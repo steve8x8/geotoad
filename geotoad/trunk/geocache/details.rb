@@ -151,7 +151,7 @@ class CacheDetails < Common
                 details.gsub!(/\* *\* *\*/, '**')	
                 details.gsub!(/\* *\* *\*/, '**')		# unnescesary
                 details.gsub!(/\*\*\*/, '**')
-
+		details.gsub!(/\* /, '*')
                 debug "post-combine-process: #{details}"
                 details.gsub!(/[\x80-\xFF]/, "\'")		# high ascii
                 details.gsub!(/\&#\d+\;/, "\'")			# high ascii in entity format
