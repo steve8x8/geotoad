@@ -29,7 +29,7 @@ require 'geocache/details'
 common = Common.new
 $TEMP_DIR=common.findTempDir
 
-puts "# GeoToad #{$VERSION} (#{RUBY_PLATFORM}) - (c) 2003 Thomas Stromberg"
+puts "# GeoToad #{$VERSION} (#{RUBY_PLATFORM}-#{RUBY_VERSION}) - (c) 2003 Thomas Stromberg"
 opts = GetoptLong.new(
 	[ "--format",					"-f",		GetoptLong::OPTIONAL_ARGUMENT ],
 	[ "--output",					"-o",		GetoptLong::OPTIONAL_ARGUMENT ],
