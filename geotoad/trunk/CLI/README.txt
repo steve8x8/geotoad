@@ -32,7 +32,7 @@ geotoad can output to over a dozen additional GPS formats.
 ------
 Syntax
 ------
-syntax: geotoad.rb [options] <search>
+syntax: geotoad.rb [options] <search:search2:search3>
 
  -f format for output. Formats available are:
    csv       CSV for spreadsheet imports
@@ -111,6 +111,10 @@ complex examples that you can work with:
 geotoad.rb -q coord 39.44486,-74.561273 -y 5
 Search for caches within 5 miles of the above coordinates
 
+
+geotoad.rb 27513:27502:33434 
+You can combine searches with the : delimiter. This works for all types,
+though it's most often used with coordinate searches.
 
 geotoad.rb -f text -o nc.txt -n -q state_id "North Carolina"
 Outputs a text file with all of the caches in North Carolina that are

@@ -5,7 +5,6 @@ TODO:
 Bugs:
 -----
 * Fix XML Entities so we can output valid GPX
-* Implement the multi-query searches patch contributed by Mike Capito
 * Fix it so that the last found date works again.
 * Fix country search to comply with the new changes.
 
