@@ -83,8 +83,8 @@ class CacheDetails < Common
             debug "we have a wid, who are the visitors..."
 			#<A HREF="/profile/default.asp?A=47159">bykenut </A></strong>
 			data.scan (/A=\d+\"\>(.*?)\<\/A\>\<\/strong\>/) {
-				#debug "visitor to #{wid}: #{$1}"
-				@waypointHash[wid]['visitors'].push($1)
+				debug "visitor to #{wid}: #{$1.downcase}"
+				@waypointHash[wid]['visitors'].push($1.downcase)
 			}
 
             # these are multi-line matches, so they are out of the scope of our

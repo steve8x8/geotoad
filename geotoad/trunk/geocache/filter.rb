@@ -70,6 +70,7 @@ class Filter < Common
 
     
     def notUser(nick)
+        nick.downcase!
             debug "filtering by notUser: #{nick}"
 
                 @waypointHash.each_key { |wid|
@@ -90,7 +91,7 @@ class Filter < Common
 
 		@waypointHash.each_key { |wid|
             # I wanted to use delete_if, but I had run into a segfault in ruby 1.6.7/8
-            if (! (@waypointHash[wid]['details'] =~ /#{string}/))
+            if (! (@waypointHash[wid]['details'] =~ /#{string}/i))
                 #uts @waypointHash[wid]['details']
                  @waypointHash.delete(wid)
             end
