@@ -21,7 +21,7 @@ rm -Rf /tmp/$DIST/**/.svn 2>/dev/null
 svn log geocache CLI -v > /tmp/$DIST/ChangeLog.txt
 
 cd /tmp
-tar -zcvf $LONGDIST.tgz $DIST
-scp $LONGDIST.tgz /tmp/$DIST/ChangeLog.txt home.toadstool.se:/www/toadstool.se/htdocs/hacks/geotoad/files/
-echo "http://home.toadstool.se/hacks/geotoad/files/$LONGDIST.tgz"
+zip -r $LONGDIST.zip $DIST
+scp $LONGDIST.zip /tmp/$DIST/ChangeLog.txt home.toadstool.se:/www/toadstool.se/htdocs/hacks/geotoad/files/
+echo "http://home.toadstool.se/hacks/geotoad/files/$LONGDIST.zip"
 
