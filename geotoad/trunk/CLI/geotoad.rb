@@ -170,11 +170,11 @@ if (search.totalWaypoints)
 
             # for the new crap that geocaching.com throws in
             postVars = search.postVars
-            postVars['__EVENTTARGET']="ResultsPager$_ctl#{resultsPager}"
+            postVars['__EVENTTARGET']="ResultsPager:_ctl#{resultsPager}"
 
 			# legacy
             #searchURL = search.URL +  '&start=' + search.lastWaypoint.to_s
-            searchURL = search.postURL
+            searchURL = search.postURL + "&gtid=#{resultsPager}"
 			page = ShadowFetch.new(searchURL)
             page.postVars=postVars
             # very short expiry time for the search index.

@@ -15,7 +15,6 @@ $shadowHosts = [
 ]
 
 $Header = {
-  'Referer'         => 'http://www.geocaching.com/',
   'User-Agent'      => 'Mozilla/4.5 (compatible; OmniWeb/4.1.1-v424.6; Mac_PowerPC)',
   'Accept'          => 'image/gif, image/jpeg, image/png, multipart/x-mixed-replace, */*',
   'Accept-Language' => 'en',
@@ -52,9 +51,17 @@ class ShadowFetch < Common
 
     def postVars=(vars)
         vars.each_key {|key|
-            debug "Set post variable: #{key}"
+            if (@postString)
+                @postString = @postString + "&"
+            else
+                @postString = ''
+            end
+
+            puts "uhm: #{key}"
+            @postString = @postString + key + "=" + CGI.escape(vars[key])
         }
         @postVars=vars
+        puts "Set post to: #{@postString}"
     end
 
 	# to get the data returned back to you.
@@ -136,8 +143,11 @@ class ShadowFetch < Common
 
 		## this assumes there was no local cache that was useable ############
 		# check shadow
-		(size, mtime) = checkShadow
-		# if we got back a valid result of some kind.
+		#(size, mtime) = checkShadow
+		# THIS IS JUST HERE FOR FUN.
+        (size, mtime) = [0, 0]
+
+        # if we got back a valid result of some kind.
 		if (size)
 			age = time.to_i - mtime
 			if ((size > 128) && (age < @shadowExpiry))
@@ -151,7 +161,7 @@ class ShadowFetch < Common
 				@data = fetchRemote
                 if (@data)
                     @@src='remote'
-    				updateShadow
+    				#updateShadow
                 else
                     size=nil
                 end
@@ -208,6 +218,7 @@ class ShadowFetch < Common
 
 	def fetchRemote
 		debug "fetching remote data from #{@url}"
+         $Header['Referer'] = @url
 		data = fetchURL(@url)
 	end
 
@@ -222,8 +233,14 @@ class ShadowFetch < Common
 		detail = nil
 
 		begin
-			debug "get #{host}#{file}"
-			resp, data = w.get(file, $Header)
+            if (@postVars)
+                debug "post #{host}#{file}/?#{@postString}"
+                $Header['Content-Type'] =  "application/x-www-form-urlencoded";
+                resp, data = w.post(file, @postString, $Header)
+            else
+                debug "get #{host}#{file}"
+                resp, data = w.get(file, $Header)
+            end
 			return data
 		rescue => detail
 			debug "Error fetching #{url} (members only cache?)"
@@ -261,6 +278,8 @@ class ShadowFetch < Common
 	def fetchShadow
 		debug "fetching shadow data of #{@url}"
 		parsed = CGI.escape(@url)
+        # Total misuse of the Referer header.
+        $Header['Referer'] = "Geotoad #{$VERSION}"
 		data = fetchURL $shadowHosts[0] + "?c=return&p=" + parsed
 	end
 
