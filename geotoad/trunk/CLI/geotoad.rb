@@ -47,8 +47,8 @@ def initialize
         # command line arguments
         @option = uin.getopt
     else
-        # This will be interactive, once the code is in place.
-        @option = uin.getopt
+        # Then go into interactive.
+        @option = uin.interactive
     end
 
     # We need this for the check following
@@ -110,7 +110,7 @@ def usage
     puts " -r/-R [# days]         include/exclude caches found in the last X days"
     puts " -n                     only include not found caches (virgins)"
     puts " -b                     only include caches with travelbugs"
-    puts " -l                     set waypoint id length. (8)"
+    puts " -l                     set waypoint id length. (16)"
     puts ""
     puts "::: OUTPUT FORMATS:"
     outputDetails = Output.new
@@ -262,14 +262,14 @@ end
 # This step filters out all the geocaches by information
 # found from the searches.
 def preFetchFilter
-
+    puts ""
     @filtered = Filter.new(@combinedWaypoints)
     beforeFilteredMembersTotal = @filtered.totalWaypoints
     @filtered.removeByElement('membersonly')
 
     excludedMembersTotal = beforeFilteredMembersTotal - @filtered.totalWaypoints
     if (excludedMembersTotal > 0)
-        displayMessage "#{excludedMembersTotal} members-only caches were @filtered out (not yet supported)"
+        displayMessage "#{excludedMembersTotal} members-only caches were filtered out (not yet supported)"
     end
 
     debug "Filter running cycle 1, #{@filtered.totalWaypoints} caches left"
@@ -509,16 +509,28 @@ end
 
 
 # Yes, it's pretty lame.
-cli = GeoToad.new
-if (! $slowLink)
-    cli.versionCheck
-end
 
-cli.downloadGeocacheList
-cli.prepareFilter
-cli.preFetchFilter
-cli.fetchGeocaches
-cli.postFetchFilter
-cli.saveFile
-cli.close
+while(1)
+  cli = GeoToad.new
+  if (! $slowLink)
+    cli.versionCheck
+  end
+
+  cli.downloadGeocacheList
+  cli.prepareFilter
+  cli.preFetchFilter
+  cli.fetchGeocaches
+  cli.postFetchFilter
+  cli.saveFile
+  cli.close
+  # Don't loop if you're in automatic mode.
+  if (ARGV[0])
+      exit
+  else
+      puts ""
+      puts "-- Complete! Press Enter to return to the menu --"
+      puts ""
+      $stdin.gets
+  end
+end
 
