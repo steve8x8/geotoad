@@ -47,7 +47,7 @@ class CacheDetails < Common
 		# find the geocaching waypoint id.
 		wid = ''
 		data.each { |line|
-			if line =~ /\<title\>Cache: \((\w+)\)/
+			if line =~ /\<title\>(\w+)/
 				wid = $1
                 debug "wid is #{wid}"
 

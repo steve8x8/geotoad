@@ -295,7 +295,7 @@ $Format = {
             'ext'        => 'pdb',
             'mime'    => 'application/cachemate',
             'spacer' => '',
-            'desc'    => 'CacheMate (cmconvert)',
+            'desc'    => 'CacheMate for PalmOS (cmconvert)',
             'filter_src'    => 'gpx',
             'filter_exec'    => 'cmconvert -o OUTFILE INFILE'
         }
