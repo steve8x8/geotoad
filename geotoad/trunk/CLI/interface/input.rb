@@ -99,8 +99,12 @@ class Input
 
 
         while (answer !~ /q/i)
-            system("stty erase ^H >/dev/null 2>/dev/null")
-            system("clear")
+            if RUBY_PLATFORM =~ /win32/
+                system("cls");
+            else
+                system("stty erase ^H >/dev/null 2>/dev/null")
+                system("clear")
+            end
             puts ""
             puts "  GeoToad #{$VERSION} TUI editon.  Type a number to modify the fields value."
             puts "=============================================================================="
