@@ -19,10 +19,17 @@ class Output < Common
 		'LAKE'		=> 'Lk',
 		'ROAD'		=> 'Rd',
 		'RIVER'		=> '',
-		'ONE'			=> '1',
+        'ONE'		=> '1',
 		'CREEK'		=> 'Ck',
+        'LITTLE'    => 'Lil',
         'BLACK'     => 'Blk',
+        'LOOP'      => 'Lp',
+        'TRAIL'     => 'Tr',
+        'EITHER'    => 'E',
+        'BROWN'     => 'Brn',
+        'ORANGE'    => 'Org',
 		'MOUNTAIN'	=> 'Mt',
+        'COUNTY'    => 'Cty',
 		'WITH'		=> 'W',
         'DOUBLE'    => 'Dbl',
         'IS'        => '',
@@ -195,15 +202,24 @@ class Output < Common
         wpList = Hash.new
         outVars['title'] = title
 
+        # this is a strange maintenance loop of sorts. First it builds a list, which
+        # I'm not sure what it's used for. Second, it inserts a new item named "sname"
+        # which is the caches short name or geocache name.
 
-        @wpHash.each_key { |wid|
+         @wpHash.each_key { |wid|
             wpList[wid] = @wpHash[wid]['name'].dup
+
+            if (@waypointLength > 1)
+                @wpHash[wid]['sname'] = shortName(@wpHash[wid]['name'])[0..(@waypointLength - 1)]
+            else
+                @wpHash[wid]['sname'] = wid.dup
+            end
             #puts "made list with #{wid} = #{wpList[wid]}"
         }
 
+
         # somewhat lame.. HTML specific index that really needs to be in the templates, but I need
         # this done before I go geocaching in 45 minutes.
-
         if @outputType == "html"
             htmlIndex=''
             debug "I should generate an index, I'm html"
@@ -214,17 +230,32 @@ class Output < Common
                 debug "Creating index for \"#{@wpHash[wid]['name']}\" (#{wid})"
 
                 @wpHash[wid]['details'].gsub!(/\&([A-Z])/, '&amp;(#{$1})');
-                htmlIndex = htmlIndex + "<li><a href=\"\##{wid}\">#{@wpHash[wid]['name']}</a>"
+                htmlIndex = htmlIndex + "<li>"
+
 
                 if (@wpHash[wid]['travelbug'])
-                    htmlIndex = htmlIndex + " [TB]"
+                    htmlIndex = htmlIndex + "<b><font color=\"#22CC22\">$</font></b>"
+                end
+
+                if (@wpHash[wid]['terrain'] > 3)
+                    htmlIndex = htmlIndex + "<b><font color=\"#666622\">#</font></b>"
+                end
+
+                if (@wpHash[wid]['difficulty'] > 3)
+                    htmlIndex = htmlIndex + "<b><font color=\"#BB0000\">!</font></b>"
                 end
 
                 if (@wpHash[wid]['mdays'] < 0)
-                    htmlIndex = htmlIndex + " (v)"
-                    debug "Marking #{@wpHash[wid]['name']} a virgin (#{@wpHash[wid]['mdays']})"
+                    htmlIndex = htmlIndex + "<b><font color=\"#CC00CC\">@</font>"
                 end
-                htmlIndex = htmlIndex + "</li>\n"
+
+                htmlIndex = htmlIndex + "<a href=\"\##{wid}\">#{@wpHash[wid]['name']}</a>"
+
+                if (@wpHash[wid]['mdays'] < 0)
+                    htmlIndex = htmlIndex + "</b>"
+                end
+
+                htmlIndex = htmlIndex + " <font color=\"#444444\">(#{@wpHash[wid]['sname']})</font></li>\n"
             }
 
             output = output + "<ul>\n" + htmlIndex + "</ul>\n"
@@ -238,6 +269,10 @@ class Output < Common
 			numEntries = @wpHash[wid]['details'].length / detailsLen
 
 			outVars['wid'] = wid.dup
+            outVars['id'] = @wpHash[wid]['sname'].dup
+            # This should clear out the hint-dup issue that Scott Brynen mentioned.
+            outVars['hint'] = ''
+
             if @wpHash[wid]['distance']
                 outVars['relativedistance'] = 'Distance: ' + @wpHash[wid]['distance'].to_s + 'mi ' + @wpHash[wid]['direction']
             end
@@ -247,16 +282,11 @@ class Output < Common
                 debug "I will include the hint: #{outVars['hint']}"
             end
 
-            outVars['sname'] = shortName(@wpHash[wid]['name'])[0..14]
-            debug "my sname is #{outVars['sname']}"
-            if (outVars['sname'].length < 1)
-                puts "#{wid}: #{@wpHash[wid]['name']} did not get an sname returned. BUG!"
-                exit 2
-            end
-            # well, this is crap.
-            outVars['id'] = outVars['sname'][0..(@waypointLength - 1)]  # lets not .upcase
-            outVars['title']="XXXX"
-            debug "my id is #{outVars['id']}"
+
+
+
+            # give it a blank title, for whatever strange reason.
+            outVars['title']="-"
 
             if (outVars['id'].length < 1)
                 debug "our id is no good, using the wid"

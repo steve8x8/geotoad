@@ -82,11 +82,16 @@ $Format = {
                 "<html><head>\n<title>GeoToad Output</title>\n" +
                 "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">\n" + "</head>\n" +
                 "<body link=\"#000099\" vlink=\"#000044\" alink=\"#000099\">\n" +
-                "GeoToad query: <%out.title%>",
+                "<h3>GeoToad HTML Index</h3>" +
+                "<b><font color=\"#22CC22\">$</font></b> have travelbugs<br>" +
+                "<b><font color=\"#CC00CC\">@</font></b> have never been found<br>" +
+                "<b><font color=\"#666622\">#</font></b> have a terrain rating of 3.5+<br>" +
+                "<b><font color=\"#BB0000\">!</font></b> have a difficulty rating of 3.5+<br>",
+
             'templateIndex' => "* <a href=\"#<%out.wid%>\"><%wpEntity.name%></a><br>",
             'templateWP'    =>
-                "\n\n<hr noshade size=\"1\">\n<a name=\"<%out.wid%>\"></a><font color=\"#000099\"><a href=\"<%out.url%>\"><big><strong><%wpEntity.name%></strong></big></a></font>&nbsp;&nbsp;  <b><%wp.travelbug%></b><br>\n" +
-                "<font color=\"#555555\"><strong><%wpEntity.creator%></strong></font>, <%wp.latwritten%> <%wp.lonwritten%><br>" +
+                "\n\n<hr noshade size=\"1\">\n<a name=\"<%out.wid%>\"></a><font color=\"#000099\"><a href=\"<%out.url%>\"><big><b><%wpEntity.name%></b></big></a></font>&nbsp;&nbsp;  <b><%wp.travelbug%></b><br>\n" +
+                "<font color=\"#555555\"><b><%wpEntity.creator%></b></font>, <%wp.latwritten%> <%wp.lonwritten%><br>" +
                 "<font color=\"#339933\"><%wp.type%> D<%wp.difficulty%>/T<%wp.terrain%> <%out.relativedistance%><br>" +
                 "placed: <%wp.cdate%> last: <%wp.mdays%> days ago</font><br>" +
                 "<p><%outEntity.details%></p>\n" +
@@ -101,7 +106,7 @@ $Format = {
             'desc'    =>     'Plain ASCII',
             'spacer'    => "\r\n",
             'templatePre' => "",
-            'templateWP'    => "----------------------------------------------------------------\n" + 
+            'templateWP'    => "----------------------------------------------------------------\n" +
 		"* <%wp.name%>\" (<%out.wid%>) by <%wp.creator%>\r\n" +
                 "Difficulty: <%wp.difficulty%>, Terrain: <%wp.terrain%>\r\n" +
                 "Lat: <%wp.latwritten%> Lon: <%wp.lonwritten%>\r\n" +
@@ -140,7 +145,7 @@ $Format = {
             'spacer' => ' ',
             'templatePre'        => "",
             'templateWP'        => "BEGIN:vCard\nVERSION:2.1\n" +
-                 "FN:G<%out.average%> <%out.sname%>\nN:G<%out.average%>;<%out.sname%>\n" +
+                 "FN:G<%out.average%> <%out.id%>\nN:G<%out.average%>;<%out.id%>\n" +
                  "NOTE:<%out.details%><%out.hint%>\n" +
                  "ADD:<%wp.latwritten%>;<%wp.lonwritten%>;;<%wp.state%>;\n" +
                  "TEL;HOME:<%out.wid%>\nEMAIL;INTERNET:<%wp.difficulty%>@<%wp.terrain%>\n" +
