@@ -21,6 +21,8 @@ $shadowHosts = [
 class ShadowFetch
     include Common
     include Display
+    @@downloadErrors = 0
+
 
 	# gets a URL, but stores it in a nice webcache
 	def initialize (url)
@@ -121,7 +123,7 @@ class ShadowFetch
 		localfile = $TEMP_DIR + localfile;
 
 		# Windows users have a max of 255 characters I believe.
-		if (localfile.length > 250) 
+		if (localfile.length > 250)
 			debug "truncating #{localfile} -- too long"
 			localfile = localfile.slice(0,250)
 		end
@@ -143,12 +145,14 @@ class ShadowFetch
 		localparts = localfile.split(/[\\\/]/)
 		localdir = localparts[0..-2].join("/")		# basename sucks in Windows.
 
+        debug "Checking to see if #{localfile} exists"
+
 		# expiry?
 		if (File.exists?(localfile))
 			age = time.to_i - File.mtime(localfile).to_i
 			if (age > @localExpiry)
 				debug "local cache is #{age} old, older than #{@localExpiry}"
-			elsif (File.size(localfile) < 32)
+			elsif (File.size(localfile) < 6)
 				debug "local cache appears corrupt. removing.."
 				File.unlink(localfile)
 			else
@@ -245,8 +249,8 @@ class ShadowFetch
 
 	def fetchRemote
 		debug "fetching remote data from #{@url}"
-         $Header['Referer'] = @url
-		data = fetchURL(@url)
+        $Header['Referer'] = @url
+ 		data = fetchURL(@url)
 	end
 
 
@@ -258,6 +262,13 @@ class ShadowFetch
 		debug "Connecting to #{host} to retrieve #{file}"
 		w = Net::HTTP.new(host, 80)
 		resp = nil
+        if (@@downloadErrors > 4)
+            debug "#{@@downloadErrors} download errors so far, no more retries will be attempted."
+            disableRetry = 1
+        else
+            debug "Only #{@@downloadErrors} download errors so far, enabling retry."
+            disableRetry = nil
+        end
 
 		begin
 			if (@postVars)
@@ -285,8 +296,17 @@ class ShadowFetch
 			    retry
 			end
 		rescue SocketError, Errno::EINVAL, EOFError, TimeoutError, StandardError => detail
-            debug "Failed fetching!"
-            return nil
+            @@downloadErrors = @@downloadErrors + 1
+
+            if (disableRetry)
+                displayWarning "Could not fetch #{url}, no more retries available. (failures=#{@@downloadErrors})"
+                return nil
+            else
+                disableRetry = 1
+                displayWarning "Could not fetch #{url}, retrying in 10 seconds.. (failures=#{@@downloadErrors})"
+                sleep(10)
+                retry
+            end
         rescue
             debug "Unknown error fetching!"
             return nil
@@ -397,8 +417,9 @@ class ShadowFetch
 			    retry
 			end
 		rescue => detail
-			head = detail.data
-			debug "I got a #{head.code} trying to retrieve #{url}"
+            displayWarning "Error trying to update the shadow at #{host}"
+            $shadowHosts.delete(host)
+			return nil
 		end
 
 
