@@ -28,14 +28,14 @@ class SearchCache
 	# set the search mode. valid modes are 'zip', 'state', 'country', 'keyword', coord, user
 	def mode(mode, key)
         case mode
-            when 'state'
+            when 'state', 'state_id'
                 keylookup=SearchCode.new(mode)		# i.e. resolve North Carolina to 34.
                 @mode=keylookup.type
                 @key=keylookup.lookup(key)
                 # nearly everything is in this form
                 @url=@@baseURL + '?' + @mode + '=' + CGI.escape(@key.to_s)
 
-            when 'country'
+            when 'country', 'country_id'
                 keylookup=SearchCode.new(mode)		# i.e. resolve North Carolina to 34.
                 @mode=keylookup.type
                 @key=keylookup.lookup(key)
@@ -60,7 +60,7 @@ class SearchCache
                 #}
                 #debug "country page parsed"
 
-			when 'coord'
+			when 'coord', 'coordinates', 'coordinate'
 				# we should check for well-formed coordinates here
 				if (key !~ /-*\d+\.\d+[, ]-*\d+\.\d+/)
 					puts "Bad coordinates format in #{key}!"
@@ -80,9 +80,9 @@ class SearchCache
 				@url=@@baseURL + '?ul=' + CGI.escape(@key)  # I didn't see the point of adding a dummy lookup
 
 
-            when 'zip'
+            when 'zip', 'zipcode'
                 # nearly everything is in this form
-                @mode = mode
+                @mode = 'zip'
                 @key = key
 
                 @url=@@baseURL + '?' + @mode + '=' + CGI.escape(@key.to_s) + "&submit1=Submit"
@@ -95,7 +95,10 @@ class SearchCache
                 if @distance
                     @url = @url + '&dist=' + @distance.to_s
                 end
+            else
+                displayWarning "Not sure what kind of search \"#{mode}\" is!"
             end
+
 
 		debug "URL for mode #{mode} is #{@url}"
         return @url
