@@ -46,7 +46,7 @@ $Format = {
             "  <urlname><%wpEntity.name%> by <%wpEntity.creator%></urlname>\r\n" +
             "  <sym>Geocache</sym><type>Geocache</type>\r\n" +
             "  <groundspeak:cache id=\"<%wp.sid%>\" available=\"True\" archived=\"False\" xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0\">\r\n" +
-            "  <groundspeak:name><%out.id%></groundspeak:name>\r\n" +
+            "  <groundspeak:name><%wpEntity.name%></groundspeak:name>\r\n" +
 			"  <groundspeak:full_name><%wp.name%></groundspeak:full_name>\r\n"+
             "  <groundspeak:placed_by><%wpEntity.creator%></groundspeak:placed_by>\r\n" +
             "  <groundspeak:owner id=\"00000\"><%wpEntity.creator%></groundspeak:owner>\r\n" +
