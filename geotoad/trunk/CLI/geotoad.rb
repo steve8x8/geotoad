@@ -149,6 +149,7 @@ def versionCheck
     version = ShadowFetch.new(url)
     version.localExpiry=43200
     version.useShadow=0
+    version.maxFailures = 0
     version.fetch
 
     if (($VERSION =~ /^(\d\.\d+\.\d+)$/) && (version.data =~ /^(\d\.\d+\.\d+)/))
@@ -192,6 +193,7 @@ def downloadGeocacheList
         end
 
         if (! search.mode(@queryType, queryArg))
+            displayError "(could not determine search type for #{@queryType}, exiting)"
             exit
         end
 
@@ -415,7 +417,7 @@ def fetchGeocaches
 
     wpFiltered.each_key { |wid|
         token = token + 1
-        detailURL = @detail.fullURL(wpFiltered[wid]['sid'])
+        detailURL = @detail.fullURL(wid)
         # This just checks to see where Shadowfetch would grab the information from.
         page = ShadowFetch.new(detailURL)
         src = page.src
@@ -426,7 +428,7 @@ def fetchGeocaches
             debug "slowlink enabled (useShadow=0)"
         end
 
-        ret = @detail.fetchWid(wid)
+        ret = @detail.fetch(wid)
         if (! ret)
             displayWarning "Page for #{wpFiltered[wid]['name']} failed to be parsed, skipping."
             wpFiltered.delete(wid)
@@ -575,8 +577,11 @@ while(1)
   end
 
   cli.downloadGeocacheList
-  cli.prepareFilter
-  cli.preFetchFilter
+  if (@queryType != "wid")
+      cli.prepareFilter
+      cli.preFetchFilter
+  end
+
   cli.fetchGeocaches
   cli.postFetchFilter
   cli.saveFile
