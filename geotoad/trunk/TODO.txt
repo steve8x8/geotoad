@@ -19,6 +19,8 @@ Output:
 * Route 66 Pushpins support
 * Improve VCF support (hints)
 * Add iPod clippings support
+* Add last 5 posts to GPX
+* Add an unhappy symbol to HTML output if there was a not-found recently
 
 Frontends:
 ----------
