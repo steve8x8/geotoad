@@ -43,6 +43,7 @@ syntax: geotoad.rb [options] <search:search2:search3>
    text      Plain ASCII
    tab       Tabbed text, for GPS Connect
    vcf       VCF for iPod Contacts export
+
    -- the following require gpsbabel to be installed --
    cetus     Cetus for PalmOS 
    dna       Navitrak DNA marker 
@@ -62,7 +63,8 @@ syntax: geotoad.rb [options] <search:search2:search3>
    tpg       National Geographic Topo 
    xmap      Delorme Topo USA4/XMap Conduit 
 
-   * some formats may require gpsbabel to be installed and in PATH
+   -- the following requires cmconvetr to be installed --
+   cachemate CacheMate Palm software
 
  -q [zip|state|coord]    query type (zip by default)
 		         [COUNTRY SEARCHES CURRENTLY BROKEN]

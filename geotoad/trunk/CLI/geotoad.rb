@@ -31,29 +31,29 @@ $TEMP_DIR=common.findTempDir
 
 puts "# GeoToad #{$VERSION} (#{RUBY_PLATFORM}-#{RUBY_VERSION}) - (c) 2003 Thomas Stromberg"
 opts = GetoptLong.new(
-	[ "--format",					"-f",		GetoptLong::OPTIONAL_ARGUMENT ],
-	[ "--output",					"-o",		GetoptLong::OPTIONAL_ARGUMENT ],
-	[ "--query",					"-q",		GetoptLong::OPTIONAL_ARGUMENT ],
-	[ "--distanceMax",				"-y",		GetoptLong::OPTIONAL_ARGUMENT ],
-	[ "--difficultyMin",	        "-d",		GetoptLong::OPTIONAL_ARGUMENT ],
-	[ "--difficultyMax",	        "-D",		GetoptLong::OPTIONAL_ARGUMENT ],
-	[ "--terrainMin",			    "-t",		GetoptLong::OPTIONAL_ARGUMENT ],
-	[ "--terrainMax",			    "-T",		GetoptLong::OPTIONAL_ARGUMENT ],
+    [ "--format",                    "-f",        GetoptLong::OPTIONAL_ARGUMENT ],
+    [ "--output",                    "-o",        GetoptLong::OPTIONAL_ARGUMENT ],
+    [ "--query",                    "-q",        GetoptLong::OPTIONAL_ARGUMENT ],
+    [ "--distanceMax",                "-y",        GetoptLong::OPTIONAL_ARGUMENT ],
+    [ "--difficultyMin",            "-d",        GetoptLong::OPTIONAL_ARGUMENT ],
+    [ "--difficultyMax",            "-D",        GetoptLong::OPTIONAL_ARGUMENT ],
+    [ "--terrainMin",                "-t",        GetoptLong::OPTIONAL_ARGUMENT ],
+    [ "--terrainMax",                "-T",        GetoptLong::OPTIONAL_ARGUMENT ],
     [ "--keyword",                  "-k",    GetoptLong::OPTIONAL_ARGUMENT ],
-	[ "--cacheExpiry"               "-c",    GetoptLong::OPTIONAL_ARGUMENT ],
-	[ "--quitAfterFetch",           "-x",    GetoptLong::OPTIONAL_ARGUMENT ],
-	[ "--notFound",                 "-n",    GetoptLong::NO_ARGUMENT ],
+    [ "--cacheExpiry"               "-c",    GetoptLong::OPTIONAL_ARGUMENT ],
+    [ "--quitAfterFetch",           "-x",    GetoptLong::OPTIONAL_ARGUMENT ],
+    [ "--notFound",                 "-n",    GetoptLong::NO_ARGUMENT ],
     [ "--travelBug",                "-b",    GetoptLong::NO_ARGUMENT ],
-	[ "--verbose",				    "-v",    GetoptLong::NO_ARGUMENT ],
-	[ "--userInclude",				"-u",    GetoptLong::OPTIONAL_ARGUMENT ],
-    [ "--userExclude",				"-U",    GetoptLong::OPTIONAL_ARGUMENT ],
-    [ "--ownerInclude",			    "-c",    GetoptLong::OPTIONAL_ARGUMENT ],
-    [ "--ownerExclude",		        "-C",    GetoptLong::OPTIONAL_ARGUMENT ],
-    [ "--placeDateInclude",			    "-p",    GetoptLong::OPTIONAL_ARGUMENT ],
-    [ "--placeDateExclude",		        "-P",    GetoptLong::OPTIONAL_ARGUMENT ],
-    [ "--foundDateInclude",			    "-r",    GetoptLong::OPTIONAL_ARGUMENT ],
-    [ "--foundDateExclude",		        "-R",    GetoptLong::OPTIONAL_ARGUMENT ],
-    [ "--waypointLength",			"-l",    GetoptLong::OPTIONAL_ARGUMENT ],
+    [ "--verbose",                    "-v",    GetoptLong::NO_ARGUMENT ],
+    [ "--userInclude",                "-u",    GetoptLong::OPTIONAL_ARGUMENT ],
+    [ "--userExclude",                "-U",    GetoptLong::OPTIONAL_ARGUMENT ],
+    [ "--ownerInclude",                "-c",    GetoptLong::OPTIONAL_ARGUMENT ],
+    [ "--ownerExclude",                "-C",    GetoptLong::OPTIONAL_ARGUMENT ],
+    [ "--placeDateInclude",                "-p",    GetoptLong::OPTIONAL_ARGUMENT ],
+    [ "--placeDateExclude",                "-P",    GetoptLong::OPTIONAL_ARGUMENT ],
+    [ "--foundDateInclude",                "-r",    GetoptLong::OPTIONAL_ARGUMENT ],
+    [ "--foundDateExclude",                "-R",    GetoptLong::OPTIONAL_ARGUMENT ],
+    [ "--waypointLength",            "-l",    GetoptLong::OPTIONAL_ARGUMENT ],
     [ "--help",                     "-h",    GetoptLong::NO_ARGUMENT ]
 )
 
@@ -61,58 +61,62 @@ output = Output.new
 @@validFormats = output.formatList.sort
 
 def usage
-	puts "syntax: geotoad.rb [options] <search>"
-	puts ""
-	puts " -o [filename]           output file"
- 	puts " -f [format]             output format type, such as:"
-	outputDetails = Output.new
-	i=0
-	print "     "
-	@@validFormats.each { |type|
-		desc = outputDetails.formatDesc(type)
-		if (i>4)
-			puts ""
-			print "     "
-			i=0
-		end
-		i=i+1
+    puts "syntax: geotoad.rb [options] <search>"
+    puts ""
+    puts " -o [filename]           output file"
+     puts " -f [format]             output format type, such as:"
+    outputDetails = Output.new
+    i=0
+    print "     "
+    @@validFormats.each { |type|
+        desc = outputDetails.formatDesc(type)
+        if (i>4)
+            puts ""
+            print "     "
+            i=0
+        end
+        i=i+1
 
 
-		if (desc =~ /gpsbabel/)
-			type = type + "*"
-		end
-	        printf("  %-8.8s", type);
+        if (desc =~ /gpsbabel/)
+            type = type + "*"
+	elsif (desc =~ /cmconvert/) 
+	    type = type + "="
+        end
 
-	}
+            printf("  %-10.10s", type);
+
+    }
     puts ""
     puts "    * format requires gpsbabel to be installed and in PATH"
+    puts "    = format requires cmconvert to be installed and in PATH"
     puts ""
-	puts " -q [zip|state|coord]    query type (zip by default)"
+    puts " -q [zip|state|coord]    query type (zip by default)"
     puts "                         [country search is broken!]"
-	puts " -d [0.0-5.0]            difficulty minimum (0)"
-	puts " -D [0.0-5.0]            difficulty maximum (5)"
-	puts " -t [0.0-5.0]            terrain minimum (0)"
-	puts " -T [0.0-5.0]            terrain maximum (5)"
-	puts " -y [1-500]              distance maximum (15)"
+    puts " -d [0.0-5.0]            difficulty minimum (0)"
+    puts " -D [0.0-5.0]            difficulty maximum (5)"
+    puts " -t [0.0-5.0]            terrain minimum (0)"
+    puts " -T [0.0-5.0]            terrain maximum (5)"
+    puts " -y [1-500]              distance maximum (15)"
     puts " -k [keyword]            keyword (regexp) search. Use | to delimit multiple"
-	puts " -c [username]           only include caches owned by this person"
-	puts " -C [username]           exclude caches owned by this person"
-	puts " -u [username]           only include caches found by this person"
-	puts " -U [username]           exclude caches found by this person"
+    puts " -c [username]           only include caches owned by this person"
+    puts " -C [username]           exclude caches owned by this person"
+    puts " -u [username]           only include caches found by this person"
+    puts " -U [username]           exclude caches found by this person"
     puts " -p [# days]             only include caches placed in the last X days"
     puts " -P [# days]             exclude caches placed in the last X days"
     puts " -r [# days]             only include caches found in the last X days"
     puts " -R [# days]             exclude caches found in the last X days"
     puts "                         (use : to delimit multiple users!)"
-	puts " -n                      only include not found caches (virgins)"
+    puts " -n                      only include not found caches (virgins)"
     puts " -b                      only include caches with travelbugs"
         puts " -l                      set waypoint id length. (8)"
-	puts "                         Note: Garmin users can use up to 16!"
-	puts ""
-	puts "EXAMPLES:"
-	puts "geotoad.rb 27502"
-	puts "geotoad.rb -d 3 -u helixblue -f vcf -o NC.vcf -q state_id \'North Carolina\'"
-	exit
+    puts "                         Note: Garmin users can use up to 16!"
+    puts ""
+    puts "EXAMPLES:"
+    puts "geotoad.rb 27502"
+    puts "geotoad.rb -d 3 -u helixblue -f vcf -o NC.vcf -q state_id \'North Carolina\'"
+    exit
 else
 
 end
@@ -120,42 +124,42 @@ end
 
 # put the stupid crap in a hash. Much nicer to deal with.
 begin
-	optHash = Hash.new
-	opts.each do |opt, arg|
-		optHash[opt]=arg
-	end
+    optHash = Hash.new
+    opts.each do |opt, arg|
+        optHash[opt]=arg
+    end
 rescue
-	usage
-	exit
+    usage
+    exit
 end
 
-formatType	= optHash['--format'] || 'gpx'
-queryType		= optHash['--query'] || 'zip'
-cacheExpiry	= optHash['--cacheExpiry'].to_i || 3
+formatType    = optHash['--format'] || 'gpx'
+queryType        = optHash['--query'] || 'zip'
+cacheExpiry    = optHash['--cacheExpiry'].to_i || 3
 quitAfterFetch  = optHash['--quitAfterFetch'].to_i || 200
 distanceMax = optHash['--distanceMax'] || 15
 
 if ((! ARGV[0]) || optHash['--help'])
-	if (! ARGV[0])
-		puts "* You forgot to specify a #{queryType} search argument"
-	end
-	usage
-	exit
+    if (! ARGV[0])
+        puts "* You forgot to specify a #{queryType} search argument"
+    end
+    usage
+    exit
 else
     # make friendly to people who can't quote.
-	queryArgList		= ARGV.join(" ")
+    queryArgList        = ARGV.join(" ")
 end
 
 if (optHash['--verbose'])
 
-	common.debugMode=1
-	common.debug "verbose mode enabled"
+    common.debugMode=1
+    common.debug "verbose mode enabled"
 end
 
 if ! @@validFormats.include?(formatType)
-	puts "[*] #{formatType} is not a valid supported format."
-	usage
-	exit
+    puts "[*] #{formatType} is not a valid supported format."
+    usage
+    exit
 end
 
 
@@ -194,20 +198,20 @@ queryArgList.split(/[:\|]/).each { |queryArg|
         downloads = 0
         resultsPager = 5
         while(running)
-		    # short-circuit for lack of understanding.
+            # short-circuit for lack of understanding.
             totalPages = search.totalPages
             currentPage = search.currentPage
-		    common.debug "(download while loop - #{currentPage} of #{totalPages})"
+            common.debug "(download while loop - #{currentPage} of #{totalPages})"
 
-    		if (totalPages > currentPage)
+            if (totalPages > currentPage)
                 lastPage = currentPage
                 # I don't think this does anything.
-			    page = ShadowFetch.new(search.URL)
+                page = ShadowFetch.new(search.URL)
                 running = search.fetchNext
-	    		src = page.src
+                src = page.src
                 # update it.
                 currentPage = search.currentPage
-		    	puts "[o] Recieved search page #{currentPage} of #{totalPages} (#{src})"
+                puts "[o] Recieved search page #{currentPage} of #{totalPages} (#{src})"
 
                 if (currentPage <= lastPage)
                     puts "[*] Logic error. I was at page #{lastPage} before, why am I at #{currentPage} now?"
@@ -215,25 +219,25 @@ queryArgList.split(/[:\|]/).each { |queryArg|
                 end
 
                 if (src == "remote")
-				    # give the server a wee bit o' rest.
-				    downloads = downloads + 1
-				    common.debug "#{downloads} of #{quitAfterFetch} remote downloads so far"
-				    if downloads >= quitAfterFetch
-					    common.debug "quitting after #{downloads} downloads"
+                    # give the server a wee bit o' rest.
+                    downloads = downloads + 1
+                    common.debug "#{downloads} of #{quitAfterFetch} remote downloads so far"
+                    if downloads >= quitAfterFetch
+                        common.debug "quitting after #{downloads} downloads"
                         #exit 4
-    				end
+                    end
                    # half the rest for this.
                      common.debug "sleeping"
-    				sleep ($SLEEP / 2).to_i
-		    	end
-    		else
-	    		common.debug "We have already downloaded the waypoints needed, lets get out of here"
-	    		running = nil
-		    end # end totalPages if
-    	end # end while(running)
+                    sleep ($SLEEP / 2).to_i
+                end
+            else
+                common.debug "We have already downloaded the waypoints needed, lets get out of here"
+                running = nil
+            end # end totalPages if
+        end # end while(running)
     else
-	    puts "(*) No waypoints found matching"
-	    exit
+        puts "(*) No waypoints found matching"
+        exit
     end
 
     # this gives us support for multiple searches.
@@ -263,37 +267,37 @@ filtered = Filter.new(combinedWaypoints)
 common.debug "[=] Filter running cycle 1, #{filtered.totalWaypoints} caches left"
 
 if optHash['--difficultyMin']
-	filtered.difficultyMin(optHash['--difficultyMin'].to_f)
+    filtered.difficultyMin(optHash['--difficultyMin'].to_f)
 end
 common.debug "[=] Filter running cycle 2, #{filtered.totalWaypoints} caches left"
 if optHash['--difficultyMax']
-	filtered.difficultyMax(optHash['--difficultyMax'].to_f)
+    filtered.difficultyMax(optHash['--difficultyMax'].to_f)
 end
 common.debug "[=] Filter running cycle 3, #{filtered.totalWaypoints} caches left"
 
 if optHash['--terrainMin']
-	filtered.terrainMin(optHash['--terrainMin'].to_f)
+    filtered.terrainMin(optHash['--terrainMin'].to_f)
 end
 common.debug "[=] Filter running cycle 4, #{filtered.totalWaypoints} caches left"
 
 if optHash['--terrainMax']
-	filtered.terrainMax(optHash['--terrainMax'].to_f)
+    filtered.terrainMax(optHash['--terrainMax'].to_f)
 end
 
 if optHash['--foundDateInclude']
-	filtered.foundDateInclude(optHash['--foundDateInclude'].to_f)
+    filtered.foundDateInclude(optHash['--foundDateInclude'].to_f)
 end
 
 if optHash['--foundDateExclude']
-	filtered.foundDateExclude(optHash['--foundDateExclude'].to_f)
+    filtered.foundDateExclude(optHash['--foundDateExclude'].to_f)
 end
 
 if optHash['--placeDateInclude']
-	filtered.placeDateInclude(optHash['--placeDateInclude'].to_f)
+    filtered.placeDateInclude(optHash['--placeDateInclude'].to_f)
 end
 
 if optHash['--placeDateExclude']
-	filtered.placeDateExclude(optHash['--placeDateExclude'].to_f)
+    filtered.placeDateExclude(optHash['--placeDateExclude'].to_f)
 end
 
 if optHash['--notFound']
@@ -332,39 +336,39 @@ end
 
 ## step #2 in filtering! ############################
 #if ((optHash['--user']) || (optHash['--format'] == 'vcard'))
-	puts "[=] Fetching geocache pages with #{$SLEEP} second rests between remote fetches"
-	wpFiltered = filtered.waypoints
+    puts "[=] Fetching geocache pages with #{$SLEEP} second rests between remote fetches"
+    wpFiltered = filtered.waypoints
 
-	# all of this junk is so we can give real status updates for non-CLI frontends
-	# but this is the demo code, so we use it!
-	detail = CacheDetails.new(wpFiltered)
-	token = 0
-	wpFiltered.each_key { |wid|
-		token = token + 1
-		#detailURL = ShadowFetch.detail.baseURL + wpFiltered[wid]['sid'].to_s
-		detailURL = detail.fullURL(wpFiltered[wid]['sid'])
-		page = ShadowFetch.new(detailURL)
-		detail.fetchWid(wid)
-		src = page.src
+    # all of this junk is so we can give real status updates for non-CLI frontends
+    # but this is the demo code, so we use it!
+    detail = CacheDetails.new(wpFiltered)
+    token = 0
+    wpFiltered.each_key { |wid|
+        token = token + 1
+        #detailURL = ShadowFetch.detail.baseURL + wpFiltered[wid]['sid'].to_s
+        detailURL = detail.fullURL(wpFiltered[wid]['sid'])
+        page = ShadowFetch.new(detailURL)
+        detail.fetchWid(wid)
+        src = page.src
         if (page.src)
-    		puts "[o] Fetched \"#{wpFiltered[wid]['name']}\" [#{token}/#{filtered.totalWaypoints}] from #{src}"
+            puts "[o] Fetched \"#{wpFiltered[wid]['name']}\" [#{token}/#{filtered.totalWaypoints}] from #{src}"
             if (wpFiltered[wid]['warning'])
                 puts " *  Skipping: #{wpFiltered[wid]['warning']}"
             end
-		elsif (src == "remote")
-				downloads = downloads + 1
-				common.debug "#{downloads} of #{quitAfterFetch} remote downloads so far"
-				if downloads >= quitAfterFetch
-					common.debug "quitting after #{downloads} downloads"
-					#exit 4
-				end
-			puts "  (sleeping for #{$SLEEP} seconds)"
-			sleep $SLEEP
+        elsif (src == "remote")
+                downloads = downloads + 1
+                common.debug "#{downloads} of #{quitAfterFetch} remote downloads so far"
+                if downloads >= quitAfterFetch
+                    common.debug "quitting after #{downloads} downloads"
+                    #exit 4
+                end
+            puts "  (sleeping for #{$SLEEP} seconds)"
+            sleep $SLEEP
         else
             puts "[*] Could not fetch \"#{wpFiltered[wid]['name']}\" [#{token}/#{filtered.totalWaypoints}] (private cache?)"
             wpFiltered.delete(wid)
-		end
-	}
+        end
+    }
 
     #puts "[=] Second filtering stage is being executed"
     filtered= Filter.new(detail.waypoints)
@@ -397,8 +401,8 @@ end
 
 puts "[=] Filter complete, #{filtered.totalWaypoints} caches left"
 if (filtered.totalWaypoints < 1)
-	puts "(*) No caches to generate output for!"
-	exit
+    puts "(*) No caches to generate output for!"
+    exit
 end
 ## generate the output ########################################
 puts ""
@@ -416,7 +420,7 @@ if (optHash['--output'])
 else
     outputFile = "gtout-" + queryType + "-" + queryArgList.gsub(/[:\.]/, '_')
     if queryType == "zip" || queryType == "coord"
-        outputFile = outputFile + "-y" + distanceMax
+        outputFile = outputFile + "-y" + distanceMax.to_s
     end
 
     outputFile = outputFile + "." + output.formatExtension(formatType)
