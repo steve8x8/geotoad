@@ -29,7 +29,7 @@ require 'geocache/details'
 common = Common.new
 $TEMP_DIR=common.findTempDir
 
-puts "# GeoToad #{$VERSION} (#{RUBY_PLATFORM}-#{RUBY_VERSION}) - (c) 2003 Thomas Stromberg"
+puts "# GeoToad #{$VERSION} (#{RUBY_PLATFORM}-#{RUBY_VERSION}) - Please report bugs to geotoad@toadstool.se"
 opts = GetoptLong.new(
     [ "--format",                    "-f",        GetoptLong::OPTIONAL_ARGUMENT ],
     [ "--output",                    "-o",        GetoptLong::OPTIONAL_ARGUMENT ],
@@ -80,7 +80,7 @@ def usage
 
         if (desc =~ /gpsbabel/)
             type = type + "*"
-	elsif (desc =~ /cmconvert/) 
+	elsif (desc =~ /cmconvert/)
 	    type = type + "="
         end
 
@@ -97,7 +97,7 @@ def usage
     puts " -D [0.0-5.0]            difficulty maximum (5)"
     puts " -t [0.0-5.0]            terrain minimum (0)"
     puts " -T [0.0-5.0]            terrain maximum (5)"
-    puts " -y [1-500]              distance maximum (15)"
+    puts " -y [1-500]              distance maximum (10)"
     puts " -k [keyword]            keyword (regexp) search. Use | to delimit multiple"
     puts " -c [username]           only include caches owned by this person"
     puts " -C [username]           exclude caches owned by this person"
@@ -137,7 +137,7 @@ formatType    = optHash['--format'] || 'gpx'
 queryType        = optHash['--query'] || 'zip'
 cacheExpiry    = optHash['--cacheExpiry'].to_i || 3
 quitAfterFetch  = optHash['--quitAfterFetch'].to_i || 200
-distanceMax = optHash['--distanceMax'] || 15
+distanceMax = optHash['--distanceMax'] || 10
 
 if ((! ARGV[0]) || optHash['--help'])
     if (! ARGV[0])
@@ -236,7 +236,7 @@ queryArgList.split(/[:\|]/).each { |queryArg|
             end # end totalPages if
         end # end while(running)
     else
-        puts "(*) No waypoints found matching"
+        puts "(*) No waypoints found. Possible error fetching?"
         exit
     end
 
