@@ -12,7 +12,7 @@ class Input
         opts = GetoptLong.new(
             [ "--format",                    "-f",        GetoptLong::OPTIONAL_ARGUMENT ],
             [ "--output",                    "-o",        GetoptLong::OPTIONAL_ARGUMENT ],
-            [ "--query",                    "-q",        GetoptLong::OPTIONAL_ARGUMENT ],
+            [ "--queryType",                    "-q",        GetoptLong::OPTIONAL_ARGUMENT ],
             [ "--distanceMax",                "-y",        GetoptLong::OPTIONAL_ARGUMENT ],
             [ "--difficultyMin",            "-d",        GetoptLong::OPTIONAL_ARGUMENT ],
             [ "--difficultyMax",            "-D",        GetoptLong::OPTIONAL_ARGUMENT ],
@@ -96,29 +96,27 @@ class Input
         while (answer !~ /q/i)
             system("stty erase ^H >/dev/null 2>/dev/null")
             system("clear")
-            # end
             puts ""
             puts "  GeoToad #{$VERSION} TUI editon.  Type a number to modify the fields value."
-            puts "============================================================================="
-            puts "(1)  search type         [#{@optHash['queryType']}]  | (2)  #{@optHash['queryType']}            [#{@optHash['queryArg'] || 'REQUIRED'}]"
-            puts "(3)  distance maximum    [#{@optHash['distanceMax'] || 10}]       |"
-            puts "                                    |"
-            puts "(4)  difficulty min        [#{@optHash['difficultyMin'] || 0.0}]    | (5)  terrain min       [#{@optHash['terrainMin'] || 0.0}]"
-            puts "(6)  dificulty max         [#{@optHash['difficultyMax'] || 5.0}]    | (7)  terrain max       [#{@optHash['terrainMax'] || 5.0}]"
-            puts "(8)  title keyword         [#{@optHash['titleKeyword']}]        | (9) description keyword [#{@optHash['descKeyword']}]"
-
-            puts "                                    |"
-            puts "(10) cache wasn't found by [#{@optHash['userExclude']}]       | (11)  cache owner isn't [#{@optHash['ownerExclude']}] "
-            puts "(12) cache was found by    [#{@optHash['userInclude']}]       | (13) cache owner is    [#{@optHash['ownerInclude']}]"
-            puts "                                    |"
-            puts "(14) virgin caches only    [#{@optHash['notFound'] || 'n'}]      | (15) travel bug caches only  [#{@optHash['travelBug'] || 'n'}] "
-            puts "(16) cache newer than      [#{@optHash['placeDateInclude']}] days  | (17) cache found within      [#{@optHash['foundDateInclude']}] days"
-            puts "(18) cache older than      [#{@optHash['placeDateExclude']}] days  | (19) cache not found within  [#{@optHash['fouundDateExclude']}] days"
-            puts "(20) waypoint length       [#{@optHash['waypointLength'] || 16}]     | (21) slowlink mode           [#{@optHash['slowlink'] || 'n'}]"
-            puts "                                    |"
-            puts "- - - - - - - - - - - - - - - - - - + - - - - - - - - - - - - - - - - - - - -"
-            puts "(22) output format     [#{@optHash['format'] || 'gpx'}]        | (23) filename          [#{@optHash['output'] || 'automatic'}]    "
-            puts "============================================================================="
+            puts "=============================================================================="
+            printf("(1)  search type         [%-10.10s] | (2) %-18.18s [%-13.13s]\n", @optHash['queryType'], @optHash['queryType'], (@optHash['queryArg'] || 'REQUIRED'))
+            printf("(3)  distance maximum    [%-3.3s]        |\n", (@optHash['distanceMax'] || 10))
+            puts   "                                      |"
+            printf("(4)  difficulty min      [%-3.3s]        | (5)  terrain min       [%-3.3s]\n", (@optHash['difficultyMin'] || 0.0), (@optHash['terrainMin'] || 0.0))
+            printf("(6)  dificulty max       [%-3.3s]        | (7)  terrain max       [%-3.3s]\n", (@optHash['difficultyMax'] || 5.0), (@optHash['terrainMax'] || 5.0))
+            printf("(8)  title keyword       [%-10.10s] | (9)  descr. keyword    [%-13.13s]\n", @optHash['titleKeyword'], @optHash['descKeyword'])
+            puts   "                                      |"
+            printf("(10) cache not found by  [%-10.10s] | (11) cache owner isn't [%-13.13s]\n", @optHash['userExclude'], @optHash['ownerExclude'])
+            printf("(12) cache found by      [%-10.10s] | (13) cache owner is    [%-13.13s]\n", @optHash['userInclude'], @optHash['ownerInclude'])
+            puts   "                                      |"
+            printf("(14) virgin caches only  [%1.1s]          | (15) travel bug caches only [%1.1s]\n", (@optHash['notFound'] || 'n'), (@optHash['travelBug'] || 'n'))
+            printf("(16) cache newer than    [%-3.3s] days   | (17) cache found within     [%-3.3s] days\n", @optHash['placeDateInclude'], @optHash['foundDateInclude'])
+            printf("(18) cache older than    [%-3.3s] days   | (19) cache not found within [%-3.3s] days\n", @optHash['placeDateExclude'], @optHash['foundDateExclude'])
+            printf("(20) waypoint length     [%-3.3s]        | (21) slowlink mode          [%1.1s]\n", (@optHash['waypointLength'] || 16), (@optHash['slowlink'] || 'n'))
+            puts "                                      |"
+            puts "- - - - - - - - - - - - - - - - - - - + - - - - - - - - - - - - - - - - - - -"
+            printf("(22) output format       [%-10.10s] | (23) filename          [%-13.13s]\n", (@optHash['format'] || 'gpx'), (@optHash['output'] || 'automatic'))
+            puts "=============================================================================="
             print "   Enter item number, (q) when done, or (x) to abort --> "
             answer = $stdin.gets.chop
             puts ""
@@ -187,12 +185,16 @@ class Input
                    answer = ask('Would you like to only include virgin geocaches (geocaches that have never been found)?', nil)
                    if (answer =~ /y/)
                        @optHash['notFound'] = 'y'
+                   else
+                       @optHash['notFound'] = nil
                    end
 
                when '15'
                    answer = ask('Would you like to only include geocaches with travelbugs in them?', nil)
                    if (answer =~ /y/)
                        @optHash['travelBug'] = 'y'
+                   else
+                       @optHash['travelBug'] = nil
                    end
 
                when '16'
@@ -211,14 +213,20 @@ class Input
                    @optHash['waypointLength'] = ask('How long can your waypoint id\'s be? (8 for Magellan, 16 for Garmin, 0 to use standard waypoint id\'s)?', nil)
 
                when '21'
-                   @optHash['slowlink'] = ask('Would you like to enable slowlink mode (faster for dialups, slower for broadband)?', nil)
+                   answer = ask('Would you like to enable slowlink mode (faster for dialups, slower for broadband)?', nil)
+                   if (answer =~ /y/)
+                       @optHash['slowlink'] = 'y'
+                   else
+                       @optHash['slowlink'] = nil
+                   end
+
 
                when '22'
                    puts "List of Output Formats: "
                    outputDetails = Output.new
                    i=0
                    print ""
-                   @@validFormats.each { |type|
+                   $validFormats.each { |type|
                        desc = outputDetails.formatDesc(type)
                        if (i>5)
                            puts ""

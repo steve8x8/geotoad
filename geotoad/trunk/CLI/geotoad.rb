@@ -38,7 +38,7 @@ $VERSION_URL = "http://toadstool.se/hacks/geotoad/currentversion.php?type=CLI&ve
 def initialize
     $TEMP_DIR=findTempDir
     output = Output.new
-    @@validFormats = output.formatList.sort
+    $validFormats = output.formatList.sort
 
     puts "# GeoToad #{$VERSION} (#{RUBY_PLATFORM}-#{RUBY_VERSION}) - Please report bugs to geotoad@toadstool.se"
 
@@ -54,7 +54,7 @@ def initialize
     end
 
     # We need this for the check following
-    @queryType         = @option['query'] || 'zip'
+    @queryType         = @option['queryType'] || 'zip'
     @queryArg          = @option['queryArg'] || nil
 
     # Get this out of the way now.
@@ -86,7 +86,7 @@ def initialize
         enableDebug
     end
 
-    if ! @@validFormats.include?(@formatType)
+    if ! $validFormats.include?(@formatType)
         displayError "#{@formatType} is not a valid supported format."
         usage
         exit
@@ -119,7 +119,7 @@ def usage
     outputDetails = Output.new
     i=0
     print ""
-    @@validFormats.each { |type|
+    $validFormats.each { |type|
         desc = outputDetails.formatDesc(type)
         if (i>5)
             puts ""
@@ -143,7 +143,7 @@ def usage
     puts ""
     puts "::: EXAMPLES:"
     puts "  geotoad.rb 27502"
-    puts "  geotoad.rb -d 3 -u helixblue -f vcf -o NC.vcf -q state_id \'North Carolina\'"
+    puts "  geotoad.rb -d 3 -u helixblue -f vcf -o NC.vcf -q state \'North Carolina\'"
 end
 
 ## Check the version #######################
