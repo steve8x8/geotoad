@@ -34,6 +34,10 @@ class SearchCache < Common
             @url=@@baseURL + '?' + @mode + '=' + @key.to_s
         else
             # we should check for well-formed coordinates here
+            if (key !~ /-*\d+\.\d+[, ]-*\d+\.\d+/)
+                puts "Bad coordinates format in #{key}!"
+                return nil
+            end
             @mode = "coord"
             @key = key
         end
