@@ -130,6 +130,36 @@ class CacheDetails
                 debug "got hint: #{hint}"
             end
 
+            if line =~ /\<span id=\"CacheLogs\"\>/
+                cnum = 0
+                line.scan(/icon_(\w+)\.gif.*?\&nbsp\;(.*?) by \<A NAME=\"(\d+)\"\>\<A HREF=\".*?\"\>(.*?)\<.*?\<br\>(.*?)\<\/font\>/) { |icon, date, id, name, comment|
+                #\<A NAME=\"\d+\"\>\<A HREF=\".*?\"\>(.*?)\<\/A\>.*?\<br\>(.*?)\<\/font\>/) { |icon, date, id, name, comment|
+                    comment.gsub!(/\<.*?\>/, ' ')
+                    type = 'unknown'
+
+                    case icon
+                        when 'smile'
+                            type = 'found'
+                        when 'sad'
+                            type = 'NOT FOUND'
+                        when 'note'
+                            type = 'Note'
+                        when 'remove'
+                            type = 'NO LONGER EXISTS'
+                    end
+
+                    @waypointHash[wid]["comment#{cnum}Type"] = type.dup
+                    @waypointHash[wid]["comment#{cnum}Date"] = date.dup
+                    @waypointHash[wid]["comment#{cnum}ID"] = id.dup
+                    @waypointHash[wid]["comment#{cnum}Icon"] = icon.dup
+                    @waypointHash[wid]["comment#{cnum}Name"] = name.dup
+                    @waypointHash[wid]["comment#{cnum}Comment"] = comment.dup
+
+                    debug "COMMENT #{cnum}: i=#{icon} d=#{date} id=#{id} n=#{name} c=#{comment}"
+                    cnum = cnum + 1
+                }
+            end
+
 		}
 
 
