@@ -141,18 +141,26 @@ class Filter
 
 
 
-	def keyword(string)
-		debug "filtering by keyword: #{string}"
-
+	def titleKeyword(string)
+		debug "filtering by title keyword: #{string}"
 		@waypointHash.each_key { |wid|
             # I wanted to use delete_if, but I had run into a segfault in ruby 1.6.7/8
-            if (! ( (@waypointHash[wid]['details'] =~ /#{string}/i) || (@waypointHash[wid]['name'] =~ /#{string}/i)) )
-                #uts @waypointHash[wid]['details']
+            if (! (@waypointHash[wid]['name'] =~ /#{string}/i) )
                  @waypointHash.delete(wid)
             end
 		}
 	end
 
+
+	def descKeyword(string)
+		debug "filtering by desc keyword: #{string}"
+		@waypointHash.each_key { |wid|
+            # I wanted to use delete_if, but I had run into a segfault in ruby 1.6.7/8
+            if (! ( (@waypointHash[wid]['details'] =~ /#{string}/i) || (@waypointHash[wid]['name'] =~ /#{string}/i)) )
+                @waypointHash.delete(wid)
+            end
+		}
+	end
 
 
     def removeByElement(element)

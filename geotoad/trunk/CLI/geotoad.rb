@@ -46,9 +46,11 @@ def initialize
     if ARGV[0]
         # command line arguments
         @option = uin.getopt
+        $interactive = nil
     else
         # Then go into interactive.
         @option = uin.interactive
+        $interactive = 1
     end
 
     # We need this for the check following
@@ -102,7 +104,8 @@ def usage
     puts " -d/-D [0.0-5.0]        difficulty minimum/maximum"
     puts " -t/-T [0.0-5.0]        terrain minimum/maximum"
     puts " -y    [1-500]          distance maximum in miles (10)"
-    puts " -k    [keyword]        keyword (regexp) search. Use | to delimit multiple"
+    puts " -k    [keyword]        title keyword search. Use | to delimit multiple"
+    puts " -K    [keyword]        desc keyword search. Use | to delimit multiple"
     puts " -c/-C [username]       include/exclude caches owned by this person"
     puts " -u/-U [username]       include/exclude caches found by this person"
     puts "                            (use : to delimit multiple users!)"
@@ -362,6 +365,12 @@ def preFetchFilter
         }
     end
 
+    if @option['titleKeyword']
+        @queryTitle = @queryTitle + ", matching title keywords #{@option['titleKeyword']}"
+        @defaultOutputFile = @defaultOutputFile + "-k=" + @option['titleKeyword']
+        @filtered.titleKeyword(@option['titleKeyword'])
+    end
+
     excludedUsersTotal = beforeUsersTotal - @filtered.totalWaypoints
     if (excludedUsersTotal > 0)
         displayMessage "User filtering removed #{excludedUsersTotal} caches from your listing."
@@ -438,10 +447,10 @@ def postFetchFilter
     # caches with warnings we choose not to include.
     @filtered.removeByElement('warning')
 
-    if @option['keyword']
-        @queryTitle = @queryTitle + ", matching keywords #{@option['keyword']}"
-        @defaultOutputFile = @defaultOutputFile + "-k=" + @option['keyword']
-        @filtered.keyword(@option['keyword'])
+    if @option['descKeyword']
+        @queryTitle = @queryTitle + ", matching desc keywords #{@option['descKeyword']}"
+        @defaultOutputFile = @defaultOutputFile + "-K=" + @option['descKeyword']
+        @filtered.descKeyword(@option['descKeyword'])
     end
 
 
@@ -510,6 +519,7 @@ end
 
 # Yes, it's pretty lame.
 
+
 while(1)
   cli = GeoToad.new
   if (! $slowLink)
@@ -523,14 +533,15 @@ while(1)
   cli.postFetchFilter
   cli.saveFile
   cli.close
+
   # Don't loop if you're in automatic mode.
-  if (ARGV[0])
-      exit
-  else
+  if ($interactive)
       puts ""
       puts "-- Complete! Press Enter to return to the menu --"
       puts ""
       $stdin.gets
+  else
+      exit
   end
 end
 

@@ -18,7 +18,8 @@ class Input
             [ "--difficultyMax",            "-D",        GetoptLong::OPTIONAL_ARGUMENT ],
             [ "--terrainMin",                "-t",        GetoptLong::OPTIONAL_ARGUMENT ],
             [ "--terrainMax",                "-T",        GetoptLong::OPTIONAL_ARGUMENT ],
-            [ "--keyword",                  "-k",    GetoptLong::OPTIONAL_ARGUMENT ],
+            [ "--titleKeyword",               "-k",    GetoptLong::OPTIONAL_ARGUMENT ],
+            [ "--descKeyword",                "-K",    GetoptLong::OPTIONAL_ARGUMENT ],
             [ "--cacheExpiry"               "-c",    GetoptLong::OPTIONAL_ARGUMENT ],
             [ "--quitAfterFetch",           "-x",    GetoptLong::OPTIONAL_ARGUMENT ],
             [ "--notFound",                 "-n",    GetoptLong::NO_ARGUMENT ],
@@ -66,8 +67,6 @@ class Input
     end
 
     def interactive
-
-
         # pop up the menu
         showmenu
 
