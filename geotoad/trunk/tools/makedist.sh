@@ -12,7 +12,7 @@ LONGDIST="$DIST"
 echo "Creating $DEST"
 rm -Rf $DEST*
 mkdir $DEST
-cp -R CLI/._* CLI/.DS* FAQ.txt TODO.txt COPYRIGHT.txt geocache CLI/interface $DEST
+cp -R CLI/._* CLI/.DS* FAQ.txt TODO.txt COPYRIGHT.txt geocache CLI/interface contrib/ $DEST
 ditto CLI/*Mac* $DEST
 sed s/"%VERSION%"/"$VERSION"/g CLI/geotoad.rb > $DEST/geotoad.rb
 sed s/"%VERSION%"/"$VERSION"/g CLI/README.txt > $DEST/README.txt
