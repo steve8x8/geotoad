@@ -38,7 +38,13 @@ something simple like:
 
 geotoad.rb 27513
 
-or:
+If that does not work, try:
+
+ruby geotoad.rb 27513
+
+
+
+Here are some more complex examples that you can work with:
 
 geotoad.rb -t 2.5 -f vcf -u helixblue:Sallad -o ~/Desktop/charlotte.vcf 28272
 
