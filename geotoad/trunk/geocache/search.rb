@@ -44,13 +44,13 @@ class SearchCache < Common
                 # we used to have a coordinates function, but it made no sense to
                 # me why we had a coordinates function but no function for other types?
                 # wrap it into the mode()!
-                (@lat, @long) = key.split(',')
+                (@lat, @long) = key.split(/[, ]/)
 
 				@url=@@baseURL + '?' + 'origin_lat=' + @lat + '&origin_long=' + @long
                 if @distance
                             @url = @url + '&dist=' + @distance.to_s
                 end
-                puts @url
+
             when 'country_id'
                 # as of aug2003, geocaching.com has an in-between page for country
                 # lookups to parse. Pretty silly and worthless, imho.
