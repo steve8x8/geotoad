@@ -88,11 +88,14 @@ class CacheDetails < Common
 		# this data is all on one line, so we should just use scan and forget reparsing.
 		if (wid)
             debug "we have a wid, who are the visitors..."
-			#<A HREF="/profile/default.asp?A=47159">bykenut </A></strong>
-			data.scan (/A=\d+\"\>(.*?)\<\/A\>\<\/strong\>/) {
-				#debug "visitor to #{wid}: #{$1.downcase}"
+
+            # thanks to Mike Capito for the heads up on the most recent change here.
+			#<A NAME="1921710"><A HREF="../profile/?guid=685787d4-3eab-43a0-93c0-9173fd284083">Geo13</A></strong>
+			data.scan (/profile\/\?guid=.*?\"\>(.*?)\<\/A\>\<\/strong\>/) {
+				puts "visitor to #{wid}: #{$1.downcase}"
 				@waypointHash[wid]['visitors'].push($1.downcase)
 			}
+
 
             # these are multi-line matches, so they are out of the scope of our
             # next
