@@ -101,7 +101,8 @@ class ShadowFetch < Common
 		end
 
 		# make a friendly filename
-		localfile.gsub!(/[=\?\*\%\&\$:]/, "_")
+		localfile.gsub!(/[=\?\*\%\&\$:\-\.]/, "_")
+		localfile.gsub!(/_+/, "_")
 		debug "cachefile: #{localfile}"
 		return localfile
 	end
@@ -256,11 +257,17 @@ class ShadowFetch < Common
 		rescue SocketError, Errno::EINVAL, EOFError, TimeoutError, StandardError => detail
             debug "Failed fetching!"
             return nil
+        rescue
+            debug "Unknown error fetching!"
+            return nil
 		end
 
 		if resp
             # ruby 1.8.0 compatibility
-            data = resp.data if data.nil?
+            if VERSION =~ /1.[789]/
+                data = resp.body
+            end
+
             return data
         end
 	end
@@ -350,6 +357,11 @@ class ShadowFetch < Common
 			debug "I got a #{head.code} trying to retrieve #{url}"
 		end
 
+
+        # ruby 1.8.0 compatibility
+        if VERSION =~ /1.[789]/
+                data = resp.body
+        end
 
 		if (data !~ /^OK/)
 			puts "* data failed to upload, deleting shadow host: (#{data})"
