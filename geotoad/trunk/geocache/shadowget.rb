@@ -2,20 +2,20 @@
 
 require 'net/http'
 require 'ftools'
+require 'uri'
 #require 'geocache/common'
 
 # find out where we want our cache #############################
 cacheDir = nil
 # we'll make this more dynamic in the future. Lets start out badly though.
 $shadowHosts = [
-	'http://toadstool.sh/hacks/shadowfetch/get.php',
-	'http://home.toadstool.sh/hacks/shadowfetch/get.php',
-    'http://bitstream.dyn.dhs.org/shadowfetch/get.php',
+	'http://toadstool.se/hacks/shadowfetch/get.php',
+	'http://home.toadstool.se/hacks/shadowfetch/get.php',
 	'http://smtp.stromberg.org/hacks/shadowfetch/get.php'
 ]
 
 $Header = {
-  'User-Agent'      => 'Mozilla/4.5 (compatible; OmniWeb/4.1.1-v424.6; Mac_PowerPC)',
+  'User-Agent'      => "Mozilla/5.0 (compatible; GeoToad/#{$VERSION}; #{RUBY_PLATFORM})",
   'Accept'          => 'image/gif, image/jpeg, image/png, multipart/x-mixed-replace, */*',
   'Accept-Language' => 'en',
   'Accept-Charset'  => 'iso-8859-1, utf-8, iso-10646-ucs-2, macintosh, windows-1252, *'
@@ -226,44 +226,41 @@ class ShadowFetch < Common
 
 		debug "Connecting to #{host} to retrieve #{file}"
 		w = Net::HTTP.new(host, 80)
-		detail = nil
+		resp = nil
 
 		begin
-            if (@postVars)
-                debug "post #{host}#{file}/?#{@postString}"
-                $Header['Content-Type'] =  "application/x-www-form-urlencoded";
-                resp, data = w.post(file, @postString, $Header)
-            else
-                debug "get #{host}#{file}"
-                resp, data = w.get(file, $Header)
-            end
-			return data
+			if (@postVars)
+	                	debug "post #{host}#{file}/?#{@postString}"
+				$Header['Content-Type'] =  "application/x-www-form-urlencoded";
+				resp, data = w.post(file, @postString, $Header)
+			else
+				debug "get #{host}#{file}"
+				resp, data = w.get(file, $Header)
+			end
+		rescue Net::ProtoRetriableError => detail
+			head = detail.data
+
+			if head.code == "301"
+			    debug "Following redirect to #{head['location']}"
+			    uri = URI.parse(head['location'])
+
+			    host = uri.host if uri.host
+			    url  = uri.path if uri.path
+			    port = uri.port if uri.port
+
+			    w.finish if w.active?
+			    w = Net::HTTP.new(host,port)
+			    retry
+			end
 		rescue => detail
-			debug "Error fetching #{url} (members only cache?)"
-
-            # our debugging is messed up right now.
-            return nil
-
-			if (detail)
-				head.each { |key, val|
-					debug "        #{key}: #{val}"
-				}
-			end
-			debug "retrying..."
-			sleep 2
-
-			# can we even do this!?!?
-			begin
-                webagain = Net::HTTP.new(host, 80)
-				resp, data = webagain.get(file, nil)
-				return data
-			rescue
-				debug "retry failed"
-				return ""
-			end
+			head = detail.data
+			debug "I got a #{head.code} trying to retrieve #{url}"
 		end
-	end
 
+		# ruby 1.8.0 compatibility
+		data = resp.data if data.nil?
+		return data
+	end
 
 	def fetchGoogle
 		debug "fetching google data of #{@url}"
@@ -309,21 +306,53 @@ class ShadowFetch < Common
 		host = fileParts[2]
 		file = '/' + fileParts[3..-1].join('/')
 
-        if (! @data)
-            debug "No data found for #{@url}, not updating shadow"
-            return nil
-        end
+		if (! @data)
+		    debug "No data found for #{@url}, not updating shadow"
+		    return nil
+		end
 
-        uploadEncoded = "c=update&p=" + CGI.escape(@url) + "&d=" + CGI.escape(@data)
+		uploadEncoded = "c=update&p=" + CGI.escape(@url) + "&d=" + CGI.escape(@data)
 
-		#puts uploadEncoded
-		web = Net::HTTP.new(host, 80)
+		##########################################
+		# This needs to get merged into fetchURL!#
+		##########################################
+
+		shadow = Net::HTTP.new(host, 80)
 		headers = { "Content-Type" => "application/x-www-form-urlencoded" }
 		debug "Uploading cache data to shadowfetch server: #{$shadowHosts[0]}"
-    response, data = web.post("#{file}?", uploadEncoded, headers)
+
+		begin
+			resp, data = shadow.post("#{file}?", uploadEncoded, headers)
+		rescue Net::ProtoRetriableError => detail
+			head = detail.data
+
+			if head.code == "301"
+                newLocation = head['location']
+                newLocation.sub!(/\?$/, '')
+                puts "> Shadowhost #{$shadowHosts[0]} has moved to #{newLocation}!"
+
+			    # store the redirect information
+
+			    $shadowHosts[0]=newLocation
+			    uri = URI.parse(head['location'])
+
+			    host = uri.host if uri.host
+			    url  = uri.path if uri.path
+			    port = uri.port if uri.port
+
+			    shadow.finish if shadow.active?
+			    shadow = Net::HTTP.new(host,port)
+			    retry
+			end
+		rescue => detail
+			head = detail.data
+			debug "I got a #{head.code} trying to retrieve #{url}"
+		end
+
+
 		if (data !~ /^OK/)
 			puts "* data failed to upload, deleting shadow host: #{data}"
-            $shadowHosts.delete(host)
+			$shadowHosts.delete(host)
 			return nil
 		else
 			debug "uploaded: #{data}"
