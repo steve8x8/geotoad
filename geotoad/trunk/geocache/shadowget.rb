@@ -383,8 +383,12 @@ class ShadowFetch
                 data = resp.body
         end
 
-		if (data !~ /^OK/)
-			displayInfo "* data failed to upload, deleting shadow host: (#{data})"
+        data.chomp!
+
+        if data =~ /^[SL]-(\d+)/
+            displayWarning "data for #{@url} failed to upload, size issue: #{data}"
+		elsif (data !~ /^OK/)
+			displayWarning "data for #{@url} failed to upload, deleting shadow host: (#{data})"
 			$shadowHosts.delete(host)
 			return nil
 		else
