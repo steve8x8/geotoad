@@ -446,7 +446,7 @@ class Output < Common
 
         wpList.sort{|a,b| a[1]<=>b[1]}.each {  |wpArray|
             wid = wpArray[0]
-            puts "Output loop: #{wid} - #{@wpHash[wid]['name']}"
+            debug "Output loop: #{wid} - #{@wpHash[wid]['name']}"
 			detailsLen = @outputFormat['detailsLength'] || 20000
 
 			numEntries = @wpHash[wid]['details'].length / detailsLen
