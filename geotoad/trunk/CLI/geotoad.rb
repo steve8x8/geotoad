@@ -1,8 +1,10 @@
 #!/usr/bin/env ruby
 # $Id: geotoad.rb,v 1.19 2002/08/05 03:38:51 strombt Exp $
 
-# hack to include .. into the library path.
-$:.push('..')
+# from ruby-talk 67359 -- make sure your current directory and directory before
+# is always in path. The gsub is for Windows machines.
+$LOAD_PATH << File.dirname(__FILE__.gsub(/\\/, '/'))
+$LOAD_PATH << (File.dirname(__FILE__.gsub(/\\/, '/')) + '/' + '..')
 
 
 # toss in our own libraries.
@@ -521,6 +523,16 @@ def saveFile
         outputFile.gsub!(/_+/, '_')
         outputFile = outputFile + "." + output.formatExtension(@formatType)
     end
+
+    # prepend the current working directory
+    if outputFile !~ /\/\\/
+        if RUBY_PLATFORM =~ /win32/
+            outputFile = Dir.getwd + '\\' + outputFile
+        else
+            outputFile = Dir.getwd + '/' + outputFile
+        end
+    end
+
 
     @queryTitle = @queryTitle + " (" + Time.now.strftime("%d%b%y %H:%M") + ")"
     outputData = output.prepare(@queryTitle);
