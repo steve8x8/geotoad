@@ -58,7 +58,7 @@ $Format = {
             "  <groundspeak:state><%wp.state%></groundspeak:state>\r\n" +
             "  <groundspeak:short_description html=\"False\">-</groundspeak:short_description>\r\n" +
             "  <groundspeak:long_description html=\"False\"><%outEntity.details%></groundspeak:long_description>\r\n" +
-            "  <groundspeak:encoded_hints><%outEntity.hint%></groundspeak:encoded_hints>\r\n" +
+            "  <groundspeak:encoded_hints><%wpEntity.hint%></groundspeak:encoded_hints>\r\n" +
             "  <groundspeak:logs>\r\n" +
             "    <groundspeak:log id=\"00000\">\r\n" +
             "      <groundspeak:date>XXX</groundspeak:date>\r\n" +
@@ -83,9 +83,9 @@ $Format = {
                 "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">\n" + "</head>\n" +
                 "<body link=\"#000099\" vlink=\"#000044\" alink=\"#000099\">\n" +
                 "<h3><%out.title%></h3>" +
-                "<b><font color=\"#11CC11\">$</font></b> have travelbugs<br>" +
-                "<b><font color=\"#9900CC\">@</font></b> have never been found<br>" +
-                "<b><font color=\"#229999\">%</font></b> have a terrain rating of 3.5+<br>" +
+                "<b><font color=\"#11CC11\">$</font></b> have travelbugs&nbsp;&nbsp;&nbsp;" +
+                "<b><font color=\"#9900CC\">@</font></b> have never been found&nbsp;&nbsp;&nbsp;" +
+                "<b><font color=\"#229999\">%</font></b> have a terrain rating of 3.5+&nbsp;&nbsp;&nbsp;" +
                 "<b><font color=\"#BB0000\">+</font></b> have a difficulty rating of 3.5+<br>",
 
             'templateIndex' => "* <a href=\"#<%out.wid%>\"><%wpEntity.name%></a><br>",
@@ -95,7 +95,7 @@ $Format = {
                 "<font color=\"#339933\"><%wp.type%> D<%wp.difficulty%>/T<%wp.terrain%> <%out.relativedistance%><br>" +
                 "placed: <%wp.cdate%> last: <%wp.mdays%> days ago</font><br>" +
                 "<p><%outEntity.details%></p>\n" +
-                "<p><font color=\"#555555\">Hint: <%out.hint%></font></p>\n",
+                "<p><font color=\"#555555\"><%out.hint%></font></p>\n",
             'templatePost'    => "</body></html>"
         },
 
@@ -113,7 +113,7 @@ $Format = {
                 "Type: <%wp.type%> <%out.relativedistance%>\r\n" +
                 "Creation: <%wp.cdate%>, Last found: <%wp.mdays%> days ago\r\n" +
                 "\r\n<%out.details%>\r\n" +
-                "\r\nHint: <%out.hint%>\r\n\r\n\r\n\r\n"
+                "\r\n<%out.hint%>\r\n\r\n\r\n\r\n"
         },
 
         'tab'    => {
