@@ -95,7 +95,7 @@ $Format = {
                 "<font color=\"#339933\"><%wp.type%> D<%wp.difficulty%>/T<%wp.terrain%> <%out.relativedistance%><br>" +
                 "placed: <%wp.cdate%> last: <%wp.mdays%> days ago</font><br>" +
                 "<p><%outEntity.details%></p>\n" +
-                "<p><font color=\"#555555\"><%out.hint%></font></p>\n",
+                "<p><font color=\"#555555\">Hint: <%out.hint%></font></p>\n",
             'templatePost'    => "</body></html>"
         },
 
@@ -113,7 +113,7 @@ $Format = {
                 "Type: <%wp.type%> <%out.relativedistance%>\r\n" +
                 "Creation: <%wp.cdate%>, Last found: <%wp.mdays%> days ago\r\n" +
                 "\r\n<%out.details%>\r\n" +
-                "\r\n<%out.hint%>\r\n\r\n\r\n\r\n"
+                "\r\nHint: <%out.hint%>\r\n\r\n\r\n\r\n"
         },
 
         'tab'    => {

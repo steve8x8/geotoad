@@ -356,7 +356,7 @@ class Output
             end
 
             if @wpHash[@currentWid]['hint']
-                @outVars['hint'] = 'Hint: ' + @wpHash[@currentWid]['hint']
+                @outVars['hint'] = @wpHash[@currentWid]['hint']
                 debug "I will include the hint: #{@outVars['hint']}"
             end
 
