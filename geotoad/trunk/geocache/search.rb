@@ -20,22 +20,17 @@ class SearchCache < Common
 	# set the search mode. valid modes are 'zip', 'state_id', 'country_id', 'keyword',
 	# coord, user
 	def mode(mode, key)
-
-		if (mode != "coord") && (mode != "user")	#for most modes look up the key
+        if (mode == "state_id") || (mode == "country_id")
 		    keylookup=SearchCode.new(mode)		# i.e. resolve North Carolina to 34.
             @mode=keylookup.type
             @key=keylookup.lookup(key)
-            if (! @key)
-                puts "Bad search key for #{@mode} type: #{key}"
-                return nil
-            end
-
-            # nearly everything is in this form
-            @url=@@baseURL + '?' + @mode + '=' + @key.to_s
-		else 	# for modes where we didn't look up the key, just save the mode and key locally
+        else
 			@mode = mode
             @key = key
         end
+
+        # nearly everything is in this form
+        @url=@@baseURL + '?' + @mode + '=' + CGI.escape(@key.to_s)
 
         # special URL preperation's for some modes
 		case @mode
@@ -59,11 +54,7 @@ class SearchCache < Common
             when 'country_id'
                 # as of aug2003, geocaching.com has an in-between page for country
                 # lookups to parse. Pretty silly and worthless, imho.
-
-                ######################
-                ## CURRENTLY BROKEN ##
-                ## NEEDS HELP       ##
-                ######################
+                ## CURRENTLY BROKEN - NEEDS HELP BADLY!!!! ##
                 puts "Country searches are currently broken. Please help fix!"
                 return nil
 
@@ -80,14 +71,15 @@ class SearchCache < Common
                 debug "country page parsed"
 
             when 'zip'
-		if (@key !~ /^\d+$/)
-			puts "Invalid zip code format: #{@key}"
-			return nil
-		end
+                if (@key !~ /^[\w][\w ]+$/)
+                    puts "Invalid zip code format: #{@key}"
+                    return nil
+                end
+
                 if @distance
                     @url = @url + '&dist=' + @distance.to_s
                 end
-		end
+            end
 
 		debug "URL for mode #{mode} is #{@url}"
         return @url
