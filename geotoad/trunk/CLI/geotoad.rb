@@ -33,7 +33,7 @@ else
     $VERSION = versionID.dup
 end
 
-$SLEEP=0
+$SLEEP=2
 $SLOWMODE=350
 
 def initialize
@@ -56,7 +56,7 @@ def getoptions
     end
 
     # We need this for the check following
-    @queryType         = @option['queryType'] || 'zip'
+    @queryType         = @option['queryType'] || 'zipcode'
     @queryArg          = @option['queryArg'] || nil
 
     # Get this out of the way now.
@@ -76,8 +76,6 @@ def getoptions
 
     # This is a global. Not cool.
     $slowLink          = @option['slowlink'] || nil
-
-
 
     if (@option['verbose'])
         enableDebug
@@ -183,7 +181,8 @@ def downloadGeocacheList
         end
 
         # only valid for zip or coordinate searches
-        if @queryType == "zip" || @queryType == "coord"
+
+        if @queryType == "zipcode" || @queryType == "coord"
             puts "(constraining to #{@distanceMax} miles)"
             @queryTitle = @queryTitle + " (#{@distanceMax}mi. radius)"
             @defaultOutputFile = @defaultOutputFile + "-y" + @distanceMax.to_s
@@ -412,6 +411,8 @@ def fetchGeocaches
 
     @detail = CacheDetails.new(wpFiltered)
     token = 0
+    downloads = 0
+
     wpFiltered.each_key { |wid|
         token = token + 1
         detailURL = @detail.fullURL(wpFiltered[wid]['sid'])
