@@ -54,7 +54,7 @@ class Output < Common
 			'ext'		=> 'html',
 			'mime'	=> 'text/html',
 			'desc'	=> 'Simple HTML table format',
-			'spacer'	=> "<br>&nbsp;<br>\n",
+			'spacer'	=> "<br>&nbsp;\n",
 			'templatePre' => "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n" +
                 "<html><head>\n<title>GeoToad Output</title>\n" +
                 "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">\n" + "</head>\n" +
@@ -420,6 +420,8 @@ class Output < Common
 
             wpList.sort{|a,b| a[1]<=>b[1]}.each {  |wpArray|
                 wid = wpArray[0]
+                debug "Creating index for \"#{@wpHash[wid]['name']}\" (#{wid})"
+
                 @wpHash[wid]['details'].gsub!(/\&([A-Z])/, '&amp;(#{$1})');
                 @wpHash[wid]['creator'].gsub!('&', '&amp;');
                 htmlIndex = htmlIndex + "<li><a href=\"\##{wid}\">#{@wpHash[wid]['name']}</a>"
@@ -428,7 +430,6 @@ class Output < Common
                     htmlIndex = htmlIndex + " [TB]"
                 end
 
-                debug "Creating index for \"#{@wpHash[wid]['name']}\" (#{wid})"
                 if (@wpHash[wid]['mdate'] < 0)
                     htmlIndex = htmlIndex + " (v)"
                     debug "Marking #{@wpHash[wid]['name']} a virgin (#{@wpHash[wid]['mdate']})"
