@@ -98,7 +98,7 @@ def usage
     puts " -D [0.0-5.0]            difficulty maximum (5)"
     puts " -t [0.0-5.0]            terrain minimum (0)"
     puts " -T [0.0-5.0]            terrain maximum (5)"
-    puts " -y [1-500]              distance maximum (10)"
+    puts " -y [1-500]              distance maximum in miles (10)"
     puts " -k [keyword]            keyword (regexp) search. Use | to delimit multiple"
     puts " -c [username]           only include caches owned by this person"
     puts " -C [username]           exclude caches owned by this person"
