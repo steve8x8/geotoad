@@ -152,15 +152,15 @@ class Input
                    @@optHash['queryType'] = guessQueryType(type).to_s
 
                when '2'
-                   if (@@optHash['queryType'] = 'zipcode')
+                   if (@@optHash['queryType'] == 'zipcode')
                        @@optHash['queryArg'] = ask('Enter a list of zipcodes (seperated by commas)', 'NO_DEFAULT').gsub(/, */, ':')
                    end
 
-                   if (@@optHash['queryType'] =~ 'state')
+                   if (@@optHash['queryType'] == 'state')
                        @@optHash['queryArg'] = ask('Enter a list of states (seperated by commas)', 'NO_DEFAULT').gsub(/, */, ':')
                    end
 
-                   if (@@optHash['queryType'] =~ 'coord')
+                   if (@@optHash['queryType'] == 'coord')
                        puts "You will be asked to enter in a list of coordinates in the following format:"
                        puts "N56 44.392 E015 52.780"
                        puts ""
