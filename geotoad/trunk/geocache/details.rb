@@ -92,7 +92,7 @@ class CacheDetails < Common
                 @waypointHash[wid]['details'] = $1
             end
 
-            if data =~ /id=\"LongDescription\"\>(.*?)\<\/span\>/m
+            if data =~ /id=\"LongDescription\"\>(.*?)\<\/span\><\/BLOCKQUOTE\>/m
 				details =  @waypointHash[wid]['details'] << "details: " << $1
 				details.gsub!("\<.*?\>", " *")
 				details.gsub!("\r\n", " ")
