@@ -126,14 +126,14 @@ $Format = {
         },
 
         'csv'    => {
-            'ext'        => 'csv',
+            'ext'        => 'txt',
             'mime'    => 'text/plain',
             'desc'    => 'CSV for spreadsheet imports',
             'spacer'    => "",
             'templatePre' => "\"Name\",\"Waypoint ID\",\"Creator\",\"Difficulty\",\"Terrain\"," +
-                                            "\"Latitude\",\"Longitude\",\"Type\",\"Creation Date\", \"Details\"\r\n",
+                                            "\"Latitude\",\"Longitude\",\"Type\",\"Creation Date\",\"Details\"\r\n",
             'templateWP'    => "\"<%wp.name%>\",\"<%out.wid%>\",\"<%wp.creator%>\"," +
-                "<%wp.difficulty%>,<%wp.terrain%>,<%wp.latwritten%>,<%wp.lonwritten%>," +
+ 		"<%wp.difficulty%>,<%wp.terrain%>,\"<%wp.latwritten%>\",\"<%wp.lonwritten%>\"," +
                 "\"<%wp.type%>\",\"<%wp.cdate%>\",\"<%out.details%>\"\r\n"
         },
 

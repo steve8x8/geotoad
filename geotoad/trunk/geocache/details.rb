@@ -206,6 +206,9 @@ class CacheDetails
                 details.gsub!(/\'+/, "\'")			# multiple apostrophes
                 details.gsub!(/^\*/, '')			# lines that start with *
 
+		# kill the last space, which makes the CSV output nicer.
+		details.gsub!(/ $/, '')
+
                 # convert things into plain text.
                 details = CGI.unescapeHTML(details);
 
