@@ -63,6 +63,7 @@ syntax: geotoad.rb [options] <search:search2:search3>
 
  -f format for output. Formats available are:
    csv           CSV for spreadsheet imports
+   delorme       DeLorme TXT import datafile  
    easygps       Geocaching.com .loc XML file
    gpsdrive      GpsDrive
    gpspoint      gpspoint datafile
