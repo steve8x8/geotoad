@@ -259,10 +259,12 @@ class ShadowFetch < Common
 		end
 
 		if resp
-            # ruby 1.8.0 compatibility
-            data = resp.data if data.nil?
-            return data
-        end
+		    # I can't believe they did this
+		    if RUBY_VERSION =~ /1\.[78]/
+			data = resp.body
+		    end
+               return data
+            end
 	end
 
 	def fetchGoogle
@@ -350,9 +352,15 @@ class ShadowFetch < Common
 			debug "I got a #{head.code} trying to retrieve #{url}"
 		end
 
+		if resp
+		    # I can't believe they did this
+		    if RUBY_VERSION =~ /1\.[78]/
+			data = resp.body
+		    end
+		end
 
 		if (data !~ /^OK/)
-			puts "* data failed to upload, deleting shadow host: (#{data})"
+			puts "* data failed to upload, deleting shadow host #{host}: (#{data})"
 			$shadowHosts.delete(host)
 			return nil
 		else
