@@ -58,19 +58,16 @@ class CacheDetails < Common
                 @waypointHash[wid]['details'] = ''
             end
 
-            # latitude in the post form
-            if line =~ /value=\"([-\+\d\.]+)\" name=lat\>/
+            # latitude in the post form. Used by GPX and other formats
+            # [<A HREF="http://www.geocaching.com/map/getmap.aspx?lat=39.14498&lon=-86.22033">view map</A>]</font></span></FONT><br>
+
+            if line =~ /getmap\.aspx\?lat=([\d\.-]+)\&lon=([\d\.-]+)\">view map/
                 @waypointHash[wid]['latdata'] = $1
-				debug "got lat data: #{$1}"
+                @waypointHash[wid]['londata'] = $2
+				debug "got digital lat/lon: #{$1} #{$2}"
             end
 
-            # longitude in the post form
-            if line =~ /value=\"([-\+\d\.]+)\" name=lon\>/
-                @waypointHash[wid]['londata'] = $1
-				debug "got lon data: #{$1}"
-            end
-
-            # latitude and longitude in the written form, which is what we use
+            # latitude and longitude in the written form
 			if line =~ /\<font size=\"3\"\>([NW]) (\d+).*? ([\d\.]+) ([NW]) (\d+).*? ([\d\.]+)\<\/STRONG\>/
 				@waypointHash[wid]['latwritten'] = $1 + $2 + ' ' + $3
 				@waypointHash[wid]['lonwritten'] = $4 + $5 + ' ' + $6
