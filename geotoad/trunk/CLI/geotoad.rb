@@ -109,7 +109,8 @@ def usage
     puts " -r/-R [# days]         include/exclude caches found in the last X days"
     puts " -n                     only include not found caches (virgins)"
     puts " -b                     only include caches with travelbugs"
-    puts " -l                     set waypoint id length. (16)"
+    puts " -E                     disable EasyName waypoint id's (16)"
+    puts " -l                     set EasyName waypoint id length. (16)"
     puts ""
     puts "::: OUTPUT FORMATS:"
     outputDetails = Output.new
@@ -506,6 +507,11 @@ def saveFile
     output.formatType=@formatType
     if (@option['waypointLength'])
         output.waypointLength=@option['waypointLength'].to_i
+    end
+
+    # easyname is just a friendlier way of saying 0 waypoint length.
+    if (@option['disableEasyName'])
+        output.waypointLength=0
     end
 
 
