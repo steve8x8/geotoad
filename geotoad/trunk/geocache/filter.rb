@@ -48,13 +48,22 @@ class Filter
 		}
 	end
 
-    def terrainMax(num)
-		debug "filtering by terrainMax: #{num}"
+	def aratingMin(num)
+		debug "filtering by aratingMin: #{num}"
 
 		@waypointHash.delete_if { |wid, values|
-			@waypointHash[wid]['terrain'] > num
+			@waypointHash[wid]['arating'] < num
 		}
 	end
+
+	def aratingMax(num)
+		debug "filtering by aratingMax: #{num}"
+
+		@waypointHash.delete_if { |wid, values|
+			@waypointHash[wid]['arating'] > num
+		}
+	end
+
 
     def notFound
 		debug "filtering by notFound"

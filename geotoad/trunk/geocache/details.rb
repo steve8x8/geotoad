@@ -95,8 +95,6 @@ class CacheDetails
                 end
             end
 
-            # latitude in the post form. Used by GPX and other formats
-            # [<A HREF="http://www.geocaching.com/map/getmap.aspx?lat=39.14498&lon=-86.22033">view map</A>]</font></span></FONT><br>
 			# Regexp rewritten by Scott Brynen for Canadian compatibility
 		    if line =~ /getmap\.aspx\?lat=([\d\.-]+)\&lon=([\d\.-]+)/
                 @waypointHash[wid]['latdata'] = $1
@@ -131,21 +129,33 @@ class CacheDetails
             end
 
             if line =~ /\<span id=\"CacheLogs\"\>/
+                # ratings
+                artificialRating = 2
+
                 cnum = 0
                 line.scan(/icon_(\w+)\.gif.*?\&nbsp\;(.*?) by \<A NAME=\"(\d+)\"\>\<A HREF=\".*?\"\>(.*?)\<.*?\<br\>(.*?)\<\/font\>/) { |icon, date, id, name, comment|
-                #\<A NAME=\"\d+\"\>\<A HREF=\".*?\"\>(.*?)\<\/A\>.*?\<br\>(.*?)\<\/font\>/) { |icon, date, id, name, comment|
                     comment.gsub!(/\<.*?\>/, ' ')
                     type = 'unknown'
 
+                    # these are the types that I have seen before in GPX files
+                    # Archive (show)       Attended      Didn't find it      Found it
+                    # Needs Archived       Note          Other               Unarchive
+                    # Webcam Photo Taken   Write note
+
                     case icon
-                        when 'smile'
+                        when /smile|happy/
                             type = 'Found it'
+                            @waypointHash[wid]['visitors'].push(name.downcase)
                         when 'sad'
-                            type = 'NOT FOUND'
+                            type = 'Didn\'t find it'
                         when 'note'
                             type = 'Note'
                         when 'remove'
-                            type = 'NO LONGER EXISTS'
+                            type = 'Archive (show)'
+                        when 'camera'
+                            type = 'Webcam Photo Taken'
+                        else
+                            type = 'Other'
                     end
 
                     @waypointHash[wid]["comment#{cnum}Type"] = type.dup
@@ -155,9 +165,14 @@ class CacheDetails
                     @waypointHash[wid]["comment#{cnum}Name"] = name.dup
                     @waypointHash[wid]["comment#{cnum}Comment"] = comment.dup
 
+                    artificialRating = artificialRating + determineRating(type, comment)
+
                     debug "COMMENT #{cnum}: i=#{icon} d=#{date} id=#{id} n=#{name} c=#{comment}"
                     cnum = cnum + 1
                 }
+
+                debug "artificialrating = #{artificialRating}"
+                @waypointHash[wid]['arating'] = artificialRating
             end
 
 		}
@@ -165,25 +180,13 @@ class CacheDetails
 
 		# this data is all on one line, so we should just use scan and forget reparsing.
 		if (wid)
-            debug "we have a wid, who are the visitors..."
-
-            # We used to include any comments, but with the smile part, we only include founds.
-            #icon_smile.gif'>&nbsp;October 12 by <A NAME="2224020"><A HREF="../profile/?guid=5dadabfd-1343-44f2-a3b1-09a4886cb164">
-            #           smile.gif'>&nbsp;August 25 by <A NAME="1945173"><A HREF="../profile/?guid=4dda95c7-06b4-42df-8bfa-d936d52a6c57">Jnick</A></strong>
-
-			data.scan(/smile.gif\'\>\&nbsp\;\w+ \d+ by <A NAME=\"\d+\"\>\<A HREF=\"..\/profile\/\?guid=.*?\"\>(.*?)\<\/A/) {
-                debug "visitor to #{wid}: #{$1.downcase}"
-                @waypointHash[wid]['visitors'].push($1.downcase)
-            }
-
+            debug "we have a wid"
 
             # these are multi-line matches, so they are out of the scope of our
             # next
             if data =~ /id=\"ShortDescription\"\>(.*?)\<\/span\>/m
                 debug "found short desc: [#{$1}]"
                 shortdesc = $1
-                #shortdesc.gsub!(/[\x80-\xFF]/, "\'")		# high ascii
-                #shortdesc.gsub!(/\&#\d+\;/, "\'")		# high ascii in entity format
                 shortdesc.gsub!(/\'+/, "\'")
                 shortdesc.gsub!(/^\*/, '')
                 @waypointHash[wid]['details'] = CGI.unescapeHTML(shortdesc)
@@ -191,57 +194,7 @@ class CacheDetails
 
             if data =~ /id=\"LongDescription\"\>(.*?)\<\/span\><\/BLOCKQUOTE\>/m
                 debug "found long desc"
-                details =  @waypointHash[wid]['details'] << "  " << $1
-
-                debug "pre-html-process: #{details}"
-                # normalize, but work around the ruby 1.8.0 warnings.
-                details.gsub!(/#{'\r\n'}/, ' ')
-                details.gsub!(/#{'\r'}/, '')
-                details.gsub!(/#{'\n'}/, '')
-
-                debug "normalized: #{details}"
-                # rip some tags out.
-                details.gsub!(/\<\/li\>/i, '')
-                details.gsub!(/\<\/p\>/i, '')
-                details.gsub!(/<\/*i\>/i, '')
-                details.gsub!(/<\/*body\>/i, '')
-                details.gsub!(/<\/*option.*?\>/i, '')
-                details.gsub!(/<\/*select.*?\>/i, '')
-                details.gsub!(/<\/*span.*?\>/i, '')
-                details.gsub!(/<\/*font.*?\>/i, '')
-                details.gsub!(/<\/*ul\>/i, '')
-                details.gsub!(/style=\".*?\"/i, '')
-
-                debug "post-html-tags-removed: #{details}"
-
-                # substitute
-                details.gsub!(/\<p\>/i, "**")
-                details.gsub!(/\<li\>/i, "\n * (o) ")
-                details.gsub!(/<\/*b>/i, '')
-                details.gsub!(/\<img.*?\>/i, '[img]')
-                details.gsub!(/\<.*?\>/, ' *')
-                debug "pre-combine-process: #{details}"
-
-                # combine all the tags we nuked. These regexps
-                # could probably be cleaned up pretty well.
-                details.gsub!(/ +/, ' ')
-                details.gsub!(/\* *\* *\*/, '**')
-                details.gsub!(/\* *\* *\*/, '**')		# unnescesary
-                details.gsub!(/\*\*\*/, '**')
-                details.gsub!(/\* /, '*')
-                debug "post-combine-process: #{details}"
-                #details.gsub!(/[\x80-\xFF]/, "\'")		# high ascii
-                #details.gsub!(/\&#\d+\;/, "\'")			# high ascii in entity format
-                details.gsub!(/\&nbsp\;/, " ")			# unescapeHTML seems to ignore.
-                details.gsub!(/\'+/, "\'")			# multiple apostrophes
-                details.gsub!(/^\*/, '')			# lines that start with *
-
-		# kill the last space, which makes the CSV output nicer.
-		details.gsub!(/ $/, '')
-
-                # convert things into plain text.
-                details = CGI.unescapeHTML(details);
-
+                details =  cleanHTML(@waypointHash[wid]['details'] << "  " << $1)
                 debug "got details: [#{details}]"
                 @waypointHash[wid]['details'] = details
             end
@@ -255,5 +208,91 @@ class CacheDetails
         end
 
 	end  # end function
+
+
+
+
+    # cleans up HTML and makes it text-worthy.
+    def cleanHTML(text)
+        debug "pre-html-process: #{text}"
+        # normalize, but work around the ruby 1.8.0 warnings.
+        text.gsub!(/#{'\r\n'}/, ' ')
+        text.gsub!(/#{'\r'}/, '')
+        text.gsub!(/#{'\n'}/, '')
+
+        debug "normalized: #{text}"
+        # rip some tags out.
+        text.gsub!(/\<\/li\>/i, '')
+        text.gsub!(/\<\/p\>/i, '')
+        text.gsub!(/<\/*i\>/i, '')
+        text.gsub!(/<\/*body\>/i, '')
+        text.gsub!(/<\/*option.*?\>/i, '')
+        text.gsub!(/<\/*select.*?\>/i, '')
+        text.gsub!(/<\/*span.*?\>/i, '')
+        text.gsub!(/<\/*font.*?\>/i, '')
+        text.gsub!(/<\/*ul\>/i, '')
+        text.gsub!(/style=\".*?\"/i, '')
+
+        debug "post-html-tags-removed: #{text}"
+
+        # substitute
+        text.gsub!(/\<p\>/i, "**")
+        text.gsub!(/\<li\>/i, "\n * (o) ")
+        text.gsub!(/<\/*b>/i, '')
+        text.gsub!(/\<img.*?\>/i, '[img]')
+        text.gsub!(/\<.*?\>/, ' *')
+        debug "pre-combine-process: #{text}"
+
+        # combine all the tags we nuked. These regexps
+        # could probably be cleaned up pretty well.
+        text.gsub!(/ +/, ' ')
+        text.gsub!(/\* *\* *\*/, '**')
+        text.gsub!(/\* *\* *\*/, '**')		# unnescesary
+        text.gsub!(/\*\*\*/, '**')
+        text.gsub!(/\* /, '*')
+        debug "post-combine-process: #{text}"
+        #text.gsub!(/[\x80-\xFF]/, "\'")		# high ascii
+        #text.gsub!(/\&#\d+\;/, "\'")			# high ascii in entity format
+        text.gsub!(/\&nbsp\;/, " ")			# unescapeHTML seems to ignore.
+        text.gsub!(/\'+/, "\'")			# multiple apostrophes
+        text.gsub!(/^\*/, '')			# lines that start with *
+
+		# kill the last space, which makes the CSV output nicer.
+		text.gsub!(/ $/, '')
+
+        # convert things into plain text.
+        text = CGI.unescapeHTML(text);
+    end
+
+
+
+
+    # This function is pretty lousy right now, which is why it's undocumented. What it really
+    # needs is some real intelligence to it. This function returns a number between -1 and 1.
+    def determineRating(type, comment)
+        rating = 0
+
+        if type =~ /Didn\'t/
+            rating = rating - 1
+        end
+
+        case comment
+         when /best cache|adventure|come back|wow|awesome|breathtaking/i
+            debug "extra: #{comment}"
+            rating = rating + 1
+         when /great|enjoyed|beautiful|excellent|be back|fun|nice drive|workout/i
+            debug "\npositive: #{comment}"
+            rating = rating + 0.7
+         when /briar|thorn|wrong/
+             debug "\nsorta: #{comment}"
+             rating = rating - 0.3
+         when /nightmare|try again|soggy|unfortunat|too easy|very easy|trash|broken|wet|wasn\'t there|weren\'t allowed|trespassing|too much walking|ambiguous|gave up/i
+            debug "\nnegative: #{comment}"
+            rating = rating - 1
+        end
+
+        return rating
+    end
+
 end  # end class
 

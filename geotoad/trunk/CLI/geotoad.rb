@@ -296,8 +296,8 @@ def preFetchFilter
     debug "Filter running cycle 4, #{@filtered.totalWaypoints} caches left"
 
     if @option['terrainMax']
-        @queryTitle = @queryTitle + ", terrain #{@option['difficultyMax']} or lower"
-        @defaultOutputFile = @defaultOutputFile + "-T" + @option['difficultyMin'].to_s
+        @queryTitle = @queryTitle + ", terrain #{@option['terrainMax']} or lower"
+        @defaultOutputFile = @defaultOutputFile + "-T" + @option['terrainMax'].to_s
         @filtered.terrainMax(@option['terrainMax'].to_f)
     end
 
@@ -466,6 +466,18 @@ def postFetchFilter
         @queryTitle = @queryTitle + ", matching desc keywords #{@option['descKeyword']}"
         @defaultOutputFile = @defaultOutputFile + "-K=" + @option['descKeyword']
         @filtered.descKeyword(@option['descKeyword'])
+    end
+
+    if @option['aratingMin']
+        @queryTitle = @queryTitle + ", arating #{@option['aratingMin']}+"
+        @defaultOutputFile = @defaultOutputFile + "-a" + @option['aratingMin'].to_s
+        @filtered.aratingMin(@option['aratingMin'].to_f)
+    end
+
+    if @option['aratingMax']
+        @queryTitle = @queryTitle + ", arating #{@option['aratingMax']} or lower"
+        @defaultOutputFile = @defaultOutputFile + '-A' + @option['aratingMax'].to_s
+        @filtered.aratingMax(@option['aratingMax'].to_f)
     end
 
 

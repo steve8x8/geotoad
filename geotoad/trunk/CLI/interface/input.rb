@@ -23,6 +23,8 @@ class Input
             [ "--difficultyMax",            "-D",        GetoptLong::OPTIONAL_ARGUMENT ],
             [ "--terrainMin",                "-t",        GetoptLong::OPTIONAL_ARGUMENT ],
             [ "--terrainMax",                "-T",        GetoptLong::OPTIONAL_ARGUMENT ],
+            [ "--aratingMin",                "-a",        GetoptLong::OPTIONAL_ARGUMENT ],
+            [ "--aratingMax",                "-A",        GetoptLong::OPTIONAL_ARGUMENT ],
             [ "--titleKeyword",               "-k",    GetoptLong::OPTIONAL_ARGUMENT ],
             [ "--descKeyword",                "-K",    GetoptLong::OPTIONAL_ARGUMENT ],
             [ "--cacheExpiry"               "-c",    GetoptLong::OPTIONAL_ARGUMENT ],
