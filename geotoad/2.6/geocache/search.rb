@@ -184,7 +184,7 @@ class SearchCache < Common
                     @cache['type']=$1
                     @cache['mdays']=-1
                     @cache['type'].gsub!(/\s*cache.*/, '')
-                    @cache['type'].gsub!('-', '')
+                    @cache['type'].gsub!(/\-/, '')
                     debug "type=#{@cache['type']}"
 
                 when /nowrap\>\(([\d\.]+)\/([\d\.]+)\)\<\/td\>/

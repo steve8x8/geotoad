@@ -107,9 +107,9 @@ class CacheDetails < Common
 
                 debug "pre-html-process: #{details}"
                 # normalize.
-				details.gsub!('\r\n', ' ')
-				details.gsub!('\r', '')
-				details.gsub!('\n', '')
+				details.gsub!(/\\r\\n/, ' ')
+				details.gsub!(/\\r/, '')
+				details.gsub!(/\\n/, '')
 
                 debug "normalized: #{details}"
                 # kill
