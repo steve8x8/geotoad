@@ -234,13 +234,12 @@ puts "[=] Filter complete, #{filtered.totalWaypoints} caches left"
 		end
 	}
 
-#	if (optHash['--user'])
 		puts "[=] Second filtering stage is being executed"
 		filtered= Filter.new(detail.waypoints)
-		filtered.notUser(optHash['--user'])
-#	end
-#end
-
+        optHash['--user'].split(':').each { |user|
+            puts user
+            filtered.notUser(user)
+        }
         puts "[=] Removing caches with warnings"
         # caches with warnings we choose not to include.
         filtered.removeByElement('warning')
