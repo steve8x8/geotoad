@@ -18,7 +18,7 @@ rm /tmp/$DIST/*/._* 2>/dev/null
 rm -Rf /tmp/$DIST/**/CVS 2>/dev/null
 rm -Rf /tmp/$DIST/**/.svn 2>/dev/null
 
-svn log -v > /tmp/$DIST/ChangeLog.txt
+svn log geocache CLI -v > /tmp/$DIST/ChangeLog.txt
 
 cd /tmp
 tar -zcvf $LONGDIST.tgz $DIST
