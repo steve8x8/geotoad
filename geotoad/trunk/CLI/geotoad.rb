@@ -172,7 +172,8 @@ version = ShadowFetch.new($VERSION_URL)
 version.shadowExpiry=0
 version.localExpiry=600
 version.fetch
-if (version.data =~ /([\d\.]+)/)
+
+if (version.data =~ /^(\d\.\d+\.\d+)/)
     latestVersion = $1;
     if (latestVersion != $VERSION)
         puts ""
@@ -180,6 +181,7 @@ if (version.data =~ /([\d\.]+)/)
         puts "[^]       Please download it from http://toadstool.se/hacks/geotoad/"
     end
 end
+
 
 # Mike Capito contributed a patch to allow for multiple
 # queries. He did it as a hash earlier, I'm just simplifying
