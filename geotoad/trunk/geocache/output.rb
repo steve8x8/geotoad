@@ -62,12 +62,12 @@ class Output < Common
 				"GeoToad query: <%out.title%>",
             'templateIndex' => "* <a href=\"#<%out.wid%>\"><%wp.name%></a><br>",
 			'templateWP'	=>
-				"<hr noshade size=\"1\">\n<a name=\"<%out.wid%>\"></a><font color=\"#000099\"><a href=\"<%out.url%>\"><big><strong><%wp.name%></strong></big></a></font>&nbsp;&nbsp;  <b><%wp.travelbug%></b><br>\n" +
+				"\n\n<hr noshade size=\"1\">\n<a name=\"<%out.wid%>\"></a><font color=\"#000099\"><a href=\"<%out.url%>\"><big><strong><%wp.name%></strong></big></a></font>&nbsp;&nbsp;  <b><%wp.travelbug%></b><br>\n" +
                 "<font color=\"#555555\"><strong><%wp.creator%></strong></font>, <%wp.latwritten%> <%wp.lonwritten%><br>" +
-				"<font color=\"#339933\"><%wp.type%> D<%wp.difficulty%>/T<%wp.terrain%> - <%wp.distance%>mi <%wp.direction%><br>" +
-                "<br>placed: <%wp.cdate%> last: <%wp.mdays%> days ago</font><br>" +
+				"<font color=\"#339933\"><%wp.type%> D<%wp.difficulty%>/T<%wp.terrain%> <%out.relativedistance%><br>" +
+                "placed: <%wp.cdate%> last: <%wp.mdays%> days ago</font><br>" +
 				"<p><%out.details%></p>\n" +
-                "<p><font color=\"#555555\">Hint (a=n): <%wp.hint%></font></p>\n",
+                "<p><font color=\"#555555\"><%out.hint%></font></p>\n",
 			'templatePost'	=> "</body></html>"
 		},
 
@@ -80,10 +80,10 @@ class Output < Common
 			'templateWP'	=> "== \"<%wp.name%>\" (<%out.wid%>) by <%wp.creator%>\r\n" +
 				"Difficulty: <%wp.difficulty%>, Terrain: <%wp.terrain%>\r\n" +
 				"Lat: <%wp.latwritten%> Lon: <%wp.lonwritten%>\r\n" +
-				"Type: <%wp.type%> Distance: <%wp.distance%>mi <%wp.direction%>\r\n" +
+				"Type: <%wp.type%> <%out.relativedistance%>\r\n" +
                 "Creation: <%wp.cdate%>, Last found: <%wp.mdays%> days ago\r\n" +
 				"Details:\r\n<%out.details%>\r\n" +
-                "Hint (a=n):\r\n<%wp.hint%>\r\n\r\n\r\n"
+                "<%out.hint%>\r\n\r\n\r\n"
 		},
 
 		'csv'	=> {
@@ -106,7 +106,7 @@ class Output < Common
 			'templatePre'		=> "",
 			'templateWP'		=> "BEGIN:vCard\nVERSION:2.1\n" +
 				 "FN:G<%out.average%> <%out.sname%>\nN:G<%out.average%>;<%out.sname%>\n" +
-				 "NOTE:<%out.details%> - Hint (a=n): <%wp.hint%>\n" +
+				 "NOTE:<%out.details%><%out.hint%>\n" +
 				 "ADD:<%wp.latwritten%>;<%wp.lonwritten%>;;<%wp.state%>;\n" +
 				 "TEL;HOME:<%out.wid%>\nEMAIL;INTERNET:<%wp.difficulty%>@<%wp.terrain%>\n" +
 				 "TITLE:<%wp.name%>\nORG:<%wp.type%> <%wp.cdate%>\nEND:vCard\n",
@@ -446,18 +446,27 @@ class Output < Common
 
         wpList.sort{|a,b| a[1]<=>b[1]}.each {  |wpArray|
             wid = wpArray[0]
+            puts "Output loop: #{wid} - #{@wpHash[wid]['name']}"
 			detailsLen = @outputFormat['detailsLength'] || 20000
 
 			numEntries = @wpHash[wid]['details'].length / detailsLen
 
 			outVars['wid'] = wid.dup
+            if @wpHash[wid]['distance']
+                outVars['relativedistance'] = 'Distance: ' + @wpHash[wid]['distance'].to_s + 'mi ' + @wpHash[wid]['direction']
+            end
+
+            if @wpHash[wid]['hint']
+                outVars['hint'] = 'Hint: ' + @wpHash[wid]['hint']
+                debug "I will include the hint: #{outVars['hint']}"
+            end
+
             outVars['sname'] = shortName(@wpHash[wid]['name'])[0..14]
             debug "my sname is #{outVars['sname']}"
             if (outVars['sname'].length < 1)
                 puts "#{wid}: #{@wpHash[wid]['name']} did not get an sname returned. BUG!"
                 exit 2
             end
-
             # well, this is crap.
             outVars['id'] = outVars['sname'][0..(@waypointLength - 1)].upcase
             outVars['title']="XXXX"
@@ -481,6 +490,7 @@ class Output < Common
                 exit
             end
 			outVars['average'] = (@wpHash[wid]['terrain'] + @wpHash[wid]['difficulty'] / 2).to_i
+
 
 			# this crazy mess is all due to iPod's VCF reader only supporting 2k chars!
 			0.upto(numEntries) { |entry|
