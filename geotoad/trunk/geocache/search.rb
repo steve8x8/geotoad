@@ -193,8 +193,8 @@ class SearchCache < Common
                     @cache['terrain']=$2.to_f
                     debug "cacheDiff=#{@cache['difficulty']} terr=#{@cache['terrain']}"
 
-                when /align=\"left\">([\d\/]+)\<\/td\>/
-                    @cache['cdate']=$1
+                when /<td valign=\"top\" align=\"left\"\>(\d+) (\w+) \'(\d+)\<\/td\>/
+                    @cache['cdate']=$1 + $2.downcase + $3
                     debug "cacheDate=#{@cache['cdate']}"
 
                 when /align=\"left\">([\d\.]+)mi [NSWE]+\<br\>/
