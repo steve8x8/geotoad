@@ -28,7 +28,7 @@ class ProgressBar
         if (@max == 0)
             showMax = "?"
         else
-            showMax = @max.dup
+            showMax = @max.to_s
         end
 
         # if the value is 0 or less, don't bother to print up a bar.

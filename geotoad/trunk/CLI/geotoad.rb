@@ -356,14 +356,14 @@ def preFetchFilter
 
     beforeOwnersTotal = @filtered.totalWaypoints
     if (@optHash['--ownerExclude'])
-        @queryTitle = @queryTitle + ", excluding caches by #{@optHash['--ownerExclude'}"
+        @queryTitle = @queryTitle + ", excluding caches by #{@optHash['--ownerExclude']}"
         @optHash['--ownerExclude'].split(/[:\|]/).each { |owner|
             @filtered.ownerExclude(owner)
         }
     end
 
     if (@optHash['--ownerInclude'])
-        @queryTitle = @queryTitle + ", excluding caches not by #{@optHash['--ownerInclude'}"
+        @queryTitle = @queryTitle + ", excluding caches not by #{@optHash['--ownerInclude']}"
         @optHash['--ownerInclude'].split(/[:\|]/).each { |owner|
             @filtered.ownerInclude(owner)
         }
