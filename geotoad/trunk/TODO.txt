@@ -18,12 +18,17 @@ Output:
 -------
 * eBook format (XML based)]
 * WML (WAP)
+* Make HTML validate
+* Should include list of TB's in HTML mode.
+* HTML mode should include query details
 
 Details:
 --------
 * Instead of enabling logs_y mode in order to find the caches that someone
 has done, use http://www.geocaching.com/seek/nearest_cache.asp?ul=helixblue
 instead. 
+
+* Only grab details if the output format will use them.
 
 Frontends:
 ----------
