@@ -69,6 +69,20 @@ class Filter < Common
 	end
 
 
+    def ownerExclude(nick)
+        debug "filtering by ownerExclude: #{nick}"
+        @waypointHash.delete_if { |wid, values|
+			@waypointHash[wid]['creator'] =~ /#{nick}/i
+        }
+    end
+
+    def ownerInclude(nick)
+        debug "filtering by ownerInclude: #{nick}"
+        @waypointHash.delete_if { |wid, values|
+			@waypointHash[wid]['creator'] !~ /#{nick}/i
+        }
+    end
+
     def userExclude(nick)
         nick.downcase!
         debug "filtering by notUser: #{nick}"

@@ -70,6 +70,10 @@ syntax: geotoad.rb [options] <search>
  -T [0.0-5.0]            terrain maximum (5)
  -y [1-500]              distance maximum (zipcode only, 25 default)
  -k [keyword]            keyword (regexp) search. Use | to delimit multiple
+ -c [username]           only include caches owned by this person
+                         Use : to delimit multiple users
+ -C [username]           exclude caches owned by this person
+                         Use : to delimit multiple users
  -u [username]           only include caches found by this person
                          Use : to delimit multiple users
  -U [username]           exclude caches found by this person

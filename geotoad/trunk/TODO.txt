@@ -10,8 +10,6 @@ Search:
 Filter:
 -------
 * Cache type
-* Caches not owned by
-* Caches owned by
 * Found in last X days
 
 Output:

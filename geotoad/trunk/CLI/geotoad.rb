@@ -46,6 +46,8 @@ opts = GetoptLong.new(
 	[ "--verbose",				    "-v",    GetoptLong::NO_ARGUMENT ],
 	[ "--userInclude",				"-u",    GetoptLong::OPTIONAL_ARGUMENT ],
     [ "--userExclude",				"-U",    GetoptLong::OPTIONAL_ARGUMENT ],
+    [ "--ownerInclude",			    "-c",    GetoptLong::OPTIONAL_ARGUMENT ],
+    [ "--ownerExclude",		        "-C",    GetoptLong::OPTIONAL_ARGUMENT ],
     [ "--waypointLength",			"-l",    GetoptLong::OPTIONAL_ARGUMENT ],
     [ "--help",                     "-h",    GetoptLong::NO_ARGUMENT ]
 )
@@ -87,10 +89,11 @@ def usage
 	puts " -T [0.0-5.0]            terrain maximum (5)"
 	puts " -y [1-500]              distance maximum (15)"
     puts " -k [keyword]            keyword (regexp) search. Use | to delimit multiple"
+	puts " -c [username]           only include caches owned by this person"
+	puts " -C [username]           exclude caches owned by this person"
 	puts " -u [username]           only include caches found by this person"
-    puts "                         Use : to delimit multiple users"
 	puts " -U [username]           exclude caches found by this person"
-    puts "                         Use : to delimit multiple users"
+    puts "                         (use : to delimit multiple users!)"
 	puts " -n                      only include not found caches (virgins)"
     puts " -b                      only include caches with travelbugs"
         puts " -l                      set waypoint id length. (8)"
@@ -261,6 +264,19 @@ end
 if optHash['--travelBug']
     filtered.travelBug
 end
+
+if (optHash['--ownerExclude'])
+    optHash['--ownerExclude'].split(':').each { |owner|
+        filtered.ownerExclude(owner)
+    }
+end
+
+if (optHash['--ownerInclude'])
+    optHash['--ownerInclude'].split(':').each { |owner|
+        filtered.ownerInclude(owner)
+    }
+end
+
 
 puts "[=] Filter complete, #{filtered.totalWaypoints} caches left"
 
