@@ -14,13 +14,21 @@ require 'geocache/output'
 require 'geocache/details'
 
 
-$VERSION='%VERSION%'
 $SLEEP=3
+
+# just in case it was never replaced.
+versionID='%VERSION%'
+
+if versionID !~ /^d/
+    $VERSION = '2.5-CURRENT'
+else
+    $VERSION = versionID.dup
+end
 
 common = Common.new
 $TEMP_DIR=common.findTempDir
 
-puts "% geotoad #{$VERSION} - (c) 2003 Thomas Stromberg"
+puts "# GeoToad #{$VERSION} (#{RUBY_PLATFORM}) - (c) 2003 Thomas Stromberg"
 opts = GetoptLong.new(
 	[ "--format",					"-f",		GetoptLong::OPTIONAL_ARGUMENT ],
 	[ "--output",					"-o",		GetoptLong::OPTIONAL_ARGUMENT ],
