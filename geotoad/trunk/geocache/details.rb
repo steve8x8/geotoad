@@ -89,10 +89,10 @@ class CacheDetails < Common
 		if (wid)
             debug "we have a wid, who are the visitors..."
 
-            # thanks to Mike Capito for the heads up on the most recent change here.
-			#<A NAME="1921710"><A HREF="../profile/?guid=685787d4-3eab-43a0-93c0-9173fd284083">Geo13</A></strong>
-			data.scan (/profile\/\?guid=.*?\"\>(.*?)\<\/A\>\<\/strong\>/) {
-				#debug "visitor to #{wid}: #{$1.downcase}"
+            # We used to include any comments, but with the smile part, we only include founds.
+            #icon_smile.gif'>&nbsp;October 12 by <A NAME="2224020"><A HREF="../profile/?guid=5dadabfd-1343-44f2-a3b1-09a4886cb164">
+			data.scan (/smile.gif\'>&nbsp;\w+ \d+ by <A NAME=\"\d+\"\>\<A HREF=\"..\/profile\/\?guid=.*?\"\>(.*?)\<\/A\>\<\/strong\>/) {
+				debug "visitor to #{wid}: #{$1.downcase}"
 				@waypointHash[wid]['visitors'].push($1.downcase)
 			}
 
@@ -148,7 +148,7 @@ class CacheDetails < Common
 
                 # combine all the tags we nuked.
                 details.gsub!(/ +/, ' ')
-                details.gsub!(/\* *\* *\*/, '**')	
+                details.gsub!(/\* *\* *\*/, '**')
                 details.gsub!(/\* *\* *\*/, '**')		# unnescesary
                 details.gsub!(/\*\*\*/, '**')
 		details.gsub!(/\* /, '*')
