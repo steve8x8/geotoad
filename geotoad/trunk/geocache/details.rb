@@ -109,10 +109,10 @@ class CacheDetails < Common
 				details =  @waypointHash[wid]['details'] << "  " << $1
 
                 debug "pre-html-process: #{details}"
-                # normalize.
-				details.gsub!('\r\n', ' ')
-				details.gsub!('\r', '')
-				details.gsub!('\n', '')
+                # normalize, but work around the ruby 1.8.0 warnings.
+				details.gsub!(/#{'\r\n'}/, ' ')
+				details.gsub!(/#{'\r'}/, '')
+				details.gsub!(/#{'\n'}/, '')
 
                 debug "normalized: #{details}"
                 # kill
