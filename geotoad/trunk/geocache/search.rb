@@ -227,7 +227,7 @@ class SearchCache < Common
 
                 when /\bby (.*)/
                     creator = $1.dup
-                    @cache['creator']=CGI.unescape(creator).gsub(/[\x80-\xFF]/, "\'")
+                    @cache['creator']=CGI.unescape(creator).gsub(/[\x80-\xFF]/, "\'").chop!
                     debug "creator=#{@cache['creator']}"
                 when /\((GC\w+)\)/
                     wid=$1.dup
