@@ -83,7 +83,7 @@ class Input
             end
 
         }
-        cmdline = cmdline + " " + @@optHash['queryArg']
+        cmdline = cmdline + " \'" + @@optHash['queryArg'] + '\''
         displayMessage "To use this query in the future, type:"
         displayMessage cmdline
         puts
