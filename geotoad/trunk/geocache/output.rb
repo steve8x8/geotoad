@@ -7,7 +7,6 @@ class Output
     include Display
 
 	$MAX_NOTES_LEN = 1999
-	$DetailURL="http://www.geocaching.com/seek/cache_details.aspx?guid="
 	$ReplaceWords = {
 		'OF'			=> '',
 		'A'				=> '',
@@ -228,8 +227,16 @@ class Output
                 text.gsub!(/\<%out\.#{var}%\>/, @outVars[var].to_s)
             elsif (type == "wpEntity")
                 text.gsub!(/\<%wpEntity\.#{var}%\>/, CGI.escapeHTML(@wpHash[@currentWid][var].to_s))
+                # using scan() here to get around difficulties with \1
+                text.scan(/([\x80-\xFF])/) {|highchar|
+                    text.gsub!(/#{highchar}/, ("&#" +  highchar[0].unpack("U").to_s + ";"))
+                }
             elsif (type == "outEntity")
                 text.gsub!(/\<%outEntity\.#{var}%\>/, CGI.escapeHTML(@outVars[var].to_s))
+                # using scan() here to get around difficulties with \1
+                text.scan(/([\x80-\xFF])/) {|highchar|
+                    text.gsub!(/#{highchar}/, ("&#" +  highchar[0].unpack("U").to_s + ";"))
+                }
             else
                 displayWarning "unknown type: #{type} tag=#{var}"
             end
@@ -253,6 +260,11 @@ class Output
         # which is the caches short name or geocache name.
 
          @wpHash.each_key { |wid|
+            if (! @wpHash[wid]['name'])
+                displayError "#{wid} has no name, what gives?"
+                exit
+            end
+
             wpList[wid] = @wpHash[wid]['name'].dup
 
             if (@waypointLength > 1)
@@ -386,7 +398,8 @@ class Output
                 displayWarning "We could not make an id from \"#{@outVars['sname']}\" so we are using #{@currentWid}"
                 @outVars['id'] = @currentWid.dup
             end
-			@outVars['url'] = $DetailURL + @wpHash[@currentWid]['sid'].to_s
+			@outVars['url'] =  @wpHash[@currentWid]['url']
+
             if (! @wpHash[@currentWid]['terrain'])
                 displayError "[*] Error: no terrain found for #{@currentWid}"
                 @wpHash[@currentWid].each_key { |key|
@@ -406,7 +419,7 @@ class Output
 
             # ** This will be removed for GeoToad 4.0, when we use a real templating engine that can do loops **
             if @outputType == 'gpx'
-                debug "Creating GPX comment list for @currentWid\""
+                debug "Creating GPX comment list for #{@currentWid}"
                 @outVars['gpxlogs'] = ''
                 0.upto(4) { |x|
                     if @wpHash[@currentWid]["comment#{x}Type"]
