@@ -19,10 +19,11 @@ rm -Rf /tmp/$DIST/**/CVS 2>/dev/null
 rm -Rf /tmp/$DIST/**/.svn 2>/dev/null
 
 svn update
-svn log VERSION COPYRIGHT.txt geocache CLI tools/makedist.sh -v > /tmp/$DIST/ChangeLog.txt
+svn log VERSION COPYRIGHT.txt geocache CLI -v > /tmp/$DIST/ChangeLog.txt
 
 cd /tmp
 zip -r $LONGDIST.zip $DIST
 scp $LONGDIST.zip /tmp/$DIST/ChangeLog.txt smtp.stromberg.org:/www/toadstool.se/htdocs/hacks/geotoad/files/
+scp $LONGDIST.zip /tmp/$DIST/ChangeLog.txt toadstool.se:/www/toadstool.se/htdocs/hacks/geotoad/files/
 echo "http://home.toadstool.se/hacks/geotoad/files/$LONGDIST.zip"
 
