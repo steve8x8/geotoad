@@ -275,7 +275,8 @@ if (optHash['--output'])
 	output.commit(outputFile)
 	puts "[=] Output saved Exiting."
 else
-	puts "[=] No output file specified by -o, displaying data:"
+puts "[=] No output file specified by -o, displaying data (#{formatType}):"
+puts "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
 	puts outputData
 end
 
