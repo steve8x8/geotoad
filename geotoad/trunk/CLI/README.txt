@@ -62,36 +62,38 @@ people scripting or embedding GeoToad into their applications.
 syntax: geotoad.rb [options] <search:search2:search3>
 
  -f format for output. Formats available are:
-   csv       CSV for spreadsheet imports
-   easygps   Geocaching.com .loc XML file
-   gpsdrive  GpsDrive
-   gpspoint  gpspoint datafile
-   gpx       GPX XML format
-   html      Simple HTML table format
-   mxf       MapTech Exchange
-   ozi       OziExplorer
-   text      Plain ASCII
-   tab       Tabbed text, for GPS Connect
-   tiger     U.S. Census Bureau Tiger Mapping Service Data
-   vcf       VCF for iPod Contacts export
+   csv           CSV for spreadsheet imports
+   easygps       Geocaching.com .loc XML file
+   gpsdrive      GpsDrive
+   gpspoint      gpspoint datafile
+   gpx           GPX XML format
+   html          Simple HTML table format
+   html-decrypt  Simple HTML table format with decrypted hints
+   mxf           MapTech Exchange
+   ozi           OziExplorer
+   text          Plain ASCII
+   text-decrypt  Plain ASCII with decrypted hints
+   tab           Tabbed text, for GPS Connect
+   tiger         U.S. Census Bureau Tiger Mapping Service Data
+   vcf           VCF for iPod Contacts export
 
    -- the following require gpsbabel to be installed --
-   cetus     Cetus for PalmOS
-   dna       Navitrak DNA marker
-   gpsman    GPSman datafile
-   gpspilot  GPSPilot for PalmOS
-   gpsutil   gpsutil
-   holux     Holux gm-100
-   magnav    Magellan NAV Companion for PalmOS
-   mapsend   Magellan MapSend software
-   pcx       Garmin PCX5
-   psp       Microsoft PocketStreets 2002 Pushpin
-   tmpro     TopoMapPro Places
-   tpg       National Geographic Topo
-   xmap      Delorme Topo USA4/XMap Conduit
+   cetus         Cetus for PalmOS
+   dna           Navitrak DNA marker
+   gpsman        GPSman datafile
+   gpspilot      GPSPilot for PalmOS
+   gpsutil       gpsutil
+   holux         Holux gm-100
+   magnav        Magellan NAV Companion for PalmOS
+   mapsend       Magellan MapSend software
+   pcx           Garmin PCX5
+   psp           Microsoft PocketStreets 2002 Pushpin
+   tmpro         TopoMapPro Places
+   tpg           National Geographic Topo
+   xmap          Delorme Topo USA4/XMap Conduit
 
    -- the following requires cmconvetr to be installed --
-   cachemate CacheMate Palm software
+   cachemate     CacheMate Palm software
 
  -q [zip|state|coord|keyword]    query type (zip by default)
 		                 [COUNTRY SEARCHES CURRENTLY BROKEN]
