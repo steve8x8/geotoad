@@ -8,9 +8,10 @@ require 'uri'
 cacheDir = nil
 # we'll make this more dynamic in the future. Lets start out badly though.
 $shadowHosts = [
-	'http://toadstool.se/hacks/shadowfetch/get.php',
-	'http://home.toadstool.se/hacks/shadowfetch/get.php',
-	'http://smtp.stromberg.org/hacks/shadowfetch/get.php'
+	'http://toadstool.se/hacks/shadowfetch/get.php'
+    #,
+	#'http://home.toadstool.se/hacks/shadowfetch/get.php',
+	#'http://smtp.stromberg.org/hacks/shadowfetch/get.php'
 ]
 
 $Header = {
