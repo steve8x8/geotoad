@@ -228,7 +228,7 @@ class SearchCache
 		    end # end totalPages if
             end # end while(running)
         else
-		    displayWarning "No waypoints found. Possible error fetching #{@url}"
+		    displayWarning "No waypoints found in #{@mode}=#{@key} search. Possible error fetching #{@url}"
         end
 	end
 
