@@ -36,20 +36,21 @@ $SLOWMODE=350
 $VERSION_URL = "http://toadstool.se/hacks/geotoad/currentversion.php?type=CLI&version=#{VERSION}&ruby=#{RUBY_PLATFORM}&rubyver=#{RUBY_VERSION}";
 
 def initialize
-    $TEMP_DIR=findTempDir
-    output = Output.new
+    $TEMP_DIR     = findTempDir
+    output        = Output.new
     $validFormats = output.formatList.sort
+    @uin          = Input.new
+end
 
-    puts "# GeoToad #{$VERSION} (#{RUBY_PLATFORM}-#{RUBY_VERSION}) - Please report bugs to geotoad@toadstool.se"
 
-    uin = Input.new
+def getoptions
     if ARGV[0]
         # command line arguments
-        @option = uin.getopt
+        @option = @uin.getopt
         $interactive = nil
     else
         # Then go into interactive.
-        @option = uin.interactive
+        @option = @uin.interactive
         $interactive = 1
     end
 
@@ -92,7 +93,6 @@ def initialize
         exit
     end
 end
-
 
 
 def usage
@@ -148,6 +148,8 @@ end
 
 ## Check the version #######################
 def versionCheck
+    puts "[^] Checking for latest version of GeoToad..."
+
     version = ShadowFetch.new($VERSION_URL)
     version.shadowExpiry=0
     version.localExpiry=43200
@@ -525,15 +527,16 @@ end
 end
 
 
-# Yes, it's pretty lame.
+###### MAIN ACTIVITY ###############################################################
+puts "# GeoToad #{$VERSION} (#{RUBY_PLATFORM}-#{RUBY_VERSION}) - Please report bugs to geotoad@toadstool.se"
+cli = GeoToad.new
+if (! $slowLink)
+    cli.versionCheck
+end
 
 
 while(1)
-  cli = GeoToad.new
-  if (! $slowLink)
-    cli.versionCheck
-  end
-
+  cli.getoptions
   cli.downloadGeocacheList
   cli.prepareFilter
   cli.preFetchFilter
