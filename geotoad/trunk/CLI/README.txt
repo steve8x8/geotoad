@@ -1,5 +1,7 @@
 GeoToad %VERSION% by Thomas Stromberg
 ==========================================================================
+If this file does not view properly, use a better text viewer like WordPad
+instead of Notepad. 
 
 -----
 About
@@ -36,7 +38,13 @@ Gets every cache in the 100 mile radius of zipcode 28272, with a terrain
 score of 2.5 or higher, and that helixblue and Sallad have not visited.
 Outputs a VCF format file, which is usable by iPod's and other devices.
 
-geotoad.rb -f html -n -k 'stream|creek|lake|river|ocean' -q state_id 34
+geotoad.rb -f html -n -k 'stream|creek|lake|river|ocean' -o watery.html -q
+state_id 34
 
-Gets every virgin cache in North Carolina that matches those water keywords.
+Gets every virgin cache in North Carolina that matches those water keywords. 
+Makes a pretty HTML file out of it.
 
+geotoad.rb -f easygps -y 5 -o easygps.loc 27513
+                                         
+Records all caches within 5 miles of 27513 into a format suitable to be read 
+by EasyGPS.
