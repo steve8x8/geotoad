@@ -280,6 +280,16 @@ end
 puts ""
 #puts "[=] 1st Stage Filtering Executing..."
 filtered = Filter.new(combinedWaypoints)
+
+
+beforeFilteredMembersTotal = filtered.totalWaypoints
+filtered.removeByElement('membersonly')
+
+excludedMembersTotal = beforeFilteredMembersTotal - filtered.totalWaypoints
+if (excludedMembersTotal > 0)
+    puts "[=] #{excludedMembersTotal} members-only caches were filtered out (not yet supported)"
+end
+
 common.debug "[=] Filter running cycle 1, #{filtered.totalWaypoints} caches left"
 
 if optHash['--difficultyMin']
@@ -323,6 +333,7 @@ end
 if optHash['--travelBug']
     filtered.travelBug
 end
+
 
 if (optHash['--ownerExclude'])
     optHash['--ownerExclude'].split(':').each { |owner|
@@ -410,6 +421,8 @@ end
     #puts "[=] Removing caches with warnings"
     # caches with warnings we choose not to include.
     filtered.removeByElement('warning')
+
+
     if optHash['--keyword']
         filtered.keyword(optHash['--keyword'])
     end
