@@ -18,17 +18,7 @@ $SLOWMODE=350
 $VERSION_URL = "http://toadstool.se/hacks/geotoad/currentversion.php?type=CLI";
 
 require 'getoptlong'
-require 'geocache/common'
-require 'geocache/shadowget'
-require 'geocache/searchcode'
-require 'geocache/search'
-require 'geocache/filter'
-require 'geocache/output'
-require 'geocache/details'
 
-
-common = Common.new
-$TEMP_DIR=common.findTempDir
 
 puts "# GeoToad #{$VERSION} (#{RUBY_PLATFORM}-#{RUBY_VERSION}) - Please report bugs to geotoad@toadstool.se"
 opts = GetoptLong.new(
@@ -55,10 +45,39 @@ opts = GetoptLong.new(
     [ "--foundDateInclude",                "-r",    GetoptLong::OPTIONAL_ARGUMENT ],
     [ "--foundDateExclude",                "-R",    GetoptLong::OPTIONAL_ARGUMENT ],
     [ "--waypointLength",            "-l",    GetoptLong::OPTIONAL_ARGUMENT ],
+    [ "--libraryInclude",            "-L",    GetoptLong::OPTIONAL_ARGUMENT ],
     [ "--help",                     "-h",    GetoptLong::NO_ARGUMENT ]
 )
 
+# put the stupid crap in a hash. Much nicer to deal with.
+begin
+    optHash = Hash.new
+    opts.each do |opt, arg|
+        optHash[opt]=arg
+    end
+rescue
+    usage
+    exit
+end
+
+# by request of Marc Sebastian Pelzer <marc%black-cube.net>
+if optHash['--libraryInclude']
+    $:.push(optHash['--libraryInclude'])
+end
+
+# toss in our own libraries.
+require 'geocache/common'
+require 'geocache/shadowget'
+require 'geocache/searchcode'
+require 'geocache/search'
+require 'geocache/filter'
+require 'geocache/output'
+require 'geocache/details'
+
+common = Common.new
 output = Output.new
+
+$TEMP_DIR=common.findTempDir
 @@validFormats = output.formatList.sort
 
 def usage
@@ -123,16 +142,7 @@ else
 end
 
 
-# put the stupid crap in a hash. Much nicer to deal with.
-begin
-    optHash = Hash.new
-    opts.each do |opt, arg|
-        optHash[opt]=arg
-    end
-rescue
-    usage
-    exit
-end
+
 
 formatType    = optHash['--format'] || 'gpx'
 queryType        = optHash['--query'] || 'zip'
