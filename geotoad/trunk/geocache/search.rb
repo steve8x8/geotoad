@@ -4,7 +4,6 @@ require 'cgi'
 
 class SearchCache < Common
 	@@baseURL="http://www.geocaching.com/seek/nearest.aspx"
-	#@@baseURL="http://home.profile.sh/index.html"
 
 	def initialize
 		@distance=15
@@ -30,18 +29,45 @@ class SearchCache < Common
             return nil
         end
 
-		# come up with a nice URL for the mode too.
+		# nearly everything is in this form
+        @url=@@baseURL + '?' + @mode + '=' + @key.to_s
+
+        # special URL preperation's for some modes
 		case @mode
 			when 'coord'
 				@url=@@baseURL + '?' + 'origin_lat=' + @lat + '&origin_long=' + @long
-			else
-				@url=@@baseURL + '?' + @mode + '=' + @key.to_s
-			end
+                if @distance
+                            @url = @url + '&dist=' + @distance.to_s
+                end
+            when 'country_id'
+                # as of aug2003, geocaching.com has an in-between page for country
+                # lookups to parse. Pretty silly and worthless, imho.
 
-		if @distance
-			@url = @url + '&dist=' + @distance.to_s
+                ######################
+                ## CURRENTLY BROKEN ##
+                ## NEEDS HELP       ##
+                ######################
+
+                debug 'fetching the country page'
+
+                # add go button to the URL, just in case.
+                @url = @url + "&submit3=GO"
+                data = fetch(@url)
+                #data.each { |line|
+                #    if (line =~ /^\<input type=\"hidden\" name=\"(.*?)\" value=\"(.*?)\" \/\>/)
+                #        debug "found hidden post variable: #{$1}"
+                #        @postVars[$1]=$2
+                #    end
+                #}
+                debug "country page parsed"
+
+            when 'zip'
+                if @distance
+                    @url = @url + '&dist=' + @distance.to_s
+                end
 		end
-		debug "URL for mode is #{@url}"
+
+		debug "URL for mode #{mode} is #{@url}"
         return @url
 	end
 
