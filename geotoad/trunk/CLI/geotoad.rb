@@ -132,7 +132,7 @@ if (search.totalWaypoints)
 			current = search.lastWaypoint + search.returnedWaypoints
 			searchURL = search.URL +  '&start=' + search.lastWaypoint.to_s
 			page = ShadowFetch.new(searchURL)
-            puts "bloo"
+
             # very short expiry time for the search index.
             page.shadowExpiry=86400
             page.localExpiry=100000
