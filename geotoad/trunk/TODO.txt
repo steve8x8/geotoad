@@ -10,7 +10,6 @@ Search:
 Filter:
 -------
 * Cache type
-* Found in last X days
 
 Output:
 -------
