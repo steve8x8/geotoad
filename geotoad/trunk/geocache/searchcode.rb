@@ -215,6 +215,8 @@ $idHash['country_id']['Zimbabwe']=225
 # some manual overrides
 $idHash['country_id']['Britain']=11
 
+$idHash['zip']=0
+
 def initialize (type)
     if (type == "state")
         type="state_id"
@@ -224,8 +226,8 @@ def initialize (type)
         type="country_id"
     end
     
-    if (type == "zip")
-        type="zipcode"
+    if (type == "zipcode")
+        type="zip"
     end
     
     if (! $idHash[type])
