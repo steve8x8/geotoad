@@ -51,7 +51,10 @@ class Output < Common
 			'templatePost'	=> '</loc>'
 		},
 
-		'gpx'	=> {
+
+        # experimental internal method. Does not yet validate because we need to encode
+        # certain text into valid XML entities.
+		'gpx-exp'	=> {
             'ext'		=> 'gpx',
 			'mime'	=> 'text/ascii',
 			'desc'	=> 'GPX',
@@ -96,6 +99,15 @@ class Output < Common
             "  </groundspeak:cache>\r\n" +
             "</wpt>\r\n",
 			'templatePost'	=> " </gpx>\r\n"
+		},
+
+        # old internal method
+        'gpx' => {
+			'ext'		=> 'gpx',
+			'mime'	=> 'application/gpx',
+			'desc'	=> 'GPX XML format (gpsbabel)',
+			'filter_src'	=> 'easygps',
+			'filter_exec'	=> 'gpsbabel -i geo -f INFILE -o gpx -F OUTFILE'
 		},
 
         'html'	=> {
