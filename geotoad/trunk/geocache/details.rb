@@ -96,6 +96,9 @@ class CacheDetails < Common
 				details =  @waypointHash[wid]['details'] << "details: " << $1
 				details.gsub!("\<.*?\>", " *")
 				details.gsub!("\r\n", " ")
+                # MS HTML crap
+                details.gsub!("style=\".*?\"", "")
+                details.gsub!("\<i.*?\>", "")
 				details.gsub!("(\W)  (\W)", "$1")
                 details.gsub!(/\* +\*/, "*")
                 details.gsub!(/ +/, " ")
