@@ -510,6 +510,7 @@ def saveFile
         outputFile = @defaultOutputFile.gsub(/[:\. \'\"\?\;]+/, '_')
     end
 
+    @queryTitle = @queryTitle + " (" + Time.now.strftime("%d%b%y %H:%M") + ")"
     outputData = output.prepare(@queryTitle);
     outputFile = outputFile + "." + output.formatExtension(@formatType)
     output.commit(outputFile)
