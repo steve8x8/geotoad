@@ -1,0 +1,84 @@
+// !$*UTF8*$!
+{
+	29B97313FDCFA39411CA2CEA = {
+		activeBuildStyle = 4A9504CCFFE6A4B311CA0CBA;
+		activeExecutable = DA206CF0015C4D9F03C91932;
+		activeTarget = 29B97326FDCFA39411CA2CEA;
+		breakpoints = (
+			BEF1C88C0305B2EE1300000E,
+			BEF1C88E0305B36F1300000E,
+			BEF1C8900305B37A1300000E,
+			BEF1C8920306000A1300000E,
+			BEF1C8940306000B1300000E,
+			BEF1C8960306000C1300000E,
+		);
+		executables = (
+			DA206CF0015C4D9F03C91932,
+		);
+		perUserDictionary = {
+			PBXPerProjectTemplateStateSaveDate = 50882473;
+		};
+		projectwideBuildSettings = {
+		};
+		wantsIndex = 1;
+		wantsSCM = -1;
+	};
+	29B97326FDCFA39411CA2CEA = {
+		activeExec = 0;
+		executables = (
+			DA206CF0015C4D9F03C91932,
+		);
+	};
+	BEF1C88C0305B2EE1300000E = {
+		fileReference = DA206CF3015C4E8B03C91932;
+		isa = PBXFileBreakpoint;
+		lineNumber = 8;
+		state = 1;
+	};
+	BEF1C88E0305B36F1300000E = {
+		fileReference = DA206CF3015C4E8B03C91932;
+		isa = PBXFileBreakpoint;
+		lineNumber = 8;
+		state = 2;
+	};
+	BEF1C8900305B37A1300000E = {
+		fileReference = DA206CF3015C4E8B03C91932;
+		isa = PBXFileBreakpoint;
+		lineNumber = 8;
+		state = 1;
+	};
+	BEF1C8920306000A1300000E = {
+		fileReference = DA206CF3015C4E8B03C91932;
+		isa = PBXFileBreakpoint;
+		lineNumber = 8;
+		state = 1;
+	};
+	BEF1C8940306000B1300000E = {
+		fileReference = DA206CF3015C4E8B03C91932;
+		isa = PBXFileBreakpoint;
+		lineNumber = 8;
+		state = 2;
+	};
+	BEF1C8960306000C1300000E = {
+		fileReference = DA206CF3015C4E8B03C91932;
+		isa = PBXFileBreakpoint;
+		lineNumber = 8;
+		state = 2;
+	};
+	DA206CF0015C4D9F03C91932 = {
+		activeArgIndex = 2147483647;
+		argumentStrings = (
+		);
+		debuggerPlugin = ASKDebugger;
+		dylibVariantSuffix = "";
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		isa = PBXExecutable;
+		name = gSpot;
+		shlibInfoDictList = (
+		);
+		sourceDirectories = (
+		);
+	};
+}

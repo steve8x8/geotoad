@@ -1,0 +1,33 @@
+$Id: TODO,v 1.2 2002/08/05 11:11:52 strombt Exp $
+
+TODO:
+======
+
+Search:
+-------
+* Support members only caches
+
+Filter:
+-------
+* Cache type
+
+Output:
+-------
+* eBook format (XML based)]
+* WML (WAP)
+* HTML mode should include query details
+
+Details:
+--------
+* Instead of enabling logs_y mode in order to find the caches that someone
+has done, use http://www.geocaching.com/seek/nearest_cache.asp?ul=helixblue
+instead. 
+
+* Only grab details if the output format will use them.
+
+Frontends:
+----------
+Web
+Mac OS X (needs clue)
+Windows (needs volunteer!)
+X11 (needs volunteer!) 
