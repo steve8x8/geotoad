@@ -101,7 +101,7 @@ class CacheDetails < Common
             # next
             if data =~ /id=\"ShortDescription\"\>(.*?)\<\/span\>/m
                 debug "found short desc: [#{$1}]"
-                @waypointHash[wid]['details'] = $1.dup
+                @waypointHash[wid]['details'] = CGI.unescapeHTML($1)
             end
 
             if data =~ /id=\"LongDescription\"\>(.*?)\<\/span\><\/BLOCKQUOTE\>/m
@@ -136,8 +136,6 @@ class CacheDetails < Common
 				details.gsub!(/\<.*?\>/, ' *')
                 # MS HTML crap
                 details.gsub!(/style=\".*?\"/i, '')
-                details.gsub!("<", '&lt;')
-                details.gsub!(">", "&gt;")
 
                 debug "pre-combine-process: #{details}"
 
@@ -148,11 +146,14 @@ class CacheDetails < Common
                 details.gsub!(/\*\*\*/, '**')
 
                 debug "post-combine-process: #{details}"
-                details.gsub!(/^\*/, '')
                 details.gsub!(/[\x80-\xFF]/, "\'")
                 details.gsub!(/\'+/, "\'")
-                # some misc. random crap.
+                details.gsub!(/^\*/, '')
 
+                # convert things into plain text.
+                details = CGI.unescapeHTML(details);
+
+                # some misc. random crap.
 
 				debug "got details: [#{details}]"
 				@waypointHash[wid]['details'] = details
