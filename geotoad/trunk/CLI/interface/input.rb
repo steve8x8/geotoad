@@ -47,7 +47,7 @@ class Input
         begin
             @@optHash = Hash.new
             opts.each do |opt, arg|
-                @@optHash[opt.gsub('-','')]=arg
+                @@optHash[opt.gsub(/-/,'')]=arg
             end
         rescue
             usage
