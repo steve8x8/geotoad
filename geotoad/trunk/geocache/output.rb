@@ -60,8 +60,7 @@ class Output
 
 	def initialize
 		@output = Array.new
-        @waypointLength = 16
-        # autodiscovery of gpsbabel output types if it's found!
+        @waypointLength = 0
 	end
 
 	def input(data)

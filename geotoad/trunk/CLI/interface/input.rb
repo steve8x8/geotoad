@@ -41,6 +41,7 @@ class Input
             [ "--foundDateInclude",                "-r",    GetoptLong::OPTIONAL_ARGUMENT ],
             [ "--foundDateExclude",                "-R",    GetoptLong::OPTIONAL_ARGUMENT ],
             [ "--waypointLength",            "-l",    GetoptLong::OPTIONAL_ARGUMENT ],
+            # compatibility only. easyname is now off by default.
             [ "--disableEasyName",          "-E",    GetoptLong::OPTIONAL_ARGUMENT ],
             [ "--help",                     "-h",    GetoptLong::NO_ARGUMENT ],
             [ "--slowlink",                 "-z",    GetoptLong::NO_ARGUMENT ]
@@ -91,7 +92,12 @@ class Input
                 if (@@optHash[option] == 'X')
                     cmdline = cmdline + " --#{option}"
                 else
-                    cmdline = cmdline + " --#{option}=\'#{@@optHash[option]}\'"
+                    # it's just a number..
+                    if (@@optHash[option] =~ /^[\w\.]+$/)
+                        cmdline = cmdline + " --#{option}=#{@@optHash[option]}"
+                    else
+                        cmdline = cmdline + " --#{option}=\'#{@@optHash[option]}\'"
+                    end
                 end
             end
 
@@ -109,9 +115,6 @@ class Input
         # if windows
         # else
         answer = nil
-
-        # this one is weird. Forgive me. We want it to be a disabler, not an enabler.
-        easyname = 'Y'
 
 
         while (answer !~ /^[sq]/i)
@@ -137,10 +140,9 @@ class Input
             printf("(14) virgin caches only  [%1.1s]          | (15) travel bug caches only [%1.1s]\n", @@optHash['notFound'], @@optHash['travelBug'])
             printf("(16) cache newer than    [%-3.3s] days   | (17) cache found within     [%-3.3s] days\n", @@optHash['placeDateInclude'], @@optHash['foundDateInclude'])
             printf("(18) cache older than    [%-3.3s] days   | (19) cache not found within [%-3.3s] days\n", @@optHash['placeDateExclude'], @@optHash['foundDateExclude'])
-            printf("(20) EasyName waypoints  [%1.1s]          | (21) slowlink mode          [%1.1s]\n", easyname, @@optHash['slowlink'])
-            printf("(22) EasyName wp length  [%-3.3s]        |\n", (@@optHash['waypointLength'] || 16))
+            printf("(20) EasyName WP length  [%-3.3s]        | (21) slowlink mode          [%1.1s]\n", @@optHash['waypointLength'] || '0', @@optHash['slowlink'])
             puts "- - - - - - - - - - - - - - - - - - - + - - - - - - - - - - - - - - - - - - -"
-            printf("(23) output format       [%-10.10s] | (24) filename          [%-13.13s]\n", (@@optHash['format'] || 'gpx'), (@@optHash['output'] || 'automatic'))
+            printf("(22) output format       [%-10.10s] | (23) filename          [%-13.13s]\n", (@@optHash['format'] || 'gpx'), (@@optHash['output'] || 'automatic'))
             puts "=============================================================================="
             print "   Enter menu number, (s) to start, or (x) to exit --> "
             answer = $stdin.gets.chop
@@ -271,11 +273,7 @@ class Input
                    @@optHash['foundDateExclude'] = ask('How many days ago is the minimum a geocache can be found in for your list?', nil)
 
                when '20'
-                   answer = ask('Would you like to use EasyName waypoint IDs instead of the GC#### waypoint ID names?', nil)
-                   if (answer =~ /n/)
-                       @@optHash['disableEasyName'] = 'X'
-                       easyname='n'
-                   end
+                   @@optHash['waypointLength'] = ask('How long can your EasyName waypoint id\'s be? (8 for Magellan, 16 for Garmin, 0 to use standard waypoint id\'s)?', nil)
 
 
                when '21'
@@ -286,11 +284,9 @@ class Input
                        @@optHash['slowlink'] = nil
                    end
 
+
+
                when '22'
-                  @@optHash['waypointLength'] = ask('How long can your waypoint id\'s be? (8 for Magellan, 16 for Garmin, 0 to use standard waypoint id\'s)?', nil)
-
-
-               when '23'
                    puts "List of Output Formats: "
                    outputDetails = Output.new
                    i=0
@@ -307,7 +303,7 @@ class Input
                    puts ""
                    @@optHash['format'] = ask('What format would you like your output in?', 'gpx')
 
-                when '24'
+                when '23'
                     @@optHash['output'] = ask('What filename would you like to output to? (press enter for automatic)', nil)
 
                 when 's', 'q'

@@ -328,14 +328,27 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
             'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o wpo -F OUTFILE'
         },
         'ozi' => {
-            'ext'        => 'ozi',
-            'mime'    => 'application/ozi',
+            'ext'        => 'wpt',
+            'mime'    => 'application/x-ozi-wpt',
             'desc'    => 'OziExplorer',
             'required' => 'gpsbabel',
             'spacer' => '',
             'filter_src'    => 'gpx',
             'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o ozi -F OUTFILE'
         },
+
+        'ozi2' => {
+            'ext'        => 'wpt',
+            'mime'    => 'application/x-ozi-wpt',
+            'desc'    => 'OziExplorer',
+            'spacer'    => "\r\n",
+            'templatePre' => "OziExplorer Waypoint File Version 1.1\r\n" +
+            "WGS 84\r\n" +
+            "Reserved 2\r\n" +
+            "garmin\r\n",
+            'templateWP' => "-1,<%out.wid%>,<%out.latdatapadded%>,<%out.londatapadded%>,,70,1.3,0,65535,<%wp.name%> by <%wp.creator%> (<%wp.type%> - <%wp.difficulty%>/<%wp.terrain%>),0,0,0,-777,6,0,17\n"
+        },
+
         'tpg' => {
             'ext'        => 'tpg',
             'mime'    => 'application/tpg',
