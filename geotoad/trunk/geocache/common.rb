@@ -30,7 +30,7 @@ class Common
 			begin
 				debug "Checking if #{dir} is suitable"
 				if ((File.stat(dir).directory?) && (File.stat(dir).writable?))
-					tempDir=dir + "/Geocrunch"
+					tempDir=dir + "/GeoToad"
 					break
 				end
 			rescue
@@ -39,7 +39,7 @@ class Common
 		
 		# probably what we fallback to in most UNIX's. 
 		if ((! tempDir) && ENV['HOME'])
-			tempDir=ENV['HOME'] + '/.geocrunch'
+			tempDir=ENV['HOME'] + '/.geotoad'
 			end
 	
 		# Convert DOS C:// to C:\

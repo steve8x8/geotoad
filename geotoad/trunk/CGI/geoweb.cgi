@@ -3,7 +3,7 @@
 
 # hack to include .. into the library path.
 $:.push('..')
-$:.push('/code/atomdrift/geocrunch')
+$:.push('/code/atomdrift/geotoad')
 
 require 'geocache/localget'
 require 'geocache/search'

@@ -6,7 +6,7 @@ property difficultyMin : "0"
 property difficultyMax : "5"
 property searchArg : "none"
 property saveFile : "/tmp/savefile"
-property execCommand : "geocrunch.rb"
+property execCommand : "geotoad.rb"
 property formatType : "iPod (VCF)"
 
 on clicked theObject

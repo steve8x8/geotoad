@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# $Id: geocrunch.rb,v 1.19 2002/08/05 03:38:51 strombt Exp $
+# $Id: geotoad.rb,v 1.19 2002/08/05 03:38:51 strombt Exp $
 
 # hack to include .. into the library path.
 $:.push('..')
@@ -19,7 +19,7 @@ $SLEEP=2
 common = Common.new
 $TEMP_DIR=common.findTempDir
 
-puts "% geocrunch #{$VERSION} - (c) 2002 Thomas Stromberg"
+puts "% geotoad #{$VERSION} - (c) 2002 Thomas Stromberg"
 puts "========================================================="
 opts = GetoptLong.new(
 	[ "--format",					"-f",		GetoptLong::OPTIONAL_ARGUMENT ],
@@ -43,7 +43,7 @@ output = Output.new
 @@validFormats = output.formatList
 
 def usage
-	puts "syntax: geocrunch [options] <search>"
+	puts "syntax: geotoad [options] <search>"
 	puts "    -f format for output. Valid options are:"
 	outputDetails = Output.new
 	@@validFormats.each { |type|
@@ -67,8 +67,8 @@ def usage
 
 	puts ""
 	puts "EXAMPLES:"
-	puts "geocrunch.rb 27502"
-	puts "geocrunch.rb -d 3 -u helixblue -f vcf -o /Volumes/Kermit/Contacts/NC.vcf -q state_id 34"
+	puts "geotoad.rb 27502"
+	puts "geotoad.rb -d 3 -u helixblue -f vcf -o /Volumes/Kermit/Contacts/NC.vcf -q state_id 34"
 	exit
 else
 

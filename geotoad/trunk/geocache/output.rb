@@ -33,7 +33,7 @@ class Output < Common
 			'mime'	=> 'application/gpspoint',
 			'desc'	=> 'gpspoint datafile',
 			'templatePre'	=> "GPSPOINT DATA FILE\ntype=\"fileinfo\"  version=\"1.00\"\n" +
-											"type=\"programinfo\" program=\"geocrunch\" version=\"0.0\"\n",
+											"type=\"programinfo\" program=\"geotoad\" version=\"0.0\"\n",
 			'templateWP'		=> "type=\"waypoint\" latdata=\"<%wp.latdata%>\" londata=\"<%wp.londata%>\"" +
 									 		"name=\"<%out.id%>\" comment=\"<%wp.name%>\"" +
 											"symbol=\"flag\"  display_option=\"symbol+name\"\n",
@@ -53,7 +53,7 @@ class Output < Common
 			'mime'	=> 'text/html',
 			'desc'	=> 'Simple HTML table format',
 			'spacer'	=> "<p>\n",
-			'templatePre' => "<html><head><title>Geocrunch Output</title></head>" +
+			'templatePre' => "<html><head><title>GeoToad Output</title></head>" +
 				"<body link=\"#000099\" vlink=\"#000044\" alink=\"#000099\">" +
 				"",
             'templateIndex' => "* <a href=\"#<%out.wid%>\"><%wp.name%></a><br>",
@@ -70,7 +70,7 @@ class Output < Common
 			'mime'	=> 'text/plain',
 			'desc'	=> 	'Plain ASCII',
 			'spacer'	=> "\r\n",
-			'templatePre' => "Geocrunch Output\r\n=========================\r\n",
+			'templatePre' => "GeoToad Output\r\n=========================\r\n",
 			'templateWP'	=> "== \"<%wp.name%>\" (<%out.wid%>) by <%wp.creator%>\r\n" +
 				"Difficulty: <%wp.difficulty%>, Terrain: <%wp.terrain%>\r\n" +
 				"Lat: <%wp.latwritten%> Lon: <%wp.lonwritten%>\r\n" +
