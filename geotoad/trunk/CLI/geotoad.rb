@@ -234,19 +234,22 @@ puts "[=] Filter complete, #{filtered.totalWaypoints} caches left"
 		end
 	}
 
-		puts "[=] Second filtering stage is being executed"
-		filtered= Filter.new(detail.waypoints)
-        optHash['--user'].split(':').each { |user|
-            puts user
-            filtered.notUser(user)
-        }
-        puts "[=] Removing caches with warnings"
-        # caches with warnings we choose not to include.
-        filtered.removeByElement('warning')
+    puts "[=] Second filtering stage is being executed"
+    filtered= Filter.new(detail.waypoints)
 
-        if optHash['--keyword']
-            filtered.keyword(optHash['--keyword'])
-        end
+    
+    if (optHash['--user'])
+         optHash['--user'].split(':').each { |user|
+             filtered.notUser(user)
+         }
+    end
+
+    puts "[=] Removing caches with warnings"
+    # caches with warnings we choose not to include.
+    filtered.removeByElement('warning')
+    if optHash['--keyword']
+        filtered.keyword(optHash['--keyword'])
+    end
 
 
 puts "[=] Filter complete, #{filtered.totalWaypoints} caches left"
