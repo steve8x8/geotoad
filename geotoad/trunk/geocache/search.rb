@@ -68,15 +68,17 @@ class SearchCache < Common
 	end
 
 	def totalWaypoints
-        debug "returning totalWaypoints from search (#{@totalWaypoints})"
+        debug "returning totalWaypoints available from search: #{@totalWaypoints}"
 		@totalWaypoints
 	end
 
 	def lastWaypoint
+        debug "returning last waypoint on this page: #{@lastWaypoint}"
 		@lastWaypoint
 	end
 
 	def returnedWaypoints
+        debug "returning number of returned waypoints: #{@returnedWaypoints}"
 		@returnedWaypoints
 	end
 
@@ -151,9 +153,9 @@ class SearchCache < Common
                     #puts line
                     # emulation of old page behaviour (pre-Jun 2003). May not be required anymore.
                     debug "current page is #{currentPage} of #{totalPages}"
-                    @firstWaypoint = (currentPage * 25) - 25  # 1st on the page
-                    @lastWaypoint = (currentPage * 25)        # last on the page
-                    if (lastWaypoint > @totalWaypoints)
+                    @firstWaypoint = (currentPage * 20) - 20  # 1st on the page
+                    @lastWaypoint = (currentPage * 20)        # last on the page
+                    if (@lastWaypoint > @totalWaypoints)
                         @lastWaypoint = @totalWaypoints
                     end
 
