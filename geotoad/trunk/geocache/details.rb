@@ -1,4 +1,4 @@
-# $Id: details.rb,v 1.10 2002/08/05 03:38:51 strombt Exp $ require 'cgi'
+
 
 class CacheDetails
     include Common
@@ -66,19 +66,22 @@ class CacheDetails
 
             # latitude in the post form. Used by GPX and other formats
             # [<A HREF="http://www.geocaching.com/map/getmap.aspx?lat=39.14498&lon=-86.22033">view map</A>]</font></span></FONT><br>
-
-            if line =~ /getmap\.aspx\?lat=([\d\.-]+)\&lon=([\d\.-]+)\">view map/
+			# Regexp rewritten by Scott Brynen for Canadian compatibility
+		    if line =~ /getmap\.aspx\?lat=([\d\.-]+)\&lon=([\d\.-]+)/
                 @waypointHash[wid]['latdata'] = $1
                 @waypointHash[wid]['londata'] = $2
 				debug "got digital lat/lon: #{$1} #{$2}"
             end
 
-            # latitude and longitude in the written form
-			if line =~ /\<font size=\"3\"\>([NW]) (\d+).*? ([\d\.]+) ([NW]) (\d+).*? ([\d\.]+)\<\/STRONG\>/
-				@waypointHash[wid]['latwritten'] = $1 + $2 + ' ' + $3
-				@waypointHash[wid]['lonwritten'] = $4 + $5 + ' ' + $6
-                debug "got written lan/lon"
-            end
+              # latitude and longitude in the written form. Rewritten by Scott Brynen for Southpole compatibility.
+              if line =~ /\<font size=\"3\"\>([NWSE]) (\d+).*? ([\d\.]+) ([NWSE]) (\d+).*? ([\d\.]+)\<\/STRONG\>/
+		@waypointHash[wid]['latwritten'] = $1 + $2 + ' ' + $3
+              	@waypointHash[wid]['lonwritten'] = $4 + $5 + ' ' + $6
+              	@waypointHash[wid]['latdata'] = ($2.to_f + $3.to_f / 60) * ($1 == 'S' ? -1:1)
+              	@waypointHash[wid]['londata'] = ($5.to_f + $6.to_f / 60) * ($4 == 'W' ? -1:1)
+              	debug "got written lat/lon"
+              end
+
 
             # why a geocache is closed. It seems to always be the same.
             if line =~ /\<span id=\"ErrorText\">(.*?)\<\/span\>/
@@ -107,7 +110,7 @@ class CacheDetails
             #icon_smile.gif'>&nbsp;October 12 by <A NAME="2224020"><A HREF="../profile/?guid=5dadabfd-1343-44f2-a3b1-09a4886cb164">
             #           smile.gif'>&nbsp;August 25 by <A NAME="1945173"><A HREF="../profile/?guid=4dda95c7-06b4-42df-8bfa-d936d52a6c57">Jnick</A></strong>
 
-			data.scan (/smile.gif\'\>\&nbsp\;\w+ \d+ by <A NAME=\"\d+\"\>\<A HREF=\"..\/profile\/\?guid=.*?\"\>(.*?)\<\/A/) {
+			data.scan(/smile.gif\'\>\&nbsp\;\w+ \d+ by <A NAME=\"\d+\"\>\<A HREF=\"..\/profile\/\?guid=.*?\"\>(.*?)\<\/A/) {
                 debug "visitor to #{wid}: #{$1.downcase}"
                 @waypointHash[wid]['visitors'].push($1.downcase)
             }
