@@ -1,7 +1,9 @@
 # $Id: details.rb,v 1.10 2002/08/05 03:38:51 strombt Exp $ require 'cgi'
 
 class CacheDetails < Common
-	@@baseURL="http://www.geocaching.com/seek/cache_details.aspx?guid="
+    # This now uses the printable version of the cache data. For now, we get the last 10
+    # logs to a cache.
+	@@baseURL="http://www.geocaching.com/seek/cache_details.aspx?pf=y&log=y&numlogs=5&decrypt=&guid="
 
 	def initialize(data)
 		@waypointHash = data
@@ -23,7 +25,7 @@ class CacheDetails < Common
 	end
 
 	def fullURL(id)
-		url = @@baseURL + id.to_s + "&log=y"
+		url = @@baseURL + id.to_s
 	end
 
 	# fetches by geocaching.com sid
@@ -47,7 +49,8 @@ class CacheDetails < Common
 		# find the geocaching waypoint id.
 		wid = ''
 		data.each { |line|
-			if line =~ /\<title\>(\w+)/
+            # this matches the <title> on the printable pages.
+			if line =~ /(GC[A-Z0-9]+)\)/
 				wid = $1
                 debug "wid is #{wid}"
 
@@ -71,7 +74,7 @@ class CacheDetails < Common
 			if line =~ /\<font size=\"3\"\>([NW]) (\d+).*? ([\d\.]+) ([NW]) (\d+).*? ([\d\.]+)\<\/STRONG\>/
 				@waypointHash[wid]['latwritten'] = $1 + $2 + ' ' + $3
 				@waypointHash[wid]['lonwritten'] = $4 + $5 + ' ' + $6
-                debug "got written lan/lon: "
+                debug "got written lan/lon"
             end
 
             # why a geocache is closed. It seems to always be the same.
@@ -79,7 +82,7 @@ class CacheDetails < Common
                 warning = $1
                 warning.gsub!(/\<.*?\>/, '')
                 @waypointHash[wid]['warning'] = warning.dup
-                debug "got a warning: #{$1}"
+                debug "got a warning: #{warning}"
             end
 
             # encrypted hint
@@ -99,7 +102,9 @@ class CacheDetails < Common
 
             # We used to include any comments, but with the smile part, we only include founds.
             #icon_smile.gif'>&nbsp;October 12 by <A NAME="2224020"><A HREF="../profile/?guid=5dadabfd-1343-44f2-a3b1-09a4886cb164">
-			data.scan (/smile.gif\'>&nbsp;\w+ \d+ by <A NAME=\"\d+\"\>\<A HREF=\"..\/profile\/\?guid=.*?\"\>(.*?)\<\/A\>\<\/strong\>/) {
+            #           smile.gif'>&nbsp;August 25 by <A NAME="1945173"><A HREF="../profile/?guid=4dda95c7-06b4-42df-8bfa-d936d52a6c57">Jnick</A></strong>
+
+			data.scan (/smile.gif\'\>\&nbsp\;\w+ \d+ by <A NAME=\"\d+\"\>\<A HREF=\"..\/profile\/\?guid=.*?\"\>(.*?)\<\/A/) {
                 debug "visitor to #{wid}: #{$1.downcase}"
                 @waypointHash[wid]['visitors'].push($1.downcase)
             }
