@@ -22,7 +22,9 @@ $Header = {
 }
 
 # Does a webget, but stores a local directory with cached results ###################
-class ShadowFetch < Common
+class ShadowFetch
+    include Common
+    include Display
 
 	# gets a URL, but stores it in a nice webcache
 	def initialize (url)
@@ -350,7 +352,7 @@ class ShadowFetch < Common
 			if head.code == "301"
                 newLocation = head['location']
                 newLocation.sub!(/\?$/, '')
-                puts "> Shadowhost #{$shadowHosts[0]} has moved to #{newLocation}!"
+                displayInfo "> Shadowhost #{$shadowHosts[0]} has moved to #{newLocation}!"
 
 			    # store the redirect information
 
@@ -377,7 +379,7 @@ class ShadowFetch < Common
         end
 
 		if (data !~ /^OK/)
-			puts "* data failed to upload, deleting shadow host: (#{data})"
+			displayInfo "* data failed to upload, deleting shadow host: (#{data})"
 			$shadowHosts.delete(host)
 			return nil
 		else

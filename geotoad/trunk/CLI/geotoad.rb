@@ -8,7 +8,7 @@ $:.push('..')
 # The version gets inserted by makedist.sh
 versionID='%VERSION%'
 if versionID !~ /^\d/
-    $VERSION = '3.2-CURRENT'
+    $VERSION = '3.5-CURRENT'
 else
     $VERSION = versionID.dup
 end
@@ -66,6 +66,8 @@ if optHash['--libraryInclude']
 end
 
 # toss in our own libraries.
+require 'interface/display'
+require 'interface/progressbar'
 require 'geocache/common'
 require 'geocache/shadowget'
 require 'geocache/searchcode'
@@ -74,17 +76,16 @@ require 'geocache/filter'
 require 'geocache/output'
 require 'geocache/details'
 
-common = Common.new
 output = Output.new
 
-$TEMP_DIR=common.findTempDir
+$TEMP_DIR=Common.findTempDir
 @@validFormats = output.formatList.sort
 
 def usage
     puts "syntax: geotoad.rb [options] <search>"
     puts ""
     puts " -o [filename]           output file"
-     puts " -f [format]             output format type, such as:"
+    puts " -f [format]             output format type, such as:"
     outputDetails = Output.new
     i=0
     print "     "
@@ -152,7 +153,7 @@ distanceMax = optHash['--distanceMax'] || 10
 
 if ((! ARGV[0]) || optHash['--help'])
     if (! ARGV[0])
-        puts "* You forgot to specify a #{queryType} search argument"
+        Display.DisplayError "You forgot to specify a #{queryType} search argument"
     end
     usage
     exit
@@ -168,7 +169,7 @@ if (optHash['--verbose'])
 end
 
 if ! @@validFormats.include?(formatType)
-    puts "[*] #{formatType} is not a valid supported format."
+    DisplayMessage "[*] #{formatType} is not a valid supported format."
     usage
     exit
 end
@@ -189,7 +190,7 @@ if (($VERSION =~ /^(\d\.\d+\.\d+)$/) && (version.data =~ /^(\d\.\d+\.\d+)/))
 end
 
 ## Make the Initial Query ############################
-puts "[.] Your cache directory is " + $TEMP_DIR
+DisplayMessage "[.] Your cache directory is " + $TEMP_DIR
 
 
 # Mike Capito contributed a patch to allow for multiple
@@ -199,7 +200,7 @@ puts "[.] Your cache directory is " + $TEMP_DIR
 combinedWaypoints = Hash.new
 
 queryArgList.split(/[:\|]/).each { |queryArg|
-    print "\n[=] Performing #{queryType} search for #{queryArg} "
+    print "\nPerforming #{queryType} search for #{queryArg} "
     search = SearchCache.new
 
     # only valid for zip or coordinate searches
@@ -235,7 +236,7 @@ combinedWaypoints.each_key { |wp|
 
 if (waypointsExtracted < (combinedWaypoints.length - 2))
     puts "***********************"
-    puts "Warning: downloaded #{combinedWaypoints.length} waypoints, but I can only parse #{waypointsExtracted} of them!"
+    DisplayMessage "Warning: downloaded #{combinedWaypoints.length} waypoints, but I can only parse #{waypointsExtracted} of them!"
     puts "***********************"
 end
 
@@ -279,24 +280,24 @@ filtered.removeByElement('membersonly')
 
 excludedMembersTotal = beforeFilteredMembersTotal - filtered.totalWaypoints
 if (excludedMembersTotal > 0)
-    puts "[=] #{excludedMembersTotal} members-only caches were filtered out (not yet supported)"
+    DisplayMessage "#{excludedMembersTotal} members-only caches were filtered out (not yet supported)"
 end
 
-common.debug "[=] Filter running cycle 1, #{filtered.totalWaypoints} caches left"
+common.debug "Filter running cycle 1, #{filtered.totalWaypoints} caches left"
 
 if optHash['--difficultyMin']
     filtered.difficultyMin(optHash['--difficultyMin'].to_f)
 end
-common.debug "[=] Filter running cycle 2, #{filtered.totalWaypoints} caches left"
+common.debug "Filter running cycle 2, #{filtered.totalWaypoints} caches left"
 if optHash['--difficultyMax']
     filtered.difficultyMax(optHash['--difficultyMax'].to_f)
 end
-common.debug "[=] Filter running cycle 3, #{filtered.totalWaypoints} caches left"
+common.debug "Filter running cycle 3, #{filtered.totalWaypoints} caches left"
 
 if optHash['--terrainMin']
     filtered.terrainMin(optHash['--terrainMin'].to_f)
 end
-common.debug "[=] Filter running cycle 4, #{filtered.totalWaypoints} caches left"
+common.debug "Filter running cycle 4, #{filtered.totalWaypoints} caches left"
 
 if optHash['--terrainMax']
     filtered.terrainMax(optHash['--terrainMax'].to_f)
@@ -342,7 +343,7 @@ end
 
 excludedOwnersTotal = beforeOwnersTotal - filtered.totalWaypoints
 if (excludedOwnersTotal > 0)
-    puts "[=] Owner filtering removed #{excludedOwnersTotal} caches from your listing."
+    DisplayMessage "Owner filtering removed #{excludedOwnersTotal} caches from your listing."
 end
 
 beforeUsersTotal = filtered.totalWaypoints
@@ -360,30 +361,30 @@ end
 
 excludedUsersTotal = beforeUsersTotal - filtered.totalWaypoints
 if (excludedUsersTotal > 0)
-    puts "[=] User filtering removed #{excludedUsersTotal} caches from your listing."
+    DisplayMessage "User filtering removed #{excludedUsersTotal} caches from your listing."
 end
 
 
-puts "[=] First stage filtering complete, #{filtered.totalWaypoints} caches left"
+DisplayMessage "First stage filtering complete, #{filtered.totalWaypoints} caches left"
 
 # We should really check our local cache and shadowhosts first before
 # doing this. This is just to be nice.
 if (filtered.totalWaypoints > $SLOWMODE)
-    puts "[!] NOTE: Because you may be downloading more than #{$SLOWMODE} waypoints"
-    puts "[!]       We will sleep longer between remote downloads to lessen the load"
-    puts "[!]       load on the geocaching.com webservers. You may want to constrain"
-    puts "[!]       the number of waypoints to download by limiting by difficulty,"
-    puts "[!]       terrain, or placement date. Please see README.txt for help."
+    DisplayMessage "NOTE: Because you may be downloading more than #{$SLOWMODE} waypoints"
+    DisplayMessage "       We will sleep longer between remote downloads to lessen the load"
+    DisplayMessage "       load on the geocaching.com webservers. You may want to constrain"
+    DisplayMessage "       the number of waypoints to download by limiting by difficulty,"
+    DisplayMessage "       terrain, or placement date. Please see README.txt for help."
     $SLEEP=15
 end
-
-
 
 
 #########################
 # Here is where we fetch each geocache page
 #
-puts "[=] Fetching geocache pages with #{$SLEEP} second rests between remote fetches"
+#searchProgress = ProgressBar.new(0,
+
+DisplayMessage "Fetching geocache pages with #{$SLEEP} second rests between remote fetches"
 wpFiltered = filtered.waypoints
 
 detail = CacheDetails.new(wpFiltered)
@@ -397,17 +398,17 @@ wpFiltered.each_key { |wid|
     # I wish I understood how this worked. I think this logic is garbage. To be revisited.
     src = page.src
     if (page.src)
-        puts "[o] Fetched \"#{wpFiltered[wid]['name']}\" [#{token}/#{filtered.totalWaypoints}] from #{src}"
+        DisplayMessage "Fetched \"#{wpFiltered[wid]['name']}\" [#{token}/#{filtered.totalWaypoints}] from #{src}"
         if (wpFiltered[wid]['warning'])
-            puts " *  Skipping: #{wpFiltered[wid]['warning']}"
+            DisplayMessage " *  Skipping: #{wpFiltered[wid]['warning']}"
         end
     elsif (src == "remote")
         downloads = downloads + 1
         common.debug "#{downloads} of #{quitAfterFetch} remote downloads so far"
-        puts "  (sleeping for #{$SLEEP} seconds)"
+        DisplayMessage "  (sleeping for #{$SLEEP} seconds)"
         sleep $SLEEP
     else
-        puts "[*] Could not fetch \"#{wpFiltered[wid]['name']}\" [#{token}/#{filtered.totalWaypoints}] (private cache?)"
+        DisplayMessage "Could not fetch \"#{wpFiltered[wid]['name']}\" [#{token}/#{filtered.totalWaypoints}] (private cache?)"
         wpFiltered.delete(wid)
     end
 }
@@ -443,18 +444,18 @@ end
 
 excludedUsersTotal = beforeUsersTotal - filtered.totalWaypoints
 if (excludedUsersTotal > 0)
-    puts "[=] User filtering removed #{excludedUsersTotal} caches from your listing."
+    DisplayMessage "User filtering removed #{excludedUsersTotal} caches from your listing."
 end
 
 
-puts "[=] Filter complete, #{filtered.totalWaypoints} caches left"
+DisplayMessage "Filter complete, #{filtered.totalWaypoints} caches left"
 if (filtered.totalWaypoints < 1)
-    puts "(*) No caches to generate output for!"
+    DisplayWarning "No caches to generate output for!"
     exit
 end
 ## generate the output ########################################
 puts ""
-puts "[=] Output format selected is #{output.formatDesc(formatType)} format"
+DisplayMessage "Output format selected is #{output.formatDesc(formatType)} format"
 output.input(filtered.waypoints)
 output.formatType=formatType
 if (optHash['--waypointLength'])
@@ -475,5 +476,5 @@ else
 end
 
 output.commit(outputFile)
-puts "[=] Output saved to #{outputFile}"
+DisplayMessage "Output saved to #{outputFile}"
 

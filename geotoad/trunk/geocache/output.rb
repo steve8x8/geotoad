@@ -2,7 +2,10 @@
 require 'cgi'
 require 'geocache/templates'
 
-class Output < Common
+class Output
+    include Common
+    include Display
+
 	$MAX_NOTES_LEN = 1999
 	$DetailURL="http://www.geocaching.com/seek/cache_details.aspx?guid="
 	$ReplaceWords = {
@@ -111,7 +114,7 @@ class Output < Common
 			@outputType = format
 			debug "format switched to #{format}"
 		else
-			puts "[*] Attempted to select invalid format: #{format}"
+			displayError "[*] Attempted to select invalid format: #{format}"
 			return nil
 		end
 	end
@@ -173,7 +176,7 @@ class Output < Common
 	def commit (file)
 		debug "committing file type #{@outputType}"
 		if @outputFormat['filter_exec']
-            puts "[-] Executing #{@outputFormat['filter_exec']}"
+            displayMessage "Executing #{@outputFormat['filter_exec']}"
 			exec = @outputFormat['filter_exec']
 			tmpfile = $TEMP_DIR + "/" + @outputType + "." + rand(500000).to_s
 			exec.gsub!('INFILE', "\"#{tmpfile}\"")
@@ -186,8 +189,8 @@ class Output < Common
 			debug "exec = #{exec}"
 			system(exec)
 			if (! File.exists?(file))
-				puts "[*] ERROR! Output filter did not create file #{file}. exec was:"
-				puts "[*]        #{exec}"
+				displayError "Output filter did not create file #{file}. exec was:"
+                displayError "#{exec}"
 			end
 		else
 			debug "no exec"
@@ -214,7 +217,6 @@ class Output < Common
             else
                 @wpHash[wid]['sname'] = wid.dup
             end
-            #puts "made list with #{wid} = #{wpList[wid]}"
         }
 
 
@@ -289,19 +291,19 @@ class Output < Common
 
             if (outVars['id'].length < 1)
                 debug "our id is no good, using the wid"
-                puts "warning: We could not make an id from \"#{outVars['sname']}\" so we are using #{wid}"
+                displayWarning "We could not make an id from \"#{outVars['sname']}\" so we are using #{wid}"
                 outVars['id'] = wid.dup
             end
 			outVars['url'] = $DetailURL + @wpHash[wid]['sid'].to_s
             if (! @wpHash[wid]['terrain'])
-                puts "[*] Error: no terrain found"
+                displayError "[*] Error: no terrain found for #{wid}"
                 @wpHash[wid].each_key { |key|
-                    puts "#{key} = #{@wpHash[wid][key]}"
+                    displayError "#{key} = #{@wpHash[wid][key]}"
                 }
                 exit
             end
             if (! @wpHash[wid]['difficulty'])
-                puts "[*] Error: no difficulty found"
+                displayError "[*] Error: no difficulty found"
 
                 exit
             end
@@ -331,7 +333,6 @@ class Output < Common
 
 				tags.each { |tag|
 					(type, var) = tag[0].split('.')
-					#puts "#{tag} - type: #{type} var: #{var}"
 					if (type == "wp")
 						tempOutput.gsub!(/\<%wp\.#{var}%\>/, @wpHash[wid][var].to_s)
 					elsif (type == "out")
@@ -341,7 +342,7 @@ class Output < Common
 					elsif (type == "outEntity")
 						tempOutput.gsub!(/\<%outEntity\.#{var}%\>/, CGI.escapeHTML(outVars[var].to_s))
                     else
-						puts "unknown type: #{type} tag=#{var}"
+						displayWarning "unknown type: #{type} tag=#{var}"
 					end
 				}
                 # we move this to after our escapeHTML's so the HTML in here doesn't get

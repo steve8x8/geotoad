@@ -1,6 +1,9 @@
 # $Id: filter.rb,v 1.7 2002/08/05 03:38:51 strombt Exp $
 
-class Filter < Common
+class Filter
+    include Common
+    include Display
+
 	def initialize(data)
 		@waypointHash = data
 	end
@@ -128,7 +131,7 @@ class Filter < Common
         debug "filtering by User: #{nick}"
 
         @waypointHash.each_key { |wid|
-            #puts "notUser #{nick}: #{wid}"
+            debug "notUser #{nick}: #{wid}"
             if (! @waypointHash[wid]['visitors'].include?(nick))
                 debug " - #{nick} has not visited #{@waypointHash[wid]['name']}, filtering."
                 @waypointHash.delete(wid)

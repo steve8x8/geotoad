@@ -2,7 +2,10 @@
 
 require 'cgi'
 
-class SearchCache < Common
+class SearchCache
+    include Common
+    include Display
+
 	@@baseURL="http://www.geocaching.com/seek/nearest.aspx"
 
 	def initialize
@@ -55,7 +58,7 @@ class SearchCache < Common
                 # as of aug2003, geocaching.com has an in-between page for country
                 # lookups to parse. Pretty silly and worthless, imho.
                 ## CURRENTLY BROKEN - NEEDS HELP BADLY!!!! ##
-                puts "Country searches are currently broken. Please help fix!"
+                displayError "Country searches are currently broken. Please help fix!"
                 return nil
 
                 debug 'fetching the country page'
@@ -74,7 +77,7 @@ class SearchCache < Common
                 @url =@url + "&submit1=Submit"
 
                 if (@key !~ /^[\w][\w ]+$/)
-                    puts "Invalid zip code format: #{@key}"
+                    displayError "Invalid zip code format: #{@key}"
                     return nil
                 end
 
@@ -183,7 +186,7 @@ class SearchCache < Common
         fetchFirst
 
 	    if (totalWaypoints)
-            puts "[.] #{totalWaypoints} waypoints matched #{@mode} query for #{@key}"
+            displayMessage "[.] #{totalWaypoints} waypoints matched #{@mode} query for #{@key}"
 
             # the loop that gets all of them.
             running = 1
@@ -200,10 +203,10 @@ class SearchCache < Common
                 running = fetchNext
                 src = page.src
                 # update it.
-                puts "[o] Received search page #{currentPage} of #{totalPages} (#{src})"
+                displayMessage "[o] Received search page #{currentPage} of #{totalPages} (#{src})"
 
                 if (currentPage <= lastPage)
-                    puts "[*] Logic error. I was at page #{lastPage} before, why am I at #{currentPage} now?"
+                    displayError "[*] Logic error. I was at page #{lastPage} before, why am I at #{currentPage} now?"
                     exit
                 end
 
@@ -220,7 +223,7 @@ class SearchCache < Common
 		    end # end totalPages if
             end # end while(running)
         else
-		    puts "(*) No waypoints found. Possible error fetching #{@url}"
+		    displayMessage "(*) No waypoints found. Possible error fetching #{@url}"
 		    exit
         end
 	end

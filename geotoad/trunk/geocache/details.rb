@@ -1,6 +1,9 @@
 # $Id: details.rb,v 1.10 2002/08/05 03:38:51 strombt Exp $ require 'cgi'
 
-class CacheDetails < Common
+class CacheDetails
+    include Common
+    include Display
+
     # This now uses the printable version of the cache data. For now, we get the last 10
     # logs to a cache.
 	@@baseURL="http://www.geocaching.com/seek/cache_details.aspx?pf=y&log=y&numlogs=5&decrypt=&guid="
@@ -31,7 +34,7 @@ class CacheDetails < Common
 	# fetches by geocaching.com sid
 	def fetch(id)
         if ((! id) || (id.length < 1))
-            puts "Empty fetch by id, quitting."
+            displayError "Empty fetch by id, quitting."
             exit
         end
 
