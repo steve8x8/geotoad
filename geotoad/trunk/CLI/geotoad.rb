@@ -326,6 +326,25 @@ if optHash['--travelBug']
     filtered.travelBug
 end
 
+
+beforeOwnersTotal = filtered.totalWaypoints
+if (optHash['--ownerExclude'])
+    optHash['--ownerExclude'].split(/[:\|]/).each { |owner|
+        filtered.ownerExclude(owner)
+    }
+end
+
+if (optHash['--ownerInclude'])
+    optHash['--ownerInclude'].split(/[:\|]/).each { |owner|
+        filtered.ownerInclude(owner)
+    }
+end
+
+excludedOwnersTotal = beforeOwnersTotal - filtered.totalWaypoints
+if (excludedOwnersTotal > 0)
+    puts "[=] Owner filtering removed #{excludedOwnersTotal} caches from your listing."
+end
+
 beforeUsersTotal = filtered.totalWaypoints
 if (optHash['--userExclude'])
     optHash['--userExclude'].split(/[:\|]/).each { |user|
