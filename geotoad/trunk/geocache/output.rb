@@ -57,13 +57,13 @@ class Output < Common
                 "<html><head>\n<title>GeoToad Output</title>\n" + 
                 "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">\n" + "</head>\n" +
 				"<body link=\"#000099\" vlink=\"#000044\" alink=\"#000099\">\n" +
-				"GeoToad query output",
+				"GeoToad query: <%out.title%>",
             'templateIndex' => "* <a href=\"#<%out.wid%>\"><%wp.name%></a><br>",
 			'templateWP'	=>
-				"<a name=\"<%out.wid%>\"></a><font color=\"#000099\"><a href=\"<%out.url%>\"><big><strong><%wp.name%></strong></big></a></font>&nbsp;&nbsp;  <b><%wp.travelbug%></b><br>\n" +
+				"<hr noshade size=\"1\">\n<a name=\"<%out.wid%>\"></a><font color=\"#000099\"><a href=\"<%out.url%>\"><big><strong><%wp.name%></strong></big></a></font>&nbsp;&nbsp;  <b><%wp.travelbug%></b><br>\n" +
                 "<font color=\"#555555\"><strong><%wp.creator%></strong></font>, <%wp.latwritten%> <%wp.lonwritten%><br>" +
 				"<font color=\"#339933\"><%wp.type%> D<%wp.difficulty%>/T<%wp.terrain%> - placed: <%wp.cdate%> last: <%wp.mdate%></font><br>" +
-				"<p><%out.details%></p><hr noshade>\n",
+				"<p><%out.details%></p>\n",
 			'templatePost'	=> "</body></html>"
 		},
 
@@ -345,7 +345,7 @@ class Output < Common
 
 
 	## sets up for the filtering process ################3
-	def prepare
+	def prepare (title)
 		# if we are not actually generating the output, lets do it in a meta-fashion.
 		debug "preparing for #{@outputType}"
 		if (@outputFormat['filter_exec'])
@@ -353,10 +353,10 @@ class Output < Common
 			src = @outputFormat['filter_src']
 			exec = @outputFormat['filter_exec']
 			formatSelect(src)
-			@output = filterInternal
+			@output = filterInternal(title)
 			formatSelect(oldformat)
 		else
-			@output = filterInternal
+			@output = filterInternal(title)
 		end
 		return @output
 	end
@@ -392,11 +392,13 @@ class Output < Common
 		end
 	end
 
-	def filterInternal
+	def filterInternal (title)
 		debug "generating output with output: #{@outputType} - #{$Format[@outputType]['desc']}"
 		output = @outputFormat['templatePre'].dup
 		outVars = Hash.new
         wpList = Hash.new
+        outVars['title'] = title
+       
 
         @wpHash.each_key { |wid|
             wpList[wid] = @wpHash[wid]['name'].dup
@@ -446,6 +448,7 @@ class Output < Common
 
             # well, this is crap.
             outVars['id'] = outVars['sname'][0..7].upcase
+            outVars['title']="XXXX"
             debug "my id is #{outVars['id']}"
 
             if (outVars['id'].length < 1)

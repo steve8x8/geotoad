@@ -44,6 +44,9 @@ class CacheDetails < Common
 			if line =~ /\<title\>Cache: \((\w+)\)/
 				wid = $1
                 debug "wid is #{wid}"
+                
+                # fill this in, since it's optional evidentally
+                @waypointHash[wid]['details'] = ''
             end
             if line =~ /value=\"([-\+\d\.]+)\" name=lat\>/
                 @waypointHash[wid]['latdata'] = $1
@@ -90,11 +93,12 @@ class CacheDetails < Common
             # these are multi-line matches, so they are out of the scope of our
             # next
             if data =~ /id=\"ShortDescription\"\>(.*?)\<\/span\>/m
-                #debug "found short desc: [#{$1}]"
+                debug "found short desc: [#{$1}]"
                 @waypointHash[wid]['details'] = $1
             end
 
             if data =~ /id=\"LongDescription\"\>(.*?)\<\/span\><\/BLOCKQUOTE\>/m
+                debug "found long desc"
 				details =  @waypointHash[wid]['details'] << "  " << $1
                 details.gsub!("<p>", "\n\n")
 				details.gsub!("\<.*?\>", " *")

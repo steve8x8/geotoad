@@ -305,7 +305,7 @@ end
 puts "[=] Generating output in #{formatType} format"
 output.input(filtered.waypoints)
 output.formatSelect(formatType)
-outputData = output.prepare
+outputData = output.prepare("details");
 
 ## save the file #############################################
 if (optHash['--output'])
