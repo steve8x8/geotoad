@@ -278,13 +278,12 @@ outputData = output.prepare
 
 ## save the file #############################################
 if (optHash['--output'])
-	outputFile = optHash['--output']
-	puts "[=] Saving output to #{outputFile}"
-	output.commit(outputFile)
-	puts "[=] Output saved Exiting."
+    outputFile = optHash['--output']
 else
-puts "[=] No output file specified by -o, displaying data (#{formatType}):"
-puts "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
-	puts outputData
+    outputFile = "geotoad-output." + output.formatExtension(formatType)
+    puts " -  No output file specified, defaulting to to #{outputFile}"
 end
+
+puts "[=] Saving output to #{outputFile}"
+output.commit(outputFile)
 
