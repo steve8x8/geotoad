@@ -20,10 +20,6 @@ Output:
 * WML (WAP)
 * HTML mode should include query details
 
-Details:
---------
-* Grab the printable pages instead
-
 Frontends:
 ----------
 Web

@@ -13,7 +13,7 @@ else
     $VERSION = versionID.dup
 end
 
-$SLEEP=3
+$SLEEP=2
 $SLOWMODE=350
 $VERSION_URL = "http://toadstool.se/hacks/geotoad/currentversion.php?type=CLI";
 
