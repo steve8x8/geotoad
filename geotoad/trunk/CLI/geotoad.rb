@@ -332,7 +332,7 @@ end
 
 ## step #2 in filtering! ############################
 #if ((optHash['--user']) || (optHash['--format'] == 'vcard'))
-	puts "[=] fetching cache details with #{$SLEEP} second rests in between remote fetches"
+	puts "[=] Fetching geocache pages with #{$SLEEP} second rests between remote fetches"
 	wpFiltered = filtered.waypoints
 
 	# all of this junk is so we can give real status updates for non-CLI frontends
@@ -383,7 +383,7 @@ end
     end
 
     excludedUsersTotal = beforeUsersTotal - filtered.totalWaypoints
-    if (excludedUsersTotal)
+    if (excludedUsersTotal > 0)
         puts "[=] User filtering removed #{excludedUsersTotal} caches from your listing."
     end
 
