@@ -8,7 +8,7 @@ $:.push('..')
 # just in case it was never replaced.
 versionID='%VERSION%'
 if versionID !~ /^\d/
-    $VERSION = '2.7-CURRENT'
+    $VERSION = '3.0-CURRENT'
 else
     $VERSION = versionID.dup
 end
@@ -129,7 +129,7 @@ rescue
 	exit
 end
 
-formatType	= optHash['--format'] || 'easygps'
+formatType	= optHash['--format'] || 'gpx'
 queryType		= optHash['--query'] || 'zip'
 cacheExpiry	= optHash['--cacheExpiry'].to_i || 3
 quitAfterFetch  = optHash['--quitAfterFetch'].to_i || 200
@@ -258,7 +258,7 @@ end
 
 ## step #1 in filtering! ############################
 puts ""
-puts "[=] 1st Stage Filtering Executing..."
+#puts "[=] 1st Stage Filtering Executing..."
 filtered = Filter.new(combinedWaypoints)
 common.debug "[=] Filter running cycle 1, #{filtered.totalWaypoints} caches left"
 
@@ -317,7 +317,7 @@ if (optHash['--ownerInclude'])
 end
 
 
-puts "[=] Filter complete, #{filtered.totalWaypoints} caches left"
+puts "[=] First stage filtering complete, #{filtered.totalWaypoints} caches left"
 
 # We should really check our local cache and shadowhosts first before
 # doing this. This is just to be nice.
@@ -366,9 +366,9 @@ end
 		end
 	}
 
-    puts "[=] Second filtering stage is being executed"
+    #puts "[=] Second filtering stage is being executed"
     filtered= Filter.new(detail.waypoints)
-
+    beforeUsersTotal = filtered.totalWaypoints
 
     if (optHash['--userExclude'])
          optHash['--userExclude'].split(/[:\|]/).each { |user|
@@ -380,6 +380,11 @@ end
          optHash['--userInclude'].split(/[:\|]/).each { |user|
              filtered.userInclude(user)
          }
+    end
+
+    excludedUsersTotal = beforeUsersTotal - filtered.totalWaypoints
+    if (excludedUsersTotal)
+        puts "[=] User filtering removed #{excludedUsersTotal} caches from your listing."
     end
 
     #puts "[=] Removing caches with warnings"
@@ -396,7 +401,8 @@ if (filtered.totalWaypoints < 1)
 	exit
 end
 ## generate the output ########################################
-puts "[=] Generating output in #{formatType} format"
+puts ""
+puts "[=] Output format selected is #{output.formatDesc(formatType)} format"
 output.input(filtered.waypoints)
 output.formatType=formatType
 if (optHash['--waypointLength'])
@@ -408,10 +414,14 @@ outputData = output.prepare("details");
 if (optHash['--output'])
     outputFile = optHash['--output']
 else
-    outputFile = "geotoad-output." + output.formatExtension(formatType)
-    puts " -  No output file specified, defaulting to to #{outputFile}"
+    outputFile = "gtout-" + queryType + "-" + queryArgList.gsub(/[:\.]/, '_')
+    if queryType == "zip" || queryType == "coord"
+        outputFile = outputFile + "-y" + distanceMax
+    end
+
+    outputFile = outputFile + "." + output.formatExtension(formatType)
 end
 
-puts "[=] Saving output to #{outputFile}"
 output.commit(outputFile)
+puts "[=] Output saved to #{outputFile}"
 
