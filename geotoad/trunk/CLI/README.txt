@@ -30,7 +30,7 @@ Other Operating Systems -  You may need to install Ruby before running GeoToad.
   * Debian Linux: apt-get install ruby
   * FreeBSD: pkg_add -r ruby
 
-Optionally, if you have gpsbabel - http://gpsbabel.sourceforge.net/ 
+Optionally, if you have gpsbabel - http://gpsbabel.sourceforge.net/
 geotoad can output to over a dozen additional GPS formats.
 
 ---------------
