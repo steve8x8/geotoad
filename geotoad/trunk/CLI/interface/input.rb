@@ -39,7 +39,6 @@ class Input
             [ "--foundDateInclude",                "-r",    GetoptLong::OPTIONAL_ARGUMENT ],
             [ "--foundDateExclude",                "-R",    GetoptLong::OPTIONAL_ARGUMENT ],
             [ "--waypointLength",            "-l",    GetoptLong::OPTIONAL_ARGUMENT ],
-            [ "--libraryInclude",            "-L",    GetoptLong::OPTIONAL_ARGUMENT ],
             [ "--help",                     "-h",    GetoptLong::NO_ARGUMENT ],
             [ "--slowlink",                 "-z",    GetoptLong::NO_ARGUMENT ]
         )

@@ -35,7 +35,6 @@ end
 
 $SLEEP=3
 $SLOWMODE=350
-$VERSION_URL = "http://toadstool.se/hacks/geotoad/currentversion.php?type=CLI&version=#{VERSION}&ruby=#{RUBY_PLATFORM}&rubyver=#{RUBY_VERSION}";
 
 def initialize
     $TEMP_DIR     = findTempDir
@@ -49,11 +48,11 @@ def getoptions
     if ARGV[0]
         # command line arguments
         @option = @uin.getopt
-        $interactive = nil
+        $mode = 'CLI'
     else
         # Then go into interactive.
         @option = @uin.interactive
-        $interactive = 1
+        $mode = 'TUI'
     end
 
     # We need this for the check following
@@ -67,11 +66,6 @@ def getoptions
         end
         usage
         exit
-    end
-
-    # by request of Marc Sebastian Pelzer <marc%black-cube.net>
-    if @option['libraryInclude']
-        $:.push(@option['libraryInclude'])
     end
 
     @formatType        = @option['format'] || 'gpx'
@@ -150,10 +144,10 @@ end
 
 ## Check the version #######################
 def versionCheck
-    puts "[^] Checking for latest version of GeoToad..."
+    url = "http://toadstool.se/hacks/geotoad/currentversion.php?type=#{$mode}&version=#{$VERSION}&ruby=#{RUBY_PLATFORM}&rubyver=#{RUBY_VERSION}";
 
-    version = ShadowFetch.new($VERSION_URL)
-    version.shadowExpiry=0
+    puts "[^] Checking for latest version of GeoToad..."
+    version = ShadowFetch.new(url)
     version.localExpiry=43200
     version.useShadow=0
     version.fetch
@@ -515,7 +509,8 @@ def saveFile
     end
 
 
-
+    # if we have selected the name of the output file, use it.
+    # otherwise, take our invented name, sanitize it, and slap a file extension on it.
     if (@option['output'])
         outputFile = @option['output']
     else
@@ -524,8 +519,9 @@ def saveFile
         outputFile = outputFile + "." + output.formatExtension(@formatType)
     end
 
-    # prepend the current working directory
-    if outputFile !~ /\/\\/
+    # prepend the current working directory. This is mostly done as a service to
+    # users who just double click to launch GeoToad, and wonder where their output file went.
+    if outputFile !~ /[\/\\]/
         if RUBY_PLATFORM =~ /win32/
             outputFile = Dir.getwd + '\\' + outputFile
         else
@@ -533,8 +529,10 @@ def saveFile
         end
     end
 
-
+    # append time to our title
     @queryTitle = @queryTitle + " (" + Time.now.strftime("%d%b%y %H:%M") + ")"
+
+    # and do the dirty.
     outputData = output.prepare(@queryTitle);
     output.commit(outputFile)
     displayMessage "Output saved to #{outputFile}"
@@ -567,7 +565,7 @@ while(1)
   cli.close
 
   # Don't loop if you're in automatic mode.
-  if ($interactive)
+  if ($mode == "TUI")
       puts ""
       puts "-- Complete! Press Enter to return to the menu --"
       puts ""
