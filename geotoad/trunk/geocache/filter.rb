@@ -146,7 +146,7 @@ class Filter
 
 		@waypointHash.each_key { |wid|
             # I wanted to use delete_if, but I had run into a segfault in ruby 1.6.7/8
-            if (! (@waypointHash[wid]['details'] =~ /#{string}/i))
+            if (! ( (@waypointHash[wid]['details'] =~ /#{string}/i) || (@waypointHash[wid]['name'] =~ /#{string}/i)) )
                 #uts @waypointHash[wid]['details']
                  @waypointHash.delete(wid)
             end
