@@ -23,7 +23,7 @@ Requirements
 Ruby 1.6 - An object oriented scripting language, similar to Perl and
 Python. Mac OS X and some Linux distributions already have this installed. 
 If you are a Windows user, you should use this installer:
-http://unc.dl.sourceforge.net/sourceforge/rubyinstaller/ruby168-8.exe
+http://twtelecom.dl.sourceforge.net/sourceforge/rubyinstaller/ruby180-9.exe
 
 Optionally, if you have gpsbabel - http://gpsbabel.sourceforge.net/ ..
 geotoad can output to over a dozen additional GPS formats.
@@ -54,6 +54,7 @@ syntax: geotoad.rb [options] <search>
    pcx       Garmin PCX5 (gpsbabel)
    psp       Microsoft PocketStreets 2002 Pushpin (gpsbabel)
    text      Plain ASCII
+   tab       Tabbed text, for GPS Connect
    tiger     U.S. Census Bureau Tiger Mapping Service Data (gpsbabel)
    tmpro     TopoMapPro Places (gpsbabel)
    tpg       National Geographic Topo (gpsbabel)
@@ -104,7 +105,7 @@ You've just made a file named geotoad-output.loc containing all the geocaches
 nearby the zipcode 27513 suitable to be read by EasyGPS. Here are some more
 complex examples that you can work with:
 
-geotoad.rb -f text -o nc.txt -q state_id "North Carolina"
+geotoad.rb -f text -o nc.txt -n -q state_id "North Carolina"
 
 Outputs a text file with all of the caches in North Carolina that are
 virgins (have never been found). 

@@ -86,6 +86,15 @@ class Output < Common
                 "<%out.hint%>\r\n\r\n\r\n"
 		},
 
+        'tab'	=> {
+			'ext'		=> 'txt',
+			'mime'	=> 'text/plain',
+			'desc'	=> 	'Tab Delimited (GPS Connect)',
+			'spacer'	=> "",
+			'templatePre' => "",
+			'templateWP'	=> "<%out.id%>\t<%wp.latdata%>\t<%wp.londata%>\t0\r\n"
+		},
+
 		'csv'	=> {
 			'ext'		=> 'csv',
 			'mime'	=> 'text/plain',
@@ -468,7 +477,7 @@ class Output < Common
                 exit 2
             end
             # well, this is crap.
-            outVars['id'] = outVars['sname'][0..(@waypointLength - 1)].upcase
+            outVars['id'] = outVars['sname'][0..(@waypointLength - 1)]  # lets not .upcase
             outVars['title']="XXXX"
             debug "my id is #{outVars['id']}"
 
