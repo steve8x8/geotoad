@@ -327,7 +327,12 @@ class ShadowFetch < Common
 		    return nil
 		end
 
-		uploadEncoded = "c=update&p=" + CGI.escape(@url) + "&d=" + CGI.escape(@data)
+        begin
+            uploadEncoded = "c=update&p=" + CGI.escape(@url) + "&d=" + CGI.escape(@data)
+        rescue
+             debug "error encoding data, returning"
+             return nil
+        end
 
 		##########################################
 		# This needs to get merged into fetchURL!#
