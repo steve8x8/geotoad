@@ -91,6 +91,8 @@ class SearchCache < Common
         # I don't know why it starts as 5, but it does.
         if (! @resultsPager)
             @resultsPager=5
+        else
+            @resultsPager = @resultsPager + 1
         end
 
 		if (@totalWaypoints > @lastWaypoint)
@@ -137,6 +139,7 @@ class SearchCache < Common
         wid=nil
         @cache = Hash.new
         @postVars = Hash.new
+        @returnedWaypoints = 0
 
         data.each { |line|
             #debug "### #{line}"
@@ -153,9 +156,6 @@ class SearchCache < Common
                     if (lastWaypoint > @totalWaypoints)
                         @lastWaypoint = @totalWaypoints
                     end
-
-                    @returnedWaypoints = @lastWaypoint - @firstWaypoint + 1
-                    debug "Search has returned #{@returnWaypoints}"
 
                 when /WptTypes.*alt=\"(.*?)\" border=0 width=22 height=30/
 
@@ -209,11 +209,12 @@ class SearchCache < Common
                         @waypointHash[wid] = @cache.dup
                         @waypointHash[wid]['visitors'] = []
                         debug "*SCORE* Search found: #{wid}: #{@waypointHash[wid]['name']} (#{@waypointHash[wid]['difficulty']} / #{@waypointHash[wid]['terrain']})"
+                        @returnedWaypoints = @returnedWaypoints + 1
                         @cache.clear
                     end
 
                 when /^\<input type=\"hidden\" name=\"(.*?)\" value=\"(.*?)\" \/\>/
-                    debug "VAR #{$1} = #{$2}"
+                    debug "found hidden post variable: #{$1}"
                     @postVars[$1]=$2
                 when /\<form name=\"Form1\" method=\"post\" action=\"(.*?)\"/
                     @postURL='http://www.geocaching.com/seek/' + $1
