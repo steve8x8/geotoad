@@ -25,7 +25,16 @@ class Output
 		'ROAD'		=> 'Rd',
 		'RIVER'		=> '',
         'ONE'		=> '1',
-		'CREEK'		=> 'Ck',
+        'TWO'       => '2',
+        'THREE'     => '3',
+        'FOUR'      => '4',
+        'FIVE'      => '5',
+        'SIX'       => '6',
+        'SEVEN'     => '7',
+        'EIGHT'     => '8',
+        'NINE'      => '9',
+        'TEN'       => '10',
+ 		'CREEK'		=> 'Ck',
         'LITTLE'    => 'Lil',
         'BLACK'     => 'Blk',
         'LOOP'      => 'Lp',
@@ -40,7 +49,9 @@ class Output
         'IS'        => '',
         'THAT'      => 'T',
         'IN'        => '',
-        'OVERLOOK'  => 'Ovlk'
+        'OVERLOOK'  => 'Ovlk',
+        'Ridge'     => 'Rdg',
+        'Forest'    => 'Frst'
 	}
 
 
@@ -288,6 +299,7 @@ class Output
         if @outputType == "html"
             htmlIndex=''
             debug "I should generate an index, I'm html"
+            symbols = Hash.new
 
             wpList.sort{|a,b| a[1]<=>b[1]}.each {  |wpArray|
                 wid = wpArray[0]
@@ -295,25 +307,25 @@ class Output
 
                 @wpHash[wid]['details'].gsub!(/\&([A-Z])/, '&amp;(#{$1})');
                 htmlIndex = htmlIndex + "<li>"
-
+                symbols[wid] = ''
 
                 if (@wpHash[wid]['travelbug'])
-                    htmlIndex = htmlIndex + "<b><font color=\"#11CC11\">$</font></b>"
+                    symbols[wid] = "<b><font color=\"#11CC11\">$</font></b>"
                 end
 
                 if (@wpHash[wid]['terrain'] > 3)
-                    htmlIndex = htmlIndex + "<b><font color=\"#229999\">%</font></b>"
+                     symbols[wid] =  symbols[wid] + "<b><font color=\"#229999\">%</font></b>"
                 end
 
                 if (@wpHash[wid]['difficulty'] > 3)
-                    htmlIndex = htmlIndex + "<b><font color=\"#BB0000\">+</font></b>"
+                     symbols[wid] =  symbols[wid] + "<b><font color=\"#BB0000\">+</font></b>"
                 end
 
                 if (@wpHash[wid]['mdays'] < 0)
-                    htmlIndex = htmlIndex + "<b><font color=\"#9900CC\">@</font>"
+                     symbols[wid] =  symbols[wid] + "<b><font color=\"#9900CC\">@</font>"
                 end
 
-                htmlIndex = htmlIndex + "<a href=\"\##{wid}\">#{@wpHash[wid]['name']}</a>"
+                htmlIndex = htmlIndex + symbols[wid] + "<a href=\"\##{wid}\">#{@wpHash[wid]['name']}</a>"
 
                 if (@wpHash[wid]['mdays'] < 0)
                     htmlIndex = htmlIndex + "</b>"
@@ -331,10 +343,13 @@ class Output
 			detailsLen = @outputFormat['detailsLength'] || 20000
 			numEntries = @wpHash[@currentWid]['details'].length / detailsLen
 
-			@outVars['wid'] = @currentWid.dup
-            @outVars['id'] = @wpHash[@currentWid]['sname'].dup
+			@outVars['wid']     = @currentWid.dup
+            if symbols
+                @outVars['symbols'] = symbols[@currentWid]
+            end
+            @outVars['id']      = @wpHash[@currentWid]['sname'].dup
             # This should clear out the hint-dup issue that Scott Brynen mentioned.
-            @outVars['hint'] = ''
+            @outVars['hint']    = ''
 
             if @wpHash[@currentWid]['distance']
                 @outVars['relativedistance'] = 'Distance: ' + @wpHash[@currentWid]['distance'].to_s + 'mi ' + @wpHash[@currentWid]['direction']
