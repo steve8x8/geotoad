@@ -186,7 +186,7 @@ class SearchCache
         fetchFirst
 
 	    if (totalWaypoints)
-            displayMessage "[.] #{totalWaypoints} waypoints matched #{@mode} query for #{@key}"
+            displayMessage "#{totalWaypoints} waypoints matched #{@mode} query for #{@key}"
 
             # the loop that gets all of them.
             running = 1
@@ -203,10 +203,10 @@ class SearchCache
                 running = fetchNext
                 src = page.src
                 # update it.
-                displayMessage "[o] Received search page #{currentPage} of #{totalPages} (#{src})"
+                displayMessage "Received search page #{currentPage} of #{totalPages} (#{src})"
 
                 if (currentPage <= lastPage)
-                    displayError "[*] Logic error. I was at page #{lastPage} before, why am I at #{currentPage} now?"
+                    displayError "Logic error. I was at page #{lastPage} before, why am I at #{currentPage} now?"
                     exit
                 end
 
@@ -223,7 +223,7 @@ class SearchCache
 		    end # end totalPages if
             end # end while(running)
         else
-		    displayMessage "(*) No waypoints found. Possible error fetching #{@url}"
+		    displayWarning "No waypoints found. Possible error fetching #{@url}"
 		    exit
         end
 	end

@@ -149,6 +149,8 @@ class Output
 
 	## sets up for the filtering process ################3
 	def prepare (title)
+        @title = title
+
 		# if we are not actually generating the output, lets do it in a meta-fashion.
 		debug "preparing for #{@outputType}"
 		if (@outputFormat['filter_exec'])
@@ -198,12 +200,40 @@ class Output
 		end
 	end
 
+    def replaceVariables(templateText)
+        text = templateText.dup
+        # okay. I will fully admit this is a *very* unusual way to handle
+        # the templates. This all came to be due to a lot of debugging.
+        tags = text.scan(/\<%(\w+\.\w+)%\>/)
+
+        tags.each { |tag|
+            # puts "scanning #{tag} (#{@currentWid})"
+            (type, var) = tag[0].split('.')
+            if (type == "wp")
+                text.gsub!(/\<%wp\.#{var}%\>/, @wpHash[@currentWid][var].to_s)
+            elsif (type == "out")
+                text.gsub!(/\<%out\.#{var}%\>/, @outVars[var].to_s)
+            elsif (type == "wpEntity")
+                text.gsub!(/\<%wpEntity\.#{var}%\>/, CGI.escapeHTML(@wpHash[@currentWid][var].to_s))
+            elsif (type == "outEntity")
+                text.gsub!(/\<%outEntity\.#{var}%\>/, CGI.escapeHTML(@outVars[var].to_s))
+            else
+                displayWarning "unknown type: #{type} tag=#{var}"
+            end
+        }
+        return text
+    end
+
+
 	def filterInternal (title)
 		debug "generating output with output: #{@outputType} - #{$Format[@outputType]['desc']}"
-		output = @outputFormat['templatePre'].dup
-		outVars = Hash.new
+		@outVars = Hash.new
         wpList = Hash.new
-        outVars['title'] = title
+        @outVars['title'] = title
+        @currentWid = 0
+        # output is what we generate. We start with the templates pre.
+		output = replaceVariables(@outputFormat['templatePre'])
+
 
         # this is a strange maintenance loop of sorts. First it builds a list, which
         # I'm not sure what it's used for. Second, it inserts a new item named "sname"
@@ -263,97 +293,71 @@ class Output
         end
 
         wpList.sort{|a,b| a[1]<=>b[1]}.each {  |wpArray|
-            wid = wpArray[0]
-            debug "Output loop: #{wid} - #{@wpHash[wid]['name']}"
+            @currentWid = wpArray[0]
+            #puts "Output loop: #{@currentWid} - #{@wpHash[@currentWid]['name']}"
 			detailsLen = @outputFormat['detailsLength'] || 20000
 
-			numEntries = @wpHash[wid]['details'].length / detailsLen
+			numEntries = @wpHash[@currentWid]['details'].length / detailsLen
 
-			outVars['wid'] = wid.dup
-            outVars['id'] = @wpHash[wid]['sname'].dup
+			@outVars['wid'] = @currentWid.dup
+            @outVars['id'] = @wpHash[@currentWid]['sname'].dup
             # This should clear out the hint-dup issue that Scott Brynen mentioned.
-            outVars['hint'] = ''
+            @outVars['hint'] = ''
 
-            if @wpHash[wid]['distance']
-                outVars['relativedistance'] = 'Distance: ' + @wpHash[wid]['distance'].to_s + 'mi ' + @wpHash[wid]['direction']
+            if @wpHash[@currentWid]['distance']
+                @outVars['relativedistance'] = 'Distance: ' + @wpHash[@currentWid]['distance'].to_s + 'mi ' + @wpHash[@currentWid]['direction']
             end
 
-            if @wpHash[wid]['hint']
-                outVars['hint'] = 'Hint: ' + @wpHash[wid]['hint']
-                debug "I will include the hint: #{outVars['hint']}"
+            if @wpHash[@currentWid]['hint']
+                @outVars['hint'] = 'Hint: ' + @wpHash[@currentWid]['hint']
+                debug "I will include the hint: #{@outVars['hint']}"
             end
 
-
-
-
-            # give it a blank title, for whatever strange reason.
-            outVars['title']="-"
-
-            if (outVars['id'].length < 1)
+            if (@outVars['id'].length < 1)
                 debug "our id is no good, using the wid"
-                displayWarning "We could not make an id from \"#{outVars['sname']}\" so we are using #{wid}"
-                outVars['id'] = wid.dup
+                displayWarning "We could not make an id from \"#{@outVars['sname']}\" so we are using #{@currentWid}"
+                @outVars['id'] = @currentWid.dup
             end
-			outVars['url'] = $DetailURL + @wpHash[wid]['sid'].to_s
-            if (! @wpHash[wid]['terrain'])
-                displayError "[*] Error: no terrain found for #{wid}"
-                @wpHash[wid].each_key { |key|
-                    displayError "#{key} = #{@wpHash[wid][key]}"
+			@outVars['url'] = $DetailURL + @wpHash[@currentWid]['sid'].to_s
+            if (! @wpHash[@currentWid]['terrain'])
+                displayError "[*] Error: no terrain found for #{@currentWid}"
+                @wpHash[@currentWid].each_key { |key|
+                    displayError "#{key} = #{@wpHash[@currentWid][key]}"
                 }
                 exit
             end
-            if (! @wpHash[wid]['difficulty'])
+            if (! @wpHash[@currentWid]['difficulty'])
                 displayError "[*] Error: no difficulty found"
 
                 exit
             end
-			outVars['average'] = (@wpHash[wid]['terrain'] + @wpHash[wid]['difficulty'] / 2).to_i
+			@outVars['average'] = (@wpHash[@currentWid]['terrain'] + @wpHash[@currentWid]['difficulty'] / 2).to_i
+            # This comment is only here to make ArmedBear-J parse the ruby properly: /\*/, "[SPACER]");
 
 			# this crazy mess is all due to iPod's VCF reader only supporting 2k chars!
 			0.upto(numEntries) { |entry|
 				if (entry > 0)
-					outVars['sname'] = shortName(@wpHash[wid]['name'])[0..12] << ":" << (entry + 1).to_s
+					@outVars['sname'] = shortName(@wpHash[@currentWid]['name'])[0..12] << ":" << (entry + 1).to_s
 				end
 
 				detailByteStart = entry * detailsLen
-        detailByteEnd = detailByteStart + detailsLen - 1
-				outVars['details'] = @wpHash[wid]['details'][detailByteStart..detailByteEnd]
+                detailByteEnd = detailByteStart + detailsLen - 1
+				@outVars['details'] = @wpHash[@currentWid]['details'][detailByteStart..detailByteEnd]
 
                 # a bad hack.
-                outVars['details'].gsub!(/\*/, "[SPACER]");
+                @outVars['details'].gsub!(/\*/, "[SPACER]");
+				tempOutput = replaceVariables(@outputFormat['templateWP'])
 
-				tempOutput = @outputFormat['templateWP'].dup
-
-				# okay. I will fully admit this is a *very* unusual way to handle
-				# the templates. This all came to be due to a lot of debugging.
-
-                # ** PLEASE MOVE INTO ANOTHER SUBROUTINE! THIS IS STUPID! **
-				tags = tempOutput.scan(/\<%(\w+\.\w+)%\>/)
-
-
-				tags.each { |tag|
-					(type, var) = tag[0].split('.')
-					if (type == "wp")
-						tempOutput.gsub!(/\<%wp\.#{var}%\>/, @wpHash[wid][var].to_s)
-					elsif (type == "out")
-						tempOutput.gsub!(/\<%out\.#{var}%\>/, outVars[var].to_s)
-					elsif (type == "wpEntity")
-						tempOutput.gsub!(/\<%wpEntity\.#{var}%\>/, CGI.escapeHTML(@wpHash[wid][var].to_s))
-					elsif (type == "outEntity")
-						tempOutput.gsub!(/\<%outEntity\.#{var}%\>/, CGI.escapeHTML(outVars[var].to_s))
-                    else
-						displayWarning "unknown type: #{type} tag=#{var}"
-					end
-				}
                 # we move this to after our escapeHTML's so the HTML in here doesn't get
-                # encoded itself!
+                # encoded itself! I think it should be handled a little better than this.
                 if (tempOutput)
                     output << tempOutput.gsub(/\[SPACER\]/, @outputFormat['spacer']);
                 end
 			}
 		}
+
 		if @outputFormat['templatePost']
-			output << @outputFormat['templatePost']
+			output << replaceVariables(@outputFormat['templatePost'])
 		end
 
 		return output

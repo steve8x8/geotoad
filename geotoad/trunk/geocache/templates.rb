@@ -28,7 +28,7 @@ $Format = {
         'gpx'    => {
             'ext'        => 'gpx',
             'mime'    => 'text/ascii',
-            'desc'    => 'Geocaching.com GPX file',
+            'desc'    => '<%out.title%>',
             'spacer'    => "\r\n",
             'templatePre' => "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n" +
             "<gpx xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" version=\"1.0\" creator=\"GeoToad\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd http://www.groundspeak.com/cache/1/0 http://www.groundspeak.com/cache/1/0/cache.xsd\" xmlns=\"http://www.topografix.com/GPX/1/0\">\r\n" +
@@ -76,13 +76,13 @@ $Format = {
         'html'    => {
             'ext'        => 'html',
             'mime'    => 'text/html',
-            'desc'    => 'Simple HTML table format',
+            'desc'    => 'Simple HTML',
             'spacer'    => "<br>&nbsp;\n",
             'templatePre' => "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n" +
-                "<html><head>\n<title>GeoToad Output</title>\n" +
+                "<html><head>\n<title><%out.title%></title>\n" +
                 "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">\n" + "</head>\n" +
                 "<body link=\"#000099\" vlink=\"#000044\" alink=\"#000099\">\n" +
-                "<h3>GeoToad HTML Index</h3>" +
+                "<h3><%out.title%></h3>" +
                 "<b><font color=\"#11CC11\">$</font></b> have travelbugs<br>" +
                 "<b><font color=\"#9900CC\">@</font></b> have never been found<br>" +
                 "<b><font color=\"#229999\">%</font></b> have a terrain rating of 3.5+<br>" +
