@@ -523,6 +523,7 @@ class Output < Common
                 debug "I will include the hint: #{outVars['hint']}"
             end
 
+            outVars['sname'] = shortName(@wpHash[wid]['name'])[0..14]
             debug "my sname is #{outVars['sname']}"
             if (outVars['sname'].length < 1)
                 puts "#{wid}: #{@wpHash[wid]['name']} did not get an sname returned. BUG!"
@@ -573,6 +574,10 @@ class Output < Common
 
                 # ** PLEASE MOVE INTO ANOTHER SUBROUTINE! THIS IS STUPID! **
 				tags = tempOutput.scan(/\<%(\w+\.\w+)%\>/)
+
+                # temporary till we get XML entities
+                outVarsEntity = outVars.dup
+                @wpHashEntity = @wpHash.dup
 
 				tags.each { |tag|
 					(type, var) = tag[0].split('.')
