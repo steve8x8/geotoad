@@ -24,7 +24,7 @@ class SearchCache < Common
         @mode=keylookup.type
 		@key=keylookup.lookup(key)
         if (! @key)
-            puts "Bad search key: #{key}"
+            puts "Bad search key for #{@mode} type: #{key}"
             return nil
         end
         
