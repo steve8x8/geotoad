@@ -1,0 +1,29 @@
+$Id: TODO,v 1.2 2002/08/05 11:11:52 strombt Exp $
+
+TODO:
+======
+
+Search:
+-------
+* Parse /hideseek to get a table of state/country codes.
+* Support members only caches
+
+Filter:
+-------
+* Cache type
+* Caches not owned by
+* Found in last 7 days
+
+Output:
+-------
+* eBook format (XML based)]
+
+Details:
+--------
+* Instead of enabling logs_y mode, do a
+http://www.geocaching.com/seek/nearest_cache.asp?ul=helixblue 
+
+Frontends:
+----------
+Web
+Mac OS X

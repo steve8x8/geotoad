@@ -1,0 +1,14 @@
+Geocrunch by Thomas Stromberg
+$Id: README,v 1.2 2002/08/05 11:12:28 strombt Exp $
+=============================
+
+Requires Ruby 1.6
+
+Sample Syntax for the CLI mode:
+
+CLI/geocrunch.rb -t 2.5 -f vcf -u helixblue -o ~/Desktop/charlotte.vcf 28272
+
+Gets every cache in the 100 mile radius of zipcode 28272, with a terrain
+score of 2.5 or higher, and that helixblue has not visited. Outputs a VCF
+format file.
+
