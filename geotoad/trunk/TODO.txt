@@ -16,6 +16,7 @@ Output:
 * eBook format (XML based)]
 * WML (WAP)
 * HTML mode should include query details
+* GPSNavX support
 
 Details:
 --------
