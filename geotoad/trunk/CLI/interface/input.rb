@@ -111,7 +111,7 @@ class Input
             printf("(3)  distance maximum    [%-3.3s]        |\n", (@@optHash['distanceMax'] || 10))
             puts   "                                      |"
             printf("(4)  difficulty min      [%-3.3s]        | (5)  terrain min       [%-3.3s]\n", (@@optHash['difficultyMin'] || 0.0), (@@optHash['terrainMin'] || 0.0))
-            printf("(6)  dificulty max       [%-3.3s]        | (7)  terrain max       [%-3.3s]\n", (@@optHash['difficultyMax'] || 5.0), (@@optHash['terrainMax'] || 5.0))
+            printf("(6)  difficulty max      [%-3.3s]        | (7)  terrain max       [%-3.3s]\n", (@@optHash['difficultyMax'] || 5.0), (@@optHash['terrainMax'] || 5.0))
             printf("(8)  title keyword       [%-10.10s] | (9)  descr. keyword    [%-13.13s]\n", @@optHash['titleKeyword'], @@optHash['descKeyword'])
             puts   "                                      |"
             printf("(10) cache not found by  [%-10.10s] | (11) cache owner isn't [%-13.13s]\n", @@optHash['userExclude'], @@optHash['ownerExclude'])
