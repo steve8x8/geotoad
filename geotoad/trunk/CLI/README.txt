@@ -64,7 +64,8 @@ syntax: geotoad.rb [options] <search>
 
    * some formats may require gpsbabel to be installed and in PATH
 
- -q [zip|state|country]  query type (zip by default)
+ -q [zip|state|coord]    query type (zip by default)
+		         [COUNTRY SEARCHES CURRENTLY BROKEN]
  -o [filename]           output file
  -d [0.0-5.0]            difficulty minimum (0)
  -D [0.0-5.0]            difficulty maximum (5)
@@ -106,19 +107,22 @@ You've just made a file named geotoad-output.loc containing all the geocaches
 nearby the zipcode 27513 suitable to be read by EasyGPS. Here are some more
 complex examples that you can work with:
 
-geotoad.rb -f text -o nc.txt -n -q state_id "North Carolina"
 
+geotoad.rb -q coord 39.44486,-74.561273 -y 5
+Search for caches within 5 miles of the above coordinates
+
+
+geotoad.rb -f text -o nc.txt -n -q state_id "North Carolina"
 Outputs a text file with all of the caches in North Carolina that are
 virgins (have never been found). 
 
-geotoad.rb -t 2.5 -f vcf -U helixblue:Sallad -o charlotte.vcf 28272
 
+geotoad.rb -t 2.5 -f vcf -U helixblue:Sallad -o charlotte.vcf 28272
 Gets every cache in the 100 mile radius of zipcode 28272, with a terrain
 score of 2.5 or higher, and that helixblue and Sallad have not visited.
 Outputs a VCF format file, which is usable by iPod's and other devices.
 
-geotoad.rb -b html -n -k 'stream|creek|lake|river|ocean' -o watery.html -q
-country Sweden
 
+geotoad.rb -b html -n -k 'stream|creek|lake|river|ocean' -o watery.html -q country Sweden
 Gets every cache in Sweden with travel bugs that matches those water keywords. 
 Makes a pretty HTML file out of it.
