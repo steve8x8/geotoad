@@ -182,7 +182,7 @@ class SearchCache < Common
 
                 when /WptTypes.*alt=\"(.*?)\" border=0/
                     @cache['type']=$1
-                    @cache['mdate']=-1
+                    @cache['mdays']=-1
                     @cache['type'].gsub!(/\s*cache.*/, '')
                     @cache['type'].gsub!('-', '')
                     debug "type=#{@cache['type']}"
@@ -193,8 +193,19 @@ class SearchCache < Common
                     debug "cacheDiff=#{@cache['difficulty']} terr=#{@cache['terrain']}"
 
                 when /<td valign=\"top\" align=\"left\"\>(\d+) (\w+) \'(\d+)\<\/td\>/
-                    @cache['cdate']=$1 + $2.downcase + $3
-                    debug "cacheDate=#{@cache['cdate']}"
+                    cday = $1
+                    cmonth = $2
+                    cyear = $3
+
+                    @cache['cdate']=cday + cmonth.downcase + cyear
+                    # I hate people who use 2 digit dates.
+                    cyearProper = "20" + cyear
+                    t = Time.new
+                    ctimestamp = Time.local(cyearProper.to_i,cmonth,cday.to_i,00,00,0)
+                    cage = t - ctimestamp
+                    @cache['cdays'] = (cage / 3600 / 24).to_i
+
+                    debug "cacheDate=#{@cache['cdate']} cdays=#{@cache['cdays']}"
 
                 when /align=\"left\">([\d\.]+)mi [NSWE]+\<br\>/
                     @cache['distance']=$1.to_f
@@ -224,25 +235,25 @@ class SearchCache < Common
                     @cache['travelbug']='Travel Bug!'
 
                 when /\<td valign=\"top\" align=\"left\"\>Today\</
-                    @cache['mdate']=0
+                    @cache['mdays']=0
 
                 when /\<td valign=\"top\" align=\"left\"\>Yesterday\</
-                    @cache['mdate']=1
+                    @cache['mdays']=1
 
                 when /\<td valign=\"top\" align=\"left\"\>(\d+) days ago\</
-                    @cache['mdate']=$1.to_i
-                    debug "mdate=#{@cache['mdate']}"
+                    @cache['mdays']=$1.to_i
+                    debug "mdays=#{@cache['mdays']}"
 
                  when /\<td valign=\"top\" align=\"left\"\>(\d+) months ago\</
                     # not exact, but close.
-                    @cache['mdate']=$1.to_i * 30
-                    debug "mdate=#{@cache['mdate']} (converted from months)"
+                    @cache['mdays']=$1.to_i * 30
+                    debug "mdays=#{@cache['mdays']} (converted from months)"
 
                  # not sure if this case actually exists.
                  when /\<td valign=\"top\" align=\"left\"\>(\d+) years ago\</
                     # not exact, but close.
-                    @cache['mdate']=$1.to_i * 365
-                    debug "mdate=#{@cache['mdate']} (converted from years)"
+                    @cache['mdays']=$1.to_i * 365
+                    debug "mdays=#{@cache['mdays']} (converted from years)"
 
                  when / ago/
                      debug "missing ago line: #{line}"
@@ -252,7 +263,13 @@ class SearchCache < Common
                     if (wid)
                         @waypointHash[wid] = @cache.dup
                         @waypointHash[wid]['visitors'] = []
-                        debug "mdate is #{@waypointHash[wid]['mdate']}"
+                        if (@cache['mdays'] > -1)
+                            t = Time.now
+                            t2 = t - (@cache['mdays'] * 3600 * 24)
+                            @waypointHash[wid]['mdate'] = t2.strftime("%d%b%y")
+                            debug "mdays = #{@cache['mdays']} mdate=#{@waypointHash[wid]['mdate']}"
+                        end
+
                         debug "*SCORE* Search found: #{wid}: #{@waypointHash[wid]['name']} (#{@waypointHash[wid]['difficulty']} / #{@waypointHash[wid]['terrain']})"
                         @returnedWaypoints = @returnedWaypoints + 1
                         @cache.clear

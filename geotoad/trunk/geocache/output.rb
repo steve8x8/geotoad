@@ -64,7 +64,7 @@ class Output < Common
 			'templateWP'	=>
 				"<hr noshade size=\"1\">\n<a name=\"<%out.wid%>\"></a><font color=\"#000099\"><a href=\"<%out.url%>\"><big><strong><%wp.name%></strong></big></a></font>&nbsp;&nbsp;  <b><%wp.travelbug%></b><br>\n" +
                 "<font color=\"#555555\"><strong><%wp.creator%></strong></font>, <%wp.latwritten%> <%wp.lonwritten%><br>" +
-				"<font color=\"#339933\"><%wp.type%> D<%wp.difficulty%>/T<%wp.terrain%> - placed: <%wp.cdate%> last: <%wp.mdate%> days ago</font><br>" +
+				"<font color=\"#339933\"><%wp.type%> D<%wp.difficulty%>/T<%wp.terrain%> - placed: <%wp.cdate%> last: <%wp.mdays%> days ago</font><br>" +
 				"<p><%out.details%></p>\n" +
                 "<p><font color=\"#555555\">Hint (a=n): <%wp.hint%></font></p>\n",
 			'templatePost'	=> "</body></html>"
@@ -79,7 +79,7 @@ class Output < Common
 			'templateWP'	=> "== \"<%wp.name%>\" (<%out.wid%>) by <%wp.creator%>\r\n" +
 				"Difficulty: <%wp.difficulty%>, Terrain: <%wp.terrain%>\r\n" +
 				"Lat: <%wp.latwritten%> Lon: <%wp.lonwritten%>\r\n" +
-				"Type: <%wp.type%>, Creation: <%wp.cdate%>, Last found: <%wp.mdate%> days ago\r\n" +
+				"Type: <%wp.type%>, Creation: <%wp.cdate%>, Last found: <%wp.mdays%> days ago\r\n" +
 				"Details:\r\n<%out.details%>\r\n" +
                 "Hint (a=n):\r\n<%wp.hint%>\r\n\r\n\r\n"
 		},
@@ -432,9 +432,9 @@ class Output < Common
                     htmlIndex = htmlIndex + " [TB]"
                 end
 
-                if (@wpHash[wid]['mdate'] < 0)
+                if (@wpHash[wid]['mdays'] < 0)
                     htmlIndex = htmlIndex + " (v)"
-                    debug "Marking #{@wpHash[wid]['name']} a virgin (#{@wpHash[wid]['mdate']})"
+                    debug "Marking #{@wpHash[wid]['name']} a virgin (#{@wpHash[wid]['mdays']})"
                 end
                 htmlIndex = htmlIndex + "</li>\n"
             }

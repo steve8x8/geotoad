@@ -78,6 +78,10 @@ syntax: geotoad.rb [options] <search>
                          Use : to delimit multiple users
  -U [username]           exclude caches found by this person
                          Use : to delimit multiple users
+ -p [# days]             only include caches placed in the last X days
+ -P [# days]             exclude caches placed in the last X days
+ -r [# days]             only include caches found in the last X days
+ -R [# days]             exclude caches found in the last X days
  -n                      only include not found caches (virgins)
  -b                      only include caches with travelbugs
  -l                      set waypoint id length (Garmin users can use 16)

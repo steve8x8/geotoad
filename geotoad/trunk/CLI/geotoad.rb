@@ -8,7 +8,7 @@ $:.push('..')
 # just in case it was never replaced.
 versionID='%VERSION%'
 if versionID !~ /^\d/
-    $VERSION = '2.5-CURRENT'
+    $VERSION = '2.6-CURRENT'
 else
     $VERSION = versionID.dup
 end
@@ -48,6 +48,10 @@ opts = GetoptLong.new(
     [ "--userExclude",				"-U",    GetoptLong::OPTIONAL_ARGUMENT ],
     [ "--ownerInclude",			    "-c",    GetoptLong::OPTIONAL_ARGUMENT ],
     [ "--ownerExclude",		        "-C",    GetoptLong::OPTIONAL_ARGUMENT ],
+    [ "--placeDateInclude",			    "-p",    GetoptLong::OPTIONAL_ARGUMENT ],
+    [ "--placeDateExclude",		        "-P",    GetoptLong::OPTIONAL_ARGUMENT ],
+    [ "--foundDateInclude",			    "-r",    GetoptLong::OPTIONAL_ARGUMENT ],
+    [ "--foundDateExclude",		        "-R",    GetoptLong::OPTIONAL_ARGUMENT ],
     [ "--waypointLength",			"-l",    GetoptLong::OPTIONAL_ARGUMENT ],
     [ "--help",                     "-h",    GetoptLong::NO_ARGUMENT ]
 )
@@ -93,6 +97,10 @@ def usage
 	puts " -C [username]           exclude caches owned by this person"
 	puts " -u [username]           only include caches found by this person"
 	puts " -U [username]           exclude caches found by this person"
+    puts " -p [# days]             only include caches placed in the last X days"
+    puts " -P [# days]             exclude caches placed in the last X days"
+    puts " -r [# days]             only include caches found in the last X days"
+    puts " -R [# days]             exclude caches found in the last X days"
     puts "                         (use : to delimit multiple users!)"
 	puts " -n                      only include not found caches (virgins)"
     puts " -b                      only include caches with travelbugs"
@@ -255,6 +263,22 @@ common.debug "[=] Filter running cycle 4, #{filtered.totalWaypoints} caches left
 
 if optHash['--terrainMax']
 	filtered.terrainMax(optHash['--terrainMax'].to_f)
+end
+
+if optHash['--foundDateInclude']
+	filtered.foundDateInclude(optHash['--foundDateInclude'].to_f)
+end
+
+if optHash['--foundDateExclude']
+	filtered.foundDateExclude(optHash['--foundDateExclude'].to_f)
+end
+
+if optHash['--placeDateInclude']
+	filtered.placeDateInclude(optHash['--placeDateInclude'].to_f)
+end
+
+if optHash['--placeDateExclude']
+	filtered.placeDateExclude(optHash['--placeDateExclude'].to_f)
 end
 
 if optHash['--notFound']

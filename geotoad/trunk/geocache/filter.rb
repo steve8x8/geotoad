@@ -56,7 +56,35 @@ class Filter < Common
     def notFound
 		debug "filtering by notFound"
 		@waypointHash.delete_if { |wid, values|
-			@waypointHash[wid]['mdate'].to_s.length > 7
+			@waypointHash[wid]['mdays'].to_i < 0
+        }
+	end
+
+    def foundDateInclude(days)
+		debug "filtering by foundDateInclude: #{days}"
+		@waypointHash.delete_if { |wid, values|
+			@waypointHash[wid]['mdays'].to_i >= days.to_i
+        }
+	end
+
+    def foundDateExclude(days)
+		debug "filtering by foundDateExclude: #{days}"
+		@waypointHash.delete_if { |wid, values|
+			@waypointHash[wid]['mdays'].to_i < days.to_i
+        }
+	end
+
+    def placeDateInclude(days)
+		debug "filtering by placeDateInclude: #{days}"
+		@waypointHash.delete_if { |wid, values|
+			@waypointHash[wid]['cdays'].to_i >= days.to_i
+        }
+	end
+
+    def placeDateExclude(days)
+		debug "filtering by placeDateExclude: #{days}"
+		@waypointHash.delete_if { |wid, values|
+			@waypointHash[wid]['cdays'].to_i < days.to_i
         }
 	end
 
