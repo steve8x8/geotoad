@@ -10,7 +10,7 @@ DEST=/tmp/$DIST
 LONGDIST="$DIST"
 
 echo "Creating $DEST"
-rm -Rf $DEST
+rm -Rf $DEST*
 mkdir $DEST
 cp -R CLI/._* CLI/.DS* TODO.txt COPYRIGHT.txt geocache CLI/interface $DEST
 ditto CLI/*Mac* $DEST
