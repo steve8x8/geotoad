@@ -15,7 +15,7 @@ require 'geocache/details'
 
 
 $VERSION='%VERSION%'
-$SLEEP=2
+$SLEEP=3
 
 common = Common.new
 $TEMP_DIR=common.findTempDir
