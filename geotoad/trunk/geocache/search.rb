@@ -18,10 +18,16 @@ class SearchCache < Common
 
 	# set the search mode. valid modes are 'zip', 'state_id', 'country_id', 'keyword',
 	# coord
-	def mode(mode, key)
-		@mode=mode.to_s
-		@key=key
-
+	def mode(mode, key)        
+        # resolve North Carolina to 34. 
+        keylookup=SearchCode.new(mode)
+        @mode=keylookup.type
+		@key=keylookup.lookup(key)
+        if (! @key)
+            puts "Bad search key: #{key}"
+            return nil
+        end
+        
 		# come up with a nice URL for the mode too.
 		case @mode
 			when 'coord'
@@ -33,7 +39,8 @@ class SearchCache < Common
 		if @distance
 			@url = @url + '&dist=' + @distance.to_s
 		end
-			debug "URL for mode is #{@url}"
+		debug "URL for mode is #{@url}"
+        return @url
 	end
 
 	# feed coordinates, which have two variables.

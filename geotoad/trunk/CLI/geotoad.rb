@@ -7,6 +7,7 @@ $:.push('..')
 require 'getoptlong'
 require 'geocache/common'
 require 'geocache/shadowget'
+require 'geocache/searchcode'
 require 'geocache/search'
 require 'geocache/filter'
 require 'geocache/output'
@@ -43,7 +44,7 @@ output = Output.new
 @@validFormats = output.formatList
 
 def usage
-	puts "syntax: geotoad [options] <search>"
+	puts "syntax: geotoad.rb [options] <search>"
 	puts "    -f format for output. Valid options are:"
 	outputDetails = Output.new
 	@@validFormats.each { |type|
@@ -51,25 +52,24 @@ def usage
 		puts "          " + type + " - " + desc
 	}
 
-	puts "    -q [zip|state_id]     query type (zip by default)"
-	puts "    -o [filename]         output file"
-	puts "    -d [0.0-5.0]          difficulty minimum (0)"
-	puts "    -D [0.0-5.0]          difficulty maximum (5)"
-	puts "    -t [0.0-5.0]          terrain minimum (0)"
-	puts "    -T [0.0-5.0]          terrain maximum (5)"
-	puts "    -y [1-500]            distance maximum (zipcode only, defaults to 25 miles)"
-	puts "    -c [0-30]             cache expiry in days"
-	puts "    -x [1-500]            quit after X amount of remote fetches (200)"
-    puts "    -k [keyword]          keyword search"
-	puts "    -u [username]         user to filter from the lists"
-	puts "    -n                    only include not found caches (virgins)"
-    puts "    -b                    only include caches with travelbugs"
-	puts "    -v                    verbose/debug mode"
+	puts " -q [zip|state|country]  query type (zip by default)"
+	puts " -o [filename]           output file"
+	puts " -d [0.0-5.0]            difficulty minimum (0)"
+	puts " -D [0.0-5.0]            difficulty maximum (5)"
+	puts " -t [0.0-5.0]            terrain minimum (0)"
+	puts " -T [0.0-5.0]            terrain maximum (5)"
+	puts " -y [1-500]              distance maximum (zipcode only, 25 default)"
+    puts " -k [keyword]            keyword (regexp) search. Use | to delimit multiple"
+	puts " -u [username]           filter out caches found by username. "
+    puts "                         Use : to delimit multiple users"
+	puts " -n                      only include not found caches (virgins)"
+    puts " -b                      only include caches with travelbugs"
+	puts " -v                      verbose/debug mode"
 
 	puts ""
 	puts "EXAMPLES:"
 	puts "geotoad.rb 27502"
-	puts "geotoad.rb -d 3 -u helixblue -f vcf -o /Volumes/Kermit/Contacts/NC.vcf -q state_id 34"
+	puts "geotoad.rb -d 3 -u helixblue -f vcf -o NC.vcf -q state_id \'North Carolina\'"
 	exit
 else
 
@@ -91,7 +91,8 @@ if (! ARGV[0])
 	usage
 	exit
 else
-	queryArg		= ARGV[0]
+    # make friendly to people who can't quote.
+	queryArg		= ARGV.join(" ")
 end
 
 if (optHash['--verbose'])
@@ -117,7 +118,10 @@ if optHash['--distanceMax']
 	search.distance(optHash['--distanceMax'].to_i)
 end
 
-search.mode(queryType, queryArg)
+if (! search.mode(queryType, queryArg))
+    exit
+end
+
 search.fetchFirst
 if (search.totalWaypoints)
 	puts "[.] #{search.totalWaypoints} waypoints matched initial query."

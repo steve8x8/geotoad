@@ -39,9 +39,9 @@ score of 2.5 or higher, and that helixblue and Sallad have not visited.
 Outputs a VCF format file, which is usable by iPod's and other devices.
 
 geotoad.rb -f html -n -k 'stream|creek|lake|river|ocean' -o watery.html -q
-state_id 34
+country Sweden
 
-Gets every virgin cache in North Carolina that matches those water keywords. 
+Gets every virgin cache in Sweden that matches those water keywords. 
 Makes a pretty HTML file out of it.
 
 geotoad.rb -f easygps -y 5 -o easygps.loc 27513
