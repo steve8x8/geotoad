@@ -254,15 +254,16 @@ class Output
         text = CGI.escapeHTML(str)
         # using scan() here to get around difficulties with \1
         text.scan(/([\x80-\xFF]+)/) {|highchar|
-            ascii = highchar[0].unpack("U").to_s
-            dec = highchar[0]
-            if ascii == '0'
-                debug "#{text}\nnot a valid char: #{highchar} / #{ascii} / #{dec}"
+            begin
+                ascii = highchar[0].unpack("U").to_s
+                debug "Replacing high char [#{highchar}] with #{ascii}"
+                text.gsub!(/#{highchar}/, ("&#" + ascii  + ";"))
+            rescue
+                # UTF-8 conversion failed. Lets use a ? instead.
+                debug "Could not determine ASCII code conversion for UTF-8 character #{highchar}, using ? instead"
+                text.gsub!(/#{highchar}/,'?')
             end
-            debug "Replacing high char [#{highchar}] with #{ascii}"
-            text.gsub!(/#{highchar}/, ("&#" + ascii  + ";"))
         }
-        return text
     end
 
 
