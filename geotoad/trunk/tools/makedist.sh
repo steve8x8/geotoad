@@ -9,15 +9,15 @@ DIST="geotoad-$VERSION"
 LONGDIST="$DIST"
 rm -Rf /tmp/$DIST
 mkdir /tmp/$DIST
-chmod 755 *.rb *.sh
-cp -R README TODO VERSION geocache CLI /tmp/$DIST
-sed s/"%VERSION%"/"$VERSION"/g CLI/geotoad.rb > /tmp/$DIST/CLI/geotoad.rb
-chmod 755 /tmp/$DIST/**/*.rb
-rm /tmp/$DIST/**/*~
-rm /tmp/$DIST/*/._*
-rm -Rf /tmp/$DIST/**/CVS
-rm -Rf /tmp/$DIST/**/.svn
-#cvs2cl --revisions -f /tmp/$DIST/ChangeLog.txt
+cp -R TODO.txt COPYRIGHT.txt geocache /tmp/$DIST
+sed s/"%VERSION%"/"$VERSION"/g CLI/geotoad.rb > /tmp/$DIST/geotoad.rb
+sed s/"%VERSION%"/"$VERSION"/g CLI/README.txt > /tmp/$DIST/README.txt
+chmod 755 /tmp/$DIST/*.rb
+rm /tmp/$DIST/**/*~ 2>/dev/null
+rm /tmp/$DIST/*/._* 2>/dev/null
+rm -Rf /tmp/$DIST/**/CVS 2>/dev/null
+rm -Rf /tmp/$DIST/**/.svn 2>/dev/null
+
 svn log -v > /tmp/$DIST/ChangeLog.txt
 
 cd /tmp
