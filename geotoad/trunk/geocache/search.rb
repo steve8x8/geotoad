@@ -21,24 +21,36 @@ class SearchCache < Common
 	# coord
 	def mode(mode, key)
         # resolve North Carolina to 34.
-        keylookup=SearchCode.new(mode)
-        @mode=keylookup.type
-		@key=keylookup.lookup(key)
-        if (! @key)
-            puts "Bad search key for #{@mode} type: #{key}"
-            return nil
-        end
+        if (mode != "coord")
+            keylookup=SearchCode.new(mode)
+            @mode=keylookup.type
+            @key=keylookup.lookup(key)
+            if (! @key)
+                puts "Bad search key for #{@mode} type: #{key}"
+                return nil
+            end
 
-		# nearly everything is in this form
-        @url=@@baseURL + '?' + @mode + '=' + @key.to_s
+            # nearly everything is in this form
+            @url=@@baseURL + '?' + @mode + '=' + @key.to_s
+        else
+            # we should check for well-formed coordinates here
+            @mode = "coord"
+            @key = key
+        end
 
         # special URL preperation's for some modes
 		case @mode
 			when 'coord'
+                # we used to have a coordinates function, but it made no sense to
+                # me why we had a coordinates function but no function for other types?
+                # wrap it into the mode()!
+                (@lat, @long) = key.split(',')
+
 				@url=@@baseURL + '?' + 'origin_lat=' + @lat + '&origin_long=' + @long
                 if @distance
                             @url = @url + '&dist=' + @distance.to_s
                 end
+                puts @url
             when 'country_id'
                 # as of aug2003, geocaching.com has an in-between page for country
                 # lookups to parse. Pretty silly and worthless, imho.
@@ -47,9 +59,10 @@ class SearchCache < Common
                 ## CURRENTLY BROKEN ##
                 ## NEEDS HELP       ##
                 ######################
+                puts "Country searches are currently broken. Please help fix!"
+                return nil
 
                 debug 'fetching the country page'
-
                 # add go button to the URL, just in case.
                 @url = @url + "&submit3=GO"
                 data = fetch(@url)
@@ -71,12 +84,6 @@ class SearchCache < Common
         return @url
 	end
 
-	# feed coordinates, which have two variables.
-	def coordinates(lat, long)
-		@lat = lat
-		@long = long
-		mode(coord, nil)
-	end
 
 	def baseURL
 		@@baseURL
