@@ -67,9 +67,17 @@ class SearchCache
                 # up input the user could conjure. Thanks to Scott Brynen for help.
 
                 #       N             48    °   08.152          E         011    ° 39.308 '
-                re = /^([ns-]?)\s*([\d\.]+).*?([\d\.]*)[\s,]+([ew-]?)\s*([\d\.]+).*?([\d\.]*)$/i
+                re = /^([ns-]?)\s*([\d\.]+)\W*([\d\.]*)[\s,]+([ew-]?)\s*([\d\.]+)\W*([\d\.]*)$/i
                 #*(\d+)\W(\d+)\W*(\d+)$/i
                 md = re.match(key)
+
+                lat_dir = md[1]
+                lat_h = md[2]
+                lat_ms = md[3]
+
+                long_dir = md[4]
+                long_h = md[5]
+                long_ms = md[6]
 
                 if ! md
                     displayError "Bad format in #{key}! Try something like \"N56 44.392 E015 52.780\" instead"
@@ -79,15 +87,19 @@ class SearchCache
                 lat_ns = 1
                 long_ew = 1
 
-                if md[1] == 's' || md[1] == 'S' || md[1] == '-'
+                if lat_dir == 's' || lat_dir == 'S' || lat_dir == '-'
                     lat_ns = -1
                 end
 
-                if md[4] == 'w' || md[4] == 'W' || md[4] == '-'
+                if long_dir == 'w' || long_dir == 'W' || long_dir == '-'
                     long_ew = -1
                 end
 
-                @url = @@baseURL + '?lat_ns=' + lat_ns.to_s + '&lat_h=' + md[2] + '&lat_mmss=' + (md[3]==''?'0':md[3]) + '&long_ew=' + long_ew.to_s + '&long_h=' + md[5] + '&long_mmss=' + (md[6]==''?'0':md[6])
+
+                displayMessage "Coordinate format decoded to latitude #{lat_dir} #{lat_h}'#{lat_ms}, longitude #{long_dir} #{long_h}'#{long_ms}"
+                exit
+
+                @url = @@baseURL + '?lat_ns=' + lat_ns.to_s + '&lat_h=' + lat_h + '&lat_mmss=' + (lat_ms==''?'0':lat_ms) + '&long_ew=' + long_ew.to_s + '&long_h=' + long_h + '&long_mmss=' + (long_ms==''?'0':long_ms)
 
                 if @distance
                     @url = @url + '&dist=' + @distance.to_s
