@@ -120,7 +120,7 @@ class Input
                 system("clear")
             end
             puts ""
-            puts "  GeoToad #{$VERSION} TUI editon.  Type a number to modify the fields value."
+            puts "  GeoToad #{$VERSION} TUI edition.  Type a number to modify the fields value."
             puts "=============================================================================="
             printf("(1)  search type         [%-10.10s] | (2) %-18.18s [%-13.13s]\n", @@optHash['queryType'], @@optHash['queryType'], (@@optHash['queryArg'] || 'REQUIRED'))
             printf("(3)  distance maximum    [%-3.3s]        |\n", (@@optHash['distanceMax'] || 10))
