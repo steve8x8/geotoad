@@ -22,16 +22,7 @@ Output:
 
 Details:
 --------
-* Instead of enabling logs_y mode in order to find the caches that someone
-has done, use http://www.geocaching.com/seek/nearest_cache.asp?ul=helixblue
-instead. 
-
 * Grab the printable pages instead
-
-Command-Line:
--------------
-Support a command line option to specify where the geocache/ files are.
-
 
 Frontends:
 ----------
