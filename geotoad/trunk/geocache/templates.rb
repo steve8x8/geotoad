@@ -99,14 +99,15 @@ $Format = {
             'mime'    => 'text/plain',
             'desc'    =>     'Plain ASCII',
             'spacer'    => "\r\n",
-            'templatePre' => "GeoToad Output\r\n----------------------------\r\n",
-            'templateWP'    => "== \"<%wp.name%>\" (<%out.wid%>) by <%wp.creator%>\r\n" +
+            'templatePre' => "",
+            'templateWP'    => "----------------------------------------------------------------\n" + 
+		"* <%wp.name%>\" (<%out.wid%>) by <%wp.creator%>\r\n" +
                 "Difficulty: <%wp.difficulty%>, Terrain: <%wp.terrain%>\r\n" +
                 "Lat: <%wp.latwritten%> Lon: <%wp.lonwritten%>\r\n" +
                 "Type: <%wp.type%> <%out.relativedistance%>\r\n" +
                 "Creation: <%wp.cdate%>, Last found: <%wp.mdays%> days ago\r\n" +
-                "Details:\r\n<%out.details%>\r\n" +
-                "<%out.hint%>\r\n\r\n\r\n"
+                "\r\n<%out.details%>\r\n" +
+                "\r\n<%out.hint%>\r\n\r\n\r\n\r\n"
         },
 
         'tab'    => {
