@@ -1,7 +1,7 @@
 # $Id: details.rb,v 1.10 2002/08/05 03:38:51 strombt Exp $ require 'cgi'
 
 class CacheDetails < Common
-	@@baseURL="http://www.geocaching.com/seek/cache_details.aspx?ID="
+	@@baseURL="http://www.geocaching.com/seek/cache_details.aspx?guid="
 
 	def initialize(data)
 		@waypointHash = data
@@ -18,15 +18,21 @@ class CacheDetails < Common
 
 	# fetches by waypoint id
 	def fetchWid(wid)
+        debug "fetching by #{wid}, converting to #{@waypointHash[wid]['sid']}"
 		fetch(@waypointHash[wid]['sid'])
 	end
 
 	def fullURL(id)
-		url = @@baseURL + id.to_s + "&log=y&decrypt="
+		url = @@baseURL + id.to_s + "&log=y"
 	end
 
 	# fetches by geocaching.com sid
 	def fetch(id)
+        if ((! id) || (id.length < 1))
+            puts "Empty fetch by id, quitting."
+            exit
+        end
+            
 		url = fullURL(id)
 		page = ShadowFetch.new(url)
 		page.fetch

@@ -3,7 +3,7 @@
 require 'cgi'
 
 class SearchCache < Common
-	@@baseURL="http://www.geocaching.com/seek/nearest_cache.asp"
+	@@baseURL="http://www.geocaching.com/seek/nearest.aspx"
 	#@@baseURL="http://home.profile.sh/index.html"
 
 	def initialize
@@ -113,69 +113,84 @@ class SearchCache < Common
 	end
 
 	def parseSearch(data)
-		#debug "parsing search returns: #{data}"
-		data.scan(/ (\d+) to (\d+) of (\d+) /) { |url|
-			@firstWaypoint = $1.to_i
-			@lastWaypoint = $2.to_i
-			@totalWaypoints = $3.to_i
-			@returnedWaypoints = @lastWaypoint - @firstWaypoint  + 1
-		}
+        wid=nil
+        @cache = Hash.new
 
-		#puts data
+        data.each { |line|
+            #debug "### #{line}"
 
-		#									1-type									2-cdate				3-distance (NO MORE)						4-name				5-creator			6-wid										# 7-state							# 8-mdate							# 9-diff		# 10-terrain										# 11-sid
-		#<A HREF="/about/cache_types.asp" target="_blank"><IMG SRC='/images/cache_types/4.gif' alt='virtual cache'WIDTH=22 HEIGHT=30 BORDER=0></A></TD><TD VALIGN=TOP ALIGN=LEFT nowrap><font face='Verdana,Arial' size='2'>3/23/2002<br></td><td valign=top align=RIGHT width=28>&nbsp;</TD><TD VALIGN=TOP ALIGN=LEFT><font face='Verdana,Arial' size='2'><STRONG>&quot;Roger Ramjet&quot; by JoeyBob and #1 Son </STRONG>(GC4509)<STRONG><BR>(North Carolina) </strong><font size=1>last found 3/26/2002</font></td><td valign=top align=left><font face='Verdana,Arial' size='2'><strong>1/1</strong></font></TD><TD valign=top align=left><font face='Verdana,Arial' size='2'>[<A HREF='cache_details.asp?ID=17673'>details</A>]</FONT><BR></font></TD></TR><TR><TD COLSPAN=5>&nbsp;</TD></TR>
-		# test.
-		#data.scan(/alt=(.*)/) { |url|
-		#	puts $1
-		#}
+            case line 
+                when /Total Records: \<b\>(\d+)\<\/b\> - Page: \<b\>(\d+)\<\/b\> of \<b\>(\d+)\<\/b\>/
+                    @totalWaypoints = $1.to_i
+                    currentPage = $2.to_i
+                    totalPages = $3.to_i
+                    # emulation of old page behaviour (pre-Jun 2003). May not be required anymore.
+                    debug "current page is #{currentPage} of #{totalPages}"
+                    @firstWaypoint = (currentPage * 25) - 25  # 1st on the page
+                    @lastWaypoint = (currentPage * 25)        # last on the page
+                    if (lastWaypoint > @totalWaypoints)
+                        @lastWaypoint = @totalWaypoints
+                    end
 
-        #alt='regular cache'WIDTH=22 HEIGHT=30 BORDER=0></A></TD><TD VALIGN=TOP ALIGN=LEFT nowrap><font face='Verdana,Arial' size='2'>2/17/2002<br>5.2mi N<BR>(8.5km)</td><td valign=top align=RIGHT width=28>&nbsp;</TD><TD VALIGN=TOP ALIGN=LEFT><font face='Verdana,Arial' size='2'><STRONG>&quot;Office Trek&quot; by Groves_Trekkers </STRONG>(GC3ABE)<STRONG><BR>(North Carolina) </strong><font size=1>last found 10/14/2002</font></td><td valign=top align=left><font face='Verdana,Arial' size='2'><strong>2/2.5</strong></font></TD><TD valign=top align=left><font face='Verdana,Arial' size='2'>[<A HREF='cache_details.aspx?ID=15038'>details</A>]</FONT><BR></font></TD></TR><TR><TD COLSPAN=5>&nbsp;</TD></TR>
-		data.scan(/alt=\'(.*?)\'W(.*?)\>([\d\/]+)\<br\>.*?&quot\;(.*?)\&quot\; by (.*?) \<.*?\((\w+)\)\<S.*?\>\((.*?)\)(.*?)ng\>([\d\.]+)\/([\d\.]+)\<.*?aspx\?ID=(\d+)/) { |url|
-			wid = $6
-			@waypointHash[wid] = Hash.new
-			type = $1
-            @waypointHash[wid]['type'] = 
-
-            bugPossible=$2
-			@waypointHash[wid]['cdate'] = $3
-			# distance is only in zipcode/coord search. don't bother.
-			#@waypointHash[wid]['distance'] = $3.to_f
-			name = CGI.unescape($4);
-			@waypointHash[wid]['creator'] = CGI.unescape($5)
-			@waypointHash[wid]['state'] = $7
-            
-			# this needs to be processed further.
-            mdate = $8
-
-            
-			@waypointHash[wid]['difficulty'] = $9.to_f
-			@waypointHash[wid]['terrain'] = $10.to_f
-			@waypointHash[wid]['sid'] = $11.to_i
-			@waypointHash[wid]['visitors'] = []
-            
-            # and this is lame.
-            mdate =~ /last found ([\d\/]+)/
-            if ($1) 
-                @waypointHash[wid]['mdate'] = $1
-            else
-                @waypointHash[wid]['mdate'] = nil
-                debug "#{wid} has never been found! (#{mdate})"
-            end
-            
-            @waypointHash[wid]['name'] = name.gsub("[\x80-\xFF]", "\'") 
-            
-            type.gsub!('\s*cache', '')
-            @waypointHash[wid]['type'] = type
-            
-            
-            if (bugPossible =~ /icon_bug/)
-                debug "Travel bug found in #{wid}"
-                @waypointHash[wid]['travelbug']='Travel Bug!';
-            end
-                
-			debug "Search found: #{wid}: #{@waypointHash[wid]['name']}"
-		}
-	end
-end
+                    @returnedWaypoints = @lastWaypoint - @firstWaypoint + 1
+                    debug "Search has returned #{@returnWaypoints}"
+                    
+                when /WptTypes.*alt=\"(.*?)\" border=0 width=22 height=30/
+                   
+                    @cache['type']=$1
+                    @cache['mdate']=nil
+                    @cache['type'].gsub!('\s*cache.*', '')
+                    @cache['type'].gsub!('-', '')
+                    debug "type=#{@cache['type']}"
+                    
+                when /nowrap\>\((\d+)\/(\d+)\)\<\/td\>/
+                    @cache['difficulty']=$1.to_f
+                    @cache['terrain']=$2.to_f
+                    debug "cacheDiff=#{@cache['difficulty']} terr=#{@cache['terrain']}"
+                    
+                when /align=\"left\">([\d\/]+)\<\/td\>/
+                    @cache['cdate']=$1
+                    debug "cacheDate=#{@cache['cdate']}"
+                    
+                when /align=\"left\">([\d\.]+)mi [NSWE]+\<br\>/
+                    @cache['distance']=$1.to_f
+                    debug "cacheDistance=#{@cache['distance']}"
+                    
+                when /cache_details.aspx\?guid=(.*?)\">(.*?)\<\/a\>/
+                    @cache['sid']=$1
+                    name=$2
+                    if name =~ /\<strike\>(.*?)\<\/strike\>/
+                        @cache['disabled']=1
+                        name=$1
+                    end
+                    @cache['name']=CGI.unescape(name).gsub("[\x80-\xFF]", "\'") 
+                    debug "sid=#{@cache['sid']} name=#{@cache['name']} (disabled=#{@cache['disabled']})"
+                    
+                when /\bby (.*)/
+                    @cache['creator']=CGI.unescape($1)
+                    debug "creator=#{@cache['creator']}"
+                when /\((GC\w+)\)/
+                    wid=$1
+                    debug "wid=#{wid}"
+                    
+                    # We have a WID! Lets begin
+                when /icon_bug/
+                    @cache['travelbug']='Travel Bug!'
+                    
+                when /\<td valign=\"top\" align=\"left\"\>(\d+) days ago\<br\>/
+                    @cache['mdate']=$1.to_i
+                    debug "mdate=#{@cache['mdate']}"
+                    
+                # There is no good end of record marker, sadly.
+                when /\<hr noshade width=\"100%\" size=\"1\">/
+                    if (wid)
+                        @waypointHash[wid] = @cache.dup
+                        @waypointHash[wid]['visitors'] = []
+                        debug "Search found: #{wid}: #{@waypointHash[wid]['name']} (sid=#{@waypointHash[wid]['sid']})"
+                        @cache.clear
+                    end
+            end # end case
+		} # end loop
+	end #end parsecache
+end # end class
 
