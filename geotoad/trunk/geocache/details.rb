@@ -106,19 +106,32 @@ class CacheDetails < Common
             if data =~ /id=\"LongDescription\"\>(.*?)\<\/span\><\/BLOCKQUOTE\>/m
                 debug "found long desc"
 				details =  @waypointHash[wid]['details'] << "  " << $1
-                details.gsub!('<p>', "\n\n")
+                details.gsub!(/\<p\>/i, "**")
+                details.gsub!(/\<li\>/i, "\n * (o) ")
+                details.gsub!(/<\li>/i, '')
+                details.gsub!(/<\p>/i, '')
+                details.gsub!(/<\/*i>/i, '')
+                details.gsub!(/<\/*font.*>/i, '')
+                details.gsub!(/<\/*ul>/i, '')
+                details.gsub!(/<\/*b>/i, '__')
+                details.gsub!(/\<img.*?\>/i, '[img]')
 				details.gsub!(/\<.*?\>/, ' *')
 				details.gsub!('\r\n', ' ')
                 # MS HTML crap
-                details.gsub!(/style=\".*?\"/, '')
-                details.gsub!(/\<i.*?\>/, '')
+                details.gsub!(/style=\".*?\"/i, '')
                 details.gsub!("<", '&lt;')
                 details.gsub!(">", "&gt;")
-                details.gsub!(/\* +\*/, "*")
+
+                puts details
+                # combine all the tags we nuked.
+                details.gsub!(/\* *\* *\*/, '**')
+                details.gsub!(/^\*/, '')
+
                 details.gsub!(/ +/, " ")
                 details.gsub!(/[\x80-\xFF]/, "\'")
                 details.gsub!(/\'+/, "\'")
                 # some misc. random crap.
+
 
 				debug "got details: [#{details}]"
 				@waypointHash[wid]['details'] = details
