@@ -5,21 +5,19 @@ TODO:
 
 Search:
 -------
-* Read in the country/state id tables
 * Support members only caches
 
 Filter:
 -------
 * Cache type
 * Caches not owned by
+* Caches owned by
 * Found in last X days
 
 Output:
 -------
 * eBook format (XML based)]
 * WML (WAP)
-* Make HTML validate
-* Should include list of TB's in HTML mode.
 * HTML mode should include query details
 
 Details:
