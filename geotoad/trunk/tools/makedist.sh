@@ -16,7 +16,7 @@ cp -R CLI/._* CLI/.DS* FAQ.txt TODO.txt COPYRIGHT.txt geocache CLI/interface $DE
 ditto CLI/*Mac* $DEST
 sed s/"%VERSION%"/"$VERSION"/g CLI/geotoad.rb > $DEST/geotoad.rb
 sed s/"%VERSION%"/"$VERSION"/g CLI/README.txt > $DEST/README.txt
-sed s/"%VERSION%"/"$VERSION"/g CLI/FAQ.txt > $DEST/FAQ.txt
+sed s/"%VERSION%"/"$VERSION"/g FAQ.txt > $DEST/FAQ.txt
 chmod 755 $DEST/*.rb
 rm $DEST/**/*~ 2>/dev/null
 rm -Rf $DEST/**/.svn 2>/dev/null
