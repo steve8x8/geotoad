@@ -309,15 +309,17 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
             'filter_src'    => 'gpx',
             'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o magnav -F OUTFILE'
         },
+
         'mxf' => {
             'ext'        => 'mxf',
             'mime'    => 'application/mxf',
             'desc'    => 'MapTech Exchange',
-            'required' => 'gpsbabel',
-            'spacer' => '',
-            'filter_src'    => 'gpx',
-            'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o mxf -F OUTFILE'
+            'spacer'    => "\n",
+           'templatePre' => '',
+           'templateWP' => "<%out.latdatapad5%>, <%out.londatapad5%>, \"<%wp.name%> by <%wp.creator%> (<%wp.type%> - <%wp.difficulty%>/<%wp.terrain%>)\", \"<%out.wid%>\", \"<%wp.name%> by <%wp.creator%> (<%wp.type%> - <%wp.difficulty%>/<%wp.terrain%>)\", ff0000, 47\r\n"
         },
+
+
         'holux' => {
             'ext'        => 'wpo',
             'mime'    => 'application/holux',
@@ -325,19 +327,11 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
             'required' => 'gpsbabel',
             'spacer' => '',
             'filter_src'    => 'gpx',
-            'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o wpo -F OUTFILE'
-        },
-        'ozi' => {
-            'ext'        => 'wpt',
-            'mime'    => 'application/x-ozi-wpt',
-            'desc'    => 'OziExplorer',
-            'required' => 'gpsbabel',
-            'spacer' => '',
-            'filter_src'    => 'gpx',
-            'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o ozi -F OUTFILE'
+            'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o holux -F OUTFILE'
         },
 
-        'ozi2' => {
+        # Tested by efnord @ EFnet.. Thanks!
+        'ozi' => {
             'ext'        => 'wpt',
             'mime'    => 'application/x-ozi-wpt',
             'desc'    => 'OziExplorer',
@@ -345,8 +339,8 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
             'templatePre' => "OziExplorer Waypoint File Version 1.1\r\n" +
             "WGS 84\r\n" +
             "Reserved 2\r\n" +
-            "garmin\r\n",
-            'templateWP' => "-1,<%out.wid%>,<%out.latdatapadded%>,<%out.londatapadded%>,,70,1.3,0,65535,<%wp.name%> by <%wp.creator%> (<%wp.type%> - <%wp.difficulty%>/<%wp.terrain%>),0,0,0,-777,6,0,17\n"
+            "Reserved 3\r\n",
+            'templateWP' => "<%out.counter%>,<%out.wid%>,<%out.latdatapad6%>,<%out.londatapad6%>,37761.29167,0,1,3,0,65535,<%wp.name%> by <%wp.creator%> (<%wp.type%> - <%wp.difficulty%>/<%wp.terrain%>),0,0,0,-777,6,0,17\r\n"
         },
 
         'tpg' => {
@@ -367,14 +361,15 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
             'filter_src'    => 'gpx',
             'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o tmpro -F OUTFILE'
         },
+
         'gpsdrive' => {
-            'ext'        => 'gpg',
-            'mime'    => 'application/gpsdrive',
-            'spacer' => '',
-            'desc'    => 'GpsDrive',
-            'required' => 'gpsbabel',
-            'filter_src'    => 'gpx',
-            'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o gpsdrive -F OUTFILE'
+           'ext'        => 'sav',
+           'mime'    => 'application/gpsdrive',
+           'spacer' => '',
+           'desc'    => 'GpsDrive',
+           'spacer'    => "\r\n",
+           'templatePre' => '',
+           'templateWP' => "<%out.wid%> <%out.latdatapad5%> <%out.londatapad5%> Geocache\n"
         },
 
         'cachemate' => {

@@ -124,13 +124,13 @@ def usage
         i=i+1
 
 
-        if (desc =~ /gpsbabel/)
+        if (outputDetails.formatRequirement(type) == 'gpsbabel')
             type = type + "+"
-        elsif (desc =~ /cmconvert/)
+        elsif (outputDetails.formatRequirement(type) == 'cmconvert')
             type = type + "="
         end
 
-        printf("  %-10.10s", type);
+        printf(" %-12.12s", type);
 
     }
     puts ""

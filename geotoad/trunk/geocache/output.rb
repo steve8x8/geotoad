@@ -269,6 +269,7 @@ class Output
         @currentWid = 0
         # output is what we generate. We start with the templates pre.
 		output = replaceVariables(@outputFormat['templatePre'])
+        @outVars['counter'] = 0
 
 
         # this is a strange maintenance loop of sorts. First it builds a list, which
@@ -401,8 +402,10 @@ class Output
             @outVars['hint']    = ''
 
             # for some templates, we pad.
-            @outVars['latdatapadded'] = sprintf("%2.6f", @wpHash[@currentWid]['latdata'])
-            @outVars['londatapadded'] = sprintf("%2.6f", @wpHash[@currentWid]['londata'])
+            @outVars['latdatapad5'] = sprintf("%2.5f", @wpHash[@currentWid]['latdata'])
+            @outVars['londatapad5'] = sprintf("%2.5f", @wpHash[@currentWid]['londata'])
+            @outVars['latdatapad6'] = sprintf("%2.6f", @wpHash[@currentWid]['latdata'])
+            @outVars['londatapad6'] = sprintf("%2.6f", @wpHash[@currentWid]['londata'])
 
 
             if @wpHash[@currentWid]['distance']
@@ -465,7 +468,7 @@ class Output
                 }
             end
 
-
+            @outVars['counter'] = @outVars['counter'] + 1
 
 			# this crazy mess is all due to iPod's VCF reader only supporting 2k chars!
 			0.upto(numEntries) { |entry|
