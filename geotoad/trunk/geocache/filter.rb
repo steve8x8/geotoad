@@ -62,30 +62,40 @@ class Filter < Common
 
     def travelBug
 		debug "filtering by travelBug"
-     
-		@waypointHash.delete_if { |wid, values|            
+
+		@waypointHash.delete_if { |wid, values|
 			@waypointHash[wid]['travelbug'].to_s.length < 1
         }
 	end
 
-    
-    def notUser(nick)
-        nick.downcase!
-            debug "filtering by notUser: #{nick}"
 
-                @waypointHash.each_key { |wid|
-                        #puts "notUser #{nick}: #{wid}"
-                        @waypointHash[wid]['visitors'].each { |visitor|
-                                if visitor == nick
-                                        @waypointHash.delete(wid)
-                                        debug " - #{nick} has visited #{wid}, filtering."
-                                end
-                        }
-                }
+    def userExclude(nick)
+        nick.downcase!
+        debug "filtering by notUser: #{nick}"
+
+        @waypointHash.each_key { |wid|
+            if (@waypointHash[wid]['visitors'].include?(nick))
+                debug " - #{nick} has visited #{@waypointHash[wid]['name']}, filtering."
+                @waypointHash.delete(wid)
+            end
+         }
     end
 
-    
-    
+    def userInclude(nick)
+        nick.downcase!
+        debug "filtering by User: #{nick}"
+
+        @waypointHash.each_key { |wid|
+            #puts "notUser #{nick}: #{wid}"
+            if (! @waypointHash[wid]['visitors'].include?(nick))
+                debug " - #{nick} has not visited #{@waypointHash[wid]['name']}, filtering."
+                @waypointHash.delete(wid)
+            end
+        }
+    end
+
+
+
 	def keyword(string)
 		debug "filtering by keyword: #{string}"
 
@@ -97,8 +107,8 @@ class Filter < Common
             end
 		}
 	end
-    
-    
+
+
 
     def removeByElement(element)
 		debug "filtering by removeByElement: #{element}"

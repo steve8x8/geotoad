@@ -32,11 +32,11 @@ class CacheDetails < Common
             puts "Empty fetch by id, quitting."
             exit
         end
-            
+
 		url = fullURL(id)
 		page = ShadowFetch.new(url)
 		page.fetch
-        if (page.data) 
+        if (page.data)
     		parseCache(page.data)
         else
             debug "No data found, not attempting to parse the entry"
@@ -50,7 +50,7 @@ class CacheDetails < Common
 			if line =~ /\<title\>Cache: \((\w+)\)/
 				wid = $1
                 debug "wid is #{wid}"
-                
+
                 # fill this in, since it's optional evidentally
                 @waypointHash[wid]['details'] = ''
             end
@@ -92,7 +92,7 @@ class CacheDetails < Common
             debug "we have a wid, who are the visitors..."
 			#<A HREF="/profile/default.asp?A=47159">bykenut </A></strong>
 			data.scan (/A=\d+\"\>(.*?)\<\/A\>\<\/strong\>/) {
-				debug "visitor to #{wid}: #{$1.downcase}"
+				#debug "visitor to #{wid}: #{$1.downcase}"
 				@waypointHash[wid]['visitors'].push($1.downcase)
 			}
 
@@ -117,10 +117,10 @@ class CacheDetails < Common
 				details.gsub!("(\W)  (\W)", "$1")
                 details.gsub!(/\* +\*/, "*")
                 details.gsub!(/ +/, " ")
-                details.gsub!("[\x80-\xFF]", "\'") 
-                details.gsub!("\'+", "\'") 
+                details.gsub!("[\x80-\xFF]", "\'")
+                details.gsub!("\'+", "\'")
                 # some misc. random crap.
-      
+
 				debug "got details: [#{details}]"
 				@waypointHash[wid]['details'] = details
             end

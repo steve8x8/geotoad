@@ -300,9 +300,15 @@ puts "[=] Filter complete, #{filtered.totalWaypoints} caches left"
     filtered= Filter.new(detail.waypoints)
 
 
-    if (optHash['--user'])
-         optHash['--user'].split(':').each { |user|
-             filtered.notUser(user)
+    if (optHash['--userExclude'])
+         optHash['--userExclude'].split(':').each { |user|
+             filtered.userExclude(user)
+         }
+    end
+
+    if (optHash['--userInclude'])
+         optHash['--userInclude'].split(':').each { |user|
+             filtered.userInclude(user)
          }
     end
 
@@ -324,7 +330,7 @@ puts "[=] Generating output in #{formatType} format"
 output.input(filtered.waypoints)
 output.formatType=formatType
 if (optHash['--waypointLength'])
-    output.waypointLength=optHash['--waypointLength']
+    output.waypointLength=optHash['--waypointLength'].to_i
 end
 outputData = output.prepare("details");
 

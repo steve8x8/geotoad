@@ -250,7 +250,6 @@ class Output < Common
 		@output = Array.new
         @waypointLength = 8
         # autodiscovery of gpsbabel output types if it's found!
-
 	end
 
 	def input(data)
@@ -322,7 +321,7 @@ class Output < Common
 
     def waypointLength=(length)
         @waypointLength=length
-        debug "set waypoint id length to @{#waypointLength}"
+        debug "set waypoint id length to #{@waypointLength}"
     end
 
 	# exploratory functions.
@@ -463,9 +462,14 @@ class Output < Common
 			outVars['url'] = $DetailURL + @wpHash[wid]['sid'].to_s
             if (! @wpHash[wid]['terrain'])
                 puts "[*] Error: no terrain found"
+                @wpHash[wid].each_key { |key|
+                    puts "#{key} = #{@wpHash[wid][key]}"
+                }
+                exit
             end
             if (! @wpHash[wid]['difficulty'])
                 puts "[*] Error: no difficulty found"
+                exit
             end
 			outVars['average'] = (@wpHash[wid]['terrain'] + @wpHash[wid]['difficulty'] / 2).to_i
 
