@@ -178,6 +178,7 @@ class ShadowFetch
         if (@useShadow > 0)
             (size, mtime) = checkShadow
         else
+            # anyone know what the heck this is?
             size = 5
             mtime = 3000
         end
@@ -210,6 +211,7 @@ class ShadowFetch
 			debug "shadow servers gave back garbarge. shadowing disabled"
 			# we could not reach a local shadow server!
 			@data = fetchRemote
+            @@src='remote'
 
             if (! @data)
                 debug "we must not have a net connection, uh no"
