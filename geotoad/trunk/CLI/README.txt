@@ -35,31 +35,32 @@ Syntax
 syntax: geotoad.rb [options] <search>
 
  -f format for output. Formats available are:
-   cetus     Cetus for PalmOS (gpsbabel)
    csv       CSV for spreadsheet imports
-   dna       Navitrak DNA marker (gpsbabel)
    easygps   Geocaching.com .loc XML file
-   gpsdrive  GpsDrive (gpsbabel)
-   gpsman    GPSman datafile (gpsbabel)
-   gpspilot  GPSPilot for PalmOS (gpsbabel)
    gpspoint  gpspoint datafile
-   gpsutil   gpsutil (gpsbabel)
-   gpx       GPX XML format (gpsbabel)
-   holux     Holux gm-100  (gpsbabel)
+   gpx       GPX XML format
    html      Simple HTML table format
-   magnav    Magellan NAV Companion for PalmOS (gpsbabel)
-   mapsend   Magellan MapSend software (gpsbabel)
-   mxf       MapTech Exchange (gpsbabel)
-   ozi       OziExplorer (gpsbabel)
-   pcx       Garmin PCX5 (gpsbabel)
-   psp       Microsoft PocketStreets 2002 Pushpin (gpsbabel)
    text      Plain ASCII
    tab       Tabbed text, for GPS Connect
-   tiger     U.S. Census Bureau Tiger Mapping Service Data (gpsbabel)
-   tmpro     TopoMapPro Places (gpsbabel)
-   tpg       National Geographic Topo (gpsbabel)
    vcf       VCF for iPod Contacts export
-   xmap      Delorme Topo USA4/XMap Conduit (gpsbabel)
+   -- the following require gpsbabel to be installed --
+   cetus     Cetus for PalmOS 
+   dna       Navitrak DNA marker 
+   gpsdrive  GpsDrive 
+   gpsman    GPSman datafile 
+   gpspilot  GPSPilot for PalmOS 
+   gpsutil   gpsutil 
+   holux     Holux gm-100  
+   magnav    Magellan NAV Companion for PalmOS 
+   mapsend   Magellan MapSend software 
+   mxf       MapTech Exchange 
+   ozi       OziExplorer 
+   pcx       Garmin PCX5 
+   psp       Microsoft PocketStreets 2002 Pushpin 
+   tiger     U.S. Census Bureau Tiger Mapping Service Data 
+   tmpro     TopoMapPro Places 
+   tpg       National Geographic Topo 
+   xmap      Delorme Topo USA4/XMap Conduit 
 
    * some formats may require gpsbabel to be installed and in PATH
 
