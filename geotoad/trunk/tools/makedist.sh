@@ -9,7 +9,7 @@ DIST="geotoad-$VERSION"
 LONGDIST="$DIST"
 rm -Rf /tmp/$DIST
 mkdir /tmp/$DIST
-cp -R TODO.txt COPYRIGHT.txt geocache /tmp/$DIST
+cp -R TODO.txt COPYRIGHT.txt geocache CLI/interface /tmp/$DIST
 sed s/"%VERSION%"/"$VERSION"/g CLI/geotoad.rb > /tmp/$DIST/geotoad.rb
 sed s/"%VERSION%"/"$VERSION"/g CLI/README.txt > /tmp/$DIST/README.txt
 chmod 755 /tmp/$DIST/*.rb
@@ -23,6 +23,6 @@ svn log VERSION COPYRIGHT.txt geocache CLI tools/makedist.sh -v > /tmp/$DIST/Cha
 
 cd /tmp
 zip -r $LONGDIST.zip $DIST
-scp $LONGDIST.zip /tmp/$DIST/ChangeLog.txt home.toadstool.se:/www/toadstool.se/htdocs/hacks/geotoad/files/
+scp $LONGDIST.zip /tmp/$DIST/ChangeLog.txt smtp.stromberg.org:/www/toadstool.se/htdocs/hacks/geotoad/files/
 echo "http://home.toadstool.se/hacks/geotoad/files/$LONGDIST.zip"
 
