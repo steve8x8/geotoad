@@ -380,6 +380,16 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
             'desc'    => 'CacheMate for PalmOS',
             'filter_src'    => 'gpx',
             'filter_exec'    => 'cmconvert -o OUTFILE INFILE'
-        }
+        },
 
+        'delorme' => {
+            'ext'          => 'txt',
+            'mime'         => 'application/delorme',
+            'desc'         => 'DeLorme TXT import datafile',
+            'spacer'       => ' ',
+            'templatePre'  => "BEGIN SYMBOL\n",
+            'templateWP'   => "<%wp.latdata%>,<%wp.londata%>," +
+		"<%out.id%>\{URL=<%out.url%>\},<%wp.type%>\n",
+            'templatePost' => "END",
+        }
 }
