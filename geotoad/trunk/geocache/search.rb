@@ -66,7 +66,8 @@ class SearchCache
                 # This regular expression should probably handle any kind of messed
                 # up input the user could conjure. Thanks to Scott Brynen for help.
 
-                re = /^([ns-]?)\s*([\d\.]+)\s*([\d\.]*)[\s,]+([ew-]?)\s*([\d\.]+)\s*([\d\.]*)$/i
+                #       N             48    °   08.152          E         011    ° 39.308 '
+                re = /^([ns-]?)\s*([\d\.]+).*?([\d\.]*)[\s,]+([ew-]?)\s*([\d\.]+).*?([\d\.]*)$/i
                 #*(\d+)\W(\d+)\W*(\d+)$/i
                 md = re.match(key)
 
