@@ -79,6 +79,10 @@ class SearchCache < Common
                 debug "country page parsed"
 
             when 'zip'
+		if (@key !~ /^\d+$/) 
+			puts "Invalid zip code format: #{@key}"
+			return nil
+		end
                 if @distance
                     @url = @url + '&dist=' + @distance.to_s
                 end
