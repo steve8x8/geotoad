@@ -229,7 +229,6 @@ class SearchCache
             end # end while(running)
         else
 		    displayWarning "No waypoints found. Possible error fetching #{@url}"
-		    exit
         end
 	end
 
