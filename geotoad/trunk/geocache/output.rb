@@ -239,9 +239,14 @@ class Output
     end
 
     def makeXML(str)
-        # XML safe chars.
+        # XML safe chars.. except for &, which is only safe if something is after it.. weird, eh?
+        # I'm not actually sure how to handle & that is not part of an element properly.
+        if (str =~ /\&/) && (str !~ /\&[\w\#]+\;/)
+            debug "Fixing ampersands in #{str}"
+            str.gsub!(/\&/, "&amp;");
+        end
+
         if str =~ /^[\&\#\;\w\s_\-:\?]+$/
-           # "[#{str}] looks clean, skipping"
            return str
         else
            debug "makeXML: [#{str}]"
