@@ -26,7 +26,12 @@ Details:
 has done, use http://www.geocaching.com/seek/nearest_cache.asp?ul=helixblue
 instead. 
 
-* Only grab details if the output format will use them.
+* Grab the printable pages instead
+
+Command-Line:
+-------------
+Support a command line option to specify where the geocache/ files are.
+
 
 Frontends:
 ----------
