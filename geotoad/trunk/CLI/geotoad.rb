@@ -143,7 +143,7 @@ if ((! ARGV[0]) || optHash['--help'])
 	exit
 else
     # make friendly to people who can't quote.
-	queryArg		= ARGV.join(" ")
+	queryArgList		= ARGV.join(" ")
 end
 
 if (optHash['--verbose'])
@@ -161,93 +161,105 @@ end
 
 ## Make the Initial Query ############################
 puts "[.] Your cache directory is " + $TEMP_DIR
-print "[=] Performing #{queryType} search for #{queryArg} "
-search = SearchCache.new
 
 
-# only valid for zip or coordinate searches
-if queryType == "zip" || queryType == "coord"
-    puts "(constraining to #{distanceMax} miles)"
-	search.distance(distanceMax.to_i)
-else
-    puts
-end
+# Mike Capito contributed a patch to allow for multiple
+# queries. He did it as a hash earlier, I'm just simplifying
+# and making it as an array because you probably don't want to
+# mix multiple queryType's anyways
+combinedWaypoints = Hash.new
 
-if (! search.mode(queryType, queryArg))
-    exit
-end
+queryArgList.split(/[:\|]/).each { |queryArg|
+    print "\n[=] Performing #{queryType} search for #{queryArg} "
+    search = SearchCache.new
 
+    # only valid for zip or coordinate searches
+    if queryType == "zip" || queryType == "coord"
+        puts "(constraining to #{distanceMax} miles)"
+        search.distance(distanceMax.to_i)
+    else
+        puts
+    end
 
-search.fetchFirst
-if (search.totalWaypoints)
-	puts "[.] #{search.totalWaypoints} waypoints matched initial query, recieved results for 1-#{search.lastWaypoint}."
+    if (! search.mode(queryType, queryArg))
+        exit
+    end
 
-	# the loop that gets all of them.
-	running = 1
-	downloads = 0
-    resultsPager = 5
-	while(running)
-		# short-circuit for lack of understanding.
-        totalPages = search.totalPages
-        currentPage = search.currentPage
-		common.debug "(download while loop - #{currentPage} of #{totalPages})"
+    search.fetchFirst
+    if (search.totalWaypoints)
+        puts "[.] #{search.totalWaypoints} waypoints matched #{queryArg} query, recieved results for 1-#{search.lastWaypoint}."
 
-		if (totalPages > currentPage)
-            lastPage = currentPage
-            # I don't think this does anything.
-			page = ShadowFetch.new(search.URL)
-            running = search.fetchNext
-			src = page.src
-            # update it.
+        # the loop that gets all of them.
+        running = 1
+        downloads = 0
+        resultsPager = 5
+        while(running)
+		    # short-circuit for lack of understanding.
+            totalPages = search.totalPages
             currentPage = search.currentPage
-			puts "[o] Recieved search page #{currentPage} of #{totalPages} (#{src})"
-            if (currentPage <= lastPage)
-                puts "[*] Logic error. I was at page #{lastPage} before, why am I at #{currentPage} now?"
-                exit
-            end
+		    common.debug "(download while loop - #{currentPage} of #{totalPages})"
 
-            #exit
-			if (src == "remote")
-				# give the server a wee bit o' rest.
-				downloads = downloads + 1
-				common.debug "#{downloads} of #{quitAfterFetch} remote downloads so far"
-				if downloads >= quitAfterFetch
-					common.debug "quitting after #{downloads} downloads"
-					#exit 4
-				end
-                # half the rest for this.
-                common.debug "sleeping"
-				sleep ($SLEEP / 2).to_i
-			end
+    		if (totalPages > currentPage)
+                lastPage = currentPage
+                # I don't think this does anything.
+			    page = ShadowFetch.new(search.URL)
+                running = search.fetchNext
+	    		src = page.src
+                # update it.
+                currentPage = search.currentPage
+		    	puts "[o] Recieved search page #{currentPage} of #{totalPages} (#{src})"
 
-		else
-			common.debug "We have already downloaded the waypoints needed, lets get out of here"
-			running = nil
-		end
-	end
-else
-	puts "(*) No waypoints found matching"
-	exit
-end
+                if (currentPage <= lastPage)
+                    puts "[*] Logic error. I was at page #{lastPage} before, why am I at #{currentPage} now?"
+                    exit
+                end
+
+                if (src == "remote")
+				    # give the server a wee bit o' rest.
+				    downloads = downloads + 1
+				    common.debug "#{downloads} of #{quitAfterFetch} remote downloads so far"
+				    if downloads >= quitAfterFetch
+					    common.debug "quitting after #{downloads} downloads"
+                        #exit 4
+    				end
+                   # half the rest for this.
+                     common.debug "sleeping"
+    				sleep ($SLEEP / 2).to_i
+		    	end
+    		else
+	    		common.debug "We have already downloaded the waypoints needed, lets get out of here"
+	    		running = nil
+		    end # end totalPages if
+    	end # end while(running)
+    else
+	    puts "(*) No waypoints found matching"
+	    exit
+    end
+
+    # this gives us support for multiple searches.
+    combinedWaypoints.update(search.waypoints)
+    combinedWaypoints.rehash
+}
 
 common.debug "pre-filter inspection of waypoints:"
 waypointsExtracted = 0
-search.waypoints.each_key { |wp|
+combinedWaypoints.each_key { |wp|
     common.debug "pre-filter: #{wp}"
     waypointsExtracted = waypointsExtracted + 1
 }
 
-if (waypointsExtracted < (search.totalWaypoints - 2))
+if (waypointsExtracted < (combinedWaypoints.length - 2))
     puts "***********************"
-    puts "Warning: downloaded #{search.totalWaypoints} waypoints, but I can only parse #{waypointsExtracted} of them!"
+    puts "Warning: downloaded #{combinedWaypoints.length} waypoints, but I can only parse #{waypointsExtracted} of them!"
     puts "***********************"
 end
 
 
 
 ## step #1 in filtering! ############################
+puts ""
 puts "[=] 1st Stage Filtering Executing..."
-filtered = Filter.new(search.waypoints)
+filtered = Filter.new(combinedWaypoints)
 common.debug "[=] Filter running cycle 1, #{filtered.totalWaypoints} caches left"
 
 if optHash['--difficultyMin']
@@ -359,13 +371,13 @@ end
 
 
     if (optHash['--userExclude'])
-         optHash['--userExclude'].split(':').each { |user|
+         optHash['--userExclude'].split(/[:\|]/).each { |user|
              filtered.userExclude(user)
          }
     end
 
     if (optHash['--userInclude'])
-         optHash['--userInclude'].split(':').each { |user|
+         optHash['--userInclude'].split(/[:\|]/).each { |user|
              filtered.userInclude(user)
          }
     end
