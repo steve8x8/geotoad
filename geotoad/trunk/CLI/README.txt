@@ -46,12 +46,12 @@ You've just made a file named geotoad-output.loc containing all the geocaches
 nearby the zipcode 27513 suitable to be read by EasyGPS. Here are some more
 complex examples that you can work with:
 
-geotoad.rb -f text -q state "North Carolina"
+geotoad.rb -f text -o nc.txt q state "North Carolina"
 
 Outputs a text file with all of the caches in North Carolina that are
 virgins (have never been found). 
 
-geotoad.rb -t 2.5 -f vcf -u helixblue:Sallad -o ~/Desktop/charlotte.vcf 28272
+geotoad.rb -t 2.5 -f vcf -u helixblue:Sallad -o charlotte.vcf 28272
 
 Gets every cache in the 100 mile radius of zipcode 28272, with a terrain
 score of 2.5 or higher, and that helixblue and Sallad have not visited.
