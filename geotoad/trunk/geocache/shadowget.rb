@@ -13,8 +13,8 @@ $shadowHosts = [
 	'http://smtp.stromberg.org/hacks/shadowfetch/get.php'
 ]
 
-$shadowExpiry=605600	# 4 days
-$localExpiry=8640000		# 1 day
+$shadowExpiry=100000	# 1 days
+$localExpiry=345600		# 4 day
 $Header = {
   'Referer'         => 'http://www.geocaching.com/',
   'User-Agent'      => 'Mozilla/4.5 (compatible; OmniWeb/4.1.1-v424.6; Mac_PowerPC)',
