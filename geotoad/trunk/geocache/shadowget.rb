@@ -31,6 +31,7 @@ class ShadowFetch
         @shadowExpiry=345600	# 4 days
         @localExpiry=432000		# 4 days
         @useShadow = 1
+        @maxFailures = 4
         debug "new fetch: #{url}"
         $Header = {
           'User-Agent'      => "Mozilla/5.0 (Macintosh; U; PPC Mac OS X Mach-O; en-US; rv:1.5a) Gecko/20030706 Mozilla Firebird/0.6 GeoToad/#{$VERSION}-#{RUBY_PLATFORM})",
@@ -55,6 +56,12 @@ class ShadowFetch
         debug "setting shadow expiry to #{expiry}"
         @shadowExpiry=expiry
     end
+
+    def maxFailures=(maxfail)
+        debug "setting max failures to #{maxfail}"
+        @maxFailures=maxfail
+    end
+
 
     def localExpiry=(expiry)
         debug "setting local expiry to #{expiry}"
@@ -262,7 +269,7 @@ class ShadowFetch
 		debug "Connecting to #{host} to retrieve #{file}"
 		w = Net::HTTP.new(host, 80)
 		resp = nil
-        if (@@downloadErrors > 4)
+        if (@@downloadErrors >= @maxFailures)
             debug "#{@@downloadErrors} download errors so far, no more retries will be attempted."
             disableRetry = 1
         else
@@ -303,7 +310,7 @@ class ShadowFetch
                 return nil
             else
                 disableRetry = 1
-                displayWarning "Could not fetch #{url}, retrying in 10 seconds.. (failures=#{@@downloadErrors})"
+                displayWarning "Could not fetch #{url}, retrying in 10 seconds.. (failures=#{@@downloadErrors}, max=#{@maxFailures})"
                 sleep(10)
                 retry
             end
