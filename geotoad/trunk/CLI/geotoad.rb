@@ -31,7 +31,7 @@ else
     $VERSION = versionID.dup
 end
 
-$SLEEP=2
+$SLEEP=3
 $SLOWMODE=350
 $VERSION_URL = "http://toadstool.se/hacks/geotoad/currentversion.php?type=CLI&version=#{VERSION}&ruby=#{RUBY_PLATFORM}&rubyver=#{RUBY_VERSION}";
 
@@ -417,7 +417,14 @@ def fetchGeocaches
             @detail.useShadow=0
             debug "slowlink enabled (useShadow=0)"
         end
-        @detail.fetchWid(wid)
+
+        ret = @detail.fetchWid(wid)
+        if (! ret)
+            displayWarning "Page for #{wpFiltered[wid]['name']} failed to be parsed, skipping."
+            wpFiltered.delete(wid)
+            next
+        end
+
 
         if (page.src)
             if (wpFiltered[wid]['warning'])
