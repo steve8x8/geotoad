@@ -73,7 +73,7 @@ class Output < Common
 			'templateWP'	=> "<wpt lat=\"<%wp.latdata%>\" lon=\"<%wp.londata%>\">\r\n" +
             "  <time>2003-06-18T00:00:00.0000000-07:00</time>\r\n" +
             "  <name><%out.id%></name>\r\n" +
-            "  <desc><%wpEntity.name%> by <%wpEntity.creator%>, <%wp.type%> Cache (<%wp.difficulty%>/1)</desc>\r\n" +
+            "  <desc><%wpEntity.name%> by <%wpEntity.creator%>, <%wp.type%> Cache (<%wp.difficulty%>/<%wp.terrain%>)</desc>\r\n" +
             "  <url><%out.url%></url>\r\n" +
             "  <urlname><%wpEntity.name%> by <%wpEntity.creator%></urlname>\r\n" +
             "  <sym>Geocache</sym><type>Geocache</type>\r\n" +
@@ -605,7 +605,6 @@ class Output < Common
                 # we move this to after our escapeHTML's so the HTML in here doesn't get
                 # encoded itself!
                 if (tempOutput)
-                    puts tempOutput
                     output << tempOutput.gsub(/\[SPACER\]/, @outputFormat['spacer']);
                 end
 			}
