@@ -294,9 +294,9 @@ class Input
                 when '24'
                     @@optHash['output'] = ask('What filename would you like to output to? (press enter for automatic)', nil)
 
-                when 's'
+                when 's', 'q'
                     if (! @@optHash['queryArg']) || (@@optHash['queryArg'].size < 1)
-                        puts "You cannot start till you specify a #{@@optHash['queryType']} query to run"
+                        puts "You cannot start till you specify what #{@@optHash['queryType']} data you would like to search with"
                         puts "(press enter to continue)"
                         answer=$stdin.gets
                     end
