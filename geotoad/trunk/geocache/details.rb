@@ -60,7 +60,9 @@ class CacheDetails < Common
             end
 
             if line =~ /\<span id=\"ErrorText\">(.*?)\<\/span\>/
-                @waypointHash[wid]['warning'] = $1
+                warning = $1
+                warning.gsub!("\<.*?\>", '')
+                @waypointHash[wid]['warning'] = warning
                 debug "got a warning: #{$1}"
             end
 

@@ -105,7 +105,7 @@ class Filter < Common
         @waypointHash.each_key { |wid|
             if @waypointHash[wid][element]
                 @waypointHash.delete(wid)
-                puts " - #{wid} has #{element}, filtering."
+                debug " - #{wid} has #{element}, filtering."
             end
         }
     end

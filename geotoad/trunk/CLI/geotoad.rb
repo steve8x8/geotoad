@@ -63,6 +63,7 @@ def usage
     puts "    -k [keyword]          keyword search"
 	puts "    -u [username]         user to filter from the lists"
 	puts "    -n                    only include not found caches (virgins)"
+    puts "    -b                    only include caches with travelbugs"
 	puts "    -v                    verbose/debug mode"
 
 	puts ""
@@ -224,6 +225,9 @@ puts "[=] Filter complete, #{filtered.totalWaypoints} caches left"
 		src = page.src
         if (page.src)
     		puts "[o] Fetched \"#{wpFiltered[wid]['name']}\" [#{token}/#{filtered.totalWaypoints}] from #{src}"
+            if (wpFiltered[wid]['warning'])
+                puts " *  Warning: #{wpFiltered[wid]['warning']}"
+            end
 		elsif (src == "remote")
 				downloads = downloads + 1
 				common.debug "#{downloads} of #{quitAfterFetch} remote downloads so far"
