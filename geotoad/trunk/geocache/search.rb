@@ -124,7 +124,9 @@ class SearchCache < Common
 		data.scan(/alt=\'(.*?)\'W(.*?)\>([\d\/]+)\<br\>.*?&quot\;(.*?)\&quot\; by (.*?) \<.*?\((\w+)\)\<S.*?\>\((.*?)\)(.*?)ng\>([\d\.]+)\/([\d\.]+)\<.*?aspx\?ID=(\d+)/) { |url|
 			wid = $6
 			@waypointHash[wid] = Hash.new
-			@waypointHash[wid]['type'] = $1
+			type = $1
+            @waypointHash[wid]['type'] = 
+
             bugPossible=$2
 			@waypointHash[wid]['cdate'] = $3
 			# distance is only in zipcode/coord search. don't bother.
@@ -148,7 +150,13 @@ class SearchCache < Common
                 @waypointHash[wid]['mdate'] = $1
             else
                 @waypointHash[wid]['mdate'] = nil
+                puts "#{wid} has never been found! (#{mdate})"
             end
+            
+            puts type
+            type.gsub!('\s*cache', '')
+            @waypointHash[wid]['type'] = type
+            
             
             if (bugPossible =~ /icon_bug/)
                 debug "Travel bug found in #{wid}"
