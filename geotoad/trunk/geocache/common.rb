@@ -44,7 +44,7 @@ class Common
 	
 		# Convert DOS C:// to C:\
 		if tempDir
-			tempDir.gsub!('\\\\', '/')
+			tempDir.gsub!(/\\\\/, '/')
 		end
 		debug "#{tempDir} is being used for temp"
 		return tempDir
