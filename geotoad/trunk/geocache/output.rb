@@ -70,12 +70,12 @@ class Output < Common
 			'mime'	=> 'text/plain',
 			'desc'	=> 	'Plain ASCII',
 			'spacer'	=> "\r\n",
-			'templatePre' => "GeoToad Output\r\n=========================\r\n",
+			'templatePre' => "GeoToad Output\r\n----------------------------\r\n",
 			'templateWP'	=> "== \"<%wp.name%>\" (<%out.wid%>) by <%wp.creator%>\r\n" +
 				"Difficulty: <%wp.difficulty%>, Terrain: <%wp.terrain%>\r\n" +
 				"Lat: <%wp.latwritten%> Lon: <%wp.lonwritten%>\r\n" +
 				"Type: <%wp.type%>, Creation: <%wp.cdate%>, Last found: <%wp.mdate%>\r\n" +
-				"Details:\r\n<%out.details%>\r\n\r\n"
+				"Details:\r\n<%out.details%>\r\n\r\n\r\n"
 		},
 
 		'csv'	=> {
