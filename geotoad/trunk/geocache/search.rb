@@ -186,7 +186,7 @@ class SearchCache
         fetchFirst
 
 	    if (totalWaypoints)
-            displayMessage "#{totalWaypoints} waypoints matched #{@mode} query for #{@key}"
+            progress = ProgressBar.new(1, totalPages, "#{@mode} query for #{@key}")
 
             # the loop that gets all of them.
             running = 1
@@ -203,7 +203,7 @@ class SearchCache
                 running = fetchNext
                 src = page.src
                 # update it.
-                displayMessage "Received search page #{currentPage} of #{totalPages} (#{src})"
+                progress.updateText(currentPage, "from #{src}")
 
                 if (currentPage <= lastPage)
                     displayError "Logic error. I was at page #{lastPage} before, why am I at #{currentPage} now?"

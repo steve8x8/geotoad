@@ -196,7 +196,7 @@ end
 
 ## Make the Initial Query ############################
 def downloadGeocacheList
-    displayMessage "[.] Your cache directory is " + $TEMP_DIR
+    displayInfo "Your cache directory is " + $TEMP_DIR
 
 
     # Mike Capito contributed a patch to allow for multiple
@@ -205,14 +205,14 @@ def downloadGeocacheList
     # mix multiple @queryType's anyways
     @combinedWaypoints = Hash.new
 
-    @queryArgList.split(/[:\|]/).each { |queryArg|
+    @queryArgList .split(/[:\|]/).each { |queryArg|
         print "\nPerforming #{@queryType} search for #{queryArg} "
         search = SearchCache.new
 
         # only valid for zip or coordinate searches
         if @queryType == "zip" || @queryType == "coord"
             puts "(constraining to #{@distanceMax} miles)"
-            @queryTitle = @queryTitle + " (#{@distanceMax})mi.)"
+            @queryTitle = @queryTitle + " (#{@distanceMax}mi. radius)"
             @defaultOutputFile = @defaultOutputFile + "-y" + @distanceMax.to_s
             search.distance(@distanceMax.to_i)
         else
@@ -417,6 +417,7 @@ def fetchGeocaches
 
     displayMessage "Fetching geocache pages with #{$SLEEP} second rests between remote fetches"
     wpFiltered = @filtered.waypoints
+    progress = ProgressBar.new(0, @filtered.totalWaypoints, "Fetching details")
 
     @detail = CacheDetails.new(wpFiltered)
     token = 0
@@ -429,9 +430,10 @@ def fetchGeocaches
         # I wish I understood how this worked. I think this logic is garbage. To be revisited.
         src = page.src
         if (page.src)
-            displayMessage "Fetched \"#{wpFiltered[wid]['name']}\" [#{token}/#{@filtered.totalWaypoints}] from #{src}"
             if (wpFiltered[wid]['warning'])
-                displayWarning "Skipping: #{wpFiltered[wid]['warning']}"
+                progress.updateText(token, "\"#{wpFiltered[wid]['name']}\" from #{src} (cache is temp. unavailable)")
+            else
+                progress.updateText(token, "\"#{wpFiltered[wid]['name']}\" from #{src}")
             end
         elsif (src == "remote")
             downloads = downloads + 1
@@ -439,7 +441,7 @@ def fetchGeocaches
             displayMessage "  (sleeping for #{$SLEEP} seconds)"
             sleep $SLEEP
         else
-            displayMessage "Could not fetch \"#{wpFiltered[wid]['name']}\" [#{token}/#{@filtered.totalWaypoints}] (private cache?)"
+            progress.updateText(token, "\"#{wpFiltered[wid]['name']}\" (could not fetch, private cache?)")
             wpFiltered.delete(wid)
         end
     }
