@@ -183,8 +183,8 @@ class SearchCache < Common
                 when /WptTypes.*alt=\"(.*?)\" border=0 width=22 height=30/
 
                     @cache['type']=$1
-                    @cache['mdate']=nil
-                    @cache['type'].gsub!('\s*cache.*', '')
+                    @cache['mdate']=-1
+                    @cache['type'].gsub!(/\s*cache.*/, '')
                     @cache['type'].gsub!('-', '')
                     debug "type=#{@cache['type']}"
 
@@ -203,24 +203,32 @@ class SearchCache < Common
 
                 when /cache_details.aspx\?guid=(.*?)\">(.*?)\<\/a\>/
                     @cache['sid']=$1
-                    name=$2
+                    name=$2.dup
+                    name.gsub!(/ +$/, '')
                     if name =~ /\<strike\>(.*?)\<\/strike\>/
                         @cache['disabled']=1
-                        name=$1
+                        name=$1.dup
                     end
-                    @cache['name']=CGI.unescape(name).gsub("[\x80-\xFF]", "\'")
+                    @cache['name']=CGI.unescape(name).gsub(/[\x80-\xFF]/, "\'")
                     debug "sid=#{@cache['sid']} name=#{@cache['name']} (disabled=#{@cache['disabled']})"
 
                 when /\bby (.*)/
-                    @cache['creator']=CGI.unescape($1)
+                    creator = $1.dup
+                    @cache['creator']=CGI.unescape(creator).gsub(/[\x80-\xFF]/, "\'")
                     debug "creator=#{@cache['creator']}"
                 when /\((GC\w+)\)/
-                    wid=$1
+                    wid=$1.dup
                     debug "wid=#{wid}"
 
                     # We have a WID! Lets begin
                 when /icon_bug/
                     @cache['travelbug']='Travel Bug!'
+
+                when /\<td valign=\"top\" align=\"left\"\>Today\</
+                    @cache['mdate']=0
+
+                when /\<td valign=\"top\" align=\"left\"\>Yesterday\</
+                    @cache['mdate']=1
 
                 when /\<td valign=\"top\" align=\"left\"\>(\d+) days ago\</
                     @cache['mdate']=$1.to_i
@@ -245,6 +253,7 @@ class SearchCache < Common
                     if (wid)
                         @waypointHash[wid] = @cache.dup
                         @waypointHash[wid]['visitors'] = []
+                        debug "mdate is #{@waypointHash[wid]['mdate']}"
                         debug "*SCORE* Search found: #{wid}: #{@waypointHash[wid]['name']} (#{@waypointHash[wid]['difficulty']} / #{@waypointHash[wid]['terrain']})"
                         @returnedWaypoints = @returnedWaypoints + 1
                         @cache.clear
@@ -255,7 +264,7 @@ class SearchCache < Common
                     @postVars[$1]=$2
                 when /\<form name=\"Form1\" method=\"post\" action=\"(.*?)\"/
                     @postURL='http://www.geocaching.com/seek/' + $1
-                    @postURL.gsub!("\&amp;", "\&")
+                    @postURL.gsub!('&amp;', '&')
                     debug "post URL is #{@postURL}"
 
             end # end case
