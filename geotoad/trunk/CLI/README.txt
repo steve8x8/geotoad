@@ -22,14 +22,16 @@ ChangeLog.txt file.
 ------------
 Requirements
 ------------
-Ruby 1.6 - An object oriented scripting language, similar to Perl and
-Python. Mac OS X and some Linux distributions already have this installed.
-If you are a Windows user, you should use this installer:
-http://twtelecom.dl.sourceforge.net/sourceforge/rubyinstaller/ruby180-9.exe
+Windows - Windows 98 or Higher
+Mac OS - Mac OS X 10.2 or Higher
+Other Operating Systems -  You may need to install Ruby before running GeoToad.
 
-Optionally, if you have gpsbabel - http://gpsbabel.sourceforge.net/ ..
+  * RedHat/Fedora Linux: built-in
+  * Debian Linux: apt-get install ruby
+  * FreeBSD: pkg_add -r ruby
+
+Optionally, if you have gpsbabel - http://gpsbabel.sourceforge.net/ 
 geotoad can output to over a dozen additional GPS formats.
-
 
 ---------------
 Getting Started
