@@ -417,7 +417,7 @@ class Output < Common
                 end
 
 		if (@wpHash[wid]['mdate'].to_s.length < 7)
-			htmlIndex = htmlIndex + " [v]"
+			htmlIndex = htmlIndex + " (v)"
 		end
 		htmlIndex = htmlIndex + "</li>\n"
             }
