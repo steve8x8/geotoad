@@ -96,7 +96,7 @@ class SearchCache
                 end
 
 
-                displayMessage "Coordinate format decoded to latitude #{lat_dir} #{lat_h}'#{lat_ms}, longitude #{long_dir} #{long_h}'#{long_ms}"
+                displayMessage "Coordinate's have been parsed as latitude #{lat_dir} #{lat_h}'#{lat_ms}, longitude #{long_dir} #{long_h}'#{long_ms}"
 
                 @url = @@baseURL + '?lat_ns=' + lat_ns.to_s + '&lat_h=' + lat_h + '&lat_mmss=' + (lat_ms==''?'0':lat_ms) + '&long_ew=' + long_ew.to_s + '&long_h=' + long_h + '&long_mmss=' + (long_ms==''?'0':long_ms)
 
@@ -249,7 +249,7 @@ class SearchCache
                 progress.updateText(currentPage, "from #{src}")
 
                 if (currentPage <= lastPage)
-                    displayError "Logic error. I was at page #{lastPage} before, why am I at #{currentPage} now?"
+                    displayError "Geocache Search Logic error. I was at page #{lastPage} before, why am I at #{currentPage} now?"
                     exit
                 end
 
