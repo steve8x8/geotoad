@@ -31,7 +31,7 @@ module Display
 
     # mindless warnings
     def displayWarning(text)
-        puts " * Warning: #{text}"
+        puts " *  #{text}"
     end
 
     # fatal errors

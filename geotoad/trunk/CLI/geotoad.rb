@@ -409,7 +409,7 @@ def fetchGeocaches
         if (page.src)
             displayMessage "Fetched \"#{wpFiltered[wid]['name']}\" [#{token}/#{@filtered.totalWaypoints}] from #{src}"
             if (wpFiltered[wid]['warning'])
-                displayMessage " *  Skipping: #{wpFiltered[wid]['warning']}"
+                displayWarning "Skipping: #{wpFiltered[wid]['warning']}"
             end
         elsif (src == "remote")
             downloads = downloads + 1
@@ -472,7 +472,7 @@ end
 def saveFile
     puts ""
     output = Output.new
-    displayMessage "Output format selected is #{output.formatDesc(@formatType)} format"
+    displayInfo "Output format selected is #{output.formatDesc(@formatType)} format"
     output.input(@filtered.waypoints)
     output.formatType=@formatType
     if (@optHash['--waypointLength'])
