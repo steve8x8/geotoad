@@ -64,11 +64,10 @@ class SearchCache
                 @mode = 'coordinate'
                 @key = key
                 # This regular expression should probably handle any kind of messed
-                # up input the user could conjure.
+                # up input the user could conjure. Thanks to Scott Brynen for help.
 
-                        #  1     2              3         4      5      6            7        8
-                        #  N     39       '    11    .   592     W      086     .   32
-                re = /^([ns-]*) *(\d{1,3})\W*(\d{1,3})\W*(\d{3})\W+([ew-]*) *(\d{1,3})\W*(\d{1,3})\W*(\d{3})$/i
+                re = /^([ns-]?)\s*([\d\.]+)\s*([\d\.]*)[\s,]+([ew-]?)\s*([\d\.]+)\s*([\d\.]*)$/i
+                #*(\d+)\W(\d+)\W*(\d+)$/i
                 md = re.match(key)
 
                 if ! md
@@ -83,15 +82,14 @@ class SearchCache
                     lat_ns = -1
                 end
 
-                if md[5] == 'w' || md[5] == 'W' || md[5] == '-'
+                if md[4] == 'w' || md[4] == 'W' || md[4] == '-'
                     long_ew = -1
                 end
 
-                @url = @@baseURL + '?lat_ns=' + lat_ns.to_s + '&lat_h=' + md[2] + '&lat_mmss=' + md[3] + '.' + md[4] +
-                '&long_ew=' + long_ew.to_s + '&long_h=' + md[6] + '&long_mmss=' + md[7] + '.' + md[8]
+                @url = @@baseURL + '?lat_ns=' + lat_ns.to_s + '&lat_h=' + md[2] + '&lat_mmss=' + (md[3]==''?'0':md[3]) + '&long_ew=' + long_ew.to_s + '&long_h=' + md[5] + '&long_mmss=' + (md[6]==''?'0':md[6])
 
                 if @distance
-                            @url = @url + '&dist=' + @distance.to_s
+                    @url = @url + '&dist=' + @distance.to_s
                 end
 
 			when 'user'
