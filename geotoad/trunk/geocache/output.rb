@@ -2,7 +2,7 @@
 
 class Output < Common
 	$MAX_NOTES_LEN = 1999
-	$DetailURL="http://www.geocaching.com/seek/cache_details.asp?ID="
+	$DetailURL="http://www.geocaching.com/seek/cache_details.aspx?guid="
 	$ReplaceWords = {
 		'OF'			=> '',
 		'A'				=> '',
