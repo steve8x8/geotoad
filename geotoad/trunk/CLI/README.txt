@@ -33,22 +33,35 @@ geotoad can output to over a dozen additional GPS formats.
 Syntax
 ------
 syntax: geotoad.rb [options] <search>
-    -f format for output. Valid options are:
-          html - Simple HTML table format
-          mapsource - Garmin Mapsource (requires gpsbabel in PATH)
-          easygps - Geocaching.com .loc XML file
-          text - Plain ASCII
-          vcf - VCF for iPod Contacts export
-          mapsend - Magellan MapSend software(requires gpsbabel in PATH)
-          gpx - GPX XML format (requires gpsbabel in PATH)
-          gpsutil - gpsutil datafile (requires gpsbabel in PATH)
-          pcx - Garmin PCX5 (requires gpsbabel in PATH)
-          csv - CSV for spreadsheet imports
-          gpspoint - gpspoint datafile
-          tiger - U.S. Census Bureau Tiger Mapping Service Data (requires
-                  gpsbabel in PATH)
-          magellan - Magellan GPS Serial Link (requires gpsbabel in PATH)
-          gpsman - GPSman datafile (requires gpsbabel in PATH)
+
+ -f format for output. Formats available are:
+   cetus     Cetus for PalmOS (gpsbabel)
+   csv       CSV for spreadsheet imports
+   dna       Navitrak DNA marker (gpsbabel)
+   easygps   Geocaching.com .loc XML file
+   gpsdrive  GpsDrive (gpsbabel)
+   gpsman    GPSman datafile (gpsbabel)
+   gpspilot  GPSPilot for PalmOS (gpsbabel)
+   gpspoint  gpspoint datafile
+   gpsutil   gpsutil (gpsbabel)
+   gpx       GPX XML format (gpsbabel)
+   holux     Holux gm-100  (gpsbabel)
+   html      Simple HTML table format
+   magnav    Magellan NAV Companion for PalmOS (gpsbabel)
+   mapsend   Magellan MapSend software (gpsbabel)
+   mxf       MapTech Exchange (gpsbabel)
+   ozi       OziExplorer (gpsbabel)
+   pcx       Garmin PCX5 (gpsbabel)
+   psp       Microsoft PocketStreets 2002 Pushpin (gpsbabel)
+   text      Plain ASCII
+   tiger     U.S. Census Bureau Tiger Mapping Service Data (gpsbabel)
+   tmpro     TopoMapPro Places (gpsbabel)
+   tpg       National Geographic Topo (gpsbabel)
+   vcf       VCF for iPod Contacts export
+   xmap      Delorme Topo USA4/XMap Conduit (gpsbabel)
+
+   * some formats may require gpsbabel to be installed and in PATH
+
  -q [zip|state|country]  query type (zip by default)
  -o [filename]           output file
  -d [0.0-5.0]            difficulty minimum (0)

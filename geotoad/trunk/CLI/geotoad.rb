@@ -41,17 +41,19 @@ opts = GetoptLong.new(
 )
 
 output = Output.new
-@@validFormats = output.formatList
+@@validFormats = output.formatList.sort
 
 def usage
 	puts "syntax: geotoad.rb [options] <search>"
-	puts "    -f format for output. Valid options are:"
+	puts " -f format for output. Formats available are:"
 	outputDetails = Output.new
 	@@validFormats.each { |type|
 		desc = outputDetails.formatDesc(type)
-		puts "          " + type + " - " + desc
+        printf("   %-8.8s  %s\n", type, desc);
 	}
-
+    puts ""
+    puts "   * some formats may require gpsbabel to be installed and in PATH"
+    puts ""
 	puts " -q [zip|state|country]  query type (zip by default)"
 	puts " -o [filename]           output file"
 	puts " -d [0.0-5.0]            difficulty minimum (0)"

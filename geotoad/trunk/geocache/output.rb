@@ -107,7 +107,7 @@ class Output < Common
 		'gpsman' => {
 			'ext'		=> 'gpm',
 			'mime'	=> 'application/gpsman',
-			'desc'	=> 'GPSman datafile (requires gpsbabel in PATH)',
+			'desc'	=> 'GPSman datafile (gpsbabel)',
 			'filter_src'	=> 'easygps',
 			'filter_exec'	=> 'gpsbabel -i geo -f INFILE -o gpsman -F OUTFILE'
 		},
@@ -115,23 +115,15 @@ class Output < Common
 		'gpx' => {
 			'ext'		=> 'gpx',
 			'mime'	=> 'application/gpx',
-			'desc'	=> 'GPX XML format (requires gpsbabel in PATH)',
+			'desc'	=> 'GPX XML format (gpsbabel)',
 			'filter_src'	=> 'easygps',
 			'filter_exec'	=> 'gpsbabel -i geo -f INFILE -o gpx -F OUTFILE'
-		},
-
-		'magellan' => {
-			'ext'		=> 'mgl',
-			'mime'	=> 'none',
-			'desc'	=> 'Magellan GPS Serial Link (requires gpsbabel in PATH)',
-			'filter_src'	=> 'easygps',
-			'filter_exec'	=> 'gpsbabel -i geo -f INFILE -o magellan -F OUTFILE'
 		},
 
 		'mapsend' => {
 			'ext'		=> 'mps',
 			'mime'	=> 'application/mapsend',
-			'desc'	=> 'Magellan MapSend software(requires gpsbabel in PATH)',
+			'desc'	=> 'Magellan MapSend software (gpsbabel)',
 			'filter_src'	=> 'easygps',
 			'filter_exec'	=> 'gpsbabel -i geo  -f INFILE -o mapsend -F OUTFILE'
 		},
@@ -139,35 +131,114 @@ class Output < Common
 		'pcx' => {
 			'ext'		=> 'pcx',
 			'mime'	=> 'application/pcx',
-			'desc'	=> 'Garmin PCX5 (requires gpsbabel in PATH)',
+			'desc'	=> 'Garmin PCX5 (gpsbabel)',
 			'filter_src'	=> 'easygps',
 			'filter_exec'	=> 'gpsbabel -i geo -f INFILE -o pcx -F OUTFILE'
-		},
-
-		'mapsource' => {
-			'ext'		=> 'msr',
-			'mime'	=> 'application/mapsource',
-			'desc'	=> 'Garmin Mapsource (requires gpsbabel in PATH)',
-			'filter_src'	=> 'easygps',
-			'filter_exec'	=> 'gpsbabel -i geo -f INFILE -o mapsource -F OUTFILE'
 		},
 
 		'gpsutil' => {
 			'ext'		=> 'gpu',
 			'mime'	=> 'application/gpsutil',
-			'desc'	=> 'gpsutil datafile (requires gpsbabel in PATH)',
+			'desc'	=> 'gpsutil (gpsbabel)',
 			'filter_src'	=> 'easygps',
 			'filter_exec'	=> 'gpsbabel -i geo -f INFILE -o gpsutil -F OUTFILE'
 		},
 
 		'tiger' => {
 			'ext'		=> 'tgr',
-			'mime'	=> 'application/tiger',
-			'desc'	=> 'U.S. Census Bureau Tiger Mapping Service Data (requires gpsbabel in PATH)',
+			'mime'	=> 'application/xtiger',
+			'desc'	=> 'U.S. Census Bureau Tiger Mapping Service Data (gpsbabel)',
 			'filter_src'	=> 'easygps',
 			'filter_exec'	=> 'gpsbabel -i geo -f INFILE -o tiger -F OUTFILE'
 		},
+        
+        'xmap' => {
+			'ext'		=> 'tgr',
+			'mime'	=> 'application/xmap',
+			'desc'	=> 'Delorme Topo USA4/XMap Conduit (gpsbabel)',
+			'filter_src'	=> 'easygps',
+			'filter_exec'	=> 'gpsbabel -i geo -f INFILE -o xmap -F OUTFILE'
+		},
 
+        'dna' => {
+			'ext'		=> 'dna',
+			'mime'	=> 'application/xmap',
+			'desc'	=> 'Navitrak DNA marker (gpsbabel)',
+			'filter_src'	=> 'easygps',
+			'filter_exec'	=> 'gpsbabel -i geo -f INFILE -o dna -F OUTFILE'
+		},
+
+        'psp' => {
+			'ext'		=> 'psp',
+			'mime'	=> 'application/psp',
+			'desc'	=> 'Microsoft PocketStreets 2002 Pushpin (gpsbabel)',
+			'filter_src'	=> 'easygps',
+			'filter_exec'	=> 'gpsbabel -i geo -f INFILE -o psp -F OUTFILE'
+		},
+
+        'cetus' => {
+			'ext'		=> 'cet',
+			'mime'	=> 'application/cetus',
+			'desc'	=> 'Cetus for PalmOS (gpsbabel)',
+			'filter_src'	=> 'easygps',
+			'filter_exec'	=> 'gpsbabel -i geo -f INFILE -o cetus -F OUTFILE'
+		},
+        'gpspilot' => {
+			'ext'		=> 'gps',
+			'mime'	=> 'application/gpspilot',
+			'desc'	=> 'GPSPilot for PalmOS (gpsbabel)',
+			'filter_src'	=> 'easygps',
+			'filter_exec'	=> 'gpsbabel -i geo -f INFILE -o dna -F OUTFILE'
+		},
+        'magnav' => {
+			'ext'		=> 'mgv',
+			'mime'	=> 'application/magnav',
+			'desc'	=> 'Magellan NAV Companion for PalmOS (gpsbabel)',
+			'filter_src'	=> 'easygps',
+			'filter_exec'	=> 'gpsbabel -i geo -f INFILE -o magnav -F OUTFILE'
+		},
+        'mxf' => {
+			'ext'		=> 'mxf',
+			'mime'	=> 'application/mxf',
+			'desc'	=> 'MapTech Exchange (gpsbabel)',
+			'filter_src'	=> 'easygps',
+			'filter_exec'	=> 'gpsbabel -i geo -f INFILE -o mxf -F OUTFILE'
+		},
+        'holux' => {
+			'ext'		=> 'wpo',
+			'mime'	=> 'application/holux',
+			'desc'	=> 'Holux gm-100  (gpsbabel)',
+			'filter_src'	=> 'easygps',
+			'filter_exec'	=> 'gpsbabel -i geo -f INFILE -o wpo -F OUTFILE'
+		},
+        'ozi' => {
+			'ext'		=> 'ozi',
+			'mime'	=> 'application/ozi',
+			'desc'	=> 'OziExplorer (gpsbabel)',
+			'filter_src'	=> 'easygps',
+			'filter_exec'	=> 'gpsbabel -i geo -f INFILE -o ozi -F OUTFILE'
+		},
+        'tpg' => {
+			'ext'		=> 'tpg',
+			'mime'	=> 'application/tpg',
+			'desc'	=> 'National Geographic Topo (gpsbabel)',
+			'filter_src'	=> 'easygps',
+			'filter_exec'	=> 'gpsbabel -i geo -f INFILE -o tpg -F OUTFILE'
+		},
+        'tmpro' => {
+			'ext'		=> 'tmp',
+			'mime'	=> 'application/tmpro',
+			'desc'	=> 'TopoMapPro Places (gpsbabel)',
+			'filter_src'	=> 'easygps',
+			'filter_exec'	=> 'gpsbabel -i geo -f INFILE -o tmpro -F OUTFILE'
+		},
+        'gpsdrive' => {
+			'ext'		=> 'gpg',
+			'mime'	=> 'application/gpsdrive',
+			'desc'	=> 'GpsDrive (gpsbabel)',
+			'filter_src'	=> 'easygps',
+			'filter_exec'	=> 'gpsbabel -i geo -f INFILE -o gpsdrive -F OUTFILE'
+		}
 	}
 
 
