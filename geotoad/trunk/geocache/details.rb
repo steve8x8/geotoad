@@ -92,7 +92,7 @@ class CacheDetails < Common
             # thanks to Mike Capito for the heads up on the most recent change here.
 			#<A NAME="1921710"><A HREF="../profile/?guid=685787d4-3eab-43a0-93c0-9173fd284083">Geo13</A></strong>
 			data.scan (/profile\/\?guid=.*?\"\>(.*?)\<\/A\>\<\/strong\>/) {
-				puts "visitor to #{wid}: #{$1.downcase}"
+				#debug "visitor to #{wid}: #{$1.downcase}"
 				@waypointHash[wid]['visitors'].push($1.downcase)
 			}
 
