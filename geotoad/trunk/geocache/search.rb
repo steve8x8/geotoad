@@ -323,7 +323,7 @@ class SearchCache
                     @cache['terrain']=$2.to_f
                     debug "cacheDiff=#{@cache['difficulty']} terr=#{@cache['terrain']}"
 
-                when /<td valign=\"top\" align=\"left\"\>(\d+) (\w+) \'(\d+)\<\/td\>/
+                when /<td valign=\"top\" align=\"left\"\>(\d+) (\w+) \'(\d+) *\<[\/I]/
                     cday = $1
                     cmonth = $2
                     cyear = $3
