@@ -150,10 +150,9 @@ class SearchCache < Common
                 @waypointHash[wid]['mdate'] = $1
             else
                 @waypointHash[wid]['mdate'] = nil
-                puts "#{wid} has never been found! (#{mdate})"
+                debug "#{wid} has never been found! (#{mdate})"
             end
             
-            puts type
             type.gsub!('\s*cache', '')
             @waypointHash[wid]['type'] = type
             
