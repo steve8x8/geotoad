@@ -253,7 +253,7 @@ class ShadowFetch < Common
 			    w = Net::HTTP.new(host,port)
 			    retry
 			end
-		rescue SockeError, Errno::EINVAL, EOFError, TimeoutError, StandardError => detail
+		rescue SocketError, Errno::EINVAL, EOFError, TimeoutError, StandardError => detail
             debug "Failed fetching!"
             return nil
 		end
