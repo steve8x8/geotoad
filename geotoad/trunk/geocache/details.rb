@@ -139,7 +139,7 @@ class CacheDetails
 
                     case icon
                         when 'smile'
-                            type = 'found'
+                            type = 'Found it'
                         when 'sad'
                             type = 'NOT FOUND'
                         when 'note'

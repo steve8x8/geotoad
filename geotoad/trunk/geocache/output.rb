@@ -294,8 +294,7 @@ class Output
         }
 
 
-        # somewhat lame.. HTML specific index that really needs to be in the templates, but I need
-        # this done before I go geocaching in 45 minutes.
+        # ** This will be removed for GeoToad 4.0, when we use a real templating engine that can do loops **
         if @outputType == "html"
             htmlIndex=''
             debug "I should generate an index, I'm html"
@@ -344,6 +343,8 @@ class Output
             output = output + "<ul>\n" + htmlIndex + "</ul>\n"
         end
 
+
+
         wpList.sort{|a,b| a[1]<=>b[1]}.each {  |wpArray|
             @currentWid = wpArray[0]
             #puts "Output loop: #{@currentWid} - #{@wpHash[@currentWid]['name']}"
@@ -386,7 +387,32 @@ class Output
                 exit
             end
 			@outVars['average'] = (@wpHash[@currentWid]['terrain'] + @wpHash[@currentWid]['difficulty'] / 2).to_i
+
             # This comment is only here to make ArmedBear-J parse the ruby properly: /\*/, "[SPACER]");
+
+
+            # ** This will be removed for GeoToad 4.0, when we use a real templating engine that can do loops **
+            if @outputType == 'gpx'
+                debug "Creating GPX comment list for @currentWid\""
+                @outVars['gpxlogs'] = ''
+                0.upto(4) { |x|
+                    if @wpHash[@currentWid]["comment#{x}Type"]
+                        debug "Found comment #{x}"
+                        rawcomment =
+                        "    <groundspeak:log id=\"<%wpEntity.comment#{x}ID%>\">\r\n" +
+                        "      <groundspeak:date><%wpEntity.comment#{x}Date%>T00:00:00.0000000-07:00</groundspeak:date>\r\n" +
+                        "      <groundspeak:type><%wpEntity.comment#{x}Type%></groundspeak:type>\r\n" +
+                        "      <groundspeak:finder id=\"1\"><%wpEntity.comment#{x}Name%></groundspeak:finder>\r\n" +
+                        "      <groundspeak:text encoded=\"False\"><%wpEntity.comment#{x}Comment%></groundspeak:text>\r\n" +
+                        "    </groundspeak:log>\r\n"
+
+                        debug "filtering raw comment..."
+                        @outVars['gpxlogs'] = @outVars['gpxlogs'] + replaceVariables(rawcomment)
+                    end
+                }
+            end
+
+
 
 			# this crazy mess is all due to iPod's VCF reader only supporting 2k chars!
 			0.upto(numEntries) { |entry|
