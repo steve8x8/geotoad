@@ -1,6 +1,6 @@
 #!/bin/sh
 # Builds a new release of geotoad
-# $Id: makedist.sh,v 1.3 2002/04/23 04:05:41 helix Exp $
+# $Id: makedist.se,v 1.3 2002/04/23 04:05:41 helix Exp $
 
 cd ..
 VERSION=`cat VERSION`
@@ -22,6 +22,6 @@ svn log geocache CLI -v > /tmp/$DIST/ChangeLog.txt
 
 cd /tmp
 tar -zcvf $LONGDIST.tgz $DIST
-scp $LONGDIST.tgz home.toadstool.sh:/www/toadstool.sh/htdocs/hacks/geotoad/files/
-echo "http://home.toadstool.sh/hacks/geotoad/files/$LONGDIST.tgz"
+scp $LONGDIST.tgz home.toadstool.se:/www/toadstool.se/htdocs/hacks/geotoad/files/
+echo "http://home.toadstool.se/hacks/geotoad/files/$LONGDIST.tgz"
 
