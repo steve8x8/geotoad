@@ -48,10 +48,35 @@ class CacheDetails
 
 		page.fetch
         if (page.data)
-    		parseCache(page.data)
+    		ret = parseCache(page.data)
         else
             debug "No data found, not attempting to parse the entry"
         end
+
+        # We try to download the page one more time.
+        if ret
+            return 1
+        else
+            displayWarning "Could not parse page information for #{@wid}, retrying download"
+            sleep(5)
+            page.shadowExpiry=1
+            page.localExpiry=1
+            page.fetch
+
+            if (page.data)
+                ret = parseCache(page.data)
+            else
+                debug "No data found, not attempting to parse the entry"
+            end
+
+            if ret
+                return 1
+            else
+                displayWarning "I have failed."
+                return nil
+            end
+        end
+
 	end
 
 	def parseCache(data)
@@ -79,14 +104,14 @@ class CacheDetails
 				debug "got digital lat/lon: #{$1} #{$2}"
             end
 
-              # latitude and longitude in the written form. Rewritten by Scott Brynen for Southpole compatibility.
-              if line =~ /\<font size=\"3\"\>([NWSE]) (\d+).*? ([\d\.]+) ([NWSE]) (\d+).*? ([\d\.]+)\<\/STRONG\>/
-		@waypointHash[wid]['latwritten'] = $1 + $2 + ' ' + $3
+            # latitude and longitude in the written form. Rewritten by Scott Brynen for Southpole compatibility.
+            if line =~ /\<font size=\"3\"\>([NWSE]) (\d+).*? ([\d\.]+) ([NWSE]) (\d+).*? ([\d\.]+)\<\/STRONG\>/
+                @waypointHash[wid]['latwritten'] = $1 + $2 + ' ' + $3
               	@waypointHash[wid]['lonwritten'] = $4 + $5 + ' ' + $6
               	@waypointHash[wid]['latdata'] = ($2.to_f + $3.to_f / 60) * ($1 == 'S' ? -1:1)
               	@waypointHash[wid]['londata'] = ($5.to_f + $6.to_f / 60) * ($4 == 'W' ? -1:1)
               	debug "got written lat/lon"
-              end
+            end
 
 
             # why a geocache is closed. It seems to always be the same.
@@ -188,6 +213,14 @@ class CacheDetails
                 @waypointHash[wid]['details'] = details
             end
         end  # end wid check.
+
+        # This checks to see if it's a geocache that at least has coordinates to mention.
+        if wid && @waypointHash[wid]['latwritten']
+            return 1
+        else
+            return nil
+        end
+
 	end  # end function
 end  # end class
 
