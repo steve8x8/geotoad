@@ -9,8 +9,8 @@ $Format = {
             'spacer' => ' ',
             'templatePre'    => "GPSPOINT DATA FILE\ntype=\"fileinfo\"  version=\"1.00\"\n" +
                                             "type=\"programinfo\" program=\"geotoad\" version=\"0.0\"\n",
-            'templateWP'        => "type=\"waypoint\" latdata=\"<%wp.latdata%>\" londata=\"<%wp.londata%>\"" +
-                                             "name=\"<%out.id%>\" comment=\"<%wp.name%>\"" +
+            'templateWP'        => "type=\"waypoint\" latdata=\"<%wp.latdata%>\" londata=\"<%wp.londata%>\" " +
+                                             "name=\"<%out.id%>\" comment=\"<%wp.name%>\" " +
                                             "symbol=\"flag\"  display_option=\"symbol+name\"\n",
         },
         'easygps' => {
