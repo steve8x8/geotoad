@@ -74,7 +74,7 @@ class Output < Common
 			'templateWP'	=> "== \"<%wp.name%>\" (<%out.wid%>) by <%wp.creator%>\r\n" +
 				"Difficulty: <%wp.difficulty%>, Terrain: <%wp.terrain%>\r\n" +
 				"Lat: <%wp.latwritten%> Lon: <%wp.lonwritten%>\r\n" +
-				"Type: <%wp.type%>, Creation Date: <%wp.cdate%>\r\n" +
+				"Type: <%wp.type%>, Creation: <%wp.cdate%>, Last found: <%wp.mdate%>\r\n" +
 				"Details:\r\n<%out.details%>\r\n\r\n"
 		},
 
