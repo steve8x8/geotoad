@@ -29,8 +29,8 @@ class ShadowFetch < Common
 	def initialize (url)
 		@url = url
 		@remote = 0
-        @shadowExpiry=172800	# 2 days
-        @localExpiry=345600		# 4 days
+        @shadowExpiry=345600	# 4 days
+        @localExpiry=432000		# 4 days
 	end
 
 	# to change the URL

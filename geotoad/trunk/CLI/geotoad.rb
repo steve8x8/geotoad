@@ -21,23 +21,24 @@ common = Common.new
 $TEMP_DIR=common.findTempDir
 
 puts "% geotoad #{$VERSION} - (c) 2002 Thomas Stromberg"
-puts "========================================================="
+puts "=================================================================="
 opts = GetoptLong.new(
 	[ "--format",					"-f",		GetoptLong::OPTIONAL_ARGUMENT ],
 	[ "--output",					"-o",		GetoptLong::OPTIONAL_ARGUMENT ],
 	[ "--query",					"-q",		GetoptLong::OPTIONAL_ARGUMENT ],
 	[ "--distanceMax",				"-y",		GetoptLong::OPTIONAL_ARGUMENT ],
-	[ "--difficultyMin",	"-d",		GetoptLong::OPTIONAL_ARGUMENT ],
-	[ "--difficultyMax",	"-D",		GetoptLong::OPTIONAL_ARGUMENT ],
-	[ "--terrainMin",			"-t",		GetoptLong::OPTIONAL_ARGUMENT ],
-	[ "--terrainMax",			"-T",		GetoptLong::OPTIONAL_ARGUMENT ],
-    [ "--keyword",              "-k",       GetoptLong::OPTIONAL_ARGUMENT ],
-	[ "--cacheExpiry"     "-c",   GetoptLong::OPTIONAL_ARGUMENT ],
-	[ "--quitAfterFetch",  "-x",  GetoptLong::OPTIONAL_ARGUMENT ],
-	[ "--notFound",  "-n",  GetoptLong::NO_ARGUMENT ],
-    [ "--travelBug",  "-b",  GetoptLong::NO_ARGUMENT ],
-	[ "--verbose",				"-v",		GetoptLong::NO_ARGUMENT ],
-	[ "--user",						"-u",		GetoptLong::OPTIONAL_ARGUMENT ]
+	[ "--difficultyMin",	        "-d",		GetoptLong::OPTIONAL_ARGUMENT ],
+	[ "--difficultyMax",	        "-D",		GetoptLong::OPTIONAL_ARGUMENT ],
+	[ "--terrainMin",			    "-t",		GetoptLong::OPTIONAL_ARGUMENT ],
+	[ "--terrainMax",			    "-T",		GetoptLong::OPTIONAL_ARGUMENT ],
+    [ "--keyword",                  "-k",    GetoptLong::OPTIONAL_ARGUMENT ],
+	[ "--cacheExpiry"               "-c",    GetoptLong::OPTIONAL_ARGUMENT ],
+	[ "--quitAfterFetch",           "-x",    GetoptLong::OPTIONAL_ARGUMENT ],
+	[ "--notFound",                 "-n",    GetoptLong::NO_ARGUMENT ],
+    [ "--travelBug",                "-b",    GetoptLong::NO_ARGUMENT ],
+	[ "--verbose",				    "-v",    GetoptLong::NO_ARGUMENT ],
+	[ "--user",						"-u",    GetoptLong::OPTIONAL_ARGUMENT ],
+    [ "--help",                     "-h",    GetoptLong::NO_ARGUMENT ]
 )
 
 output = Output.new
@@ -60,7 +61,7 @@ def usage
 	puts " -D [0.0-5.0]            difficulty maximum (5)"
 	puts " -t [0.0-5.0]            terrain minimum (0)"
 	puts " -T [0.0-5.0]            terrain maximum (5)"
-	puts " -y [1-500]              distance maximum (zipcode only, 25 default)"
+	puts " -y [1-500]              distance maximum (15)"
     puts " -k [keyword]            keyword (regexp) search. Use | to delimit multiple"
 	puts " -u [username]           filter out caches found by username. "
     puts "                         Use : to delimit multiple users"
@@ -88,8 +89,9 @@ formatType	= optHash['--format'] || 'easygps'
 queryType		= optHash['--query'] || 'zip'
 cacheExpiry	= optHash['--cacheExpiry'].to_i || 3
 quitAfterFetch  = optHash['--quitAfterFetch'].to_i || 200
+distanceMax = optHash['--distanceMax'] || 15
 
-if (! ARGV[0])
+if ((! ARGV[0]) || optHash['--help'])
 	usage
 	exit
 else
@@ -112,12 +114,16 @@ end
 
 ## Make the Initial Query ############################
 puts "[.] Your cache directory is " + $TEMP_DIR
-puts "[=] Performing #{queryType} search for #{queryArg}"
+print "[=] Performing #{queryType} search for #{queryArg} "
 search = SearchCache.new
 
-if optHash['--distanceMax']
-	puts "[-] Constraining distance to #{optHash['--distanceMax']} miles"
-	search.distance(optHash['--distanceMax'].to_i)
+
+# only valid for zip searches
+if queryType == "zip"
+    puts "(constraining to #{distanceMax} miles)"
+	search.distance(distanceMax.to_i)
+else
+    puts
 end
 
 if (! search.mode(queryType, queryArg))
@@ -141,8 +147,8 @@ if (search.totalWaypoints)
 			page = ShadowFetch.new(searchURL)
 
             # very short expiry time for the search index.
-            page.shadowExpiry=86400
-            page.localExpiry=100000
+            page.shadowExpiry=60000
+            page.localExpiry=43200
             
 			src = page.src
 			puts "[o] Recieved search results for \##{search.lastWaypoint}-#{current} of #{search.totalWaypoints} (#{src})"
@@ -154,7 +160,9 @@ if (search.totalWaypoints)
 					common.debug "quitting after #{downloads} downloads"
 					#exit 4
 				end
-				sleep $SLEEP
+                # half the rest for this. 
+                common.debug "sleeping"
+				sleep ($SLEEP / 2).to_i
 			end
 			running = search.fetchNext
 		else

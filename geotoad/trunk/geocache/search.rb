@@ -7,7 +7,7 @@ class SearchCache < Common
 	#@@baseURL="http://home.profile.sh/index.html"
 
 	def initialize
-		@distance=25
+		@distance=15
 		@waypointHash = Hash.new
 	end
 
