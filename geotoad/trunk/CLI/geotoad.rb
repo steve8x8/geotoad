@@ -20,8 +20,7 @@ $SLEEP=3
 common = Common.new
 $TEMP_DIR=common.findTempDir
 
-puts "% geotoad #{$VERSION} - (c) 2002 Thomas Stromberg"
-puts "=================================================================="
+puts "% geotoad #{$VERSION} - (c) 2003 Thomas Stromberg"
 opts = GetoptLong.new(
 	[ "--format",					"-f",		GetoptLong::OPTIONAL_ARGUMENT ],
 	[ "--output",					"-o",		GetoptLong::OPTIONAL_ARGUMENT ],
@@ -46,17 +45,33 @@ output = Output.new
 
 def usage
 	puts "syntax: geotoad.rb [options] <search>"
-	puts " -f format for output. Formats available are:"
+	puts ""
+	puts " -o [filename]           output file"
+ 	puts " -f [format]             output format type, such as:"
 	outputDetails = Output.new
+	i=0
+	print "     "
 	@@validFormats.each { |type|
 		desc = outputDetails.formatDesc(type)
-        printf("   %-8.8s  %s\n", type, desc);
+		if (i>3)
+			puts ""
+			print "     "
+			i=0
+		end
+		i=i+1
+
+		
+		if (desc =~ /gpsbabel/) 
+			type = type + "*"
+		end
+	        printf("  %-8.8s", type);
+
 	}
+    puts "" 
     puts ""
-    puts "   * some formats may require gpsbabel to be installed and in PATH"
+    puts "    * format requires gpsbabel to be installed and in PATH"
     puts ""
 	puts " -q [zip|state|country]  query type (zip by default)"
-	puts " -o [filename]           output file"
 	puts " -d [0.0-5.0]            difficulty minimum (0)"
 	puts " -D [0.0-5.0]            difficulty maximum (5)"
 	puts " -t [0.0-5.0]            terrain minimum (0)"
@@ -92,6 +107,9 @@ quitAfterFetch  = optHash['--quitAfterFetch'].to_i || 200
 distanceMax = optHash['--distanceMax'] || 15
 
 if ((! ARGV[0]) || optHash['--help'])
+	if (! ARGV[0])
+		puts "* You forgot to specify a #{queryType} search argument"
+	end
 	usage
 	exit
 else
