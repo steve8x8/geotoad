@@ -17,7 +17,10 @@ chmod 755 /tmp/$DIST/**/*.rb
 rm /tmp/$DIST/**/*~
 rm /tmp/$DIST/*/._*
 rm -Rf /tmp/$DIST/**/CVS
+rm -Rf /tmp/$DIST/**/.svn
 #cvs2cl --revisions -f /tmp/$DIST/ChangeLog.txt
+svn log -v > /tmp/$DIST/ChangeLog.txt
+
 cd /tmp
 tar -zcvf $LONGDIST.tgz $DIST
 #cp /tmp/$LONGDIST.tgz /www/profile.sh/htdocs/hacks/geotoad/files/
