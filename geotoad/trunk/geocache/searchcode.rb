@@ -214,7 +214,8 @@ $idHash['country_id']['zimbabwe']=225
 # some manual overrides
 $idHash['country_id']['britain']=11
 
-$idHash['zip']=0
+$idHash['zip'] = Hash.new
+$idHash['zip']['placeholder']=27513
 
 def initialize (type)
     type.downcase!
