@@ -25,23 +25,41 @@ class SearchCache
         @useShadow=toggle
     end
 
-	# set the search mode. valid modes are 'zip', 'state_id', 'country_id', 'keyword',
-	# coord, user
+	# set the search mode. valid modes are 'zip', 'state', 'country', 'keyword', coord, user
 	def mode(mode, key)
-        if (mode == "state_id") || (mode == "country_id")
-		    keylookup=SearchCode.new(mode)		# i.e. resolve North Carolina to 34.
-            @mode=keylookup.type
-            @key=keylookup.lookup(key)
-        else
-			@mode = mode
-            @key = key
-        end
+        case mode
+            when 'state'
+                keylookup=SearchCode.new(mode)		# i.e. resolve North Carolina to 34.
+                @mode=keylookup.type
+                @key=keylookup.lookup(key)
+                # nearly everything is in this form
+                @url=@@baseURL + '?' + @mode + '=' + CGI.escape(@key.to_s)
 
-        # nearly everything is in this form
-        @url=@@baseURL + '?' + @mode + '=' + CGI.escape(@key.to_s)
+            when 'country'
+                keylookup=SearchCode.new(mode)		# i.e. resolve North Carolina to 34.
+                @mode=keylookup.type
+                @key=keylookup.lookup(key)
+                # nearly everything is in this form
+                @url=@@baseURL + '?' + @mode + '=' + CGI.escape(@key.to_s)
 
-        # special URL preperation's for some modes
-		case @mode
+                # as of aug2003, geocaching.com has an in-between page for country
+                # lookups to parse. Pretty silly and worthless, imho.
+                ## CURRENTLY BROKEN - NEEDS HELP BADLY!!!! ##
+                displayError "Country searches are currently broken. Please help fix!"
+                return nil
+
+                #debug 'fetching the country page'
+                # add go button to the URL, just in case.
+                #@url = @url + "&submit3=GO"
+                #data = fetch(@url)
+                #data.each { |line|
+                #    if (line =~ /^\<input type=\"hidden\" name=\"(.*?)\" value=\"(.*?)\" \/\>/)
+                #        debug "found hidden post variable: #{$1}"
+                #        @postVars[$1]=$2
+                #    end
+                #}
+                #debug "country page parsed"
+
 			when 'coord'
 				# we should check for well-formed coordinates here
 				if (key !~ /-*\d+\.\d+[, ]-*\d+\.\d+/)
@@ -57,29 +75,17 @@ class SearchCache
                 end
 
 			when 'user'
+                @mode = mode
+                @key = key
 				@url=@@baseURL + '?ul=' + CGI.escape(@key)  # I didn't see the point of adding a dummy lookup
 
-            when 'country_id'
-                # as of aug2003, geocaching.com has an in-between page for country
-                # lookups to parse. Pretty silly and worthless, imho.
-                ## CURRENTLY BROKEN - NEEDS HELP BADLY!!!! ##
-                displayError "Country searches are currently broken. Please help fix!"
-                return nil
-
-                debug 'fetching the country page'
-                # add go button to the URL, just in case.
-                @url = @url + "&submit3=GO"
-                data = fetch(@url)
-                #data.each { |line|
-                #    if (line =~ /^\<input type=\"hidden\" name=\"(.*?)\" value=\"(.*?)\" \/\>/)
-                #        debug "found hidden post variable: #{$1}"
-                #        @postVars[$1]=$2
-                #    end
-                #}
-                debug "country page parsed"
 
             when 'zip'
-                @url =@url + "&submit1=Submit"
+                # nearly everything is in this form
+                @mode = mode
+                @key = key
+
+                @url=@@baseURL + '?' + @mode + '=' + CGI.escape(@key.to_s) + "&submit1=Submit"
 
                 if (@key !~ /^[\w][\w ]+$/)
                     displayError "Invalid zip code format: #{@key}"
@@ -94,7 +100,6 @@ class SearchCache
 		debug "URL for mode #{mode} is #{@url}"
         return @url
 	end
-
 
 	def baseURL
 		@@baseURL
