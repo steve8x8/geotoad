@@ -61,15 +61,35 @@ class SearchCache
                 #debug "country page parsed"
 
 			when 'coord', 'coordinates', 'coordinate'
-				# we should check for well-formed coordinates here
-				if (key !~ /-*\d+\.\d+[, ]-*\d+\.\d+/)
-					puts "Bad coordinates format in #{key}!"
-					return nil
-				end
+                @mode = 'coordinate'
+                @key = key
+                # This regular expression should probably handle any kind of messed
+                # up input the user could conjure.
 
-                (@lat, @long) = key.split(/[, ]/)
+                        #  1     2              3         4      5      6            7        8
+                        #  N     39       '    11    .   592     W      086     .   32
+                re = /^([ns-]*)(\d{1,3})\W(\d{1,3})\W*(\d{3})\W([ew-]*)(\d{1,3})\W(\d{1,3})\W*(\d{3})$/i
+                md = re.match(key)
 
-				@url=@@baseURL + '?' + 'origin_lat=' + @lat + '&origin_long=' + @long
+                if ! md
+                    displayError "Bad coordinates format in #{key}! Try N39.11592 W086.32282"
+                    return nil
+                end
+
+                lat_ns = 1
+                long_ew = 1
+
+                if md[1] == 's' || md[1] == 'S' || md[1] == '-'
+                    lat_ns = -1
+                end
+
+                if md[5] == 'w' || md[5] == 'W' || md[5] == '-'
+                    long_ew = -1
+                end
+
+                @url = @@baseURL + '?lat_ns=' + lat_ns.to_s + '&lat_h=' + md[2] + '&lat_mmss=' + md[3] + '.' + md[4] +
+                '&long_ew=' + long_ew.to_s + '&long_h=' + md[6] + '&long_mmss=' + md[7] + '.' + md[8]
+
                 if @distance
                             @url = @url + '&dist=' + @distance.to_s
                 end
