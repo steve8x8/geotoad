@@ -82,6 +82,16 @@ class SearchCache < Common
 		@returnedWaypoints
 	end
 
+    def currentPage
+        debug "returning the current page: #{@currentPage}"
+        @currentPage
+    end
+
+    def totalPages
+        debug "returning the total pages: #{@totalPages}"
+        @totalPages
+    end
+
 	def fetchNext
 		debug "fetchNext called, last waypoint was #{@lastWaypoint} of #{@totalWaypoints}"
 
@@ -90,11 +100,16 @@ class SearchCache < Common
 		end
 		nextWaypoint = @lastWaypoint
 
-        # I don't know why it starts as 5, but it does.
-        if (! @resultsPager)
+        # I don't know why it starts as 5, but it does. It resets at 14 for the next page.
+        if ((! @resultsPager))
             @resultsPager=5
         else
             @resultsPager = @resultsPager + 1
+        end
+
+        if (@resultsPager > 14)
+            debug "reset the resultsPager from #{@resultsPager} to 5"
+            @resultsPager=5
         end
 
 		if (@totalWaypoints > @lastWaypoint)
@@ -148,8 +163,8 @@ class SearchCache < Common
             case line
                 when /Total Records: \<b\>(\d+)\<\/b\> - Page: \<b\>(\d+)\<\/b\> of \<b\>(\d+)\<\/b\>/
                     @totalWaypoints = $1.to_i
-                    currentPage = $2.to_i
-                    totalPages = $3.to_i
+                    @currentPage = $2.to_i
+                    @totalPages = $3.to_i
                     #puts line
                     # emulation of old page behaviour (pre-Jun 2003). May not be required anymore.
                     debug "current page is #{currentPage} of #{totalPages}"
@@ -201,9 +216,23 @@ class SearchCache < Common
                 when /icon_bug/
                     @cache['travelbug']='Travel Bug!'
 
-                when /\<td valign=\"top\" align=\"left\"\>(\d+) days ago\<br\>/
+                when /\<td valign=\"top\" align=\"left\"\>(\d+) days ago\</
                     @cache['mdate']=$1.to_i
                     debug "mdate=#{@cache['mdate']}"
+
+                 when /\<td valign=\"top\" align=\"left\"\>(\d+) months ago\</
+                    # not exact, but close.
+                    @cache['mdate']=$1.to_i * 30
+                    debug "mdate=#{@cache['mdate']} (converted from months)"
+
+                 # not sure if this case actually exists.
+                 when /\<td valign=\"top\" align=\"left\"\>(\d+) years ago\</
+                    # not exact, but close.
+                    @cache['mdate']=$1.to_i * 365
+                    debug "mdate=#{@cache['mdate']} (converted from years)"
+
+                 when / ago/
+                     debug "missing ago line: #{line}"
 
                 # There is no good end of record marker, sadly.
                 when /\<hr noshade width=\"100%\" size=\"1\">/
