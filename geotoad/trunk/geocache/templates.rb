@@ -39,7 +39,7 @@ $Format = {
             "<keywords>cache, geocache, groundspeak, geotoad</keywords>\r\n",
 
             'templateWP'    => "<wpt lat=\"<%wp.latdata%>\" lon=\"<%wp.londata%>\">\r\n" +
-            "  <time>2003-06-18T00:00:00.0000000-07:00</time>\r\n" +
+            "  <time>2003-05-20T00:00:00.0000000-07:00</time>\r\n" +
             "  <name><%out.id%></name>\r\n" +
             "  <desc><%wpEntity.name%> by <%wpEntity.creator%>, <%wp.type%> Cache (<%wp.difficulty%>/<%wp.terrain%>)</desc>\r\n" +
             "  <url><%out.url%></url>\r\n" +
@@ -49,7 +49,7 @@ $Format = {
             "  <groundspeak:name><%wpEntity.name%></groundspeak:name>\r\n" +
 			"  <groundspeak:full_name><%wpEntity.name%></groundspeak:full_name>\r\n"+
             "  <groundspeak:placed_by><%wpEntity.creator%></groundspeak:placed_by>\r\n" +
-            "  <groundspeak:owner id=\"00000\"><%wpEntity.creator%></groundspeak:owner>\r\n" +
+            "  <groundspeak:owner id=\"89944\"><%wpEntity.creator%></groundspeak:owner>\r\n" +
             "  <groundspeak:type><%wp.type%> Cache</groundspeak:type>\r\n" +
             "  <groundspeak:container><%wp.type%></groundspeak:container>\r\n" +
             "  <groundspeak:difficulty><%wp.difficulty%></groundspeak:difficulty>\r\n" +
@@ -60,10 +60,10 @@ $Format = {
             "  <groundspeak:long_description html=\"False\"><%outEntity.details%></groundspeak:long_description>\r\n" +
             "  <groundspeak:encoded_hints><%wpEntity.hint%></groundspeak:encoded_hints>\r\n" +
             "  <groundspeak:logs>\r\n" +
-            "    <groundspeak:log id=\"00000\">\r\n" +
-            "      <groundspeak:date>XXX</groundspeak:date>\r\n" +
+            "    <groundspeak:log id=\"2351055\">\r\n" +
+            "      <groundspeak:date>2003-10-01T00:00:00.0000000-07:00</groundspeak:date>\r\n" +
             "      <groundspeak:type>Found it</groundspeak:type>\r\n" +
-            "      <groundspeak:finder id=\"000000\">Unsupported</groundspeak:finder>\r\n" +
+            "      <groundspeak:finder id=\"86529\">Unsupported</groundspeak:finder>\r\n" +
             "      <groundspeak:text encoded=\"False\">Comments not yet supported</groundspeak:text>\r\n" +
             "    </groundspeak:log>\r\n" +
             "  </groundspeak:logs>\r\n" +
