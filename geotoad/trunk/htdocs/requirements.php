@@ -1,1 +1,35 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"><html><head><title>GeoToad Requirements</title><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"></head><body><table width="100%" border="0" cellpadding="2" cellspacing="0">  <tr bgcolor="#DDDDDD">     <td colspan="3"><div align="right"><font color="#FFFFFF" size="5" face="Arial, Helvetica, sans-serif"><strong><em><font color="#B4742C" size="3">GeoToad</font><font color="#3A2B0D" size="3">:</font><font color="#3A2B0D">         </font></em></strong><font color="#685137" size="3"><strong>Opensource         Geocaching tools</strong></font></font></div></td>  </tr>  <tr valign="top">     <td bgcolor="#D8DEA2"> <p><strong><a href="index.php">About / News</a><br>        <a href="features.php">Features</a><br>        <a href="requirements.php">Requirements</a></strong><br>        <strong><a href="screenshots.php">Screenshots</a><br>        <a href="download.php">Download</a><br>        <a href="source.php">Source</a></strong><br>      </p>      <p>&nbsp;</p>      <p>&nbsp;</p>      <p>&nbsp;</p>      <p>&nbsp; </p>      <p align="center"><img src="geotoad-sidebadge2.jpg" width="133" height="133"><br>        <font size="2">Latest Version is <a href="download.php">2.3.0</a></font><br>      </p></td>    <td> <div align="left">         <p><font color="#3C471E" size="5"><strong>GeoToad Requirements</strong></font></p>        <p>&nbsp;</p>        <p><font color="#3C471E" size="3"><strong>Ruby</strong></font></p>        <p><font face="Arial, Helvetica, sans-serif">GeoToad is written in a programming           language named <a href="http://www.ruby-lang.org/">Ruby</a>. You need           to have Ruby 1.6 installed on your machine before you can use it. Here           are instructions on installing it for various operating systems:</font></p>        <p><font size="3"><strong>Windows</strong>: Install from <a href="http://unc.dl.sourceforge.net/sourceforge/rubyinstaller/ruby168-8.ex">http://unc.dl.sourceforge.net/sourceforge/rubyinstaller/ruby168-8.ex</a>e<br>          <strong>Mac OS X 10.2</strong>: Your system comes with ruby already.</font><font size="3"><br>          <strong>Debian Linux</strong>: apt-get install ruby<br>          <strong>FreeBSD</strong>: pkg_add -r ruby</font></p>        <p><font size="3">Other people should consult their appropriate package           systems, and or the ruby website. </font></p>        </div>      <p>&nbsp;</p>      <p><strong><font color="#3C471E" size="3">gpsbabel</font></strong></p>      <p>This is actually optional, but in order to get to all of the <a href="features.php">exotic         file formats</a>, you'll need to install <a href="http://gpsbabel.sourceforge.net/">gpsbabel</a>.       </p></td>    <td> <div align="left"></div>      </td>  </tr></table></body></html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>GeoToad Requirements</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="/style.css?2003080901" type="text/css" />
+</head>
+
+<body>
+<? include("../../header.inc"); ?>
+<? include("header.inc"); ?>
+<div class="hacktext"> 
+        <div class="hackpagetitle">GeoToad Requirements</div>
+	<h4>Ruby Scripting Language</h4>
+        GeoToad is written in a programming 
+          language named <a href="http://www.ruby-lang.org/">Ruby</a>. You need 
+          to have Ruby 1.6 or higher installed on your machine before you can use it. Here 
+          are instructions on installing it for various operating systems:
+        
+<ul><li>Windows: Install from <a
+href="http://twtelecom.dl.sourceforge.net/sourceforge/rubyinstaller/ruby180-9.exe">http://twtelecom.dl.sourceforge.net/sourceforge/rubyinstaller/ruby180-9.exe</a></li>
+          <li>Mac OS X 10.2: Your system comes with ruby already.</li>
+          <li>Debian Linux: apt-get install ruby </li>
+          <li>FreeBSD: pkg_add -r ruby</li>
+</ul>
+        Other people should consult their appropriate package 
+          systems, and or the ruby website. 
+<h4>gpsbabel for extended file format support</h4>
+      This is actually optional, but in order to get to all of the <a href="features.php">exotic 
+        file formats</a>, you'll need to install <a href="http://gpsbabel.sourceforge.net/">gpsbabel</a>. 
+
+</div>
+<? include("footer.inc"); ?>
+</html>
+

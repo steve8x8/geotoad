@@ -1,1 +1,25 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"><html><head><title>GeoToad Source</title><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"></head><body><table width="100%" border="0" cellpadding="2" cellspacing="0">  <tr bgcolor="#DDDDDD">     <td colspan="3"><div align="right"><font color="#FFFFFF" size="5" face="Arial, Helvetica, sans-serif"><strong><em><font color="#B4742C" size="3">GeoToad</font><font color="#3A2B0D" size="3">:</font><font color="#3A2B0D">         </font></em></strong><font color="#685137" size="3"><strong>Opensource         Geocaching tools</strong></font></font></div></td>  </tr>  <tr valign="top">     <td bgcolor="#D8DEA2"> <p><strong><a href="index.php">About / News</a><br>        <a href="features.php">Features</a><br>        <a href="requirements.php">Requirements</a></strong><br>        <strong><a href="screenshots.php">Screenshots</a><br>        <a href="download.php">Download</a><br>        <a href="source.php">Source</a></strong><br>      </p>      <p>&nbsp;</p>      <p>&nbsp;</p>      <p>&nbsp;</p>      <p>&nbsp; </p>      <p align="center"><img src="geotoad-sidebadge2.jpg" width="133" height="133"><br>        <font size="2">Latest Version is <a href="download.php">2.3.0</a></font><br>      </p></td>    <td> <div align="left">         <p><font color="#3C471E" size="5"><strong>GeoToad Source</strong></font></p>        <p><font face="Arial, Helvetica, sans-serif">Because GeoToad is written           in an interpreted scripting language, it already comes with the source           code. However, if you would like to check-out the latest source code,           you'll need to grab a <a href="http://subversion.tigris.org/">Subversion</a>           client. You can then anonymously checkout the repository via:</font></p>        <p> <font color="#555555" face="Courier New, Courier, mono">svn co http://home.toadstool.sh:8080/svn/repos/           geotoad/trunk</font></p>        <p><font face="Arial, Helvetica, sans-serif">If you see a bug, or are           just interested in helping out, <a href="mailto:thomas%2Bgeotoad@stromberg.org">contact           me</a> and I can give you write access to the repository. </font></p>        <p></p>        <p></p>      <p></p>        <p></p>        <p>&nbsp; </p>      </div>      </td>    <td> <div align="left"></div>      </td>  </tr></table></body></html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>GeoToad Source</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="/style.css?2003080901" type="text/css" />
+</head>
+
+<body>
+<? include("../../header.inc"); ?>
+<? include("header.inc"); ?>
+<div class="hacktext">
+	<div class="hackpagetitle">GeoToad Source</div>
+        Because GeoToad is written 
+          in an interpreted scripting language, it already comes with the source 
+          code. However, if you would like to check-out the latest source code, 
+          you'll need to grab a <a href="http://subversion.tigris.org/">Subversion</a> 
+          client. You can then anonymously checkout the repository via:
+	<div class="hackexample">svn co http://home.toadstool.sh/svn/repos/ geotoad/trunk</div>
+        If you see a bug, or are 
+          just interested in helping out, <a href="mailto:geotoad@toadstool.se">contact 
+          me</a> and I can give you write access to the repository. 
+      </div>
+<? include("footer.inc"); ?>
+</html>

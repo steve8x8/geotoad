@@ -1,1 +1,29 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"><html><head><title>GeoToad Download</title><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"></head><body><table width="100%" border="0" cellpadding="2" cellspacing="0">  <tr bgcolor="#DDDDDD">     <td colspan="3"><div align="right"><font color="#FFFFFF" size="5" face="Arial, Helvetica, sans-serif"><strong><em><font color="#B4742C" size="3">GeoToad</font><font color="#3A2B0D" size="3">:</font><font color="#3A2B0D">         </font></em></strong><font color="#685137" size="3"><strong>Opensource         Geocaching tools</strong></font></font></div></td>  </tr>  <tr valign="top">     <td bgcolor="#D8DEA2"> <p><strong><a href="index.php">About / News</a><br>        <a href="features.php">Features</a><br>        <a href="requirements.php">Requirements</a></strong><br>        <strong><a href="screenshots.php">Screenshots</a><br>        <a href="download.php">Download</a><br>        <a href="source.php">Source</a></strong><br>      </p>      <p>&nbsp;</p>      <p>&nbsp;</p>      <p>&nbsp;</p>      <p>&nbsp; </p>      <p align="center"><img src="geotoad-sidebadge2.jpg" width="133" height="133"><br>        <font size="2">Latest Version is <a href="download.php">2.3.0</a></font><br>      </p></td>    <td> <div align="left">         <p><font color="#3C471E" size="5"><strong>GeoToad Download</strong></font></p>        <p><font face="Arial, Helvetica, sans-serif">GeoToad can always be downloaded           from <a href="http://toadstool.sh/hacks/geotoad/files/">http://toadstool.sh/hacks/geotoad/files/</a>           . As of this writing, the latest version is <strong>2.3.0</strong></font></p>        <p><font face="Arial, Helvetica, sans-serif">Please note that it does           require ruby to be installed on your machine. Please see the <a href="requirements.php">Requirements</a>           page for more information.</font></p>        <p>&nbsp;</p>        <p>&nbsp;</p>        <p></p>        <p></p>      <p></p>        <p></p>        <p>&nbsp; </p>      </div>      </td>    <td> <div align="left"></div>      </td>  </tr></table></body></html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>GeoToad Download</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="/style.css?2003080901" type="text/css" />
+</head>
+
+<body>
+<? include("../../header.inc"); ?>
+<? include("header.inc"); ?>
+<div class="hacktext">
+        <div class="hackpagetitle">GeoToad Download</div>
+        GeoToad can always be downloaded 
+          from <a
+href="http://toadstool.sh/hacks/geotoad/files/">http://toadstool.sh/hacks/geotoad/files/</a>.
+          As of this writing, the latest version is
+<strong>2.6.1</strong>. The <a
+href="http://toadstool.sh/hacks/geotoad/files/ChangeLog.txt">ChangeLog</a>
+should be referred to if you would
+like in depth knowledge of what changed between revisions.
+<p>
+        Please note that it does 
+          require ruby to be installed on your machine. Please see the <a href="requirements.php">Requirements</a> 
+          page for more information.
+</p>
+</div>
+<? include ("footer.inc"); ?>
+</html>
