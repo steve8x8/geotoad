@@ -281,26 +281,29 @@ class SearchCache < Common
                 when /icon_bug/
                     @cache['travelbug']='Travel Bug!'
 
-                when /\<td valign=\"top\" align=\"left\"\>Today\</
+                when /\<td valign=\"top\" align=\"left\"\>Today\**\</
                     @cache['mdays']=0
 
-                when /\<td valign=\"top\" align=\"left\"\>Yesterday\</
+                when /\<td valign=\"top\" align=\"left\"\>Yesterday\**\</
                     @cache['mdays']=1
 
-                when /\<td valign=\"top\" align=\"left\"\>(\d+) days ago\</
+                when /\<td valign=\"top\" align=\"left\"\>(\d+) days ago\**\</
                     @cache['mdays']=$1.to_i
                     debug "mdays=#{@cache['mdays']}"
 
-                 when /\<td valign=\"top\" align=\"left\"\>(\d+) months ago\</
-                    # not exact, but close.
-                    @cache['mdays']=$1.to_i * 30
-                    debug "mdays=#{@cache['mdays']} (converted from months)"
+                 # <td valign="top" align="left">24 Apr 03<br>
+                 when /<td valign=\"top\" align=\"left\"\>(\d+) (\w+) (\d+)\<br\>/
+                    mday = $1
+                    mmonth = $2
+                    myear = $3
 
-                 # not sure if this case actually exists.
-                 when /\<td valign=\"top\" align=\"left\"\>(\d+) years ago\</
-                    # not exact, but close.
-                    @cache['mdays']=$1.to_i * 365
-                    debug "mdays=#{@cache['mdays']} (converted from years)"
+                    myearProper = "20" + myear
+                    t = Time.new
+                    mtimestamp = Time.local(myearProper.to_i,cmonth,mday.to_i,00,00,0)
+                    mage = t - mtimestamp
+                    @cache['mdays'] = (mage / 3600 / 24).to_i
+
+                    debug "mdays=#{@cache['cdays']}"
 
                  when / ago/
                      debug "missing ago line: #{line}"
