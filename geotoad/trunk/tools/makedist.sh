@@ -46,6 +46,9 @@ rm -Rf *.rb geocache interface
 # convert to Windows newlines
 flip -d *.txt
 
+# remove geotoad.rb mentions, since it's an executable.
+perl -pi -e  's/([\s])geotoad\.rb/$1geotoad/g' README.txt
+
 cp $SRC/CLI/*.exe .
 zip -r ../${LONGDIST}_for_Windows.zip *
 
