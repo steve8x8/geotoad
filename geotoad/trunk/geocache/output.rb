@@ -65,7 +65,8 @@ class Output < Common
 				"<hr noshade size=\"1\">\n<a name=\"<%out.wid%>\"></a><font color=\"#000099\"><a href=\"<%out.url%>\"><big><strong><%wp.name%></strong></big></a></font>&nbsp;&nbsp;  <b><%wp.travelbug%></b><br>\n" +
                 "<font color=\"#555555\"><strong><%wp.creator%></strong></font>, <%wp.latwritten%> <%wp.lonwritten%><br>" +
 				"<font color=\"#339933\"><%wp.type%> D<%wp.difficulty%>/T<%wp.terrain%> - placed: <%wp.cdate%> last: <%wp.mdate%> days ago</font><br>" +
-				"<p><%out.details%></p>\n",
+				"<p><%out.details%></p>\n" +
+                "<p><font color=\"#555555\">Hint (a=n): <%wp.hint%></font></p>\n",
 			'templatePost'	=> "</body></html>"
 		},
 
@@ -79,7 +80,8 @@ class Output < Common
 				"Difficulty: <%wp.difficulty%>, Terrain: <%wp.terrain%>\r\n" +
 				"Lat: <%wp.latwritten%> Lon: <%wp.lonwritten%>\r\n" +
 				"Type: <%wp.type%>, Creation: <%wp.cdate%>, Last found: <%wp.mdate%> days ago\r\n" +
-				"Details:\r\n<%out.details%>\r\n\r\n\r\n"
+				"Details:\r\n<%out.details%>\r\n" +
+                "Hint (a=n):\r\n<%wp.hint%>\r\n\r\n\r\n"
 		},
 
 		'csv'	=> {
@@ -102,7 +104,7 @@ class Output < Common
 			'templatePre'		=> "",
 			'templateWP'		=> "BEGIN:vCard\nVERSION:2.1\n" +
 				 "FN:G<%out.average%> <%out.sname%>\nN:G<%out.average%>;<%out.sname%>\n" +
-				 "NOTE:<%out.details%>\n" +
+				 "NOTE:<%out.details%> - Hint (a=n): <%wp.hint%>\n" +
 				 "ADD:<%wp.latwritten%>;<%wp.lonwritten%>;;<%wp.state%>;\n" +
 				 "TEL;HOME:<%out.wid%>\nEMAIL;INTERNET:<%wp.difficulty%>@<%wp.terrain%>\n" +
 				 "TITLE:<%wp.name%>\nORG:<%wp.type%> <%wp.cdate%>\nEND:vCard\n",
