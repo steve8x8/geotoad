@@ -355,7 +355,8 @@ class SearchCache
                     end
 
                     name =  CGI.unescapeHTML(name);
-                    @cache['name']=name.gsub(/[\x80-\xFF]/, '?')
+                    @cache['name']=name
+                    #@cache['name']=name.gsub(/[\x80-\xFF]/, '?')
                     debug "sid=#{@cache['sid']} name=#{@cache['name']} (disabled=#{@cache['disabled']})"
 
                 when /\bby (.*)/
@@ -364,7 +365,8 @@ class SearchCache
                         creator =  CGI.unescapeHTML(creator);
                         creator.gsub!(/ +$/, ' ')
                     end
-                    @cache['creator']=creator.gsub(/[\x80-\xFF]/, '?').chop!
+                    @cache['creator']=creator
+                    #creator.gsub(/[\x80-\xFF]/, '?').chop!
                     debug "creator=#{@cache['creator']}"
 
                 when /\((GC\w+)\)/

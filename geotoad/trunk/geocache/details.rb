@@ -152,8 +152,8 @@ class CacheDetails
             if data =~ /id=\"ShortDescription\"\>(.*?)\<\/span\>/m
                 debug "found short desc: [#{$1}]"
                 shortdesc = $1
-                shortdesc.gsub!(/[\x80-\xFF]/, "\'")		# high ascii
-                shortdesc.gsub!(/\&#\d+\;/, "\'")		# high ascii in entity format
+                #shortdesc.gsub!(/[\x80-\xFF]/, "\'")		# high ascii
+                #shortdesc.gsub!(/\&#\d+\;/, "\'")		# high ascii in entity format
                 shortdesc.gsub!(/\'+/, "\'")
                 shortdesc.gsub!(/^\*/, '')
                 @waypointHash[wid]['details'] = CGI.unescapeHTML(shortdesc)
@@ -200,8 +200,8 @@ class CacheDetails
                 details.gsub!(/\*\*\*/, '**')
                 details.gsub!(/\* /, '*')
                 debug "post-combine-process: #{details}"
-                details.gsub!(/[\x80-\xFF]/, "\'")		# high ascii
-                details.gsub!(/\&#\d+\;/, "\'")			# high ascii in entity format
+                #details.gsub!(/[\x80-\xFF]/, "\'")		# high ascii
+                #details.gsub!(/\&#\d+\;/, "\'")			# high ascii in entity format
                 details.gsub!(/\&nbsp\;/, " ")			# unescapeHTML seems to ignore.
                 details.gsub!(/\'+/, "\'")			# multiple apostrophes
                 details.gsub!(/^\*/, '')			# lines that start with *

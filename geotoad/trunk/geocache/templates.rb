@@ -80,7 +80,7 @@ $Format = {
             'spacer'    => "<br>&nbsp;\n",
             'templatePre' => "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n" +
                 "<html><head>\n<title><%out.title%></title>\n" +
-                "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">\n" + "</head>\n" +
+                "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n" + "</head>\n" +
                 "<body link=\"#000099\" vlink=\"#000044\" alink=\"#000099\">\n" +
                 "<h3><%out.title%></h3>" +
                 "<b><font color=\"#11CC11\">$</font></b> have travelbugs&nbsp;&nbsp;&nbsp;" +
