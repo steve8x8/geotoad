@@ -8,7 +8,7 @@ $:.push('..')
 # just in case it was never replaced.
 versionID='%VERSION%'
 if versionID !~ /^\d/
-    $VERSION = '2.6-CURRENT'
+    $VERSION = '2.7-CURRENT'
 else
     $VERSION = versionID.dup
 end
