@@ -4,8 +4,6 @@ TODO:
 ======
 Bugs:
 -----
-* Fix XML Entities so we can output valid GPX
-* Fix it so that the last found date works again.
 * Fix country search to comply with the new changes.
 
 Search:
