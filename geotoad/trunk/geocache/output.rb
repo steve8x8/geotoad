@@ -228,34 +228,34 @@ class Output
             elsif (type == "out")
                 text.gsub!(/\<%out\.#{var}%\>/, @outVars[var].to_s)
             elsif (type == "wpEntity")
-                text.gsub!(/\<%wpEntity\.#{var}%\>/, CGI.escapeHTML(@wpHash[@currentWid][var].to_s))
-                # using scan() here to get around difficulties with \1
-                text.scan(/([\x80-\xFF])/) {|highchar|
-                    ascii = highchar[0].unpack("U").to_s
-                    # if it's not valid, make it the equiv to &nbsp;
-                    if ascii.to_i == 0
-                        ascii = '160'
-                    end
-
-                    debug "Replacing high char [#{highchar}] with #{ascii}"
-                    text.gsub!(/#{highchar}/, ("&#" + ascii  + ";"))
-                }
+                text.gsub!(/\<%wpEntity\.#{var}%\>/, makeXML(@wpHash[@currentWid][var].to_s))
             elsif (type == "outEntity")
-                text.gsub!(/\<%outEntity\.#{var}%\>/, CGI.escapeHTML(@outVars[var].to_s))
-                # using scan() here to get around difficulties with \1
-                text.scan(/([\x80-\xFF])/) {|highchar|
-                    ascii = highchar[0].unpack("U").to_s
-                    # if it's not valid, make it the equiv to &nbsp;
-                    if ascii.to_i == 0
-                        ascii = '160'
-                    end
-
-                    debug "Replacing high char [#{highchar}] with #{ascii}"
-                    text.gsub!(/#{highchar}/, ("&#" + ascii  + ";"))
-                }
+                text.gsub!(/\<%outEntity\.#{var}%\>/, makeXML(@outVars[var].to_s))
             else
                 displayWarning "unknown type: #{type} tag=#{var}"
             end
+        }
+        return text
+    end
+
+    def makeXML(str)
+        # XML safe chars.
+        if str =~ /^[\&\#\;\w\s_\-:\?]+$/
+           # "[#{str}] looks clean, skipping"
+           return str
+        else
+           debug "makeXML: [#{str}]"
+        end
+        text = CGI.escapeHTML(str)
+        # using scan() here to get around difficulties with \1
+        text.scan(/([\x80-\xFF]+)/) {|highchar|
+            ascii = highchar[0].unpack("U").to_s
+            dec = highchar[0]
+            if ascii == '0'
+                debug "#{text}\nnot a valid char: #{highchar} / #{ascii} / #{dec}"
+            end
+            debug "Replacing high char [#{highchar}] with #{ascii}"
+            text.gsub!(/#{highchar}/, ("&#" + ascii  + ";"))
         }
         return text
     end

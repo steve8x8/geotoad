@@ -391,9 +391,8 @@ class SearchCache
                         name=$1.dup
                     end
 
-                    name =  CGI.unescapeHTML(name);
+#                    name = name  CGI.unescapeHTML(name);
                     @cache['name']=name
-                    #@cache['name']=name.gsub(/[\x80-\xFF]/, '?')
                     debug "sid=#{@cache['sid']} name=#{@cache['name']} (disabled=#{@cache['disabled']})"
 
                 when /\bby (.*)/
