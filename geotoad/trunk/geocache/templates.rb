@@ -1,3 +1,6 @@
+# This is our dump templating engine. It only handles really simple text formats at the moment.
+# GeoToad 4.0 will have a plugins architecture that replaces this.
+
 $Format = {
         'gpspoint'    => {
             'ext'        => 'gpd',
@@ -23,8 +26,7 @@ $Format = {
         },
 
 
-        # experimental internal method. Does not yet validate because we need to encode
-        # certain text into valid XML entities.
+        # ** The gpx.hints be removed for GeoToad 4.0, when we use a real templating engine that can do loops **
         'gpx'    => {
             'ext'        => 'gpx',
             'mime'    => 'text/ascii',
@@ -60,12 +62,7 @@ $Format = {
             "  <groundspeak:long_description html=\"False\"><%outEntity.details%></groundspeak:long_description>\r\n" +
             "  <groundspeak:encoded_hints><%wpEntity.hint%></groundspeak:encoded_hints>\r\n" +
             "  <groundspeak:logs>\r\n" +
-            "    <groundspeak:log id=\"2351055\">\r\n" +
-            "      <groundspeak:date>2003-10-01T00:00:00.0000000-07:00</groundspeak:date>\r\n" +
-            "      <groundspeak:type>Found it</groundspeak:type>\r\n" +
-            "      <groundspeak:finder id=\"86529\">Unsupported</groundspeak:finder>\r\n" +
-            "      <groundspeak:text encoded=\"False\">Comments not yet supported</groundspeak:text>\r\n" +
-            "    </groundspeak:log>\r\n" +
+            "  <%out.gpxlogs%>\r\n" +
             "  </groundspeak:logs>\r\n" +
             "  <groundspeak:travelbugs />\r\n" +
             "  </groundspeak:cache>\r\n" +
