@@ -54,7 +54,7 @@ class SearchCache < Common
                 end
 
 			when 'user'
-				@url=@@baseURL + '?ul=' + @key  # I didn't see the point of adding a dummy lookup
+				@url=@@baseURL + '?ul=' + CGI.escape(@key)  # I didn't see the point of adding a dummy lookup
 
             when 'country_id'
                 # as of aug2003, geocaching.com has an in-between page for country
@@ -226,7 +226,7 @@ class SearchCache < Common
 		    end # end totalPages if
             end # end while(running)
         else
-		    puts "(*) No waypoints found. Possible error fetching?"
+		    puts "(*) No waypoints found. Possible error fetching #{@url}"
 		    exit
         end
 	end
