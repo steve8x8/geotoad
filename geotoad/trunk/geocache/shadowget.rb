@@ -1,5 +1,6 @@
 # $Id: shadowget.rb,v 1.3 2002/08/05 03:42:24 strombt Exp $
 
+require 'digest/md5'
 require 'net/http'
 require 'ftools'
 require 'uri'
@@ -88,10 +89,15 @@ class ShadowFetch
 	# returns the cache filename that the URL will be stored as
 	def cacheFile(url)
         if (@postVars)
+	    postdata=''
             @postVars.each_key { |key|
-                value=@postVars[key].slice(0,20)
-                url = url + "&POST-#{key}=#{value}"
+                postdata = postdata + "#{key}=#{@postVars[key]}"
             }
+
+	    # we used to just keep the postdata in the filename, but DOS has
+            # a 255 character limit on filenames. Lets hash it instead.
+
+	    url = url + "-P=" + Digest::MD5.hexdigest(postdata)
             debug "added post vars to url: #{url}"
         else
             debug "no post vars to add to filename"
@@ -113,6 +119,13 @@ class ShadowFetch
 		localfile.gsub!(/[=\?\*\%\&\$:\-\.]/, "_")
 		localfile.gsub!(/_+/, "_")
 		localfile = $TEMP_DIR + localfile;
+
+		# Windows users have a max of 255 characters I believe.
+		if (localfile.length > 250) 
+			debug "truncating #{localfile} -- too long"
+			localfile = localfile.slice(0,250)
+		end
+
 		debug "cachefile: #{localfile}"
 		return localfile
 	end
