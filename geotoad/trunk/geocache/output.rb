@@ -50,7 +50,7 @@ class Output
 
 	def initialize
 		@output = Array.new
-        @waypointLength = 8
+        @waypointLength = 16
         # autodiscovery of gpsbabel output types if it's found!
 	end
 
@@ -329,7 +329,6 @@ class Output
             @currentWid = wpArray[0]
             #puts "Output loop: #{@currentWid} - #{@wpHash[@currentWid]['name']}"
 			detailsLen = @outputFormat['detailsLength'] || 20000
-
 			numEntries = @wpHash[@currentWid]['details'].length / detailsLen
 
 			@outVars['wid'] = @currentWid.dup
