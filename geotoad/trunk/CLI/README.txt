@@ -1,7 +1,5 @@
 GeoToad %VERSION% by Thomas Stromberg (c) 2003
 ==========================================================================
-If this file does not view properly in Windows, try using WordPad instead of
-Notepad.
 
 Table of Contents:
 ------------------

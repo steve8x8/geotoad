@@ -3,37 +3,52 @@
 # $Id: makedist.se,v 1.3 2002/04/23 04:05:41 helix Exp $
 
 cd ..
+SRC=`pwd`
 VERSION=`cat VERSION`
-
 DIST="geotoad-$VERSION"
+DEST=/tmp/$DIST
 LONGDIST="$DIST"
-echo "Creating /tmp/$DIST"
-rm -Rf /tmp/$DIST
-mkdir /tmp/$DIST
-cp -R TODO.txt COPYRIGHT.txt geocache CLI/interface /tmp/$DIST
-sed s/"%VERSION%"/"$VERSION"/g CLI/geotoad.rb > /tmp/$DIST/geotoad.rb
-sed s/"%VERSION%"/"$VERSION"/g CLI/README.txt > /tmp/$DIST/README.txt
-chmod 755 /tmp/$DIST/*.rb
-rm /tmp/$DIST/**/*~ 2>/dev/null
-rm /tmp/$DIST/*/._* 2>/dev/null
-rm -Rf /tmp/$DIST/**/CVS 2>/dev/null
-rm -Rf /tmp/$DIST/**/.svn 2>/dev/null
+
+echo "Creating $DEST"
+rm -Rf $DEST
+mkdir $DEST
+cp -R CLI/._* CLI/.DS* TODO.txt COPYRIGHT.txt geocache CLI/interface $DEST
+ditto CLI/*Mac* $DEST
+sed s/"%VERSION%"/"$VERSION"/g CLI/geotoad.rb > $DEST/geotoad.rb
+sed s/"%VERSION%"/"$VERSION"/g CLI/README.txt > $DEST/README.txt
+chmod 755 $DEST/*.rb
+rm $DEST/**/*~ 2>/dev/null
+rm -Rf $DEST/**/.svn 2>/dev/null
 
 echo "Updating repository..."
 svn update
 echo "Creating Changelog"
-svn log VERSION COPYRIGHT.txt geocache CLI -v > /tmp/$DIST/ChangeLog.txt
+svn log VERSION COPYRIGHT.txt geocache CLI -v > $DEST/ChangeLog.txt
 
-echo "Creating zipfile"
+# Mac OS X
 cd /tmp
-cd $DIST
-ln -s GeoToad.rb "GeoToad for Mac.command"
-cd ..
+echo "Creating zipfile (Mac OS X): zip -r ${LONGDIST}_for_MacOS.zip $DIST"
+zip -r ${LONGDIST}_for_MacOS.zip $DIST
 
+# Generic
+echo "Creating zipfile (Generic): zip -r $LONGDIST.zip $DIST"
+rm $DEST/*.command 2>/dev/null
+rm $DEST/.* 2>/dev/null
 zip -r $LONGDIST.zip $DIST
-echo "Copying zipfile to webservers"
 
-scp $LONGDIST.zip /tmp/$DIST/ChangeLog.txt smtp.stromberg.org:/www/toadstool.se/htdocs/hacks/geotoad/files/
-scp $LONGDIST.zip /tmp/$DIST/ChangeLog.txt toadstool.se:/www/toadstool.se/htdocs/hacks/geotoad/files/
-echo "http://home.toadstool.se/hacks/geotoad/files/$LONGDIST.zip"
+# Windows
+echo "Creating zipfile (Windows): zip -r ../${LONGDIST}_for_Windows.zip *"
+cd $DEST
+rm -Rf *.rb geocache interface
+
+# convert to Windows newlines
+flip -d *.txt
+
+cp $SRC/CLI/*.exe .
+zip -r ../${LONGDIST}_for_Windows.zip *
+
+#echo "Copying zipfile to webservers"
+#scp $LONGDIST.zip $DEST/ChangeLog.txt smtp.stromberg.org:/www/toadstool.se/htdocs/hacks/geotoad/files/
+#scp $LONGDIST.zip $DEST/ChangeLog.txt toadstool.se:/www/toadstool.se/htdocs/hacks/geotoad/files/
+#echo "http://home.toadstool.se/hacks/geotoad/files/$LONGDIST.zip"
 
