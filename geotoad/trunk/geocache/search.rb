@@ -9,6 +9,7 @@ class SearchCache < Common
 	def initialize
 		@distance=15
 		@waypointHash = Hash.new
+        @fetchID=0
         @resultsPager=nil
 	end
 
@@ -95,6 +96,11 @@ class SearchCache < Common
 	def fetchNext
 		debug "fetchNext called, last waypoint was #{@lastWaypoint} of #{@totalWaypoints}"
 
+        # This is a ridiculous hack. We tack this onto the URL as cid (cache id), so we
+        # can store this independantly in our local and remote webcache. We also do the same
+        # with resultsPager, so we know what "page" we are on.. in theory.
+        @fetchID = @fetchID + 1
+
 		if (! @totalWaypoints)
 			return nil
 		end
@@ -115,8 +121,8 @@ class SearchCache < Common
 		if (@totalWaypoints > @lastWaypoint)
 
 			#newUrl = @url + '&start=' + @lastWaypoint.to_s
-            newUrl = @url + "&gtid=#{@resultsPager}"
-            debug "More waypoints needed! #{nextWaypoint} - first: #{@firstWaypoint} (gtid=#{@resultsPager})"
+            newUrl = @url + "&gtid=#{@resultsPager}&cid=#{@fetchID}"
+            debug "More waypoints needed! #{nextWaypoint} - first: #{@firstWaypoint} (gtid=#{@resultsPager}, cid=#{@fetchID})"
             @postVars['__EVENTTARGET']="ResultsPager:_ctl#{@resultsPager}"
 			fetch(newUrl)
 		else
