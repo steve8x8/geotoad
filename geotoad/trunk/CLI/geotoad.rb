@@ -522,12 +522,11 @@ def saveFile
     # prepend the current working directory. This is mostly done as a service to
     # users who just double click to launch GeoToad, and wonder where their output file went.
     if outputFile !~ /[\/\\]/
-        if RUBY_PLATFORM =~ /win32/
-            outputFile = Dir.getwd + '\\' + outputFile
-        else
-            outputFile = Dir.getwd + '/' + outputFile
-        end
+        outputFile = Dir.getwd + '/' + outputFile
     end
+    
+    # Lets not mix and match DOS and UNIX /'s, we'll just make everyone like us!
+    outputFile.gsub!(/\\/, '/')
 
     # append time to our title
     @queryTitle = @queryTitle + " (" + Time.now.strftime("%d%b%y %H:%M") + ")"
