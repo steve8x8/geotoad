@@ -79,7 +79,7 @@ class SearchCache < Common
                 debug "country page parsed"
 
             when 'zip'
-		if (@key !~ /^\d+$/) 
+		if (@key !~ /^\d+$/)
 			puts "Invalid zip code format: #{@key}"
 			return nil
 		end
@@ -212,7 +212,6 @@ class SearchCache < Common
                     @totalWaypoints = $1.to_i
                     @currentPage = $2.to_i
                     @totalPages = $3.to_i
-                    #puts line
                     # emulation of old page behaviour (pre-Jun 2003). May not be required anymore.
                     debug "current page is #{currentPage} of #{totalPages}"
                     @firstWaypoint = (currentPage * 20) - 20  # 1st on the page
@@ -283,6 +282,10 @@ class SearchCache < Common
                     # We have a WID! Lets begin
                 when /icon_bug/
                     @cache['travelbug']='Travel Bug!'
+
+                when /Member-only/
+                    debug "Found members only cache. Marking"
+                    @cache['membersonly'] = 1
 
                 when /\<td valign=\"top\" align=\"left\"\>Today\**\</
                     @cache['mdays']=0
