@@ -11,7 +11,7 @@ echo "Creating /tmp/$DIST"
 rm -Rf /tmp/$DIST
 mkdir /tmp/$DIST
 cp -R TODO.txt COPYRIGHT.txt geocache CLI/interface /tmp/$DIST
-sed s/"%VERSION%"/"$VERSION"/g CLI/geotoad.rb > /tmp/$DIST/GeoToad.rb
+sed s/"%VERSION%"/"$VERSION"/g CLI/geotoad.rb > /tmp/$DIST/geotoad.rb
 sed s/"%VERSION%"/"$VERSION"/g CLI/README.txt > /tmp/$DIST/README.txt
 chmod 755 /tmp/$DIST/*.rb
 rm /tmp/$DIST/**/*~ 2>/dev/null

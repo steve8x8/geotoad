@@ -1,20 +1,24 @@
-GeoToad %VERSION% by Thomas Stromberg
+GeoToad %VERSION% by Thomas Stromberg (c) 2003
 ==========================================================================
-If this file does not view properly, use a better text viewer like WordPad
-instead of Notepad.
+If this file does not view properly in Windows, try using WordPad instead of
+Notepad.
+
+Table of Contents:
+------------------
+* About
+* Requirements
+* Getting Started
+* Command-Line Syntax
+* Usage Guide
+
+
 
 -----
 About
 -----
 It's an open-source query tool to query the geocaching.com website. It can
-write into a half dozen formats.
-
-
----------
-Copyright
----------
-BSD. If you include the source in your product, please mention me in the
-credits.
+write into a half dozen formats. To see what's new in this release, see the
+ChangeLog.txt file.
 
 
 ------------
@@ -29,9 +33,32 @@ Optionally, if you have gpsbabel - http://gpsbabel.sourceforge.net/ ..
 geotoad can output to over a dozen additional GPS formats.
 
 
-------
-Syntax
-------
+---------------
+Getting Started
+---------------
+There are two modes to GeoToad, an interactive mode, which most people will
+use, and a command line interface, which is mostly for people scripting
+GeoToad. To get to the interactive mode:
+
+In Windows  -- simply double click on geotoad.rb once Ruby is installed.
+In Mac OS X -- click on the "GeoToad for Mac.cmd" file.
+In UNIX     -- run ./geotoad.rb in a shell.
+
+The rest should be somewhat obvious. You get to a screen where you can
+change your query and filter options, and once you are done with that, press
+'q' and it will perform the magic.
+
+
+-------------------
+Command Line Syntax
+-------------------
+
+The command-line interface used to be the only way to use GeoToad. In 3.5.0,
+we have introduced a TUI (Text-User Interface), but have kept the
+command-line interface for those who's preference it is, and of course for
+people scripting or embedding GeoToad into their applications.
+
+
 syntax: geotoad.rb [options] <search:search2:search3>
 
  -f format for output. Formats available are:
@@ -91,6 +118,8 @@ syntax: geotoad.rb [options] <search:search2:search3>
  -n                      only include not found caches (virgins)
  -b                      only include caches with travelbugs
  -l                      set waypoint id length (Garmin users can use 16)
+
+
 
 -----
 Usage
