@@ -535,7 +535,7 @@ def saveFile
     # and do the dirty.
     outputData = output.prepare(@queryTitle);
     output.commit(outputFile)
-    displayMessage "Output saved to #{outputFile}"
+    displayMessage "Saved to #{outputFile}"
 end
 
 
@@ -547,7 +547,7 @@ end
 
 
 ###### MAIN ACTIVITY ###############################################################
-puts "# GeoToad #{$VERSION} (#{RUBY_PLATFORM}-#{RUBY_VERSION}) - Please report bugs to geotoad@toadstool.se"
+puts "GeoToad #{$VERSION} (#{RUBY_PLATFORM}-#{RUBY_VERSION}) - Please report bugs to geotoad@toadstool.se"
 cli = GeoToad.new
 
 while(1)
@@ -567,8 +567,9 @@ while(1)
   # Don't loop if you're in automatic mode.
   if ($mode == "TUI")
       puts ""
-      puts "-- Complete! Press Enter to return to the menu --"
-      puts ""
+      puts "***********************************************"
+      puts "* Complete! Press Enter to return to the menu *"
+      puts "***********************************************"
       $stdin.gets
   else
       exit
