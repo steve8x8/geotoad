@@ -95,14 +95,15 @@ class ShadowFetch < Common
 		if fileParts[3]
 			dir = fileParts[3..-2].join('/')
 			file = fileParts[-1]
-			localfile = $TEMP_DIR + '/' + host + '/' + dir + '/' + file
+			localfile = '/' + host + '/' + dir + '/' + file
 		else
-			localfile = $TEMP_DIR + '/' + host + '/' + 'index.html'
+			localfile = '/' + host + '/' + 'index.html'
 		end
 
 		# make a friendly filename
 		localfile.gsub!(/[=\?\*\%\&\$:\-\.]/, "_")
 		localfile.gsub!(/_+/, "_")
+		localfile = $TEMP_DIR + localfile;
 		debug "cachefile: #{localfile}"
 		return localfile
 	end
