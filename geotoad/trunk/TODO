@@ -5,25 +5,29 @@ TODO:
 
 Search:
 -------
-* Parse /hideseek to get a table of state/country codes.
+* Read in the country/state id tables
 * Support members only caches
 
 Filter:
 -------
 * Cache type
 * Caches not owned by
-* Found in last 7 days
+* Found in last X days
 
 Output:
 -------
 * eBook format (XML based)]
+* WML (WAP)
 
 Details:
 --------
-* Instead of enabling logs_y mode, do a
-http://www.geocaching.com/seek/nearest_cache.asp?ul=helixblue 
+* Instead of enabling logs_y mode in order to find the caches that someone
+has done, use http://www.geocaching.com/seek/nearest_cache.asp?ul=helixblue
+instead. 
 
 Frontends:
 ----------
 Web
-Mac OS X
+Mac OS X (needs clue)
+Windows (needs volunteer!)
+X11 (needs volunteer!) 
