@@ -112,7 +112,7 @@ class Input
         easyname = 'Y'
 
 
-        while (answer !~ /s/i)
+        while (answer !~ /^[sq]/i)
             if RUBY_PLATFORM =~ /win32/
                 system("cls");
             else
