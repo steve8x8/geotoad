@@ -5,6 +5,23 @@
 $:.push('..')
 
 
+# toss in our own libraries.
+require 'interface/display'
+require 'interface/progressbar'
+require 'geocache/common'
+require 'geocache/shadowget'
+require 'geocache/searchcode'
+require 'geocache/search'
+require 'geocache/filter'
+require 'geocache/output'
+require 'geocache/details'
+require 'getoptlong'
+
+
+class GeoToad
+include Common
+include Display
+
 # The version gets inserted by makedist.sh
 versionID='%VERSION%'
 if versionID !~ /^\d/
@@ -17,11 +34,13 @@ $SLEEP=2
 $SLOWMODE=350
 $VERSION_URL = "http://toadstool.se/hacks/geotoad/currentversion.php?type=CLI";
 
-require 'getoptlong'
+def initialize
+    $TEMP_DIR=findTempDir
+    output = Output.new
+    @@validFormats = output.formatList.sort
 
-
-puts "# GeoToad #{$VERSION} (#{RUBY_PLATFORM}-#{RUBY_VERSION}) - Please report bugs to geotoad@toadstool.se"
-opts = GetoptLong.new(
+    puts "# GeoToad #{$VERSION} (#{RUBY_PLATFORM}-#{RUBY_VERSION}) - Please report bugs to geotoad@toadstool.se"
+    opts = GetoptLong.new(
     [ "--format",                    "-f",        GetoptLong::OPTIONAL_ARGUMENT ],
     [ "--output",                    "-o",        GetoptLong::OPTIONAL_ARGUMENT ],
     [ "--query",                    "-q",        GetoptLong::OPTIONAL_ARGUMENT ],
@@ -47,39 +66,56 @@ opts = GetoptLong.new(
     [ "--waypointLength",            "-l",    GetoptLong::OPTIONAL_ARGUMENT ],
     [ "--libraryInclude",            "-L",    GetoptLong::OPTIONAL_ARGUMENT ],
     [ "--help",                     "-h",    GetoptLong::NO_ARGUMENT ]
-)
+    )
 
-# put the stupid crap in a hash. Much nicer to deal with.
-begin
-    optHash = Hash.new
-    opts.each do |opt, arg|
-        optHash[opt]=arg
+    # put the stupid crap in a hash. Much nicer to deal with.
+    begin
+        @optHash = Hash.new
+        opts.each do |opt, arg|
+            @optHash[opt]=arg
+        end
+        rescue
+        usage
+        exit
     end
-rescue
-    usage
-    exit
+
+    # by request of Marc Sebastian Pelzer <marc%black-cube.net>
+    if @optHash['--libraryInclude']
+        $:.push(@optHash['--libraryInclude'])
+    end
+
+
+
+    @formatType    = @optHash['--format'] || 'gpx'
+    @queryType        = @optHash['--query'] || 'zip'
+    @cacheExpiry    = @optHash['--cacheExpiry'].to_i || 3
+    @quitAfterFetch  = @optHash['--quitAfterFetch'].to_i || 200
+    @distanceMax = @optHash['--distanceMax'] || 10
+
+    if ((! ARGV[0]) || @optHash['--help'])
+        if (! ARGV[0])
+            displayError "You forgot to specify a #{@queryType} search argument"
+        end
+        usage
+        exit
+    else
+        # make friendly to people who can't quote.
+        @queryArgList        = ARGV.join(" ")
+    end
+
+    if (@optHash['--verbose'])
+        debugMode=1
+        debug "verbose mode enabled"
+    end
+
+    if ! @@validFormats.include?(@formatType)
+        displayMessage "[*] #{@formatType} is not a valid supported format."
+        usage
+        exit
+    end
 end
 
-# by request of Marc Sebastian Pelzer <marc%black-cube.net>
-if optHash['--libraryInclude']
-    $:.push(optHash['--libraryInclude'])
-end
 
-# toss in our own libraries.
-require 'interface/display'
-require 'interface/progressbar'
-require 'geocache/common'
-require 'geocache/shadowget'
-require 'geocache/searchcode'
-require 'geocache/search'
-require 'geocache/filter'
-require 'geocache/output'
-require 'geocache/details'
-
-output = Output.new
-
-$TEMP_DIR=Common.findTempDir
-@@validFormats = output.formatList.sort
 
 def usage
     puts "syntax: geotoad.rb [options] <search>"
@@ -137,344 +173,340 @@ def usage
     puts "EXAMPLES:"
     puts "geotoad.rb 27502"
     puts "geotoad.rb -d 3 -u helixblue -f vcf -o NC.vcf -q state_id \'North Carolina\'"
-    exit
-else
-
-end
-
-
-
-
-formatType    = optHash['--format'] || 'gpx'
-queryType        = optHash['--query'] || 'zip'
-cacheExpiry    = optHash['--cacheExpiry'].to_i || 3
-quitAfterFetch  = optHash['--quitAfterFetch'].to_i || 200
-distanceMax = optHash['--distanceMax'] || 10
-
-if ((! ARGV[0]) || optHash['--help'])
-    if (! ARGV[0])
-        Display.DisplayError "You forgot to specify a #{queryType} search argument"
-    end
-    usage
-    exit
-else
-    # make friendly to people who can't quote.
-    queryArgList        = ARGV.join(" ")
-end
-
-if (optHash['--verbose'])
-
-    common.debugMode=1
-    common.debug "verbose mode enabled"
-end
-
-if ! @@validFormats.include?(formatType)
-    DisplayMessage "[*] #{formatType} is not a valid supported format."
-    usage
-    exit
 end
 
 ## Check the version #######################
-version = ShadowFetch.new($VERSION_URL)
-version.shadowExpiry=0
-version.localExpiry=600
-version.fetch
+def versionCheck
+    version = ShadowFetch.new($VERSION_URL)
+    version.shadowExpiry=0
+    version.localExpiry=600
+    version.fetch
 
-if (($VERSION =~ /^(\d\.\d+\.\d+)$/) && (version.data =~ /^(\d\.\d+\.\d+)/))
-    latestVersion = $1;
-    if (latestVersion != $VERSION)
-        puts ""
-        puts "[^] NOTE: Your version of GeoToad is obsolete - #{latestVersion} is now available!";
-        puts "[^]       Please download it from http://toadstool.se/hacks/geotoad/"
+    if (($VERSION =~ /^(\d\.\d+\.\d+)$/) && (version.data =~ /^(\d\.\d+\.\d+)/))
+        latestVersion = $1;
+        if (latestVersion != $VERSION)
+            puts ""
+            puts "[^] NOTE: Your version of GeoToad is obsolete - #{latestVersion} is now available!";
+            puts "[^]       Please download it from http://toadstool.se/hacks/geotoad/"
+        end
     end
 end
 
 ## Make the Initial Query ############################
-DisplayMessage "[.] Your cache directory is " + $TEMP_DIR
+def downloadGeocacheList
+    displayMessage "[.] Your cache directory is " + $TEMP_DIR
 
 
-# Mike Capito contributed a patch to allow for multiple
-# queries. He did it as a hash earlier, I'm just simplifying
-# and making it as an array because you probably don't want to
-# mix multiple queryType's anyways
-combinedWaypoints = Hash.new
+    # Mike Capito contributed a patch to allow for multiple
+    # queries. He did it as a hash earlier, I'm just simplifying
+    # and making it as an array because you probably don't want to
+    # mix multiple @queryType's anyways
+    @combinedWaypoints = Hash.new
 
-queryArgList.split(/[:\|]/).each { |queryArg|
-    print "\nPerforming #{queryType} search for #{queryArg} "
-    search = SearchCache.new
+    @queryArgList.split(/[:\|]/).each { |queryArg|
+        print "\nPerforming #{@queryType} search for #{queryArg} "
+        search = SearchCache.new
 
-    # only valid for zip or coordinate searches
-    if queryType == "zip" || queryType == "coord"
-        puts "(constraining to #{distanceMax} miles)"
-        search.distance(distanceMax.to_i)
-    else
-        puts
-    end
+        # only valid for zip or coordinate searches
+        if @queryType == "zip" || @queryType == "coord"
+            puts "(constraining to #{@distanceMax} miles)"
+            search.distance(@distanceMax.to_i)
+        else
+            puts
+        end
 
-    if (! search.mode(queryType, queryArg))
-        exit
-    end
+        if (! search.mode(@queryType, queryArg))
+            exit
+        end
 
-    search.fetchSearchLoop
+        search.fetchSearchLoop
 
-    # this gives us support for multiple searches. It adds together the search.waypoints hashes
-    # and pops them into the combinedWaypoints hash.
-    combinedWaypoints.update(search.waypoints)
-    combinedWaypoints.rehash
-}
-
-
-# Here we make sure that the amount of waypoints we've downloaded (combinedWaypoints) matches the
-# amount of waypoints we found information for. This is just to check for buggy search code, and
-# really doesn't make much sense.
-
-waypointsExtracted = 0
-combinedWaypoints.each_key { |wp|
-    common.debug "pre-filter: #{wp}"
-    waypointsExtracted = waypointsExtracted + 1
-}
-
-if (waypointsExtracted < (combinedWaypoints.length - 2))
-    puts "***********************"
-    DisplayMessage "Warning: downloaded #{combinedWaypoints.length} waypoints, but I can only parse #{waypointsExtracted} of them!"
-    puts "***********************"
-end
-
-
-# Prepare for the manipulation
-filtered = Filter.new(combinedWaypoints)
-
-
-# This is where we do a little bit of cheating. In order to avoid downloading the
-# cache details for each cache to see if it's been visited, we do a search for the
-# users on the include or exclude list. We then populate combinedWaypoints[wid]['visitors']
-# with our discovery.
-
-userLookups = Array.new
-if (optHash['--userExclude'])
-    userLookups = optHash['--userExclude'].split(':')
-end
-
-if (optHash['--userInclude'])
-    userLookups = userLookups + optHash['--userInclude'].split(':')
-end
-
-userLookups.each { |user|
-    search = SearchCache.new
-    search.mode('user', user)
-    search.fetchSearchLoop
-    search.waypointList.each { |wid|
-        filtered.addVisitor(wid, user)
+        # this gives us support for multiple searches. It adds together the search.waypoints hashes
+        # and pops them into the @combinedWaypoints hash.
+        @combinedWaypoints.update(search.waypoints)
+        @combinedWaypoints.rehash
     }
+
+
+    # Here we make sure that the amount of waypoints we've downloaded (@combinedWaypoints) matches the
+    # amount of waypoints we found information for. This is just to check for buggy search code, and
+    # really doesn't make much sense.
+
+    waypointsExtracted = 0
+    @combinedWaypoints.each_key { |wp|
+        debug "pre-filter: #{wp}"
+        waypointsExtracted = waypointsExtracted + 1
+    }
+
+    if (waypointsExtracted < (@combinedWaypoints.length - 2))
+        displayWarning "downloaded #{@combinedWaypoints.length} waypoints, but I can only parse #{waypointsExtracted} of them!"
+    end
+
+end
+
+
+def prepareFilter
+    # Prepare for the manipulation
+    @filtered = Filter.new(@combinedWaypoints)
+
+
+    # This is where we do a little bit of cheating. In order to avoid downloading the
+    # cache details for each cache to see if it's been visited, we do a search for the
+    # users on the include or exclude list. We then populate @combinedWaypoints[wid]['visitors']
+    # with our discovery.
+
+    userLookups = Array.new
+    if (@optHash['--userExclude'])
+        userLookups = @optHash['--userExclude'].split(':')
+    end
+
+    if (@optHash['--userInclude'])
+        userLookups = userLookups + @optHash['--userInclude'].split(':')
+    end
+
+    userLookups.each { |user|
+        search = SearchCache.new
+        search.mode('user', user)
+        search.fetchSearchLoop
+        search.waypointList.each { |wid|
+            @filtered.addVisitor(wid, user)
+        }
 }
+end
 
 
 ## step #1 in filtering! ############################
 # This step filters out all the geocaches by information
 # found from the searches.
-puts ""
+def preFetchFilter
 
-filtered = Filter.new(combinedWaypoints)
-beforeFilteredMembersTotal = filtered.totalWaypoints
-filtered.removeByElement('membersonly')
+    @filtered = Filter.new(@combinedWaypoints)
+    beforeFilteredMembersTotal = @filtered.totalWaypoints
+    @filtered.removeByElement('membersonly')
 
-excludedMembersTotal = beforeFilteredMembersTotal - filtered.totalWaypoints
-if (excludedMembersTotal > 0)
-    DisplayMessage "#{excludedMembersTotal} members-only caches were filtered out (not yet supported)"
+    excludedMembersTotal = beforeFilteredMembersTotal - @filtered.totalWaypoints
+    if (excludedMembersTotal > 0)
+        displayMessage "#{excludedMembersTotal} members-only caches were @filtered out (not yet supported)"
+    end
+
+    debug "Filter running cycle 1, #{@filtered.totalWaypoints} caches left"
+
+    if @optHash['--difficultyMin']
+        @filtered.difficultyMin(@optHash['--difficultyMin'].to_f)
+    end
+    debug "Filter running cycle 2, #{@filtered.totalWaypoints} caches left"
+    if @optHash['--difficultyMax']
+        @filtered.difficultyMax(@optHash['--difficultyMax'].to_f)
+    end
+    debug "Filter running cycle 3, #{@filtered.totalWaypoints} caches left"
+
+    if @optHash['--terrainMin']
+        @filtered.terrainMin(@optHash['--terrainMin'].to_f)
+    end
+    debug "Filter running cycle 4, #{@filtered.totalWaypoints} caches left"
+
+    if @optHash['--terrainMax']
+        @filtered.terrainMax(@optHash['--terrainMax'].to_f)
+    end
+
+    if @optHash['--foundDateInclude']
+        @filtered.foundDateInclude(@optHash['--foundDateInclude'].to_f)
+    end
+
+    if @optHash['--foundDateExclude']
+        @filtered.foundDateExclude(@optHash['--foundDateExclude'].to_f)
+    end
+
+    if @optHash['--placeDateInclude']
+        @filtered.placeDateInclude(@optHash['--placeDateInclude'].to_f)
+    end
+
+    if @optHash['--placeDateExclude']
+        @filtered.placeDateExclude(@optHash['--placeDateExclude'].to_f)
+    end
+
+    if @optHash['--notFound']
+        @filtered.notFound
+    end
+
+    if @optHash['--travelBug']
+        @filtered.travelBug
+    end
+
+
+    beforeOwnersTotal = @filtered.totalWaypoints
+    if (@optHash['--ownerExclude'])
+        @optHash['--ownerExclude'].split(/[:\|]/).each { |owner|
+            @filtered.ownerExclude(owner)
+        }
+    end
+
+    if (@optHash['--ownerInclude'])
+        @optHash['--ownerInclude'].split(/[:\|]/).each { |owner|
+            @filtered.ownerInclude(owner)
+        }
+    end
+
+    excludedOwnersTotal = beforeOwnersTotal - @filtered.totalWaypoints
+    if (excludedOwnersTotal > 0)
+        displayMessage "Owner filtering removed #{excludedOwnersTotal} caches from your listing."
+    end
+
+    beforeUsersTotal = @filtered.totalWaypoints
+    if (@optHash['--userExclude'])
+        @optHash['--userExclude'].split(/[:\|]/).each { |user|
+            @filtered.userExclude(user)
+        }
+    end
+
+    if (@optHash['--userInclude'])
+        @optHash['--userInclude'].split(/[:\|]/).each { |user|
+            @filtered.userInclude(user)
+        }
+    end
+
+    excludedUsersTotal = beforeUsersTotal - @filtered.totalWaypoints
+    if (excludedUsersTotal > 0)
+        displayMessage "User filtering removed #{excludedUsersTotal} caches from your listing."
+    end
+
+
+    displayMessage "First stage filtering complete, #{@filtered.totalWaypoints} caches left"
 end
 
-common.debug "Filter running cycle 1, #{filtered.totalWaypoints} caches left"
 
-if optHash['--difficultyMin']
-    filtered.difficultyMin(optHash['--difficultyMin'].to_f)
-end
-common.debug "Filter running cycle 2, #{filtered.totalWaypoints} caches left"
-if optHash['--difficultyMax']
-    filtered.difficultyMax(optHash['--difficultyMax'].to_f)
-end
-common.debug "Filter running cycle 3, #{filtered.totalWaypoints} caches left"
-
-if optHash['--terrainMin']
-    filtered.terrainMin(optHash['--terrainMin'].to_f)
-end
-common.debug "Filter running cycle 4, #{filtered.totalWaypoints} caches left"
-
-if optHash['--terrainMax']
-    filtered.terrainMax(optHash['--terrainMax'].to_f)
-end
-
-if optHash['--foundDateInclude']
-    filtered.foundDateInclude(optHash['--foundDateInclude'].to_f)
-end
-
-if optHash['--foundDateExclude']
-    filtered.foundDateExclude(optHash['--foundDateExclude'].to_f)
-end
-
-if optHash['--placeDateInclude']
-    filtered.placeDateInclude(optHash['--placeDateInclude'].to_f)
-end
-
-if optHash['--placeDateExclude']
-    filtered.placeDateExclude(optHash['--placeDateExclude'].to_f)
-end
-
-if optHash['--notFound']
-    filtered.notFound
-end
-
-if optHash['--travelBug']
-    filtered.travelBug
-end
-
-
-beforeOwnersTotal = filtered.totalWaypoints
-if (optHash['--ownerExclude'])
-    optHash['--ownerExclude'].split(/[:\|]/).each { |owner|
-        filtered.ownerExclude(owner)
-    }
-end
-
-if (optHash['--ownerInclude'])
-    optHash['--ownerInclude'].split(/[:\|]/).each { |owner|
-        filtered.ownerInclude(owner)
-    }
-end
-
-excludedOwnersTotal = beforeOwnersTotal - filtered.totalWaypoints
-if (excludedOwnersTotal > 0)
-    DisplayMessage "Owner filtering removed #{excludedOwnersTotal} caches from your listing."
-end
-
-beforeUsersTotal = filtered.totalWaypoints
-if (optHash['--userExclude'])
-    optHash['--userExclude'].split(/[:\|]/).each { |user|
-        filtered.userExclude(user)
-    }
-end
-
-if (optHash['--userInclude'])
-    optHash['--userInclude'].split(/[:\|]/).each { |user|
-        filtered.userInclude(user)
-    }
-end
-
-excludedUsersTotal = beforeUsersTotal - filtered.totalWaypoints
-if (excludedUsersTotal > 0)
-    DisplayMessage "User filtering removed #{excludedUsersTotal} caches from your listing."
-end
-
-
-DisplayMessage "First stage filtering complete, #{filtered.totalWaypoints} caches left"
-
-# We should really check our local cache and shadowhosts first before
-# doing this. This is just to be nice.
-if (filtered.totalWaypoints > $SLOWMODE)
-    DisplayMessage "NOTE: Because you may be downloading more than #{$SLOWMODE} waypoints"
-    DisplayMessage "       We will sleep longer between remote downloads to lessen the load"
-    DisplayMessage "       load on the geocaching.com webservers. You may want to constrain"
-    DisplayMessage "       the number of waypoints to download by limiting by difficulty,"
-    DisplayMessage "       terrain, or placement date. Please see README.txt for help."
-    $SLEEP=15
-end
 
 
 #########################
 # Here is where we fetch each geocache page
 #
-#searchProgress = ProgressBar.new(0,
-
-DisplayMessage "Fetching geocache pages with #{$SLEEP} second rests between remote fetches"
-wpFiltered = filtered.waypoints
-
-detail = CacheDetails.new(wpFiltered)
-token = 0
-wpFiltered.each_key { |wid|
-    token = token + 1
-    detailURL = detail.fullURL(wpFiltered[wid]['sid'])
-    page = ShadowFetch.new(detailURL)
-    detail.fetchWid(wid)
-
-    # I wish I understood how this worked. I think this logic is garbage. To be revisited.
-    src = page.src
-    if (page.src)
-        DisplayMessage "Fetched \"#{wpFiltered[wid]['name']}\" [#{token}/#{filtered.totalWaypoints}] from #{src}"
-        if (wpFiltered[wid]['warning'])
-            DisplayMessage " *  Skipping: #{wpFiltered[wid]['warning']}"
-        end
-    elsif (src == "remote")
-        downloads = downloads + 1
-        common.debug "#{downloads} of #{quitAfterFetch} remote downloads so far"
-        DisplayMessage "  (sleeping for #{$SLEEP} seconds)"
-        sleep $SLEEP
-    else
-        DisplayMessage "Could not fetch \"#{wpFiltered[wid]['name']}\" [#{token}/#{filtered.totalWaypoints}] (private cache?)"
-        wpFiltered.delete(wid)
+def fetchGeocaches
+    # We should really check our local cache and shadowhosts first before
+    # doing this. This is just to be nice.
+    if (@filtered.totalWaypoints > $SLOWMODE)
+        displayMessage "NOTE: Because you may be downloading more than #{$SLOWMODE} waypoints"
+        displayMessage "       We will sleep longer between remote downloads to lessen the load"
+        displayMessage "       load on the geocaching.com webservers. You may want to constrain"
+        displayMessage "       the number of waypoints to download by limiting by difficulty,"
+        displayMessage "       terrain, or placement date. Please see README.txt for help."
+        $SLEEP=15
     end
-}
+
+
+    displayMessage "Fetching geocache pages with #{$SLEEP} second rests between remote fetches"
+    wpFiltered = @filtered.waypoints
+
+    @detail = CacheDetails.new(wpFiltered)
+    token = 0
+    wpFiltered.each_key { |wid|
+        token = token + 1
+        detailURL = @detail.fullURL(wpFiltered[wid]['sid'])
+        page = ShadowFetch.new(detailURL)
+        @detail.fetchWid(wid)
+
+        # I wish I understood how this worked. I think this logic is garbage. To be revisited.
+        src = page.src
+        if (page.src)
+            displayMessage "Fetched \"#{wpFiltered[wid]['name']}\" [#{token}/#{@filtered.totalWaypoints}] from #{src}"
+            if (wpFiltered[wid]['warning'])
+                displayMessage " *  Skipping: #{wpFiltered[wid]['warning']}"
+            end
+        elsif (src == "remote")
+            downloads = downloads + 1
+            debug "#{downloads} of #{quitAfterFetch} remote downloads so far"
+            displayMessage "  (sleeping for #{$SLEEP} seconds)"
+            sleep $SLEEP
+        else
+            displayMessage "Could not fetch \"#{wpFiltered[wid]['name']}\" [#{token}/#{@filtered.totalWaypoints}] (private cache?)"
+            wpFiltered.delete(wid)
+        end
+    }
+end
+
 
 ## step #2 in filtering! ############################
 # In this stage, we actually have to download all the information on the caches in order to decide
 # whether or not they are keepers.
+def postFetchFilter
+    @filtered= Filter.new(@detail.waypoints)
 
-filtered= Filter.new(detail.waypoints)
+    # caches with warnings we choose not to include.
+    @filtered.removeByElement('warning')
 
-# caches with warnings we choose not to include.
-filtered.removeByElement('warning')
-
-if optHash['--keyword']
-    filtered.keyword(optHash['--keyword'])
-end
-
-
-# We filter for users again. While this may be a bit obsessive, this is in case
-# our local cache is not valid.
-beforeUsersTotal = filtered.totalWaypoints
-if (optHash['--userExclude'])
-    optHash['--userExclude'].split(/[:\|]/).each { |user|
-        filtered.userExclude(user)
-    }
-end
-
-if (optHash['--userInclude'])
-    optHash['--userInclude'].split(/[:\|]/).each { |user|
-        filtered.userInclude(user)
-    }
-end
-
-excludedUsersTotal = beforeUsersTotal - filtered.totalWaypoints
-if (excludedUsersTotal > 0)
-    DisplayMessage "User filtering removed #{excludedUsersTotal} caches from your listing."
-end
-
-
-DisplayMessage "Filter complete, #{filtered.totalWaypoints} caches left"
-if (filtered.totalWaypoints < 1)
-    DisplayWarning "No caches to generate output for!"
-    exit
-end
-## generate the output ########################################
-puts ""
-DisplayMessage "Output format selected is #{output.formatDesc(formatType)} format"
-output.input(filtered.waypoints)
-output.formatType=formatType
-if (optHash['--waypointLength'])
-    output.waypointLength=optHash['--waypointLength'].to_i
-end
-outputData = output.prepare("details");
-
-## save the file #############################################
-if (optHash['--output'])
-    outputFile = optHash['--output']
-else
-    outputFile = "gtout-" + queryType + "-" + queryArgList.gsub(/[:\.]/, '_')
-    if queryType == "zip" || queryType == "coord"
-        outputFile = outputFile + "-y" + distanceMax.to_s
+    if @optHash['--keyword']
+        @filtered.keyword(@optHash['--keyword'])
     end
 
-    outputFile = outputFile + "." + output.formatExtension(formatType)
+
+    # We filter for users again. While this may be a bit obsessive, this is in case
+    # our local cache is not valid.
+    beforeUsersTotal = @filtered.totalWaypoints
+    if (@optHash['--userExclude'])
+        @optHash['--userExclude'].split(/[:\|]/).each { |user|
+            @filtered.userExclude(user)
+        }
+    end
+
+    if (@optHash['--userInclude'])
+        @optHash['--userInclude'].split(/[:\|]/).each { |user|
+            @filtered.userInclude(user)
+        }
+    end
+
+    excludedUsersTotal = beforeUsersTotal - @filtered.totalWaypoints
+    if (excludedUsersTotal > 0)
+        displayMessage "User filtering removed #{excludedUsersTotal} caches from your listing."
+    end
+
+
+    displayMessage "Filter complete, #{@filtered.totalWaypoints} caches left"
+    if (@filtered.totalWaypoints < 1)
+        displayWarning "No caches to generate output for!"
+        exit
+    end
 end
 
-output.commit(outputFile)
-DisplayMessage "Output saved to #{outputFile}"
 
+
+## save the file #############################################
+def saveFile
+    puts ""
+    output = Output.new
+    displayMessage "Output format selected is #{output.formatDesc(@formatType)} format"
+    output.input(@filtered.waypoints)
+    output.formatType=@formatType
+    if (@optHash['--waypointLength'])
+        output.waypointLength=@optHash['--waypointLength'].to_i
+    end
+    outputData = output.prepare("details");
+
+
+    if (@optHash['--output'])
+        outputFile = @optHash['--output38']
+    else
+        outputFile = "gtout-" + @queryType + "-" + @queryArgList.gsub(/[:\.]/, '_')
+        if @queryType == "zip" || @queryType == "coord"
+            outputFile = outputFile + "-y" + @distanceMax.to_s
+        end
+
+        outputFile = outputFile + "." + output.formatExtension(@formatType)
+    end
+
+    output.commit(outputFile)
+    displayMessage "Output saved to #{outputFile}"
+end
+
+
+
+end
+
+
+# Yes, it's pretty lame.
+cli = GeoToad.new
+cli.versionCheck
+cli.downloadGeocacheList
+cli.prepareFilter
+cli.preFetchFilter
+cli.fetchGeocaches
+cli.postFetchFilter
+cli.saveFile
