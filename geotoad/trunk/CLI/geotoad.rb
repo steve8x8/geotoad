@@ -106,7 +106,7 @@ def initialize
     end
 
     if (@optHash['--verbose'])
-        debugMode=1
+        enableDebug
         debug "verbose mode enabled"
     end
 

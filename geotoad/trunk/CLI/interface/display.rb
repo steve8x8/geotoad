@@ -4,8 +4,8 @@
 # $Id$
 
 module Display
-    def debugMode=(deb)
-        $debugMode = deb
+    def enableDebug
+        $debugMode = 1
     end
 
     def debug(text)

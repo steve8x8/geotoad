@@ -50,15 +50,18 @@ class CacheDetails
 
 	def parseCache(data)
 		# find the geocaching waypoint id.
-		wid = ''
+		wid = nil
 		data.each { |line|
             # this matches the <title> on the printable pages.
 			if line =~ /(GC[A-Z0-9]+)\)/
-				wid = $1
-                debug "wid is #{wid}"
+                # only do it if the wid hasn't been found yet, sometimes pages mention wid's of other caches.
+                if (! wid)
+                    wid = $1
+                    debug "wid is #{wid}"
 
-                # We give this a predefined value, because some caches have no details!
-                @waypointHash[wid]['details'] = ''
+                    # We give this a predefined value, because some caches have no details!
+                    @waypointHash[wid]['details'] = ''
+                end
             end
 
             # latitude in the post form. Used by GPX and other formats
