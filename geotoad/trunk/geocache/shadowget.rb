@@ -143,7 +143,12 @@ class ShadowFetch < Common
 
 		## this assumes there was no local cache that was useable ############
 		# check shadow
-		(size, mtime) = checkShadow
+        if (@shadowExpiry > 0)
+            (size, mtime) = checkShadow
+        else
+            size = 5
+            mtime = 3000
+        end
 
         # if we got back a valid result of some kind.
 		if (size)
@@ -159,7 +164,9 @@ class ShadowFetch < Common
 				@data = fetchRemote
                 if (@data)
                     @@src='remote'
-    				updateShadow
+                    if (@shadowExpiry > 0)
+                        updateShadow
+                    end
                 else
                     size=nil
                 end

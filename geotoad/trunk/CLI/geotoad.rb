@@ -15,6 +15,7 @@ end
 
 $SLEEP=3
 $SLOWMODE=350
+$VERSION_URL = "http://toadstool.se/hacks/geotoad/currentversion.php?type=CLI";
 
 require 'getoptlong'
 require 'geocache/common'
@@ -166,6 +167,19 @@ end
 ## Make the Initial Query ############################
 puts "[.] Your cache directory is " + $TEMP_DIR
 
+## Check the version
+version = ShadowFetch.new($VERSION_URL)
+version.shadowExpiry=0
+version.localExpiry=600
+version.fetch
+if (version.data =~ /([\d\.]+)/)
+    latestVersion = $1;
+    if (latestVersion != $VERSION)
+        puts ""
+        puts "[^] NOTE: Your version of GeoToad is old - #{latestVersion} is now available!";
+        puts "[^]       Please download it from http://toadstool.se/hacks/geotoad/"
+    end
+end
 
 # Mike Capito contributed a patch to allow for multiple
 # queries. He did it as a hash earlier, I'm just simplifying
