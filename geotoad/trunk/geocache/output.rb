@@ -317,11 +317,24 @@ class Output
                 end
 
                 if (@wpHash[wid]['difficulty'] > 3)
-                     symbols[wid] =  symbols[wid] + "<b><font color=\"#BB0000\">+</font></b>"
+                     symbols[wid] =  symbols[wid] + "<b><font color=\"#BB0000\">&gt;</font></b>"
                 end
 
                 if (@wpHash[wid]['mdays'] < 0)
                      symbols[wid] =  symbols[wid] + "<b><font color=\"#9900CC\">@</font></b>"
+                end
+
+                # not yet ready for consumption
+                #if (@wpHash[wid]['arating'] < 1)
+                #     symbols[wid] =  symbols[wid] + "<b><font color=\"#555555\">--</font></b>"
+                #end
+
+                #if (@wpHash[wid]['arating'] > 4)
+                #     symbols[wid] =  symbols[wid] + "<b><font color=\"#000000\">++</font></b>"
+                #end
+
+                if (symbols[wid].length < 1)
+                    symbols[wid] = "&nbsp;"
                 end
 
                 htmlIndex = htmlIndex + symbols[wid]

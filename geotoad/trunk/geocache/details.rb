@@ -267,9 +267,15 @@ class CacheDetails
 
 
 
-    # This function is pretty lousy right now, which is why it's undocumented. What it really
-    # needs is some real intelligence to it. This function returns a number between -1 and 1.
+
+    # PROOF OF CONCEPT CODE ONLY
+    # this will be completely redone with a scientific approach and
+    # moved into a ratings.rb file for GeoToad 3.7
+
     def determineRating(type, comment)
+
+        debug"COMMENT: #{type} - #{comment}"
+
         rating = 0
 
         if type =~ /Didn\'t/
@@ -277,18 +283,22 @@ class CacheDetails
         end
 
         case comment
-         when /best cache|adventure|come back|wow|awesome|breathtaking/i
+         when /best cache|awesome|breathtaking|coolest|neatest|great view|what a cool/i
             debug "extra: #{comment}"
-            rating = rating + 1
-         when /great|enjoyed|beautiful|excellent|be back|fun|nice drive|workout/i
-            debug "\npositive: #{comment}"
+            rating = rating + 0.95
+         when /great cache|great place|another great|great.*time|great \w+ cache|excellent cache|very clever|great find|was great|excellent|beautiful|adventure|wow|be back|come back|nice drive|natural wonder|do it again/i
+            debug "positive: #{comment}"
             rating = rating + 0.7
-         when /briar|thorn|wrong/
-             debug "\nsorta: #{comment}"
+         when /neat|workout|great|wonderful|wow|very cool|clever|fun|glad|enjoyed|one of a kind|good one|perfect|excellent/
+             rating = rating + 0.3
+             debug "sorta pos: #{comment}"
+         when /nightmare|try again|soggy|unfortunat|too easy|very easy|trash|broken|wasn\'t there|weren\'t allowed|trespassing|too much walking|ambiguous|gave up|give up/i
+             debug "negative: #{comment}"
+             rating = rating - 0.85
+
+         when /briar|thorn|wrong|easy find|confused|wet/
+             debug "sorta neg: #{comment}"
              rating = rating - 0.3
-         when /nightmare|try again|soggy|unfortunat|too easy|very easy|trash|broken|wet|wasn\'t there|weren\'t allowed|trespassing|too much walking|ambiguous|gave up/i
-            debug "\nnegative: #{comment}"
-            rating = rating - 1
         end
 
         return rating

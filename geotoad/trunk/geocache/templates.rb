@@ -81,9 +81,13 @@ $Format = {
                 "<body link=\"#000099\" vlink=\"#000044\" alink=\"#000099\">\n" +
                 "<h3><%out.title%></h3>" +
                 "<b><font color=\"#11CC11\">$</font></b> have travelbugs&nbsp;&nbsp;&nbsp;" +
-                "<b><font color=\"#9900CC\">@</font></b> have never been found&nbsp;&nbsp;&nbsp;" +
-                "<b><font color=\"#229999\">%</font></b> have a terrain rating of 3.5+&nbsp;&nbsp;&nbsp;" +
-                "<b><font color=\"#BB0000\">+</font></b> have a difficulty rating of 3.5+<br>" +
+                "<b><font color=\"#9900CC\">@</font></b> never been found&nbsp;&nbsp;&nbsp;" +
+                "<b><font color=\"#229999\">%</font></b> terrain rating of 3.5+&nbsp;&nbsp;&nbsp;" +
+                "<b><font color=\"#BB0000\">&gt;</font></b> difficulty rating of 3.5+<br>" +
+                # Not yet ready for consumption
+                #"<b><font color=\"#333333\">--</font></b> comments seem negative&nbsp;&nbsp;&nbsp;" +
+                #"<b><font color=\"#000000\">++</font></b> comments seem very positive" +
+
                 "<font color=\"#555555\" size=\"1\"><pre>Decryption Key (letter above equals below, and vice versa)
 
 A|B|C|D|E|F|G|H|I|J|K|L|M
@@ -91,7 +95,7 @@ A|B|C|D|E|F|G|H|I|J|K|L|M
 N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
             'templateIndex' => "* <a href=\"#<%out.wid%>\"><%wpEntity.name%></a><br>",
             'templateWP'    =>
-                "\n\n<hr noshade size=\"1\">\n<a name=\"<%out.wid%>\"></a><font color=\"#000099\"><a href=\"<%out.url%>\"><big><b><%wpEntity.name%><%out.symbols%></b></big></a></font><br>\n" +
+                "\n\n<hr noshade size=\"1\">\n<a name=\"<%out.wid%>\"></a><font color=\"#000099\"><a href=\"<%out.url%>\"><big><b><%wpEntity.name%>&nbsp;<%out.symbols%></b></big></a></font><br>\n" +
                 "<font color=\"#555555\"><b><%wpEntity.creator%></b></font>, <%wp.latwritten%> <%wp.lonwritten%><br>" +
                 "<font color=\"#339933\"><%wp.type%> D<%wp.difficulty%>/T<%wp.terrain%> <%out.relativedistance%><br>" +
                 "placed: <%wp.cdate%> last comment: <%wp.mdays%> days ago (<%wp.comment0Type%>)</font><br>" +
