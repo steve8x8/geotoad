@@ -32,6 +32,41 @@ geotoad can output to over a dozen additional GPS formats.
 ------
 Syntax
 ------
+syntax: geotoad.rb [options] <search>
+    -f format for output. Valid options are:
+          html - Simple HTML table format
+          mapsource - Garmin Mapsource (requires gpsbabel in PATH)
+          easygps - Geocaching.com .loc XML file
+          text - Plain ASCII
+          vcf - VCF for iPod Contacts export
+          mapsend - Magellan MapSend software(requires gpsbabel in PATH)
+          gpx - GPX XML format (requires gpsbabel in PATH)
+          gpsutil - gpsutil datafile (requires gpsbabel in PATH)
+          pcx - Garmin PCX5 (requires gpsbabel in PATH)
+          csv - CSV for spreadsheet imports
+          gpspoint - gpspoint datafile
+          tiger - U.S. Census Bureau Tiger Mapping Service Data (requires
+                  gpsbabel in PATH)
+          magellan - Magellan GPS Serial Link (requires gpsbabel in PATH)
+          gpsman - GPSman datafile (requires gpsbabel in PATH)
+ -q [zip|state|country]  query type (zip by default)
+ -o [filename]           output file
+ -d [0.0-5.0]            difficulty minimum (0)
+ -D [0.0-5.0]            difficulty maximum (5)
+ -t [0.0-5.0]            terrain minimum (0)
+ -T [0.0-5.0]            terrain maximum (5)
+ -y [1-500]              distance maximum (zipcode only, 25 default)
+ -k [keyword]            keyword (regexp) search. Use | to delimit multiple
+ -u [username]           filter out caches found by username. 
+                         Use : to delimit multiple users
+ -n                      only include not found caches (virgins)
+ -b                      only include caches with travelbugs
+
+
+-----
+Usage
+-----
+
 You need to get to a command-line (DOS, cmd.exe, UNIX shell), and go into
 the directory you extracted geotoad into. Then you should be able to type
 something simple like:
