@@ -18,11 +18,11 @@ class SearchCache < Common
 	end
 
 	# set the search mode. valid modes are 'zip', 'state_id', 'country_id', 'keyword',
-	# coord
+	# coord, user
 	def mode(mode, key)
-        # resolve North Carolina to 34.
-        if (mode != "coord")
-            keylookup=SearchCode.new(mode)
+		
+		if (mode != "coord") && (mode != "user")	#for most modes look up the key
+		    keylookup=SearchCode.new(mode)		# i.e. resolve North Carolina to 34.
             @mode=keylookup.type
             @key=keylookup.lookup(key)
             if (! @key)
@@ -32,22 +32,20 @@ class SearchCache < Common
 
             # nearly everything is in this form
             @url=@@baseURL + '?' + @mode + '=' + @key.to_s
-        else
-            # we should check for well-formed coordinates here
-            if (key !~ /-*\d+\.\d+[, ]-*\d+\.\d+/)
-                puts "Bad coordinates format in #{key}!"
-                return nil
-            end
-            @mode = "coord"
+		else 	# for modes where we didn't look up the key, just save the mode and key locally
+			@mode = mode
             @key = key
         end
 
         # special URL preperation's for some modes
 		case @mode
 			when 'coord'
-                # we used to have a coordinates function, but it made no sense to
-                # me why we had a coordinates function but no function for other types?
-                # wrap it into the mode()!
+				# we should check for well-formed coordinates here
+				if (key !~ /-*\d+\.\d+[, ]-*\d+\.\d+/)
+					puts "Bad coordinates format in #{key}!"
+					return nil
+				end
+
                 (@lat, @long) = key.split(/[, ]/)
 
 				@url=@@baseURL + '?' + 'origin_lat=' + @lat + '&origin_long=' + @long
@@ -55,6 +53,9 @@ class SearchCache < Common
                             @url = @url + '&dist=' + @distance.to_s
                 end
 
+			when 'user'
+				@url=@@baseURL + '?ul=' + @key  # I didn't see the point of adding a dummy lookup
+  			
             when 'country_id'
                 # as of aug2003, geocaching.com has an in-between page for country
                 # lookups to parse. Pretty silly and worthless, imho.
@@ -175,6 +176,56 @@ class SearchCache < Common
 		fetch(@url)
 	end
 
+	def fetchCacheList(quitAfterFetch)
+	    fetchFirst
+	    if (totalWaypoints)
+	    puts "[.] #{totalWaypoints} waypoints matched #{@mode} query, recieved results for 1-#{lastWaypoint}."
+	
+		# the loop that gets all of them.
+		running = 1
+		downloads = 0
+		resultsPager = 5
+		while(running)
+		    # short-circuit for lack of understanding.
+		    debug "(download while loop - #{currentPage} of #{totalPages})"
+	
+		    if (totalPages > currentPage)
+			lastPage = currentPage
+			# I don't think this does anything.
+			page = ShadowFetch.new(@url)
+			running = fetchNext
+			src = page.src
+			# update it.
+			puts "[o] Recieved search page #{currentPage} of #{totalPages} (#{src})"
+	
+			if (currentPage <= lastPage)
+			    puts "[*] Logic error. I was at page #{lastPage} before, why am I at #{currentPage} now?"
+			    exit
+			end
+	
+			if (src == "remote")
+			    # give the server a wee bit o' rest.
+			    downloads = downloads + 1
+			    debug "#{downloads} of #{quitAfterFetch} remote downloads so far"
+			    if downloads >= quitAfterFetch
+				debug "quitting after #{downloads} downloads"
+				#exit 4
+			    end
+			   # half the rest for this.
+			    debug "sleeping"
+			    sleep ($SLEEP / 2).to_i
+			end
+		    else
+			debug "We have already downloaded the waypoints needed, lets get out of here"
+			running = nil
+		    end # end totalPages if
+		end # end while(running)
+	    else
+		puts "(*) No waypoints found. Possible error fetching?"
+		exit
+	    end
+	end
+	
 	def fetch(url)
 		page = ShadowFetch.new(url)
         page.shadowExpiry=60000

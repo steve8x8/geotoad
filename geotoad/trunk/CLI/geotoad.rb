@@ -205,62 +205,14 @@ queryArgList.split(/[:\|]/).each { |queryArg|
         exit
     end
 
-    search.fetchFirst
-    if (search.totalWaypoints)
-        puts "[.] #{search.totalWaypoints} waypoints matched #{queryArg} query, recieved results for 1-#{search.lastWaypoint}."
-
-        # the loop that gets all of them.
-        running = 1
-        downloads = 0
-        resultsPager = 5
-        while(running)
-            # short-circuit for lack of understanding.
-            totalPages = search.totalPages
-            currentPage = search.currentPage
-            common.debug "(download while loop - #{currentPage} of #{totalPages})"
-
-            if (totalPages > currentPage)
-                lastPage = currentPage
-                # I don't think this does anything.
-                page = ShadowFetch.new(search.URL)
-                running = search.fetchNext
-                src = page.src
-                # update it.
-                currentPage = search.currentPage
-                puts "[o] Recieved search page #{currentPage} of #{totalPages} (#{src})"
-
-                if (currentPage <= lastPage)
-                    puts "[*] Logic error. I was at page #{lastPage} before, why am I at #{currentPage} now?"
-                    exit
-                end
-
-                if (src == "remote")
-                    # give the server a wee bit o' rest.
-                    downloads = downloads + 1
-                    common.debug "#{downloads} of #{quitAfterFetch} remote downloads so far"
-                    if downloads >= quitAfterFetch
-                        common.debug "quitting after #{downloads} downloads"
-                        #exit 4
-                    end
-                   # half the rest for this.
-                     common.debug "sleeping"
-                    sleep ($SLEEP / 2).to_i
-                end
-            else
-                common.debug "We have already downloaded the waypoints needed, lets get out of here"
-                running = nil
-            end # end totalPages if
-        end # end while(running)
-    else
-        puts "(*) No waypoints found. Possible error fetching?"
-        exit
-    end
-
+    search.fetchCacheList(quitAfterFetch)
     # this gives us support for multiple searches.
     combinedWaypoints.update(search.waypoints)
     combinedWaypoints.rehash
 }
 
+
+# What does this block do?
 common.debug "pre-filter inspection of waypoints:"
 waypointsExtracted = 0
 combinedWaypoints.each_key { |wp|
@@ -348,6 +300,34 @@ if (optHash['--ownerInclude'])
 end
 
 
+if (optHash['--userExclude'])
+    excludeList = Hash.new
+    optHash['--userExclude'].split(':').each { |user|
+	search = SearchCache.new
+	search.mode('user', user)
+	search.fetchCacheList(quitAfterFetch)
+	excludeList.update(search.waypoints)
+	excludeList.rehash
+    }
+    common.debug "Exclude list has #{excludeList.length} caches"
+    filtered.userExclude(excludeList)
+end
+
+if (optHash['--userInclude'])
+    includeList = Hash.new
+    optHash['--userInclude'].split(':').each { |user|
+	search = SearchCache.new
+	search.mode('user', user)
+	search.fetchCacheList(quitAfterFetch)
+	includeList.update(search.waypoints)
+	includeList.rehash
+    }
+    common.debug "Include list has #{includeList.length} caches"
+    filtered.userInclude(includeList)
+end
+
+
+
 puts "[=] First stage filtering complete, #{filtered.totalWaypoints} caches left"
 
 # We should really check our local cache and shadowhosts first before
@@ -399,24 +379,6 @@ end
 
     #puts "[=] Second filtering stage is being executed"
     filtered= Filter.new(detail.waypoints)
-    beforeUsersTotal = filtered.totalWaypoints
-
-    if (optHash['--userExclude'])
-         optHash['--userExclude'].split(/[:\|]/).each { |user|
-             filtered.userExclude(user)
-         }
-    end
-
-    if (optHash['--userInclude'])
-         optHash['--userInclude'].split(/[:\|]/).each { |user|
-             filtered.userInclude(user)
-         }
-    end
-
-    excludedUsersTotal = beforeUsersTotal - filtered.totalWaypoints
-    if (excludedUsersTotal > 0)
-        puts "[=] User filtering removed #{excludedUsersTotal} caches from your listing."
-    end
 
     #puts "[=] Removing caches with warnings"
     # caches with warnings we choose not to include.
