@@ -298,12 +298,13 @@ class SearchCache < Common
                     myear = $3
 
                     myearProper = "20" + myear
+                    debug "mod time is #{mday}  #{mmonth} #{myearProper}"
                     t = Time.new
-                    mtimestamp = Time.local(myearProper.to_i,cmonth,mday.to_i,00,00,0)
+                    mtimestamp = Time.local(myearProper.to_i,mmonth,mday.to_i,00,00,0)
                     mage = t - mtimestamp
                     @cache['mdays'] = (mage / 3600 / 24).to_i
 
-                    debug "mdays=#{@cache['cdays']}"
+                    debug "mdays=#{@cache['mdays']}"
 
                  when / ago/
                      debug "missing ago line: #{line}"
