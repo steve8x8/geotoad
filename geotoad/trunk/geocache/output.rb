@@ -420,16 +420,17 @@ class Output < Common
                 wid = wpArray[0]
                 @wpHash[wid]['details'].gsub!("\&([A-Z])", "&amp;(#{$1})");
                 @wpHash[wid]['creator'].gsub!("\&", "&amp;");
-		htmlIndex = htmlIndex + "<li><a href=\"\##{wid}\">#{@wpHash[wid]['name']}</a>"
+                htmlIndex = htmlIndex + "<li><a href=\"\##{wid}\">#{@wpHash[wid]['name']}</a>"
 
                 if (@wpHash[wid]['travelbug'])
-                     htmlIndex = htmlIndex + " [TB]"
+                    htmlIndex = htmlIndex + " [TB]"
                 end
 
-		if (@wpHash[wid]['mdate'].to_s.length < 7)
-			htmlIndex = htmlIndex + " (v)"
-		end
-		htmlIndex = htmlIndex + "</li>\n"
+                if (! @wpHash[wid]['mdate'])
+                    htmlIndex = htmlIndex + " (v)"
+                    debug "Marking #{@wpHash[wid]['name']} a virgin"
+                end
+                htmlIndex = htmlIndex + "</li>\n"
             }
 
             output = output + "<ul>\n" + htmlIndex + "</ul>\n"
