@@ -105,8 +105,8 @@ $Format = {
             'mime'    => 'text/plain',
             'desc'    =>     'Plain ASCII',
             'spacer'    => "\r\n",
-            'templatePre' => "",
-            'templateWP'    => "----------------------------------------------------------------\n" +
+            'templatePre' =>  "== <%out.title%>\r\nHint Decryption (ROT13): Add 13 to each letter, so that A=N, M=Z, N=A, and Z=M.\r\n",
+            'templateWP'    => "----------------------------------------------------------------\r\n" +
 		"* <%wp.name%>\" (<%out.wid%>) by <%wp.creator%>\r\n" +
                 "Difficulty: <%wp.difficulty%>, Terrain: <%wp.terrain%>\r\n" +
                 "Lat: <%wp.latwritten%> Lon: <%wp.lonwritten%>\r\n" +
