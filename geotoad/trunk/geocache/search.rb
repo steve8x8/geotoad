@@ -282,7 +282,7 @@ class SearchCache
                     downloads = downloads + 1
                     # half the rest for this.
                     debug "sleeping"
-                    sleep ($SLEEP / 2).to_i
+                    sleep ($SLEEP * 1.5).to_i
                 end
 		    else
                 debug "We have already downloaded the waypoints needed, lets get out of here"
@@ -348,14 +348,14 @@ class SearchCache
                         @lastWaypoint = @totalWaypoints
                     end
 
-                when /WptTypes.*alt=\"(.*?)\" border=0/
+                when /WptTypes.*alt=\"(.*?)\" title/
                     @cache['type']=$1
                     @cache['mdays']=-1
                     @cache['type'].gsub!(/\s*cache.*/, '')
                     @cache['type'].gsub!(/\-/, '')
                     debug "type=#{@cache['type']}"
 
-                when /nowrap\>\(([-\d\.]+)\/([-\d\.]+)\)\<\/td\>/
+                when /nowrap\>\(([-\d\.]+)\/([-\d\.]+)\)\<br\>/
                     @cache['difficulty']=$1.to_f
                     @cache['terrain']=$2.to_f
                     debug "cacheDiff=#{@cache['difficulty']} terr=#{@cache['terrain']}"
@@ -385,13 +385,14 @@ class SearchCache
                 when /cache_details.aspx\?guid=(.*?)\">(.*?)\<\/a\>/
                     @cache['sid']=$1
                     name=$2.dup
-                    name.gsub!(/ +$/, ' ')
+                    name.gsub!(/ +$/, '')
                     if name =~ /\<strike\>(.*?)\<\/strike\>/
                         @cache['disabled']=1
                         name=$1.dup
                     end
 
-#                    name = name  CGI.unescapeHTML(name);
+                    # re-enabled to fix &quot; -- what else will we be messing up?
+                    name = CGI.unescapeHTML(name);
                     @cache['name']=name
                     debug "sid=#{@cache['sid']} name=#{@cache['name']} (disabled=#{@cache['disabled']})"
 
@@ -446,7 +447,7 @@ class SearchCache
                      debug "missing ago line: #{line}"
 
                 # There is no good end of record marker, sadly.
-                when /\<hr noshade width=\"100%\" size=\"1\">/
+                when /^\t\t\<\/tr\>\<tr\>/
                     if (wid)
                         @waypointHash[wid] = @cache.dup
                         @waypointHash[wid]['visitors'] = []

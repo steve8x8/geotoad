@@ -28,13 +28,13 @@ include Display
 # The version gets inserted by makedist.sh
 versionID='%VERSION%'
 if versionID !~ /^\d/
-    $VERSION = '3.6-CURRENT'
+    $VERSION = '3.7-CURRENT'
 else
     $VERSION = versionID.dup
 end
 
 $SLEEP=2
-$SLOWMODE=350
+$SLOWMODE=300
 
 def initialize
     $TEMP_DIR     = findTempDir
@@ -143,7 +143,7 @@ end
 
 ## Check the version #######################
 def versionCheck
-    url = "http://toadstool.se/hacks/geotoad/currentversion.php?type=#{$mode}&version=#{$VERSION}&platform=#{RUBY_PLATFORM}&rubyver=#{RUBY_VERSION}";
+    url = "http://geotoad.sourceforge.net/currentversion.php?type=#{$mode}&version=#{$VERSION}&platform=#{RUBY_PLATFORM}&rubyver=#{RUBY_VERSION}&vc=2";
 
     #puts "[^] Checking for latest version of GeoToad..."
     version = ShadowFetch.new(url)
@@ -152,12 +152,21 @@ def versionCheck
     version.maxFailures = 0
     version.fetch
 
-    if (($VERSION =~ /^(\d\.\d+\.\d+)$/) && (version.data =~ /^(\d\.\d+\.\d+)/))
+    if (($VERSION =~ /^(\d\.\d+\.\d+)$/) && (version.data =~ /^(\d\.\d+\.\d+): (.*)/))
         latestVersion = $1;
+        releaseNotes = $2;
+
         if (latestVersion != $VERSION)
+            puts " .------------------------------------------------------------------."
+            printf("| %-66.66s |\n", "GeoToad #{latestVersion} is now available. Here are the release notes:");
+            printf("| %-66.66s |\n", "");
+
+            releaseNotes.split('|').each { |text|
+               printf("|  * %-63.63s |\n", text);
+            }
+            puts " '------------------------------------------------------------------'"
             puts ""
-            puts "[^] NOTE: Your version of GeoToad is obsolete - #{latestVersion} is now available!";
-            puts "[^]       Please download it from http://toadstool.se/hacks/geotoad/"
+            sleep(2)
         end
     end
 end
@@ -436,22 +445,25 @@ def fetchGeocaches
         end
 
 
+        message = nil
         if (page.src)
             src = page.src
             if (wpFiltered[wid]['warning'])
-                progress.updateText(token, "\"#{wpFiltered[wid]['name']}\" from #{src} (cache is temp. unavailable)")
-            else
-                progress.updateText(token, "\"#{wpFiltered[wid]['name']}\" from #{src}")
+                message = "(cache is temp. unavailable)"
             end
-        elsif (src == "remote")
+            if (src == "remote")
             downloads = downloads + 1
-            debug "#{downloads} of #{quitAfterFetch} remote downloads so far"
-            displayMessage "  (sleeping for #{$SLEEP} seconds)"
+                # somewhat obnoxious.
+                #message = "(sleeping for #{$SLEEP} seconds)"
             sleep $SLEEP
+            end
         else
-            progress.updateText(token, "\"#{wpFiltered[wid]['name']}\" (could not fetch, private cache?)")
+            message = "could not fetch, private cache?)"
             wpFiltered.delete(wid)
         end
+
+        progress.updateText(token, "\"#{wpFiltered[wid]['name']}\" from #{src} #{message}")
+
     }
 end
 

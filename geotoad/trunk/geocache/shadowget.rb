@@ -9,10 +9,8 @@ require 'uri'
 cacheDir = nil
 # we'll make this more dynamic in the future. Lets start out badly though.
 $shadowHosts = [
-	'http://toadstool.se/hacks/shadowfetch/get.php'
-    #,
-	#'http://home.toadstool.se/hacks/shadowfetch/get.php',
-	#'http://smtp.stromberg.org/hacks/shadowfetch/get.php'
+	# This functionality disabled by request of Geocaching.com. 
+	#'http://toadstool.se/hacks/shadowfetch/get.php'
 ]
 
 
@@ -34,7 +32,7 @@ class ShadowFetch
         @maxFailures = 4
         debug "new fetch: #{url}"
         $Header = {
-          'User-Agent'      => "Mozilla/5.0 (Macintosh; U; PPC Mac OS X Mach-O; en-US; rv:1.5a) Gecko/20030706 Mozilla Firebird/0.6 GeoToad/#{$VERSION}-#{RUBY_PLATFORM})",
+          'User-Agent'      => "Mozilla/5.0 (Windows; U; Windows NT 5.0; rv:1.7.3) Gecko/20040913 Firefox/0.10",
           'Accept'          => 'image/gif, image/jpeg, image/png, multipart/x-mixed-replace, */*',
           'Accept-Language' => 'en',
           'Accept-Charset'  => 'iso-8859-1, utf-8, iso-10646-ucs-2, macintosh, windows-1252, *'

@@ -34,8 +34,8 @@ $Format = {
             'spacer'    => "\r\n",
             'templatePre' => "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n" +
             "<gpx xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" version=\"1.0\" creator=\"GeoToad\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd http://www.groundspeak.com/cache/1/0 http://www.groundspeak.com/cache/1/0/cache.xsd\" xmlns=\"http://www.topografix.com/GPX/1/0\">\r\n" +
-            "<desc><%outEntity.title%></desc>\r\n" +
-            "<author>GeoToad #{$VERSION}</author>\r\n" +
+            "<desc><%outXML.title%></desc>\r\n" +
+            "<author>GeoToad <%out.version%></author>\r\n" +
             "<email>geotoad@toadstool.se</email>\r\n" +
             "<time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S")  + ".0000000-00:00</time>\r\n" +
             "<keywords>cache, geocache, groundspeak, geotoad</keywords>\r\n",
@@ -43,24 +43,24 @@ $Format = {
             'templateWP'    => "<wpt lat=\"<%wp.latdata%>\" lon=\"<%wp.londata%>\">\r\n" +
             "  <time>2003-05-20T00:00:00.0000000-07:00</time>\r\n" +
             "  <name><%out.id%></name>\r\n" +
-            "  <desc><%wpEntity.name%> by <%wpEntity.creator%>, <%wp.type%> (<%wp.difficulty%>/<%wp.terrain%>)</desc>\r\n" +
+            "  <desc><%wpXML.name%> by <%wpXML.creator%>, <%wp.type%> (<%wp.difficulty%>/<%wp.terrain%>)</desc>\r\n" +
             "  <url><%out.url%></url>\r\n" +
-            "  <urlname><%wpEntity.name%> by <%wpEntity.creator%></urlname>\r\n" +
+            "  <urlname><%wpXML.name%> by <%wpXML.creator%></urlname>\r\n" +
             "  <sym>Geocache</sym><type>Geocache</type>\r\n" +
             "  <groundspeak:cache id=\"<%wp.sid%>\" available=\"True\" archived=\"False\" xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0\">\r\n" +
-            "  <groundspeak:name><%wpEntity.name%></groundspeak:name>\r\n" +
-			"  <groundspeak:full_name><%wpEntity.name%></groundspeak:full_name>\r\n"+
-            "  <groundspeak:placed_by><%wpEntity.creator%></groundspeak:placed_by>\r\n" +
-            "  <groundspeak:owner id=\"89944\"><%wpEntity.creator%></groundspeak:owner>\r\n" +
+            "  <groundspeak:name><%wpXML.name%></groundspeak:name>\r\n" +
+			"  <groundspeak:full_name><%wpXML.name%></groundspeak:full_name>\r\n"+
+            "  <groundspeak:placed_by><%wpXML.creator%></groundspeak:placed_by>\r\n" +
+            "  <groundspeak:owner id=\"89944\"><%wpXML.creator%></groundspeak:owner>\r\n" +
             "  <groundspeak:type><%wp.type%></groundspeak:type>\r\n" +
             "  <groundspeak:container><%wp.container%></groundspeak:container>\r\n" +
             "  <groundspeak:difficulty><%wp.difficulty%></groundspeak:difficulty>\r\n" +
             "  <groundspeak:terrain><%wp.terrain%></groundspeak:terrain>\r\n" +
             "  <groundspeak:country><%wp.country%></groundspeak:country>\r\n" +
             "  <groundspeak:state><%wp.state%></groundspeak:state>\r\n" +
-            "  <groundspeak:short_description html=\"False\">-</groundspeak:short_description>\r\n" +
-            "  <groundspeak:long_description html=\"False\"><%outEntity.details%></groundspeak:long_description>\r\n" +
-            "  <groundspeak:encoded_hints><%wpEntity.hint%></groundspeak:encoded_hints>\r\n" +
+            "  <groundspeak:short_description html=\"False\"><%outXML.shortdesc%></groundspeak:short_description>\r\n" +
+            "  <groundspeak:long_description html=\"False\"><%outXML.longdesc%></groundspeak:long_description>\r\n" +
+            "  <groundspeak:encoded_hints><%wpXML.hint%></groundspeak:encoded_hints>\r\n" +
             "  <groundspeak:logs>\r\n" +
             "  <%out.gpxlogs%>\r\n" +
             "  </groundspeak:logs>\r\n" +
@@ -390,6 +390,17 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
             'templatePre'  => "BEGIN SYMBOL\n",
             'templateWP'   => "<%wp.latdata%>,<%wp.londata%>," +
 		"<%out.id%>\{URL=<%out.url%>\},<%wp.type%>\n",
+            'templatePost' => "END",
+        },
+
+         'delorme-nourl' => {
+            'ext'          => 'txt',
+            'mime'         => 'application/delorme',
+            'desc'         => 'DeLorme TXT import datafile without URL',
+            'spacer'       => ' ',
+            'templatePre'  => "BEGIN SYMBOL\n",
+            'templateWP'   => "<%wp.latdata%>,<%wp.londata%>," +
+                              "<%out.id%>,<%wp.type%>\n",
             'templatePost' => "END",
         }
 }
