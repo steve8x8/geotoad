@@ -14,6 +14,7 @@ else
 end
 
 $SLEEP=3
+$SLOWMODE=350
 
 require 'getoptlong'
 require 'geocache/common'
@@ -304,9 +305,20 @@ end
 
 puts "[=] Filter complete, #{filtered.totalWaypoints} caches left"
 
+# We should really check our local cache and shadowhosts first before
+# doing this. This is just to be nice.
+if (filtered.totalWaypoints > $SLOWMODE)
+    puts "[!] NOTE: Because you may be downloading more than #{$SLOWMODE} waypoints"
+    puts "[!]       We will sleep longer between remote downloads to lessen the load"
+    puts "[!]       load on the geocaching.com webservers. You may want to constrain"
+    puts "[!]       the number of waypoints to download by limiting by difficulty,"
+    puts "[!]       terrain, or placement date. Please see README.txt for help."
+    $SLEEP=15
+end
+
 ## step #2 in filtering! ############################
 #if ((optHash['--user']) || (optHash['--format'] == 'vcard'))
-	puts "[=] fetching cache details with #{$SLEEP} second rests in between gets."
+	puts "[=] fetching cache details with #{$SLEEP} second rests in between remote fetches"
 	wpFiltered = filtered.waypoints
 
 	# all of this junk is so we can give real status updates for non-CLI frontends
