@@ -306,18 +306,26 @@ def preFetchFilter
     end
 
     if @option['foundDateInclude']
+        @queryTitle = @queryTitle + ", found in the last  #{@option['foundDateInclude']} days"
+        @defaultOutputFile = @defaultOutputFile + "-r=" + @option['foundDateInclude']
         @filtered.foundDateInclude(@option['foundDateInclude'].to_f)
     end
 
     if @option['foundDateExclude']
+        @queryTitle = @queryTitle + ", not found in the last #{@option['foundDateExclude']} days"
+        @defaultOutputFile = @defaultOutputFile + "-R=" + @option['foundDateExclude']
         @filtered.foundDateExclude(@option['foundDateExclude'].to_f)
     end
 
     if @option['placeDateInclude']
+        @queryTitle = @queryTitle + ", newer than #{@option['placeDateInclude']} days"
+        @defaultOutputFile = @defaultOutputFile + "-p=" + @option['placeDateInclude']
         @filtered.placeDateInclude(@option['placeDateInclude'].to_f)
     end
 
     if @option['placeDateExclude']
+        @queryTitle = @queryTitle + ", over #{@option['placeDateExclude']} days old"
+        @defaultOutputFile = @defaultOutputFile + "-P=" + @option['placeDateExclude']
         @filtered.placeDateExclude(@option['placeDateExclude'].to_f)
     end
 
