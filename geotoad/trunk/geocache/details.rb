@@ -75,15 +75,13 @@ class CacheDetails < Common
                 debug "got a warning: #{$1}"
             end
 
-			if line =~ /\<span id=\"Hints\"\>(.*?)\</
-					@waypointHash[wid]['hint'] = $1.dup
-                    debug "got hint"
+			if line =~ /\<span id=\"Hints\"\>(.*?)\<\/span\>/m
+                hint = $1.dup
+                hint.gsub!(/\<.*?\>/, '')
+				@waypointHash[wid]['hint'] = hint
+                debug "got hint: #{hint}"
             end
 
-            #if line =~ /lnkTravelBugs/
-            #        @waypointHash[wid]['travelbug'] = 'Travel Bug!'
-            #        debug "#{wid} has travelbug"
-            #end
 		}
 
 
@@ -106,27 +104,48 @@ class CacheDetails < Common
             if data =~ /id=\"LongDescription\"\>(.*?)\<\/span\><\/BLOCKQUOTE\>/m
                 debug "found long desc"
 				details =  @waypointHash[wid]['details'] << "  " << $1
+
+                debug "pre-html-process: #{details}"
+                # normalize.
+				details.gsub!('\r\n', ' ')
+				details.gsub!('\r', '')
+				details.gsub!('\n', '')
+
+                debug "normalized: #{details}"
+                # kill
+                details.gsub!(/\<\/li\>/i, '')
+                details.gsub!(/\<\/p\>/i, '')
+                details.gsub!(/<\/*i\>/i, '')
+                details.gsub!(/<\/*body\>/i, '')
+                details.gsub!(/<\/*option.*?\>/i, '')
+                details.gsub!(/<\/*select.*?\>/i, '')
+                details.gsub!(/<\/*span.*?\>/i, '')
+                details.gsub!(/<\/*font.*?\>/i, '')
+                details.gsub!(/<\/*ul\>/i, '')
+
+                debug "post-html-tags-removed: #{details}"
+
+                # substitute
                 details.gsub!(/\<p\>/i, "**")
                 details.gsub!(/\<li\>/i, "\n * (o) ")
-                details.gsub!(/<\li>/i, '')
-                details.gsub!(/<\p>/i, '')
-                details.gsub!(/<\/*i>/i, '')
-                details.gsub!(/<\/*font.*>/i, '')
-                details.gsub!(/<\/*ul>/i, '')
-                details.gsub!(/<\/*b>/i, '__')
+                details.gsub!(/<\/*b>/i, '')
                 details.gsub!(/\<img.*?\>/i, '[img]')
 				details.gsub!(/\<.*?\>/, ' *')
-				details.gsub!('\r\n', ' ')
                 # MS HTML crap
                 details.gsub!(/style=\".*?\"/i, '')
                 details.gsub!("<", '&lt;')
                 details.gsub!(">", "&gt;")
 
-                # combine all the tags we nuked.
-                details.gsub!(/\* *\* *\*/, '**')
-                details.gsub!(/^\*/, '')
+                debug "pre-combine-process: #{details}"
 
-                details.gsub!(/ +/, " ")
+                # combine all the tags we nuked.
+                details.gsub!(/ +/, ' ')
+                details.gsub!(/\* *\* *\*/, '**')
+                details.gsub!(/\* *\* *\*/, '**')
+                details.gsub!(/\*\*\*/, '**')
+
+                debug "post-combine-process: #{details}"
+                details.gsub!(/^\*/, '')
                 details.gsub!(/[\x80-\xFF]/, "\'")
                 details.gsub!(/\'+/, "\'")
                 # some misc. random crap.
