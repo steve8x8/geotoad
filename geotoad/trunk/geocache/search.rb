@@ -67,9 +67,16 @@ class SearchCache
                 # up input the user could conjure. Thanks to Scott Brynen for help.
 
                 #       N             48    °   08.152          E         011    ° 39.308 '
-                re = /^([ns-]?)\s*([\d\.]+)\W*([\d\.]*)[\s,]+([ew-]?)\s*([\d\.]+)\W*([\d\.]*)$/i
+                re = /^([ns-]?)\s*([\d\.]+)\W*([\d\.]*)[\s,]+([ew-]?)\s*([\d\.]+)\W*([\d\.]+)/i
                 #*(\d+)\W(\d+)\W*(\d+)$/i
                 md = re.match(key)
+
+                if ! md
+                    displayError "Bad format in #{key}! Try something like \"N56 44.392 E015 52.780\" instead"
+                    return nil
+                end
+
+
 
                 lat_dir = md[1]
                 lat_h = md[2]
@@ -78,11 +85,6 @@ class SearchCache
                 long_dir = md[4]
                 long_h = md[5]
                 long_ms = md[6]
-
-                if ! md
-                    displayError "Bad format in #{key}! Try something like \"N56 44.392 E015 52.780\" instead"
-                    return nil
-                end
 
                 lat_ns = 1
                 long_ew = 1
