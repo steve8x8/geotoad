@@ -122,7 +122,6 @@ class CacheDetails < Common
                 details.gsub!("<", '&lt;')
                 details.gsub!(">", "&gt;")
 
-                puts details
                 # combine all the tags we nuked.
                 details.gsub!(/\* *\* *\*/, '**')
                 details.gsub!(/^\*/, '')
