@@ -12,14 +12,14 @@ LONGDIST="$DIST"
 echo "Creating $DEST"
 rm -Rf $DEST*
 mkdir $DEST
-cp -R CLI/._* CLI/.DS* FAQ.txt TODO.txt COPYRIGHT.txt geocache CLI/interface contrib/ $DEST
+cp -R CLI/._* CLI/.DS* FAQ.txt TODO.txt COPYRIGHT.txt geocache CLI/interface contrib $DEST
 ditto CLI/*Mac* $DEST
 sed s/"%VERSION%"/"$VERSION"/g CLI/geotoad.rb > $DEST/geotoad.rb
 sed s/"%VERSION%"/"$VERSION"/g CLI/README.txt > $DEST/README.txt
 sed s/"%VERSION%"/"$VERSION"/g FAQ.txt > $DEST/FAQ.txt
 chmod 755 $DEST/*.rb
 rm $DEST/**/*~ 2>/dev/null
-rm -Rf $DEST/**/.svn 2>/dev/null
+find $DEST -name .svn -exec rm -Rf {} \;
 
 echo "Updating repository..."
 svn update
