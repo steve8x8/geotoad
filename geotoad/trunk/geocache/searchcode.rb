@@ -215,21 +215,33 @@ $idHash['country_id']['zimbabwe']=225
 $idHash['country_id']['britain']=11
 
 $idHash['zip'] = Hash.new
-$idHash['zip']['placeholder']=27513
+$idHash['zip']['placeholder']=1
+
+$idHash['coord'] = Hash.new
+$idHash['coord']['placeholder']=1
+
 
 def initialize (type)
-    type.downcase!
-    if (type == "state")
+    if (type.downcase == "state")
         type="state_id"
     end
     
-    if (type == "country")
+    if (type.downcase == "country")
         type="country_id"
     end
     
-    if (type == "zipcode")
+    if (type.downcase == "zipcode")
         type="zip"
     end
+
+    if (type.downcase == "coords")
+        type="coord"
+    end
+
+    if (type.downcase == "coordinates")
+        type="coord"
+    end
+
     
     if (! $idHash[type])
         puts "* Invalid search type: #{type} (using state_id)"
