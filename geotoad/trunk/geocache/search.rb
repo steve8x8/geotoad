@@ -68,11 +68,11 @@ class SearchCache
 
                         #  1     2              3         4      5      6            7        8
                         #  N     39       '    11    .   592     W      086     .   32
-                re = /^([ns-]*)(\d{1,3})\W(\d{1,3})\W*(\d{3})\W([ew-]*)(\d{1,3})\W(\d{1,3})\W*(\d{3})$/i
+                re = /^([ns-]*) *(\d{1,3})\W*(\d{1,3})\W*(\d{3})\W+([ew-]*) *(\d{1,3})\W*(\d{1,3})\W*(\d{3})$/i
                 md = re.match(key)
 
                 if ! md
-                    displayError "Bad coordinates format in #{key}! Try N39.11592 W086.32282"
+                    displayError "Bad format in #{key}! Try something like \"N56 44.392 E015 52.780\" instead"
                     return nil
                 end
 

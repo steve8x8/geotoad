@@ -64,7 +64,7 @@ class Input
         if ARGV[0]
             displayError "Extra arguments found on command-line: \"#{ARGV.join(" ")}\""
             displayError "Perhaps you forgot to put quote marks around any arguments that"
-            displayError "contain spaces in them. Example: -q #{@formatType} \"#{optHash['queryArg']} #{ARGV.join(" ")}\""
+            displayError "contain spaces in them. Example: -q #{@formatType} \"#{@@optHash['queryArg']} #{ARGV.join(" ")}\""
             exit
         end
 
@@ -141,16 +141,25 @@ class Input
 
                    if (@@optHash['queryType'] =~ /^coord/)
                        puts "You will be asked to enter in a list of coordinates in the following format:"
-                       puts "N395.2359 W2359.23591"
+                       puts "N56 44.392 E015 52.780"
                        puts ""
                        puts "Press (q) when done."
 
-                       @@optHash['queryArg'] = nil
                        coordset = 1
+                       coord = nil
+                       query = ''
+
                        while (coord != 'q')
-                           print coordest + ": "
-                           @@optHash['queryArg'] = @@optHash['queryArg']
+                           print coordset.to_s + ": "
+                           coord = $stdin.gets.chomp
+                           if coord != 'q'
+                               query = query + coord + ':'
+                               coordset = coordset + 1
+                           end
                        end
+
+                       query.gsub!(/:$/, '')
+                       @@optHash['queryArg'] = query
                    end
 
                when '3'

@@ -13,11 +13,12 @@ Search:
 Filter:
 -------
 * Cache type
-* By-title
 
 Output:
 -------
-* WML (WAP)
+* Route 66 Pushpins support
+* Improve VCF support (hints)
+* Add iPod clippings support
 
 Frontends:
 ----------

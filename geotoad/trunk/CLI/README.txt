@@ -1,7 +1,7 @@
 GeoToad %VERSION% by Thomas Stromberg
 ==========================================================================
 If this file does not view properly, use a better text viewer like WordPad
-instead of Notepad. 
+instead of Notepad.
 
 -----
 About
@@ -14,14 +14,14 @@ write into a half dozen formats.
 Copyright
 ---------
 BSD. If you include the source in your product, please mention me in the
-credits. 
+credits.
 
 
 ------------
 Requirements
 ------------
 Ruby 1.6 - An object oriented scripting language, similar to Perl and
-Python. Mac OS X and some Linux distributions already have this installed. 
+Python. Mac OS X and some Linux distributions already have this installed.
 If you are a Windows user, you should use this installer:
 http://twtelecom.dl.sourceforge.net/sourceforge/rubyinstaller/ruby180-9.exe
 
@@ -45,23 +45,23 @@ syntax: geotoad.rb [options] <search:search2:search3>
    vcf       VCF for iPod Contacts export
 
    -- the following require gpsbabel to be installed --
-   cetus     Cetus for PalmOS 
-   dna       Navitrak DNA marker 
-   gpsdrive  GpsDrive 
-   gpsman    GPSman datafile 
-   gpspilot  GPSPilot for PalmOS 
-   gpsutil   gpsutil 
-   holux     Holux gm-100  
-   magnav    Magellan NAV Companion for PalmOS 
-   mapsend   Magellan MapSend software 
-   mxf       MapTech Exchange 
-   ozi       OziExplorer 
-   pcx       Garmin PCX5 
-   psp       Microsoft PocketStreets 2002 Pushpin 
-   tiger     U.S. Census Bureau Tiger Mapping Service Data 
-   tmpro     TopoMapPro Places 
-   tpg       National Geographic Topo 
-   xmap      Delorme Topo USA4/XMap Conduit 
+   cetus     Cetus for PalmOS
+   dna       Navitrak DNA marker
+   gpsdrive  GpsDrive
+   gpsman    GPSman datafile
+   gpspilot  GPSPilot for PalmOS
+   gpsutil   gpsutil
+   holux     Holux gm-100
+   magnav    Magellan NAV Companion for PalmOS
+   mapsend   Magellan MapSend software
+   mxf       MapTech Exchange
+   ozi       OziExplorer
+   pcx       Garmin PCX5
+   psp       Microsoft PocketStreets 2002 Pushpin
+   tiger     U.S. Census Bureau Tiger Mapping Service Data
+   tmpro     TopoMapPro Places
+   tpg       National Geographic Topo
+   xmap      Delorme Topo USA4/XMap Conduit
 
    -- the following requires cmconvetr to be installed --
    cachemate CacheMate Palm software
@@ -74,7 +74,8 @@ syntax: geotoad.rb [options] <search:search2:search3>
  -t [0.0-5.0]            terrain minimum (0)
  -T [0.0-5.0]            terrain maximum (5)
  -y [1-500]              distance maximum in miles (10 is the default)
- -k [keyword]            keyword (regexp) search. Use | to delimit multiple
+ -k [keyword]            title keyword (regexp) search. Use | to delimit multiple
+ -K [keyword]            desc keyword (regexp) search. Use | to delimit multiple
  -c [username]           only include caches owned by this person
                          Use : to delimit multiple users
  -C [username]           exclude caches owned by this person
@@ -94,7 +95,6 @@ syntax: geotoad.rb [options] <search:search2:search3>
 -----
 Usage
 -----
-
 You need to get to a command-line (DOS, cmd.exe, UNIX shell), and go into
 the directory you extracted geotoad into. Then you should be able to type
 something simple like:
@@ -109,18 +109,18 @@ You've just made a file named geotoad-output.loc containing all the geocaches
 nearby the zipcode 27513 suitable to be read by EasyGPS. Here are some more
 complex examples that you can work with:
 
-1) geotoad.rb -q coord 39.44486,-74.561273 -y 5
+1) geotoad.rb -q coord "N56 44.392, E015 52.780"  -y 5
 Search for caches within 5 miles of the above coordinates
 
 
-2) geotoad.rb 27513:27502:33434 
+2) geotoad.rb 27513:27502:33434
 You can combine searches with the : delimiter. This works for all types,
 though it's most often used with coordinate searches.
 
 
-3) geotoad.rb -f text -o nc.txt -n -q state_id "North Carolina"
+3) geotoad.rb -f text -o nc.txt -n -q state "North Carolina"
 Outputs a text file with all of the caches in North Carolina that are
-virgins (have never been found). 
+virgins (have never been found).
 
 Please note the quotes around North Carolina. Any parameters with spaces in
 them must have quotes around them.
@@ -134,6 +134,6 @@ Outputs a VCF format file, which is usable by iPod's and other devices.
 Please note: Put quotes around your username if it has any spaces in it.
 
 
-5) geotoad.rb -b html -n -k 'stream|creek|lake|river|ocean' -o watery.html -q country Sweden
-Gets every cache in Sweden with travel bugs that matches those water keywords. 
+5) geotoad.rb -f html -b -K 'stream|creek|lake|river|ocean' -o watery.html -q state Indiana
+Gets every cache in Sweden with travel bugs that matches those water keywords.
 Makes a pretty HTML file out of it.

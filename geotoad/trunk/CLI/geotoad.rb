@@ -517,7 +517,8 @@ def saveFile
     if (@option['output'])
         outputFile = @option['output']
     else
-        outputFile = @defaultOutputFile.gsub(/[:\. \'\"\?\;]+/, '_')
+        outputFile = @defaultOutputFile.gsub(/\W/, '_')
+        outputFile.gsub!(/_+/, '_')
         outputFile = outputFile + "." + output.formatExtension(@formatType)
     end
 
