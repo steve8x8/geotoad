@@ -3,7 +3,8 @@
 <head>
 <title>GeoToad Screenshots</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<link rel="stylesheet" href="/style.css?2003080901" type="text/css" />
+<link rel="stylesheet" href="/style-blue.css?2003080901" type="text/css" />
+<link rel="stylesheet" href="/hacks.css?2003092601" type="text/css" />
 </head>
 
 <body>
@@ -14,13 +15,17 @@
 		This page shows screenshots of GeoToad or it's data being used on various devices. If you've got a screenshot from your device or machine that you would like to submit, send some e-mail to <a href="mailto:geotoad@toadstool.se">geotoad@toadstool.se</a>
 	</div>
 
-        <div class="hacktext"><div class="hackboxtitle">The Command Line (Mac OS
-X)</div>
-        See the query tool in action. 
-          It's running a query of all the caches with travelbugs (-b) within a 
-          20 mile radius (-y 20) of the zipcode 27513, and outputting it to the 
-          default EasyGPS format.<br />
-        <a href="screenshots/geotoad-cli.jpg"><img src="screenshots/geotoad-cli-thumb.jpg" width="200" height="190" border="1"></a>
+        <div class="hacktext"><div class="hackboxtitle">The Command Line</div>
+		GeoToad has a very simple Text-User Interface, which allows
+you to select your query options. When your done, just press &quot;q&quot;
+and watch the magic. 
+
+<br />
+        <a href="screenshots/geotoad-cli.jpg"><img src="screenshots/geotoad-cli-thumb.jpg" width="200" height="138" border="1"></a>
+
+<p>GeoToad runs under Windows, as well as Mac OS X, UNIX, and Linux - all
+with the same fantastically dull user interface.</p>
+
         </div>
         <div class="hacktext"><div class="hackboxtitle">EasyGPS</div>
         Once you've run a query and 
@@ -54,7 +59,20 @@ P800</div>
         Plain text your thing? For 
           some devices, this may make the most sense!<br />
 
-       <a href="screenshots/text.png"><img src="screenshots/text-thumb.jpg" width="200" height="199" border="1"></a>
+       <a href="screenshots/text.png"><img src="screenshots/text-thumb.jpg" width="200" height="232" border="1"></a>
       </div>
+
+        <div class="hacktext"><div class="hackboxtitle">GPS Connect</div>
+		You a Mac OS X user? GPS Connect makes it easy to upload and
+download waypoints to your Garmin GPS unit. Here's a screenshot of it using
+GPX data from GeoToad. The query was &quot;All Geocaches in North Carolina that
+have not been found in 180 days&quot;. 
+<br />
+
+       <a href="screenshots/gpsconnect.jpg"><img src="screenshots/gpsconnect-thumb.jpg" width="200"
+height="157" border="1"></a>
+      </div>
+
+
 <? include("footer.inc"); ?>
 </html>
