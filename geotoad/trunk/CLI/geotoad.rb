@@ -87,7 +87,8 @@ def usage
     puts ""
     puts "    * format requires gpsbabel to be installed and in PATH"
     puts ""
-	puts " -q [zip|state|country]  query type (zip by default)"
+	puts " -q [zip|state|coord]    query type (zip by default)"
+    puts "                         [country search is broken!]"
 	puts " -d [0.0-5.0]            difficulty minimum (0)"
 	puts " -D [0.0-5.0]            difficulty maximum (5)"
 	puts " -t [0.0-5.0]            terrain minimum (0)"
@@ -164,8 +165,8 @@ print "[=] Performing #{queryType} search for #{queryArg} "
 search = SearchCache.new
 
 
-# only valid for zip searches
-if queryType == "zip"
+# only valid for zip or coordinate searches
+if queryType == "zip" || queryType == "coord"
     puts "(constraining to #{distanceMax} miles)"
 	search.distance(distanceMax.to_i)
 else
@@ -175,6 +176,7 @@ end
 if (! search.mode(queryType, queryArg))
     exit
 end
+
 
 search.fetchFirst
 if (search.totalWaypoints)
