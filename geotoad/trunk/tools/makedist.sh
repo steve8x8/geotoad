@@ -19,7 +19,7 @@ rm -Rf /tmp/$DIST/**/CVS 2>/dev/null
 rm -Rf /tmp/$DIST/**/.svn 2>/dev/null
 
 svn update
-svn log geocache CLI -v > /tmp/$DIST/ChangeLog.txt
+svn log VERSION COPYRIGHT.txt geocache CLI tools/makedist.sh -v > /tmp/$DIST/ChangeLog.txt
 
 cd /tmp
 zip -r $LONGDIST.zip $DIST
