@@ -155,6 +155,7 @@ class CacheDetails < Common
                 debug "post-combine-process: #{details}"
                 details.gsub!(/[\x80-\xFF]/, "\'")		# high ascii
                 details.gsub!(/\&#\d+\;/, "\'")			# high ascii in entity format
+                details.gsub!(/\&nbsp\;/, " ")			# unescapeHTML seems to ignore.
                 details.gsub!(/\'+/, "\'")			# multiple apostrophes
                 details.gsub!(/^\*/, '')			# lines that start with *
 
