@@ -158,6 +158,9 @@ class Output
 		return $Format[format]['desc']
 	end
 
+    def formatRequirement(format)
+		return $Format[format]['required']
+	end
 
 	## sets up for the filtering process ################3
 	def prepare (title)
@@ -229,13 +232,27 @@ class Output
                 text.gsub!(/\<%wpEntity\.#{var}%\>/, CGI.escapeHTML(@wpHash[@currentWid][var].to_s))
                 # using scan() here to get around difficulties with \1
                 text.scan(/([\x80-\xFF])/) {|highchar|
-                    text.gsub!(/#{highchar}/, ("&#" +  highchar[0].unpack("U").to_s + ";"))
+                    ascii = highchar[0].unpack("U").to_s
+                    # if it's not valid, make it the equiv to &nbsp;
+                    if ascii.to_i == 0
+                        ascii = '160'
+                    end
+
+                    debug "Replacing high char [#{highchar}] with #{ascii}"
+                    text.gsub!(/#{highchar}/, ("&#" + ascii  + ";"))
                 }
             elsif (type == "outEntity")
                 text.gsub!(/\<%outEntity\.#{var}%\>/, CGI.escapeHTML(@outVars[var].to_s))
                 # using scan() here to get around difficulties with \1
                 text.scan(/([\x80-\xFF])/) {|highchar|
-                    text.gsub!(/#{highchar}/, ("&#" +  highchar[0].unpack("U").to_s + ";"))
+                    ascii = highchar[0].unpack("U").to_s
+                    # if it's not valid, make it the equiv to &nbsp;
+                    if ascii.to_i == 0
+                        ascii = '160'
+                    end
+
+                    debug "Replacing high char [#{highchar}] with #{ascii}"
+                    text.gsub!(/#{highchar}/, ("&#" + ascii  + ";"))
                 }
             else
                 displayWarning "unknown type: #{type} tag=#{var}"
@@ -384,14 +401,25 @@ class Output
             # This should clear out the hint-dup issue that Scott Brynen mentioned.
             @outVars['hint']    = ''
 
+            # for some templates, we pad.
+            @outVars['latdatapadded'] = sprintf("%2.6f", @wpHash[@currentWid]['latdata'])
+            @outVars['londatapadded'] = sprintf("%2.6f", @wpHash[@currentWid]['londata'])
+
+
             if @wpHash[@currentWid]['distance']
                 @outVars['relativedistance'] = 'Distance: ' + @wpHash[@currentWid]['distance'].to_s + 'mi ' + @wpHash[@currentWid]['direction']
             end
 
             if @wpHash[@currentWid]['hint']
-                @outVars['hint'] = 'Hint: ' + @wpHash[@currentWid]['hint']
+                hint = @wpHash[@currentWid]['hint']
+                @outVars['hint'] = 'Hint: ' + hint
+                # decrypted hints contributed by Jerry Davis <jfdecd%wi.rr.com>
+                hint.tr!('A-MN-Z', 'N-ZA-M')
+                hint.tr!('a-mn-z', 'n-za-m')
+                @outVars['hintdecrypt'] = 'Hint: ' + hint
                 debug "I will include the hint: #{@outVars['hint']}"
             end
+
 
             if (@outVars['id'].length < 1)
                 debug "our id is no good, using the wid"

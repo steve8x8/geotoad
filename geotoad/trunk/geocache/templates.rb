@@ -43,7 +43,7 @@ $Format = {
             'templateWP'    => "<wpt lat=\"<%wp.latdata%>\" lon=\"<%wp.londata%>\">\r\n" +
             "  <time>2003-05-20T00:00:00.0000000-07:00</time>\r\n" +
             "  <name><%out.id%></name>\r\n" +
-            "  <desc><%wpEntity.name%> by <%wpEntity.creator%>, <%wp.type%> Cache (<%wp.difficulty%>/<%wp.terrain%>)</desc>\r\n" +
+            "  <desc><%wpEntity.name%> by <%wpEntity.creator%>, <%wp.type%> (<%wp.difficulty%>/<%wp.terrain%>)</desc>\r\n" +
             "  <url><%out.url%></url>\r\n" +
             "  <urlname><%wpEntity.name%> by <%wpEntity.creator%></urlname>\r\n" +
             "  <sym>Geocache</sym><type>Geocache</type>\r\n" +
@@ -53,7 +53,7 @@ $Format = {
             "  <groundspeak:placed_by><%wpEntity.creator%></groundspeak:placed_by>\r\n" +
             "  <groundspeak:owner id=\"89944\"><%wpEntity.creator%></groundspeak:owner>\r\n" +
             "  <groundspeak:type><%wp.type%></groundspeak:type>\r\n" +
-            "  <groundspeak:container><%wp.type%></groundspeak:container>\r\n" +
+            "  <groundspeak:container><%wp.container%></groundspeak:container>\r\n" +
             "  <groundspeak:difficulty><%wp.difficulty%></groundspeak:difficulty>\r\n" +
             "  <groundspeak:terrain><%wp.terrain%></groundspeak:terrain>\r\n" +
             "  <groundspeak:country><%wp.country%></groundspeak:country>\r\n" +
@@ -105,6 +105,35 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
         },
 
 
+        'html-decrypt'    => {
+            'ext'        => 'html',
+            'mime'    => 'text/html',
+            'desc'    => 'Simple HTML with hint decrypted',
+            'spacer'    => "<br>&nbsp;\n",
+            'templatePre' => "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n" +
+            "<html><head>\n<title><%out.title%></title>\n" +
+            "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n" + "</head>\n" +
+            "<body link=\"#000099\" vlink=\"#000044\" alink=\"#000099\">\n" +
+            "<h3><%out.title%></h3>" +
+            "<b><font color=\"#11CC11\">$</font></b> have travelbugs&nbsp;&nbsp;&nbsp;" +
+            "<b><font color=\"#9900CC\">@</font></b> never been found&nbsp;&nbsp;&nbsp;" +
+            "<b><font color=\"#229999\">%</font></b> terrain rating of 3.5+&nbsp;&nbsp;&nbsp;" +
+            "<b><font color=\"#BB0000\">&gt;</font></b> difficulty rating of 3.5+<br>",
+            # Not yet ready for consumption
+            #"<b><font color=\"#333333\">--</font></b> comments seem negative&nbsp;&nbsp;&nbsp;" +
+            #"<b><font color=\"#000000\">++</font></b> comments seem very positive" +
+            'templateIndex' => "* <a href=\"#<%out.wid%>\"><%wpEntity.name%></a><br>",
+            'templateWP'    =>
+            "\n\n<hr noshade size=\"1\">\n<a name=\"<%out.wid%>\"></a><font color=\"#000099\"><a href=\"<%out.url%>\"><big><b><%wpEntity.name%>&nbsp;<%out.symbols%></b></big></a></font><br>\n" +
+            "<font color=\"#555555\"><b><%wpEntity.creator%></b></font>, <%wp.latwritten%> <%wp.lonwritten%><br>" +
+            "<font color=\"#339933\"><%wp.type%> D<%wp.difficulty%>/T<%wp.terrain%> <%out.relativedistance%><br>" +
+             "placed: <%wp.cdate%> last comment: <%wp.mdays%> days ago (<%wp.comment0Type%>)</font><br>" +
+            "<p><%outEntity.details%></p>\n" +
+            "<p><font color=\"#555555\"><%out.hintdecrypt%></font></p>\n",
+          'templatePost'    => "</body></html>"
+        },
+
+
         'text'    => {
             'ext'        => 'txt',
             'mime'    => 'text/plain',
@@ -120,6 +149,23 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
                 "\r\n<%out.details%>\r\n" +
                 "\r\n<%out.hint%>\r\n\r\n\r\n\r\n"
         },
+
+        'text-decrypt'    => {
+        'ext'        => 'txt',
+        'mime'    => 'text/plain',
+        'desc'    =>     'Plain ASCII with hint decrypted',
+        'spacer'    => "\r\n",
+        'templatePre' =>  "== <%out.title%>\r\n\r\nDecryption Key (letter above equals below, and vice versa)\r\n\r\nA|B|C|D|E|F|G|H|I|J|K|L|M\r\n-------------------------\r\nN|O|P|Q|R|S|T|U|V|W|X|Y|Z\r\n\r\n\r\n",
+        'templateWP'    => "----------------------------------------------------------------\r\n" +
+		"* <%wp.name%>\" (<%out.wid%>) by <%wp.creator%>\r\n" +
+        "Difficulty: <%wp.difficulty%>, Terrain: <%wp.terrain%>\r\n" +
+        "Lat: <%wp.latwritten%> Lon: <%wp.lonwritten%>\r\n" +
+        "Type: <%wp.type%> <%out.relativedistance%>\r\n" +
+        "Creation: <%wp.cdate%>, Last comment: <%wp.mdays%> days ago (<%wp.comment0Type%>)\r\n" +
+        "\r\n<%out.details%>\r\n" +
+        "\r\n<%out.hint%>\r\n\r\n\r\n\r\n"
+    },
+
 
         'tab'    => {
             'ext'        => 'txt',
@@ -160,7 +206,8 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
         'gpsman' => {
             'ext'        => 'gpm',
             'mime'    => 'application/gpsman',
-            'desc'    => 'GPSman datafile (gpsbabel)',
+            'desc'    => 'GPSman datafile',
+            'spacer' => '',
             'spacer' => '',
             'filter_src'    => 'gpx',
             'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o gpsman -F OUTFILE'
@@ -169,7 +216,8 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
         'mapsend' => {
             'ext'        => 'mps',
             'mime'    => 'application/mapsend',
-            'desc'    => 'Magellan MapSend software (gpsbabel)',
+            'desc'    => 'Magellan MapSend software',
+            'required' => 'gpsbabel',
             'spacer' => '',
             'filter_src'    => 'gpx',
             'filter_exec'    => 'gpsbabel -i gpx  -f INFILE -o mapsend -F OUTFILE'
@@ -178,7 +226,8 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
         'pcx' => {
             'ext'        => 'pcx',
             'mime'    => 'application/pcx',
-            'desc'    => 'Garmin PCX5 (gpsbabel)',
+            'desc'    => 'Garmin PCX5',
+            'required' => 'gpsbabel',
             'spacer' => '',
             'filter_src'    => 'gpx',
             'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o pcx -F OUTFILE'
@@ -187,7 +236,8 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
         'gpsutil' => {
             'ext'        => 'gpu',
             'mime'    => 'application/gpsutil',
-            'desc'    => 'gpsutil (gpsbabel)',
+            'desc'    => 'gpsutil',
+            'required' => 'gpsbabel',
             'spacer' => '',
                         'filter_src'    => 'gpx',
             'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o gpsutil -F OUTFILE'
@@ -195,17 +245,18 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
 
         'tiger' => {
             'ext'        => 'tgr',
-            'mime'    => 'application/xtiger',
-            'desc'    => 'U.S. Census Bureau Tiger Mapping Service Data (gpsbabel)',
-            'spacer' => '',
-            'filter_src'    => 'gpx',
-            'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o tiger -F OUTFILE'
+            'mime'    => 'application/x-tiger',
+            'desc'    => 'U.S. Census Bureau Tiger Mapping Service Data',
+            'spacer'    => "\n",
+            'templatePre' =>  "#tms-marker\n",
+            'templateWP' => "<%out.londatapadded%>,<%out.latdatapadded%>:redpin:<%wp.name%> by <%wp.creator%>, <%wp.type%> (<%wp.difficulty%>/<%wp.terrain%>)\n"
         },
 
         'xmap' => {
             'ext'        => 'tgr',
             'mime'    => 'application/xmap',
-            'desc'    => 'Delorme Topo USA4/XMap Conduit (gpsbabel)',
+            'desc'    => 'Delorme Topo USA4/XMap Conduit',
+            'required' => 'gpsbabel',
             'spacer' => '',
             'filter_src'    => 'gpx',
             'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o xmap -F OUTFILE'
@@ -214,7 +265,8 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
         'dna' => {
             'ext'        => 'dna',
             'mime'    => 'application/xmap',
-            'desc'    => 'Navitrak DNA marker (gpsbabel)',
+            'desc'    => 'Navitrak DNA marker',
+            'required' => 'gpsbabel',
             'spacer' => '',
             'filter_src'    => 'gpx',
             'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o dna -F OUTFILE'
@@ -223,7 +275,8 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
         'psp' => {
             'ext'        => 'psp',
             'mime'    => 'application/psp',
-            'desc'    => 'Microsoft PocketStreets 2002 Pushpin (gpsbabel)',
+            'desc'    => 'Microsoft PocketStreets 2002 Pushpin',
+            'required' => 'gpsbabel',
             'spacer' => '',
             'filter_src'    => 'gpx',
             'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o psp -F OUTFILE'
@@ -232,7 +285,8 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
         'cetus' => {
             'ext'        => 'cet',
             'mime'    => 'application/cetus',
-            'desc'    => 'Cetus for PalmOS (gpsbabel)',
+            'desc'    => 'Cetus for PalmOS',
+            'required' => 'gpsbabel',
             'spacer' => '',
             'filter_src'    => 'gpx',
             'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o cetus -F OUTFILE'
@@ -240,7 +294,8 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
         'gpspilot' => {
             'ext'        => 'gps',
             'mime'    => 'application/gpspilot',
-            'desc'    => 'GPSPilot for PalmOS (gpsbabel)',
+            'desc'    => 'GPSPilot for PalmOS',
+            'required' => 'gpsbabel',
             'spacer' => '',
             'filter_src'    => 'gpx',
             'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o dna -F OUTFILE'
@@ -248,7 +303,8 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
         'magnav' => {
             'ext'        => 'mgv',
             'mime'    => 'application/magnav',
-            'desc'    => 'Magellan NAV Companion for PalmOS (gpsbabel)',
+            'desc'    => 'Magellan NAV Companion for PalmOS',
+            'required' => 'gpsbabel',
             'spacer' => '',
             'filter_src'    => 'gpx',
             'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o magnav -F OUTFILE'
@@ -256,7 +312,8 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
         'mxf' => {
             'ext'        => 'mxf',
             'mime'    => 'application/mxf',
-            'desc'    => 'MapTech Exchange (gpsbabel)',
+            'desc'    => 'MapTech Exchange',
+            'required' => 'gpsbabel',
             'spacer' => '',
             'filter_src'    => 'gpx',
             'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o mxf -F OUTFILE'
@@ -264,7 +321,8 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
         'holux' => {
             'ext'        => 'wpo',
             'mime'    => 'application/holux',
-            'desc'    => 'Holux gm-100  (gpsbabel)',
+            'desc'    => 'Holux gm-100 ',
+            'required' => 'gpsbabel',
             'spacer' => '',
             'filter_src'    => 'gpx',
             'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o wpo -F OUTFILE'
@@ -272,7 +330,8 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
         'ozi' => {
             'ext'        => 'ozi',
             'mime'    => 'application/ozi',
-            'desc'    => 'OziExplorer (gpsbabel)',
+            'desc'    => 'OziExplorer',
+            'required' => 'gpsbabel',
             'spacer' => '',
             'filter_src'    => 'gpx',
             'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o ozi -F OUTFILE'
@@ -280,7 +339,8 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
         'tpg' => {
             'ext'        => 'tpg',
             'mime'    => 'application/tpg',
-            'desc'    => 'National Geographic Topo (gpsbabel)',
+            'desc'    => 'National Geographic Topo',
+            'required' => 'gpsbabel',
             'spacer' => '',
             'filter_src'    => 'gpx',
             'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o tpg -F OUTFILE'
@@ -288,7 +348,8 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
         'tmpro' => {
             'ext'        => 'tmp',
             'mime'    => 'application/tmpro',
-            'desc'    => 'TopoMapPro Places (gpsbabel)',
+            'desc'    => 'TopoMapPro Places',
+            'required' => 'gpsbabel',
             'spacer' => '',
             'filter_src'    => 'gpx',
             'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o tmpro -F OUTFILE'
@@ -297,7 +358,8 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
             'ext'        => 'gpg',
             'mime'    => 'application/gpsdrive',
             'spacer' => '',
-            'desc'    => 'GpsDrive (gpsbabel)',
+            'desc'    => 'GpsDrive',
+            'required' => 'gpsbabel',
             'filter_src'    => 'gpx',
             'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o gpsdrive -F OUTFILE'
         },
@@ -305,8 +367,9 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
         'cachemate' => {
             'ext'        => 'pdb',
             'mime'    => 'application/cachemate',
+            'required' => 'cmconvert',
             'spacer' => '',
-            'desc'    => 'CacheMate for PalmOS (cmconvert)',
+            'desc'    => 'CacheMate for PalmOS',
             'filter_src'    => 'gpx',
             'filter_exec'    => 'cmconvert -o OUTFILE INFILE'
         }

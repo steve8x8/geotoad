@@ -400,7 +400,7 @@ class SearchCache
                     creator = $1.dup
                     if (creator)
                         creator =  CGI.unescapeHTML(creator);
-                        creator.gsub!(/ +$/, ' ')
+                        creator.gsub!(/\s+$/, '')
                     end
                     @cache['creator']=creator
                     #creator.gsub(/[\x80-\xFF]/, '?').chop!

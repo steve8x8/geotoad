@@ -132,6 +132,11 @@ class CacheDetails
                 end
             end
 
+            if line =~ /\<br\>Size: ([\w ]+)\<br\>/
+                @waypointHash[wid]['container'] = $1
+                debug "container type is #{$1}"
+            end
+
 			# Regexp rewritten by Scott Brynen for Canadian compatibility
 		    if line =~ /getmap\.aspx\?lat=([\d\.-]+)\&lon=([\d\.-]+)/
                 @waypointHash[wid]['latdata'] = $1

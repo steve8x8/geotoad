@@ -297,26 +297,14 @@ class Input
                    print ""
                    $validFormats.each { |type|
                        desc = outputDetails.formatDesc(type)
-                       if (i>5)
-                           puts ""
-                           print ""
-                           i=0
+                       req = outputDetails.formatRequirement(type)
+                       if (req)
+                           req = "[" + req + " required]"
                        end
-                       i=i+1
-
-
-                       if (desc =~ /gpsbabel/)
-                           type = type + "+"
-                       elsif (desc =~ /cmconvert/)
-                           type = type + "="
-                       end
-
-                       printf("  %-10.10s", type);
-
+                       printf("%-12.12s: %-45.45s %s\n", type, desc, req);
                    }
-                   puts ""
-                   puts "    + requires gpsbabel in PATH           = requires cmconvert in PATH"
 
+                   puts ""
                    @@optHash['format'] = ask('What format would you like your output in?', 'gpx')
 
                 when '24'
