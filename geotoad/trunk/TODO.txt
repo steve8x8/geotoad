@@ -10,21 +10,21 @@ Search:
 -------
 * Support members only caches
 
+Details:
+--------
+* Artificial intellegence to determine whether or not users like the cache. (3.7)
+
 Filter:
 -------
-* Cache type
+* Cache type (3.7)
 
 Output:
 -------
 * Route 66 Pushpins support
-* Improve VCF support (hints)
-* Add iPod clippings support
-* Add last 5 posts to GPX
-* Add an unhappy symbol to HTML output if there was a not-found recently
+* Add iPod clippings support (4.0)
+* SMS support (3.8)
 
 Frontends:
 ----------
-Web
-Mac OS X (needs clue)
-Windows (needs volunteer!)
-X11 (needs volunteer!) 
+Web (4.0)
+Cross-Platform GUI (4.0)

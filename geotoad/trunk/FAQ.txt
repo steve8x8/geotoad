@@ -1,0 +1,73 @@
+GeoToad %VERSION% by Thomas Stromberg (c) 2003
+==========================================================================
+Frequently Asked Questions
+
+Table of Contents:
+------------------
+1. How do you make GeoToad display the original waypoint id's, like GC2034
+   instead of BrnCntyTour?
+2. Geocaching Swiss Army Knife complains about the GPX format. How do I
+   make them compatible?
+3. What software can you use the GPX files in?
+4. Why is there no GUI for GeoToad?
+
+
+
+Questions and Answers:
+----------------------
+
+1. How do you make GeoToad display the original waypoint id's, like GC2034
+   instead of BrnCntyTour?
+
+    The synthesized waypoint id's are a feature named EasyName. It's
+    can be disabled in the GUI, and on the command line using -E.
+
+
+
+2. Geocaching Swiss Army Knife complains about the GPX format. How do I
+   make them compatible?
+
+    Disable EasyName waypoints. See #1.
+
+
+3. What software can you use the GPX files in?
+
+    Here are a few software products I have found that know about GPX
+    files. If you have any to add, please e-mail thomas%stromberg.org
+
+    Windows:
+    - - - - -
+
+    Geocaching Swiss Army Knife http://gsak.net/
+    GPX Spinner                 http://www.gpxspinner.com/
+    EasyGPS                     http://www.easygps.com/
+    Utopia                      http://home.earthlink.net/~msargent2/ch/
+    G7ToWin                     http://www.gpsinformation.org/ronh/
+    GPSbabel                    http://gpsbabel.sourceforge.net/
+
+    Mac OS X:
+    - - - - -
+    gpsWrite                    http://www.hiketech.com/
+    GPS Connect                 http://www.chimoosoft.com/gpsconnect.html
+    FlightTrack                 http://flighttrack.sourceforge.net/
+    GPSbabel                    http://gpsbabel.sourceforge.net/
+
+    Linux/UNIX:
+    - - - - - -
+    GPSbabel                    http://gpsbabel.sourceforge.net/
+
+    PalmOS:
+    - - - -
+    CacheMate                   http://www.smittyware.com/palm/cachemate/
+
+
+4. Why is there no GUI for GeoToad?
+
+    Because we haven't gotten to it yet. There have been some
+    failed projects by 3rd party users to produce one, and we are
+    looking for developers to give us this capability in 4.0.
+
+    The only requirement is that the GUI be fairly similar between
+    Windows, Mac OS X, and Linux users. We're considering using
+    ruby/wxWindows or Java/Swing (maybe Java/SWT) to do this.
+
