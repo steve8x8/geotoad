@@ -59,7 +59,7 @@ class Filter
     def notFound
 		debug "filtering by notFound"
 		@waypointHash.delete_if { |wid, values|
-			@waypointHash[wid]['mdays'].to_i > 0
+			@waypointHash[wid]['mdays'].to_i > -1
         }
 	end
 
