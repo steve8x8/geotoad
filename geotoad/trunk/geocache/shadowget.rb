@@ -56,12 +56,10 @@ class ShadowFetch < Common
             else
                 @postString = ''
             end
-
-            puts "uhm: #{key}"
             @postString = @postString + key + "=" + CGI.escape(vars[key])
         }
         @postVars=vars
-        puts "Set post to: #{@postString}"
+        debug "Set post to: #{@postString}"
     end
 
 	# to get the data returned back to you.
@@ -103,7 +101,7 @@ class ShadowFetch < Common
 		end
 
 		# make a friendly filename
-		localfile.gsub!(/[=\?\*\%\&\$]/, "_")
+		localfile.gsub!(/[=\?\*\%\&\$:]/, "_")
 		debug "cachefile: #{localfile}"
 		return localfile
 	end
@@ -143,9 +141,7 @@ class ShadowFetch < Common
 
 		## this assumes there was no local cache that was useable ############
 		# check shadow
-		#(size, mtime) = checkShadow
-		# THIS IS JUST HERE FOR FUN.
-        (size, mtime) = [0, 0]
+		(size, mtime) = checkShadow
 
         # if we got back a valid result of some kind.
 		if (size)
@@ -161,7 +157,7 @@ class ShadowFetch < Common
 				@data = fetchRemote
                 if (@data)
                     @@src='remote'
-    				#updateShadow
+    				updateShadow
                 else
                     size=nil
                 end

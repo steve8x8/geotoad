@@ -9,6 +9,7 @@ class SearchCache < Common
 	def initialize
 		@distance=15
 		@waypointHash = Hash.new
+        @resultsPager=nil
 	end
 
 	def distance (dist)
@@ -87,9 +88,17 @@ class SearchCache < Common
 		end
 		nextWaypoint = @lastWaypoint
 
+        # I don't know why it starts as 5, but it does.
+        if (! @resultsPager)
+            @resultsPager=5
+        end
+
 		if (@totalWaypoints > @lastWaypoint)
-			debug "More waypoints needed! #{nextWaypoint} - first: #{@firstWaypoint}"
-			newUrl = @url + '&start=' + @lastWaypoint.to_s
+
+			#newUrl = @url + '&start=' + @lastWaypoint.to_s
+            newUrl = @url + "&gtid=#{@resultsPager}"
+            debug "More waypoints needed! #{nextWaypoint} - first: #{@firstWaypoint} (gtid=#{@resultsPager})"
+            @postVars['__EVENTTARGET']="ResultsPager:_ctl#{@resultsPager}"
 			fetch(newUrl)
 		else
 			return nil
@@ -102,8 +111,11 @@ class SearchCache < Common
 
 	def fetch(url)
 		page = ShadowFetch.new(url)
-        page.shadowExpiry=43200
-        page.localExpiry=86400
+        page.shadowExpiry=60000
+        page.localExpiry=43200
+        if (@postVars)
+            page.postVars=@postVars
+        end
 
 		if (page.fetch)
 			parseSearch(page.data)

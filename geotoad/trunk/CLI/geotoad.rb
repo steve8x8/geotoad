@@ -36,7 +36,9 @@ opts = GetoptLong.new(
 	[ "--notFound",                 "-n",    GetoptLong::NO_ARGUMENT ],
     [ "--travelBug",                "-b",    GetoptLong::NO_ARGUMENT ],
 	[ "--verbose",				    "-v",    GetoptLong::NO_ARGUMENT ],
-	[ "--user",						"-u",    GetoptLong::OPTIONAL_ARGUMENT ],
+	[ "--userInclude",				"-u",    GetoptLong::OPTIONAL_ARGUMENT ],
+    [ "--userExclude",				"-U",    GetoptLong::OPTIONAL_ARGUMENT ],
+    [ "--waypointLength",			"-l",    GetoptLong::OPTIONAL_ARGUMENT ],
     [ "--help",                     "-h",    GetoptLong::NO_ARGUMENT ]
 )
 
@@ -169,19 +171,17 @@ if (search.totalWaypoints)
 			current = search.lastWaypoint + search.returnedWaypoints
 
             # for the new crap that geocaching.com throws in
-            postVars = search.postVars
-            postVars['__EVENTTARGET']="ResultsPager:_ctl#{resultsPager}"
+            #postVars = search.postVars
+            #postVars['__EVENTTARGET']="ResultsPager:_ctl#{resultsPager}"
 
 			# legacy
             #searchURL = search.URL +  '&start=' + search.lastWaypoint.to_s
-            searchURL = search.postURL + "&gtid=#{resultsPager}"
-			page = ShadowFetch.new(searchURL)
-            page.postVars=postVars
-            # very short expiry time for the search index.
-            page.shadowExpiry=60000
-            page.localExpiry=43200
-            common.debug "Going to fetch the page for real now"
-            page.fetch
+            #searchURL = search.postURL + "&gtid=#{resultsPager}"
+			page = ShadowFetch.new(search.URL)
+            #page.postVars=postVars
+
+            # This actually fetches the page. Go fucking figure!
+            running = search.fetchNext
 
 			src = page.src
 			puts "[o] Recieved search results for \##{search.lastWaypoint}-#{current} of #{search.totalWaypoints} (#{src})"
@@ -203,7 +203,7 @@ if (search.totalWaypoints)
                 common.debug "sleeping"
 				sleep ($SLEEP / 2).to_i
 			end
-			running = search.fetchNext
+
 		else
 			common.debug "We have already downloaded the waypoints needed, lets get out of here"
 			running = nil
@@ -322,7 +322,10 @@ end
 ## generate the output ########################################
 puts "[=] Generating output in #{formatType} format"
 output.input(filtered.waypoints)
-output.formatSelect(formatType)
+output.formatType=formatType
+if (optHash['--waypointLength'])
+    output.waypointLength=optHash['--waypointLength']
+end
 outputData = output.prepare("details");
 
 ## save the file #############################################

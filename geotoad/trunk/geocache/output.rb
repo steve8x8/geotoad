@@ -53,8 +53,8 @@ class Output < Common
 			'mime'	=> 'text/html',
 			'desc'	=> 'Simple HTML table format',
 			'spacer'	=> "<br>&nbsp;<br>\n",
-			'templatePre' => "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n" + 
-                "<html><head>\n<title>GeoToad Output</title>\n" + 
+			'templatePre' => "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n" +
+                "<html><head>\n<title>GeoToad Output</title>\n" +
                 "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">\n" + "</head>\n" +
 				"<body link=\"#000099\" vlink=\"#000044\" alink=\"#000099\">\n" +
 				"GeoToad query: <%out.title%>",
@@ -153,7 +153,7 @@ class Output < Common
 			'filter_src'	=> 'easygps',
 			'filter_exec'	=> 'gpsbabel -i geo -f INFILE -o tiger -F OUTFILE'
 		},
-        
+
         'xmap' => {
 			'ext'		=> 'tgr',
 			'mime'	=> 'application/xmap',
@@ -248,9 +248,9 @@ class Output < Common
 
 	def initialize
 		@output = Array.new
-        
+        @waypointLength = 8
         # autodiscovery of gpsbabel output types if it's found!
-        
+
 	end
 
 	def input(data)
@@ -293,10 +293,10 @@ class Output < Common
                 debug "shortname: word #{word} is still long, stripping vowels"
 				word = word[0..0] + word[1..15].gsub(/[AEIOUaeiou]/, '')	# remove vowels
 			end
-			# if it is STILL >8
-			if word && (word.length > 8)
-                debug "shortname: cutting #{word} in #{name} to 6 chars"
-				word.slice!(0,6)
+			# if it is STILL >wplength
+			if word && (word.length > @waypointLength)
+                debug "shortname: cutting #{word} in #{name} to #{@waypointLength - 2} chars"
+				word.slice!(0,(@waypointLength - 2))
 			end
 
 			if word
@@ -309,7 +309,7 @@ class Output < Common
 	end
 
 	# select the format for the next set of output
-	def formatSelect(format)
+	def formatType=(format)
 		if ($Format[format])
 			@outputFormat = $Format[format]
 			@outputType = format
@@ -320,6 +320,10 @@ class Output < Common
 		end
 	end
 
+    def waypointLength=(length)
+        @waypointLength=length
+        debug "set waypoint id length to @{#waypointLength}"
+    end
 
 	# exploratory functions.
 	def formatList
@@ -398,7 +402,7 @@ class Output < Common
 		outVars = Hash.new
         wpList = Hash.new
         outVars['title'] = title
-       
+
 
         @wpHash.each_key { |wid|
             wpList[wid] = @wpHash[wid]['name'].dup
@@ -407,11 +411,11 @@ class Output < Common
 
         # somewhat lame.. HTML specific index that really needs to be in the templates, but I need
         # this done before I go geocaching in 45 minutes.
-        
+
         if @outputType == "html"
             htmlIndex=''
             debug "I should generate an index, I'm html"
-            
+
 
             wpList.sort{|a,b| a[1]<=>b[1]}.each {  |wpArray|
                 wid = wpArray[0]
@@ -447,7 +451,7 @@ class Output < Common
             end
 
             # well, this is crap.
-            outVars['id'] = outVars['sname'][0..7].upcase
+            outVars['id'] = outVars['sname'][0..(@waypointLength - 1)].upcase
             outVars['title']="XXXX"
             debug "my id is #{outVars['id']}"
 
@@ -457,6 +461,12 @@ class Output < Common
                 outVars['id'] = wid.dup
             end
 			outVars['url'] = $DetailURL + @wpHash[wid]['sid'].to_s
+            if (! @wpHash[wid]['terrain'])
+                puts "[*] Error: no terrain found"
+            end
+            if (! @wpHash[wid]['difficulty'])
+                puts "[*] Error: no difficulty found"
+            end
 			outVars['average'] = (@wpHash[wid]['terrain'] + @wpHash[wid]['difficulty'] / 2).to_i
 
 			# this crazy mess is all due to iPod's VCF reader only supporting 2k chars!
