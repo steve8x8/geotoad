@@ -5,10 +5,10 @@
 $:.push('..')
 
 
-# just in case it was never replaced.
+# The version gets inserted by makedist.sh
 versionID='%VERSION%'
 if versionID !~ /^\d/
-    $VERSION = '3.2-DEV'
+    $VERSION = '3.2-CURRENT'
 else
     $VERSION = versionID.dup
 end
@@ -179,11 +179,11 @@ version.shadowExpiry=0
 version.localExpiry=600
 version.fetch
 
-if (version.data =~ /^(\d\.\d+\.\d+)/)
+if (($VERSION =~ /^(\d\.\d+\.\d+)$/) && (version.data =~ /^(\d\.\d+\.\d+)/))
     latestVersion = $1;
-    if (($VERSION !~ /DEV/) && (latestVersion != $VERSION))
+    if (latestVersion != $VERSION)
         puts ""
-        puts "[^] NOTE: Your version of GeoToad is old - #{latestVersion} is now available!";
+        puts "[^] NOTE: Your version of GeoToad is obsolete - #{latestVersion} is now available!";
         puts "[^]       Please download it from http://toadstool.se/hacks/geotoad/"
     end
 end
