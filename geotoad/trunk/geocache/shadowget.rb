@@ -246,7 +246,7 @@ class ShadowFetch
 
 		begin
 			if (@postVars)
-	                	debug "post #{host}#{file}/?#{@postString}"
+	            debug "post #{host}#{file}/?#{@postString}"
 				$Header['Content-Type'] =  "application/x-www-form-urlencoded";
 				resp, data = w.post(file, @postString, $Header)
 			else
@@ -283,6 +283,15 @@ class ShadowFetch
                 data = resp.body
             end
 
+            # I've noticed that sometimes IIS.net gives back error messages as normal HTML documents.
+            # This should handle this RFC violation. You may want to remove this if you use shadowfetch
+            # outside of geotoad.
+            data.each { |line|
+                if line =~ /\[HttpException \(0x\w+\): (.*?)\]/
+                    displayWarning "IIS.net HttpException: #{$1}"
+                    return nil
+                end
+            }
             return data
         end
 	end
