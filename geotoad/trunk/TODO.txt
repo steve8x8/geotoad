@@ -12,17 +12,17 @@ Search:
 
 Details:
 --------
-* Artificial intellegence to determine whether or not users like the cache. (3.7)
+* Artificial intellegence to determine whether or not users like the cache. (3.8)
 
 Filter:
 -------
-* Cache type (3.7)
+* Cache type (3.8)
 
 Output:
 -------
 * Route 66 Pushpins support
 * Add iPod clippings support (4.0)
-* SMS support (3.8)
+* SMS support (3.9)
 
 Frontends:
 ----------

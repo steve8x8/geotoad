@@ -16,18 +16,17 @@ Table of Contents:
 Questions and Answers:
 ----------------------
 
-1. How do you make GeoToad display the original waypoint id's, like GC2034
-   instead of BrnCntyTour?
+1. How do you enable friendly waypoint id names?
 
-    The synthesized waypoint id's are a feature named EasyName. It's
-    can be disabled in the GUI, and on the command line using -E.
-
+    The synthesized waypoint id's are a feature named EasyName. Set
+    your maximum EasyName waypoint length (16 for Garmin), and it will
+    use them.
 
 
 2. Geocaching Swiss Army Knife complains about the GPX format. How do I
    make them compatible?
 
-    Disable EasyName waypoints. See #1.
+    Disable EasyName waypoints.
 
 
 3. What software can you use the GPX files in?

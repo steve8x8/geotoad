@@ -64,28 +64,28 @@ syntax: geotoad.rb [options] <search:search2:search3>
  -f format for output. Formats available are:
    csv       CSV for spreadsheet imports
    easygps   Geocaching.com .loc XML file
+   gpsdrive  GpsDrive
    gpspoint  gpspoint datafile
    gpx       GPX XML format
    html      Simple HTML table format
+   mxf       MapTech Exchange
+   ozi       OziExplorer
    text      Plain ASCII
    tab       Tabbed text, for GPS Connect
+   tiger     U.S. Census Bureau Tiger Mapping Service Data
    vcf       VCF for iPod Contacts export
 
    -- the following require gpsbabel to be installed --
    cetus     Cetus for PalmOS
    dna       Navitrak DNA marker
-   gpsdrive  GpsDrive
    gpsman    GPSman datafile
    gpspilot  GPSPilot for PalmOS
    gpsutil   gpsutil
    holux     Holux gm-100
    magnav    Magellan NAV Companion for PalmOS
    mapsend   Magellan MapSend software
-   mxf       MapTech Exchange
-   ozi       OziExplorer
    pcx       Garmin PCX5
    psp       Microsoft PocketStreets 2002 Pushpin
-   tiger     U.S. Census Bureau Tiger Mapping Service Data
    tmpro     TopoMapPro Places
    tpg       National Geographic Topo
    xmap      Delorme Topo USA4/XMap Conduit
@@ -93,8 +93,8 @@ syntax: geotoad.rb [options] <search:search2:search3>
    -- the following requires cmconvetr to be installed --
    cachemate CacheMate Palm software
 
- -q [zip|state|coord]    query type (zip by default)
-		         [COUNTRY SEARCHES CURRENTLY BROKEN]
+ -q [zip|state|coord|keyword]    query type (zip by default)
+		                 [COUNTRY SEARCHES CURRENTLY BROKEN]
  -o [filename]           output file
  -d [0.0-5.0]            difficulty minimum (0)
  -D [0.0-5.0]            difficulty maximum (5)
