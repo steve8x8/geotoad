@@ -180,8 +180,7 @@ class SearchCache < Common
                         @lastWaypoint = @totalWaypoints
                     end
 
-                when /WptTypes.*alt=\"(.*?)\" border=0 width=22 height=30/
-
+                when /WptTypes.*alt=\"(.*?)\" border=0/
                     @cache['type']=$1
                     @cache['mdate']=-1
                     @cache['type'].gsub!(/\s*cache.*/, '')
