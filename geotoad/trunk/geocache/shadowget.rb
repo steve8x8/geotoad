@@ -287,7 +287,8 @@ class ShadowFetch < Common
 		debug "Uploading cache data to shadowfetch server: #{$shadowHosts[0]}"
     response, data = web.post("#{file}?", uploadEncoded, headers)
 		if (data !~ /^OK/)
-			debug "data failed to upload: #{data}"
+			puts "* data failed to upload, deleting shadow host: #{data}"
+            $shadowHosts.delete(host)
 			return nil
 		else
 			debug "uploaded: #{data}"
