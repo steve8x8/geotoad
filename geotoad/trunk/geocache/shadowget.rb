@@ -13,8 +13,6 @@ $shadowHosts = [
 	'http://smtp.stromberg.org/hacks/shadowfetch/get.php'
 ]
 
-$shadowExpiry=100000	# 1 days
-$localExpiry=345600		# 4 day
 $Header = {
   'Referer'         => 'http://www.geocaching.com/',
   'User-Agent'      => 'Mozilla/4.5 (compatible; OmniWeb/4.1.1-v424.6; Mac_PowerPC)',
@@ -30,6 +28,8 @@ class ShadowFetch < Common
 	def initialize (url)
 		@url = url
 		@remote = 0
+        @shadowExpiry=172800	# 2 days
+        @localExpiry=345600		# 4 days
 	end
 
 	# to change the URL
@@ -37,6 +37,16 @@ class ShadowFetch < Common
 		@url = url
 	end
 
+    def shadowExpiry=(expiry)
+        debug "setting shadow expiry to #{expiry}"
+        @shadowExpiry=expiry
+    end
+    
+    def localExpiry=(expiry)
+        debug "setting local expiry to #{expiry}"
+        @localExpiry=expiry
+    end
+            
 	# to get the data returned back to you.
 	def data
 		@data
@@ -87,14 +97,14 @@ class ShadowFetch < Common
 		# expiry?
 		if (File.exists?(localfile))
 			age = time.to_i - File.mtime(localfile).to_i
-			if (age > $localExpiry)
-				debug "local cache is #{age} old, older than #{$localExpiry}. removing.."
+			if (age > @localExpiry)
+				debug "local cache is #{age} old, older than #{@localExpiry}. removing.."
 				#File.unlink(localfile)
 			elsif (File.size(localfile) < 32)
 				debug "local cache appears corrupt. removing.."
 				File.unlink(localfile)
 			else
-				debug "local cache is only #{age} old, using local file."
+            debug "local cache is only #{age} old (#{@localExpiry}), using local file."
                 @data = fetchLocal(localfile)
                 @@src='local'
 				# short-circuit out of here!
@@ -110,12 +120,12 @@ class ShadowFetch < Common
 		# if we got back a valid result of some kind.
 		if (size)
 			age = time.to_i - mtime
-			if ((size > 128) && (age < $shadowExpiry))
-				debug "shadow results valid"
+			if ((size > 128) && (age < @shadowExpiry))
+            debug "shadow has cache entry #{age} old, using."
 				@data = fetchShadow
                 @@src='shadow'
 			else
-				debug "shadow gave results, but not satisfactory. fetching & shadowing"
+                debug "shadow gave results we don't like (s:#{size} a:#{age} e:#{@shadowExpiry})"
 				#(size, mtime) = checkGoogle(url)
 				#age = time.to_i - mtime
 				@data = fetchRemote

@@ -95,6 +95,9 @@ class SearchCache < Common
 
 	def fetch(url)
 		page = ShadowFetch.new(url)
+        page.shadowExpiry=43200
+        page.localExpiry=86400
+            
 		if (page.fetch)
 			parseSearch(page.data)
 		else
