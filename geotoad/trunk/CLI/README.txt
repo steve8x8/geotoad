@@ -36,15 +36,15 @@ You need to get to a command-line (DOS, cmd.exe, UNIX shell), and go into
 the directory you extracted geotoad into. Then you should be able to type
 something simple like:
 
-geotoad.rb 27513
+geotoad.rb -o easygps.loc 27513
 
 If that does not work, try:
 
-ruby geotoad.rb 27513
+ruby geotoad.rb -o easygps.loc 27513
 
-
-
-Here are some more complex examples that you can work with:
+You've just made a file containing all the geocaches nearby 27513
+suitable to be read by EasyGPS. Here are some more complex examples that
+you can work with:
 
 geotoad.rb -t 2.5 -f vcf -u helixblue:Sallad -o ~/Desktop/charlotte.vcf 28272
 
@@ -58,7 +58,7 @@ country Sweden
 Gets every virgin cache in Sweden that matches those water keywords. 
 Makes a pretty HTML file out of it.
 
-geotoad.rb -f easygps -y 5 -o easygps.loc 27513
+geotoad.rb -f text -y 5 -o 27513.txt 27513
                                          
-Records all caches within 5 miles of 27513 into a format suitable to be read 
-by EasyGPS.
+Records all caches within 5 miles of 27513 into a plain text file.
+
