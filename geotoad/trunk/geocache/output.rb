@@ -55,12 +55,12 @@ class Output < Common
 			'spacer'	=> "<p>\n",
 			'templatePre' => "<html><head><title>GeoToad Output</title></head>" +
 				"<body link=\"#000099\" vlink=\"#000044\" alink=\"#000099\">" +
-				"",
+				"GeoToad query output",
             'templateIndex' => "* <a href=\"#<%out.wid%>\"><%wp.name%></a><br>",
 			'templateWP'	=>
 				"<a name=\"<%out.wid%>\"></a><font color=\"#000099\"><a href=\"<%out.url%>\"><big><strong><%wp.name%></strong></big></a></font>&nbsp;&nbsp;  <b><%wp.travelbug%></b><br>\n" +
                 "<font color=\"#555555\"><strong><%wp.creator%></strong></font>, <%wp.latwritten%> <%wp.lonwritten%><br>" +
-				"<font color=\"#339933\">D<%wp.difficulty%>/T<%wp.terrain%> - <%wp.type%>, <%wp.cdate%></font><br>" +
+				"<font color=\"#339933\"><%wp.type%> D<%wp.difficulty%>/T<%wp.terrain%> - placed: <%wp.cdate%> last: <%wp.mdate%></font><br>" +
 				"<p><%out.details%></p>\n",
 			'templatePost'	=> "</body></html>"
 		},
