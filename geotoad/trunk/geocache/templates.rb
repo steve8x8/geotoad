@@ -86,8 +86,8 @@ $Format = {
                 "<b><font color=\"#11CC11\">$</font></b> have travelbugs&nbsp;&nbsp;&nbsp;" +
                 "<b><font color=\"#9900CC\">@</font></b> have never been found&nbsp;&nbsp;&nbsp;" +
                 "<b><font color=\"#229999\">%</font></b> have a terrain rating of 3.5+&nbsp;&nbsp;&nbsp;" +
-                "<b><font color=\"#BB0000\">+</font></b> have a difficulty rating of 3.5+<br>",
-
+                "<b><font color=\"#BB0000\">+</font></b> have a difficulty rating of 3.5+<br>" +
+                "<font color=\"#555555\" size=\"1\">Hint Decryption (ROT13): Add 13 to each letter, so that A=N, M=Z, N=A, and Z=M.</font><br>",
             'templateIndex' => "* <a href=\"#<%out.wid%>\"><%wpEntity.name%></a><br>",
             'templateWP'    =>
                 "\n\n<hr noshade size=\"1\">\n<a name=\"<%out.wid%>\"></a><font color=\"#000099\"><a href=\"<%out.url%>\"><big><b><%wpEntity.name%><%out.symbols%></b></big></a></font><br>\n" +

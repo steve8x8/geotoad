@@ -322,10 +322,17 @@ class Output
                 end
 
                 if (@wpHash[wid]['mdays'] < 0)
-                     symbols[wid] =  symbols[wid] + "<b><font color=\"#9900CC\">@</font>"
+                     symbols[wid] =  symbols[wid] + "<b><font color=\"#9900CC\">@</font></b>"
                 end
 
-                htmlIndex = htmlIndex + symbols[wid] + "<a href=\"\##{wid}\">#{@wpHash[wid]['name']}</a>"
+                htmlIndex = htmlIndex + symbols[wid]
+
+                # make the names bold if they are virgins. Broken when we moved everything into symbols.
+                if (@wpHash[wid]['mdays'] < 0)
+                    htmlIndex = htmlIndex + "<b>"
+                end
+
+                htmlIndex = htmlIndex + "<a href=\"\##{wid}\">#{@wpHash[wid]['name']}</a>"
 
                 if (@wpHash[wid]['mdays'] < 0)
                     htmlIndex = htmlIndex + "</b>"
