@@ -20,8 +20,10 @@ credits.
 ------------
 Requirements
 ------------
-Ruby 1.6 - http://www.ruby-lang.org/ .. Mac OS X and some Linux
-distributions already have this installed.
+Ruby 1.6 - An object oriented scripting language, similar to Perl and
+Python. Mac OS X and some Linux distributions already have this installed. 
+If you are a Windows user, you should use this installer:
+http://unc.dl.sourceforge.net/sourceforge/rubyinstaller/ruby168-8.exe
 
 Optionally, if you have gpsbabel - http://gpsbabel.sourceforge.net/ ..
 geotoad can output to over a dozen additional GPS formats.
@@ -30,7 +32,13 @@ geotoad can output to over a dozen additional GPS formats.
 ------
 Syntax
 ------
-Sample Syntax for the CLI mode:
+You need to get to a command-line (DOS, cmd.exe, UNIX shell), and go into
+the directory you extracted geotoad into. Then you should be able to type
+something simple like:
+
+geotoad.rb 27513
+
+or:
 
 geotoad.rb -t 2.5 -f vcf -u helixblue:Sallad -o ~/Desktop/charlotte.vcf 28272
 
