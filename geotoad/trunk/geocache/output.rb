@@ -52,16 +52,18 @@ class Output < Common
 			'ext'		=> 'html',
 			'mime'	=> 'text/html',
 			'desc'	=> 'Simple HTML table format',
-			'spacer'	=> "<p>\n",
-			'templatePre' => "<html><head><title>GeoToad Output</title></head>" +
-				"<body link=\"#000099\" vlink=\"#000044\" alink=\"#000099\">" +
+			'spacer'	=> "<br>&nbsp;<br>\n",
+			'templatePre' => "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n" + 
+                "<html><head>\n<title>GeoToad Output</title>\n" + 
+                "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">\n" + "</head>\n" +
+				"<body link=\"#000099\" vlink=\"#000044\" alink=\"#000099\">\n" +
 				"GeoToad query output",
             'templateIndex' => "* <a href=\"#<%out.wid%>\"><%wp.name%></a><br>",
 			'templateWP'	=>
 				"<a name=\"<%out.wid%>\"></a><font color=\"#000099\"><a href=\"<%out.url%>\"><big><strong><%wp.name%></strong></big></a></font>&nbsp;&nbsp;  <b><%wp.travelbug%></b><br>\n" +
                 "<font color=\"#555555\"><strong><%wp.creator%></strong></font>, <%wp.latwritten%> <%wp.lonwritten%><br>" +
 				"<font color=\"#339933\"><%wp.type%> D<%wp.difficulty%>/T<%wp.terrain%> - placed: <%wp.cdate%> last: <%wp.mdate%></font><br>" +
-				"<p><%out.details%></p>\n",
+				"<p><%out.details%></p><hr noshade>\n",
 			'templatePost'	=> "</body></html>"
 		},
 
@@ -407,9 +409,12 @@ class Output < Common
         if @outputType == "html"
             htmlIndex=''
             debug "I should generate an index, I'm html"
+            
 
             wpList.sort{|a,b| a[1]<=>b[1]}.each {  |wpArray|
                 wid = wpArray[0]
+                @wpHash[wid]['details'].gsub!("\&([A-Z])", "&amp;(#{$1})");
+                @wpHash[wid]['creator'].gsub!("\&", "&amp;");
 		htmlIndex = htmlIndex + "<li><a href=\"\##{wid}\">#{@wpHash[wid]['name']}</a>"
 
                 if (@wpHash[wid]['travelbug'])

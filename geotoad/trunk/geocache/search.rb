@@ -141,7 +141,7 @@ class SearchCache < Common
 			@waypointHash[wid]['cdate'] = $3
 			# distance is only in zipcode/coord search. don't bother.
 			#@waypointHash[wid]['distance'] = $3.to_f
-			@waypointHash[wid]['name'] = CGI.unescape($4);
+			name = CGI.unescape($4);
 			@waypointHash[wid]['creator'] = CGI.unescape($5)
 			@waypointHash[wid]['state'] = $7
             
@@ -162,6 +162,8 @@ class SearchCache < Common
                 @waypointHash[wid]['mdate'] = nil
                 debug "#{wid} has never been found! (#{mdate})"
             end
+            
+            @waypointHash[wid]['name'] = name.gsub("[\x80-\xFF]", "\'") 
             
             type.gsub!('\s*cache', '')
             @waypointHash[wid]['type'] = type

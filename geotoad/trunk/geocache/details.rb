@@ -95,15 +95,22 @@ class CacheDetails < Common
             end
 
             if data =~ /id=\"LongDescription\"\>(.*?)\<\/span\><\/BLOCKQUOTE\>/m
-				details =  @waypointHash[wid]['details'] << "details: " << $1
+				details =  @waypointHash[wid]['details'] << "  " << $1
+                details.gsub!("<p>", "\n\n")
 				details.gsub!("\<.*?\>", " *")
 				details.gsub!("\r\n", " ")
                 # MS HTML crap
                 details.gsub!("style=\".*?\"", "")
                 details.gsub!("\<i.*?\>", "")
+                details.gsub!("\<", "&lt;")
+                details.gsub!("\>", "&gt;")
 				details.gsub!("(\W)  (\W)", "$1")
                 details.gsub!(/\* +\*/, "*")
                 details.gsub!(/ +/, " ")
+                details.gsub!("[\x80-\xFF]", "\'") 
+                details.gsub!("\'+", "\'") 
+                # some misc. random crap.
+      
 				debug "got details: [#{details}]"
 				@waypointHash[wid]['details'] = details
             end
