@@ -28,7 +28,7 @@ $Format = {
         'gpx'    => {
             'ext'        => 'gpx',
             'mime'    => 'text/ascii',
-            'desc'    => '<%out.title%>',
+            'desc'    => 'GPX Geocaching XML',
             'spacer'    => "\r\n",
             'templatePre' => "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n" +
             "<gpx xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" version=\"1.0\" creator=\"GeoToad\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd http://www.groundspeak.com/cache/1/0 http://www.groundspeak.com/cache/1/0/cache.xsd\" xmlns=\"http://www.topografix.com/GPX/1/0\">\r\n" +
