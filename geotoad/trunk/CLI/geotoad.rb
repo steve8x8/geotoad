@@ -28,12 +28,12 @@ include Display
 # The version gets inserted by makedist.sh
 versionID='%VERSION%'
 if versionID !~ /^\d/
-    $VERSION = '3.5-CURRENT'
+    $VERSION = '3.6-CURRENT'
 else
     $VERSION = versionID.dup
 end
 
-$SLEEP=3
+$SLEEP=0
 $SLOWMODE=350
 
 def initialize
@@ -524,7 +524,7 @@ def saveFile
     if outputFile !~ /[\/\\]/
         outputFile = Dir.getwd + '/' + outputFile
     end
-    
+
     # Lets not mix and match DOS and UNIX /'s, we'll just make everyone like us!
     outputFile.gsub!(/\\/, '/')
 

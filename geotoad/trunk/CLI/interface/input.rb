@@ -125,7 +125,7 @@ class Input
             puts "- - - - - - - - - - - - - - - - - - - + - - - - - - - - - - - - - - - - - - -"
             printf("(22) output format       [%-10.10s] | (23) filename          [%-13.13s]\n", (@@optHash['format'] || 'gpx'), (@@optHash['output'] || 'automatic'))
             puts "=============================================================================="
-            print "   Enter item number, (q) when done, or (x) to abort --> "
+            print "   Enter menu number, (s) to start, or (x) to exit --> "
             answer = $stdin.gets.chop
             puts ""
 
@@ -270,9 +270,9 @@ class Input
                 when '23'
                     @@optHash['output'] = ask('What filename would you like to output to? (press enter for automatic)', nil)
 
-                when 'q'
+                when 's'
                     if (! @@optHash['queryArg']) || (@@optHash['queryArg'].size < 1)
-                        puts "You cannot quit till you specify a #{@@optHash['queryType']} query to run"
+                        puts "You cannot start till you specify a #{@@optHash['queryType']} query to run"
                         puts "(press enter to continue)"
                         answer=$stdin.gets
                     end
