@@ -19,8 +19,10 @@ class Output < Common
 		'RIVER'		=> '',
 		'ONE'			=> '1',
 		'CREEK'		=> 'Ck',
+        'BLACK'     => 'Blk',
 		'MOUNTAIN'	=> 'Mt',
 		'WITH'		=> 'W',
+        'DOUBLE'    => 'Dbl',
         'IS'        => '',
         'THAT'      => 'T',
         'IN'        => '',
@@ -62,7 +64,7 @@ class Output < Common
 			'templateWP'	=>
 				"<hr noshade size=\"1\">\n<a name=\"<%out.wid%>\"></a><font color=\"#000099\"><a href=\"<%out.url%>\"><big><strong><%wp.name%></strong></big></a></font>&nbsp;&nbsp;  <b><%wp.travelbug%></b><br>\n" +
                 "<font color=\"#555555\"><strong><%wp.creator%></strong></font>, <%wp.latwritten%> <%wp.lonwritten%><br>" +
-				"<font color=\"#339933\"><%wp.type%> D<%wp.difficulty%>/T<%wp.terrain%> - placed: <%wp.cdate%> last: <%wp.mdate%></font><br>" +
+				"<font color=\"#339933\"><%wp.type%> D<%wp.difficulty%>/T<%wp.terrain%> - placed: <%wp.cdate%> last: <%wp.mdate%> days ago</font><br>" +
 				"<p><%out.details%></p>\n",
 			'templatePost'	=> "</body></html>"
 		},
@@ -76,7 +78,7 @@ class Output < Common
 			'templateWP'	=> "== \"<%wp.name%>\" (<%out.wid%>) by <%wp.creator%>\r\n" +
 				"Difficulty: <%wp.difficulty%>, Terrain: <%wp.terrain%>\r\n" +
 				"Lat: <%wp.latwritten%> Lon: <%wp.lonwritten%>\r\n" +
-				"Type: <%wp.type%>, Creation: <%wp.cdate%>, Last found: <%wp.mdate%>\r\n" +
+				"Type: <%wp.type%>, Creation: <%wp.cdate%>, Last found: <%wp.mdate%> days ago\r\n" +
 				"Details:\r\n<%out.details%>\r\n\r\n\r\n"
 		},
 
@@ -264,7 +266,7 @@ class Output < Common
         # acronym.
         if tempname =~ /(\w)\. (\w)\. (\w)/
             debug "shortname: acronym detected.. removing extraneous dots and spaces"
-            tempname.gsub!('\. ', '')
+            tempname.gsub!(/\. /, '')
         end
 
 
@@ -418,17 +420,18 @@ class Output < Common
 
             wpList.sort{|a,b| a[1]<=>b[1]}.each {  |wpArray|
                 wid = wpArray[0]
-                @wpHash[wid]['details'].gsub!("\&([A-Z])", "&amp;(#{$1})");
-                @wpHash[wid]['creator'].gsub!("\&", "&amp;");
+                @wpHash[wid]['details'].gsub!(/\&([A-Z])/, '&amp;(#{$1})');
+                @wpHash[wid]['creator'].gsub!('&', '&amp;');
                 htmlIndex = htmlIndex + "<li><a href=\"\##{wid}\">#{@wpHash[wid]['name']}</a>"
 
                 if (@wpHash[wid]['travelbug'])
                     htmlIndex = htmlIndex + " [TB]"
                 end
 
-                if (! @wpHash[wid]['mdate'])
+                debug "Creating index for \"#{@wpHash[wid]['name']}\" (#{wid})"
+                if (@wpHash[wid]['mdate'] < 0)
                     htmlIndex = htmlIndex + " (v)"
-                    debug "Marking #{@wpHash[wid]['name']} a virgin"
+                    debug "Marking #{@wpHash[wid]['name']} a virgin (#{@wpHash[wid]['mdate']})"
                 end
                 htmlIndex = htmlIndex + "</li>\n"
             }
@@ -499,9 +502,9 @@ class Output < Common
 					(type, var) = tag[0].split('.')
 					#puts "#{tag} - type: #{type} var: #{var}"
 					if (type == "wp")
-						tempOutput.gsub!("\<%wp\.#{var}%\>", @wpHash[wid][var].to_s)
+						tempOutput.gsub!(/\<%wp\.#{var}%\>/, @wpHash[wid][var].to_s)
 					elsif (type == "out")
-						tempOutput.gsub!("\<%out\.#{var}%\>", outVars[var].to_s)
+						tempOutput.gsub!(/\<%out\.#{var}%\>/, outVars[var].to_s)
 					else
 						puts "unknown type: #{type} tag=#{var}"
 					end
