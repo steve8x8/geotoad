@@ -167,7 +167,13 @@ class Filter < Common
     # add a visitor to a cache. Used by the userlookup feeder.
     def addVisitor(wid, visitor)
         if (@waypointHash[wid])
-            @waypointHash[wid]['visitors'] << visitor
+            debug "Added visitor to #{wid}: #{visitor}"
+            # I don't believe we should downcase the visitors at this stage,
+            # since we really are losing data for the templates. I need to
+            # modify userInclude() and userExclude() to be case insensitive
+            # first.
+
+            @waypointHash[wid]['visitors'] << visitor.downcase
         else
             return 0
         end
