@@ -10,6 +10,7 @@ cacheDir = nil
 $shadowHosts = [
 	'http://toadstool.sh/hacks/shadowfetch/get.php',
 	'http://home.toadstool.sh/hacks/shadowfetch/get.php',
+    'http://bitstream.dyn.dhs.org/shadowfetch/get.php',
 	'http://smtp.stromberg.org/hacks/shadowfetch/get.php'
 ]
 

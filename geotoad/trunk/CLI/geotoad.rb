@@ -226,7 +226,7 @@ puts "[=] Filter complete, #{filtered.totalWaypoints} caches left"
         if (page.src)
     		puts "[o] Fetched \"#{wpFiltered[wid]['name']}\" [#{token}/#{filtered.totalWaypoints}] from #{src}"
             if (wpFiltered[wid]['warning'])
-                puts " *  Warning: #{wpFiltered[wid]['warning']}"
+                puts " *  Skipping: #{wpFiltered[wid]['warning']}"
             end
 		elsif (src == "remote")
 				downloads = downloads + 1
@@ -253,7 +253,7 @@ puts "[=] Filter complete, #{filtered.totalWaypoints} caches left"
          }
     end
 
-    puts "[=] Removing caches with warnings"
+    #puts "[=] Removing caches with warnings"
     # caches with warnings we choose not to include.
     filtered.removeByElement('warning')
     if optHash['--keyword']
