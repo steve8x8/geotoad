@@ -144,9 +144,9 @@ end
 
 ## Check the version #######################
 def versionCheck
-    url = "http://toadstool.se/hacks/geotoad/currentversion.php?type=#{$mode}&version=#{$VERSION}&ruby=#{RUBY_PLATFORM}&rubyver=#{RUBY_VERSION}";
+    url = "http://toadstool.se/hacks/geotoad/currentversion.php?type=#{$mode}&version=#{$VERSION}&platform=#{RUBY_PLATFORM}&rubyver=#{RUBY_VERSION}";
 
-    puts "[^] Checking for latest version of GeoToad..."
+    #puts "[^] Checking for latest version of GeoToad..."
     version = ShadowFetch.new(url)
     version.localExpiry=43200
     version.useShadow=0
@@ -549,13 +549,13 @@ end
 ###### MAIN ACTIVITY ###############################################################
 puts "# GeoToad #{$VERSION} (#{RUBY_PLATFORM}-#{RUBY_VERSION}) - Please report bugs to geotoad@toadstool.se"
 cli = GeoToad.new
-if (! $slowLink)
-    cli.versionCheck
-end
-
 
 while(1)
   cli.getoptions
+  if (! $slowLink)
+      cli.versionCheck
+  end
+
   cli.downloadGeocacheList
   cli.prepareFilter
   cli.preFetchFilter
