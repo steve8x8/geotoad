@@ -83,10 +83,10 @@ $Format = {
                 "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">\n" + "</head>\n" +
                 "<body link=\"#000099\" vlink=\"#000044\" alink=\"#000099\">\n" +
                 "<h3>GeoToad HTML Index</h3>" +
-                "<b><font color=\"#22CC22\">$</font></b> have travelbugs<br>" +
-                "<b><font color=\"#CC00CC\">@</font></b> have never been found<br>" +
-                "<b><font color=\"#666622\">#</font></b> have a terrain rating of 3.5+<br>" +
-                "<b><font color=\"#BB0000\">!</font></b> have a difficulty rating of 3.5+<br>",
+                "<b><font color=\"#11CC11\">$</font></b> have travelbugs<br>" +
+                "<b><font color=\"#9900CC\">@</font></b> have never been found<br>" +
+                "<b><font color=\"#229999\">%</font></b> have a terrain rating of 3.5+<br>" +
+                "<b><font color=\"#BB0000\">+</font></b> have a difficulty rating of 3.5+<br>",
 
             'templateIndex' => "* <a href=\"#<%out.wid%>\"><%wpEntity.name%></a><br>",
             'templateWP'    =>

@@ -224,7 +224,6 @@ class Output < Common
             htmlIndex=''
             debug "I should generate an index, I'm html"
 
-
             wpList.sort{|a,b| a[1]<=>b[1]}.each {  |wpArray|
                 wid = wpArray[0]
                 debug "Creating index for \"#{@wpHash[wid]['name']}\" (#{wid})"
@@ -234,19 +233,19 @@ class Output < Common
 
 
                 if (@wpHash[wid]['travelbug'])
-                    htmlIndex = htmlIndex + "<b><font color=\"#22CC22\">$</font></b>"
+                    htmlIndex = htmlIndex + "<b><font color=\"#11CC11\">$</font></b>"
                 end
 
                 if (@wpHash[wid]['terrain'] > 3)
-                    htmlIndex = htmlIndex + "<b><font color=\"#666622\">#</font></b>"
+                    htmlIndex = htmlIndex + "<b><font color=\"#229999\">%</font></b>"
                 end
 
                 if (@wpHash[wid]['difficulty'] > 3)
-                    htmlIndex = htmlIndex + "<b><font color=\"#BB0000\">!</font></b>"
+                    htmlIndex = htmlIndex + "<b><font color=\"#BB0000\">+</font></b>"
                 end
 
                 if (@wpHash[wid]['mdays'] < 0)
-                    htmlIndex = htmlIndex + "<b><font color=\"#CC00CC\">@</font>"
+                    htmlIndex = htmlIndex + "<b><font color=\"#9900CC\">@</font>"
                 end
 
                 htmlIndex = htmlIndex + "<a href=\"\##{wid}\">#{@wpHash[wid]['name']}</a>"
