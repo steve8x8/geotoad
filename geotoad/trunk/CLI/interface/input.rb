@@ -48,6 +48,13 @@ class Input
         begin
             @@optHash = Hash.new
             opts.each do |opt, arg|
+                # queryType gets special treatment. We try and normalize what they mean.
+                debug "opt = #{opt} arg=#{arg}"
+                if (opt == '--queryType')
+                    arg = guessQueryType(arg)
+                    debug "queryType is now #{arg}"
+                end
+
                 @@optHash[opt.gsub(/-/,'')]=arg
             end
         rescue
@@ -139,18 +146,19 @@ class Input
 
             case answer
                when '1'
-                   @@optHash['queryType'] = ask("What type of search would you like to perform? (zip, state, coordinate)", nil)
+                   type = ask("What type of search would you like to perform? (zip, state, coordinate)", nil)
+                   @optHash['queryType'] = guessQueryType(type)
 
                when '2'
-                   if (@@optHash['queryType'] =~ /^zip/)
+                   if (@@optHash['queryType'] = 'zip')
                        @@optHash['queryArg'] = ask('Enter a list of zipcodes (seperated by commas)', 'NO_DEFAULT').gsub(/, */, ':')
                    end
 
-                   if (@@optHash['queryType'] =~ /^state/)
+                   if (@@optHash['queryType'] =~ 'state')
                        @@optHash['queryArg'] = ask('Enter a list of states (seperated by commas)', 'NO_DEFAULT').gsub(/, */, ':')
                    end
 
-                   if (@@optHash['queryType'] =~ /^coord/)
+                   if (@@optHash['queryType'] =~ 'coord')
                        puts "You will be asked to enter in a list of coordinates in the following format:"
                        puts "N56 44.392 E015 52.780"
                        puts ""
@@ -325,6 +333,17 @@ class Input
         else
             puts "Assuming the default answer \'#{default}\'"
             return default
+        end
+    end
+
+    def guessQueryType(type)
+        case type
+            when /^z/
+                return 'zipcode'
+            when /^c/
+                return 'coord'
+            when /^s/
+                return 'state'
         end
     end
 
