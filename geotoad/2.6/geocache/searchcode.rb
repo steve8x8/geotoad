@@ -218,7 +218,7 @@ $idHash['zip'] = Hash.new
 $idHash['zip']['placeholder']=27513
 
 def initialize (type)
-    type.downcase!
+    type = type.downcase
     if (type == "state")
         type="state_id"
     end
