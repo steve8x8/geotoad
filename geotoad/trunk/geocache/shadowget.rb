@@ -31,23 +31,32 @@ class ShadowFetch < Common
 		@remote = 0
         @shadowExpiry=345600	# 4 days
         @localExpiry=432000		# 4 days
+        debug "new fetch: #{url}"
 	end
 
 	# to change the URL
 	def url=(url)
 		@url = url
+        debug "set url to #{url}"
 	end
 
     def shadowExpiry=(expiry)
         debug "setting shadow expiry to #{expiry}"
         @shadowExpiry=expiry
     end
-    
+
     def localExpiry=(expiry)
         debug "setting local expiry to #{expiry}"
         @localExpiry=expiry
     end
-            
+
+    def postVars=(vars)
+        vars.each_key {|key|
+            debug "Set post variable: #{key}"
+        }
+        @postVars=vars
+    end
+
 	# to get the data returned back to you.
 	def data
 		@data
@@ -64,6 +73,16 @@ class ShadowFetch < Common
 
 	# returns the cache filename that the URL will be stored as
 	def cacheFile(url)
+        if (@postVars)
+            @postVars.each_key { |key|
+                value=@postVars[key].slice(0,20)
+                url = url + "&POST-#{key}=#{value}"
+            }
+            debug "added post vars to url: #{url}"
+        else
+            debug "no post vars to add to filename"
+        end
+
 		fileParts = url.split('/')
 		host = fileParts[2]
 
@@ -77,7 +96,7 @@ class ShadowFetch < Common
 		end
 
 		# make a friendly filename
-		localfile.gsub!(/[=\?\*\%\&]/, "_")
+		localfile.gsub!(/[=\?\*\%\&\$]/, "_")
 		debug "cachefile: #{localfile}"
 		return localfile
 	end
@@ -144,7 +163,7 @@ class ShadowFetch < Common
 			debug "shadow servers gave back garbarge. shadowing disabled"
 			# we could not reach a local shadow server!
 			@data = fetchRemote
-            
+
             if (! @data)
                 debug "we must not have a net connection, uh no"
                 if (File.exists?(localfile))
@@ -208,10 +227,10 @@ class ShadowFetch < Common
 			return data
 		rescue => detail
 			debug "Error fetching #{url} (members only cache?)"
-            
+
             # our debugging is messed up right now.
             return nil
-            
+
 			if (detail)
 				head.each { |key, val|
 					debug "        #{key}: #{val}"
@@ -279,7 +298,7 @@ class ShadowFetch < Common
             debug "No data found for #{@url}, not updating shadow"
             return nil
         end
-        
+
         uploadEncoded = "c=update&p=" + CGI.escape(@url) + "&d=" + CGI.escape(@data)
 
 		#puts uploadEncoded

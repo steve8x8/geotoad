@@ -18,8 +18,8 @@ class SearchCache < Common
 
 	# set the search mode. valid modes are 'zip', 'state_id', 'country_id', 'keyword',
 	# coord
-	def mode(mode, key)        
-        # resolve North Carolina to 34. 
+	def mode(mode, key)
+        # resolve North Carolina to 34.
         keylookup=SearchCode.new(mode)
         @mode=keylookup.type
 		@key=keylookup.lookup(key)
@@ -27,7 +27,7 @@ class SearchCache < Common
             puts "Bad search key for #{@mode} type: #{key}"
             return nil
         end
-        
+
 		# come up with a nice URL for the mode too.
 		case @mode
 			when 'coord'
@@ -104,7 +104,7 @@ class SearchCache < Common
 		page = ShadowFetch.new(url)
         page.shadowExpiry=43200
         page.localExpiry=86400
-            
+
 		if (page.fetch)
 			parseSearch(page.data)
 		else
@@ -112,18 +112,28 @@ class SearchCache < Common
 		end
 	end
 
+    # for the eventstate thing
+    def postVars
+        @postVars
+    end
+
+    def postURL
+        @postURL
+    end
+
 	def parseSearch(data)
         wid=nil
         @cache = Hash.new
+        @postVars = Hash.new
 
         data.each { |line|
             #debug "### #{line}"
-
-            case line 
+            case line
                 when /Total Records: \<b\>(\d+)\<\/b\> - Page: \<b\>(\d+)\<\/b\> of \<b\>(\d+)\<\/b\>/
                     @totalWaypoints = $1.to_i
                     currentPage = $2.to_i
                     totalPages = $3.to_i
+                    #puts line
                     # emulation of old page behaviour (pre-Jun 2003). May not be required anymore.
                     debug "current page is #{currentPage} of #{totalPages}"
                     @firstWaypoint = (currentPage * 25) - 25  # 1st on the page
@@ -134,28 +144,28 @@ class SearchCache < Common
 
                     @returnedWaypoints = @lastWaypoint - @firstWaypoint + 1
                     debug "Search has returned #{@returnWaypoints}"
-                    
+
                 when /WptTypes.*alt=\"(.*?)\" border=0 width=22 height=30/
-                   
+
                     @cache['type']=$1
                     @cache['mdate']=nil
                     @cache['type'].gsub!('\s*cache.*', '')
                     @cache['type'].gsub!('-', '')
                     debug "type=#{@cache['type']}"
-                    
+
                 when /nowrap\>\((\d+)\/(\d+)\)\<\/td\>/
                     @cache['difficulty']=$1.to_f
                     @cache['terrain']=$2.to_f
                     debug "cacheDiff=#{@cache['difficulty']} terr=#{@cache['terrain']}"
-                    
+
                 when /align=\"left\">([\d\/]+)\<\/td\>/
                     @cache['cdate']=$1
                     debug "cacheDate=#{@cache['cdate']}"
-                    
+
                 when /align=\"left\">([\d\.]+)mi [NSWE]+\<br\>/
                     @cache['distance']=$1.to_f
                     debug "cacheDistance=#{@cache['distance']}"
-                    
+
                 when /cache_details.aspx\?guid=(.*?)\">(.*?)\<\/a\>/
                     @cache['sid']=$1
                     name=$2
@@ -163,24 +173,24 @@ class SearchCache < Common
                         @cache['disabled']=1
                         name=$1
                     end
-                    @cache['name']=CGI.unescape(name).gsub("[\x80-\xFF]", "\'") 
+                    @cache['name']=CGI.unescape(name).gsub("[\x80-\xFF]", "\'")
                     debug "sid=#{@cache['sid']} name=#{@cache['name']} (disabled=#{@cache['disabled']})"
-                    
+
                 when /\bby (.*)/
                     @cache['creator']=CGI.unescape($1)
                     debug "creator=#{@cache['creator']}"
                 when /\((GC\w+)\)/
                     wid=$1
                     debug "wid=#{wid}"
-                    
+
                     # We have a WID! Lets begin
                 when /icon_bug/
                     @cache['travelbug']='Travel Bug!'
-                    
+
                 when /\<td valign=\"top\" align=\"left\"\>(\d+) days ago\<br\>/
                     @cache['mdate']=$1.to_i
                     debug "mdate=#{@cache['mdate']}"
-                    
+
                 # There is no good end of record marker, sadly.
                 when /\<hr noshade width=\"100%\" size=\"1\">/
                     if (wid)
@@ -189,6 +199,15 @@ class SearchCache < Common
                         debug "Search found: #{wid}: #{@waypointHash[wid]['name']} (sid=#{@waypointHash[wid]['sid']})"
                         @cache.clear
                     end
+
+                when /^\<input type=\"hidden\" name=\"(.*?)\" value=\"(.*?)\" \/\>/
+                    debug "VAR #{$1} = #{$2}"
+                    @postVars[$1]=$2
+                when /\<form name=\"Form1\" method=\"post\" action=\"(.*?)\"/
+                    @postURL='http://www.geocaching.com/seek/' + $1
+                    @postURL.gsub!("\&amp;", "\&")
+                    debug "post URL is #{@postURL}"
+
             end # end case
 		} # end loop
 	end #end parsecache

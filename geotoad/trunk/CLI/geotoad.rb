@@ -60,14 +60,14 @@ def usage
 		end
 		i=i+1
 
-		
-		if (desc =~ /gpsbabel/) 
+
+		if (desc =~ /gpsbabel/)
 			type = type + "*"
 		end
 	        printf("  %-8.8s", type);
 
 	}
-    puts "" 
+    puts ""
     puts "    * format requires gpsbabel to be installed and in PATH"
     puts ""
 	puts " -q [zip|state|country]  query type (zip by default)"
@@ -153,26 +153,44 @@ end
 
 search.fetchFirst
 if (search.totalWaypoints)
-	puts "[.] #{search.totalWaypoints} waypoints matched initial query."
+	puts "[.] #{search.totalWaypoints} waypoints matched initial query, recieved results for 1-#{search.lastWaypoint}."
 
 	# the loop that gets all of them.
 	running = 1
 	downloads = 0
+    resultsPager = 5
 	while(running)
 		common.debug "(download while loop)"
 		# short-circuit for lack of understanding.
 		if (search.totalWaypoints > search.lastWaypoint)
+            lastWaypoint=search.lastWaypoint
+
 			common.debug "I think we need more waypoints, lets hack up a URL"
 			current = search.lastWaypoint + search.returnedWaypoints
-			searchURL = search.URL +  '&start=' + search.lastWaypoint.to_s
-			page = ShadowFetch.new(searchURL)
 
+            # for the new crap that geocaching.com throws in
+            postVars = search.postVars
+            postVars['__EVENTTARGET']="ResultsPager$_ctl#{resultsPager}"
+
+			# legacy
+            #searchURL = search.URL +  '&start=' + search.lastWaypoint.to_s
+            searchURL = search.postURL
+			page = ShadowFetch.new(searchURL)
+            page.postVars=postVars
             # very short expiry time for the search index.
             page.shadowExpiry=60000
             page.localExpiry=43200
-            
+            common.debug "Going to fetch the page for real now"
+            page.fetch
+
 			src = page.src
 			puts "[o] Recieved search results for \##{search.lastWaypoint}-#{current} of #{search.totalWaypoints} (#{src})"
+            if (search.lastWaypoint <= lastWaypoint)
+                puts "[*] Logic error. I was at #{lastWaypoint} before, why am I at #{search.lastWaypoint} now?"
+                exit
+            end
+
+            #exit
 			if (src == "remote")
 				# give the server a wee bit o' rest.
 				downloads = downloads + 1
@@ -181,7 +199,7 @@ if (search.totalWaypoints)
 					common.debug "quitting after #{downloads} downloads"
 					#exit 4
 				end
-                # half the rest for this. 
+                # half the rest for this.
                 common.debug "sleeping"
 				sleep ($SLEEP / 2).to_i
 			end
@@ -281,7 +299,7 @@ puts "[=] Filter complete, #{filtered.totalWaypoints} caches left"
     puts "[=] Second filtering stage is being executed"
     filtered= Filter.new(detail.waypoints)
 
-    
+
     if (optHash['--user'])
          optHash['--user'].split(':').each { |user|
              filtered.notUser(user)
