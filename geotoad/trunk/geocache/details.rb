@@ -63,20 +63,20 @@ class CacheDetails < Common
 				debug "got lon data: #{$1}"
             end
 			if line =~ /\<font size=\"3\"\>([NW]) (\d+).*? ([\d\.]+) ([NW]) (\d+).*? ([\d\.]+)\<\/STRONG\>/
-				@waypointHash[wid]['latwritten'] = $1 + $2 + " " + $3
-				@waypointHash[wid]['lonwritten'] = $4 + $5 + " " + $6
+				@waypointHash[wid]['latwritten'] = $1 + $2 + ' ' + $3
+				@waypointHash[wid]['lonwritten'] = $4 + $5 + ' ' + $6
                 debug "got written lan/lon: "
             end
 
             if line =~ /\<span id=\"ErrorText\">(.*?)\<\/span\>/
                 warning = $1
-                warning.gsub!("\<.*?\>", '')
-                @waypointHash[wid]['warning'] = warning
+                warning.gsub!(/\<.*?\>/, '')
+                @waypointHash[wid]['warning'] = warning.dup
                 debug "got a warning: #{$1}"
             end
 
 			if line =~ /\<span id=\"Hints\"\>(.*?)\</
-					@waypointHash[wid]['hint'] = $1
+					@waypointHash[wid]['hint'] = $1.dup
                     debug "got hint"
             end
 
@@ -100,25 +100,24 @@ class CacheDetails < Common
             # next
             if data =~ /id=\"ShortDescription\"\>(.*?)\<\/span\>/m
                 debug "found short desc: [#{$1}]"
-                @waypointHash[wid]['details'] = $1
+                @waypointHash[wid]['details'] = $1.dup
             end
 
             if data =~ /id=\"LongDescription\"\>(.*?)\<\/span\><\/BLOCKQUOTE\>/m
                 debug "found long desc"
 				details =  @waypointHash[wid]['details'] << "  " << $1
-                details.gsub!("<p>", "\n\n")
-				details.gsub!("\<.*?\>", " *")
-				details.gsub!("\r\n", " ")
+                details.gsub!('<p>', "\n\n")
+				details.gsub!(/\<.*?\>/, ' *')
+				details.gsub!('\r\n', ' ')
                 # MS HTML crap
-                details.gsub!("style=\".*?\"", "")
-                details.gsub!("\<i.*?\>", "")
-                details.gsub!("\<", "&lt;")
-                details.gsub!("\>", "&gt;")
-				details.gsub!("(\W)  (\W)", "$1")
+                details.gsub!(/style=\".*?\"/, '')
+                details.gsub!(/\<i.*?\>/, '')
+                details.gsub!("<", '&lt;')
+                details.gsub!(">", "&gt;")
                 details.gsub!(/\* +\*/, "*")
                 details.gsub!(/ +/, " ")
-                details.gsub!("[\x80-\xFF]", "\'")
-                details.gsub!("\'+", "\'")
+                details.gsub!(/[\x80-\xFF]/, "\'")
+                details.gsub!(/\'+/, "\'")
                 # some misc. random crap.
 
 				debug "got details: [#{details}]"
