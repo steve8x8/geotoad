@@ -38,8 +38,8 @@ There are two modes to GeoToad, an interactive mode, which most people will
 use, and a command line interface, which is mostly for people scripting
 GeoToad. To get to the interactive mode:
 
-In Windows  -- simply double click on geotoad.rb once Ruby is installed.
-In Mac OS X -- click on the "GeoToad for Mac.cmd" file.
+In Windows  -- double click on the "geotoad.exe" file.
+In Mac OS X -- double click on the "GeoToad" file.
 In UNIX     -- run ./geotoad.rb in a shell.
 
 The rest should be somewhat obvious. You get to a screen where you can
