@@ -32,7 +32,7 @@ zip -r ${LONGDIST}_for_MacOS.zip $DIST
 
 # Generic
 echo "Creating zipfile (Generic): zip -r $LONGDIST.zip $DIST"
-rm $DEST/*.command 2>/dev/null
+rm $DEST/*.command 
 rm $DEST/.* 2>/dev/null
 zip -r $LONGDIST.zip $DIST
 
@@ -46,6 +46,9 @@ flip -d *.txt
 
 cp $SRC/CLI/*.exe .
 zip -r ../${LONGDIST}_for_Windows.zip *
+
+echo "Copying to desktop"
+cp /tmp/${LONGDIST}* ~/Desktop
 
 #echo "Copying zipfile to webservers"
 #scp $LONGDIST.zip $DEST/ChangeLog.txt smtp.stromberg.org:/www/toadstool.se/htdocs/hacks/geotoad/files/
