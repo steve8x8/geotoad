@@ -410,11 +410,16 @@ class Output < Common
 
             wpList.sort{|a,b| a[1]<=>b[1]}.each {  |wpArray|
                 wid = wpArray[0]
+		htmlIndex = htmlIndex + "<li><a href=\"\##{wid}\">#{@wpHash[wid]['name']}</a>"
+
                 if (@wpHash[wid]['travelbug'])
-                    htmlIndex = htmlIndex + "<li><a href=\"\##{wid}\">#{@wpHash[wid]['name']}</a> [*]</li>\n"
-                else
-                    htmlIndex = htmlIndex + "<li><a href=\"\##{wid}\">#{@wpHash[wid]['name']}</a></li>\n"
+                     htmlIndex = htmlIndex + " [TB]"
                 end
+
+		if (@wpHash[wid]['mdate'].to_s.length < 7)
+			htmlIndex = htmlIndex + " [v]"
+		end
+		htmlIndex = htmlIndex + "</li>\n"
             }
 
             output = output + "<ul>\n" + htmlIndex + "</ul>\n"
