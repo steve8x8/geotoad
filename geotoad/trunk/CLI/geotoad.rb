@@ -213,7 +213,7 @@ def downloadGeocacheList
         if @queryType == "zip" || @queryType == "coord"
             puts "(constraining to #{@distanceMax} miles)"
             @queryTitle = @queryTitle + " (#{@distanceMax})mi.)"
-            @defaultOutputFile = @defaultOutputFile + "-y" + @distanceMax
+            @defaultOutputFile = @defaultOutputFile + "-y" + @distanceMax.to_s
             search.distance(@distanceMax.to_i)
         else
             puts
@@ -301,27 +301,27 @@ def preFetchFilter
 
     if @optHash['--difficultyMin']
         @queryTitle = @queryTitle + ", difficulty #{@optHash['--difficultyMin']}+"
-        @defaultOutputFile = @defaultOutputFile + "-d" + @optHash['--difficultyMin']
+        @defaultOutputFile = @defaultOutputFile + "-d" + @optHash['--difficultyMin'].to_s
         @filtered.difficultyMin(@optHash['--difficultyMin'].to_f)
     end
     debug "Filter running cycle 2, #{@filtered.totalWaypoints} caches left"
     if @optHash['--difficultyMax']
         @queryTitle = @queryTitle + ", difficulty #{@optHash['--difficultyMax']} or lower"
-        @defaultOutputFile = @defaultOutputFile + "-D" + @optHash['--difficultyMin']
+        @defaultOutputFile = @defaultOutputFile + "-D" + @optHash['--difficultyMin'].to_s
         @filtered.difficultyMax(@optHash['--difficultyMax'].to_f)
     end
     debug "Filter running cycle 3, #{@filtered.totalWaypoints} caches left"
 
     if @optHash['--terrainMin']
         @queryTitle = @queryTitle + ", terrain #{@optHash['--terrainMin']}+"
-        @defaultOutputFile = @defaultOutputFile + "-t" + @optHash['--terrainMin']
+        @defaultOutputFile = @defaultOutputFile + "-t" + @optHash['--terrainMin'].to_s
         @filtered.terrainMin(@optHash['--terrainMin'].to_f)
     end
     debug "Filter running cycle 4, #{@filtered.totalWaypoints} caches left"
 
     if @optHash['--terrainMax']
         @queryTitle = @queryTitle + ", terrain #{@optHash['--difficultyMax']} or lower"
-        @defaultOutputFile = @defaultOutputFile + "-T" + @optHash['--difficultyMin']
+        @defaultOutputFile = @defaultOutputFile + "-T" + @optHash['--difficultyMin'].to_s
         @filtered.terrainMax(@optHash['--terrainMax'].to_f)
     end
 
