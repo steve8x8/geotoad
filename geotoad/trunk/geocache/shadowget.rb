@@ -354,7 +354,7 @@ class ShadowFetch < Common
 
 
 		if (data !~ /^OK/)
-			puts "* data failed to upload, deleting shadow host: #{data}"
+			puts "* data failed to upload, deleting shadow host: (#{data})"
 			$shadowHosts.delete(host)
 			return nil
 		else
