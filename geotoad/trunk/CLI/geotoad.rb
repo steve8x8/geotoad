@@ -101,6 +101,8 @@ def initialize
     else
         # make friendly to people who can't quote.
         @queryArgList        = ARGV.join(" ")
+        @queryTitle = "GeoToad: #{@queryArgList}"
+        @defaultOutputFile = "gtout-" + @queryType + "-" + @queryArgList
     end
 
     if (@optHash['--verbose'])
@@ -210,6 +212,8 @@ def downloadGeocacheList
         # only valid for zip or coordinate searches
         if @queryType == "zip" || @queryType == "coord"
             puts "(constraining to #{@distanceMax} miles)"
+            @queryTitle = @queryTitle + " (#{@distanceMax})mi.)"
+            @defaultOutputFile = @defaultOutputFile + "-y" + @distanceMax
             search.distance(@distanceMax.to_i)
         else
             puts
@@ -257,10 +261,14 @@ def prepareFilter
 
     userLookups = Array.new
     if (@optHash['--userExclude'])
+        @queryTitle = @queryTitle + ", excluding caches done by " + @optHash['--userExclude']
+        @defaultOutputFile = @defaultOutputFile + "-U=" + @optHash['--userExclude']
         userLookups = @optHash['--userExclude'].split(':')
     end
 
     if (@optHash['--userInclude'])
+        @queryTitle = @queryTitle + ", excluding caches not done by " + @optHash['--userInclude']
+        @defaultOutputFile = @defaultOutputFile + "-u=" + @optHash['--userInclude']
         userLookups = userLookups + @optHash['--userInclude'].split(':')
     end
 
@@ -292,20 +300,28 @@ def preFetchFilter
     debug "Filter running cycle 1, #{@filtered.totalWaypoints} caches left"
 
     if @optHash['--difficultyMin']
+        @queryTitle = @queryTitle + ", difficulty #{@optHash['--difficultyMin']}+"
+        @defaultOutputFile = @defaultOutputFile + "-d" + @optHash['--difficultyMin']
         @filtered.difficultyMin(@optHash['--difficultyMin'].to_f)
     end
     debug "Filter running cycle 2, #{@filtered.totalWaypoints} caches left"
     if @optHash['--difficultyMax']
+        @queryTitle = @queryTitle + ", difficulty #{@optHash['--difficultyMax']} or lower"
+        @defaultOutputFile = @defaultOutputFile + "-D" + @optHash['--difficultyMin']
         @filtered.difficultyMax(@optHash['--difficultyMax'].to_f)
     end
     debug "Filter running cycle 3, #{@filtered.totalWaypoints} caches left"
 
     if @optHash['--terrainMin']
+        @queryTitle = @queryTitle + ", terrain #{@optHash['--terrainMin']}+"
+        @defaultOutputFile = @defaultOutputFile + "-t" + @optHash['--terrainMin']
         @filtered.terrainMin(@optHash['--terrainMin'].to_f)
     end
     debug "Filter running cycle 4, #{@filtered.totalWaypoints} caches left"
 
     if @optHash['--terrainMax']
+        @queryTitle = @queryTitle + ", terrain #{@optHash['--difficultyMax']} or lower"
+        @defaultOutputFile = @defaultOutputFile + "-T" + @optHash['--difficultyMin']
         @filtered.terrainMax(@optHash['--terrainMax'].to_f)
     end
 
@@ -326,22 +342,28 @@ def preFetchFilter
     end
 
     if @optHash['--notFound']
+        @queryTitle = @queryTitle + ", virgins only"
+        @defaultOutputFile = @defaultOutputFile + "-n"
         @filtered.notFound
     end
 
     if @optHash['--travelBug']
+        @queryTitle = @queryTitle + ", only with TB's"
+        @defaultOutputFile = @defaultOutputFile + "-b"
         @filtered.travelBug
     end
 
 
     beforeOwnersTotal = @filtered.totalWaypoints
     if (@optHash['--ownerExclude'])
+        @queryTitle = @queryTitle + ", excluding caches by #{@optHash['--ownerExclude'}"
         @optHash['--ownerExclude'].split(/[:\|]/).each { |owner|
             @filtered.ownerExclude(owner)
         }
     end
 
     if (@optHash['--ownerInclude'])
+        @queryTitle = @queryTitle + ", excluding caches not by #{@optHash['--ownerInclude'}"
         @optHash['--ownerInclude'].split(/[:\|]/).each { |owner|
             @filtered.ownerInclude(owner)
         }
@@ -434,6 +456,8 @@ def postFetchFilter
     @filtered.removeByElement('warning')
 
     if @optHash['--keyword']
+        @queryTitle = @queryTitle + ", matching keywords #{@optHash['--keyword']}"
+        @defaultOutputFile = @defaultOutputFile + "-k=" + @optHash['--keyword']
         @filtered.keyword(@optHash['--keyword'])
     end
 
@@ -478,20 +502,17 @@ def saveFile
     if (@optHash['--waypointLength'])
         output.waypointLength=@optHash['--waypointLength'].to_i
     end
-    outputData = output.prepare("details");
+
 
 
     if (@optHash['--output'])
-        outputFile = @optHash['--output38']
+        outputFile = @optHash['--output']
     else
-        outputFile = "gtout-" + @queryType + "-" + @queryArgList.gsub(/[:\.]/, '_')
-        if @queryType == "zip" || @queryType == "coord"
-            outputFile = outputFile + "-y" + @distanceMax.to_s
-        end
-
-        outputFile = outputFile + "." + output.formatExtension(@formatType)
+        outputFile = @defaultOutputFile.gsub(/[:\. \'\"\?\;]+/, '_')
     end
 
+    outputData = output.prepare(@queryTitle);
+    outputFile = outputFile + "." + output.formatExtension(@formatType)
     output.commit(outputFile)
     displayMessage "Output saved to #{outputFile}"
 end
