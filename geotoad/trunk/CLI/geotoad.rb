@@ -4,6 +4,17 @@
 # hack to include .. into the library path.
 $:.push('..')
 
+
+# just in case it was never replaced.
+versionID='%VERSION%'
+if versionID !~ /^d/
+    $VERSION = '2.5-CURRENT'
+else
+    $VERSION = versionID.dup
+end
+
+$SLEEP=3
+
 require 'getoptlong'
 require 'geocache/common'
 require 'geocache/shadowget'
@@ -13,17 +24,6 @@ require 'geocache/filter'
 require 'geocache/output'
 require 'geocache/details'
 
-
-$SLEEP=3
-
-# just in case it was never replaced.
-versionID='%VERSION%'
-
-if versionID !~ /^d/
-    $VERSION = '2.5-CURRENT'
-else
-    $VERSION = versionID.dup
-end
 
 common = Common.new
 $TEMP_DIR=common.findTempDir
