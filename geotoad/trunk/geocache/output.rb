@@ -245,7 +245,38 @@ class Output
             wpList[wid] = @wpHash[wid]['name'].dup
 
             if (@waypointLength > 1)
-                @wpHash[wid]['sname'] = shortName(@wpHash[wid]['name'])[0..(@waypointLength - 1)]
+                sname = shortName(@wpHash[wid]['name'])
+
+                # This loop checks for any other caches with the same generated waypoint id
+                # If a conflict is found, it looks for the unique characters in them, and
+                # puts something nice together.
+                @wpHash.each_key { |conflictWid|
+                    if (@wpHash[conflictWid]['sname']) && (@wpHash[conflictWid]['sname'][0..7] == sname[0..7])
+                        debug "Conflict found with #{sname} and #{@wpHash[conflictWid]['snameUncut']}"
+                        # Get the first 3 characters
+                        unique = ''
+                        x = 0
+
+                        # and then the unique ones after that
+                        sname.split('').each { |ch|
+                            if sname[x] != @wpHash[conflictWid]['snameUncut'][x]
+                                unique = unique + sname[x].chr
+                                #puts "unique: #{sname[x].chr} does not match #{@wpHash[conflictWid]['sname'][x].chr}"
+                            end
+                            x = x + 1
+                        }
+
+                        if unique.length > 6
+                            sname = sname[0..3] + unique
+                        else
+                            sname = sname[0..(7-unique.length)] + unique
+                        end
+
+                        debug "Conflict resolved with short name: #{sname} (unique = #{unique})"
+                    end
+                }
+                @wpHash[wid]['sname'] = sname[0..(@waypointLength - 1)]
+                @wpHash[wid]['snameUncut'] = sname
             else
                 @wpHash[wid]['sname'] = wid.dup
             end
