@@ -36,6 +36,7 @@ module Display
 
     # fatal errors
     def displayError(text)
-        puts " =!=  ERROR: #{text}"
+        puts " *!*  ERROR: #{text}"
+        sleep(1)
     end
 end

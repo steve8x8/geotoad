@@ -7,9 +7,9 @@ $:.push('..')
 
 # toss in our own libraries.
 require 'interface/display'
-require 'interface/input'
 require 'interface/progressbar'
 require 'geocache/common'
+require 'interface/input'
 require 'geocache/shadowget'
 require 'geocache/searchcode'
 require 'geocache/search'
@@ -51,38 +51,41 @@ def initialize
         @option = uin.getopt
     end
 
+    # We need this for the check following
+    @queryType         = @option['query'] || 'zip'
+    @queryArg          = @option['queryArg'] || nil
+
+    # Get this out of the way now.
+    if (! @queryArg) || @option['help']
+        if (! @queryArg)
+            displayError "You forgot to specify a #{@queryType} search argument"
+        end
+        usage
+        exit
+    end
+
     # by request of Marc Sebastian Pelzer <marc%black-cube.net>
     if @option['libraryInclude']
         $:.push(@option['libraryInclude'])
     end
 
-    @formatType    = @option['format'] || 'gpx'
-    @queryType        = @option['query'] || 'zip'
-    @cacheExpiry    = @option['cacheExpiry'].to_i || 3
-    @distanceMax = @option['distanceMax'] || 10
-    # This is a global. Not cool.
-    $slowLink = @option['slowlink'] || nil
+    @formatType        = @option['format'] || 'gpx'
+    @cacheExpiry       = @option['cacheExpiry'].to_i || 3
+    @distanceMax       = @option['distanceMax'] || 10
+    @queryTitle        = "GeoToad: #{@queryArg}"
+    @defaultOutputFile = "gtout-" + @queryType + "-" + @queryArg
 
-    if ((! ARGV[0]) || @option['help'])
-        if (! ARGV[0])
-            displayError "You forgot to specify a #{@queryType} search argument"
-        end
-        usage
-        exit
-    else
-        # make friendly to people who can't quote.
-        @queryArgList        = ARGV.join(" ")
-        @queryTitle = "GeoToad: #{@queryArgList}"
-        @defaultOutputFile = "gtout-" + @queryType + "-" + @queryArgList
-    end
+    # This is a global. Not cool.
+    $slowLink          = @option['slowlink'] || nil
+
+
 
     if (@option['verbose'])
         enableDebug
-        debug "verbose mode enabled"
     end
 
     if ! @@validFormats.include?(@formatType)
-        displayMessage "[*] #{@formatType} is not a valid supported format."
+        displayError "#{@formatType} is not a valid supported format."
         usage
         exit
     end
@@ -91,68 +94,61 @@ end
 
 
 def usage
-    puts "syntax: geotoad.rb [options] <search>"
+    puts "::: SYNTAX: geotoad.rb [options] <search>"
     puts ""
-    puts " -o [filename]           output file"
-    puts " -f [format]             output format type, such as:"
+    puts " -o [filename]          output file name (automatic otherwise)"
+    puts " -f [format]            output format type, see list below"
+    puts " -q [zip|state|coord]   query type (zip by default)"
+    puts " -d/-D [0.0-5.0]        difficulty minimum/maximum"
+    puts " -t/-T [0.0-5.0]        terrain minimum/maximum"
+    puts " -y    [1-500]          distance maximum in miles (10)"
+    puts " -k    [keyword]        keyword (regexp) search. Use | to delimit multiple"
+    puts " -c/-C [username]       include/exclude caches owned by this person"
+    puts " -u/-U [username]       include/exclude caches found by this person"
+    puts "                            (use : to delimit multiple users!)"
+    puts " -p/-P [# days]         include/exclude caches placed in the last X days"
+    puts " -r/-R [# days]         include/exclude caches found in the last X days"
+    puts " -n                     only include not found caches (virgins)"
+    puts " -b                     only include caches with travelbugs"
+    puts " -l                     set waypoint id length. (8)"
+    puts ""
+    puts "::: OUTPUT FORMATS:"
     outputDetails = Output.new
     i=0
-    print "     "
+    print ""
     @@validFormats.each { |type|
         desc = outputDetails.formatDesc(type)
-        if (i>4)
+        if (i>5)
             puts ""
-            print "     "
+            print ""
             i=0
         end
         i=i+1
 
 
         if (desc =~ /gpsbabel/)
-            type = type + "*"
-	elsif (desc =~ /cmconvert/)
-	    type = type + "="
+            type = type + "+"
+        elsif (desc =~ /cmconvert/)
+            type = type + "="
         end
 
-            printf("  %-10.10s", type);
+        printf("  %-10.10s", type);
 
     }
     puts ""
-    puts "    * format requires gpsbabel to be installed and in PATH"
-    puts "    = format requires cmconvert to be installed and in PATH"
+    puts "    + requires gpsbabel in PATH           = requires cmconvert in PATH"
     puts ""
-    puts " -q [zip|state|coord]    query type (zip by default)"
-    puts "                         [country search is broken!]"
-    puts " -d [0.0-5.0]            difficulty minimum (0)"
-    puts " -D [0.0-5.0]            difficulty maximum (5)"
-    puts " -t [0.0-5.0]            terrain minimum (0)"
-    puts " -T [0.0-5.0]            terrain maximum (5)"
-    puts " -y [1-500]              distance maximum in miles (10)"
-    puts " -k [keyword]            keyword (regexp) search. Use | to delimit multiple"
-    puts " -c [username]           only include caches owned by this person"
-    puts " -C [username]           exclude caches owned by this person"
-    puts " -u [username]           only include caches found by this person"
-    puts " -U [username]           exclude caches found by this person"
-    puts " -p [# days]             only include caches placed in the last X days"
-    puts " -P [# days]             exclude caches placed in the last X days"
-    puts " -r [# days]             only include caches found in the last X days"
-    puts " -R [# days]             exclude caches found in the last X days"
-    puts "                         (use : to delimit multiple users!)"
-    puts " -n                      only include not found caches (virgins)"
-    puts " -b                      only include caches with travelbugs"
-        puts " -l                      set waypoint id length. (8)"
-    puts "                         Note: Garmin users can use up to 16!"
-    puts ""
-    puts "EXAMPLES:"
-    puts "geotoad.rb 27502"
-    puts "geotoad.rb -d 3 -u helixblue -f vcf -o NC.vcf -q state_id \'North Carolina\'"
+    puts "::: EXAMPLES:"
+    puts "  geotoad.rb 27502"
+    puts "  geotoad.rb -d 3 -u helixblue -f vcf -o NC.vcf -q state_id \'North Carolina\'"
 end
 
 ## Check the version #######################
 def versionCheck
     version = ShadowFetch.new($VERSION_URL)
     version.shadowExpiry=0
-    version.localExpiry=600
+    version.localExpiry=43200
+    version.useShadow=0
     version.fetch
 
     if (($VERSION =~ /^(\d\.\d+\.\d+)$/) && (version.data =~ /^(\d\.\d+\.\d+)/))
@@ -176,8 +172,8 @@ def downloadGeocacheList
     # mix multiple @queryType's anyways
     @combinedWaypoints = Hash.new
 
-    @queryArgList .split(/[:\|]/).each { |queryArg|
-        print "\nPerforming #{@queryType} search for #{queryArg} "
+    @queryArg .split(/[:\|]/).each { |queryArg|
+        print "\n( o ) Performing #{@queryType} search for #{queryArg} "
         search = SearchCache.new
         if ($slowLink)
             debug "slowlink enabled (useShadow=0)"

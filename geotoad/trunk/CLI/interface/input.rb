@@ -1,4 +1,7 @@
 class Input
+    include Common
+    include Display
+
     def getopt
         opts = GetoptLong.new(
             [ "--format",                    "-f",        GetoptLong::OPTIONAL_ARGUMENT ],
@@ -31,16 +34,29 @@ class Input
 
         # put the stupid crap in a hash. Much nicer to deal with.
         begin
-            @optHash = Hash.new
+            optHash = Hash.new
             opts.each do |opt, arg|
-                @optHash[opt.gsub('-','')]=arg
+                optHash[opt.gsub('-','')]=arg
             end
         rescue
             usage
             exit
         end
 
-        return @optHash
+
+        optHash['queryArg'] = ARGV.shift
+
+        # if there are still remaining arguments, error out. Usually missed quote marks.
+        # We used to make assumptions about this, but it ended up being more confusing when
+        # wrong.
+        if ARGV[0]
+            displayError "Extra arguments found on command-line: \"#{ARGV.join(" ")}\""
+            displayError "Perhaps you forgot to put quote marks around any arguments that"
+            displayError "contain spaces in them. Example: -q #{@formatType} \"#{optHash['queryArg']} #{ARGV.join(" ")}\""
+            exit
+        end
+
+        return optHash
     end
 
     def interactive
