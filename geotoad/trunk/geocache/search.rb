@@ -198,7 +198,7 @@ class SearchCache < Common
                 running = fetchNext
                 src = page.src
                 # update it.
-                puts "[o] Recieved search page #{currentPage} of #{totalPages} (#{src})"
+                puts "[o] Received search page #{currentPage} of #{totalPages} (#{src})"
 
                 if (currentPage <= lastPage)
                     puts "[*] Logic error. I was at page #{lastPage} before, why am I at #{currentPage} now?"

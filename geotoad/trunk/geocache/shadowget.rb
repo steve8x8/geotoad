@@ -245,7 +245,7 @@ class ShadowFetch < Common
 			else
 				debug "get #{host}#{file}"
 				resp, data = w.get(file, $Header)
-                debug "recieved file. code is #{resp.code}"
+                debug "received file. code is #{resp.code}"
 			end
 		rescue Net::ProtoRetriableError => detail
 			head = detail.data
