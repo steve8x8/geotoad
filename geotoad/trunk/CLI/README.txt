@@ -70,11 +70,13 @@ syntax: geotoad.rb [options] <search>
  -T [0.0-5.0]            terrain maximum (5)
  -y [1-500]              distance maximum (zipcode only, 25 default)
  -k [keyword]            keyword (regexp) search. Use | to delimit multiple
- -u [username]           filter out caches found by username. 
+ -u [username]           only include caches found by this person
+                         Use : to delimit multiple users
+ -U [username]           exclude caches found by this person
                          Use : to delimit multiple users
  -n                      only include not found caches (virgins)
  -b                      only include caches with travelbugs
-
+ -l                      set waypoint id length (Garmin users can use 16)
 
 -----
 Usage
@@ -99,7 +101,7 @@ geotoad.rb -f text -o nc.txt q state "North Carolina"
 Outputs a text file with all of the caches in North Carolina that are
 virgins (have never been found). 
 
-geotoad.rb -t 2.5 -f vcf -u helixblue:Sallad -o charlotte.vcf 28272
+geotoad.rb -t 2.5 -f vcf -U helixblue:Sallad -o charlotte.vcf 28272
 
 Gets every cache in the 100 mile radius of zipcode 28272, with a terrain
 score of 2.5 or higher, and that helixblue and Sallad have not visited.

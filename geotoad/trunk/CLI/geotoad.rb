@@ -79,11 +79,13 @@ def usage
 	puts " -T [0.0-5.0]            terrain maximum (5)"
 	puts " -y [1-500]              distance maximum (15)"
     puts " -k [keyword]            keyword (regexp) search. Use | to delimit multiple"
-	puts " -u [username]           filter out caches found by username. "
+	puts " -u [username]           only include caches found by this person"
+    puts "                         Use : to delimit multiple users"
+	puts " -U [username]           exclude caches found by this person"
     puts "                         Use : to delimit multiple users"
 	puts " -n                      only include not found caches (virgins)"
     puts " -b                      only include caches with travelbugs"
-
+    puts " -l                      set waypoint id length (Garmin users can use 16)"
 	puts ""
 	puts "EXAMPLES:"
 	puts "geotoad.rb 27502"
@@ -162,31 +164,22 @@ if (search.totalWaypoints)
 	downloads = 0
     resultsPager = 5
 	while(running)
-		common.debug "(download while loop)"
 		# short-circuit for lack of understanding.
-		if (search.totalWaypoints > search.lastWaypoint)
-            lastWaypoint=search.lastWaypoint
+        totalPages = search.totalPages
+        currentPage = search.currentPage
+		common.debug "(download while loop - #{currentPage} of #{totalPages})"
 
-			common.debug "I think we need more waypoints, lets hack up a URL"
-			current = search.lastWaypoint + search.returnedWaypoints
-
-            # for the new crap that geocaching.com throws in
-            #postVars = search.postVars
-            #postVars['__EVENTTARGET']="ResultsPager:_ctl#{resultsPager}"
-
-			# legacy
-            #searchURL = search.URL +  '&start=' + search.lastWaypoint.to_s
-            #searchURL = search.postURL + "&gtid=#{resultsPager}"
+		if (totalPages > currentPage)
+            lastPage = currentPage
+            # I don't think this does anything.
 			page = ShadowFetch.new(search.URL)
-            #page.postVars=postVars
-
-            # This actually fetches the page. Go fucking figure!
             running = search.fetchNext
-
 			src = page.src
-			puts "[o] Recieved search results for \##{search.lastWaypoint}-#{current} of #{search.totalWaypoints} (#{src})"
-            if (search.lastWaypoint <= lastWaypoint)
-                puts "[*] Logic error. I was at #{lastWaypoint} before, why am I at #{search.lastWaypoint} now?"
+            # update it.
+            currentPage = search.currentPage
+			puts "[o] Recieved search page #{currentPage} of #{totalPages} (#{src})"
+            if (currentPage <= lastPage)
+                puts "[*] Logic error. I was at page #{lastPage} before, why am I at #{currentPage} now?"
                 exit
             end
 
@@ -222,7 +215,9 @@ search.waypoints.each_key { |wp|
 }
 
 if (waypointsExtracted < (search.totalWaypoints - 2))
+    puts "***********************"
     puts "Warning: downloaded #{search.totalWaypoints} waypoints, but I can only parse #{waypointsExtracted} of them!"
+    puts "***********************"
 end
 
 
