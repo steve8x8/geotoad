@@ -4,6 +4,7 @@
 
 
 #VERSION=`grep VERSION=  | cut -d\' -f2`
+cd ..
 VERSION=`cat VERSION`
 
 DIST="geotoad-$VERSION"
@@ -23,8 +24,6 @@ svn log -v > /tmp/$DIST/ChangeLog.txt
 
 cd /tmp
 tar -zcvf $LONGDIST.tgz $DIST
-#cp /tmp/$LONGDIST.tgz /www/profile.sh/htdocs/hacks/geotoad/files/
-#cp /tmp/$DIST/ChangeLog.txt /www/profile.sh/htdocs/hacks/geotoad/files/
-#echo
-#echo "http://home.profile.sh/hacks/geotoad/files/$LONGDIST.tgz"
+scp $LONGDIST.tgz home.toadstool.sh:/www/toadstool.sh/htdocs/hacks/geotoad/files/
+echo "http://home.profile.sh/hacks/geotoad/files/$LONGDIST.tgz"
 
