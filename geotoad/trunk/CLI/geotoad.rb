@@ -53,7 +53,7 @@ def usage
 	print "     "
 	@@validFormats.each { |type|
 		desc = outputDetails.formatDesc(type)
-		if (i>3)
+		if (i>4)
 			puts ""
 			print "     "
 			i=0
@@ -68,7 +68,6 @@ def usage
 
 	}
     puts "" 
-    puts ""
     puts "    * format requires gpsbabel to be installed and in PATH"
     puts ""
 	puts " -q [zip|state|country]  query type (zip by default)"
@@ -82,7 +81,6 @@ def usage
     puts "                         Use : to delimit multiple users"
 	puts " -n                      only include not found caches (virgins)"
     puts " -b                      only include caches with travelbugs"
-	puts " -v                      verbose/debug mode"
 
 	puts ""
 	puts "EXAMPLES:"
@@ -95,9 +93,14 @@ end
 
 
 # put the stupid crap in a hash. Much nicer to deal with.
-optHash = Hash.new
-opts.each do |opt, arg|
-	optHash[opt]=arg
+begin
+	optHash = Hash.new
+	opts.each do |opt, arg|
+		optHash[opt]=arg
+	end
+rescue
+	usage
+	exit
 end
 
 formatType	= optHash['--format'] || 'easygps'
