@@ -2,6 +2,12 @@ $Id: TODO,v 1.2 2002/08/05 11:11:52 strombt Exp $
 
 TODO:
 ======
+Bugs:
+-----
+* Fix XML Entities so we can output valid GPX
+* Implement the multi-query searches patch contributed by Mike Capito
+* Fix it so that the last found date works again.
+* Fix country search to comply with the new changes.
 
 Search:
 -------
@@ -16,7 +22,6 @@ Output:
 * eBook format (XML based)]
 * WML (WAP)
 * HTML mode should include query details
-* GPSNavX support
 
 Details:
 --------
@@ -32,3 +37,4 @@ Web
 Mac OS X (needs clue)
 Windows (needs volunteer!)
 X11 (needs volunteer!) 
+
