@@ -207,9 +207,12 @@ class SearchCache < Common
 
                     debug "cacheDate=#{@cache['cdate']} cdays=#{@cache['cdays']}"
 
-                when /align=\"left\">([\d\.]+)mi [NSWE]+\<br\>/
+                # <td valign="top" align="left">0.3mi&nbsp;<br>SE</td>
+
+                when /\>([\d\.]+)mi.*?\>([NWSE]+)\</
                     @cache['distance']=$1.to_f
-                    debug "cacheDistance=#{@cache['distance']}"
+                    @cache['direction'] = $2
+                    debug "cacheDistance=#{@cache['distance']} dir=#{@cache['direction']}"
 
                 when /cache_details.aspx\?guid=(.*?)\">(.*?)\<\/a\>/
                     @cache['sid']=$1
