@@ -330,7 +330,7 @@ class SearchCache
                     @cache['type'].gsub!(/\-/, '')
                     debug "type=#{@cache['type']}"
 
-                when /nowrap\>\(([\d\.]+)\/([\d\.]+)\)\<\/td\>/
+                when /nowrap\>\(([-\d\.]+)\/([-\d\.]+)\)\<\/td\>/
                     @cache['difficulty']=$1.to_f
                     @cache['terrain']=$2.to_f
                     debug "cacheDiff=#{@cache['difficulty']} terr=#{@cache['terrain']}"
