@@ -23,7 +23,9 @@ rm -Rf $DEST/**/.svn 2>/dev/null
 echo "Updating repository..."
 svn update
 echo "Creating Changelog"
-svn log VERSION COPYRIGHT.txt geocache CLI -v > $DEST/ChangeLog.txt
+svn log -v > $DEST/ChangeLog.txt
+joe $DEST/ChangeLog.txt
+rm $DEST/ChangeLog.txt~
 
 # Mac OS X
 cd /tmp
