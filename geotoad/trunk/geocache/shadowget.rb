@@ -274,8 +274,6 @@ class ShadowFetch < Common
 	def fetchShadow
 		debug "fetching shadow data of #{@url}"
 		parsed = CGI.escape(@url)
-        # Total misuse of the Referer header.
-        $Header['Referer'] = "Geotoad #{$VERSION}"
 		data = fetchURL $shadowHosts[0] + "?c=return&p=" + parsed
 	end
 
