@@ -317,6 +317,9 @@ class Input
             while (answer.length < 1)
                 print string + ": "
                 answer = $stdin.gets.chomp
+
+                # chomp any trailing slashes.
+                answer.gsub!(/ +$/, '')
             end
             return answer
         else
