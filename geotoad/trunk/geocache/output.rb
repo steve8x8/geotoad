@@ -67,14 +67,14 @@ class Output < Common
 			'templateWP'	=> "<wpt lat=\"<%wp.latdata%>\" lon=\"<%wp.londata%>\">\r\n" +
             "  <time>2003-06-18T00:00:00.0000000-07:00</time>\r\n" +
             "  <name><%out.id%></name>\r\n" +
-            "  <desc><%wp.name%> by <%wp.creator%>, <%wp.type%> Cache (<%wp.difficulty%>/1)</desc>\r\n" +
+            "  <desc><%wpEntity.name%> by <%wpEntity.creator%>, <%wp.type%> Cache (<%wp.difficulty%>/1)</desc>\r\n" +
             "  <url><%out.url%></url>\r\n" +
-            "  <urlname><%wp.name%> by <%wp.creator%></urlname>\r\n" +
+            "  <urlname><%wpEntity.name%> by <%wpEntity.creator%></urlname>\r\n" +
             "  <sym>Geocache</sym><type>Geocache</type>\r\n" +
             "  <groundspeak:cache id=\"<%wp.sid%>\" available=\"True\" archived=\"False\" xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0\">\r\n" +
             "  <groundspeak:name><%out.id%></groundspeak:name>\r\n" +
-            "  <groundspeak:placed_by><%wp.creator%></groundspeak:placed_by>\r\n" +
-            "  <groundspeak:owner id=\"00000\"><%wp.creator%></groundspeak:owner>\r\n" +
+            "  <groundspeak:placed_by><%wpEntity.creator%></groundspeak:placed_by>\r\n" +
+            "  <groundspeak:owner id=\"00000\"><%wpEntity.creator%></groundspeak:owner>\r\n" +
             "  <groundspeak:type><%wp.type%> Cache</groundspeak:type>\r\n" +
             "  <groundspeak:container><%wp.type%></groundspeak:container>\r\n" +
             "  <groundspeak:difficulty><%wp.difficulty%></groundspeak:difficulty>\r\n" +
@@ -82,7 +82,7 @@ class Output < Common
             "  <groundspeak:country><%wp.country%></groundspeak:country>\r\n" +
             "  <groundspeak:state><%wp.state%></groundspeak:state>\r\n" +
             "  <groundspeak:short_description html=\"True\">-</groundspeak:short_description>\r\n" +
-            "  <groundspeak:long_description html=\"True\"><%wp.details%></groundspeak:long_description>\r\n" +
+            "  <groundspeak:long_description html=\"True\"><%outEntity.details%></groundspeak:long_description>\r\n" +
             "  <groundspeak:encoded_hints>XXX (plaintext)</groundspeak:encoded_hints>\r\n" +
             "  <groundspeak:logs>\r\n" +
             "    <groundspeak:log id=\"00000\">\r\n" +
@@ -109,13 +109,13 @@ class Output < Common
                 "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">\n" + "</head>\n" +
 				"<body link=\"#000099\" vlink=\"#000044\" alink=\"#000099\">\n" +
 				"GeoToad query: <%out.title%>",
-            'templateIndex' => "* <a href=\"#<%out.wid%>\"><%wp.name%></a><br>",
+            'templateIndex' => "* <a href=\"#<%out.wid%>\"><%wpEntity.name%></a><br>",
 			'templateWP'	=>
-				"\n\n<hr noshade size=\"1\">\n<a name=\"<%out.wid%>\"></a><font color=\"#000099\"><a href=\"<%out.url%>\"><big><strong><%wp.name%></strong></big></a></font>&nbsp;&nbsp;  <b><%wp.travelbug%></b><br>\n" +
-                "<font color=\"#555555\"><strong><%wp.creator%></strong></font>, <%wp.latwritten%> <%wp.lonwritten%><br>" +
+				"\n\n<hr noshade size=\"1\">\n<a name=\"<%out.wid%>\"></a><font color=\"#000099\"><a href=\"<%out.url%>\"><big><strong><%wpEntity.name%></strong></big></a></font>&nbsp;&nbsp;  <b><%wp.travelbug%></b><br>\n" +
+                "<font color=\"#555555\"><strong><%wpEntity.creator%></strong></font>, <%wp.latwritten%> <%wp.lonwritten%><br>" +
 				"<font color=\"#339933\"><%wp.type%> D<%wp.difficulty%>/T<%wp.terrain%> <%out.relativedistance%><br>" +
                 "placed: <%wp.cdate%> last: <%wp.mdays%> days ago</font><br>" +
-				"<p><%out.details%></p>\n" +
+				"<p><%outEntity.details%></p>\n" +
                 "<p><font color=\"#555555\"><%out.hint%></font></p>\n",
 			'templatePost'	=> "</body></html>"
 		},
@@ -478,7 +478,6 @@ class Output < Common
                 debug "Creating index for \"#{@wpHash[wid]['name']}\" (#{wid})"
 
                 @wpHash[wid]['details'].gsub!(/\&([A-Z])/, '&amp;(#{$1})');
-                @wpHash[wid]['creator'].gsub!('&', '&amp;');
                 htmlIndex = htmlIndex + "<li><a href=\"\##{wid}\">#{@wpHash[wid]['name']}</a>"
 
                 if (@wpHash[wid]['travelbug'])
@@ -512,7 +511,6 @@ class Output < Common
                 debug "I will include the hint: #{outVars['hint']}"
             end
 
-            outVars['sname'] = shortName(@wpHash[wid]['name'])[0..14]
             debug "my sname is #{outVars['sname']}"
             if (outVars['sname'].length < 1)
                 puts "#{wid}: #{@wpHash[wid]['name']} did not get an sname returned. BUG!"
@@ -538,10 +536,10 @@ class Output < Common
             end
             if (! @wpHash[wid]['difficulty'])
                 puts "[*] Error: no difficulty found"
+
                 exit
             end
 			outVars['average'] = (@wpHash[wid]['terrain'] + @wpHash[wid]['difficulty'] / 2).to_i
-
 
 			# this crazy mess is all due to iPod's VCF reader only supporting 2k chars!
 			0.upto(numEntries) { |entry|
@@ -571,7 +569,11 @@ class Output < Common
 						tempOutput.gsub!(/\<%wp\.#{var}%\>/, @wpHash[wid][var].to_s)
 					elsif (type == "out")
 						tempOutput.gsub!(/\<%out\.#{var}%\>/, outVars[var].to_s)
-					else
+					elsif (type == "wpEntity")
+						tempOutput.gsub!(/\<%wpEntity\.#{var}%\>/, @wpHashEntity[wid][var].to_s)
+					elsif (type == "outEntity")
+						tempOutput.gsub!(/\<%outEntity\.#{var}%\>/, outVarsEntity[var].to_s)
+                    else
 						puts "unknown type: #{type} tag=#{var}"
 					end
 				}
