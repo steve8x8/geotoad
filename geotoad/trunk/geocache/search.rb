@@ -20,7 +20,7 @@ class SearchCache < Common
 	# set the search mode. valid modes are 'zip', 'state_id', 'country_id', 'keyword',
 	# coord, user
 	def mode(mode, key)
-		
+
 		if (mode != "coord") && (mode != "user")	#for most modes look up the key
 		    keylookup=SearchCode.new(mode)		# i.e. resolve North Carolina to 34.
             @mode=keylookup.type
@@ -55,7 +55,7 @@ class SearchCache < Common
 
 			when 'user'
 				@url=@@baseURL + '?ul=' + @key  # I didn't see the point of adding a dummy lookup
-  			
+
             when 'country_id'
                 # as of aug2003, geocaching.com has an in-between page for country
                 # lookups to parse. Pretty silly and worthless, imho.
@@ -109,6 +109,10 @@ class SearchCache < Common
         }
 		@waypointHash
 	end
+
+    def waypointList
+        @waypointHash.keys
+    end
 
 	def totalWaypoints
         debug "returning totalWaypoints available from search: #{@totalWaypoints}"
@@ -176,60 +180,67 @@ class SearchCache < Common
 		fetch(@url)
 	end
 
-	def fetchCacheList(quitAfterFetch)
-	    fetchFirst
+    # This function used to be in the CLI but was moved in here by Mike Capito's
+    # userlist patch. This loop downloads all the pages needed.
+	def fetchSearchLoop
+
+	    # fetches the first page in the search listing, so we can determine
+        # how many search pages we need to download.
+        fetchFirst
+
 	    if (totalWaypoints)
-	    puts "[.] #{totalWaypoints} waypoints matched #{@mode} query, recieved results for 1-#{lastWaypoint}."
-	
-		# the loop that gets all of them.
-		running = 1
-		downloads = 0
-		resultsPager = 5
-		while(running)
+            puts "[.] #{totalWaypoints} waypoints matched #{@mode} query for #{@key}"
+
+            # the loop that gets all of them.
+            running = 1
+            downloads = 0
+            resultsPager = 5
+            while(running)
 		    # short-circuit for lack of understanding.
 		    debug "(download while loop - #{currentPage} of #{totalPages})"
-	
+
 		    if (totalPages > currentPage)
-			lastPage = currentPage
-			# I don't think this does anything.
-			page = ShadowFetch.new(@url)
-			running = fetchNext
-			src = page.src
-			# update it.
-			puts "[o] Recieved search page #{currentPage} of #{totalPages} (#{src})"
-	
-			if (currentPage <= lastPage)
-			    puts "[*] Logic error. I was at page #{lastPage} before, why am I at #{currentPage} now?"
-			    exit
-			end
-	
-			if (src == "remote")
-			    # give the server a wee bit o' rest.
-			    downloads = downloads + 1
-			    debug "#{downloads} of #{quitAfterFetch} remote downloads so far"
-			    if downloads >= quitAfterFetch
-				debug "quitting after #{downloads} downloads"
-				#exit 4
-			    end
-			   # half the rest for this.
-			    debug "sleeping"
-			    sleep ($SLEEP / 2).to_i
-			end
+                lastPage = currentPage
+                # I don't think this does anything.
+                page = ShadowFetch.new(@url)
+                running = fetchNext
+                src = page.src
+                # update it.
+                puts "[o] Recieved search page #{currentPage} of #{totalPages} (#{src})"
+
+                if (currentPage <= lastPage)
+                    puts "[*] Logic error. I was at page #{lastPage} before, why am I at #{currentPage} now?"
+                    exit
+                end
+
+                if (src == "remote")
+                    # give the server a wee bit o' rest.
+                    downloads = downloads + 1
+                    # half the rest for this.
+                    debug "sleeping"
+                    sleep ($SLEEP / 2).to_i
+                end
 		    else
-			debug "We have already downloaded the waypoints needed, lets get out of here"
-			running = nil
+                debug "We have already downloaded the waypoints needed, lets get out of here"
+                running = nil
 		    end # end totalPages if
-		end # end while(running)
-	    else
-		puts "(*) No waypoints found. Possible error fetching?"
-		exit
-	    end
+            end # end while(running)
+        else
+		    puts "(*) No waypoints found. Possible error fetching?"
+		    exit
+        end
 	end
-	
+
 	def fetch(url)
 		page = ShadowFetch.new(url)
-        page.shadowExpiry=60000
-        page.localExpiry=43200
+        if (@mode == "user")
+            page.shadowExpiry=120000
+            page.localExpiry=100000
+        else
+            page.shadowExpiry=60000
+            page.localExpiry=43200
+        end
+
         if (@postVars)
             page.postVars=@postVars
         end
@@ -326,6 +337,7 @@ class SearchCache < Common
                     end
                     @cache['creator']=creator.gsub(/[\x80-\xFF]/, '?').chop!
                     debug "creator=#{@cache['creator']}"
+
                 when /\((GC\w+)\)/
                     wid=$1.dup
                     debug "wid=#{wid}"
@@ -371,6 +383,13 @@ class SearchCache < Common
                     if (wid)
                         @waypointHash[wid] = @cache.dup
                         @waypointHash[wid]['visitors'] = []
+
+                        # if our search is for caches that have been done by a particular user,
+                        # we may as well add that user to the hash!
+                        if @mode == "users"
+                            @waypointHash[wid]['visitors'].push(@key.downcase)
+                        end
+
                         if (@cache['mdays'] > -1)
                             t = Time.now
                             t2 = t - (@cache['mdays'] * 3600 * 24)

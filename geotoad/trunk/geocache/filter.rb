@@ -163,4 +163,13 @@ class Filter < Common
         }
     end
 
+
+    # add a visitor to a cache. Used by the userlookup feeder.
+    def addVisitor(wid, visitor)
+        if (@waypointHash[wid])
+            @waypointHash[wid]['visitors'] << visitor
+        else
+            return 0
+        end
+    end
 end

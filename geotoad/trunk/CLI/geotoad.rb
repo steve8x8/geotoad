@@ -8,7 +8,7 @@ $:.push('..')
 # just in case it was never replaced.
 versionID='%VERSION%'
 if versionID !~ /^\d/
-    $VERSION = '3.0-CURRENT'
+    $VERSION = '3.2-DEV'
 else
     $VERSION = versionID.dup
 end
@@ -163,11 +163,7 @@ if ! @@validFormats.include?(formatType)
     exit
 end
 
-
-## Make the Initial Query ############################
-puts "[.] Your cache directory is " + $TEMP_DIR
-
-## Check the version
+## Check the version #######################
 version = ShadowFetch.new($VERSION_URL)
 version.shadowExpiry=0
 version.localExpiry=600
@@ -175,12 +171,15 @@ version.fetch
 
 if (version.data =~ /^(\d\.\d+\.\d+)/)
     latestVersion = $1;
-    if (latestVersion != $VERSION)
+    if (($VERSION !~ /DEV/) && (latestVersion != $VERSION))
         puts ""
         puts "[^] NOTE: Your version of GeoToad is old - #{latestVersion} is now available!";
         puts "[^]       Please download it from http://toadstool.se/hacks/geotoad/"
     end
 end
+
+## Make the Initial Query ############################
+puts "[.] Your cache directory is " + $TEMP_DIR
 
 
 # Mike Capito contributed a patch to allow for multiple
@@ -205,15 +204,19 @@ queryArgList.split(/[:\|]/).each { |queryArg|
         exit
     end
 
-    search.fetchCacheList(quitAfterFetch)
-    # this gives us support for multiple searches.
+    search.fetchSearchLoop
+
+    # this gives us support for multiple searches. It adds together the search.waypoints hashes
+    # and pops them into the combinedWaypoints hash.
     combinedWaypoints.update(search.waypoints)
     combinedWaypoints.rehash
 }
 
 
-# What does this block do?
-common.debug "pre-filter inspection of waypoints:"
+# Here we make sure that the amount of waypoints we've downloaded (combinedWaypoints) matches the
+# amount of waypoints we found information for. This is just to check for buggy search code, and
+# really doesn't make much sense.
+
 waypointsExtracted = 0
 combinedWaypoints.each_key { |wp|
     common.debug "pre-filter: #{wp}"
@@ -227,13 +230,40 @@ if (waypointsExtracted < (combinedWaypoints.length - 2))
 end
 
 
-
-## step #1 in filtering! ############################
-puts ""
-#puts "[=] 1st Stage Filtering Executing..."
+# Prepare for the manipulation
 filtered = Filter.new(combinedWaypoints)
 
 
+# This is where we do a little bit of cheating. In order to avoid downloading the
+# cache details for each cache to see if it's been visited, we do a search for the
+# users on the include or exclude list. We then populate combinedWaypoints[wid]['visitors']
+# with our discovery.
+
+userLookups = Array.new
+if (optHash['--userExclude'])
+    userLookups = optHash['--userExclude'].split(':')
+end
+
+if (optHash['--userInclude'])
+    userLookups = userLookups + optHash['--userInclude'].split(':')
+end
+
+userLookups.each { |user|
+    search = SearchCache.new
+    search.mode('user', user)
+    search.fetchSearchLoop
+    search.waypointList.each { |wid|
+        filtered.addVisitor(wid, user)
+    }
+}
+
+
+## step #1 in filtering! ############################
+# This step filters out all the geocaches by information
+# found from the searches.
+puts ""
+
+filtered = Filter.new(combinedWaypoints)
 beforeFilteredMembersTotal = filtered.totalWaypoints
 filtered.removeByElement('membersonly')
 
@@ -286,46 +316,23 @@ if optHash['--travelBug']
     filtered.travelBug
 end
 
-
-if (optHash['--ownerExclude'])
-    optHash['--ownerExclude'].split(':').each { |owner|
-        filtered.ownerExclude(owner)
-    }
-end
-
-if (optHash['--ownerInclude'])
-    optHash['--ownerInclude'].split(':').each { |owner|
-        filtered.ownerInclude(owner)
-    }
-end
-
-
+beforeUsersTotal = filtered.totalWaypoints
 if (optHash['--userExclude'])
-    excludeList = Hash.new
-    optHash['--userExclude'].split(':').each { |user|
-	search = SearchCache.new
-	search.mode('user', user)
-	search.fetchCacheList(quitAfterFetch)
-	excludeList.update(search.waypoints)
-	excludeList.rehash
+    optHash['--userExclude'].split(/[:\|]/).each { |user|
+        filtered.userExclude(user)
     }
-    common.debug "Exclude list has #{excludeList.length} caches"
-    filtered.userExclude(excludeList)
 end
 
 if (optHash['--userInclude'])
-    includeList = Hash.new
-    optHash['--userInclude'].split(':').each { |user|
-	search = SearchCache.new
-	search.mode('user', user)
-	search.fetchCacheList(quitAfterFetch)
-	includeList.update(search.waypoints)
-	includeList.rehash
+    optHash['--userInclude'].split(/[:\|]/).each { |user|
+        filtered.userInclude(user)
     }
-    common.debug "Include list has #{includeList.length} caches"
-    filtered.userInclude(includeList)
 end
 
+excludedUsersTotal = beforeUsersTotal - filtered.totalWaypoints
+if (excludedUsersTotal > 0)
+    puts "[=] User filtering removed #{excludedUsersTotal} caches from your listing."
+end
 
 
 puts "[=] First stage filtering complete, #{filtered.totalWaypoints} caches left"
@@ -341,53 +348,74 @@ if (filtered.totalWaypoints > $SLOWMODE)
     $SLEEP=15
 end
 
-## step #2 in filtering! ############################
-#if ((optHash['--user']) || (optHash['--format'] == 'vcard'))
-    puts "[=] Fetching geocache pages with #{$SLEEP} second rests between remote fetches"
-    wpFiltered = filtered.waypoints
 
-    # all of this junk is so we can give real status updates for non-CLI frontends
-    # but this is the demo code, so we use it!
-    detail = CacheDetails.new(wpFiltered)
-    token = 0
-    wpFiltered.each_key { |wid|
-        token = token + 1
-        #detailURL = ShadowFetch.detail.baseURL + wpFiltered[wid]['sid'].to_s
-        detailURL = detail.fullURL(wpFiltered[wid]['sid'])
-        page = ShadowFetch.new(detailURL)
-        detail.fetchWid(wid)
-        src = page.src
-        if (page.src)
-            puts "[o] Fetched \"#{wpFiltered[wid]['name']}\" [#{token}/#{filtered.totalWaypoints}] from #{src}"
-            if (wpFiltered[wid]['warning'])
-                puts " *  Skipping: #{wpFiltered[wid]['warning']}"
-            end
-        elsif (src == "remote")
-                downloads = downloads + 1
-                common.debug "#{downloads} of #{quitAfterFetch} remote downloads so far"
-                if downloads >= quitAfterFetch
-                    common.debug "quitting after #{downloads} downloads"
-                    #exit 4
-                end
-            puts "  (sleeping for #{$SLEEP} seconds)"
-            sleep $SLEEP
-        else
-            puts "[*] Could not fetch \"#{wpFiltered[wid]['name']}\" [#{token}/#{filtered.totalWaypoints}] (private cache?)"
-            wpFiltered.delete(wid)
+
+
+#########################
+# Here is where we fetch each geocache page
+#
+puts "[=] Fetching geocache pages with #{$SLEEP} second rests between remote fetches"
+wpFiltered = filtered.waypoints
+
+detail = CacheDetails.new(wpFiltered)
+token = 0
+wpFiltered.each_key { |wid|
+    token = token + 1
+    detailURL = detail.fullURL(wpFiltered[wid]['sid'])
+    page = ShadowFetch.new(detailURL)
+    detail.fetchWid(wid)
+
+    # I wish I understood how this worked. I think this logic is garbage. To be revisited.
+    src = page.src
+    if (page.src)
+        puts "[o] Fetched \"#{wpFiltered[wid]['name']}\" [#{token}/#{filtered.totalWaypoints}] from #{src}"
+        if (wpFiltered[wid]['warning'])
+            puts " *  Skipping: #{wpFiltered[wid]['warning']}"
         end
-    }
-
-    #puts "[=] Second filtering stage is being executed"
-    filtered= Filter.new(detail.waypoints)
-
-    #puts "[=] Removing caches with warnings"
-    # caches with warnings we choose not to include.
-    filtered.removeByElement('warning')
-
-
-    if optHash['--keyword']
-        filtered.keyword(optHash['--keyword'])
+    elsif (src == "remote")
+        downloads = downloads + 1
+        common.debug "#{downloads} of #{quitAfterFetch} remote downloads so far"
+        puts "  (sleeping for #{$SLEEP} seconds)"
+        sleep $SLEEP
+    else
+        puts "[*] Could not fetch \"#{wpFiltered[wid]['name']}\" [#{token}/#{filtered.totalWaypoints}] (private cache?)"
+        wpFiltered.delete(wid)
     end
+}
+
+## step #2 in filtering! ############################
+# In this stage, we actually have to download all the information on the caches in order to decide
+# whether or not they are keepers.
+
+filtered= Filter.new(detail.waypoints)
+
+# caches with warnings we choose not to include.
+filtered.removeByElement('warning')
+
+if optHash['--keyword']
+    filtered.keyword(optHash['--keyword'])
+end
+
+
+# We filter for users again. While this may be a bit obsessive, this is in case
+# our local cache is not valid.
+beforeUsersTotal = filtered.totalWaypoints
+if (optHash['--userExclude'])
+    optHash['--userExclude'].split(/[:\|]/).each { |user|
+        filtered.userExclude(user)
+    }
+end
+
+if (optHash['--userInclude'])
+    optHash['--userInclude'].split(/[:\|]/).each { |user|
+        filtered.userInclude(user)
+    }
+end
+
+excludedUsersTotal = beforeUsersTotal - filtered.totalWaypoints
+if (excludedUsersTotal > 0)
+    puts "[=] User filtering removed #{excludedUsersTotal} caches from your listing."
+end
 
 
 puts "[=] Filter complete, #{filtered.totalWaypoints} caches left"
