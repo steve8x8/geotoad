@@ -437,6 +437,7 @@ def fetchGeocaches
 
 
         if (page.src)
+            src = page.src
             if (wpFiltered[wid]['warning'])
                 progress.updateText(token, "\"#{wpFiltered[wid]['name']}\" from #{src} (cache is temp. unavailable)")
             else

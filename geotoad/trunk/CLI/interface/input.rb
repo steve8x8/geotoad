@@ -148,7 +148,7 @@ class Input
 
             case answer
                when '1'
-                   type = ask("What type of search would you like to perform? (zipcode, state, coordinate)", nil)
+                   type = ask("What type of search would you like to perform? (zipcode, state, coordinate, keyword [title only])", nil)
                    @@optHash['queryType'] = guessQueryType(type).to_s
 
                when '2'
@@ -158,6 +158,10 @@ class Input
 
                    if (@@optHash['queryType'] == 'state')
                        @@optHash['queryArg'] = ask('Enter a list of states (seperated by commas)', 'NO_DEFAULT').gsub(/, */, ':')
+                   end
+
+                   if (@@optHash['queryType'] == 'wid')
+                       @@optHash['queryArg'] = ask('Enter a list of waypoint id\'s (seperated by commas)', 'NO_DEFAULT').gsub(/, */, ':')
                    end
 
                    if (@@optHash['queryType'] == 'coord')
@@ -182,6 +186,28 @@ class Input
                        query.gsub!(/:$/, '')
                        @@optHash['queryArg'] = query
                    end
+
+                   if (@@optHash['queryType'] == 'keyword')
+                       puts "Please enter a list of keywords, pressing enter after each one."
+                       puts "Press (q) when done."
+
+                       keyset = 1
+                       key = nil
+                       query = ''
+
+                       while (key != 'q')
+                           print keyset.to_s + ": "
+                           key = $stdin.gets.chomp
+                           if key != 'q'
+                               query = query + key + ':'
+                               keyset = keyset + 1
+                           end
+                       end
+
+                       query.gsub!(/:$/, '')
+                       @@optHash['queryArg'] = query
+                   end
+
 
                when '3'
                    @@optHash['distanceMax'] = ask("What is the maximum distance from your #{@@optHash['queryType']} that you would like to include geocaches from?", 10)
@@ -347,6 +373,13 @@ class Input
                 return 'coord'
             when /stat/
                 return 'state'
+            when /wid/
+                return 'wid'
+            when /waypoint/
+                return 'wid'
+
+            when /key/
+                return 'keyword'
         end
     end
 

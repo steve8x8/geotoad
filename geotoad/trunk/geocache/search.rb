@@ -28,14 +28,14 @@ class SearchCache
 	# set the search mode. valid modes are 'zip', 'state', 'country', 'keyword', coord, user
 	def mode(mode, key)
         case mode
-            when 'state', 'state_id'
+            when 'state'
                 keylookup=SearchCode.new(mode)		# i.e. resolve North Carolina to 34.
                 @mode=keylookup.type
                 @key=keylookup.lookup(key)
                 # nearly everything is in this form
                 @url=@@baseURL + '?' + @mode + '=' + CGI.escape(@key.to_s)
 
-            when 'country', 'country_id'
+            when 'country'
                 keylookup=SearchCode.new(mode)		# i.e. resolve North Carolina to 34.
                 @mode=keylookup.type
                 @key=keylookup.lookup(key)
@@ -60,7 +60,7 @@ class SearchCache
                 #}
                 #debug "country page parsed"
 
-			when 'coord', 'coordinates', 'coordinate'
+			when 'coord'
                 @mode = 'coordinate'
                 @key = key
                 # This regular expression should probably handle any kind of messed
@@ -111,8 +111,12 @@ class SearchCache
                 @key = key
 				@url=@@baseURL + '?ul=' + CGI.escape(@key)  # I didn't see the point of adding a dummy lookup
 
+			when 'keyword'
+                @mode = mode
+                @key = key
+				@url=@@baseURL + '?key=' + CGI.escape(@key)  # I didn't see the point of adding a dummy lookup
 
-            when 'zip', 'zipcode'
+            when 'zipcode'
                 # nearly everything is in this form
                 @mode = 'zip'
                 @key = key
@@ -127,6 +131,18 @@ class SearchCache
                 if @distance
                     @url = @url + '&dist=' + @distance.to_s
                 end
+            when 'wid'
+                # uhm.
+                @mode = 'wid'
+                @key = key
+
+                @url = "http://www.geocaching.com/seek/cache_details.aspx?wp=#{@key}"
+
+                if (@key !~ /^GC/)
+                    displayError "Waypoint ID's must start with GC"
+                    return nil
+                end
+
             else
                 displayWarning "Not sure what kind of search \"#{mode}\" is!"
             end
@@ -225,6 +241,12 @@ class SearchCache
     # This function used to be in the CLI but was moved in here by Mike Capito's
     # userlist patch. This loop downloads all the pages needed.
 	def fetchSearchLoop
+        # Wid's don't actually have a search loop, so we fake it.
+        if (@mode == 'wid')
+            fakeSearchLoop
+            return
+        end
+
 
 	    # fetches the first page in the search listing, so we can determine
         # how many search pages we need to download.
@@ -303,6 +325,7 @@ class SearchCache
     def postURL
         @postURL
     end
+
 
 	def parseSearch(data)
         wid=nil
@@ -458,5 +481,25 @@ class SearchCache
             end # end case
 		} # end loop
 	end #end parsecache
+
+    # This is for wid searches.
+    def fakeSearchLoop
+        wid = @key
+        debug "Faking a search loop for wid search for #{wid}"
+        @waypointHash[wid] = Hash.new
+
+        # I don't like that we need to set it, but otherwise we get an error later on
+        # in details.rb
+        @waypointHash[wid]['visitors'] = []
+
+        # temporary, until I write some details sniffers for these. It's ugly cause it's
+        # not just a number in details, it's a *** 1/2 diagram.
+        @waypointHash[wid]['terrain'] = 0
+        @waypointHash[wid]['difficulty'] = 0
+        @waypointHash[wid]['mdays'] = 1
+        @returnedWaypoints = 1
+    end
+
 end # end class
+
 

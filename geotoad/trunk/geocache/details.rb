@@ -6,7 +6,7 @@ class CacheDetails
 
     # This now uses the printable version of the cache data. For now, we get the last 10
     # logs to a cache.
-	@@baseURL="http://www.geocaching.com/seek/cache_details.aspx?pf=y&log=y&numlogs=5&decrypt=&guid="
+	@@baseURL="http://www.geocaching.com/seek/cache_details.aspx?pf=y&log=y&numlogs=5&decrypt="
 
 	def initialize(data)
 		@waypointHash = data
@@ -26,14 +26,25 @@ class CacheDetails
 		@@baseURL
 	end
 
-	# fetches by waypoint id
-	def fetchWid(wid)
-        debug "fetching by #{wid}, converting to #{@waypointHash[wid]['sid']}"
-		fetch(@waypointHash[wid]['sid'])
-	end
+    # this routine is for compatibility.
+    def fetchWid(id)
+        fetch(id)
+    end
 
 	def fullURL(id)
-		url = @@baseURL + id.to_s
+        if (id =~ /^GC/)
+            # If we can look up the guid, use it. It's not actually required, but
+            # it behaves a lot more like a standard web browser on the gc.com website.
+            if @waypointHash[id]['sid']
+                suffix = 'guid=' + @waypointHash[id]['sid'].to_s
+            else
+                suffix = 'wp=' + id.to_s
+            end
+        else
+             suffix = 'guid=' + id.to_s
+        end
+
+        url = @@baseURL + "&" + suffix
 	end
 
 	# fetches by geocaching.com sid
@@ -82,6 +93,7 @@ class CacheDetails
 	def parseCache(data)
 		# find the geocaching waypoint id.
 		wid = nil
+
 		data.each { |line|
             # this matches the <title> on the printable pages. Some pages have ) and some don't.
 			if line =~  /^\s+(GC[A-Z0-9]+)[) ]/
@@ -92,6 +104,31 @@ class CacheDetails
 
                     # We give this a predefined value, because some caches have no details!
                     @waypointHash[wid]['details'] = ''
+
+                    # Set what URL we used as our details source. We do not use baseURL because
+                    # some GPX parsers freak if there is a & in this URL.
+                    @waypointHash[wid]['url'] = "http://www.geocaching.com/seek/cache_details.aspx?wp=" + wid
+                end
+            end
+
+
+            # DUPLICATE OF WHAT SEARCH.RB HAS! Only used for failures and or wid searches.
+            # May make in the future have it decide which source is newest: search or details.
+            if line =~ /\<span id=\"CacheName\"\>(.*?)\<\/span\>/
+                if (! @waypointHash[wid]['name'])
+                    @waypointHash[wid]['name'] = $1
+                    debug "name was not set, now set to #{$1}"
+                end
+            end
+
+
+            # DUPLICATE OF WHAT SEARCH.RB HAS! Only used for failures and or wid searches.
+            # May make in the future have it decide which source is newest: search or details.
+            if line =~ /\<br\>by (.*?) \[\<A HREF/
+                if (! @waypointHash[wid]['creator'])
+                    @waypointHash[wid]['creator'] = $1
+                    debug "creator was not set, now set to #{$1}"
+
                 end
             end
 
