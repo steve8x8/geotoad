@@ -13,12 +13,11 @@ Search:
 Filter:
 -------
 * Cache type
+* By-title
 
 Output:
 -------
-* eBook format (XML based)]
 * WML (WAP)
-* HTML mode should include query details
 
 Frontends:
 ----------
@@ -26,4 +25,3 @@ Web
 Mac OS X (needs clue)
 Windows (needs volunteer!)
 X11 (needs volunteer!) 
-
