@@ -117,7 +117,8 @@ syntax: geotoad.rb [options] <search:search2:search3>
  -R [# days]             exclude caches found in the last X days
  -n                      only include not found caches (virgins)
  -b                      only include caches with travelbugs
- -l                      set waypoint id length (Garmin users can use 16)
+ -E                      disable EasyName waypoint id's (16)
+ -l                      EasyName waypoint id length (Garmin users can use 16)
 
 
 

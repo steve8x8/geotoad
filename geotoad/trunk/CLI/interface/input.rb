@@ -146,11 +146,11 @@ class Input
 
             case answer
                when '1'
-                   type = ask("What type of search would you like to perform? (zip, state, coordinate)", nil)
-                   @optHash['queryType'] = guessQueryType(type)
+                   type = ask("What type of search would you like to perform? (zipcode, state, coordinate)", nil)
+                   @@optHash['queryType'] = guessQueryType(type).to_s
 
                when '2'
-                   if (@@optHash['queryType'] = 'zip')
+                   if (@@optHash['queryType'] = 'zipcode')
                        @@optHash['queryArg'] = ask('Enter a list of zipcodes (seperated by commas)', 'NO_DEFAULT').gsub(/, */, ':')
                    end
 
@@ -337,12 +337,13 @@ class Input
     end
 
     def guessQueryType(type)
+
         case type
-            when /^z/
+            when /zip/
                 return 'zipcode'
-            when /^c/
+            when /coo/
                 return 'coord'
-            when /^s/
+            when /stat/
                 return 'state'
         end
     end
