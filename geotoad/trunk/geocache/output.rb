@@ -330,7 +330,7 @@ class Output
 
 
         # ** This will be removed for GeoToad 4.0, when we use a real templating engine that can do loops **
-        if @outputType == "html"
+        if @outputType == "html" || @outputType == "html-decrypt"
             htmlIndex=''
             debug "I should generate an index, I'm html"
             symbols = Hash.new
