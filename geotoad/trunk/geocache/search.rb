@@ -71,6 +71,8 @@ class SearchCache < Common
                 debug "country page parsed"
 
             when 'zip'
+                @url =@url + "&submit1=Submit"
+
                 if (@key !~ /^[\w][\w ]+$/)
                     puts "Invalid zip code format: #{@key}"
                     return nil
