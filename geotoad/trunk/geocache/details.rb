@@ -51,23 +51,30 @@ class CacheDetails < Common
 				wid = $1
                 debug "wid is #{wid}"
 
-                # fill this in, since it's optional evidentally
+                # We give this a predefined value, because some caches have no details!
                 @waypointHash[wid]['details'] = ''
             end
+
+            # latitude in the post form
             if line =~ /value=\"([-\+\d\.]+)\" name=lat\>/
                 @waypointHash[wid]['latdata'] = $1
 				debug "got lat data: #{$1}"
             end
+
+            # longitude in the post form
             if line =~ /value=\"([-\+\d\.]+)\" name=lon\>/
                 @waypointHash[wid]['londata'] = $1
 				debug "got lon data: #{$1}"
             end
+
+            # latitude and longitude in the written form, which is what we use
 			if line =~ /\<font size=\"3\"\>([NW]) (\d+).*? ([\d\.]+) ([NW]) (\d+).*? ([\d\.]+)\<\/STRONG\>/
 				@waypointHash[wid]['latwritten'] = $1 + $2 + ' ' + $3
 				@waypointHash[wid]['lonwritten'] = $4 + $5 + ' ' + $6
                 debug "got written lan/lon: "
             end
 
+            # why a geocache is closed. It seems to always be the same.
             if line =~ /\<span id=\"ErrorText\">(.*?)\<\/span\>/
                 warning = $1
                 warning.gsub!(/\<.*?\>/, '')
@@ -75,6 +82,7 @@ class CacheDetails < Common
                 debug "got a warning: #{$1}"
             end
 
+            # encrypted hint
 			if line =~ /\<span id=\"Hints\"\>(.*?)\<\/span\>/m
                 hint = $1.dup
                 hint.gsub!(/\<.*?\>/, '')
@@ -92,37 +100,35 @@ class CacheDetails < Common
             # We used to include any comments, but with the smile part, we only include founds.
             #icon_smile.gif'>&nbsp;October 12 by <A NAME="2224020"><A HREF="../profile/?guid=5dadabfd-1343-44f2-a3b1-09a4886cb164">
 			data.scan (/smile.gif\'>&nbsp;\w+ \d+ by <A NAME=\"\d+\"\>\<A HREF=\"..\/profile\/\?guid=.*?\"\>(.*?)\<\/A\>\<\/strong\>/) {
-				debug "visitor to #{wid}: #{$1.downcase}"
-				@waypointHash[wid]['visitors'].push($1.downcase)
-			}
+                debug "visitor to #{wid}: #{$1.downcase}"
+                @waypointHash[wid]['visitors'].push($1.downcase)
+            }
 
 
             # these are multi-line matches, so they are out of the scope of our
             # next
             if data =~ /id=\"ShortDescription\"\>(.*?)\<\/span\>/m
                 debug "found short desc: [#{$1}]"
-		shortdesc = $1
+                shortdesc = $1
                 shortdesc.gsub!(/[\x80-\xFF]/, "\'")		# high ascii
                 shortdesc.gsub!(/\&#\d+\;/, "\'")		# high ascii in entity format
                 shortdesc.gsub!(/\'+/, "\'")
                 shortdesc.gsub!(/^\*/, '')
-
-
                 @waypointHash[wid]['details'] = CGI.unescapeHTML(shortdesc)
             end
 
             if data =~ /id=\"LongDescription\"\>(.*?)\<\/span\><\/BLOCKQUOTE\>/m
                 debug "found long desc"
-				details =  @waypointHash[wid]['details'] << "  " << $1
+                details =  @waypointHash[wid]['details'] << "  " << $1
 
                 debug "pre-html-process: #{details}"
                 # normalize, but work around the ruby 1.8.0 warnings.
-				details.gsub!(/#{'\r\n'}/, ' ')
-				details.gsub!(/#{'\r'}/, '')
-				details.gsub!(/#{'\n'}/, '')
+                details.gsub!(/#{'\r\n'}/, ' ')
+                details.gsub!(/#{'\r'}/, '')
+                details.gsub!(/#{'\n'}/, '')
 
                 debug "normalized: #{details}"
-                # kill
+                # rip some tags out.
                 details.gsub!(/\<\/li\>/i, '')
                 details.gsub!(/\<\/p\>/i, '')
                 details.gsub!(/<\/*i\>/i, '')
@@ -132,6 +138,7 @@ class CacheDetails < Common
                 details.gsub!(/<\/*span.*?\>/i, '')
                 details.gsub!(/<\/*font.*?\>/i, '')
                 details.gsub!(/<\/*ul\>/i, '')
+                details.gsub!(/style=\".*?\"/i, '')
 
                 debug "post-html-tags-removed: #{details}"
 
@@ -140,18 +147,16 @@ class CacheDetails < Common
                 details.gsub!(/\<li\>/i, "\n * (o) ")
                 details.gsub!(/<\/*b>/i, '')
                 details.gsub!(/\<img.*?\>/i, '[img]')
-				details.gsub!(/\<.*?\>/, ' *')
-                # MS HTML crap
-                details.gsub!(/style=\".*?\"/i, '')
-
+                details.gsub!(/\<.*?\>/, ' *')
                 debug "pre-combine-process: #{details}"
 
-                # combine all the tags we nuked.
+                # combine all the tags we nuked. These regexps
+                # could probably be cleaned up pretty well.
                 details.gsub!(/ +/, ' ')
                 details.gsub!(/\* *\* *\*/, '**')
                 details.gsub!(/\* *\* *\*/, '**')		# unnescesary
                 details.gsub!(/\*\*\*/, '**')
-		details.gsub!(/\* /, '*')
+                details.gsub!(/\* /, '*')
                 debug "post-combine-process: #{details}"
                 details.gsub!(/[\x80-\xFF]/, "\'")		# high ascii
                 details.gsub!(/\&#\d+\;/, "\'")			# high ascii in entity format
@@ -162,12 +167,10 @@ class CacheDetails < Common
                 # convert things into plain text.
                 details = CGI.unescapeHTML(details);
 
-                # some misc. random crap.
-
-				debug "got details: [#{details}]"
-				@waypointHash[wid]['details'] = details
+                debug "got details: [#{details}]"
+                @waypointHash[wid]['details'] = details
             end
-		end  # end wid check.
+        end  # end wid check.
 	end  # end function
 end  # end class
 
