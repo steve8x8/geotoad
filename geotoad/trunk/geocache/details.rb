@@ -101,7 +101,14 @@ class CacheDetails < Common
             # next
             if data =~ /id=\"ShortDescription\"\>(.*?)\<\/span\>/m
                 debug "found short desc: [#{$1}]"
-                @waypointHash[wid]['details'] = CGI.unescapeHTML($1)
+		shortdesc = $1
+                shortdesc.gsub!(/[\x80-\xFF]/, "\'")		# high ascii
+                shortdesc.gsub!(/\&#\d+\;/, "\'")		# high ascii in entity format
+                shortdesc.gsub!(/\'+/, "\'")
+                shortdesc.gsub!(/^\*/, '')
+
+
+                @waypointHash[wid]['details'] = CGI.unescapeHTML(shortdesc)
             end
 
             if data =~ /id=\"LongDescription\"\>(.*?)\<\/span\><\/BLOCKQUOTE\>/m
@@ -141,14 +148,15 @@ class CacheDetails < Common
 
                 # combine all the tags we nuked.
                 details.gsub!(/ +/, ' ')
-                details.gsub!(/\* *\* *\*/, '**')
-                details.gsub!(/\* *\* *\*/, '**')
+                details.gsub!(/\* *\* *\*/, '**')	
+                details.gsub!(/\* *\* *\*/, '**')		# unnescesary
                 details.gsub!(/\*\*\*/, '**')
 
                 debug "post-combine-process: #{details}"
-                details.gsub!(/[\x80-\xFF]/, "\'")
-                details.gsub!(/\'+/, "\'")
-                details.gsub!(/^\*/, '')
+                details.gsub!(/[\x80-\xFF]/, "\'")		# high ascii
+                details.gsub!(/\&#\d+\;/, "\'")			# high ascii in entity format
+                details.gsub!(/\'+/, "\'")			# multiple apostrophes
+                details.gsub!(/^\*/, '')			# lines that start with *
 
                 # convert things into plain text.
                 details = CGI.unescapeHTML(details);
