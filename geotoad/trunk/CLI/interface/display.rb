@@ -10,32 +10,32 @@ module Display
 
     def debug(text)
         if $debugMode == 1
-            puts "<d> #{text}"
+            puts "< d > #{text}"
         end
     end
 
     # Text that's just fluff that can be ignored.
     def displayInfo(text)
-        puts "[-] #{text}"
+        puts "( - ) #{text}"
     end
 
     # often worth displaying
     def displayTitleMessage(text)
-        puts "[=] #{text}"
+        puts "( = ) #{text}"
     end
 
     # often worth displaying
     def displayMessage(text)
-        puts "[o] #{text}"
+        puts "( o ) #{text}"
     end
 
     # mindless warnings
     def displayWarning(text)
-        puts " *  #{text}"
+        puts " ***  #{text}"
     end
 
     # fatal errors
     def displayError(text)
-        puts "=!= ERROR: #{text}"
+        puts " =!=  ERROR: #{text}"
     end
 end

@@ -37,13 +37,13 @@ class ProgressBar
         end
 
         percentage = (@value.to_f / @max.to_f) * 100
-        bardiv = percentage.divmod(25)
+        bardiv = percentage.divmod(33.333333333333333333333333333333333333)
 
         fullbars = bardiv[0]
-        minibars = bardiv[1] / 12.5
-        #puts "p=#{percentage} f=#{fullbars} m=#{minibars}"
+        minibars = bardiv[1] / (16.66666666666666666666666666667).round
+        # "p=#{percentage} f=#{fullbars} m=#{minibars}"
         meter = "=" * fullbars + "-" * minibars
-        meter = meter.ljust(4)
+        meter = meter.ljust(3)
 
         if (@valueText)
             puts "[#{meter}] (#{@value}/#{@max}) #{@name}: #{@valueText}"

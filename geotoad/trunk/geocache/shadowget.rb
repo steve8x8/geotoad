@@ -3,7 +3,6 @@
 require 'net/http'
 require 'ftools'
 require 'uri'
-#require 'geocache/common'
 
 # find out where we want our cache #############################
 cacheDir = nil
@@ -32,8 +31,14 @@ class ShadowFetch
 		@remote = 0
         @shadowExpiry=345600	# 4 days
         @localExpiry=432000		# 4 days
+        @useShadow = 1
         debug "new fetch: #{url}"
 	end
+
+    def useShadow=(toggle)
+        @useShadow = toggle.to_i
+        debug "set useShadow to #{toggle}"
+    end
 
 	# to change the URL
 	def url=(url)
@@ -127,8 +132,7 @@ class ShadowFetch
 		if (File.exists?(localfile))
 			age = time.to_i - File.mtime(localfile).to_i
 			if (age > @localExpiry)
-				debug "local cache is #{age} old, older than #{@localExpiry}. removing.."
-				#File.unlink(localfile)
+				debug "local cache is #{age} old, older than #{@localExpiry}"
 			elsif (File.size(localfile) < 32)
 				debug "local cache appears corrupt. removing.."
 				File.unlink(localfile)
@@ -145,7 +149,7 @@ class ShadowFetch
 
 		## this assumes there was no local cache that was useable ############
 		# check shadow
-        if (@shadowExpiry > 0)
+        if (@useShadow > 0)
             (size, mtime) = checkShadow
         else
             size = 5
@@ -166,7 +170,7 @@ class ShadowFetch
 				@data = fetchRemote
                 if (@data)
                     @@src='remote'
-                    if (@shadowExpiry > 0)
+                    if (@useShadow > 0)
                         updateShadow
                     end
                 else
@@ -186,6 +190,7 @@ class ShadowFetch
                 if (File.exists?(localfile))
                     debug "using local cache instead"
                     @data = fetchLocal(localfile)
+                    @@src = "local <offline>"
                     return @data
                 end
                 @@src=nil

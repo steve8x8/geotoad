@@ -12,6 +12,7 @@ class SearchCache
 		@distance=15
 		@waypointHash = Hash.new
         @fetchID=0
+        @useShadow=1
         @resultsPager=nil
 	end
 
@@ -19,6 +20,10 @@ class SearchCache
 		debug "setting distance to #{dist}"
 		@distance = dist
 	end
+
+    def useShadow=(toggle)
+        @useShadow=toggle
+    end
 
 	# set the search mode. valid modes are 'zip', 'state_id', 'country_id', 'keyword',
 	# coord, user
@@ -237,6 +242,8 @@ class SearchCache
             page.shadowExpiry=60000
             page.localExpiry=43200
         end
+
+        page.useShadow=@useShadow
 
         if (@postVars)
             page.postVars=@postVars

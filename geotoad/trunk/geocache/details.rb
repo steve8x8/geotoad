@@ -10,8 +10,13 @@ class CacheDetails
 
 	def initialize(data)
 		@waypointHash = data
+        @useShadow=1
 		#fetchAll()
 	end
+
+    def useShadow=(toggle)
+        @useShadow=toggle
+    end
 
 	def waypoints
 		@waypointHash
@@ -40,6 +45,7 @@ class CacheDetails
 
 		url = fullURL(id)
 		page = ShadowFetch.new(url)
+
 		page.fetch
         if (page.data)
     		parseCache(page.data)

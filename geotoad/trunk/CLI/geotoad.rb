@@ -7,6 +7,7 @@ $:.push('..')
 
 # toss in our own libraries.
 require 'interface/display'
+require 'interface/input'
 require 'interface/progressbar'
 require 'geocache/common'
 require 'geocache/shadowget'
@@ -32,7 +33,7 @@ end
 
 $SLEEP=2
 $SLOWMODE=350
-$VERSION_URL = "http://toadstool.se/hacks/geotoad/currentversion.php?type=CLI";
+$VERSION_URL = "http://toadstool.se/hacks/geotoad/currentversion.php?type=CLI&version=#{VERSION}&ruby=#{RUBY_PLATFORM}&rubyver=#{RUBY_VERSION}";
 
 def initialize
     $TEMP_DIR=findTempDir
@@ -40,59 +41,29 @@ def initialize
     @@validFormats = output.formatList.sort
 
     puts "# GeoToad #{$VERSION} (#{RUBY_PLATFORM}-#{RUBY_VERSION}) - Please report bugs to geotoad@toadstool.se"
-    opts = GetoptLong.new(
-    [ "--format",                    "-f",        GetoptLong::OPTIONAL_ARGUMENT ],
-    [ "--output",                    "-o",        GetoptLong::OPTIONAL_ARGUMENT ],
-    [ "--query",                    "-q",        GetoptLong::OPTIONAL_ARGUMENT ],
-    [ "--distanceMax",                "-y",        GetoptLong::OPTIONAL_ARGUMENT ],
-    [ "--difficultyMin",            "-d",        GetoptLong::OPTIONAL_ARGUMENT ],
-    [ "--difficultyMax",            "-D",        GetoptLong::OPTIONAL_ARGUMENT ],
-    [ "--terrainMin",                "-t",        GetoptLong::OPTIONAL_ARGUMENT ],
-    [ "--terrainMax",                "-T",        GetoptLong::OPTIONAL_ARGUMENT ],
-    [ "--keyword",                  "-k",    GetoptLong::OPTIONAL_ARGUMENT ],
-    [ "--cacheExpiry"               "-c",    GetoptLong::OPTIONAL_ARGUMENT ],
-    [ "--quitAfterFetch",           "-x",    GetoptLong::OPTIONAL_ARGUMENT ],
-    [ "--notFound",                 "-n",    GetoptLong::NO_ARGUMENT ],
-    [ "--travelBug",                "-b",    GetoptLong::NO_ARGUMENT ],
-    [ "--verbose",                    "-v",    GetoptLong::NO_ARGUMENT ],
-    [ "--userInclude",                "-u",    GetoptLong::OPTIONAL_ARGUMENT ],
-    [ "--userExclude",                "-U",    GetoptLong::OPTIONAL_ARGUMENT ],
-    [ "--ownerInclude",                "-c",    GetoptLong::OPTIONAL_ARGUMENT ],
-    [ "--ownerExclude",                "-C",    GetoptLong::OPTIONAL_ARGUMENT ],
-    [ "--placeDateInclude",                "-p",    GetoptLong::OPTIONAL_ARGUMENT ],
-    [ "--placeDateExclude",                "-P",    GetoptLong::OPTIONAL_ARGUMENT ],
-    [ "--foundDateInclude",                "-r",    GetoptLong::OPTIONAL_ARGUMENT ],
-    [ "--foundDateExclude",                "-R",    GetoptLong::OPTIONAL_ARGUMENT ],
-    [ "--waypointLength",            "-l",    GetoptLong::OPTIONAL_ARGUMENT ],
-    [ "--libraryInclude",            "-L",    GetoptLong::OPTIONAL_ARGUMENT ],
-    [ "--help",                     "-h",    GetoptLong::NO_ARGUMENT ]
-    )
 
-    # put the stupid crap in a hash. Much nicer to deal with.
-    begin
-        @optHash = Hash.new
-        opts.each do |opt, arg|
-            @optHash[opt]=arg
-        end
-        rescue
-        usage
-        exit
+    uin = Input.new
+    if ARGV[0]
+        # command line arguments
+        @option = uin.getopt
+    else
+        # This will be interactive, once the code is in place.
+        @option = uin.getopt
     end
 
     # by request of Marc Sebastian Pelzer <marc%black-cube.net>
-    if @optHash['--libraryInclude']
-        $:.push(@optHash['--libraryInclude'])
+    if @option['libraryInclude']
+        $:.push(@option['libraryInclude'])
     end
 
+    @formatType    = @option['format'] || 'gpx'
+    @queryType        = @option['query'] || 'zip'
+    @cacheExpiry    = @option['cacheExpiry'].to_i || 3
+    @distanceMax = @option['distanceMax'] || 10
+    # This is a global. Not cool.
+    $slowLink = @option['slowlink'] || nil
 
-
-    @formatType    = @optHash['--format'] || 'gpx'
-    @queryType        = @optHash['--query'] || 'zip'
-    @cacheExpiry    = @optHash['--cacheExpiry'].to_i || 3
-    @quitAfterFetch  = @optHash['--quitAfterFetch'].to_i || 200
-    @distanceMax = @optHash['--distanceMax'] || 10
-
-    if ((! ARGV[0]) || @optHash['--help'])
+    if ((! ARGV[0]) || @option['help'])
         if (! ARGV[0])
             displayError "You forgot to specify a #{@queryType} search argument"
         end
@@ -105,7 +76,7 @@ def initialize
         @defaultOutputFile = "gtout-" + @queryType + "-" + @queryArgList
     end
 
-    if (@optHash['--verbose'])
+    if (@option['verbose'])
         enableDebug
         debug "verbose mode enabled"
     end
@@ -208,6 +179,10 @@ def downloadGeocacheList
     @queryArgList .split(/[:\|]/).each { |queryArg|
         print "\nPerforming #{@queryType} search for #{queryArg} "
         search = SearchCache.new
+        if ($slowLink)
+            debug "slowlink enabled (useShadow=0)"
+            search.useShadow=0
+        end
 
         # only valid for zip or coordinate searches
         if @queryType == "zip" || @queryType == "coord"
@@ -260,26 +235,30 @@ def prepareFilter
     # with our discovery.
 
     userLookups = Array.new
-    if (@optHash['--userExclude'])
-        @queryTitle = @queryTitle + ", excluding caches done by " + @optHash['--userExclude']
-        @defaultOutputFile = @defaultOutputFile + "-U=" + @optHash['--userExclude']
-        userLookups = @optHash['--userExclude'].split(':')
+    if (@option['userExclude'])
+        @queryTitle = @queryTitle + ", excluding caches done by " + @option['userExclude']
+        @defaultOutputFile = @defaultOutputFile + "-U=" + @option['userExclude']
+        userLookups = @option['userExclude'].split(':')
     end
 
-    if (@optHash['--userInclude'])
-        @queryTitle = @queryTitle + ", excluding caches not done by " + @optHash['--userInclude']
-        @defaultOutputFile = @defaultOutputFile + "-u=" + @optHash['--userInclude']
-        userLookups = userLookups + @optHash['--userInclude'].split(':')
+    if (@option['userInclude'])
+        @queryTitle = @queryTitle + ", excluding caches not done by " + @option['userInclude']
+        @defaultOutputFile = @defaultOutputFile + "-u=" + @option['userInclude']
+        userLookups = userLookups + @option['userInclude'].split(':')
     end
 
     userLookups.each { |user|
         search = SearchCache.new
         search.mode('user', user)
+        if ($slowLink)
+            debug "slowlink enabled (useShadow=0)"
+            search.useShadow=0
+        end
         search.fetchSearchLoop
         search.waypointList.each { |wid|
             @filtered.addVisitor(wid, user)
         }
-}
+    }
 end
 
 
@@ -299,55 +278,55 @@ def preFetchFilter
 
     debug "Filter running cycle 1, #{@filtered.totalWaypoints} caches left"
 
-    if @optHash['--difficultyMin']
-        @queryTitle = @queryTitle + ", difficulty #{@optHash['--difficultyMin']}+"
-        @defaultOutputFile = @defaultOutputFile + "-d" + @optHash['--difficultyMin'].to_s
-        @filtered.difficultyMin(@optHash['--difficultyMin'].to_f)
+    if @option['difficultyMin']
+        @queryTitle = @queryTitle + ", difficulty #{@option['difficultyMin']}+"
+        @defaultOutputFile = @defaultOutputFile + "-d" + @option['difficultyMin'].to_s
+        @filtered.difficultyMin(@option['difficultyMin'].to_f)
     end
     debug "Filter running cycle 2, #{@filtered.totalWaypoints} caches left"
-    if @optHash['--difficultyMax']
-        @queryTitle = @queryTitle + ", difficulty #{@optHash['--difficultyMax']} or lower"
-        @defaultOutputFile = @defaultOutputFile + "-D" + @optHash['--difficultyMin'].to_s
-        @filtered.difficultyMax(@optHash['--difficultyMax'].to_f)
+    if @option['difficultyMax']
+        @queryTitle = @queryTitle + ", difficulty #{@option['difficultyMax']} or lower"
+        @defaultOutputFile = @defaultOutputFile + "-D" + @option['difficultyMin'].to_s
+        @filtered.difficultyMax(@option['difficultyMax'].to_f)
     end
     debug "Filter running cycle 3, #{@filtered.totalWaypoints} caches left"
 
-    if @optHash['--terrainMin']
-        @queryTitle = @queryTitle + ", terrain #{@optHash['--terrainMin']}+"
-        @defaultOutputFile = @defaultOutputFile + "-t" + @optHash['--terrainMin'].to_s
-        @filtered.terrainMin(@optHash['--terrainMin'].to_f)
+    if @option['terrainMin']
+        @queryTitle = @queryTitle + ", terrain #{@option['terrainMin']}+"
+        @defaultOutputFile = @defaultOutputFile + "-t" + @option['terrainMin'].to_s
+        @filtered.terrainMin(@option['terrainMin'].to_f)
     end
     debug "Filter running cycle 4, #{@filtered.totalWaypoints} caches left"
 
-    if @optHash['--terrainMax']
-        @queryTitle = @queryTitle + ", terrain #{@optHash['--difficultyMax']} or lower"
-        @defaultOutputFile = @defaultOutputFile + "-T" + @optHash['--difficultyMin'].to_s
-        @filtered.terrainMax(@optHash['--terrainMax'].to_f)
+    if @option['terrainMax']
+        @queryTitle = @queryTitle + ", terrain #{@option['difficultyMax']} or lower"
+        @defaultOutputFile = @defaultOutputFile + "-T" + @option['difficultyMin'].to_s
+        @filtered.terrainMax(@option['terrainMax'].to_f)
     end
 
-    if @optHash['--foundDateInclude']
-        @filtered.foundDateInclude(@optHash['--foundDateInclude'].to_f)
+    if @option['foundDateInclude']
+        @filtered.foundDateInclude(@option['foundDateInclude'].to_f)
     end
 
-    if @optHash['--foundDateExclude']
-        @filtered.foundDateExclude(@optHash['--foundDateExclude'].to_f)
+    if @option['foundDateExclude']
+        @filtered.foundDateExclude(@option['foundDateExclude'].to_f)
     end
 
-    if @optHash['--placeDateInclude']
-        @filtered.placeDateInclude(@optHash['--placeDateInclude'].to_f)
+    if @option['placeDateInclude']
+        @filtered.placeDateInclude(@option['placeDateInclude'].to_f)
     end
 
-    if @optHash['--placeDateExclude']
-        @filtered.placeDateExclude(@optHash['--placeDateExclude'].to_f)
+    if @option['placeDateExclude']
+        @filtered.placeDateExclude(@option['placeDateExclude'].to_f)
     end
 
-    if @optHash['--notFound']
+    if @option['notFound']
         @queryTitle = @queryTitle + ", virgins only"
         @defaultOutputFile = @defaultOutputFile + "-n"
         @filtered.notFound
     end
 
-    if @optHash['--travelBug']
+    if @option['travelBug']
         @queryTitle = @queryTitle + ", only with TB's"
         @defaultOutputFile = @defaultOutputFile + "-b"
         @filtered.travelBug
@@ -355,16 +334,16 @@ def preFetchFilter
 
 
     beforeOwnersTotal = @filtered.totalWaypoints
-    if (@optHash['--ownerExclude'])
-        @queryTitle = @queryTitle + ", excluding caches by #{@optHash['--ownerExclude']}"
-        @optHash['--ownerExclude'].split(/[:\|]/).each { |owner|
+    if (@option['ownerExclude'])
+        @queryTitle = @queryTitle + ", excluding caches by #{@option['ownerExclude']}"
+        @option['ownerExclude'].split(/[:\|]/).each { |owner|
             @filtered.ownerExclude(owner)
         }
     end
 
-    if (@optHash['--ownerInclude'])
-        @queryTitle = @queryTitle + ", excluding caches not by #{@optHash['--ownerInclude']}"
-        @optHash['--ownerInclude'].split(/[:\|]/).each { |owner|
+    if (@option['ownerInclude'])
+        @queryTitle = @queryTitle + ", excluding caches not by #{@option['ownerInclude']}"
+        @option['ownerInclude'].split(/[:\|]/).each { |owner|
             @filtered.ownerInclude(owner)
         }
     end
@@ -375,14 +354,14 @@ def preFetchFilter
     end
 
     beforeUsersTotal = @filtered.totalWaypoints
-    if (@optHash['--userExclude'])
-        @optHash['--userExclude'].split(/[:\|]/).each { |user|
+    if (@option['userExclude'])
+        @option['userExclude'].split(/[:\|]/).each { |user|
             @filtered.userExclude(user)
         }
     end
 
-    if (@optHash['--userInclude'])
-        @optHash['--userInclude'].split(/[:\|]/).each { |user|
+    if (@option['userInclude'])
+        @option['userInclude'].split(/[:\|]/).each { |user|
             @filtered.userInclude(user)
         }
     end
@@ -424,11 +403,17 @@ def fetchGeocaches
     wpFiltered.each_key { |wid|
         token = token + 1
         detailURL = @detail.fullURL(wpFiltered[wid]['sid'])
+        # This just checks to see where Shadowfetch would grab the information from.
         page = ShadowFetch.new(detailURL)
+        src = page.src
+
+        # This actually fetches the page.
+        if ($slowLink)
+            @detail.useShadow=0
+            debug "slowlink enabled (useShadow=0)"
+        end
         @detail.fetchWid(wid)
 
-        # I wish I understood how this worked. I think this logic is garbage. To be revisited.
-        src = page.src
         if (page.src)
             if (wpFiltered[wid]['warning'])
                 progress.updateText(token, "\"#{wpFiltered[wid]['name']}\" from #{src} (cache is temp. unavailable)")
@@ -457,24 +442,24 @@ def postFetchFilter
     # caches with warnings we choose not to include.
     @filtered.removeByElement('warning')
 
-    if @optHash['--keyword']
-        @queryTitle = @queryTitle + ", matching keywords #{@optHash['--keyword']}"
-        @defaultOutputFile = @defaultOutputFile + "-k=" + @optHash['--keyword']
-        @filtered.keyword(@optHash['--keyword'])
+    if @option['keyword']
+        @queryTitle = @queryTitle + ", matching keywords #{@option['keyword']}"
+        @defaultOutputFile = @defaultOutputFile + "-k=" + @option['keyword']
+        @filtered.keyword(@option['keyword'])
     end
 
 
     # We filter for users again. While this may be a bit obsessive, this is in case
     # our local cache is not valid.
     beforeUsersTotal = @filtered.totalWaypoints
-    if (@optHash['--userExclude'])
-        @optHash['--userExclude'].split(/[:\|]/).each { |user|
+    if (@option['userExclude'])
+        @option['userExclude'].split(/[:\|]/).each { |user|
             @filtered.userExclude(user)
         }
     end
 
-    if (@optHash['--userInclude'])
-        @optHash['--userInclude'].split(/[:\|]/).each { |user|
+    if (@option['userInclude'])
+        @option['userInclude'].split(/[:\|]/).each { |user|
             @filtered.userInclude(user)
         }
     end
@@ -501,14 +486,14 @@ def saveFile
     displayInfo "Output format selected is #{output.formatDesc(@formatType)} format"
     output.input(@filtered.waypoints)
     output.formatType=@formatType
-    if (@optHash['--waypointLength'])
-        output.waypointLength=@optHash['--waypointLength'].to_i
+    if (@option['waypointLength'])
+        output.waypointLength=@option['waypointLength'].to_i
     end
 
 
 
-    if (@optHash['--output'])
-        outputFile = @optHash['--output']
+    if (@option['output'])
+        outputFile = @option['output']
     else
         outputFile = @defaultOutputFile.gsub(/[:\. \'\"\?\;]+/, '_')
     end
@@ -520,16 +505,24 @@ def saveFile
 end
 
 
+def close
+    # Not currently used.
+end
 
 end
 
 
 # Yes, it's pretty lame.
 cli = GeoToad.new
-cli.versionCheck
+if (! $slowLink)
+    cli.versionCheck
+end
+
 cli.downloadGeocacheList
 cli.prepareFilter
 cli.preFetchFilter
 cli.fetchGeocaches
 cli.postFetchFilter
 cli.saveFile
+cli.close
+
