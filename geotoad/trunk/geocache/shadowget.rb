@@ -15,7 +15,7 @@ $shadowHosts = [
 ]
 
 $Header = {
-  'User-Agent'      => "Mozilla/5.0 (compatible; GeoToad/#{$VERSION}; #{RUBY_PLATFORM})",
+  'User-Agent'      => "Mozilla/5.0 (Macintosh; U; PPC Mac OS X Mach-O; en-US; rv:1.5a) Gecko/20030706 Mozilla Firebird/0.6 GeoToad/#{$VERSION}-#{RUBY_PLATFORM})",
   'Accept'          => 'image/gif, image/jpeg, image/png, multipart/x-mixed-replace, */*',
   'Accept-Language' => 'en',
   'Accept-Charset'  => 'iso-8859-1, utf-8, iso-10646-ucs-2, macintosh, windows-1252, *'
@@ -236,6 +236,7 @@ class ShadowFetch < Common
 			else
 				debug "get #{host}#{file}"
 				resp, data = w.get(file, $Header)
+                debug "recieved file. code is #{resp.code}"
 			end
 		rescue Net::ProtoRetriableError => detail
 			head = detail.data
@@ -252,14 +253,16 @@ class ShadowFetch < Common
 			    w = Net::HTTP.new(host,port)
 			    retry
 			end
-		rescue => detail
-			head = detail.data
-			debug "I got a #{head.code} trying to retrieve #{url}"
+		rescue SockeError, Errno::EINVAL, EOFError, TimeoutError, StandardError => detail
+            debug "Failed fetching!"
+            return nil
 		end
 
-		# ruby 1.8.0 compatibility
-		data = resp.data if data.nil?
-		return data
+		if resp
+            # ruby 1.8.0 compatibility
+            data = resp.data if data.nil?
+            return data
+        end
 	end
 
 	def fetchGoogle
