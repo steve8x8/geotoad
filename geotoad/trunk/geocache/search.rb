@@ -217,17 +217,28 @@ class SearchCache < Common
                 when /cache_details.aspx\?guid=(.*?)\">(.*?)\<\/a\>/
                     @cache['sid']=$1
                     name=$2.dup
-                    name.gsub!(/ +$/, '')
+
+                    name.gsub!(/\&quot;/, '\"')
+                    name.gsub!(/\&amp;/, '&')
+                    name.gsub!(/ +$/, ' ')
+
+
                     if name =~ /\<strike\>(.*?)\<\/strike\>/
                         @cache['disabled']=1
                         name=$1.dup
                     end
-                    @cache['name']=CGI.unescape(name).gsub(/[\x80-\xFF]/, "\'")
+
+
+                    @cache['name']=name.gsub(/[\x80-\xFF]/, '?')
                     debug "sid=#{@cache['sid']} name=#{@cache['name']} (disabled=#{@cache['disabled']})"
 
                 when /\bby (.*)/
                     creator = $1.dup
-                    @cache['creator']=CGI.unescape(creator).gsub(/[\x80-\xFF]/, "\'").chop!
+                    creator.gsub!(/\&quot;/, '\"')
+                    creator.gsub!(/\&amp;/, ' & ')
+                    creator.gsub!(/ +$/, ' ')
+
+                    @cache['creator']=creator.gsub(/[\x80-\xFF]/, '?').chop!
                     debug "creator=#{@cache['creator']}"
                 when /\((GC\w+)\)/
                     wid=$1.dup
