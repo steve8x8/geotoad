@@ -96,7 +96,7 @@ class CacheDetails
 
 		data.each { |line|
             # this matches the <title> on the printable pages. Some pages have ) and some don't.
-			if line =~  /^\s+(GC[A-Z0-9]+)[) ]/
+			if line =~  /^\s+\((GC[A-Z0-9]+)\)/
                 # only do it if the wid hasn't been found yet, sometimes pages mention wid's of other caches.
                 if (! wid)
                     wid = $1

@@ -9,8 +9,8 @@ $Format = {
             'spacer' => ' ',
             'templatePre'    => "GPSPOINT DATA FILE\ntype=\"fileinfo\"  version=\"1.00\"\n" +
                                             "type=\"programinfo\" program=\"geotoad\" version=\"0.0\"\n",
-            'templateWP'        => "type=\"waypoint\" latdata=\"<%wp.latdata%>\" londata=\"<%wp.londata%>\"" +
-                                             "name=\"<%out.id%>\" comment=\"<%wp.name%>\"" +
+            'templateWP'        => "type=\"waypoint\" latdata=\"<%wp.latdata%>\" londata=\"<%wp.londata%>\" " +
+                                             "name=\"<%out.id%>\" comment=\"<%wp.name%>\" " +
                                             "symbol=\"flag\"  display_option=\"symbol+name\"\n",
         },
         'easygps' => {
@@ -380,6 +380,27 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
             'desc'    => 'CacheMate for PalmOS',
             'filter_src'    => 'gpx',
             'filter_exec'    => 'cmconvert -o OUTFILE INFILE'
-        }
+        },
 
+        'delorme' => {
+            'ext'          => 'txt',
+            'mime'         => 'application/delorme',
+            'desc'         => 'DeLorme TXT import datafile',
+            'spacer'       => ' ',
+            'templatePre'  => "BEGIN SYMBOL\n",
+            'templateWP'   => "<%wp.latdata%>,<%wp.londata%>," +
+                              "<%out.id%>\{URL=<%out.url%>\},<%wp.type%>\n",
+            'templatePost' => "END",
+        },
+
+         'delorme-nourl' => {
+            'ext'          => 'txt',
+            'mime'         => 'application/delorme',
+            'desc'         => 'DeLorme TXT import datafile without URL',
+            'spacer'       => ' ',
+            'templatePre'  => "BEGIN SYMBOL\n",
+            'templateWP'   => "<%wp.latdata%>,<%wp.londata%>," +
+                              "<%out.id%>,<%wp.type%>\n",
+            'templatePost' => "END",
+         }
 }

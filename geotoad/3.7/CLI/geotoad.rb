@@ -34,7 +34,7 @@ else
 end
 
 $SLEEP=2
-$SLOWMODE=350
+$SLOWMODE=300
 
 def initialize
     $TEMP_DIR     = findTempDir
@@ -436,22 +436,24 @@ def fetchGeocaches
         end
 
 
+        message = nil
         if (page.src)
             src = page.src
             if (wpFiltered[wid]['warning'])
-                progress.updateText(token, "\"#{wpFiltered[wid]['name']}\" from #{src} (cache is temp. unavailable)")
-            else
-                progress.updateText(token, "\"#{wpFiltered[wid]['name']}\" from #{src}")
+                message = "(cache is temp. unavailable)"
             end
-        elsif (src == "remote")
-            downloads = downloads + 1
-            debug "#{downloads} of #{quitAfterFetch} remote downloads so far"
-            displayMessage "  (sleeping for #{$SLEEP} seconds)"
-            sleep $SLEEP
+            if (src == "remote")
+                downloads = downloads + 1
+                message = "(sleeping for #{$SLEEP} seconds)"
+                sleep $SLEEP
+            end
         else
-            progress.updateText(token, "\"#{wpFiltered[wid]['name']}\" (could not fetch, private cache?)")
+            message = "could not fetch, private cache?)"
             wpFiltered.delete(wid)
         end
+
+        progress.updateText(token, "\"#{wpFiltered[wid]['name']}\" from #{src} #{message}")
+
     }
 end
 

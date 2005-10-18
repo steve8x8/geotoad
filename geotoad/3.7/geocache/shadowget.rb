@@ -9,10 +9,8 @@ require 'uri'
 cacheDir = nil
 # we'll make this more dynamic in the future. Lets start out badly though.
 $shadowHosts = [
-	'http://toadstool.se/hacks/shadowfetch/get.php'
-    #,
-	#'http://home.toadstool.se/hacks/shadowfetch/get.php',
-	#'http://smtp.stromberg.org/hacks/shadowfetch/get.php'
+	# This functionality disabled by request of Geocaching.com. 
+	#'http://toadstool.se/hacks/shadowfetch/get.php'
 ]
 
 
@@ -34,7 +32,7 @@ class ShadowFetch
         @maxFailures = 4
         debug "new fetch: #{url}"
         $Header = {
-          'User-Agent'      => "Mozilla/5.0 (Macintosh; U; PPC Mac OS X Mach-O; en-US; rv:1.5a) Gecko/20030706 Mozilla Firebird/0.6 GeoToad/#{$VERSION}-#{RUBY_PLATFORM})",
+          'User-Agent'      => "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.8) Gecko/20050511 Firefox/1.0.4",
           'Accept'          => 'image/gif, image/jpeg, image/png, multipart/x-mixed-replace, */*',
           'Accept-Language' => 'en',
           'Accept-Charset'  => 'iso-8859-1, utf-8, iso-10646-ucs-2, macintosh, windows-1252, *'
@@ -115,14 +113,19 @@ class ShadowFetch
 		fileParts = url.split('/')
 		host = fileParts[2]
 
-		# if there is anything to salvage
+
 		if fileParts[3]
 			dir = fileParts[3..-2].join('/')
 			file = fileParts[-1]
 			localfile = '/' + host + '/' + dir + '/' + file
-		else
-			localfile = '/' + host + '/' + 'index.html'
-		end
+        end
+		#else
+		#    puts "XX should use index.html"
+	#		localfile = '/' + host + '/' + 'index.html'
+	#	end
+        if url =~ /\/$/
+            localfile = localfile + '/index.html'
+        end
 
 		# make a friendly filename
 		localfile.gsub!(/[=\?\*\%\&\$:\-\.]/, "_")
@@ -267,6 +270,9 @@ class ShadowFetch
 		fileParts = url.split('/')
 		host = fileParts[2]
 		file = '/' + fileParts[3..-1].join('/')
+		if url =~ /\/$/
+            file = file + '/'
+        end
 
 		debug "Connecting to #{host} to retrieve #{file}"
 		w = Net::HTTP.new(host, 80)
@@ -308,7 +314,10 @@ class ShadowFetch
             @@downloadErrors = @@downloadErrors + 1
 
             if (disableRetry)
-                displayWarning "Could not fetch #{url}, no more retries available. (failures=#{@@downloadErrors})"
+                # only show the first few failures..
+                if @@downloadErrors < @maxFailures
+                    displayWarning "Could not fetch #{url}, no more retries available. (failures=#{@@downloadErrors})"
+                end
                 return nil
             else
                 disableRetry = 1

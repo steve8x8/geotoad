@@ -50,8 +50,23 @@ class Output
         'IN'        => '',
         'OVERLOOK'  => 'Ovlk',
         'Ridge'     => 'Rdg',
-        'Forest'    => 'Frst'
-	}
+        'Forest'    => 'Frst',
+        'II'        => '2',
+        'III'       => '3',
+        'IV'        => '4',
+        'BY'        => '',
+        'HOTEL'     => 'Htl',
+        'MOTEL'     => 'Mtl',
+
+        # German Words Follow
+        'DIE'       => '',
+        'DER'       => '',
+        'DEN'       => '',
+        'ZUM'       => '',
+        'IM'        => '',
+        'EIN'       => '',
+        'DAS'       => ''
+}
 
 
 
@@ -72,6 +87,11 @@ class Output
 	def shortName(name)
 		tempname = name.dup
 		tempname.gsub!('cache', '')
+        # not sure why this isn't being handled by the \W regexps, but
+        # I'm taking care of it to fix a bug with caches with _ in their name.
+
+        tempname.gsub!(/_/, '')
+
         # acronym.
         if tempname =~ /(\w)\. (\w)\. (\w)/
             debug "shortname: acronym detected.. removing extraneous dots and spaces"
@@ -254,15 +274,16 @@ class Output
         text = CGI.escapeHTML(str)
         # using scan() here to get around difficulties with \1
         text.scan(/([\x80-\xFF]+)/) {|highchar|
-            ascii = highchar[0].unpack("U").to_s
-            dec = highchar[0]
-            if ascii == '0'
-                debug "#{text}\nnot a valid char: #{highchar} / #{ascii} / #{dec}"
+            begin
+                ascii = highchar[0].unpack("U").to_s
+                debug "Replacing high char [#{highchar}] with #{ascii}"
+                text.gsub!(/#{highchar}/, ("&#" + ascii  + ";"))
+            rescue
+                # UTF-8 conversion failed. Lets use a ? instead.
+                debug "Could not determine ASCII code conversion for UTF-8 character #{highchar}, using ? instead"
+                text.gsub!(/#{highchar}/,'?')
             end
-            debug "Replacing high char [#{highchar}] with #{ascii}"
-            text.gsub!(/#{highchar}/, ("&#" + ascii  + ";"))
         }
-        return text
     end
 
 
@@ -329,7 +350,7 @@ class Output
 
 
         # ** This will be removed for GeoToad 4.0, when we use a real templating engine that can do loops **
-        if @outputType == "html"
+        if @outputType == "html" || @outputType == "html-decrypt"
             htmlIndex=''
             debug "I should generate an index, I'm html"
             symbols = Hash.new
@@ -416,6 +437,9 @@ class Output
             if @wpHash[@currentWid]['distance']
                 @outVars['relativedistance'] = 'Distance: ' + @wpHash[@currentWid]['distance'].to_s + 'mi ' + @wpHash[@currentWid]['direction']
             end
+
+            # fix for bug reported by wkraml%a1.net - caches with no hint get the last hint.
+            @outVars['hintdecrypt'] = nil
 
             if @wpHash[@currentWid]['hint']
                 hint = @wpHash[@currentWid]['hint']
