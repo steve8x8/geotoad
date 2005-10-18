@@ -32,7 +32,7 @@ class ShadowFetch
         @maxFailures = 4
         debug "new fetch: #{url}"
         $Header = {
-          'User-Agent'      => "Mozilla/5.0 (Windows; U; Windows NT 5.0; rv:1.7.3) Gecko/20040913 Firefox/0.10",
+          'User-Agent'      => "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.8) Gecko/20050511 Firefox/1.0.4",
           'Accept'          => 'image/gif, image/jpeg, image/png, multipart/x-mixed-replace, */*',
           'Accept-Language' => 'en',
           'Accept-Charset'  => 'iso-8859-1, utf-8, iso-10646-ucs-2, macintosh, windows-1252, *'

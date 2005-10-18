@@ -96,7 +96,7 @@ class CacheDetails
 
 		data.each { |line|
             # this matches the <title> on the printable pages. Some pages have ) and some don't.
-			if line =~  /^\s+(GC[A-Z0-9]+)[) ]/
+			if line =~  /^\s+\((GC[A-Z0-9]+)\)/
                 # only do it if the wid hasn't been found yet, sometimes pages mention wid's of other caches.
                 if (! wid)
                     wid = $1
@@ -153,16 +153,6 @@ class CacheDetails
               	debug "got written lat/lon"
             end
 
-            if line =~ /\<span id=\"Location\"\>In (.*?)\<\/span\>/
-                location = $1
-                debug "got location: #{location}"
-                if location =~ /(.*?), (.*?)/
-                    @waypointHash[wid]['state'] = $1
-                    @waypointHash[wid]['country'] = $2
-                else
-                    @waypointHash[wid]['country'] = location
-                end
-            end
 
             # why a geocache is closed. It seems to always be the same.
             if line =~ /\<span id=\"ErrorText\">(.*?)\<\/span\>/
@@ -233,8 +223,6 @@ class CacheDetails
 		# this data is all on one line, so we should just use scan and forget reparsing.
 		if (wid)
             debug "we have a wid"
-            # some caches don't have a short desc.
-            @waypointHash[wid]['shortdesc']=''
 
             # these are multi-line matches, so they are out of the scope of our
             # next
@@ -243,18 +231,14 @@ class CacheDetails
                 shortdesc = $1
                 shortdesc.gsub!(/\'+/, "\'")
                 shortdesc.gsub!(/^\*/, '')
-                @waypointHash[wid]['shortdesc'] = CGI.unescapeHTML(shortdesc)
-                @waypointHash[wid]['details'] << cleanHTML(@waypointHash[wid]['shortdesc'])
+                @waypointHash[wid]['details'] = CGI.unescapeHTML(shortdesc)
             end
 
             if data =~ /id=\"LongDescription\"\>(.*?)\<\/span\><\/BLOCKQUOTE\>/m
                 debug "found long desc"
                 details =  cleanHTML(@waypointHash[wid]['details'] << "  " << $1)
-                @waypointHash[wid]['longdesc'] = details
-
                 debug "got details: [#{details}]"
-                @waypointHash[wid]['details'] << @waypointHash[wid]['longdesc']
-
+                @waypointHash[wid]['details'] = details
             end
         end  # end wid check.
 

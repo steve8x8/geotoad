@@ -66,7 +66,7 @@ class Output
         'IM'        => '',
         'EIN'       => '',
         'DAS'       => ''
-	}
+}
 
 
 
@@ -241,22 +241,16 @@ class Output
         tags = text.scan(/\<%(\w+\.\w+)%\>/)
 
         tags.each { |tag|
-            #puts "scanning #{tag} (#{@currentWid})"
+            # puts "scanning #{tag} (#{@currentWid})"
             (type, var) = tag[0].split('.')
-            #debug "t=#{type} v=#{var}"
-
             if (type == "wp")
                 text.gsub!(/\<%wp\.#{var}%\>/, @wpHash[@currentWid][var].to_s)
             elsif (type == "out")
                 text.gsub!(/\<%out\.#{var}%\>/, @outVars[var].to_s)
             elsif (type == "wpEntity")
-                text.gsub!(/\<%wpEntity\.#{var}%\>/, makeEntity(@wpHash[@currentWid][var].to_s))
+                text.gsub!(/\<%wpEntity\.#{var}%\>/, makeXML(@wpHash[@currentWid][var].to_s))
             elsif (type == "outEntity")
-                text.gsub!(/\<%outEntity\.#{var}%\>/, makeEntity(@outVars[var].to_s))
-            elsif (type == "wpXML")
-                text.gsub!(/\<%wpXML\.#{var}%\>/, makeXML(@wpHash[@currentWid][var].to_s))
-            elsif (type == "outXML")
-                text.gsub!(/\<%outXML\.#{var}%\>/, makeXML(@outVars[var].to_s))
+                text.gsub!(/\<%outEntity\.#{var}%\>/, makeXML(@outVars[var].to_s))
             else
                 displayWarning "unknown type: #{type} tag=#{var}"
             end
@@ -264,42 +258,7 @@ class Output
         return text
     end
 
-
-    # Makes HTML entities out of a string
-    def makeEntity(str)
-        # XML safe chars.. except for &, which is only safe if something is after it.. weird, eh?
-        # I'm not actually sure how to handle & that is not part of an element properly.
-
-        if (str =~ /\&/) && (str !~ /\&[\w\#]+\;/)
-            debug "Fixing ampersands in #{str}"
-            str.gsub!(/\&/, "&amp;");
-        end
-
-        if str =~ /^[\&\#\;\w\s_\-:\?]+$/
-           return str
-        else
-           debug "makeXML: [#{str}]"
-        end
-
-        text = CGI.escapeHTML(str)
-        # using scan() here to get around difficulties with \1
-        text.scan(/([\x80-\xFF]+)/) {|highchar|
-            begin
-                ascii = highchar[0].unpack("U").to_s
-                puts "Replacing high char [#{highchar}] with #{ascii}"
-                text.gsub!(/#{highchar}/, ("&#" + ascii  + ";"))
-            rescue
-                # UTF-8 conversion failed. Lets use a ? instead.
-                puts "Could not determine ASCII code conversion for UTF-8 character #{highchar}, using ? instead"
-                text.gsub!(/#{highchar}/,'?')
-            end
-        }
-    end
-
-    # Massages data to be XML valid.
     def makeXML(str)
-        debug "makeXML in: #{str}"
-
         # XML safe chars.. except for &, which is only safe if something is after it.. weird, eh?
         # I'm not actually sure how to handle & that is not part of an element properly.
         if (str =~ /\&/) && (str !~ /\&[\w\#]+\;/)
@@ -308,29 +267,23 @@ class Output
         end
 
         if str =~ /^[\&\#\;\w\s_\-:\?]+$/
-            debug "Shortcutting out: #{str}"
            return str
         else
            debug "makeXML: [#{str}]"
         end
-
         text = CGI.escapeHTML(str)
-        #text = str
-
         # using scan() here to get around difficulties with \1
         text.scan(/([\x80-\xFF]+)/) {|highchar|
             begin
                 ascii = highchar[0].unpack("U").to_s
                 debug "Replacing high char [#{highchar}] with #{ascii}"
-                #text.gsub!(/#{highchar}/, ("&#" + ascii  + ";"))
+                text.gsub!(/#{highchar}/, ("&#" + ascii  + ";"))
             rescue
                 # UTF-8 conversion failed. Lets use a ? instead.
                 debug "Could not determine ASCII code conversion for UTF-8 character #{highchar}, using ? instead"
                 text.gsub!(/#{highchar}/,'?')
             end
         }
-        debug "makeXML out: #{str}"
-        return text
     end
 
 
@@ -341,12 +294,9 @@ class Output
         @outVars['title'] = title
         @currentWid = 0
         # output is what we generate. We start with the templates pre.
-        @outVars['version'] = $VERSION
 		output = replaceVariables(@outputFormat['templatePre'])
-
-
-
         @outVars['counter'] = 0
+
 
         # this is a strange maintenance loop of sorts. First it builds a list, which
         # I'm not sure what it's used for. Second, it inserts a new item named "sname"
@@ -534,11 +484,11 @@ class Output
                     if @wpHash[@currentWid]["comment#{x}Type"]
                         debug "Found comment #{x}"
                         rawcomment =
-                        "    <groundspeak:log id=\"<%wpXML.comment#{x}ID%>\">\r\n" +
-                        "      <groundspeak:date><%wpXML.comment#{x}Date%>T00:00:00.0000000-07:00</groundspeak:date>\r\n" +
-                        "      <groundspeak:type><%wpXML.comment#{x}Type%></groundspeak:type>\r\n" +
-                        "      <groundspeak:finder id=\"1\"><%wpXML.comment#{x}Name%></groundspeak:finder>\r\n" +
-                        "      <groundspeak:text encoded=\"False\"><%wpXML.comment#{x}Comment%></groundspeak:text>\r\n" +
+                        "    <groundspeak:log id=\"<%wpEntity.comment#{x}ID%>\">\r\n" +
+                        "      <groundspeak:date><%wpEntity.comment#{x}Date%>T00:00:00.0000000-07:00</groundspeak:date>\r\n" +
+                        "      <groundspeak:type><%wpEntity.comment#{x}Type%></groundspeak:type>\r\n" +
+                        "      <groundspeak:finder id=\"1\"><%wpEntity.comment#{x}Name%></groundspeak:finder>\r\n" +
+                        "      <groundspeak:text encoded=\"False\"><%wpEntity.comment#{x}Comment%></groundspeak:text>\r\n" +
                         "    </groundspeak:log>\r\n"
 
                         debug "filtering raw comment..."
@@ -548,8 +498,6 @@ class Output
             end
 
             @outVars['counter'] = @outVars['counter'] + 1
-            @outVars['longdesc'] = @wpHash[@currentWid]['longdesc']
-            @outVars['shortdesc'] = @wpHash[@currentWid]['shortdesc']
 
 			# this crazy mess is all due to iPod's VCF reader only supporting 2k chars!
 			0.upto(numEntries) { |entry|
@@ -563,13 +511,6 @@ class Output
 
                 # a bad hack.
                 @outVars['details'].gsub!(/\*/, "[SPACER]");
-                if (@outVars['longdesc'])
-                    @outVars['longdesc'].gsub!(/\*/, "[SPACER]");
-                end
-                if (@outVars['shortdesc'])
-                    @outVars['shortdesc'].gsub!(/\*/, "[SPACER]");
-                end
-
 				tempOutput = replaceVariables(@outputFormat['templateWP'])
 
                 # we move this to after our escapeHTML's so the HTML in here doesn't get
