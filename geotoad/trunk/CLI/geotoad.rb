@@ -28,7 +28,7 @@ include Display
 # The version gets inserted by makedist.sh
 versionID='%VERSION%'
 if versionID !~ /^\d/
-    $VERSION = '3.7-CURRENT'
+    $VERSION = '3.8-CURRENT'
 else
     $VERSION = versionID.dup
 end
