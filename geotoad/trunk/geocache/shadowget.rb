@@ -7,16 +7,12 @@ require 'uri'
 
 # find out where we want our cache #############################
 cacheDir = nil
-# we'll make this more dynamic in the future. Lets start out badly though.
-$shadowHosts = [
-	# This functionality disabled by request of Geocaching.com. 
-	#'http://toadstool.se/hacks/shadowfetch/get.php'
-]
-
 
 
 # Does a webget, but stores a local directory with cached results ###################
 class ShadowFetch
+	attr_reader :cookies, :data, :waypoints
+	
     include Common
     include Display
     @@downloadErrors = 0
@@ -26,23 +22,16 @@ class ShadowFetch
 	def initialize (url)
 		@url = url
 		@remote = 0
-        @shadowExpiry=345600	# 4 days
         @localExpiry=432000		# 4 days
-        @useShadow = 1
         @maxFailures = 4
         debug "new fetch: #{url}"
         $Header = {
-          'User-Agent'      => "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.8) Gecko/20050511 Firefox/1.0.4",
+          'User-Agent'      => "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.12) Gecko/20050915 Firefox/1.0.7",
           'Accept'          => 'image/gif, image/jpeg, image/png, multipart/x-mixed-replace, */*',
           'Accept-Language' => 'en',
           'Accept-Charset'  => 'iso-8859-1, utf-8, iso-10646-ucs-2, macintosh, windows-1252, *'
         }
 	end
-
-    def useShadow=(toggle)
-        @useShadow = toggle.to_i
-        debug "set useShadow to #{toggle}"
-    end
 
 	# to change the URL
 	def url=(url)
@@ -50,10 +39,6 @@ class ShadowFetch
         debug "set url to #{url}"
 	end
 
-    def shadowExpiry=(expiry)
-        debug "setting shadow expiry to #{expiry}"
-        @shadowExpiry=expiry
-    end
 
     def maxFailures=(maxfail)
         debug "setting max failures to #{maxfail}"
@@ -78,15 +63,6 @@ class ShadowFetch
         @postVars=vars
         debug "Set post to: #{@postString}"
     end
-
-	# to get the data returned back to you.
-	def data
-		@data
-	end
-
-	def waypoints
-		@waypoints
-	end
 
 	def src
 		debug "src of last get was #{@@src}"
@@ -176,60 +152,25 @@ class ShadowFetch
 			debug "no local cache file found for #{localfile}"
 		end
 
-		## this assumes there was no local cache that was useable ############
-		# check shadow
-        if (@useShadow > 0)
-            (size, mtime) = checkShadow
-        else
-            # anyone know what the heck this is?
-            size = 5
-            mtime = 3000
-        end
-
-        # if we got back a valid result of some kind.
-		if (size)
-			age = time.to_i - mtime
-			if ((size > 128) && (age < @shadowExpiry))
-            debug "shadow has cache entry #{age} old, using."
-				@data = fetchShadow
-                @@src='shadow'
+	
+		@data = fetchRemote
+		size = nil
+	   if (@data)
+	        @@src='remote'
+				size = @data.length
+		else
+	       debug "we must not have a net connection, uh no"
+	       if (File.exists?(localfile))
+	          debug "using local cache instead"
+	          @data = fetchLocal(localfile)
+	          @@src = "local <offline>"
+	          return @data
 			else
-                debug "shadow gave results we don't like (s:#{size} a:#{age} e:#{@shadowExpiry})"
-				#(size, mtime) = checkGoogle(url)
-				#age = time.to_i - mtime
-				@data = fetchRemote
-                if (@data)
-                    @@src='remote'
-                    if (@useShadow > 0)
-                        updateShadow
-                    end
-                else
-                    size=nil
-                end
-			end
-        end
-
-        # normally, this is an else, but I do that evil size=nil trick above.
-		if (! size)
-			debug "shadow servers gave back garbarge. shadowing disabled"
-			# we could not reach a local shadow server!
-			@data = fetchRemote
-            @@src='remote'
-
-            if (! @data)
-                debug "we must not have a net connection, uh no"
-                if (File.exists?(localfile))
-                    debug "using local cache instead"
-                    @data = fetchLocal(localfile)
-                    @@src = "local <offline>"
-                    return @data
-                end
-                @@src=nil
-                debug "ERROR: #{@url} could not be fetched, even by cache"
-                return nil
-            end
+	      	@@src=nil
+	      	debug "ERROR: #{@url} could not be fetched, even by cache"
+	      	return nil
+	   	end
 		end
-
 
 		if (! File.exists?(localdir))
 			debug "creating #{localdir}"
@@ -290,6 +231,7 @@ class ShadowFetch
 	            debug "post #{host}#{file}/?#{@postString}"
 				$Header['Content-Type'] =  "application/x-www-form-urlencoded";
 				resp, data = w.post(file, @postString, $Header)
+				@cookies = resp.response['set-cookie']
 			else
 				debug "get #{host}#{file}"
 				resp, data = w.get(file, $Header)
@@ -349,114 +291,5 @@ class ShadowFetch
         end
 	end
 
-	def fetchGoogle
-		debug "fetching google data of #{@url}"
-		data = fetchURL 'http://216.239.37.100/search?q=cache:FsU-6uPWmo4C:#{url}%&hl=en&ie=UTF-8'
-		return data
-	end
-
-	def fetchShadow
-		debug "fetching shadow data of #{@url}"
-		parsed = CGI.escape(@url)
-		data = fetchURL $shadowHosts[0] + "?c=return&p=" + parsed
-	end
-
-	def checkShadow
-		parsed = CGI.escape(@url)
-		size = 0
-		mtime = 0
-
-		$shadowHosts.each { |host|
-			debug "checking shadow entry on #{host}"
-			ret = fetchURL "#{host}?c=check&p=#{parsed}"
-			if (ret)
-				if (ret =~ /^(\d+) (\d+)/)
-					size = $1.to_i
-					mtime = $2.to_i
-					debug "shadow reply: size = #{size} mtime=#{mtime}"
-					return size, mtime
-				else
-					debug "invalid shadow reply: #{ret}"
-				end
-			else
-				debug "#{host} unavailable, deleting from shadow list"
-				$shadowHosts.delete(host)
-			end
-		}
-		return nil
-	end
-
-	def updateShadow
-		fileParts = $shadowHosts[0].split('/')
-		host = fileParts[2]
-		file = '/' + fileParts[3..-1].join('/')
-
-		if (! @data)
-		    debug "No data found for #{@url}, not updating shadow"
-		    return nil
-		end
-
-        begin
-            uploadEncoded = "c=update&p=" + CGI.escape(@url) + "&d=" + CGI.escape(@data)
-        rescue
-             debug "error encoding data, returning"
-             return nil
-        end
-
-		##########################################
-		# This needs to get merged into fetchURL!#
-		##########################################
-
-		shadow = Net::HTTP.new(host, 80)
-		headers = { "Content-Type" => "application/x-www-form-urlencoded" }
-		debug "Uploading cache data to shadowfetch server: #{$shadowHosts[0]}"
-
-		begin
-			resp, data = shadow.post("#{file}?", uploadEncoded, headers)
-		rescue Net::ProtoRetriableError => detail
-			head = detail.data
-
-			if head.code == "301"
-                newLocation = head['location']
-                newLocation.sub!(/\?$/, '')
-                displayInfo "> Shadowhost #{$shadowHosts[0]} has moved to #{newLocation}!"
-
-			    # store the redirect information
-
-			    $shadowHosts[0]=newLocation
-			    uri = URI.parse(head['location'])
-
-			    host = uri.host if uri.host
-			    url  = uri.path if uri.path
-			    port = uri.port if uri.port
-
-			    shadow.finish if shadow.active?
-			    shadow = Net::HTTP.new(host,port)
-			    retry
-			end
-		rescue => detail
-            displayWarning "Error trying to update the shadow at #{host}"
-            $shadowHosts.delete(host)
-			return nil
-		end
-
-
-        # ruby 1.8.0 compatibility
-        if VERSION =~ /1.[789]/
-                data = resp.body
-        end
-
-        data.chomp!
-
-        if data =~ /^[SL]-(\d+)/
-            displayWarning "data for #{@url} failed to upload, size issue: #{data}"
-		elsif (data !~ /^OK/)
-			displayWarning "data for #{@url} failed to upload, deleting shadow host: (#{data})"
-			$shadowHosts.delete(host)
-			return nil
-		else
-			debug "uploaded: #{data}"
-		end
-	end
 end
 

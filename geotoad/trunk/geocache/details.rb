@@ -1,5 +1,3 @@
-
-
 class CacheDetails
     include Common
     include Display
@@ -61,14 +59,14 @@ class CacheDetails
         if (page.data)
     		ret = parseCache(page.data)
         else
-            debug "No data found, not attempting to parse the entry"
+            debug "No data found, not attempting to parse the entry at #{url}"
         end
 
         # We try to download the page one more time.
         if ret
             return 1
         else
-            displayWarning "Could not parse page information for #{@wid}, retrying download"
+            displayWarning "Could not parse page information for #{@wid}, retrying download from #{url}"
             sleep(5)
             page.shadowExpiry=1
             page.localExpiry=1
@@ -77,13 +75,13 @@ class CacheDetails
             if (page.data)
                 ret = parseCache(page.data)
             else
-                debug "No data found, not attempting to parse the entry"
+                debug "No data found, not attempting to parse the entry at #{url}"
             end
 
             if ret
                 return 1
             else
-                displayWarning "I have failed."
+                displayWarning "I have failed to re-parse the cache for #{@wid} from #{url}"
                 return nil
             end
         end
@@ -144,13 +142,18 @@ class CacheDetails
 				debug "got digital lat/lon: #{$1} #{$2}"
             end
 
+				if line =~ /LatLon/
+					debug "LatLon: #{line}"
+				end
+
             # latitude and longitude in the written form. Rewritten by Scott Brynen for Southpole compatibility.
-            if line =~ /\<font size=\"3\"\>([NWSE]) (\d+).*? ([\d\.]+) ([NWSE]) (\d+).*? ([\d\.]+)\<\/STRONG\>/
-                @waypointHash[wid]['latwritten'] = $1 + $2 + ' ' + $3
+            if line =~ /\<span id=\"LatLon\"\>.*?([NWSE]) (\d+).*? ([\d\.]+) ([NWSE]) (\d+).*? ([\d\.]+)\</
+               @waypointHash[wid]['latwritten'] = $1 + $2 + ' ' + $3
               	@waypointHash[wid]['lonwritten'] = $4 + $5 + ' ' + $6
               	@waypointHash[wid]['latdata'] = ($2.to_f + $3.to_f / 60) * ($1 == 'S' ? -1:1)
               	@waypointHash[wid]['londata'] = ($5.to_f + $6.to_f / 60) * ($4 == 'W' ? -1:1)
               	debug "got written lat/lon"
+					exit
             end
 
 
@@ -207,14 +210,9 @@ class CacheDetails
                     @waypointHash[wid]["comment#{cnum}Name"] = name.dup
                     @waypointHash[wid]["comment#{cnum}Comment"] = comment.dup
 
-                    artificialRating = artificialRating + determineRating(type, comment)
-
                     debug "COMMENT #{cnum}: i=#{icon} d=#{date} id=#{id} n=#{name} c=#{comment}"
                     cnum = cnum + 1
                 }
-
-                debug "artificialrating = #{artificialRating}"
-                @waypointHash[wid]['arating'] = artificialRating
             end
 
 		}
@@ -246,12 +244,11 @@ class CacheDetails
         if wid && @waypointHash[wid]['latwritten']
             return 1
         else
+				debug "parseCache returning as nil because wid #{wid} has no written latitude!"
             return nil
         end
 
 	end  # end function
-
-
 
 
     # cleans up HTML and makes it text-worthy.
@@ -304,46 +301,6 @@ class CacheDetails
 
         # convert things into plain text.
         text = CGI.unescapeHTML(text);
-    end
-
-
-
-
-
-    # PROOF OF CONCEPT CODE ONLY
-    # this will be completely redone with a scientific approach and
-    # moved into a ratings.rb file for GeoToad 3.7
-
-    def determineRating(type, comment)
-
-        debug"COMMENT: #{type} - #{comment}"
-
-        rating = 0
-
-        if type =~ /Didn\'t/
-            rating = rating - 1
-        end
-
-        case comment
-         when /best cache|awesome|breathtaking|coolest|neatest|great view|what a cool/i
-            debug "extra: #{comment}"
-            rating = rating + 0.95
-         when /great cache|great place|another great|great.*time|great \w+ cache|excellent cache|very clever|great find|was great|excellent|beautiful|adventure|wow|be back|come back|nice drive|natural wonder|do it again/i
-            debug "positive: #{comment}"
-            rating = rating + 0.7
-         when /neat|workout|great|wonderful|wow|very cool|clever|fun|glad|enjoyed|one of a kind|good one|perfect|excellent/
-             rating = rating + 0.3
-             debug "sorta pos: #{comment}"
-         when /nightmare|try again|soggy|unfortunat|too easy|very easy|trash|broken|wasn\'t there|weren\'t allowed|trespassing|too much walking|ambiguous|gave up|give up/i
-             debug "negative: #{comment}"
-             rating = rating - 0.85
-
-         when /briar|thorn|wrong|easy find|confused|wet/
-             debug "sorta neg: #{comment}"
-             rating = rating - 0.3
-        end
-
-        return rating
     end
 
 end  # end class

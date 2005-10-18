@@ -18,12 +18,14 @@ require 'geocache/search'
 require 'geocache/filter'
 require 'geocache/output'
 require 'geocache/details'
+require 'geocache/auth'
 require 'getoptlong'
 
 
 class GeoToad
 include Common
 include Display
+include Auth
 
 # The version gets inserted by makedist.sh
 versionID='%VERSION%'
@@ -148,7 +150,6 @@ def versionCheck
     #puts "[^] Checking for latest version of GeoToad..."
     version = ShadowFetch.new(url)
     version.localExpiry=43200
-    version.useShadow=0
     version.maxFailures = 0
     version.fetch
 
@@ -174,8 +175,9 @@ end
 ## Make the Initial Query ############################
 def downloadGeocacheList
     displayInfo "Your cache directory is " + $TEMP_DIR
-
-
+	 @cookie = login('helixblue', 'XXX')
+	
+	
     # Mike Capito contributed a patch to allow for multiple
     # queries. He did it as a hash earlier, I'm just simplifying
     # and making it as an array because you probably don't want to
@@ -185,10 +187,6 @@ def downloadGeocacheList
     @queryArg .split(/[:\|]/).each { |queryArg|
         print "\n( o ) Performing #{@queryType} search for #{queryArg} "
         search = SearchCache.new
-        if ($slowLink)
-            debug "slowlink enabled (useShadow=0)"
-            search.useShadow=0
-        end
 
         # only valid for zip or coordinate searches
 
@@ -258,10 +256,6 @@ def prepareFilter
     userLookups.each { |user|
         search = SearchCache.new
         search.mode('user', user)
-        if ($slowLink)
-            debug "slowlink enabled (useShadow=0)"
-            search.useShadow=0
-        end
         search.fetchSearchLoop
         search.waypointList.each { |wid|
             @filtered.addVisitor(wid, user)
@@ -430,12 +424,6 @@ def fetchGeocaches
         # This just checks to see where Shadowfetch would grab the information from.
         page = ShadowFetch.new(detailURL)
         src = page.src
-
-        # This actually fetches the page.
-        if ($slowLink)
-            @detail.useShadow=0
-            debug "slowlink enabled (useShadow=0)"
-        end
 
         ret = @detail.fetch(wid)
         if (! ret)
