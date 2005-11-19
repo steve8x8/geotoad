@@ -175,8 +175,6 @@ end
 ## Make the Initial Query ############################
 def downloadGeocacheList
     displayInfo "Your cache directory is " + $TEMP_DIR
-	 @cookie = login('helixblue', 'XXX')
-	
 	
     # Mike Capito contributed a patch to allow for multiple
     # queries. He did it as a hash earlier, I'm just simplifying
@@ -409,7 +407,13 @@ def fetchGeocaches
         $SLEEP=15
     end
 
-
+    displayMessage("Logging in as helixblue (hardcoded password, please fix)")
+    @cookie = login('helixblue', 'PASSWORD')	
+    if ! @cookie
+      displayWarning "Could not login"
+      exit
+    end
+    
     displayMessage "Fetching geocache pages with #{$SLEEP} second rests between remote fetches"
     wpFiltered = @filtered.waypoints
     progress = ProgressBar.new(0, @filtered.totalWaypoints, "Fetching details")
@@ -424,6 +428,7 @@ def fetchGeocaches
         # This just checks to see where Shadowfetch would grab the information from.
         page = ShadowFetch.new(detailURL)
         src = page.src
+        page.cookie = @cookie
 
         ret = @detail.fetch(wid)
         if (! ret)

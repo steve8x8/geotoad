@@ -4,8 +4,8 @@ module Auth
 	
 	def login(user, password)		
 		getLoginValues
-		getLoginCookies(user, password)
-		return @cookies
+		getLoginCookie(user, password)
+		return @cookie
 	end
 	
 	def getLoginValues
@@ -28,16 +28,22 @@ module Auth
 		end
 	end
 	
-	def getLoginCookies(user, password)
+	def getLoginCookie(user, password)
 		page = ShadowFetch.new(@postURL)
-      page.localExpiry=1
+    page.localExpiry=1
 		@postVars['myUsername']=user
 		@postVars['myPassword']=password
 		@postVars['cookie']='on'
 		@postVars['Button1']='Login'
 		page.postVars=@postVars
 		data = page.fetch
-		@cookies = page.cookies
-		debug "got cookies: #{@cookies}"
+		@cookie = page.cookie
+		if @cookie =~ /userid/
+		  debug "got cookie: #{@cookie}"
+		  return @cookie
+		else
+		  debug "login failed"
+		  return nil
+		end
 	end
 end

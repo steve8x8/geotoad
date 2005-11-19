@@ -8,7 +8,7 @@ class CacheDetails
 
 	def initialize(data)
 		@waypointHash = data
-        @useShadow=1
+    @useShadow=1
 		#fetchAll()
 	end
 
@@ -68,7 +68,6 @@ class CacheDetails
         else
             displayWarning "Could not parse page information for #{@wid}, retrying download from #{url}"
             sleep(5)
-            page.shadowExpiry=1
             page.localExpiry=1
             page.fetch
 

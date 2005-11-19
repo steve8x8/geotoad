@@ -11,12 +11,11 @@ cacheDir = nil
 
 # Does a webget, but stores a local directory with cached results ###################
 class ShadowFetch
-	attr_reader :cookies, :data, :waypoints
+	attr_reader :data, :waypoints
 	
-    include Common
-    include Display
-    @@downloadErrors = 0
-
+  include Common
+  include Display
+  @@downloadErrors = 0
 
 	# gets a URL, but stores it in a nice webcache
 	def initialize (url)
@@ -25,7 +24,7 @@ class ShadowFetch
         @localExpiry=432000		# 4 days
         @maxFailures = 4
         debug "new fetch: #{url}"
-        $Header = {
+        @httpHeaders = {
           'User-Agent'      => "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.12) Gecko/20050915 Firefox/1.0.7",
           'Accept'          => 'image/gif, image/jpeg, image/png, multipart/x-mixed-replace, */*',
           'Accept-Language' => 'en',
@@ -202,81 +201,61 @@ class ShadowFetch
 
 	def fetchRemote
 		debug "fetching remote data from #{@url}"
-        $Header['Referer'] = @url
+        @httpHeaders['Referer'] = @url
  		data = fetchURL(@url)
 	end
 
 
-	def fetchURL (url)  # full http:// string!
-		fileParts = url.split('/')
-		host = fileParts[2]
-		file = '/' + fileParts[3..-1].join('/')
-		if url =~ /\/$/
-            file = file + '/'
-        end
 
-		debug "Connecting to #{host} to retrieve #{file}"
-		w = Net::HTTP.new(host, 80)
-		resp = nil
-        if (@@downloadErrors >= @maxFailures)
-            debug "#{@@downloadErrors} download errors so far, no more retries will be attempted."
-            disableRetry = 1
-        else
-            debug "Only #{@@downloadErrors} download errors so far, enabling retry."
-            disableRetry = nil
-        end
-
-		begin
-			if (@postVars)
-	            debug "post #{host}#{file}/?#{@postString}"
-				$Header['Content-Type'] =  "application/x-www-form-urlencoded";
-				resp, data = w.post(file, @postString, $Header)
-				@cookies = resp.response['set-cookie']
-			else
-				debug "get #{host}#{file}"
-				resp, data = w.get(file, $Header)
-                debug "received file. code is #{resp.code}"
-			end
-		rescue Net::ProtoRetriableError => detail
-			head = detail.data
-
-			if head.code == "301"
-			    debug "Following redirect to #{head['location']}"
-			    uri = URI.parse(head['location'])
-
-			    host = uri.host if uri.host
-			    url  = uri.path if uri.path
-			    port = uri.port if uri.port
-
-			    w.finish if w.active?
-			    w = Net::HTTP.new(host,port)
-			    retry
-			end
-		rescue SocketError, Errno::EINVAL, EOFError, TimeoutError, StandardError => detail
-            @@downloadErrors = @@downloadErrors + 1
-
-            if (disableRetry)
-                # only show the first few failures..
-                if @@downloadErrors < @maxFailures
-                    displayWarning "Could not fetch #{url}, no more retries available. (failures=#{@@downloadErrors})"
-                end
-                return nil
-            else
-                disableRetry = 1
-                displayWarning "Could not fetch #{url}, retrying in 10 seconds.. (failures=#{@@downloadErrors}, max=#{@maxFailures})"
-                sleep(10)
-                retry
-            end
-        rescue
-            debug "Unknown error fetching!"
-            return nil
+	def fetchURL (url_str, redirects=2)  # full http:// string!
+	  raise ArgumentError, 'HTTP redirect too deep' if redirects == 0
+	  
+	  debug "Fetching #{url_str}"
+	  uri = URI.parse(url_str)
+	  
+    if (@@downloadErrors >= @maxFailures)
+        debug "#{@@downloadErrors} download errors so far, no more retries will be attempted."
+        disableRetry = 1
+    else
+        debug "Only #{@@downloadErrors} download errors so far, will try until #{@maxFailures}"
+        disableRetry = nil
+    end
+    
+    http = Net::HTTP.new(uri.host, 80)
+    if (@postVars)
+      @httpHeaders['Content-Type'] =  "application/x-www-form-urlencoded";
+      debug "POST to #{url_str}, headers are #{@httpHeaders.keys.join(" ")}"
+      resp = http.post(uri.path, @postString, @httpHeaders)
+    else
+      debug "GET to #{url_str}, headers are #{@httpHeaders.keys.join(" ")}"
+			resp = http.get(file, @httpHeaders)
 		end
+		
+		
+		case resp
+      when Net::HTTPSuccess     then resp
+      when Net::HTTPRedirection then fetchURL(resp['location'], limit - 1)
+    else
+      debug "error downloading #{url}"
+      @@downloadErrors = @@downloadErrors + 1
 
-		if resp
-            # ruby 1.8.0 compatibility
-            if VERSION =~ /1.[789]/
-                data = resp.body
-            end
+      if (disableRetry)
+        # only show the first few failures..
+        if @@downloadErrors < @maxFailures
+          displayWarning "Could not fetch #{url}, no more retries available. (failures=#{@@downloadErrors})"
+        end
+        return nil
+      else
+        disableRetry = 1
+        displayWarning "Could not fetch #{url}, retrying in 5 seconds.. (failures=#{@@downloadErrors}, max=#{@maxFailures})"
+        sleep(5)
+      end  
+		  
+
+			      if resp.response && resp.response['set-cookie']
+			        debug "receieved cookie: #{@cookie}"
+			        @cookie = resp.response['set-cookie']
+			      end
 
             # I've noticed that sometimes IIS.net gives back error messages as normal HTML documents.
             # This should handle this RFC violation. You may want to remove this if you use shadowfetch
