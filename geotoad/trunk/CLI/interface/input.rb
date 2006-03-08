@@ -15,37 +15,56 @@ class Input
 
     def getopt
         opts = GetoptLong.new(
-            [ "--format",                    "-f",        GetoptLong::OPTIONAL_ARGUMENT ],
-            [ "--output",                    "-o",        GetoptLong::OPTIONAL_ARGUMENT ],
-            [ "--queryType",                    "-q",        GetoptLong::OPTIONAL_ARGUMENT ],
-            [ "--distanceMax",                "-y",        GetoptLong::OPTIONAL_ARGUMENT ],
-            [ "--difficultyMin",            "-d",        GetoptLong::OPTIONAL_ARGUMENT ],
-            [ "--difficultyMax",            "-D",        GetoptLong::OPTIONAL_ARGUMENT ],
-            [ "--terrainMin",                "-t",        GetoptLong::OPTIONAL_ARGUMENT ],
-            [ "--terrainMax",                "-T",        GetoptLong::OPTIONAL_ARGUMENT ],
-            [ "--aratingMin",                "-a",        GetoptLong::OPTIONAL_ARGUMENT ],
             [ "--aratingMax",                "-A",        GetoptLong::OPTIONAL_ARGUMENT ],
+            [ "--aratingMin",                "-a",        GetoptLong::OPTIONAL_ARGUMENT ],
+
+            [ "--travelBug",                "-b",    GetoptLong::NO_ARGUMENT ],
+            
+            [ "--cacheExpiry"                  "-c",    GetoptLong::OPTIONAL_ARGUMENT ],
+
+            
+            [ "--difficultyMax",            "-D",        GetoptLong::OPTIONAL_ARGUMENT ],
+            [ "--difficultyMin",            "-d",        GetoptLong::OPTIONAL_ARGUMENT ],
+            
+            [ "--disableEasyName",          "-E",    GetoptLong::OPTIONAL_ARGUMENT ],
+            [ "--format",                    "-f",        GetoptLong::OPTIONAL_ARGUMENT ],
+
+            [ "--foundDateExclude",                "-R",    GetoptLong::OPTIONAL_ARGUMENT ],
+            [ "--foundDateInclude",                "-r",    GetoptLong::OPTIONAL_ARGUMENT ],
+
+            [ "--help",                     "-h",    GetoptLong::NO_ARGUMENT ],
+
+            [ "--ownerInclude",                "-i",    GetoptLong::OPTIONAL_ARGUMENT ],            
+            [ "--ownerExclude",                "-I",    GetoptLong::OPTIONAL_ARGUMENT ],
+
+            [ "--placeDateInclude",                "-j",    GetoptLong::OPTIONAL_ARGUMENT ],
+            [ "--placeDateExclude",                "-J",    GetoptLong::OPTIONAL_ARGUMENT ],
+
             [ "--titleKeyword",               "-k",    GetoptLong::OPTIONAL_ARGUMENT ],
             [ "--descKeyword",                "-K",    GetoptLong::OPTIONAL_ARGUMENT ],
-            [ "--cacheExpiry"               "-c",    GetoptLong::OPTIONAL_ARGUMENT ],
-            [ "--quitAfterFetch",           "-x",    GetoptLong::OPTIONAL_ARGUMENT ],
+
+            [ "--waypointLength",            "-l",    GetoptLong::OPTIONAL_ARGUMENT ],    
             [ "--notFound",                 "-n",    GetoptLong::NO_ARGUMENT ],
-            [ "--travelBug",                "-b",    GetoptLong::NO_ARGUMENT ],
+            [ "--output",                    "-o",        GetoptLong::OPTIONAL_ARGUMENT ],           
+
+            [ "--password",                     "-p",          GetoptLong::REQUIRED_ARGUMENT ],         # * REQ
+
+            [ "--queryType",                    "-q",        GetoptLong::OPTIONAL_ARGUMENT ],
+
+            [ "--userExclude",                "-S",    GetoptLong::OPTIONAL_ARGUMENT ],
+            [ "--userInclude",                "-s",    GetoptLong::OPTIONAL_ARGUMENT ],
+
+            [ "--terrainMax",                "-T",        GetoptLong::OPTIONAL_ARGUMENT ],
+            [ "--terrainMin",                "-t",        GetoptLong::OPTIONAL_ARGUMENT ],
+
+            [ "--user",                     "-u",          GetoptLong::REQUIRED_ARGUMENT ],         # * REQ
+
+
             [ "--verbose",                    "-v",    GetoptLong::NO_ARGUMENT ],
-            [ "--userInclude",                "-u",    GetoptLong::OPTIONAL_ARGUMENT ],
-            [ "--userExclude",                "-U",    GetoptLong::OPTIONAL_ARGUMENT ],
-            [ "--ownerInclude",                "-c",    GetoptLong::OPTIONAL_ARGUMENT ],
-            [ "--ownerExclude",                "-C",    GetoptLong::OPTIONAL_ARGUMENT ],
-            [ "--placeDateInclude",                "-p",    GetoptLong::OPTIONAL_ARGUMENT ],
-            [ "--placeDateExclude",                "-P",    GetoptLong::OPTIONAL_ARGUMENT ],
-            [ "--foundDateInclude",                "-r",    GetoptLong::OPTIONAL_ARGUMENT ],
-            [ "--foundDateExclude",                "-R",    GetoptLong::OPTIONAL_ARGUMENT ],
-            [ "--waypointLength",            "-l",    GetoptLong::OPTIONAL_ARGUMENT ],
-            # compatibility only. easyname is now off by default.
-            [ "--disableEasyName",          "-E",    GetoptLong::OPTIONAL_ARGUMENT ],
-            [ "--help",                     "-h",    GetoptLong::NO_ARGUMENT ],
+            [ "--quitAfterFetch",           "-x",    GetoptLong::OPTIONAL_ARGUMENT ],
+            [ "--distanceMax",                "-y",        GetoptLong::OPTIONAL_ARGUMENT ],
             [ "--slowlink",                 "-z",    GetoptLong::NO_ARGUMENT ]
-        )
+        ) || usage
 
         # put the stupid crap in a hash. Much nicer to deal with.
         begin

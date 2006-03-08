@@ -35,8 +35,8 @@ else
     $VERSION = versionID.dup
 end
 
-$SLEEP=2
-$SLOWMODE=300
+$SLEEP=3
+$SLOWMODE=150
 
 def initialize
     $TEMP_DIR     = findTempDir
@@ -94,6 +94,9 @@ end
 def usage
     puts "::: SYNTAX: geotoad.rb [options] <search>"
     puts ""
+    puts " -u <username>          Geocaching.com username, required for coordinates"
+    puts " -p <password>          Geocaching.com password, required for coordinates"
+
     puts " -o [filename]          output file name (automatic otherwise)"
     puts " -f [format]            output format type, see list below"
     puts " -q [zip|state|coord]   query type (zip by default)"
@@ -102,10 +105,10 @@ def usage
     puts " -y    [1-500]          distance maximum in miles (10)"
     puts " -k    [keyword]        title keyword search. Use | to delimit multiple"
     puts " -K    [keyword]        desc keyword search. Use | to delimit multiple"
-    puts " -c/-C [username]       include/exclude caches owned by this person"
-    puts " -u/-U [username]       include/exclude caches found by this person"
+    puts " -i/-I [username]       include/exclude caches owned by this person"
+    puts " -s/-S [username]       include/exclude caches found by this person"
     puts "                            (use : to delimit multiple users!)"
-    puts " -p/-P [# days]         include/exclude caches placed in the last X days"
+    puts " -j/-J [# days]         include/exclude caches placed in the last X days"
     puts " -r/-R [# days]         include/exclude caches found in the last X days"
     puts " -n                     only include not found caches (virgins)"
     puts " -b                     only include caches with travelbugs"
@@ -224,7 +227,7 @@ def downloadGeocacheList
     if (waypointsExtracted < (@combinedWaypoints.length - 2))
         displayWarning "downloaded #{@combinedWaypoints.length} waypoints, but I can only parse #{waypointsExtracted} of them!"
     end
-
+    return waypointsExtracted
 end
 
 
@@ -269,12 +272,12 @@ def preFetchFilter
     puts ""
     @filtered = Filter.new(@combinedWaypoints)
     beforeFilteredMembersTotal = @filtered.totalWaypoints
-    @filtered.removeByElement('membersonly')
+    #@filtered.removeByElement('membersonly')
 
-    excludedMembersTotal = beforeFilteredMembersTotal - @filtered.totalWaypoints
-    if (excludedMembersTotal > 0)
-        displayMessage "#{excludedMembersTotal} members-only caches were filtered out (not yet supported)"
-    end
+    #excludedMembersTotal = beforeFilteredMembersTotal - @filtered.totalWaypoints
+    #if (excludedMembersTotal > 0)
+    #    displayMessage "#{excludedMembersTotal} members-only caches were filtered out (not yet supported)"
+    #end
 
     debug "Filter running cycle 1, #{@filtered.totalWaypoints} caches left"
 
@@ -407,10 +410,11 @@ def fetchGeocaches
         $SLEEP=15
     end
 
-    displayMessage("Logging in as helixblue (hardcoded password, please fix)")
-    @cookie = login('helixblue', 'PASSWORD')	
-    if ! @cookie
-      displayWarning "Could not login"
+    @cookie = login(@option['user'], @option['password'])	
+    if @cookie
+        displayMessage "Logged into Geocaching.com as #{@option['user']}"
+    else
+      displayError "Could not login"
       exit
     end
     
@@ -419,6 +423,8 @@ def fetchGeocaches
     progress = ProgressBar.new(0, @filtered.totalWaypoints, "Fetching details")
 
     @detail = CacheDetails.new(wpFiltered)
+    @detail.cookie = @cookie
+    
     token = 0
     downloads = 0
 
@@ -428,11 +434,11 @@ def fetchGeocaches
         # This just checks to see where Shadowfetch would grab the information from.
         page = ShadowFetch.new(detailURL)
         src = page.src
-        page.cookie = @cookie
+     
 
         ret = @detail.fetch(wid)
         if (! ret)
-            displayWarning "Page for #{wpFiltered[wid]['name']} failed to be parsed, skipping."
+            debug "Page for #{wpFiltered[wid]['name']} failed to be parsed, skipping."
             wpFiltered.delete(wid)
             next
         end
@@ -577,7 +583,14 @@ while(1)
       cli.versionCheck
   end
 
-  cli.downloadGeocacheList
+  count = cli.downloadGeocacheList
+  if count < 1
+        cli.displayError "No caches found in search, exiting early."
+        exit(5)
+  else
+        cli.displayMessage "#{count} geocaches found in defined area."
+  end
+  
   if (@queryType != "wid")
       cli.prepareFilter
       cli.preFetchFilter

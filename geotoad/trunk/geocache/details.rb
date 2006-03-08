@@ -1,4 +1,6 @@
 class CacheDetails
+    attr_writer :useShadow, :cookie
+    
     include Common
     include Display
 
@@ -12,9 +14,6 @@ class CacheDetails
 		#fetchAll()
 	end
 
-    def useShadow=(toggle)
-        @useShadow=toggle
-    end
 
 	def waypoints
 		@waypointHash
@@ -28,6 +27,7 @@ class CacheDetails
     def fetchWid(id)
         fetch(id)
     end
+
 
 	def fullURL(id)
         if (id =~ /^GC/)
@@ -54,6 +54,9 @@ class CacheDetails
 
 		url = fullURL(id)
 		page = ShadowFetch.new(url)
+		if (@cookie)
+		  page.cookie=@cookie
+	    end
 
 		page.fetch
         if (page.data)
@@ -66,25 +69,9 @@ class CacheDetails
         if ret
             return 1
         else
-            displayWarning "Could not parse page information for #{@wid}, retrying download from #{url}"
-            sleep(5)
-            page.localExpiry=1
-            page.fetch
-
-            if (page.data)
-                ret = parseCache(page.data)
-            else
-                debug "No data found, not attempting to parse the entry at #{url}"
-            end
-
-            if ret
-                return 1
-            else
-                displayWarning "I have failed to re-parse the cache for #{@wid} from #{url}"
-                return nil
-            end
+            displayWarning "Could not parse #{url}, skipping."
+            return nil
         end
-
 	end
 
 	def parseCache(data)
@@ -112,7 +99,9 @@ class CacheDetails
             # DUPLICATE OF WHAT SEARCH.RB HAS! Only used for failures and or wid searches.
             # May make in the future have it decide which source is newest: search or details.
             if line =~ /\<span id=\"CacheName\"\>(.*?)\<\/span\>/
-                if (! @waypointHash[wid]['name'])
+                if (! wid)
+                    debug "Invalid cache, title is: #{$1}"
+                elsif (! @waypointHash[wid]['name'])
                     @waypointHash[wid]['name'] = $1
                     debug "name was not set, now set to #{$1}"
                 end
@@ -152,7 +141,6 @@ class CacheDetails
               	@waypointHash[wid]['latdata'] = ($2.to_f + $3.to_f / 60) * ($1 == 'S' ? -1:1)
               	@waypointHash[wid]['londata'] = ($5.to_f + $6.to_f / 60) * ($4 == 'W' ? -1:1)
               	debug "got written lat/lon"
-					exit
             end
 
 
@@ -160,8 +148,11 @@ class CacheDetails
             if line =~ /\<span id=\"ErrorText\">(.*?)\<\/span\>/
                 warning = $1
                 warning.gsub!(/\<.*?\>/, '')
-                @waypointHash[wid]['warning'] = warning.dup
+                displayWarning "#{warning}"
                 debug "got a warning: #{warning}"
+                if (wid)
+                    @waypointHash[wid]['warning'] = warning.dup
+                end
             end
 
             # encrypted hint
