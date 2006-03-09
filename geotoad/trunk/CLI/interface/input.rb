@@ -17,19 +17,14 @@ class Input
 
     def getopt
         opts = GetoptLong.new(
-            [ "--aratingMax",                "-A",        GetoptLong::OPTIONAL_ARGUMENT ],
-            [ "--aratingMin",                "-a",        GetoptLong::OPTIONAL_ARGUMENT ],
 
             [ "--travelBug",                "-b",    GetoptLong::NO_ARGUMENT ],
             
-            [ "--cacheExpiry"                  "-c",    GetoptLong::OPTIONAL_ARGUMENT ],
-
-            
             [ "--difficultyMax",            "-D",        GetoptLong::OPTIONAL_ARGUMENT ],
             [ "--difficultyMin",            "-d",        GetoptLong::OPTIONAL_ARGUMENT ],
-            
-            [ "--disableEasyName",          "-E",    GetoptLong::OPTIONAL_ARGUMENT ],
-            [ "--format",                    "-f",        GetoptLong::OPTIONAL_ARGUMENT ],
+
+            [ "--fratingMax",                "-F",        GetoptLong::OPTIONAL_ARGUMENT ],
+            [ "--fratingMin",                "-f",        GetoptLong::OPTIONAL_ARGUMENT ],
 
             [ "--foundDateExclude",                "-R",    GetoptLong::OPTIONAL_ARGUMENT ],
             [ "--foundDateInclude",                "-r",    GetoptLong::OPTIONAL_ARGUMENT ],
@@ -61,11 +56,10 @@ class Input
 
             [ "--user",                     "-u",          GetoptLong::REQUIRED_ARGUMENT ],         # * REQ
 
-
             [ "--verbose",                    "-v",    GetoptLong::NO_ARGUMENT ],
-            [ "--quitAfterFetch",           "-x",    GetoptLong::OPTIONAL_ARGUMENT ],
-            [ "--distanceMax",                "-y",        GetoptLong::OPTIONAL_ARGUMENT ],
-            [ "--slowlink",                 "-z",    GetoptLong::NO_ARGUMENT ]
+            [ "--format",                    "-x",        GetoptLong::OPTIONAL_ARGUMENT ],
+            
+            [ "--distanceMax",                "-y",        GetoptLong::OPTIONAL_ARGUMENT ]
         ) || usage
 
         # put the stupid crap in a hash. Much nicer to deal with.
@@ -146,11 +140,10 @@ class Input
                 system("stty erase ^H >/dev/null 2>/dev/null")
                 system("clear")
             end
-            puts ""
             puts "  GeoToad #{$VERSION} TUI edition.  Type a number to modify the fields value."
             puts "=============================================================================="
-            printf("(1)  search type         [%-10.10s] | (2) %-18.18s [%-13.13s]\n", @@optHash['queryType'], @@optHash['queryType'], (@@optHash['queryArg'] || 'REQUIRED'))
-            printf("(3)  distance maximum    [%-3.3s]        |\n", (@@optHash['distanceMax'] || 10))
+            printf("(1)  login         [%-9.9s] )   | 2)  search type         [%-10.10s]\n", (@@optHash['user'] || 'REQUIRED'), @@optHash['queryType'])
+            printf("(3) %-18.18s [%-13.13s] | (4)  distance maximum    [%-3.3s]\n", @@optHash['queryType'], (@@optHash['queryArg'] || 'REQUIRED'), (@@optHash['distanceMax'] || 10))
             puts   "                                      |"
             printf("(4)  difficulty min      [%-3.3s]        | (5)  terrain min       [%-3.3s]\n", (@@optHash['difficultyMin'] || 0.0), (@@optHash['terrainMin'] || 0.0))
             printf("(6)  difficulty max      [%-3.3s]        | (7)  terrain max       [%-3.3s]\n", (@@optHash['difficultyMax'] || 5.0), (@@optHash['terrainMax'] || 5.0))
@@ -158,11 +151,10 @@ class Input
             puts   "                                      |"
             printf("(10) cache not found by  [%-10.10s] | (11) cache owner isn't [%-13.13s]\n", @@optHash['userExclude'], @@optHash['ownerExclude'])
             printf("(12) cache found by      [%-10.10s] | (13) cache owner is    [%-13.13s]\n", @@optHash['userInclude'], @@optHash['ownerInclude'])
-            puts   "                                      |"
             printf("(14) virgin caches only  [%1.1s]          | (15) travel bug caches only [%1.1s]\n", @@optHash['notFound'], @@optHash['travelBug'])
             printf("(16) cache newer than    [%-3.3s] days   | (17) cache found within     [%-3.3s] days\n", @@optHash['placeDateInclude'], @@optHash['foundDateInclude'])
             printf("(18) cache older than    [%-3.3s] days   | (19) cache not found within [%-3.3s] days\n", @@optHash['placeDateExclude'], @@optHash['foundDateExclude'])
-            printf("(20) EasyName WP length  [%-3.3s]        | (21) slowlink mode          [%1.1s]\n", @@optHash['waypointLength'] || '0', @@optHash['slowlink'])
+            printf("(20) EasyName WP length  [%-3.3s]        | \n", @@optHash['waypointLength'] || '0')
             puts "- - - - - - - - - - - - - - - - - - - + - - - - - - - - - - - - - - - - - - -"
             printf("(22) output format       [%-10.10s] | (23) filename          [%-13.13s]\n", (@@optHash['format'] || 'gpx'), (@@optHash['output'] || 'automatic'))
             puts "=============================================================================="
