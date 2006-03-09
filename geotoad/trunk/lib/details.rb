@@ -1,3 +1,5 @@
+# $Id$
+
 class CacheDetails
     attr_writer :useShadow, :cookie
     

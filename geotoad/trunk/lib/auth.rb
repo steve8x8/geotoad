@@ -1,3 +1,5 @@
+# $Id$
+
 module Auth
     include Common
     include Display

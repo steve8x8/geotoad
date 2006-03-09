@@ -1,3 +1,5 @@
+# $Id$
+
 class SearchCode
     include Common
     include Display

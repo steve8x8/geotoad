@@ -1,5 +1,7 @@
 # This is our dump templating engine. It only handles really simple text formats at the moment.
 # GeoToad 4.0 will have a plugins architecture that replaces this.
+#
+# $Id$
 
 $Format = {
         'gpspoint'    => {

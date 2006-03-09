@@ -1,4 +1,5 @@
 GeoToad %VERSION% by Thomas Stromberg (c) 2003
+$Id$
 ==========================================================================
 Frequently Asked Questions
 

@@ -1,11 +1,8 @@
 #!/usr/bin/env ruby
 # $Id$
 
-# from ruby-talk 67359 -- make sure your current directory and directory before
-# is always in path. The gsub is for Windows machines.
 $LOAD_PATH << File.dirname(__FILE__.gsub(/\\/, '/'))
 $LOAD_PATH << (File.dirname(__FILE__.gsub(/\\/, '/')) + '/' + '..')
-
 
 # toss in our own libraries.
 require 'interface/display'

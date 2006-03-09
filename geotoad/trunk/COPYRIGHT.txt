@@ -1,3 +1,5 @@
+$Id$
+
 All of the documentation and software included in the GeoToad distribution
 Releases is copyrighted by Thomas Stromberg.
 

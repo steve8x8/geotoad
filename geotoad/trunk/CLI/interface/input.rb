@@ -1,3 +1,5 @@
+# $Id$
+
 class Input
     include Common
     include Display
