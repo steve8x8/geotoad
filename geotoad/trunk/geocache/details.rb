@@ -156,7 +156,7 @@ class CacheDetails
             end
 
             # encrypted hint
-			if line =~ /\<span id=\"Hints\"\>(.*?)\<\/span\>/m
+			if line =~ /\<span id=\"Hints\".*?\>(.*?)\<\/span\>/m
                 hint = $1.dup
                 hint.gsub!(/\<.*?\>/, '')
 				@waypointHash[wid]['hint'] = hint
@@ -164,11 +164,15 @@ class CacheDetails
             end
 
             if line =~ /\<span id=\"CacheLogs\"\>/
+                debug "inspecting comments"
                 # ratings
                 artificialRating = 2
 
                 cnum = 0
-                line.scan(/icon_(\w+)\.gif.*?\&nbsp\;(.*?) by \<A NAME=\"(\d+)\"\>\<A HREF=\".*?\"\>(.*?)\<.*?\<br\>(.*?)\<\/font\>/) { |icon, date, id, name, comment|
+                
+                # icon_smile.gif' align='absmiddle'>&nbsp;November 24, 2005 by <A NAME="11547243" style='text-decoration: underline;'><A HREF="../profile/?guid=43af89b2-3843-4ac6-85dd-74b489332ddf" 
+                # style='text-decoration: underline;'>TKG</A></strong> (334 found)<br>#316 L! and B.  Finally got this one - took two tries.  My gps zero is about 50 feet east of actual cache.  Took: tb and 2 $1 bills which will become WheresGeorge.com bills.  Left: tb and truck.  Lots of MP3s still here to trade.  Happy Thanksgiving 2005!  Thanks for the cache.  <p>[This entry was edited by TKG on Friday, November 25, 2005 at 4:14:42 AM.]</font>
+                line.scan(/icon_(\w+)\.gif.*?\&nbsp\;(.*?) by \<A NAME=\"(\d+)\".*?HREF.*?\>(.*?)\<.*?\<br\>(.*?)\<\/font\>/) { |icon, date, id, name, comment|
                     comment.gsub!(/\<.*?\>/, ' ')
                     type = 'unknown'
 
@@ -193,6 +197,7 @@ class CacheDetails
                             type = 'Other'
                     end
 
+                    debug "comment [#{cnum}] is #{type} by #{name}: #{comment}"
                     @waypointHash[wid]["comment#{cnum}Type"] = type.dup
                     @waypointHash[wid]["comment#{cnum}Date"] = date.dup
                     @waypointHash[wid]["comment#{cnum}ID"] = id.dup
@@ -222,7 +227,7 @@ class CacheDetails
                 @waypointHash[wid]['details'] = CGI.unescapeHTML(shortdesc)
             end
 
-            if data =~ /id=\"LongDescription\"\>(.*?)\<\/span\><\/BLOCKQUOTE\>/m
+            if data =~ /\<span id=\"LongDescription\"\>(.*?)\<\/span\>/m
                 debug "found long desc"
                 details =  cleanHTML(@waypointHash[wid]['details'] << "  " << $1)
                 debug "got details: [#{details}]"
