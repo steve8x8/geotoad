@@ -1,6 +1,6 @@
 # $Id$
 require 'cgi'
-require 'geocache/templates'
+require 'lib/templates'
 
 class Output
     include Common
