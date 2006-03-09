@@ -1,4 +1,6 @@
 #!/usr/bin/ruby
+# $Id$
+
 require 'open-uri'
 
 uri=ARGV[0]

@@ -1,4 +1,4 @@
-# $Id: output.rb,v 1.20 2002/08/06 11:56:50 strombt Exp $
+# $Id$
 require 'cgi'
 require 'geocache/templates'
 

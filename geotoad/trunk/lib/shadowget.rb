@@ -1,4 +1,4 @@
-# $Id: shadowget.rb,v 1.3 2002/08/05 03:42:24 strombt Exp $
+# $Id$
 
 require 'digest/md5'
 require 'net/http'

@@ -1,5 +1,7 @@
 #!/usr/local/bin/ruby
 # Processes the Hide/Seek page to grab countries/state names.
+# $Id$
+
 codeType='unknown'
 
 puts "$idHash = Hash.new"

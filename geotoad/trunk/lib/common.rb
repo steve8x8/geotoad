@@ -1,4 +1,4 @@
-# $Id: common.rb,v 1.2 2002/08/04 21:21:18 strombt Exp $
+# $Id$
 
 module Common
 

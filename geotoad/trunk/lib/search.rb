@@ -1,4 +1,4 @@
-# $Id: search.rb,v 1.10 2002/08/05 03:38:51 strombt Exp $
+# $Id$
 
 require 'cgi'
 

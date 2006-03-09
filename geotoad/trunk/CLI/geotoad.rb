@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# $Id: geotoad.rb,v 1.19 2002/08/05 03:38:51 strombt Exp $
+# $Id$
 
 # from ruby-talk 67359 -- make sure your current directory and directory before
 # is always in path. The gsub is for Windows machines.
@@ -10,15 +10,15 @@ $LOAD_PATH << (File.dirname(__FILE__.gsub(/\\/, '/')) + '/' + '..')
 # toss in our own libraries.
 require 'interface/display'
 require 'interface/progressbar'
-require 'geocache/common'
+require 'lib/common'
 require 'interface/input'
-require 'geocache/shadowget'
-require 'geocache/searchcode'
-require 'geocache/search'
-require 'geocache/filter'
-require 'geocache/output'
-require 'geocache/details'
-require 'geocache/auth'
+require 'lib/shadowget'
+require 'lib/searchcode'
+require 'lib/search'
+require 'lib/filter'
+require 'lib/output'
+require 'lib/details'
+require 'lib/auth'
 require 'getoptlong'
 
 

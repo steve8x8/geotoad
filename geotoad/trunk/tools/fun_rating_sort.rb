@@ -1,4 +1,5 @@
 #!/usr/bin/ruby
+# $Id$
 
 fun = YAML::load( File.open( 'good.txt' ) )
 #boring = YAML::load( File.open( 'bad.txt' ) )

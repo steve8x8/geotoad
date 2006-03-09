@@ -1,4 +1,6 @@
 #!/usr/bin/ruby
+# $Id$
+
 require 'rubygems'
 require 'yaml'
 require 'bishop'

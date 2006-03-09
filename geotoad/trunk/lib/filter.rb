@@ -1,4 +1,4 @@
-# $Id: filter.rb,v 1.7 2002/08/05 03:38:51 strombt Exp $
+# $Id$
 
 class Filter
     include Common
