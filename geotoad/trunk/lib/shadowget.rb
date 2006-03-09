@@ -22,7 +22,7 @@ class ShadowFetch
     def initialize (url)
         @url = url
         @remote = 0
-        @localExpiry=432000		# 4 days
+        @localExpiry=518400    		# 6 days
         @maxFailures = 4
         debug "** new fetch: #{url}"
         @httpHeaders = {

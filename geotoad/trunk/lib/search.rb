@@ -294,9 +294,9 @@ class SearchCache
     def fetch(url)
         page = ShadowFetch.new(url)
         if (@mode == "user")
-            page.localExpiry=100000
-        else
             page.localExpiry=43200
+        else
+            page.localExpiry=72000
         end
         
         if (@postVars)
