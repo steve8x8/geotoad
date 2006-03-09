@@ -278,7 +278,8 @@ class SearchCache
                     downloads = downloads + 1
                     # half the rest for this.
                     debug "sleeping"
-                    sleep ($SLEEP * 1.5)
+                    sleep=$SLEEP*1.5
+                    sleep(sleep)
                 end
 		    else
                 debug "We have already downloaded the waypoints needed, lets get out of here"
