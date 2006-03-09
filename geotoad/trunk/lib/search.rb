@@ -370,9 +370,9 @@ class SearchCache
                 
                 # <td valign="top" align="left">0.3mi&nbsp;<br>SE</td>
                 
-            when /\>([\d\.]+)mi.*?\>([NWSE]+)\</
-                @cache['distance']=$1.to_f
-                @cache['direction'] = $2
+            when /([NWSE]+)\<br \/\>([\d\.]+)mi</
+                @cache['distance']=$2.to_f
+                @cache['direction'] = $1
                 debug "cacheDistance=#{@cache['distance']} dir=#{@cache['direction']}"
                 
             when /cache_details.aspx\?guid=(.*?)\">(.*?)\<\/a\>/
