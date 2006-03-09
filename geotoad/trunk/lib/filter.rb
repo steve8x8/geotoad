@@ -3,142 +3,142 @@
 class Filter
     include Common
     include Display
-
-	def initialize(data)
-		@waypointHash = data
-	end
-
-	def waypoints
-		@waypointHash
-	end
-
-	def totalWaypoints
-		@waypointHash.entries.length
-	end
-
-	def difficultyMin(num)
-		debug "filtering by difficultyMin: #{num}"
-		@waypointHash.delete_if { |wid, values|
-			@waypointHash[wid]['difficulty'] < num
-		}
-	end
-
-	def difficultyMax(num)
-		debug "filtering by difficultyMax: #{num}"
-
-		@waypointHash.delete_if { |wid, values|
-			@waypointHash[wid]['difficulty'] > num
-		}
-	end
-
-
-	def terrainMin(num)
-		debug "filtering by terrainMin: #{num}"
-
-		@waypointHash.delete_if { |wid, values|
-			@waypointHash[wid]['terrain'] < num
-		}
-	end
-
-	def terrainMax(num)
-		debug "filtering by terrainMax: #{num}"
-
-		@waypointHash.delete_if { |wid, values|
-			@waypointHash[wid]['terrain'] > num
-		}
-	end
-
-	def aratingMin(num)
-		debug "filtering by aratingMin: #{num}"
-
-		@waypointHash.delete_if { |wid, values|
-			@waypointHash[wid]['arating'] < num
-		}
-	end
-
-	def aratingMax(num)
-		debug "filtering by aratingMax: #{num}"
-
-		@waypointHash.delete_if { |wid, values|
-			@waypointHash[wid]['arating'] > num
-		}
-	end
-
-
+    
+    def initialize(data)
+        @waypointHash = data
+    end
+    
+    def waypoints
+        @waypointHash
+    end
+    
+    def totalWaypoints
+        @waypointHash.entries.length
+    end
+    
+    def difficultyMin(num)
+        debug "filtering by difficultyMin: #{num}"
+        @waypointHash.delete_if { |wid, values|
+            @waypointHash[wid]['difficulty'] < num
+        }
+    end
+    
+    def difficultyMax(num)
+        debug "filtering by difficultyMax: #{num}"
+        
+        @waypointHash.delete_if { |wid, values|
+            @waypointHash[wid]['difficulty'] > num
+        }
+    end
+    
+    
+    def terrainMin(num)
+        debug "filtering by terrainMin: #{num}"
+        
+        @waypointHash.delete_if { |wid, values|
+            @waypointHash[wid]['terrain'] < num
+        }
+    end
+    
+    def terrainMax(num)
+        debug "filtering by terrainMax: #{num}"
+        
+        @waypointHash.delete_if { |wid, values|
+            @waypointHash[wid]['terrain'] > num
+        }
+    end
+    
+    def aratingMin(num)
+        debug "filtering by aratingMin: #{num}"
+        
+        @waypointHash.delete_if { |wid, values|
+            @waypointHash[wid]['arating'] < num
+        }
+    end
+    
+    def aratingMax(num)
+        debug "filtering by aratingMax: #{num}"
+        
+        @waypointHash.delete_if { |wid, values|
+            @waypointHash[wid]['arating'] > num
+        }
+    end
+    
+    
     def notFound
-		debug "filtering by notFound"
-		@waypointHash.delete_if { |wid, values|
-			@waypointHash[wid]['mdays'].to_i > -1
+        debug "filtering by notFound"
+        @waypointHash.delete_if { |wid, values|
+            @waypointHash[wid]['mdays'].to_i > -1
         }
-	end
-
+    end
+    
     def foundDateInclude(days)
-		debug "filtering by foundDateInclude: #{days}"
-		@waypointHash.delete_if { |wid, values|
-			@waypointHash[wid]['mdays'].to_i >= days.to_i
+        debug "filtering by foundDateInclude: #{days}"
+        @waypointHash.delete_if { |wid, values|
+            @waypointHash[wid]['mdays'].to_i >= days.to_i
         }
-	end
-
+    end
+    
     def foundDateExclude(days)
-		debug "filtering by foundDateExclude: #{days}"
-		@waypointHash.delete_if { |wid, values|
-			@waypointHash[wid]['mdays'].to_i < days.to_i
+        debug "filtering by foundDateExclude: #{days}"
+        @waypointHash.delete_if { |wid, values|
+            @waypointHash[wid]['mdays'].to_i < days.to_i
         }
-	end
-
+    end
+    
     def placeDateInclude(days)
-		debug "filtering by placeDateInclude: #{days}"
-		@waypointHash.delete_if { |wid, values|
-			@waypointHash[wid]['cdays'].to_i >= days.to_i
+        debug "filtering by placeDateInclude: #{days}"
+        @waypointHash.delete_if { |wid, values|
+            @waypointHash[wid]['cdays'].to_i >= days.to_i
         }
-	end
-
+    end
+    
     def placeDateExclude(days)
-		debug "filtering by placeDateExclude: #{days}"
-		@waypointHash.delete_if { |wid, values|
-			@waypointHash[wid]['cdays'].to_i < days.to_i
+        debug "filtering by placeDateExclude: #{days}"
+        @waypointHash.delete_if { |wid, values|
+            @waypointHash[wid]['cdays'].to_i < days.to_i
         }
-	end
-
+    end
+    
     def travelBug
-		debug "filtering by travelBug"
-
-		@waypointHash.delete_if { |wid, values|
-			@waypointHash[wid]['travelbug'].to_s.length < 1
+        debug "filtering by travelBug"
+        
+        @waypointHash.delete_if { |wid, values|
+            @waypointHash[wid]['travelbug'].to_s.length < 1
         }
-	end
-
-
+    end
+    
+    
     def ownerExclude(nick)
         debug "filtering by ownerExclude: #{nick}"
         @waypointHash.delete_if { |wid, values|
-			@waypointHash[wid]['creator'] =~ /#{nick}/i
+            @waypointHash[wid]['creator'] =~ /#{nick}/i
         }
     end
-
+    
     def ownerInclude(nick)
         debug "filtering by ownerInclude: #{nick}"
         @waypointHash.delete_if { |wid, values|
-			@waypointHash[wid]['creator'] !~ /#{nick}/i
+            @waypointHash[wid]['creator'] !~ /#{nick}/i
         }
     end
-
+    
     def userExclude(nick)
         nick.downcase!
         debug "filtering by notUser: #{nick}"
-
+        
         @waypointHash.each_key { |wid|
             if (@waypointHash[wid]['visitors'].include?(nick))
                 debug " - #{nick} has visited #{@waypointHash[wid]['name']}, filtering."
                 @waypointHash.delete(wid)
             end
-         }
+        }
     end
-
+    
     def userInclude(nick)
         nick.downcase!
         debug "filtering by User: #{nick}"
-
+        
         @waypointHash.each_key { |wid|
             debug "notUser #{nick}: #{wid}"
             if (! @waypointHash[wid]['visitors'].include?(nick))
@@ -147,34 +147,34 @@ class Filter
             end
         }
     end
-
-
-
-	def titleKeyword(string)
-		debug "filtering by title keyword: #{string}"
-		@waypointHash.each_key { |wid|
+    
+    
+    
+    def titleKeyword(string)
+        debug "filtering by title keyword: #{string}"
+        @waypointHash.each_key { |wid|
             # I wanted to use delete_if, but I had run into a segfault in ruby 1.6.7/8
             if (! (@waypointHash[wid]['name'] =~ /#{string}/i) )
-                 @waypointHash.delete(wid)
+                @waypointHash.delete(wid)
             end
-		}
-	end
-
-
-	def descKeyword(string)
-		debug "filtering by desc keyword: #{string}"
-		@waypointHash.each_key { |wid|
+        }
+    end
+    
+    
+    def descKeyword(string)
+        debug "filtering by desc keyword: #{string}"
+        @waypointHash.each_key { |wid|
             # I wanted to use delete_if, but I had run into a segfault in ruby 1.6.7/8
             if (! ( (@waypointHash[wid]['details'] =~ /#{string}/i) || (@waypointHash[wid]['name'] =~ /#{string}/i)) )
                 @waypointHash.delete(wid)
             end
-		}
-	end
-
-
+        }
+    end
+    
+    
     def removeByElement(element)
-		debug "filtering by removeByElement: #{element}"
-
+        debug "filtering by removeByElement: #{element}"
+        
         @waypointHash.each_key { |wid|
             if @waypointHash[wid][element]
                 @waypointHash.delete(wid)
@@ -182,8 +182,8 @@ class Filter
             end
         }
     end
-
-
+    
+    
     # add a visitor to a cache. Used by the userlookup feeder.
     def addVisitor(wid, visitor)
         if (@waypointHash[wid])
@@ -192,7 +192,7 @@ class Filter
             # since we really are losing data for the templates. I need to
             # modify userInclude() and userExclude() to be case insensitive
             # first.
-
+            
             @waypointHash[wid]['visitors'] << visitor.downcase
         else
             return 0

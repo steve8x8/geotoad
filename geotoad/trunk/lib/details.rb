@@ -5,33 +5,33 @@ class CacheDetails
     
     include Common
     include Display
-
+    
     # This now uses the printable version of the cache data. For now, we get the last 10
     # logs to a cache.
-	@@baseURL="http://www.geocaching.com/seek/cache_details.aspx?pf=y&log=y&numlogs=5&decrypt="
-
-	def initialize(data)
-		@waypointHash = data
-    @useShadow=1
-		#fetchAll()
-	end
-
-
-	def waypoints
-		@waypointHash
-	end
-
-	def baseURL
-		@@baseURL
-	end
-
+    @@baseURL="http://www.geocaching.com/seek/cache_details.aspx?pf=y&log=y&numlogs=5&decrypt="
+    
+    def initialize(data)
+        @waypointHash = data
+        @useShadow=1
+        #fetchAll()
+    end
+    
+    
+    def waypoints
+        @waypointHash
+    end
+    
+    def baseURL
+        @@baseURL
+    end
+    
     # this routine is for compatibility.
     def fetchWid(id)
         fetch(id)
     end
-
-
-	def fullURL(id)
+    
+    
+    def fullURL(id)
         if (id =~ /^GC/)
             # If we can look up the guid, use it. It's not actually required, but
             # it behaves a lot more like a standard web browser on the gc.com website.
@@ -41,32 +41,32 @@ class CacheDetails
                 suffix = 'wp=' + id.to_s
             end
         else
-             suffix = 'guid=' + id.to_s
+            suffix = 'guid=' + id.to_s
         end
-
+        
         url = @@baseURL + "&" + suffix
-	end
-
-	# fetches by geocaching.com sid
-	def fetch(id)
+    end
+    
+    # fetches by geocaching.com sid
+    def fetch(id)
         if ((! id) || (id.length < 1))
             displayError "Empty fetch by id, quitting."
             exit
         end
-
-		url = fullURL(id)
-		page = ShadowFetch.new(url)
-		if (@cookie)
-		  page.cookie=@cookie
-	    end
-
-		page.fetch
+        
+        url = fullURL(id)
+        page = ShadowFetch.new(url)
+        if (@cookie)
+            page.cookie=@cookie
+        end
+        
+        page.fetch
         if (page.data)
-    		ret = parseCache(page.data)
+            ret = parseCache(page.data)
         else
             debug "No data found, not attempting to parse the entry at #{url}"
         end
-
+        
         # We try to download the page one more time.
         if ret
             return 1
@@ -74,30 +74,30 @@ class CacheDetails
             displayWarning "Could not parse #{url}, skipping."
             return nil
         end
-	end
-
-	def parseCache(data)
-		# find the geocaching waypoint id.
-		wid = nil
-
-		data.each { |line|
+    end
+    
+    def parseCache(data)
+        # find the geocaching waypoint id.
+        wid = nil
+        
+        data.each { |line|
             # this matches the <title> on the printable pages. Some pages have ) and some don't.
-			if line =~  /^\s+\((GC[A-Z0-9]+)\)/
+            if line =~  /^\s+\((GC[A-Z0-9]+)\)/
                 # only do it if the wid hasn't been found yet, sometimes pages mention wid's of other caches.
                 if (! wid)
                     wid = $1
                     debug "wid is #{wid}"
-
+                    
                     # We give this a predefined value, because some caches have no details!
                     @waypointHash[wid]['details'] = ''
-
+                    
                     # Set what URL we used as our details source. We do not use baseURL because
                     # some GPX parsers freak if there is a & in this URL.
                     @waypointHash[wid]['url'] = "http://www.geocaching.com/seek/cache_details.aspx?wp=" + wid
                 end
             end
-
-
+            
+            
             # DUPLICATE OF WHAT SEARCH.RB HAS! Only used for failures and or wid searches.
             # May make in the future have it decide which source is newest: search or details.
             if line =~ /\<span id=\"CacheName\"\>(.*?)\<\/span\>/
@@ -108,44 +108,44 @@ class CacheDetails
                     debug "name was not set, now set to #{$1}"
                 end
             end
-
-
+            
+            
             # DUPLICATE OF WHAT SEARCH.RB HAS! Only used for failures and or wid searches.
             # May make in the future have it decide which source is newest: search or details.
             if line =~ /\<br\>by (.*?) \[\<A HREF/
                 if (! @waypointHash[wid]['creator'])
                     @waypointHash[wid]['creator'] = $1
                     debug "creator was not set, now set to #{$1}"
-
+                    
                 end
             end
-
+            
             if line =~ /\<br\>Size: ([\w ]+)\<br\>/
                 @waypointHash[wid]['container'] = $1
                 debug "container type is #{$1}"
             end
-
-			# Regexp rewritten by Scott Brynen for Canadian compatibility
-		    if line =~ /getmap\.aspx\?lat=([\d\.-]+)\&lon=([\d\.-]+)/
+            
+            # Regexp rewritten by Scott Brynen for Canadian compatibility
+            if line =~ /getmap\.aspx\?lat=([\d\.-]+)\&lon=([\d\.-]+)/
                 @waypointHash[wid]['latdata'] = $1
                 @waypointHash[wid]['londata'] = $2
-				debug "got digital lat/lon: #{$1} #{$2}"
+                debug "got digital lat/lon: #{$1} #{$2}"
             end
-
-				if line =~ /LatLon/
-					debug "LatLon: #{line}"
-				end
-
+            
+            if line =~ /LatLon/
+                debug "LatLon: #{line}"
+            end
+            
             # latitude and longitude in the written form. Rewritten by Scott Brynen for Southpole compatibility.
             if line =~ /\<span id=\"LatLon\"\>.*?([NWSE]) (\d+).*? ([\d\.]+) ([NWSE]) (\d+).*? ([\d\.]+)\</
-               @waypointHash[wid]['latwritten'] = $1 + $2 + ' ' + $3
-              	@waypointHash[wid]['lonwritten'] = $4 + $5 + ' ' + $6
-              	@waypointHash[wid]['latdata'] = ($2.to_f + $3.to_f / 60) * ($1 == 'S' ? -1:1)
-              	@waypointHash[wid]['londata'] = ($5.to_f + $6.to_f / 60) * ($4 == 'W' ? -1:1)
-              	debug "got written lat/lon"
+                @waypointHash[wid]['latwritten'] = $1 + $2 + ' ' + $3
+                @waypointHash[wid]['lonwritten'] = $4 + $5 + ' ' + $6
+                @waypointHash[wid]['latdata'] = ($2.to_f + $3.to_f / 60) * ($1 == 'S' ? -1:1)
+                @waypointHash[wid]['londata'] = ($5.to_f + $6.to_f / 60) * ($4 == 'W' ? -1:1)
+                debug "got written lat/lon"
             end
-
-
+            
+            
             # why a geocache is closed. It seems to always be the same.
             if line =~ /\<span id=\"ErrorText\">(.*?)\<\/span\>/
                 warning = $1
@@ -156,20 +156,20 @@ class CacheDetails
                     @waypointHash[wid]['warning'] = warning.dup
                 end
             end
-
+            
             # encrypted hint
-			if line =~ /\<span id=\"Hints\".*?\>(.*?)\<\/span\>/m
+            if line =~ /\<span id=\"Hints\".*?\>(.*?)\<\/span\>/m
                 hint = $1.dup
                 hint.gsub!(/\<.*?\>/, '')
-				@waypointHash[wid]['hint'] = hint
+                @waypointHash[wid]['hint'] = hint
                 debug "got hint: #{hint}"
             end
-
+            
             if line =~ /\<span id=\"CacheLogs\"\>/
                 debug "inspecting comments"
                 # ratings
                 artificialRating = 2
-
+                
                 cnum = 0
                 
                 # icon_smile.gif' align='absmiddle'>&nbsp;November 24, 2005 by <A NAME="11547243" style='text-decoration: underline;'><A HREF="../profile/?guid=43af89b2-3843-4ac6-85dd-74b489332ddf" 
@@ -177,28 +177,28 @@ class CacheDetails
                 line.scan(/icon_(\w+)\.gif.*?\&nbsp\;(.*?) by \<A NAME=\"(\d+)\".*?HREF.*?\>(.*?)\<.*?\<br\>(.*?)\<\/font\>/) { |icon, date, id, name, comment|
                     comment.gsub!(/\<.*?\>/, ' ')
                     type = 'unknown'
-
+                    
                     # these are the types that I have seen before in GPX files
                     # Archive (show)       Attended      Didn't find it      Found it
                     # Needs Archived       Note          Other               Unarchive
                     # Webcam Photo Taken   Write note
-
+                    
                     case icon
-                        when /smile|happy/
-                            type = 'Found it'
-                            @waypointHash[wid]['visitors'].push(name.downcase)
-                        when 'sad'
-                            type = 'Didn\'t find it'
-                        when 'note'
-                            type = 'Note'
-                        when 'remove'
-                            type = 'Archive (show)'
-                        when 'camera'
-                            type = 'Webcam Photo Taken'
-                        else
-                            type = 'Other'
+                    when /smile|happy/
+                        type = 'Found it'
+                        @waypointHash[wid]['visitors'].push(name.downcase)
+                    when 'sad'
+                        type = 'Didn\'t find it'
+                    when 'note'
+                        type = 'Note'
+                    when 'remove'
+                        type = 'Archive (show)'
+                    when 'camera'
+                        type = 'Webcam Photo Taken'
+                    else
+                        type = 'Other'
                     end
-
+                    
                     debug "comment [#{cnum}] is #{type} by #{name}: #{comment}"
                     @waypointHash[wid]["comment#{cnum}Type"] = type.dup
                     @waypointHash[wid]["comment#{cnum}Date"] = date.dup
@@ -206,19 +206,19 @@ class CacheDetails
                     @waypointHash[wid]["comment#{cnum}Icon"] = icon.dup
                     @waypointHash[wid]["comment#{cnum}Name"] = name.dup
                     @waypointHash[wid]["comment#{cnum}Comment"] = comment.dup
-
+                    
                     debug "COMMENT #{cnum}: i=#{icon} d=#{date} id=#{id} n=#{name} c=#{comment}"
                     cnum = cnum + 1
                 }
             end
-
-		}
-
-
-		# this data is all on one line, so we should just use scan and forget reparsing.
-		if (wid)
+            
+        }
+        
+        
+        # this data is all on one line, so we should just use scan and forget reparsing.
+        if (wid)
             debug "we have a wid"
-
+            
             # these are multi-line matches, so they are out of the scope of our
             # next
             if data =~ /id=\"ShortDescription\"\>(.*?)\<\/span\>/m
@@ -228,7 +228,7 @@ class CacheDetails
                 shortdesc.gsub!(/^\*/, '')
                 @waypointHash[wid]['details'] = CGI.unescapeHTML(shortdesc)
             end
-
+            
             if data =~ /\<span id=\"LongDescription\"\>(.*?)\<\/span\>/m
                 debug "found long desc"
                 details =  cleanHTML(@waypointHash[wid]['details'] << "  " << $1)
@@ -236,18 +236,18 @@ class CacheDetails
                 @waypointHash[wid]['details'] = details
             end
         end  # end wid check.
-
+        
         # This checks to see if it's a geocache that at least has coordinates to mention.
         if wid && @waypointHash[wid]['latwritten']
             return 1
         else
-				debug "parseCache returning as nil because wid #{wid} has no written latitude!"
+            debug "parseCache returning as nil because wid #{wid} has no written latitude!"
             return nil
         end
-
-	end  # end function
-
-
+        
+    end  # end function
+    
+    
     # cleans up HTML and makes it text-worthy.
     def cleanHTML(text)
         debug "pre-html-process: #{text}"
@@ -255,7 +255,7 @@ class CacheDetails
         text.gsub!(/#{'\r\n'}/, ' ')
         text.gsub!(/#{'\r'}/, '')
         text.gsub!(/#{'\n'}/, '')
-
+        
         debug "normalized: #{text}"
         # rip some tags out.
         text.gsub!(/\<\/li\>/i, '')
@@ -268,9 +268,9 @@ class CacheDetails
         text.gsub!(/<\/*font.*?\>/i, '')
         text.gsub!(/<\/*ul\>/i, '')
         text.gsub!(/style=\".*?\"/i, '')
-
+        
         debug "post-html-tags-removed: #{text}"
-
+        
         # substitute
         text.gsub!(/\<p\>/i, "**")
         text.gsub!(/\<li\>/i, "\n * (o) ")
@@ -278,7 +278,7 @@ class CacheDetails
         text.gsub!(/\<img.*?\>/i, '[img]')
         text.gsub!(/\<.*?\>/, ' *')
         debug "pre-combine-process: #{text}"
-
+        
         # combine all the tags we nuked. These regexps
         # could probably be cleaned up pretty well.
         text.gsub!(/ +/, ' ')
@@ -292,13 +292,12 @@ class CacheDetails
         text.gsub!(/\&nbsp\;/, " ")			# unescapeHTML seems to ignore.
         text.gsub!(/\'+/, "\'")			# multiple apostrophes
         text.gsub!(/^\*/, '')			# lines that start with *
-
-		# kill the last space, which makes the CSV output nicer.
-		text.gsub!(/ $/, '')
-
+        
+        # kill the last space, which makes the CSV output nicer.
+        text.gsub!(/ $/, '')
+        
         # convert things into plain text.
         text = CGI.unescapeHTML(text);
     end
-
+    
 end  # end class
-

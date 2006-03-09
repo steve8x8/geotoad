@@ -3,7 +3,7 @@
 class SearchCode
     include Common
     include Display
-
+    
     # output from tools/countryrip.rb
     $idHash = Hash.new
     $idHash['state_id'] = Hash.new
@@ -58,7 +58,7 @@ class SearchCode
     $idHash['state_id']['west virginia']=49
     $idHash['state_id']['wisconsin']=50
     $idHash['state_id']['wyoming']=51
-
+    
     $idHash['country_id'] = Hash.new
     $idHash['country_id']['andorra']=16
     $idHash['country_id']['antarctica']=18
@@ -214,63 +214,62 @@ class SearchCode
     $idHash['country_id']['western somoa isl']=219
     $idHash['country_id']['yugoslavia']=222
     $idHash['country_id']['zimbabwe']=225
-
+    
     # some manual overrides
     $idHash['country_id']['britain']=11
-
+    
     $idHash['zip'] = Hash.new
     $idHash['zip']['placeholder']=1
-
+    
     $idHash['coord'] = Hash.new
     $idHash['coord']['placeholder']=1
-
-
+    
+    
     def initialize (type)
         if (type.downcase == "state")
             type="state_id"
         end
-
+        
         if (type.downcase == "country")
             type="country_id"
         end
-
+        
         if (type.downcase == "zipcode")
             type="zip"
         end
-
+        
         if (type.downcase == "coords")
             type="coord"
         end
-
+        
         if (type.downcase == "coordinates")
             type="coord"
         end
-
-
+        
+        
         if (! $idHash[type])
             displayWarning "* Invalid search type: #{type} (using state_id)"
             type="state_id"
         end
-
+        
         debug "set type to #{type}"
         @lookupType=type
     end
-
+    
     def type
         return @lookupType
     end
-
+    
     def lookup (key)
         # it's already a digit, stupid.
         if (key.to_i > 0)
             return key
         end
-
+        
         key.downcase!
         id = $idHash[@lookupType][key] || nil
         debug "looked up #{key} - #{id}"
         return id
     end
-
+    
 end
-

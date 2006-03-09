@@ -32,7 +32,7 @@ class ShadowFetch
           'Accept-Charset'  => 'iso-8859-1, utf-8, iso-10646-ucs-2, macintosh, windows-1252, *'
         }
     end
-        
+    
     
     def maxFailures=(maxfail)
         debug "setting max failures to #{maxfail}"
