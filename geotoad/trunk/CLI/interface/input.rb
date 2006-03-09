@@ -9,8 +9,9 @@ class Input
         # restore and save for it so that it can keep preferences between runs,
         # I thought I would just make it class-wide instead of instance wide.
         
-        
         @@optHash = Hash.new
+        @@outFile=nil
+        @@outDir=nil
         # some default values.
         @@optHash['queryType'] = 'zipcode'
     end
@@ -100,7 +101,17 @@ class Input
     def interactive
         # pop up the menu
         showmenu
-        
+        if (@outDir)
+            @@optHash['output']=@outDir + "/"
+        end
+        if (@outFile)
+            if @@optHash['output']
+                @@optHash['output']=@optHash['output'] + @outFile
+            else
+                @@optHash['output']=@outFile
+            end
+        end
+            
         # demonstrate a sample command line
         cmdline = "geotoad.rb"
         @@optHash.each_key { |option|
@@ -140,34 +151,47 @@ class Input
                 system("stty erase ^H >/dev/null 2>/dev/null")
                 system("clear")
             end
-            puts "  GeoToad #{$VERSION} TUI edition.  Type a number to modify the fields value."
+            
             puts "=============================================================================="
-            printf("(1)  login         [%-9.9s] )   | 2)  search type         [%-10.10s]\n", (@@optHash['user'] || 'REQUIRED'), @@optHash['queryType'])
-            printf("(3) %-18.18s [%-13.13s] | (4)  distance maximum    [%-3.3s]\n", @@optHash['queryType'], (@@optHash['queryArg'] || 'REQUIRED'), (@@optHash['distanceMax'] || 10))
+            printf(":::           %46.46s               :::\n", "// GeoToad #$VERSION Text User Interface //")
+            puts "=============================================================================="
+            
+            printf("(1)  GC.com login     [%-13.13s] | (2)  search type          [%-10.10s]\n", (@@optHash['user'] || 'REQUIRED'), @@optHash['queryType'])
+            printf("(3)  %-16.16s [%-13.13s] | (4)  distance maximum            [%-3.3s]\n", @@optHash['queryType'], (@@optHash['queryArg'] || 'REQUIRED'), (@@optHash['distanceMax'] || 10))
             puts   "                                      |"
-            printf("(4)  difficulty min      [%-3.3s]        | (5)  terrain min       [%-3.3s]\n", (@@optHash['difficultyMin'] || 0.0), (@@optHash['terrainMin'] || 0.0))
-            printf("(6)  difficulty max      [%-3.3s]        | (7)  terrain max       [%-3.3s]\n", (@@optHash['difficultyMax'] || 5.0), (@@optHash['terrainMax'] || 5.0))
-            printf("(8)  title keyword       [%-10.10s] | (9)  descr. keyword    [%-13.13s]\n", @@optHash['titleKeyword'], @@optHash['descKeyword'])
+            printf("(5)  difficulty           [%-2.1f - %-1.1f] | (6)  terrain               [%-1.1f - %-1.1f]\n",
+                    (@@optHash['difficultyMin'] || 0.0), (@@optHash['difficultyMax'] || 5.0), 
+                    (@@optHash['terrainMin'] || 0.0), (@@optHash['terrainMax'] || 5.0))
+            printf("(7)  fun factor           [%-1.1f - %-1.1f] |\n", (@@optHash['funFactorMin'] || 0.0), (@@optHash['funFactorMax'] || 5.0))
+            printf("(8) virgin caches only            [%1.1s] | (9) travel bug caches only         [%1.1s]\n", @@optHash['notFound'], @@optHash['travelBug'])
+            printf("(10) cache age (days)       [%3.3s-%-3.3s] | (11) last found (days)       [%3.3s-%-3.3s] \n", 
+                    (@@optHash['placeDateExclude'] || 0), (@@optHash['placeDateInclude'] || 'any'), 
+                    (@@optHash['foundDateExclude'] || 0), (@@optHash['foundDateInclude'] || 'any'))
             puts   "                                      |"
-            printf("(10) cache not found by  [%-10.10s] | (11) cache owner isn't [%-13.13s]\n", @@optHash['userExclude'], @@optHash['ownerExclude'])
-            printf("(12) cache found by      [%-10.10s] | (13) cache owner is    [%-13.13s]\n", @@optHash['userInclude'], @@optHash['ownerInclude'])
-            printf("(14) virgin caches only  [%1.1s]          | (15) travel bug caches only [%1.1s]\n", @@optHash['notFound'], @@optHash['travelBug'])
-            printf("(16) cache newer than    [%-3.3s] days   | (17) cache found within     [%-3.3s] days\n", @@optHash['placeDateInclude'], @@optHash['foundDateInclude'])
-            printf("(18) cache older than    [%-3.3s] days   | (19) cache not found within [%-3.3s] days\n", @@optHash['placeDateExclude'], @@optHash['foundDateExclude'])
-            printf("(20) EasyName WP length  [%-3.3s]        | \n", @@optHash['waypointLength'] || '0')
+            printf("(12) title keyword       [%-10.10s] | (13) descr. keyword    [%-13.13s]\n", @@optHash['titleKeyword'], @@optHash['descKeyword'])
+            printf("(14) cache not found by  [%-10.10s] | (15) cache owner isn't [%-13.13s]\n", @@optHash['userExclude'], @@optHash['ownerExclude'])
+            printf("(16) cache found by      [%-10.10s] | (17) cache owner is    [%-13.13s]\n", @@optHash['userInclude'], @@optHash['ownerInclude'])
+           
+            printf("(18) EasyName WP length         [%3.3s] | \n", @@optHash['waypointLength'] || '0')
             puts "- - - - - - - - - - - - - - - - - - - + - - - - - - - - - - - - - - - - - - -"
-            printf("(22) output format       [%-10.10s] | (23) filename          [%-13.13s]\n", (@@optHash['format'] || 'gpx'), (@@optHash['output'] || 'automatic'))
+            printf("(19) output format       [%-10.10s]   (20) filename   [%-20.20s]\n", (@@optHash['format'] || 'gpx'), (@@outFile || 'automatic'))
+            printf("(21) output directory    [%-51.51s]\n", (@@outDir || Dir.pwd))
             puts "=============================================================================="
-            print "   Enter menu number, (s) to start, or (x) to exit --> "
+            puts ""
+            print "-- Enter menu number, (s) to start, or (x) to exit --> "
             answer = $stdin.gets.chop
             puts ""
             
             case answer
             when '1'
-                type = ask("What type of search would you like to perform? (zipcode, state, coordinate, keyword [title only])", nil)
-                @@optHash['queryType'] = guessQueryType(type).to_s
+                @@optHash['user'] = ask("What is your Geocaching.com username?", 'NO_DEFAULT')
+                @@optHash['password'] = ask("What is your Geocaching.com password?", 'NO_DEFAULT')
                 
             when '2'
+                type = ask("What type of search would you like to perform? (zipcode, state, coordinate, keyword [title only])", nil)
+                @@optHash['queryType'] = guessQueryType(type).to_s
+            
+            when '3'
                 if (@@optHash['queryType'] == 'zipcode')
                     @@optHash['queryArg'] = ask('Enter a list of zipcodes (seperated by commas)', 'NO_DEFAULT').gsub(/, */, ':')
                 end
@@ -225,40 +249,22 @@ class Input
                 end
                 
                 
-            when '3'
+            when '4'
                 @@optHash['distanceMax'] = ask("What is the maximum distance from your #{@@optHash['queryType']} that you would like to include geocaches from?", 10)
                 
-            when '4'
+            when '5'
                 @@optHash['difficultyMin'] = ask('What is the minimum difficulty you would like? (0.0)', nil)
+                @@optHash['difficultyMax'] = ask('What is the maximum difficulty you would like? (5.0)', nil)
                 
             when '6'
-                @@optHash['difficultyMax'] = ask('What is the maximum difficulty you would like? (0.0)', nil)
-                
-            when '5'
                 @@optHash['terrainMin'] = ask('What is the minimum terrain you would like? (0.0)', nil)
+                @@optHash['terrainMax'] = ask('What is the maximum terrain you would like? (5.0)', nil)
                 
             when '7'
-                @@optHash['terrainMax'] = ask('What is the maximum terrain you would like? (0.0)', nil)
+                @@optHash['funFactorMin'] = ask('What is the minimum fun factor you would like? (0.0)', nil)
+                @@optHash['funFactorMax'] = ask('What is the maximum fun factor you would like? (5.0)', nil)
                 
             when '8'
-                @@optHash['titleKeyword'] = ask('Only include geocaches with these keywords in their title (seperate by |)?', nil)
-                
-            when '9'
-                @@optHash['descKeyword'] = ask('Only include geocaches with these keywords in their description (seperate by |)', nil)
-                
-            when '10'
-                @@optHash['userExclude'] = ask('Filter out geocaches found by these people (seperate by commas)', '').gsub(/, */, ':')
-                
-            when '12'
-                @@optHash['userInclude'] = ask('Only include geocaches that have been found by these people (separate by commas)', '').gsub(/, */, ':')
-                
-            when '11'
-                @@optHash['ownerExclude'] = ask('Filter out geocaches owned by these people (seperate by commas)', '').gsub(/, */, ':')
-                
-            when '13'
-                @@optHash['ownerInclude'] = ask('Only include geocaches owned by these people (seperate by commas)', '').gsub(/, */, ':')
-                
-            when '14'
                 answer = ask('Would you like to only include virgin geocaches (geocaches that have never been found)?', nil)
                 if (answer =~ /y/)
                     @@optHash['notFound'] = 'X'
@@ -266,7 +272,7 @@ class Input
                     @@optHash['notFound'] = nil
                 end
                 
-            when '15'
+            when '9'
                 answer = ask('Would you like to only include geocaches with travelbugs in them?', nil)
                 if (answer =~ /y/)
                     @@optHash['travelBug'] = 'X'
@@ -274,33 +280,40 @@ class Input
                     @@optHash['travelBug'] = nil
                 end
                 
-            when '16'
-                @@optHash['placeDateInclude'] = ask('How many days old is the oldest a geocache can be for your list?', nil)
                 
-            when '18'
-                @@optHash['placeDateExclude'] = ask('How many days old is the youngest a geocache can be for your list?', nil)
+            when '10'
+                @@optHash['placeDateExclude'] = ask('How many days old is the youngest a geocache can be for your list? (0)', nil)
+                @@optHash['placeDateInclude'] = ask('How many days old is the oldest a geocache can be for your list? (any)', nil)
+                
+            when '11'
+                @@optHash['foundDateExclude'] = ask('How many days ago is the minimum a geocache can be found in for your list? (0)', nil)
+                @@optHash['foundDateInclude'] = ask('How many days ago is the maximum a geocache can be found in for your list? (any)', nil)
+                                
+            when '12'
+                @@optHash['titleKeyword'] = ask('Only include geocaches with these keywords in their title (seperate by |)?', nil)
+                
+            when '13'
+                @@optHash['descKeyword'] = ask('Only include geocaches with these keywords in their description (seperate by |)', nil)
+                
+            when '14'
+                @@optHash['userExclude'] = ask('Filter out geocaches found by these people (seperate by commas)', '').gsub(/, */, ':')
+                
+            when '16'
+                @@optHash['userInclude'] = ask('Only include geocaches that have been found by these people (separate by commas)', '').gsub(/, */, ':')
+                
+            when '15'
+                @@optHash['ownerExclude'] = ask('Filter out geocaches owned by these people (seperate by commas)', '').gsub(/, */, ':')
                 
             when '17'
-                @@optHash['foundDateInclude'] = ask('How many days ago is the maximum a geocache can be found in for your list?', nil)
+                @@optHash['ownerInclude'] = ask('Only include geocaches owned by these people (seperate by commas)', '').gsub(/, */, ':')
                 
-            when '19'
-                @@optHash['foundDateExclude'] = ask('How many days ago is the minimum a geocache can be found in for your list?', nil)
                 
-            when '20'
+       
+            when '18'
                 @@optHash['waypointLength'] = ask('How long can your EasyName waypoint id\'s be? (8 for Magellan, 16 for Garmin, 0 to use standard waypoint id\'s)?', nil)
                 
                 
-            when '21'
-                answer = ask('Would you like to enable slowlink mode (faster for dialups, slower for broadband)?', nil)
-                if (answer =~ /y/)
-                    @@optHash['slowlink'] = 'X'
-                else
-                    @@optHash['slowlink'] = nil
-                end
-                
-                
-                
-            when '22'
+            when '19'
                 puts "List of Output Formats: "
                 outputDetails = Output.new
                 i=0
@@ -317,9 +330,12 @@ class Input
                 puts ""
                 @@optHash['format'] = ask('What format would you like your output in?', 'gpx')
                 
-            when '23'
-                @@optHash['output'] = ask('What filename would you like to output to? (press enter for automatic)', nil)
+            when '20'
+                @@outFile = ask('What filename would you like to output to? (press enter for automatic)', nil)
                 
+            when '21'
+                 @@outDir = ask("Output directory (#{Dir.pwd})", nil).gsub(/\\/, '/')
+            
             when 's', 'q'
                 if (! @@optHash['queryArg']) || (@@optHash['queryArg'].size < 1)
                     puts "You cannot start till you specify what #{@@optHash['queryType']} data you would like to search with"

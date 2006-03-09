@@ -27,7 +27,7 @@ class GeoToad
     # The version gets inserted by makedist.sh
     versionID='%VERSION%'
     if versionID !~ /^\d/
-        $VERSION = '3.8-CURRENT'
+        $VERSION = '3.9-CURRENT'
     else
         $VERSION = versionID.dup
     end
@@ -482,16 +482,16 @@ class GeoToad
             @filtered.descKeyword(@option['descKeyword'])
         end
         
-        if @option['fratingMin']
-            @queryTitle = @queryTitle + ", frating #{@option['fratingMin']}+"
-            @defaultOutputFile = @defaultOutputFile + "-f" + @option['fratingMin'].to_s
-            @filtered.fratingMin(@option['fratingMin'].to_f)
+        if @option['funFactorMin']
+            @queryTitle = @queryTitle + ", funFactor #{@option['funFactorMin']}+"
+            @defaultOutputFile = @defaultOutputFile + "-f" + @option['funFactorMin'].to_s
+            @filtered.funFactorMin(@option['funFactorMin'].to_f)
         end
         
-        if @option['fratingMax']
-            @queryTitle = @queryTitle + ", frating #{@option['fratingMax']} or lower"
-            @defaultOutputFile = @defaultOutputFile + '-A' + @option['fratingMax'].to_s
-            @filtered.fratingMax(@option['fratingMax'].to_f)
+        if @option['funFactorMax']
+            @queryTitle = @queryTitle + ", funFactor #{@option['funFactorMax']} or lower"
+            @defaultOutputFile = @defaultOutputFile + '-A' + @option['funFactorMax'].to_s
+            @filtered.funFactorMax(@option['funFactorMax'].to_f)
         end
         
         
@@ -539,8 +539,8 @@ class GeoToad
         
         # if we have selected the name of the output file, use it.
         # otherwise, take our invented name, sanitize it, and slap a file extension on it.
-        if (@option['output'])
-            outputFile = @option['output']
+        if (@option['output'] && File.basename(@option['output']))
+            outputFile = File.basename(@option['output'])
         else
             outputFile = @defaultOutputFile.gsub(/\W/, '_')
             outputFile.gsub!(/_+/, '_')
@@ -549,7 +549,7 @@ class GeoToad
         
         # prepend the current working directory. This is mostly done as a service to
         # users who just double click to launch GeoToad, and wonder where their output file went.
-        if outputFile !~ /[\/\\]/
+        if (! @option['output']) || (! File.dirname(@option['output'])) 
             outputFile = Dir.getwd + '/' + outputFile
         end
         

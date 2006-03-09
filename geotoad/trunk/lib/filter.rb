@@ -48,16 +48,16 @@ class Filter
         }
     end
     
-    def fratingMin(num)
-        debug "filtering by fratingMin: #{num}"
+    def funFactorMin(num)
+        debug "filtering by funFactorMin: #{num}"
         
         @waypointHash.delete_if { |wid, values|
             @waypointHash[wid]['funfactor'] < num
         }
     end
     
-    def fratingMax(num)
-        debug "filtering by fratingMax: #{num}"
+    def funFactorMax(num)
+        debug "filtering by funFactorMax: #{num}"
         
         @waypointHash.delete_if { |wid, values|
             @waypointHash[wid]['funfactor'] > num
