@@ -62,9 +62,12 @@ def getoptions
     @queryArg          = @option['queryArg'] || nil
 
     # Get this out of the way now.
-    if (! @queryArg) || @option['help']
+    if (! @queryArg) || @option['help'] || (! @option['user']) ||  (! @option['password'])
         if (! @queryArg)
             displayError "You forgot to specify a #{@queryType} search argument"
+        end
+        if (! @option['user']) ||  (! @option['password'])
+            displayError "You must specify a username and password to download coordinates from Geocaching.com"
         end
         usage
         exit

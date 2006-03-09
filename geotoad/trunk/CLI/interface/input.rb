@@ -96,6 +96,7 @@ class Input
             displayError "contain spaces in them. Example: -q #{@formatType} \"#{@@optHash['queryArg']} #{ARGV.join(" ")}\""
             exit
         end
+       
 
         return @@optHash
     end
