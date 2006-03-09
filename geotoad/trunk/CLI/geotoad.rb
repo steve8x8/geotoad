@@ -482,16 +482,16 @@ class GeoToad
             @filtered.descKeyword(@option['descKeyword'])
         end
         
-        if @option['aratingMin']
-            @queryTitle = @queryTitle + ", arating #{@option['aratingMin']}+"
-            @defaultOutputFile = @defaultOutputFile + "-a" + @option['aratingMin'].to_s
-            @filtered.aratingMin(@option['aratingMin'].to_f)
+        if @option['fratingMin']
+            @queryTitle = @queryTitle + ", frating #{@option['fratingMin']}+"
+            @defaultOutputFile = @defaultOutputFile + "-f" + @option['fratingMin'].to_s
+            @filtered.fratingMin(@option['fratingMin'].to_f)
         end
         
-        if @option['aratingMax']
-            @queryTitle = @queryTitle + ", arating #{@option['aratingMax']} or lower"
-            @defaultOutputFile = @defaultOutputFile + '-A' + @option['aratingMax'].to_s
-            @filtered.aratingMax(@option['aratingMax'].to_f)
+        if @option['fratingMax']
+            @queryTitle = @queryTitle + ", frating #{@option['fratingMax']} or lower"
+            @defaultOutputFile = @defaultOutputFile + '-A' + @option['fratingMax'].to_s
+            @filtered.fratingMax(@option['fratingMax'].to_f)
         end
         
         

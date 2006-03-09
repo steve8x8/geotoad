@@ -1,10 +1,12 @@
 # $Id$
+require 'lib/bishop'
 
 class CacheDetails
     attr_writer :useShadow, :cookie
     
     include Common
     include Display
+    include Bishop
     
     # This now uses the printable version of the cache data. For now, we get the last 10
     # logs to a cache.
@@ -13,7 +15,24 @@ class CacheDetails
     def initialize(data)
         @waypointHash = data
         @useShadow=1
-        #fetchAll()
+        
+        if File.exists?('../../data/fun_scores.dat') 
+            @funfile="../../data/fun_scores.dat"
+        elsif File.exists?('../data/fun_scores.dat')
+            @funfile="../data/fun_scores.dat"
+        elsif File.exists?('data/fun_scores.dat')
+            @funfile="data/fun_scores.dat"
+        end
+        
+        if @funfile
+            @@bayes = Bishop::Bayes.new
+            if ! @@bayes.load(@funfile)
+                debug "Could not open fun file: #{@funfile}"
+                @@funfactor=nil
+            else
+                @@funfactor=1
+            end
+        end
     end
     
     
@@ -74,6 +93,21 @@ class CacheDetails
             displayWarning "Could not parse #{url}, skipping."
             return nil
         end
+    end
+    
+    def calculateFun(total, comments)
+        score=total / comments
+        # a grade of >28 is considered awesome
+        # a grade of <-20 is considered pretty bad
+        
+        grade=((score + 25) / 5.3).round.to_f / 2
+        if grade > 5.0
+            grade=5.0
+        elsif grade < 0.0
+            grade=0.0
+        end
+        debug "calculateFun: score=#{score} grade=#{grade}"        
+        return grade
     end
     
     def parseCache(data)
@@ -167,16 +201,16 @@ class CacheDetails
             
             if line =~ /\<span id=\"CacheLogs\"\>/
                 debug "inspecting comments"
-                # ratings
-                artificialRating = 2
-                
                 cnum = 0
+                funTotal = 0.0
+                fnum = 0
                 
                 # icon_smile.gif' align='absmiddle'>&nbsp;November 24, 2005 by <A NAME="11547243" style='text-decoration: underline;'><A HREF="../profile/?guid=43af89b2-3843-4ac6-85dd-74b489332ddf" 
                 # style='text-decoration: underline;'>TKG</A></strong> (334 found)<br>#316 L! and B.  Finally got this one - took two tries.  My gps zero is about 50 feet east of actual cache.  Took: tb and 2 $1 bills which will become WheresGeorge.com bills.  Left: tb and truck.  Lots of MP3s still here to trade.  Happy Thanksgiving 2005!  Thanks for the cache.  <p>[This entry was edited by TKG on Friday, November 25, 2005 at 4:14:42 AM.]</font>
                 line.scan(/icon_(\w+)\.gif.*?\&nbsp\;(.*?) by \<A NAME=\"(\d+)\".*?HREF.*?\>(.*?)\<.*?\<br\>(.*?)\<\/font\>/) { |icon, date, id, name, comment|
                     comment.gsub!(/\<.*?\>/, ' ')
                     type = 'unknown'
+                    nograde=nil
                     
                     # these are the types that I have seen before in GPX files
                     # Archive (show)       Attended      Didn't find it      Found it
@@ -193,10 +227,15 @@ class CacheDetails
                         type = 'Note'
                     when 'remove'
                         type = 'Archive (show)'
+                        nograde=1
                     when 'camera'
                         type = 'Webcam Photo Taken'
+                    when 'disabled'
+                        type = 'Cache Disabled!'
+                        nograde=1
                     else
                         type = 'Other'
+                        nograde=1
                     end
                     
                     debug "comment [#{cnum}] is #{type} by #{name}: #{comment}"
@@ -207,9 +246,27 @@ class CacheDetails
                     @waypointHash[wid]["comment#{cnum}Name"] = name.dup
                     @waypointHash[wid]["comment#{cnum}Comment"] = comment.dup
                     
-                    debug "COMMENT #{cnum}: i=#{icon} d=#{date} id=#{id} n=#{name} c=#{comment}"
-                    cnum = cnum + 1
-                }
+                    if (nograde)
+                        debug "not grading comment due to type #{icon}"
+                    else
+                        guess=@@bayes.guess(comment)
+                        if (guess[0] && guess[1])
+                            fun = (guess[1][1] - guess[0][1]) * 100
+                            if fun > 28.0
+                                fun=28.0
+                            end
+                        else
+                            debug "could not determine fun factor for comment: #{comment}"
+                            fun=0
+                        end
+                        funTotal=funTotal + fun
+                        fnum=fnum+1
+                    end
+                    debug "COMMENT #{cnum}: i=#{icon} d=#{date} id=#{id} n=#{name} c=#{comment} fun=#{fun}"
+                    cnum = cnum + 1.0
+                }   # no more comments
+                
+                @waypointHash[wid]['funfactor']=calculateFun(funTotal, fnum)
             end
             
         }
@@ -246,7 +303,6 @@ class CacheDetails
         end
         
     end  # end function
-    
     
     # cleans up HTML and makes it text-worthy.
     def cleanHTML(text)
