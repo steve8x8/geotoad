@@ -369,7 +369,7 @@ class Input
                     @@optHash['outFile']=File.basename(@@optHash['outFile'])
                 end
             when '21'
-                 @@optHash['outDir'] = ask("Output directory (#{Dir.pwd})", nil)
+                 @@optHash['outDir'] = ask("Output directory (#{findOutputDir})", nil)
                  if @@optHash['outDir']
                     @@optHash['outDir'].gsub!(/\\/,  '/')
                     
