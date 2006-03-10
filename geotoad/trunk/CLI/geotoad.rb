@@ -550,8 +550,8 @@ class GeoToad
         
         # prepend the current working directory. This is mostly done as a service to
         # users who just double click to launch GeoToad, and wonder where their output file went.
-        puts "outputFile is #{outputFile}"
-        puts "output dir check is #{File.dirname(@option['output'])}"
+        debug "outputFile is #{outputFile}"
+        debug "output dir check is #{File.dirname(@option['output'])}"
         
         if (! @option['output']) || (@option['output'] !~ /\//)
             outputDir = Dir.getwd
