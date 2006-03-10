@@ -598,20 +598,20 @@ while(1)
     count = cli.downloadGeocacheList
     if count < 1
         cli.displayError "No caches found in search, exiting early."
-        exit(5)
     else
         cli.displayMessage "#{count} geocaches found in defined area."
+        if (@queryType != "wid")
+            cli.prepareFilter
+            cli.preFetchFilter
+        end
+        
+        cli.fetchGeocaches
+        cli.postFetchFilter
+        cli.saveFile
+        cli.close
+        
     end
     
-    if (@queryType != "wid")
-        cli.prepareFilter
-        cli.preFetchFilter
-    end
-    
-    cli.fetchGeocaches
-    cli.postFetchFilter
-    cli.saveFile
-    cli.close
     
     # Don't loop if you're in automatic mode.
     if ($mode == "TUI")
