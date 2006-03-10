@@ -208,7 +208,11 @@ class Input
             printf("(19) output format       [%-10.10s]   (20) filename   [%-20.20s]\n", (@@optHash['format'] || 'gpx'), (@@optHash['outFile'] || 'automatic'))
             printf("(21) output directory    [%-51.51s]\n", (@@optHash['outDir'] || findOutputDir))
             puts "=============================================================================="
-            puts ""
+            if @@optHash['verbose']
+                puts "VERBOSE MODE ENABLED"
+            else
+               puts ""
+            end
             print "-- Enter menu number, (s) to start, (r) to reset, or (x) to exit --> "
             answer = $stdin.gets.chop
             puts ""
@@ -395,7 +399,12 @@ class Input
                 end
             when 'r'
                 resetOptions
-                
+            when 'v'
+                if  @@optHash['verbose']
+                     @@optHash['verbose']=nil
+                else
+                    @@optHash['verbose'] = 'X'
+                end            
             when 'x'
                 puts "Git'rdone"
                 exit
