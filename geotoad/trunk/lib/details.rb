@@ -27,11 +27,14 @@ class CacheDetails
         if @funfile
             @@bayes = Bishop::Bayes.new
             if ! @@bayes.load(@funfile)
-                debug "Could not open fun file: #{@funfile}"
+                displayWarning "Could not open fun file: #{@funfile}"
                 @@funfactor=nil
             else
                 @@funfactor=1
             end
+        else
+            @@bayes=nil
+            displayWarning "Could not find data/fun_scores.dat, FunFactor scores disabled"
         end
     end
     
@@ -254,6 +257,9 @@ class CacheDetails
                     
                     if (nograde)
                         debug "not grading comment due to type #{icon}"
+                    elsif (! @@bayes)
+                        funTotal=1
+                        fnum=1
                     else
                         guess=@@bayes.guess(comment)
                         if (guess[0] && guess[1])
@@ -269,7 +275,7 @@ class CacheDetails
                         fnum=fnum+1
                     end
                     debug "COMMENT #{cnum}: i=#{icon} d=#{date} id=#{id} n=#{name} c=#{comment} fun=#{fun}"
-                    cnum = cnum + 1.0
+                    cnum = cnum + 1
                 }   # no more comments
                 
                 @waypointHash[wid]['funfactor']=calculateFun(funTotal, fnum)

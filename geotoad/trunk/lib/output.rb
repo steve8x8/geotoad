@@ -481,6 +481,8 @@ class Output
                 debug "Creating GPX comment list for #{@currentWid}"
                 @outVars['gpxlogs'] = ''
                 0.upto(4) { |x|
+                    debug "Looking for comment #{x}"
+                    
                     if @wpHash[@currentWid]["comment#{x}Type"]
                         debug "Found comment #{x}"
                         rawcomment =
