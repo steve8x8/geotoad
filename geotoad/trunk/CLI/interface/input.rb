@@ -24,18 +24,19 @@ class Input
         if (! File.exists?(@configDir))
             File.makedirs(@configDir)
         end
-        
+
         f=File.open(@configFile, 'w')
-        @@optHash.each_key { |option|
-            f.puts option + ": " + @@optHash[option].to_s
-        }
+        f.puts @@optHash.to_yaml
+        #@@optHash.each_key { |option|
+        #    f.puts option + ": " + @@optHash[option].to_s
+        #}
         f.close
         debug "Saved configuration" 
     end
     
     def loadConfig
         if File.exists?(@configFile)
-            debug "Found config file at #{@configFile}"
+            displayMessage "Loading configuration from #{@configFile}"
             @@optHash = YAML::load( File.open(@configFile) )
         end
     end
@@ -202,7 +203,7 @@ class Input
             printf("(18) EasyName WP length         [%3.3s] | \n", @@optHash['waypointLength'] || '0')
             puts "- - - - - - - - - - - - - - - - - - - + - - - - - - - - - - - - - - - - - - -"
             printf("(19) output format       [%-10.10s]   (20) filename   [%-20.20s]\n", (@@optHash['format'] || 'gpx'), (@@optHash['outFile'] || 'automatic'))
-            printf("(21) output directory    [%-51.51s]\n", (@@optHash['outDir'] || Dir.pwd))
+            printf("(21) output directory    [%-51.51s]\n", (@@optHash['outDir'] || findOutputDir))
             puts "=============================================================================="
             puts ""
             print "-- Enter menu number, (s) to start, (r) to reset, or (x) to exit --> "

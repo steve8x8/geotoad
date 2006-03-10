@@ -101,7 +101,7 @@ class ShadowFetch
         # make a friendly filename
         localfile.gsub!(/[=\?\*\%\&\$:\-\.]/, "_")
         localfile.gsub!(/_+/, "_")
-        localfile = $TEMP_DIR + localfile;
+        localfile = $CACHE_DIR + localfile;
         
         # Windows users have a max of 255 characters I believe.
         if (localfile.length > 250)

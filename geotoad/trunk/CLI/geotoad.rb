@@ -42,10 +42,10 @@ class GeoToad
     $SLOWMODE=150
     
     def initialize
-        $TEMP_DIR     = findTempDir
         output        = Output.new
         $validFormats = output.formatList.sort
         @uin          = Input.new
+        $CACHE_DIR    = findCacheDir
     end
     
     
@@ -184,7 +184,7 @@ class GeoToad
     
     ## Make the Initial Query ############################
     def downloadGeocacheList
-        displayInfo "Your cache directory is " + $TEMP_DIR
+        displayInfo "Your cache directory is " + $CACHE_DIR
         
         # Mike Capito contributed a patch to allow for multiple
         # queries. He did it as a hash earlier, I'm just simplifying
@@ -316,25 +316,25 @@ class GeoToad
         
         if @option['foundDateInclude']
             @queryTitle = @queryTitle + ", found in the last  #{@option['foundDateInclude']} days"
-            @defaultOutputFile = @defaultOutputFile + "-r=" + @option['foundDateInclude']
+            @defaultOutputFile = @defaultOutputFile + "-r=" + @option['foundDateInclude'].to_s
             @filtered.foundDateInclude(@option['foundDateInclude'].to_f)
         end
         
         if @option['foundDateExclude']
             @queryTitle = @queryTitle + ", not found in the last #{@option['foundDateExclude']} days"
-            @defaultOutputFile = @defaultOutputFile + "-R=" + @option['foundDateExclude']
+            @defaultOutputFile = @defaultOutputFile + "-R=" + @option['foundDateExclude'].to_s
             @filtered.foundDateExclude(@option['foundDateExclude'].to_f)
         end
         
         if @option['placeDateInclude']
             @queryTitle = @queryTitle + ", newer than #{@option['placeDateInclude']} days"
-            @defaultOutputFile = @defaultOutputFile + "-p=" + @option['placeDateInclude']
+            @defaultOutputFile = @defaultOutputFile + "-p=" + @option['placeDateInclude'].to_s
             @filtered.placeDateInclude(@option['placeDateInclude'].to_f)
         end
         
         if @option['placeDateExclude']
             @queryTitle = @queryTitle + ", over #{@option['placeDateExclude']} days old"
-            @defaultOutputFile = @defaultOutputFile + "-P=" + @option['placeDateExclude']
+            @defaultOutputFile = @defaultOutputFile + "-P=" + @option['placeDateExclude'].to_s
             @filtered.placeDateExclude(@option['placeDateExclude'].to_f)
         end
         
@@ -417,20 +417,11 @@ class GeoToad
             $SLEEP=15
         end
         
-        @cookie = login(@option['user'], @option['password'])	
-        if @cookie
-            displayMessage "Logged into Geocaching.com as #{@option['user']}"
-        else
-            displayError "Could not login"
-            exit
-        end
-        
         displayMessage "Fetching geocache pages with #{$SLEEP} second rests between remote fetches"
         wpFiltered = @filtered.waypoints
         progress = ProgressBar.new(0, @filtered.totalWaypoints, "Fetching details")
         
         @detail = CacheDetails.new(wpFiltered)
-        @detail.cookie = @cookie
         
         token = 0
         downloads = 0
@@ -441,6 +432,14 @@ class GeoToad
             # This just checks to see where Shadowfetch would grab the information from.
             page = ShadowFetch.new(detailURL)
             src = page.src
+            if (src == "remote") && (! @cookie)
+                @cookie = login(@option['user'], @option['password'])	
+                if ! @cookie
+                    displayError "Could not login as #{@option['user']}, skipping cache"
+                    next
+                end
+            end                
+            @detail.cookie = @cookie
             
             
             ret = @detail.fetch(wid)
@@ -526,7 +525,6 @@ class GeoToad
         displayMessage "Filter complete, #{@filtered.totalWaypoints} caches left"
         if (@filtered.totalWaypoints < 1)
             displayWarning "No caches to generate output for!"
-            exit
         end
     end
     
@@ -560,14 +558,14 @@ class GeoToad
         debug "output dir check is #{File.dirname(@option['output'])}"
         
         if (! @option['output']) || (@option['output'] !~ /\//)
-            outputDir = Dir.getwd
+            outputDir = findOutputDir
         else
             # fool it so that trailing slashes work.
             outputDir = File.dirname(@option['output'] + "x")
         end
-                        
+        
         outputFile = outputDir + '/' + outputFile
-
+        
         
         # Lets not mix and match DOS and UNIX /'s, we'll just make everyone like us!
         outputFile.gsub!(/\\/, '/')

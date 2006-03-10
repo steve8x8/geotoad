@@ -144,7 +144,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
             'templatePre' =>  "== <%out.title%>\r\n\r\nDecryption Key (letter above equals below, and vice versa)\r\n\r\nA|B|C|D|E|F|G|H|I|J|K|L|M\r\n-------------------------\r\nN|O|P|Q|R|S|T|U|V|W|X|Y|Z\r\n\r\n\r\n",
             'templateWP'    => "----------------------------------------------------------------\r\n" +
 		"* <%wp.name%>\" (<%out.wid%>) by <%wp.creator%>\r\n" +
-                "Difficulty: <%wp.difficulty%>, Terrain: <%wp.terrain%>\r\n" +
+                "Difficulty: <%wp.difficulty%>, Terrain: <%wp.terrain%>, FunFactor: <%wp.funfactor%>\r\n" +
                 "Lat: <%wp.latwritten%> Lon: <%wp.lonwritten%>\r\n" +
                 "Type: <%wp.type%> <%out.relativedistance%>\r\n" +
                 "Creation: <%wp.cdate%>, Last comment: <%wp.mdays%> days ago (<%wp.comment0Type%>)\r\n" +

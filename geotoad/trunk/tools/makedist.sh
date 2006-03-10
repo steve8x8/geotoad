@@ -12,7 +12,7 @@ LONGDIST="$DIST"
 echo "Creating $DEST"
 rm -Rf $DEST*
 mkdir $DEST
-cp -R CLI/._* CLI/.DS* FAQ.txt TODO.txt COPYRIGHT.txt lib data CLI/interface contrib $DEST
+cp -R CLI/._* CLI/.DS* FAQ.txt TODO.txt COPYRIGHT.txt lib tools data CLI/interface contrib $DEST
 ditto CLI/*Mac* $DEST
 sed s/"%VERSION%"/"$VERSION"/g CLI/geotoad.rb > $DEST/geotoad.rb
 sed s/"%VERSION%"/"$VERSION"/g CLI/README.txt > $DEST/README.txt
@@ -42,7 +42,7 @@ zip -r $LONGDIST.zip $DIST
 # Windows
 echo "Creating zipfile (Windows): zip -r ../${LONGDIST}_for_Windows.zip *"
 cd $DEST
-rm -Rf *.rb geocache interface
+rm -Rf *.rb lib interface
 
 # convert to Windows newlines
 flip -d *.txt
