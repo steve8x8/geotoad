@@ -48,7 +48,10 @@ In UNIX     -- run ./geotoad.rb in a shell.
 
 The rest should be somewhat obvious. You get to a screen where you can
 change your query and filter options, and once you are done with that, press
-'q' and it will perform the magic.
+'s' and it will perform the magic.
+
+GeoToad will automatically save any options defined in the text interface
+for the next time it is loaded.
 
 
 -------------------
@@ -98,32 +101,27 @@ syntax: geotoad.rb [options] <search:search2:search3>
    -- the following requires cmconvetr to be installed --
    cachemate     CacheMate Palm software
 
- -q [zip|state|coord|keyword]    query type (zip by default)
-		                 [COUNTRY SEARCHES CURRENTLY BROKEN]
- -o [filename]           output file
- -d [0.0-5.0]            difficulty minimum (0)
- -D [0.0-5.0]            difficulty maximum (5)
- -t [0.0-5.0]            terrain minimum (0)
- -T [0.0-5.0]            terrain maximum (5)
- -y [1-500]              distance maximum in miles (10 is the default)
- -k [keyword]            title keyword (regexp) search. Use | to delimit multiple
- -K [keyword]            desc keyword (regexp) search. Use | to delimit multiple
- -c [username]           only include caches owned by this person
-                         Use : to delimit multiple users
- -C [username]           exclude caches owned by this person
-                         Use : to delimit multiple users
- -u [username]           only include caches found by this person
-                         Use : to delimit multiple users
- -U [username]           exclude caches found by this person
-                         Use : to delimit multiple users
- -p [# days]             only include caches placed in the last X days
- -P [# days]             exclude caches placed in the last X days
- -r [# days]             only include caches found in the last X days
- -R [# days]             exclude caches found in the last X days
- -n                      only include not found caches (virgins)
- -b                      only include caches with travelbugs
- -E                      disable EasyName waypoint id's (16)
- -l                      EasyName waypoint id length (Garmin users can use 16)
+ -u <username>          Geocaching.com username, required for coordinates
+ -p <password>          Geocaching.com password, required for coordinates
+
+ -o [filename]          output file name (automatic otherwise)
+ -x [format]            output format type, see list below
+ -q [zip|state|coord]   query type (zip by default)
+
+ -d/-D [0.0-5.0]        difficulty minimum/maximum
+ -t/-T [0.0-5.0]        terrain minimum/maximum
+ -f/-F [0.0-5.0]        fun factor minimum/maximum
+ -y    [1-500]          distance maximum in miles (10)
+ -k    [keyword]        title keyword search. Use | to delimit multiple
+ -K    [keyword]        desc keyword search. Use | to delimit multiple
+ -i/-I [username]       include/exclude caches owned by this person
+ -s/-S [username]       include/exclude caches found by this person
+                            (use : to delimit multiple users!)
+ -j/-J [# days]         include/exclude caches placed in the last X days
+ -r/-R [# days]         include/exclude caches found in the last X days
+ -n                     only include not found caches (virgins)
+ -b                     only include caches with travelbugs
+ -l                     set EasyName waypoint id length. (16)     
 
 
 
@@ -134,26 +132,29 @@ You need to get to a command-line (DOS, cmd.exe, UNIX shell), and go into
 the directory you extracted geotoad into. Then you should be able to type
 something simple like:
 
-geotoad.rb 27513
+geotoad.rb -u user -p password 27513
+
+Why do we need a username and password? In October of 2004, Geocaching.com
+began to require a login in order to see the coordinates of a geocache.
 
 If that does not work, try:
 
-ruby geotoad.rb 27513
+ruby geotoad.rb -u user -p password 27513
 
 You've just made a file named geotoad-output.loc containing all the geocaches
 nearby the zipcode 27513 suitable to be read by EasyGPS. Here are some more
 complex examples that you can work with:
 
-1) geotoad.rb -q coord "N56 44.392, E015 52.780"  -y 5
+1) geotoad.rb -u user -p password q coord "N56 44.392, E015 52.780"  -y 5
 Search for caches within 5 miles of the above coordinates
 
 
-2) geotoad.rb 27513:27502:33434
+2) geotoad.rb -u user -p password 27513:27502:33434
 You can combine searches with the : delimiter. This works for all types,
 though it's most often used with coordinate searches.
 
 
-3) geotoad.rb -f text -o nc.txt -n -q state "North Carolina"
+3) geotoad.rb -u user -p password -f text -o nc.txt -n -q state "North Carolina"
 Outputs a text file with all of the caches in North Carolina that are
 virgins (have never been found).
 
@@ -161,7 +162,7 @@ Please note the quotes around North Carolina. Any parameters with spaces in
 them must have quotes around them.
 
 
-4) geotoad.rb -t 2.5 -f vcf -U "helixblue:Sallad" -o charlotte.vcf 28272
+4) geotoad.rb -u user -p password -t 2.5 -f vcf -U "helixblue:Sallad" -o charlotte.vcf 28272
 Gets every cache in the 100 mile radius of zipcode 28272, with a terrain
 score of 2.5 or higher, and that helixblue and Sallad have not visited.
 Outputs a VCF format file, which is usable by iPod's and other devices.
@@ -169,6 +170,6 @@ Outputs a VCF format file, which is usable by iPod's and other devices.
 Please note: Put quotes around your username if it has any spaces in it.
 
 
-5) geotoad.rb -f html -b -K 'stream|creek|lake|river|ocean' -o watery.html -q state Indiana
+5) geotoad.rb -u user -p password -f html -b -K 'stream|creek|lake|river|ocean' -o watery.html -q state Indiana
 Gets every cache in Sweden with travel bugs that matches those water keywords.
 Makes a pretty HTML file out of it.

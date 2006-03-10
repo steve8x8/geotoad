@@ -98,10 +98,12 @@ class GeoToad
         puts " -p <password>          Geocaching.com password, required for coordinates"
         
         puts " -o [filename]          output file name (automatic otherwise)"
-        puts " -f [format]            output format type, see list below"
+        puts " -x [format]            output format type, see list below"
         puts " -q [zip|state|coord]   query type (zip by default)"
+        
         puts " -d/-D [0.0-5.0]        difficulty minimum/maximum"
         puts " -t/-T [0.0-5.0]        terrain minimum/maximum"
+        puts " -f/-F [0.0-5.0]        fun factor minimum/maximum"
         puts " -y    [1-500]          distance maximum in miles (10)"
         puts " -k    [keyword]        title keyword search. Use | to delimit multiple"
         puts " -K    [keyword]        desc keyword search. Use | to delimit multiple"
@@ -112,7 +114,6 @@ class GeoToad
         puts " -r/-R [# days]         include/exclude caches found in the last X days"
         puts " -n                     only include not found caches (virgins)"
         puts " -b                     only include caches with travelbugs"
-        puts " -e                     enable EasyName waypoint id's"
         puts " -l                     set EasyName waypoint id length. (16)"
         puts ""
         puts "::: OUTPUT FORMATS:"

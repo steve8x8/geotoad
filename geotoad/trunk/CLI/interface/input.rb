@@ -48,8 +48,8 @@ class Input
         [ "--difficultyMax",            "-D",        GetoptLong::OPTIONAL_ARGUMENT ],
         [ "--difficultyMin",            "-d",        GetoptLong::OPTIONAL_ARGUMENT ],
         
-        [ "--fratingMax",                "-F",        GetoptLong::OPTIONAL_ARGUMENT ],
-        [ "--fratingMin",                "-f",        GetoptLong::OPTIONAL_ARGUMENT ],
+        [ "--funFactorMax",                "-F",        GetoptLong::OPTIONAL_ARGUMENT ],
+        [ "--funFactorMin",                "-f",        GetoptLong::OPTIONAL_ARGUMENT ],
         
         [ "--foundDateExclude",                "-R",    GetoptLong::OPTIONAL_ARGUMENT ],
         [ "--foundDateInclude",                "-r",    GetoptLong::OPTIONAL_ARGUMENT ],
