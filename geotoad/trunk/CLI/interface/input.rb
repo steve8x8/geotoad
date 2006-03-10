@@ -372,7 +372,18 @@ class Input
                  @@optHash['outDir'] = ask("Output directory (#{Dir.pwd})", nil)
                  if @@optHash['outDir']
                     @@optHash['outDir'].gsub!(/\\/,  '/')
+                    
+                    if (! File.exists?(@@optHash['outDir']))
+                        answer = ask("This directory does not exist. Would you like me to create it?", 'n')
+                        if answer =~ /y/
+                            File.makedirs(@@optHash['outDir'])
+                        else
+                            puts "Fine, suit yourself."
+                            sleep(1)
+                        end
+                     end
                  end
+                 
             when 's', 'q'
                 if (! @@optHash['queryArg']) || (@@optHash['queryArg'].size < 1)
                     puts "You cannot start till you specify what #{@@optHash['queryType']} data you would like to search with"
@@ -383,7 +394,7 @@ class Input
                 resetOptions
                 
             when 'x'
-                puts "Ya\'ll come back now, ya hear?"
+                puts "Git'rdone"
                 exit
                 
                 

@@ -4,12 +4,13 @@ module Common
     
     ## finds a place to put temp files on the system ###################################
     def selectDirectory(dirs)
-        dir=nil
+        selected=nil
         debug "Searching directories: #{dirs.join(':')}"
         dirs.compact.each do |dir|
             begin
                 debug "Checking if #{dir} is suitable"
                 if ((File.stat(dir).directory?) && (File.stat(dir).writable?))
+                    selected=dir.dup
                     break
                 end
             rescue
@@ -17,13 +18,13 @@ module Common
         end
         
         # fall back on the current directory if everything else fails!
-        if (! dir)
-            dir=Dir.pwd
+        if (! selected)
+            selected=Dir.pwd
         else
-            dir.gsub!(/\\/, '/')
+            selected.gsub!(/\\/, '/')
         end
-        debug "Found #{dir}"
-        return dir
+        debug "Found #{selected}"
+        return selected
     end
     
     def findCacheDir

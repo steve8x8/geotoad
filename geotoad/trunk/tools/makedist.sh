@@ -24,7 +24,7 @@ find $DEST -name .svn -exec rm -Rf {} \;
 echo "Updating repository..."
 svn update
 echo "Creating Changelog"
-svn log -v > $DEST/ChangeLog.txt
+svn log > $DEST/ChangeLog.txt
 joe $DEST/ChangeLog.txt
 rm $DEST/ChangeLog.txt~
 
