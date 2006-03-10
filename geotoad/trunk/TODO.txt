@@ -6,25 +6,14 @@ Bugs:
 -----
 * Fix country search to comply with the new changes.
 
-Search:
--------
-* Support members only caches
-
-Details:
---------
-* Artificial intellegence to determine whether or not users like the cache. (3.8)
-
 Filter:
 -------
-* Cache type (3.8)
+* Cache type (4.0)
 
 Output:
 -------
-* Route 66 Pushpins support
 * Add iPod clippings support (4.0)
-* SMS support (3.9)
 
 Frontends:
 ----------
 Web (4.0)
-Cross-Platform GUI (4.0)
