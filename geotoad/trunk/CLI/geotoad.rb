@@ -74,7 +74,7 @@ class GeoToad
         @cacheExpiry       = @option['cacheExpiry'].to_i || 3
         @distanceMax       = @option['distanceMax'] || 10
         @queryTitle        = "GeoToad: #{@queryArg}"
-        @defaultOutputFile = "gtout-" + @queryType + "-" + @queryArg
+        @defaultOutputFile = "gtout-" + @queryType + "-" + @queryArg.to_s
         
         # This is a global. Not cool.
         $slowLink          = @option['slowlink'] || nil
@@ -185,7 +185,7 @@ class GeoToad
         # mix multiple @queryType's anyways
         @combinedWaypoints = Hash.new
         
-        @queryArg .split(/[:\|]/).each { |queryArg|
+        @queryArg.to_s.split(/[:\|]/).each { |queryArg|
             print "\n( o ) Performing #{@queryType} search for #{queryArg} "
             search = SearchCache.new
             
@@ -539,7 +539,7 @@ class GeoToad
         
         # if we have selected the name of the output file, use it.
         # otherwise, take our invented name, sanitize it, and slap a file extension on it.
-        if (@option['output'] && File.basename(@option['output']))
+        if @option['output'] && (@option['output'] !~ /\/$/)
             outputFile = File.basename(@option['output'])
         else
             outputFile = @defaultOutputFile.gsub(/\W/, '_')
@@ -549,9 +549,18 @@ class GeoToad
         
         # prepend the current working directory. This is mostly done as a service to
         # users who just double click to launch GeoToad, and wonder where their output file went.
-        if (! @option['output']) || (! File.dirname(@option['output'])) 
-            outputFile = Dir.getwd + '/' + outputFile
+        puts "outputFile is #{outputFile}"
+        puts "output dir check is #{File.dirname(@option['output'])}"
+        
+        if (! @option['output']) || (@option['output'] !~ /\//)
+            outputDir = Dir.getwd
+        else
+            # fool it so that trailing slashes work.
+            outputDir = File.dirname(@option['output'] + "x")
         end
+                        
+        outputFile = outputDir + '/' + outputFile
+
         
         # Lets not mix and match DOS and UNIX /'s, we'll just make everyone like us!
         outputFile.gsub!(/\\/, '/')

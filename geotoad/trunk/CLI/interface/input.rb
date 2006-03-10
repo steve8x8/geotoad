@@ -9,11 +9,35 @@ class Input
         # restore and save for it so that it can keep preferences between runs,
         # I thought I would just make it class-wide instead of instance wide.
         
+        resetOptions
+        @configDir = findConfigDir
+        @configFile = @configDir + '/' + 'config.yaml'
+    end
+    
+    def resetOptions
         @@optHash = Hash.new
-        @@outFile=nil
-        @@outDir=nil
         # some default values.
-        @@optHash['queryType'] = 'zipcode'
+        @@optHash['queryType'] = 'zipcode'    
+    end
+
+    def saveConfig
+        if (! File.exists?(@configDir))
+            File.makedirs(@configDir)
+        end
+        
+        f=File.open(@configFile, 'w')
+        @@optHash.each_key { |option|
+            f.puts option + ": " + @@optHash[option].to_s
+        }
+        f.close
+        debug "Saved configuration" 
+    end
+    
+    def loadConfig
+        if File.exists?(@configFile)
+            debug "Found config file at #{@configFile}"
+            @@optHash = YAML::load( File.open(@configFile) )
+        end
     end
     
     def getopt
@@ -100,22 +124,25 @@ class Input
     
     def interactive
         # pop up the menu
-        showmenu
-        if (@outDir)
-            @@optHash['output']=@outDir + "/"
+        loadConfig
+        showMenu
+        saveConfig
+        if (@@optHash['outDir'])
+            @@optHash['output']=@@optHash['outDir'] + "/"
         end
-        if (@outFile)
+        if (@@optHash['outFile'])
             if @@optHash['output']
-                @@optHash['output']=@optHash['output'] + @outFile
+                @@optHash['output']=@@optHash['output'] + @@optHash['outFile']
             else
-                @@optHash['output']=@outFile
+                @@optHash['output']=@@optHash['outFile']
             end
         end
+        
             
         # demonstrate a sample command line
         cmdline = "geotoad.rb"
         @@optHash.each_key { |option|
-            if (option != 'queryArg') && @@optHash[option]
+            if (option != 'queryArg') && (option != 'outDir') && (option != 'outFile') && @@optHash[option]
                 if (@@optHash[option] == 'X')
                     cmdline = cmdline + " --#{option}"
                 else
@@ -129,7 +156,7 @@ class Input
             end
             
         }
-        cmdline = cmdline + " \'" + @@optHash['queryArg'] + '\''
+        cmdline = cmdline + " \'" + @@optHash['queryArg'].to_s + '\''
         displayMessage "To use this query in the future, type:"
         displayMessage cmdline
         puts
@@ -138,7 +165,7 @@ class Input
         return @@optHash
     end
     
-    def showmenu
+    def showMenu
         # if windows
         # else
         answer = nil
@@ -174,11 +201,11 @@ class Input
            
             printf("(18) EasyName WP length         [%3.3s] | \n", @@optHash['waypointLength'] || '0')
             puts "- - - - - - - - - - - - - - - - - - - + - - - - - - - - - - - - - - - - - - -"
-            printf("(19) output format       [%-10.10s]   (20) filename   [%-20.20s]\n", (@@optHash['format'] || 'gpx'), (@@outFile || 'automatic'))
-            printf("(21) output directory    [%-51.51s]\n", (@@outDir || Dir.pwd))
+            printf("(19) output format       [%-10.10s]   (20) filename   [%-20.20s]\n", (@@optHash['format'] || 'gpx'), (@@optHash['outFile'] || 'automatic'))
+            printf("(21) output directory    [%-51.51s]\n", (@@optHash['outDir'] || Dir.pwd))
             puts "=============================================================================="
             puts ""
-            print "-- Enter menu number, (s) to start, or (x) to exit --> "
+            print "-- Enter menu number, (s) to start, (r) to reset, or (x) to exit --> "
             answer = $stdin.gets.chop
             puts ""
             
@@ -331,17 +358,28 @@ class Input
                 @@optHash['format'] = ask('What format would you like your output in?', 'gpx')
                 
             when '20'
-                @@outFile = ask('What filename would you like to output to? (press enter for automatic)', nil)
+                @@optHash['outFile'] = ask('What filename would you like to output to? (press enter for automatic)', nil)
+                if (@@optHash['outFile'])
+                    @@optHash['outFile'].gsub!(/\\/,  '/')
+                end
                 
+                if (@@optHash['outFile'] =~ /\//) 
+                    @@optHash['outDir']=File.dirname(@@optHash['outFile'])
+                    @@optHash['outFile']=File.basename(@@optHash['outFile'])
+                end
             when '21'
-                 @@outDir = ask("Output directory (#{Dir.pwd})", nil).gsub(/\\/, '/')
-            
+                 @@optHash['outDir'] = ask("Output directory (#{Dir.pwd})", nil)
+                 if @@optHash['outDir']
+                    @@optHash['outDir'].gsub!(/\\/,  '/')
+                 end
             when 's', 'q'
                 if (! @@optHash['queryArg']) || (@@optHash['queryArg'].size < 1)
                     puts "You cannot start till you specify what #{@@optHash['queryType']} data you would like to search with"
                     puts "(press enter to continue)"
                     answer=$stdin.gets
                 end
+            when 'r'
+                resetOptions
                 
             when 'x'
                 puts "Ya\'ll come back now, ya hear?"
@@ -350,6 +388,7 @@ class Input
                 
             end
             
+            saveConfig
         end
         
     end
