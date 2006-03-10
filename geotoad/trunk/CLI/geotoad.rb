@@ -556,7 +556,7 @@ class GeoToad
         # users who just double click to launch GeoToad, and wonder where their output file went.
         
         if (! @option['output']) || (@option['output'] !~ /\//)
-            outputDir = findOutputDir
+            outputDir = Dir.pwd
         else
             # fool it so that trailing slashes work.
             outputDir = File.dirname(@option['output'] + "x")

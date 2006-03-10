@@ -130,7 +130,10 @@ class Input
         saveConfig
         if (@@optHash['outDir'])
             @@optHash['output']=@@optHash['outDir'] + "/"
+        else
+            @@optHash['output']=findOutputDir + "/"
         end
+        
         if (@@optHash['outFile'])
             if @@optHash['output']
                 @@optHash['output']=@@optHash['output'] + @@optHash['outFile']
