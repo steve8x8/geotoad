@@ -16,20 +16,25 @@ class CacheDetails
         @waypointHash = data
         @useShadow=1
         
-        if File.exists?('../../data/fun_scores.dat') 
-            @funfile="../../data/fun_scores.dat"
-        elsif File.exists?('../data/fun_scores.dat')
-            @funfile="../data/fun_scores.dat"
-        elsif File.exists?('data/fun_scores.dat')
-            @funfile="data/fun_scores.dat"
+        dataFile="fun_scores.dat"
+        dataDirs=[ File.dirname(__FILE__) + "/../data", "../../data", "../data", "data", 
+            File.dirname($0) + "/data", File.dirname($0) + "/../data", findConfigDir ]
+            
+        dataDirs.each do |dir|
+            debug "checking #{dir} for #{dataFile}"
+            if File.exists?(dir + "/" + dataFile)
+                @funfile=dir + "/" + dataFile
+                debug "found #{dir}/#{dataFile}"
+            end
         end
-        
+                 
         if @funfile
             @@bayes = Bishop::Bayes.new
             if ! @@bayes.load(@funfile)
-                displayWarning "Could not open fun file: #{@funfile}"
+                displayMessage "Reading Bayesian data for FunFactor scores from {#@funfile}"
                 @@funfactor=nil
             else
+                debug "Loaded #{@funfile}"
                 @@funfactor=1
             end
         else
