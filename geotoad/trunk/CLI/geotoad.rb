@@ -4,6 +4,12 @@
 $LOAD_PATH << File.dirname(__FILE__.gsub(/\\/, '/'))
 $LOAD_PATH << (File.dirname(__FILE__.gsub(/\\/, '/')) + '/' + '..')
 
+if RUBY_VERSION.gsub('.', '').to_i < 180
+    puts "ERROR: The version of Ruby your system has installed is #{RUBY_VERSION}, but we now require 1.8.0 or higher"
+    sleep(5)
+    exit(99)
+end
+
 # toss in our own libraries.
 require 'interface/display'
 require 'interface/progressbar'
