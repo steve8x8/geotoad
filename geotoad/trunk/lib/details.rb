@@ -96,10 +96,16 @@ class CacheDetails
     end
     
     def calculateFun(total, comments)
+        # if no comments, it must be at least somewhat interesting!
+        if comments == 0
+            return 3.0
+        end
+    
         score=total / comments
+        
         # a grade of >28 is considered awesome
         # a grade of <-20 is considered pretty bad
-        
+        debug "total=#{total} comments=#{comments} score=#{score}"        
         grade=((score + 25) / 5.3).round.to_f / 2
         if grade > 5.0
             grade=5.0

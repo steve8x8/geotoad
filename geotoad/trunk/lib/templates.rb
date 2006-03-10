@@ -43,15 +43,16 @@ $Format = {
             "<keywords>cache, geocache, groundspeak, geotoad</keywords>\r\n",
 
             'templateWP'    => "<wpt lat=\"<%wp.latdata%>\" lon=\"<%wp.londata%>\">\r\n" +
-            "  <time>2003-05-20T00:00:00.0000000-07:00</time>\r\n" +
+            "  <time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S")  + ".0000000-00:00</time>\r\n" +
             "  <name><%out.id%></name>\r\n" +
             "  <desc><%wpEntity.name%> by <%wpEntity.creator%>, <%wp.type%> (<%wp.difficulty%>/<%wp.terrain%>)</desc>\r\n" +
             "  <url><%out.url%></url>\r\n" +
             "  <urlname><%wpEntity.name%> by <%wpEntity.creator%></urlname>\r\n" +
             "  <sym>Geocache</sym><type>Geocache</type>\r\n" +
             "  <groundspeak:cache id=\"<%wp.sid%>\" available=\"True\" archived=\"False\" xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0\">\r\n" +
+            "  <groundspeak:date>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S")  + ".0000000-00:00</groundspeak:date>\r\n" +
             "  <groundspeak:name><%wpEntity.name%></groundspeak:name>\r\n" +
-			"  <groundspeak:full_name><%wpEntity.name%></groundspeak:full_name>\r\n"+
+			" <groundspeak:full_name><%wpEntity.name%></groundspeak:full_name>\r\n"+
             "  <groundspeak:placed_by><%wpEntity.creator%></groundspeak:placed_by>\r\n" +
             "  <groundspeak:owner id=\"89944\"><%wpEntity.creator%></groundspeak:owner>\r\n" +
             "  <groundspeak:type><%wp.type%></groundspeak:type>\r\n" +

@@ -376,8 +376,13 @@ class SearchCache
                 debug "cacheDistance=#{@cache['distance']} dir=#{@cache['direction']}"
                 
             when /cache_details.aspx\?guid=(.*?)\">(.*?)\<\/a\>/
+                debug "cache line: #{line}"
                 @cache['sid']=$1
-                name=$2.dup
+                if $2
+                    name=$2.dup
+                else
+                    name='not_parsed'
+                end
                 name.gsub!(/ +$/, '')
                 if name =~ /\<strike\>(.*?)\<\/strike\>/
                     @cache['disabled']=1
