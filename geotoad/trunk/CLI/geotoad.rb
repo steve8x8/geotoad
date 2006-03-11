@@ -523,9 +523,7 @@ class GeoToad
         
         
         displayMessage "Filter complete, #{@filtered.totalWaypoints} caches left"
-        if (@filtered.totalWaypoints < 1)
-            displayWarning "No caches to generate output for!"
-        end
+        return @filtered.totalWaypoints
     end
     
     
@@ -559,7 +557,11 @@ class GeoToad
            # rubyscript2exe is self extracting and overwrites the Pwd. 
            # rather than dumping files in a temp dir, lets put it where geotoad is installed
            if defined?(RUBYSCRIPT2EXE_APPEXE)
-               outputDir=File.dirname(RUBYSCRIPT2EXE_APPEXE)
+               if ENV["OLDDIR"]
+                   outputDir=ENV["OLDDIR"]
+               else 
+                   outputDir=File.dirname(RUBYSCRIPT2EXE_APPEXE)
+               end
            else
                outputDir = Dir.pwd
            end
@@ -612,10 +614,13 @@ while(1)
         end
         
         cli.fetchGeocaches
-        cli.postFetchFilter
-        cli.saveFile
+        caches = cli.postFetchFilter
+        if caches > 0
+            cli.saveFile
+        else
+            cli.displayMessage "No caches were found that matched your requirements"
+        end
         cli.close
-        
     end
     
     
