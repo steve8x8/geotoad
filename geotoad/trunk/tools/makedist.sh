@@ -29,8 +29,8 @@ joe $DEST/ChangeLog.txt
 rm $DEST/ChangeLog.txt~
 
 # unnecessary tools
-rm tools/makedist.sh
-rm data/*.txt
+rm $DEST/tools/makedist.sh
+rm $DEST/data/*.txt
 
 # Mac OS X
 cd /tmp
