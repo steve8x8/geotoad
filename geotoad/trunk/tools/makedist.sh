@@ -28,6 +28,10 @@ svn log > $DEST/ChangeLog.txt
 joe $DEST/ChangeLog.txt
 rm $DEST/ChangeLog.txt~
 
+# unnecessary tools
+rm tools/makedist.sh
+rm data/*.txt
+
 # Mac OS X
 cd /tmp
 echo "Creating zipfile (Mac OS X): zip -r ${LONGDIST}_for_MacOS.zip $DIST"
@@ -42,7 +46,12 @@ zip -r $LONGDIST.zip $DIST
 # Windows
 echo "Creating zipfile (Windows): zip -r ../${LONGDIST}_for_Windows.zip *"
 cd $DEST
-rm -Rf *.rb lib interface
+#rm -Rf *.rb lib interface
+mkdir compile
+mv *.rb lib interface data compile
+mv compile/geotoad.rb compile/init.rb
+tar2rubyscript compile
+echo "Under Windows, run: rubyscript2exe compile.rb"
 
 # convert to Windows newlines
 flip -d *.txt
@@ -54,7 +63,7 @@ cp $SRC/CLI/*.exe .
 zip -r ../${LONGDIST}_for_Windows.zip *
 
 echo "Copying to desktop"
-cp /tmp/${LONGDIST}* ~/Desktop
+cp /tmp/${LONGDIST}*.* ~/Desktop
 
 #echo "Copying zipfile to webservers"
 #scp $LONGDIST.zip $DEST/ChangeLog.txt smtp.stromberg.org:/www/toadstool.se/htdocs/hacks/geotoad/files/
