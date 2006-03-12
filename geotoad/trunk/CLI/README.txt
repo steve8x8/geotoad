@@ -9,23 +9,23 @@ Table of Contents:
 * Requirements
 * Getting Started
 * Command-Line Syntax
-* Usage Guide
+* Command-Line examples
 
 
 
 -----
 About
 -----
-It's an open-source query tool to query the geocaching.com website. It can
-write into a half dozen formats. To see what's new in this release, see the
-ChangeLog.txt file.
+It's an open-source query tool to query the geocaching.com website. It
+supports exporting your results into a dozen or more formats such as GPX,
+HTML, or VCF for your iPod.
 
 
 ------------
 Requirements
 ------------
 Windows - Windows 98 or Higher
-Mac OS - Mac OS X 10.2 or Higher
+Mac OS - Mac OS X 10.4 or Higher (10.2 or higher if Ruby 1.8 is installed)
 Other Operating Systems -  You may need to install Ruby before running GeoToad.
 
   * RedHat/Fedora Linux: built-in
@@ -35,36 +35,59 @@ Other Operating Systems -  You may need to install Ruby before running GeoToad.
 Optionally, if you have gpsbabel - http://gpsbabel.sourceforge.net/
 geotoad can output to over a dozen additional GPS formats.
 
+
 ---------------
 Getting Started
 ---------------
-There are two modes to GeoToad, an interactive mode, which most people will
-use, and a command line interface, which is mostly for people scripting
-GeoToad. To get to the interactive mode:
+The easiest way to get started with GeoToad is to use the "text user
+interface" (TUI). Simply double click on the GeoToad program icon, or from 
+a command prompt run "geotoad" or if you are on UNIX, run "./geotoad.rb". You
+will then see a screen that looks similar to this:
 
-In Windows  -- double click on the "geotoad.exe" file.
-In Mac OS X -- double click on the "GeoToad" file.
-In UNIX     -- run ./geotoad.rb in a shell.
+==============================================================================
+:::            // GeoToad 3.9-CURRENT Text User Interface //               :::
+==============================================================================
+(1)  GC.com login     [wally        ] | (2)  search type          [zipcode   ]
+(3)  zipcode          [47408        ] | (4)  distance maximum            [10 ]
+                                      |
+(5)  difficulty           [2.0 - 5.0] | (6)  terrain               [1.5 - 5.0]
+(7)  fun factor           [0.0 - 5.0] |
+(8) virgin caches only            [ ] | (9) travel bug caches only         [X]
+(10) cache age (days)       [  0-120] | (11) last found (days)       [  0-any] 
+                                      |
+(12) title keyword       [          ] | (13) descr. keyword    [             ]
+(14) cache not found by  [helixblue:] | (15) cache owner isn't [             ]
+(16) cache found by      [          ] | (17) cache owner is    [             ]
+(18) EasyName WP length         [  8] | 
+- - - - - - - - - - - - - - - - - - - + - - - - - - - - - - - - - - - - - - -
+(19) output format       [html      ]   (20) filename   [automatic           ]
+(21) output directory    [/Users/thomas/Desktop                              ]
+==============================================================================
 
-The rest should be somewhat obvious. You get to a screen where you can
-change your query and filter options, and once you are done with that, press
-'s' and it will perform the magic.
+-- Enter menu number, (s) to start, (r) to reset, or (x) to exit --> 
+                                                                              
+At this point, follow the prompt and begin typing the number of the item you
+wish to change, pressing enter afterwards. You will need to enter your login
+and some basic search criteria first.
 
-GeoToad will automatically save any options defined in the text interface
-for the next time it is loaded.
+Once you have entered in all of your information, press "s" and then <ENTER>
+to begin your search. GeoToad will save any options you have entered for
+future runs.
 
 
 -------------------
 Command Line Syntax
 -------------------
 
-The command-line interface used to be the only way to use GeoToad. In 3.5.0,
-we have introduced a TUI (Text-User Interface), but have kept the
-command-line interface for those who's preference it is, and of course for
-people scripting or embedding GeoToad into their applications.
+Sometimes people prefer to use the command-line switches instead of the text user
+interface. This comes especially in handy when you wish to automate it so
+that every morning your iPod or GPS has the freshest list of geocaches that have
+not been found in your area.
 
+If you go to the command line, and run geotoad -h, you will get a screen
+with a list of of options such as the following:
 
-syntax: geotoad.rb [options] <search:search2:search3>
+syntax: geotoad [options] <search:search2:search3>
 
  -x format for output. Formats available are:
    csv           CSV for spreadsheet imports
@@ -125,9 +148,10 @@ syntax: geotoad.rb [options] <search:search2:search3>
 
 
 
------
-Usage
------
+---------------------
+Command-Line Examples
+---------------------
+
 You need to get to a command-line (DOS, cmd.exe, UNIX shell), and go into
 the directory you extracted geotoad into. Then you should be able to type
 something simple like:
