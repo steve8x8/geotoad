@@ -25,7 +25,8 @@ class Input
             File.makedirs(@configDir)
         end
 
-        f=File.open(@configFile, 'w')
+	# File contains password, keep it safe..
+        f=File.open(@configFile, 'w', 0600)
         f.puts @@optHash.to_yaml
         #@@optHash.each_key { |option|
         #    f.puts option + ": " + @@optHash[option].to_s
