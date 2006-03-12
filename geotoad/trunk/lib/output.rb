@@ -214,7 +214,7 @@ class Output
         if @outputFormat['filter_exec']
             displayMessage "Executing #{@outputFormat['filter_exec']}"
             exec = @outputFormat['filter_exec']
-            tmpfile = $TEMP_DIR + "/" + @outputType + "." + rand(500000).to_s
+            tmpfile = $CACHE_DIR + "/" + @outputType + "." + rand(500000).to_s
             exec.gsub!('INFILE', "\"#{tmpfile}\"")
             exec.gsub!('OUTFILE', "\"#{file}\"")
             writeFile(tmpfile)
