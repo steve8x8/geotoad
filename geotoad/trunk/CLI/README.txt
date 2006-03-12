@@ -66,7 +66,7 @@ people scripting or embedding GeoToad into their applications.
 
 syntax: geotoad.rb [options] <search:search2:search3>
 
- -f format for output. Formats available are:
+ -x format for output. Formats available are:
    csv           CSV for spreadsheet imports
    delorme       DeLorme TXT import datafile  
    easygps       Geocaching.com .loc XML file
@@ -154,7 +154,7 @@ You can combine searches with the : delimiter. This works for all types,
 though it's most often used with coordinate searches.
 
 
-3) geotoad.rb -u user -p password -f text -o nc.txt -n -q state "North Carolina"
+3) geotoad.rb -u user -p password -x text -o nc.txt -n -q state "North Carolina"
 Outputs a text file with all of the caches in North Carolina that are
 virgins (have never been found).
 
@@ -162,7 +162,7 @@ Please note the quotes around North Carolina. Any parameters with spaces in
 them must have quotes around them.
 
 
-4) geotoad.rb -u user -p password -t 2.5 -f vcf -U "helixblue:Sallad" -o charlotte.vcf 28272
+4) geotoad.rb -u user -p password -t 2.5 -x vcf -S "helixblue:Sallad" -o charlotte.vcf 28272
 Gets every cache in the 100 mile radius of zipcode 28272, with a terrain
 score of 2.5 or higher, and that helixblue and Sallad have not visited.
 Outputs a VCF format file, which is usable by iPod's and other devices.
@@ -170,6 +170,6 @@ Outputs a VCF format file, which is usable by iPod's and other devices.
 Please note: Put quotes around your username if it has any spaces in it.
 
 
-5) geotoad.rb -u user -p password -f html -b -K 'stream|creek|lake|river|ocean' -o watery.html -q state Indiana
+5) geotoad.rb -u user -p password -x html -b -K 'stream|creek|lake|river|ocean' -o watery.html -q state Indiana
 Gets every cache in Sweden with travel bugs that matches those water keywords.
 Makes a pretty HTML file out of it.
