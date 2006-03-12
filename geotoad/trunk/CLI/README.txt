@@ -24,13 +24,13 @@ HTML, or VCF for your iPod.
 ------------
 Requirements
 ------------
-Windows - Windows 98 or Higher
-Mac OS - Mac OS X 10.4 or Higher (10.2 or higher if Ruby 1.8 is installed)
+Windows                 - Windows 98 or Higher
+Mac OS                  - Mac OS X 10.4 or Higher
+                          (Mac OS X 10.2 or higher if Ruby 1.8 is installed)
 Other Operating Systems -  You may need to install Ruby before running GeoToad.
-
-  * RedHat/Fedora Linux: built-in
-  * Debian Linux: apt-get install ruby
-  * FreeBSD: pkg_add -r ruby
+                          * RedHat/Fedora Linux: built-in
+                          * Debian Linux: apt-get install ruby
+                          * FreeBSD: pkg_add -r ruby
 
 Optionally, if you have gpsbabel - http://gpsbabel.sourceforge.net/
 geotoad can output to over a dozen additional GPS formats.
@@ -40,49 +40,49 @@ geotoad can output to over a dozen additional GPS formats.
 Getting Started
 ---------------
 The easiest way to get started with GeoToad is to use the "text user
-interface" (TUI). Simply double click on the GeoToad program icon, or from 
-a command prompt run "geotoad" or if you are on UNIX, run "./geotoad.rb". You
-will then see a screen that looks similar to this:
+interface" (TUI). Simply double click on the GeoToad program icon, or from
+a command prompt run "geotoad" or if you are on UNIX, run "./geotoad.rb".
+You will then see a screen that looks similar to this:
 
-==============================================================================
-:::            // GeoToad 3.9-CURRENT Text User Interface //               :::
-==============================================================================
-(1)  GC.com login     [wally        ] | (2)  search type          [zipcode   ]
-(3)  zipcode          [47408        ] | (4)  distance maximum            [10 ]
+===========================================================================
+:::          // GeoToad 3.9-CURRENT Text User Interface //              :::
+===========================================================================
+(1)  GC.com login     [wally        ] | (2)  search type          [zipcode]
+(3)  zipcode          [47408        ] | (4)  distance maximum          [10]
                                       |
-(5)  difficulty           [2.0 - 5.0] | (6)  terrain               [1.5 - 5.0]
+(5)  difficulty           [2.0 - 5.0] | (6)  terrain            [1.5 - 5.0]
 (7)  fun factor           [0.0 - 5.0] |
-(8) virgin caches only            [ ] | (9) travel bug caches only         [X]
-(10) cache age (days)       [  0-120] | (11) last found (days)       [  0-any] 
+(8) virgin caches only            [ ] | (9) travel bug caches only      [X]
+(10) cache age (days)       [  0-120] | (11) last found (days)    [0 - any] 
                                       |
-(12) title keyword       [          ] | (13) descr. keyword    [             ]
-(14) cache not found by  [helixblue:] | (15) cache owner isn't [             ]
-(16) cache found by      [          ] | (17) cache owner is    [             ]
+(12) title keyword       [          ] | (13) descr. keyword    [          ]
+(14) cache not found by  [helixblue:] | (15) cache owner isn't [          ]
+(16) cache found by      [          ] | (17) cache owner is    [          ]
 (18) EasyName WP length         [  8] | 
-- - - - - - - - - - - - - - - - - - - + - - - - - - - - - - - - - - - - - - -
-(19) output format       [html      ]   (20) filename   [automatic           ]
-(21) output directory    [/Users/thomas/Desktop                              ]
-==============================================================================
+- - - - - - - - - - - - - - - - - - - + - - - - - - - - - - - - - - - - - -
+(19) output format       [html      ]   (20) filename   [automatic        ]
+(21) output directory    [/Users/thomas/Desktop                           ]
+===========================================================================
 
 -- Enter menu number, (s) to start, (r) to reset, or (x) to exit --> 
-                                                                              
-At this point, follow the prompt and begin typing the number of the item you
-wish to change, pressing enter afterwards. You will need to enter your login
-and some basic search criteria first.
 
-Once you have entered in all of your information, press "s" and then <ENTER>
-to begin your search. GeoToad will save any options you have entered for
-future runs.
+At this point, follow the prompt and begin typing the number of the item
+you wish to change, pressing enter afterwards. You will need to enter your
+login and some basic search criteria first.
+
+Once you have entered in all of your information, press "s" and then
+<ENTER> to begin your search. GeoToad will save any options you have
+entered for future runs.
 
 
 -------------------
 Command Line Syntax
 -------------------
 
-Sometimes people prefer to use the command-line switches instead of the text user
-interface. This comes especially in handy when you wish to automate it so
-that every morning your iPod or GPS has the freshest list of geocaches that have
-not been found in your area.
+Sometimes people prefer to use the command-line switches instead of the
+text user interface. This comes especially in handy when you wish to
+automate it so that every morning your iPod or GPS has the freshest list of
+geocaches that have not been found in your area.
 
 If you go to the command line, and run geotoad -h, you will get a screen
 with a list of of options such as the following:
@@ -165,9 +165,9 @@ If that does not work, try:
 
 ruby geotoad.rb -u user -p password 27513
 
-You've just made a file named geotoad-output.loc containing all the geocaches
-nearby the zipcode 27513 suitable to be read by EasyGPS. Here are some more
-complex examples that you can work with:
+You've just made a file named geotoad-output.loc containing all the
+geocaches nearby the zipcode 27513 suitable to be read by EasyGPS. Here are
+some more complex examples that you can work with:
 
 1) geotoad.rb -u user -p password q coord "N56 44.392, E015 52.780"  -y 5
 Search for caches within 5 miles of the above coordinates
