@@ -375,6 +375,10 @@ class SearchCache
                 @cache['direction'] = $1
                 debug "cacheDistance=#{@cache['distance']} dir=#{@cache['direction']}"
                 
+            when /alt=\"Size: (.*)\"/
+                @cache['size'] = $1
+                debug "cache size is #{$1}"
+                
             when /cache_details.aspx\?guid=(.*?)\">(.*?)\<\/a\>/
                 debug "cache line: #{line}"
                 @cache['sid']=$1
@@ -384,9 +388,10 @@ class SearchCache
                     name='not_parsed'
                 end
                 name.gsub!(/ +$/, '')
-                if name =~ /\<strike\>(.*?)\<\/strike\>/
+                if name =~ /\<strike\>\<font color=\"red\"\>(.*?)\<\/font\>\<\/strike\>/
                     @cache['disabled']=1
                     name=$1.dup
+                    debug "#{name} appears to be disabled"
                 end
                 
                 # re-enabled to fix &quot; -- what else will we be messing up?

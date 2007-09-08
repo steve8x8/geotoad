@@ -44,7 +44,7 @@ $Format = {
 
             'templateWP'    => "<wpt lat=\"<%wp.latdata%>\" lon=\"<%wp.londata%>\">\r\n" +
             "  <time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S")  + ".0000000-00:00</time>\r\n" +
-            "  <name><%out.id%></name>\r\n" +
+            "  <name><%outEntity.id%></name>\r\n" +
             "  <desc><%wpEntity.name%> by <%wpEntity.creator%>, <%wp.type%> (<%wp.difficulty%>/<%wp.terrain%>)</desc>\r\n" +
             "  <url><%out.url%></url>\r\n" +
             "  <urlname><%wpEntity.name%> by <%wpEntity.creator%></urlname>\r\n" +
@@ -98,7 +98,7 @@ A|B|C|D|E|F|G|H|I|J|K|L|M
 N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
             'templateIndex' => "* <a href=\"#<%out.wid%>\"><%wpEntity.name%></a><br>",
             'templateWP'    =>
-                "\n\n<hr noshade size=\"1\">\n<a name=\"<%out.wid%>\"></a><font color=\"#000099\"><a href=\"<%out.url%>\"><big><b><%wpEntity.name%>&nbsp;<%out.symbols%></b></big></a></font><br>\n" +
+                "\n\n<hr noshade size=\"1\">\n<a name=\"<%out.wid%>\"></a><font color=\"#000099\"><big><b><a href=\"<%out.url%>\"><%wpEntity.name%>&nbsp;<%out.symbols%></a></b></big></font><br>\n" +
                 "<font color=\"#555555\"><b><%wpEntity.creator%></b></font>, <%wp.latwritten%> <%wp.lonwritten%><br>" +
                 "<font color=\"#339933\"><%wp.type%> D<%wp.difficulty%>/T<%wp.terrain%> F:<%wp.funfactor%> <%out.relativedistance%><br>" +
                 "placed: <%wp.cdate%> last comment: <%wp.mdays%> days ago (<%wp.comment0Type%>)</font><br>" +
@@ -127,7 +127,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
             #"<b><font color=\"#000000\">++</font></b> comments seem very positive" +
             'templateIndex' => "* <a href=\"#<%out.wid%>\"><%wpEntity.name%></a><br>",
             'templateWP'    =>
-            "\n\n<hr noshade size=\"1\">\n<a name=\"<%out.wid%>\"></a><font color=\"#000099\"><a href=\"<%out.url%>\"><big><b><%wpEntity.name%>&nbsp;<%out.symbols%></b></big></a></font><br>\n" +
+            "\n\n<hr noshade size=\"1\">\n<a name=\"<%out.wid%>\"></a><font color=\"#000099\"><big><b><a href=\"<%out.url%>\"><%wpEntity.name%>&nbsp;<%out.symbols%></a></b></big></font><br>\n" +
             "<font color=\"#555555\"><b><%wpEntity.creator%></b></font>, <%wp.latwritten%> <%wp.lonwritten%><br>" +
             "<font color=\"#339933\"><%wp.type%> D<%wp.difficulty%>/T<%wp.terrain%> F:<%wp.funfactor%> <%out.relativedistance%><br>" +
              "placed: <%wp.cdate%> last comment: <%wp.mdays%> days ago (<%wp.comment0Type%>)</font><br>" +
@@ -166,7 +166,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
         "Type: <%wp.type%> <%out.relativedistance%>\r\n" +
         "Creation: <%wp.cdate%>, Last comment: <%wp.mdays%> days ago (<%wp.comment0Type%>)\r\n" +
         "\r\n<%out.details%>\r\n" +
-        "\r\n<%out.hint%>\r\n\r\n\r\n\r\n"
+        "\r\n<%out.hintdecrypt%>\r\n\r\n\r\n\r\n"
     },
 
 
@@ -244,6 +244,16 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
             'spacer' => '',
                         'filter_src'    => 'gpx',
             'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o gpsutil -F OUTFILE'
+        },
+
+        'kml' => {
+            'ext'        => 'kml',
+            'mime'    => 'application/kml',
+            'desc'    => 'KML (Google Earth)',
+            'required' => 'gpsbabel',
+            'spacer' => '',
+                        'filter_src'    => 'gpx',
+            'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o kml -F OUTFILE'
         },
 
         'tiger' => {

@@ -272,8 +272,9 @@ class Output
             debug "makeXML: [#{str}]"
         end
         text = CGI.escapeHTML(str)
+    scan_text = text.dup
         # using scan() here to get around difficulties with \1
-        text.scan(/([\x80-\xFF]+)/) {|highchar|
+    scan_text.scan(/([\x80-\xFF]+)/) {|highchar|
             begin
                 ascii = highchar[0].unpack("U").to_s
                 debug "Replacing high char [#{highchar}] with #{ascii}"
@@ -284,6 +285,7 @@ class Output
                 text.gsub!(/#{highchar}/,'?')
             end
         }
+    return text 
     end
     
     
@@ -310,7 +312,7 @@ class Output
             
             wpList[wid] = @wpHash[wid]['name'].dup
             
-            if (@waypointLength > 1)
+      if @waypointLength > 1
                 sname = shortName(@wpHash[wid]['name'])
                 
                 # This loop checks for any other caches with the same generated waypoint id
@@ -343,7 +345,11 @@ class Output
                 }
                 @wpHash[wid]['sname'] = sname[0..(@waypointLength - 1)]
                 @wpHash[wid]['snameUncut'] = sname
+      elsif @waypointLength == -1
+        # full text names.. useful for Google Earth
+        @wpHash[wid]['sname'] = @wpHash[wid]['name']
             else
+        # use waypoint id
                 @wpHash[wid]['sname'] = wid.dup
             end
         }
@@ -448,7 +454,9 @@ class Output
                 hint.tr!('A-MN-Z', 'N-ZA-M')
                 hint.tr!('a-mn-z', 'n-za-m')
                 @outVars['hintdecrypt'] = 'Hint: ' + hint
-                debug "I will include the hint: #{@outVars['hint']}"
+
+        debug "Hint: #{@outVars['hint']}"
+        debug "Decrypted hint: #{@outVars['hintdecrypt']}"
             end
             
             

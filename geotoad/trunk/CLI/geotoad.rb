@@ -38,8 +38,8 @@ class GeoToad
         $VERSION = versionID.dup
     end
     
-    $SLEEP=3
-    $SLOWMODE=150
+    $SLEEP=0.5
+    $SLOWMODE=1500
     
     def initialize
         output        = Output.new
@@ -105,7 +105,7 @@ class GeoToad
         
         puts " -o [filename]          output file name (automatic otherwise)"
         puts " -x [format]            output format type, see list below"
-        puts " -q [zip|state|coord]   query type (zip by default)"
+        puts " -q [zip|state|coord|wid]   query type (zip by default)"
         
         puts " -d/-D [0.0-5.0]        difficulty minimum/maximum"
         puts " -t/-T [0.0-5.0]        terrain minimum/maximum"
@@ -480,7 +480,9 @@ class GeoToad
         @filtered= Filter.new(@detail.waypoints)
         
         # caches with warnings we choose not to include.
+        if ! @option['includeDisabled']
         @filtered.removeByElement('warning')
+        end
         
         if @option['descKeyword']
             @queryTitle = @queryTitle + ", matching desc keywords #{@option['descKeyword']}"

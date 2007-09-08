@@ -46,6 +46,7 @@ class Input
         opts = GetoptLong.new(
                           
         [ "--travelBug",                "-b",    GetoptLong::NO_ARGUMENT ],
+        [ "--includeDisabled",                "-z",    GetoptLong::NO_ARGUMENT ],
         
         [ "--difficultyMax",            "-D",        GetoptLong::OPTIONAL_ARGUMENT ],
         [ "--difficultyMin",            "-d",        GetoptLong::OPTIONAL_ARGUMENT ],
@@ -204,10 +205,10 @@ class Input
             printf("(14) cache not found by  [%-10.10s] | (15) cache owner isn't [%-13.13s]\n", @@optHash['userExclude'], @@optHash['ownerExclude'])
             printf("(16) cache found by      [%-10.10s] | (17) cache owner is    [%-13.13s]\n", @@optHash['userInclude'], @@optHash['ownerInclude'])
            
-            printf("(18) EasyName WP length         [%3.3s] | \n", @@optHash['waypointLength'] || '0')
+            printf("(18) EasyName WP length         [%3.3s] | (19) include disabled caches [%1.1s] \n", @@optHash['waypointLength'] || '0', @@optHash['includeDisabled'])
             puts "- - - - - - - - - - - - - - - - - - - + - - - - - - - - - - - - - - - - - - -"
-            printf("(19) output format       [%-10.10s]   (20) filename   [%-20.20s]\n", (@@optHash['format'] || 'gpx'), (@@optHash['outFile'] || 'automatic'))
-            printf("(21) output directory    [%-51.51s]\n", (@@optHash['outDir'] || findOutputDir))
+            printf("(20) output format       [%-10.10s]   (21) filename   [%-20.20s]\n", (@@optHash['format'] || 'gpx'), (@@optHash['outFile'] || 'automatic'))
+            printf("(22) output directory    [%-51.51s]\n", (@@optHash['outDir'] || findOutputDir))
             puts "=============================================================================="
             if @@optHash['verbose']
                 puts "VERBOSE MODE ENABLED"
@@ -224,7 +225,7 @@ class Input
                 @@optHash['password'] = ask("What is your Geocaching.com password?", 'NO_DEFAULT')
                 
             when '2'
-                type = ask("What type of search would you like to perform? (zipcode, state, coordinate, keyword [title only])", nil)
+                type = ask("What type of search would you like to perform? (zipcode, state, user, coordinate, keyword [title only])", nil)
                 @@optHash['queryType'] = guessQueryType(type).to_s
             
             when '3'
@@ -238,6 +239,10 @@ class Input
                 
                 if (@@optHash['queryType'] == 'wid')
                     @@optHash['queryArg'] = ask('Enter a list of waypoint id\'s (seperated by commas)', 'NO_DEFAULT').gsub(/, */, ':')
+                end
+                
+                if (@@optHash['queryType'] == 'user')
+                    @@optHash['queryArg'] = ask('Enter a list of users (seperated by commas)', 'NO_DEFAULT').gsub(/, */, ':')
                 end
                 
                 if (@@optHash['queryType'] == 'coord')
@@ -346,10 +351,12 @@ class Input
                 
        
             when '18'
-                @@optHash['waypointLength'] = ask('How long can your EasyName waypoint id\'s be? (8 for Magellan, 16 for Garmin, 0 to use standard waypoint id\'s)?', nil)
-                
+                @@optHash['waypointLength'] = ask('How long can your EasyName waypoint id\'s be? (8 for Magellan, 16 for Garmin, -1 to use full text, 0 to disable and use waypoint id\'s)?', nil)
                 
             when '19'
+                @@optHash['includeDisabled'] = ask('Include disabled caches in your results?', nil)
+                
+            when '20'
                 puts "List of Output Formats: "
                 outputDetails = Output.new
                 i=0
@@ -366,7 +373,7 @@ class Input
                 puts ""
                 @@optHash['format'] = ask('What format would you like your output in?', 'gpx')
                 
-            when '20'
+            when '21'
                 @@optHash['outFile'] = ask('What filename would you like to output to? (press enter for automatic)', nil)
                 if (@@optHash['outFile'])
                     @@optHash['outFile'].gsub!(/\\/,  '/')
@@ -376,7 +383,7 @@ class Input
                     @@optHash['outDir']=File.dirname(@@optHash['outFile'])
                     @@optHash['outFile']=File.basename(@@optHash['outFile'])
                 end
-            when '21'
+            when '22'
                  @@optHash['outDir'] = ask("Output directory (#{findOutputDir})", nil)
                  if @@optHash['outDir']
                     @@optHash['outDir'].gsub!(/\\/,  '/')
@@ -455,7 +462,8 @@ class Input
             return 'wid'
         when /waypoint/
             return 'wid'
-            
+        when /user/
+            return 'user'
         when /key/
             return 'keyword'
         end
