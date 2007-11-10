@@ -433,10 +433,13 @@ class GeoToad
             page = ShadowFetch.new(detailURL)
             src = page.src
             if (src == "remote") && (! @cookie)
+              displayMessage "Logging in as #{@option['user']}"
                 @cookie = login(@option['user'], @option['password'])	
                 if ! @cookie
-                    displayError "Could not login as #{@option['user']}, skipping cache"
-                    next
+                  displayError "Could not login as #{@option['user']}, skipping cache"
+                  next
+                else
+                  displayMessage "Logged in as #{@option['user']}, session=[#{@cookie}]"
                 end
             end                
             @detail.cookie = @cookie

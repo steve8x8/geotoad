@@ -89,13 +89,13 @@ class CacheDetails
         
         page.fetch
         if (page.data)
-            ret = parseCache(page.data)
+            success = parseCache(page.data)
         else
             debug "No data found, not attempting to parse the entry at #{url}"
         end
         
         # We try to download the page one more time.
-        if ret
+        if success
             return 1
         else
             displayWarning "Could not parse #{url}, skipping."
@@ -185,7 +185,7 @@ class CacheDetails
             end
             
             # latitude and longitude in the written form. Rewritten by Scott Brynen for Southpole compatibility.
-            if line =~ /\<span id=\"LatLon\"\>.*?([NWSE]) (\d+).*? ([\d\.]+) ([NWSE]) (\d+).*? ([\d\.]+)\</
+            if line =~ /id=\"LatLon\".*\>.*?([NWSE]) (\d+).*? ([\d\.]+) ([NWSE]) (\d+).*? ([\d\.]+)\</
                 @waypointHash[wid]['latwritten'] = $1 + $2 + ' ' + $3
                 @waypointHash[wid]['lonwritten'] = $4 + $5 + ' ' + $6
                 @waypointHash[wid]['latdata'] = ($2.to_f + $3.to_f / 60) * ($1 == 'S' ? -1:1)

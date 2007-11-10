@@ -4,6 +4,7 @@ require 'digest/md5'
 require 'net/http'
 require 'ftools'
 require 'uri'
+require 'cgi'
 
 # find out where we want our cache #############################
 cacheDir = nil
@@ -113,7 +114,14 @@ class ShadowFetch
         return localfile
     end
     
-    
+    def invalidate
+      filename = cacheFile(@url)
+      if File.exist?(filename)
+        debug "invalidating cache at #{filename}"
+        File.unlink(filename)
+      end  
+    end
+      
     
     # gets the file
     def fetch
