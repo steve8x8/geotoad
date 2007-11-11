@@ -38,8 +38,8 @@ class GeoToad
         $VERSION = versionID.dup
     end
     
-    $SLEEP=0.5
-    $SLOWMODE=1500
+    $SLEEP=1
+    $SLOWMODE=500
     
     def initialize
         output        = Output.new

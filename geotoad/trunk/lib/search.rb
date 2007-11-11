@@ -190,19 +190,8 @@ class SearchCache
     end
     
     def fetchNext
-        debug "fetchNext called, last waypoint was #{@lastWaypoint} of #{@totalWaypoints}"
-        # This is a ridiculous hack. We tack this onto the URL as cid (cache id), so we
-        # can store this independantly in our local and remote webcache. We also do the same
-        # with resultsPager, so we know what "page" we are on.. in theory.
-        @fetchID = @fetchID + 1
-        
-        if (! @totalWaypoints)
-            return nil
-        end
-        nextWaypoint = @lastWaypoint
-                
-        if (@totalWaypoints > @lastWaypoint)    
-            debug "More waypoints needed! #{nextWaypoint} - first: #{@firstWaypoint} (gtid=#{@nextTarget}, cid=#{@fetchID})"
+        debug "fetchNext called, last waypoint was #{@lastWaypoint} of #{@totalWaypoints}, next target is #{@nextTarget}"
+        if (@nextTarget) 
             @postVars['__EVENTTARGET']=@nextTarget
             fetch(@url)
             return @nextTarget
@@ -212,7 +201,8 @@ class SearchCache
     end
     
     def fetchFirst
-        fetch(@url)
+      @nextTarget=nil
+      fetch(@url)
     end
     
     # This function used to be in the CLI but was moved in here by Mike Capito's
@@ -312,7 +302,7 @@ class SearchCache
         data.each { |line|
             #debug "### #{line}"
             case line
-            when /Total Records: \<b\>(\d+)\<\/b\> - Page: \<b\>(\d+)\<\/b\> of \<b\>(\d+)\<\/b\>.*doPostBack\(\'(.*?)\',\'\'\)\"\>\<b\>Next\</
+            when /Total Records: \<b\>(\d+)\<\/b\> - Page: \<b\>(\d+)\<\/b\> of \<b\>(\d+)\<\/b\>/
               if seen_total_records
                 debug "skipping redundant records line with #{$1} waypoints listed."
                 next
@@ -322,8 +312,16 @@ class SearchCache
                 @totalWaypoints = $1.to_i
                 @currentPage = $2.to_i
                 @totalPages = $3.to_i
-                @nextTarget = $4
-                # emulation of old page behaviour (pre-Jun 2003). May not be required anymore.
+                # ;<a disabled="disabled"><b>Next</b></a>
+                # <a href="javascript:__doPostBack('pgrTop$_ctl16','')"><b>Next</b></a>
+                if line =~ /doPostBack\(\'([\w\$_]+)\',\'\'\)\"\>\<b\>Next\</
+                  @nextTarget = $1
+                  debug "Found next target: #{@nextTarget}"
+                else
+                  debug "Could not find next target, we must be at the end!"
+                  @nextTarget = nil
+                end
+                
                 @firstWaypoint = (currentPage * 20) - 20  # 1st on the page
                 @lastWaypoint = (currentPage * 20)        # last on the page
                 debug "current page is #{currentPage} of #{totalPages} (first=#{@firstWaypoint} total=#{@totalWaypoints}, target=#{@nextTarget})"
