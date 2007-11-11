@@ -86,7 +86,8 @@ $Format = {
                 "<b><font color=\"#11CC11\">$</font></b> have travelbugs&nbsp;&nbsp;&nbsp;" +
                 "<b><font color=\"#9900CC\">@</font></b> never been found&nbsp;&nbsp;&nbsp;" +
                 "<b><font color=\"#229999\">%</font></b> terrain rating of 3.5+&nbsp;&nbsp;&nbsp;" +
-                "<b><font color=\"#BB0000\">&gt;</font></b> difficulty rating of 3.5+<br>" +
+                "<b><font color=\"#BB0000\">&gt;</font></b> difficulty rating of 3.5+&nbsp;&nbsp;&nbsp;" +
+                "<b><font color=\"#E2BF2B\">#</font></b> fun factor rating of 3.5+<br>" +
                 # Not yet ready for consumption
                 #"<b><font color=\"#333333\">--</font></b> comments seem negative&nbsp;&nbsp;&nbsp;" +
                 #"<b><font color=\"#000000\">++</font></b> comments seem very positive" +
@@ -121,7 +122,8 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
             "<b><font color=\"#11CC11\">$</font></b> have travelbugs&nbsp;&nbsp;&nbsp;" +
             "<b><font color=\"#9900CC\">@</font></b> never been found&nbsp;&nbsp;&nbsp;" +
             "<b><font color=\"#229999\">%</font></b> terrain rating of 3.5+&nbsp;&nbsp;&nbsp;" +
-            "<b><font color=\"#BB0000\">&gt;</font></b> difficulty rating of 3.5+<br>",
+            "<b><font color=\"#BB0000\">&gt;</font></b> difficulty rating of 3.5+&nbsp;&nbsp;&nbsp;",
+            "<b><font color=\"#E2BF2B\">#</font></b> fun factor rating of 3.5+<br>" +
             # Not yet ready for consumption
             #"<b><font color=\"#333333\">--</font></b> comments seem negative&nbsp;&nbsp;&nbsp;" +
             #"<b><font color=\"#000000\">++</font></b> comments seem very positive" +

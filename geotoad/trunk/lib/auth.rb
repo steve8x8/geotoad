@@ -43,7 +43,6 @@ module Auth
   end
       
   def checkLoginScreen(cookie)
-    debug "-- checking login screen --------------------------------------"
     @postVars = Hash.new        
     page = ShadowFetch.new(@@login_url)
     page.localExpiry=0
@@ -73,7 +72,6 @@ module Auth
   end
     
   def getLoginCookie(user, password)
-    debug "-- getting login cookie --------------------------------------"    
     page = ShadowFetch.new(@postURL)
     page.localExpiry=1
     @postVars['myUsername']=user

@@ -174,28 +174,23 @@ class SearchCache
     end
     
     def lastWaypoint
-        debug "returning last waypoint on this page: #{@lastWaypoint}"
         @lastWaypoint
     end
     
     def returnedWaypoints
-        debug "returning number of returned waypoints: #{@returnedWaypoints}"
         @returnedWaypoints
     end
     
     def currentPage
-        debug "returning the current page: #{@currentPage}"
         @currentPage
     end
     
     def totalPages
-        debug "returning the total pages: #{@totalPages}"
         @totalPages
     end
     
     def fetchNext
         debug "fetchNext called, last waypoint was #{@lastWaypoint} of #{@totalWaypoints}"
-        
         # This is a ridiculous hack. We tack this onto the URL as cid (cache id), so we
         # can store this independantly in our local and remote webcache. We also do the same
         # with resultsPager, so we know what "page" we are on.. in theory.
@@ -205,26 +200,12 @@ class SearchCache
             return nil
         end
         nextWaypoint = @lastWaypoint
-        
-        # I don't know why it starts as 5, but it does. It resets at 14 for the next page.
-        if ((! @resultsPager))
-            @resultsPager=5
-        else
-            @resultsPager = @resultsPager + 1
-        end
-        
-        if (@resultsPager > 14)
-            debug "reset the resultsPager from #{@resultsPager} to 5"
-            @resultsPager=5
-        end
-        
-        if (@totalWaypoints > @lastWaypoint)
-            
-            #newUrl = @url + '&start=' + @lastWaypoint.to_s
-            newUrl = @url + "&gtid=#{@resultsPager}&cid=#{@fetchID}"
-            debug "More waypoints needed! #{nextWaypoint} - first: #{@firstWaypoint} (gtid=#{@resultsPager}, cid=#{@fetchID})"
-            @postVars['__EVENTTARGET']="ResultsPager:_ctl#{@resultsPager}"
-            fetch(newUrl)
+                
+        if (@totalWaypoints > @lastWaypoint)    
+            debug "More waypoints needed! #{nextWaypoint} - first: #{@firstWaypoint} (gtid=#{@nextTarget}, cid=#{@fetchID})"
+            @postVars['__EVENTTARGET']=@nextTarget
+            fetch(@url)
+            return @nextTarget
         else
             return nil
         end
@@ -325,26 +306,36 @@ class SearchCache
         @cache = Hash.new
         @postVars = Hash.new
         @returnedWaypoints = 0
+        debug "--- parsing search page ---"
+        seen_total_records = nil
         
         data.each { |line|
             #debug "### #{line}"
             case line
-            when /Total Records: \<b\>(\d+)\<\/b\> - Page: \<b\>(\d+)\<\/b\> of \<b\>(\d+)\<\/b\>/
+            when /Total Records: \<b\>(\d+)\<\/b\> - Page: \<b\>(\d+)\<\/b\> of \<b\>(\d+)\<\/b\>.*doPostBack\(\'(.*?)\',\'\'\)\"\>\<b\>Next\</
+              if seen_total_records
+                debug "skipping redundant records line with #{$1} waypoints listed."
+                next
+              else
+                seen_total_records = true
+              end
                 @totalWaypoints = $1.to_i
                 @currentPage = $2.to_i
                 @totalPages = $3.to_i
+                @nextTarget = $4
                 # emulation of old page behaviour (pre-Jun 2003). May not be required anymore.
-                debug "current page is #{currentPage} of #{totalPages}"
                 @firstWaypoint = (currentPage * 20) - 20  # 1st on the page
                 @lastWaypoint = (currentPage * 20)        # last on the page
+                debug "current page is #{currentPage} of #{totalPages} (first=#{@firstWaypoint} total=#{@totalWaypoints}, target=#{@nextTarget})"
                 if (@lastWaypoint > @totalWaypoints)
-                    @lastWaypoint = @totalWaypoints
+                    debug "last is greater than total, fixing?"
+                    @lastWaypoint = @totalWaypoints                    
                 end
                 
             when /WptTypes.*alt=\"(.*?)\" title/
                 @cache['type']=$1
                 @cache['mdays']=-1
-                @cache['type'].gsub!(/\s*cache.*/, '')
+                @cache['type'].gsub!(/\s*cache.*/i, '')
                 @cache['type'].gsub!(/\-/, '')
                 debug "type=#{@cache['type']}"
                 
@@ -375,12 +366,11 @@ class SearchCache
                 @cache['direction'] = $1
                 debug "cacheDistance=#{@cache['distance']} dir=#{@cache['direction']}"
                 
-            when /alt=\"Size: (.*)\"/
+            when /alt=\"Size: (.*?)\"/
                 @cache['size'] = $1
                 debug "cache size is #{$1}"
                 
             when /cache_details.aspx\?guid=(.*?)\">(.*?)\<\/a\>/
-                debug "cache line: #{line}"
                 @cache['sid']=$1
                 if $2
                     name=$2.dup
@@ -388,7 +378,7 @@ class SearchCache
                     name='not_parsed'
                 end
                 name.gsub!(/ +$/, '')
-                if name =~ /\<strike\>\<font color=\"red\"\>(.*?)\<\/font\>\<\/strike\>/
+                if name =~ /\<strike\>(.*?)\<\/strike\>/
                     @cache['disabled']=1
                     name=$1.dup
                     debug "#{name} appears to be disabled"
@@ -473,7 +463,7 @@ class SearchCache
                     @cache.clear
                 end
                 
-            when /^\<input type=\"hidden\" name=\"(.*?)\" value=\"(.*?)\" \/\>/
+            when /^\<input type=\"hidden\" name=\"(.*?)\".*value=\"(.*?)\" \/\>/
                 debug "found hidden post variable: #{$1}"
                 @postVars[$1]=$2
             when /\<form name=\"Form1\" method=\"post\" action=\"(.*?)\"/
@@ -483,6 +473,7 @@ class SearchCache
                 
             end # end case
         } # end loop
+        debug "^^^ parsing complete ^^^"
     end #end parsecache
     
     # This is for wid searches.

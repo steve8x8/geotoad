@@ -25,7 +25,6 @@ class ShadowFetch
         @remote = 0
         @localExpiry=518400    		# 6 days
         @maxFailures = 4
-        debug "** new fetch: #{url}"
         @httpHeaders = {
           'User-Agent'      => "Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en) AppleWebKit/417.9 (KHTML, like Gecko) Safari/417.8",
           'Accept'          => 'image/gif, image/jpeg, image/png, multipart/x-mixed-replace, */*',
@@ -81,8 +80,6 @@ class ShadowFetch
             # a 255 character limit on filenames. Lets hash it instead.
             url = url + "-P=" + Digest::MD5.hexdigest(postdata)
             debug "added post vars to url: #{url}"
-        else
-            debug "no post vars to add to filename"
         end
         
         fileParts = url.split('/')
@@ -130,8 +127,8 @@ class ShadowFetch
         localfile = cacheFile(@url)
         localparts = localfile.split(/[\\\/]/)
         localdir = localparts[0..-2].join("/")		# basename sucks in Windows.
-        
-        debug "Checking to see if #{localfile} exists"
+        debug "====+ Fetch URL: #{url}"
+        debug "====+ Fetch File: #{localfile}"
         
         # expiry?
         if (File.exists?(localfile))
@@ -190,7 +187,6 @@ class ShadowFetch
     ## the real fetch methods ########################################################
     
     def fetchLocal(file)
-        debug "fetching local data from #{file}"
         data = IO.readlines(file).join
         debug "#{data.length} bytes retrieved from local cache"
         return data

@@ -4,8 +4,8 @@
 require 'rubygems'
 require 'yaml'
 require 'bishop'
-fun = YAML::load( File.open( 'good.txt' ) )
-boring = YAML::load( File.open( 'bad.txt' ) )
+fun = YAML::load( File.open( 'fun.txt' ) )
+boring = YAML::load( File.open( 'boring.txt' ) )
 
 $grade = Bishop::Bayes.new	
 
@@ -64,7 +64,9 @@ test("This was a fun one! Had to be careful, though. There were a few people aro
 test("Ooh, you are a tricksy one OG. We stood there looking at it for a moment, asking ourselves if that could possibly be right. ")
 test("After parking at the recommended coodinates, Atrus and walked up to what we thought was the correct clearing and turned at restrooms and found a primitive trail. Well, it seems we had the “wrong” clearing and the “wrong” primitive trail. However, we did find out way to the falls and ultimately to the cache. They are really beautiful falls and worth the trip, but there “Ain’t No Way” I care to do it again!")
 test("Found at 12:50 SL tnln tftc my gps was off over a 100 feet.")
-$grade.save("scores.dat")
+test("Took my three nieces and nephew to find this but it wasn't there. My son and I found this one before, but it's no longer in the same spot. I think someone may have taken it.")
+test("I found this one with my family after running some errands in Monterey. I left an orange and white marble and took the Halloween geocoin. Prunedale, CA")
+$grade.save("fun_scores.dat")
 
 puts "enter your own:"
 while (1) do

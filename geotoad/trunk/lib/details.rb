@@ -195,7 +195,7 @@ class CacheDetails
             
             
             # why a geocache is closed. It seems to always be the same.
-            if line =~ /\<span id=\"ErrorText\">(.*?)\<\/span\>/
+            if line =~ /\<span id=\"ErrorText\".*?>(.*?)\<\/span\>/
                 warning = $1
                 warning.gsub!(/\<.*?\>/, '')
                 displayWarning "#{warning}"

@@ -376,6 +376,10 @@ class Output
                 if (@wpHash[wid]['terrain'] > 3)
                     symbols[wid] =  symbols[wid] + "<b><font color=\"#229999\">%</font></b>"
                 end
+
+                if (@wpHash[wid]['funfactor'] >= 3.5)
+                    symbols[wid] =  symbols[wid] + "<b><font color=\"#E2BF2B\">#</font></b>"
+                end
                 
                 if (@wpHash[wid]['difficulty'] > 3)
                     symbols[wid] =  symbols[wid] + "<b><font color=\"#BB0000\">&gt;</font></b>"
@@ -421,7 +425,7 @@ class Output
         
         wpList.sort{|a,b| a[1]<=>b[1]}.each {  |wpArray|
             @currentWid = wpArray[0]
-            #puts "Output loop: #{@currentWid} - #{@wpHash[@currentWid]['name']}"
+            debug "--- Output loop: #{@currentWid} - #{@wpHash[@currentWid]['name']}"
             detailsLen = @outputFormat['detailsLength'] || 20000
             numEntries = @wpHash[@currentWid]['details'].length / detailsLen
             
@@ -486,22 +490,17 @@ class Output
             
             # ** This will be removed for GeoToad 4.0, when we use a real templating engine that can do loops **
             if @outputType == 'gpx'
-                debug "Creating GPX comment list for #{@currentWid}"
                 @outVars['gpxlogs'] = ''
                 0.upto(4) { |x|
-                    debug "Looking for comment #{x}"
-                    
+                    debug "Looking for comment #{x}"                    
                     if @wpHash[@currentWid]["comment#{x}Type"]
-                        debug "Found comment #{x}"
                         rawcomment =
                         "    <groundspeak:log id=\"<%wpEntity.comment#{x}ID%>\">\r\n" +
                         "      <groundspeak:date><%wpEntity.comment#{x}Date%>T00:00:00.0000000-07:00</groundspeak:date>\r\n" +
                         "      <groundspeak:type><%wpEntity.comment#{x}Type%></groundspeak:type>\r\n" +
                         "      <groundspeak:finder id=\"1\"><%wpEntity.comment#{x}Name%></groundspeak:finder>\r\n" +
                         "      <groundspeak:text encoded=\"False\"><%wpEntity.comment#{x}Comment%></groundspeak:text>\r\n" +
-                        "    </groundspeak:log>\r\n"
-                        
-                        debug "filtering raw comment..."
+                        "    </groundspeak:log>\r\n"                        
                         @outVars['gpxlogs'] = @outVars['gpxlogs'] + replaceVariables(rawcomment)
                     end
                 }

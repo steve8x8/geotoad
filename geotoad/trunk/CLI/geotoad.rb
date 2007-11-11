@@ -402,79 +402,66 @@ class GeoToad
     
     
     
-    #########################
-    # Here is where we fetch each geocache page
-    #
     def fetchGeocaches
-        # We should really check our local cache and shadowhosts first before
-        # doing this. This is just to be nice.
-        if (@filtered.totalWaypoints > $SLOWMODE)
-            displayMessage "NOTE: Because you may be downloading more than #{$SLOWMODE} waypoints"
-            displayMessage "       We will sleep longer between remote downloads to lessen the load"
-            displayMessage "       load on the geocaching.com webservers. You may want to constrain"
-            displayMessage "       the number of waypoints to download by limiting by difficulty,"
-            displayMessage "       terrain, or placement date. Please see README.txt for help."
-            $SLEEP=15
+      # We should really check our local cache and shadowhosts first before
+      # doing this. This is just to be nice.
+      if (@filtered.totalWaypoints > $SLOWMODE)
+          displayMessage "NOTE: Because you may be downloading more than #{$SLOWMODE} waypoints"
+          displayMessage "       We will sleep longer between remote downloads to lessen the load"
+          displayMessage "       load on the geocaching.com webservers. You may want to constrain"
+          displayMessage "       the number of waypoints to download by limiting by difficulty,"
+          displayMessage "       terrain, or placement date. Please see README.txt for help."
+          $SLEEP=15
+      end
+      
+      displayMessage "Fetching geocache pages with #{$SLEEP} second rests between remote fetches"
+      wpFiltered = @filtered.waypoints
+      progress = ProgressBar.new(0, @filtered.totalWaypoints, "Fetching details")
+      @detail = CacheDetails.new(wpFiltered)
+      @detail.cookie = get_login_cookie()
+      token = 0
+      downloads = 0
+      
+      wpFiltered.each_key { |wid|
+        token = token + 1
+        detailURL = @detail.fullURL(wid)
+        page = ShadowFetch.new(detailURL)
+        success = @detail.fetch(wid)
+        message = nil
+
+        if ! success
+          if (wpFiltered[wid]['warning'])
+            debug "Could not parse page, but it had a warning, so I am not invalidating"
+            message = "(could not fetch, private cache?)"
+          else
+            debug "Page for #{wpFiltered[wid]['name']} failed to be parsed, invalidating cache."
+            message = "error"
+          end
+        else
+          if (wpFiltered[wid]['warning'])
+            message = "(cache is temp. unavailable)"
+          end
         end
-        
-        displayMessage "Fetching geocache pages with #{$SLEEP} second rests between remote fetches"
-        wpFiltered = @filtered.waypoints
-        progress = ProgressBar.new(0, @filtered.totalWaypoints, "Fetching details")
-        
-        @detail = CacheDetails.new(wpFiltered)
-        
-        token = 0
-        downloads = 0
-        
-        wpFiltered.each_key { |wid|
-            token = token + 1
-            detailURL = @detail.fullURL(wid)
-            # This just checks to see where Shadowfetch would grab the information from.
-            page = ShadowFetch.new(detailURL)
-            src = page.src
-            if (src == "remote") && (! @cookie)
-              displayMessage "Logging in as #{@option['user']}"
-                @cookie = login(@option['user'], @option['password'])	
-                if ! @cookie
-                  displayError "Could not login as #{@option['user']}, skipping cache"
-                  next
-                else
-                  displayMessage "Logged in as #{@option['user']}, session=[#{@cookie}]"
-                end
-            end                
-            @detail.cookie = @cookie
-            
-            
-            ret = @detail.fetch(wid)
-            if (! ret)
-                debug "Page for #{wpFiltered[wid]['name']} failed to be parsed, skipping."
-                wpFiltered.delete(wid)
-                next
-            end
-            
-            
-            message = nil
-            if (page.src)
-                src = page.src
-                if (wpFiltered[wid]['warning'])
-                    message = "(cache is temp. unavailable)"
-                end
-                if (src == "remote")
-                    downloads = downloads + 1
-                    # somewhat obnoxious.
-                    #message = "(sleeping for #{$SLEEP} seconds)"
-                    sleep $SLEEP
-                end
-            else
-                message = "could not fetch, private cache?)"
-                wpFiltered.delete(wid)
-            end
-            
-            progress.updateText(token, "\"#{wpFiltered[wid]['name']}\" from #{src} #{message}")
-            
-        }
+        if (page.src == "remote")
+          downloads = downloads + 1
+          sleep $SLEEP
+        end          
+        progress.updateText(token, "[#{wid}] \"#{wpFiltered[wid]['name']}\" from #{page.src} #{message}")  
+        if message == '(error)'
+          wpFiltered.delete(wid)
+          page.invalidate()
+        end
+      }
     end
     
+    def get_login_cookie
+      cookie = loadCookie()
+      if ! cookie
+        displayMessage "Logging in as #{@option['user']}"
+        cookie = login(@option['user'], @option['password'])
+      end
+      return cookie
+    end  
     
     ## step #2 in filtering! ############################
     # In this stage, we actually have to download all the information on the caches in order to decide
@@ -484,7 +471,8 @@ class GeoToad
         
         # caches with warnings we choose not to include.
         if ! @option['includeDisabled']
-        @filtered.removeByElement('warning')
+          displayMessage "Filtering out disabled caches"
+          @filtered.removeByElement('warning')
         end
         
         if @option['descKeyword']
