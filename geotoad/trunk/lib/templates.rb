@@ -50,19 +50,19 @@ $Format = {
             "  <urlname><%wpEntity.name%> by <%wpEntity.creator%></urlname>\r\n" +
             "  <sym>Geocache</sym><type>Geocache</type>\r\n" +
             "  <groundspeak:cache id=\"<%wp.sid%>\" available=\"True\" archived=\"False\" xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0\">\r\n" +
-            "  <groundspeak:date>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S")  + ".0000000-00:00</groundspeak:date>\r\n" +
+            "  <groundspeak:date><%out.XMLDate%></groundspeak:date>\r\n" +
             "  <groundspeak:name><%wpEntity.name%></groundspeak:name>\r\n" +
 			" <groundspeak:full_name><%wpEntity.name%></groundspeak:full_name>\r\n"+
             "  <groundspeak:placed_by><%wpEntity.creator%></groundspeak:placed_by>\r\n" +
-            "  <groundspeak:owner id=\"89944\"><%wpEntity.creator%></groundspeak:owner>\r\n" +
+            "  <groundspeak:owner id=\"999\"><%wpEntity.creator%></groundspeak:owner>\r\n" +
             "  <groundspeak:type><%wp.type%></groundspeak:type>\r\n" +
             "  <groundspeak:container><%wp.container%></groundspeak:container>\r\n" +
             "  <groundspeak:difficulty><%wp.difficulty%></groundspeak:difficulty>\r\n" +
             "  <groundspeak:terrain><%wp.terrain%></groundspeak:terrain>\r\n" +
             "  <groundspeak:country><%wp.country%></groundspeak:country>\r\n" +
             "  <groundspeak:state><%wp.state%></groundspeak:state>\r\n" +
-            "  <groundspeak:short_description html=\"False\">-</groundspeak:short_description>\r\n" +
-            "  <groundspeak:long_description html=\"False\"><%outEntity.details%></groundspeak:long_description>\r\n" +
+            "  <groundspeak:short_description html=\"False\"><%wpEntity.shortdesc%></groundspeak:short_description>\r\n" +
+            "  <groundspeak:long_description html=\"False\"><%wpEntity.longdesc%></groundspeak:long_description>\r\n" +
             "  <groundspeak:encoded_hints><%wpEntity.hint%></groundspeak:encoded_hints>\r\n" +
             "  <groundspeak:logs>\r\n" +
             "  <%out.gpxlogs%>\r\n" +

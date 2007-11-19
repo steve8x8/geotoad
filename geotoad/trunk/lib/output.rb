@@ -437,6 +437,9 @@ class Output
             # This should clear out the hint-dup issue that Scott Brynen mentioned.
             @outVars['hint']    = ''
             
+            # For GPX
+            @outVars['XMLDate'] = @wpHash[@currentWid]['ctime'].strftime("%Y-%m-%dT%H:00:00.0000000-07:00")
+            
             # for some templates, we pad.
             @outVars['latdatapad5'] = sprintf("%2.5f", @wpHash[@currentWid]['latdata'])
             @outVars['londatapad5'] = sprintf("%2.5f", @wpHash[@currentWid]['londata'])
@@ -496,7 +499,7 @@ class Output
                     if @wpHash[@currentWid]["comment#{x}Type"]
                         rawcomment =
                         "    <groundspeak:log id=\"<%wpEntity.comment#{x}ID%>\">\r\n" +
-                        "      <groundspeak:date><%wpEntity.comment#{x}Date%>T00:00:00.0000000-07:00</groundspeak:date>\r\n" +
+                        "      <groundspeak:date><%wpEntity.comment#{x}Date%></groundspeak:date>\r\n" +
                         "      <groundspeak:type><%wpEntity.comment#{x}Type%></groundspeak:type>\r\n" +
                         "      <groundspeak:finder id=\"1\"><%wpEntity.comment#{x}Name%></groundspeak:finder>\r\n" +
                         "      <groundspeak:text encoded=\"False\"><%wpEntity.comment#{x}Comment%></groundspeak:text>\r\n" +

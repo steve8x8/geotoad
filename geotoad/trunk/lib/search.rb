@@ -1,6 +1,7 @@
 # $Id$
 
 require 'cgi'
+require 'time'
 
 class SearchCache
     include Common
@@ -300,9 +301,7 @@ class SearchCache
       when /(\d)+ days ago/
         days_ago=$1.to_i
       when /^(\d+) (\w+) (\d+)/
-        # two digit days? peh.
-        yearProper = "20" + $3
-        timestamp = Time.local(yearProper.to_i,$2,$1.to_i,00,00,0)
+        timestamp = Time.parse(date)
       else
         displayWarning "Could not parse date: #{date}"
         return nil
@@ -326,8 +325,9 @@ class SearchCache
         seen_total_records = nil
         
         data.each { |line|
-            #debug "### #{line}"
             case line
+            when /\<tr bgcolor=/
+              debug "-- row --"
             when /Total Records: \<b\>(\d+)\<\/b\> - Page: \<b\>(\d+)\<\/b\> of \<b\>(\d+)\<\/b\>/
               if seen_total_records
                 debug "skipping redundant records line with #{$1} waypoints listed."
@@ -370,7 +370,7 @@ class SearchCache
                 debug "cacheDiff=#{@cache['difficulty']} terr=#{@cache['terrain']}"
             
             # <td valign="top" align="left" nowrap>26 Sep 07</td>  
-            when /td valign="top" align="left" nowrap\>([\w ]+)\<\/td\>/
+            when /td valign="top" align="left" nowrap\>([\w ]+)\</
               @cache['ctime'] = parseDate($1)
               @cache['cdays'] = daysAgo(@cache['ctime'])
               debug "ctime=#{@cache['ctime']} cdays=#{@cache['cdays']}"

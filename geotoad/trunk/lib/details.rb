@@ -1,5 +1,6 @@
 # $Id$
 require 'lib/bishop'
+require 'time'
 
 class CacheDetails
     attr_writer :useShadow, :cookie
@@ -124,7 +125,7 @@ class CacheDetails
         debug "calculateFun: score=#{score} grade=#{grade}"        
         return grade
     end
-    
+        
     def parseCache(data)
         # find the geocaching waypoint id.
         wid = nil
@@ -138,7 +139,8 @@ class CacheDetails
                     debug "wid is #{wid}"
                     
                     # We give this a predefined value, because some caches have no details!
-                    @waypointHash[wid]['details'] = ''
+                    @waypointHash[wid]['shortdesc'] = ''
+                    @waypointHash[wid]['longdesc'] = ''
                     
                     # Set what URL we used as our details source. We do not use baseURL because
                     # some GPX parsers freak if there is a & in this URL.
@@ -228,7 +230,7 @@ class CacheDetails
                 
                 # icon_smile.gif' align='absmiddle'>&nbsp;November 24, 2005 by <A NAME="11547243" style='text-decoration: underline;'><A HREF="../profile/?guid=43af89b2-3843-4ac6-85dd-74b489332ddf" 
                 # style='text-decoration: underline;'>TKG</A></strong> (334 found)<br>#316 L! and B.  Finally got this one - took two tries.  My gps zero is about 50 feet east of actual cache.  Took: tb and 2 $1 bills which will become WheresGeorge.com bills.  Left: tb and truck.  Lots of MP3s still here to trade.  Happy Thanksgiving 2005!  Thanks for the cache.  <p>[This entry was edited by TKG on Friday, November 25, 2005 at 4:14:42 AM.]</font>
-                line.scan(/icon_(\w+)\.gif.*?\&nbsp\;(.*?) by \<A NAME=\"(\d+)\".*?HREF.*?\>(.*?)\<.*?\<br\>(.*?)\<\/font\>/) { |icon, date, id, name, comment|
+                line.scan(/icon_(\w+)\.gif.*?\&nbsp\;.*?([\w, ]+) by \<A NAME=\"(\d+)\".*?HREF.*?\>(.*?)\<.*?\<br\>(.*?)\<\/font\>/) { |icon, date, id, name, comment|
                     comment.gsub!(/\<.*?\>/, ' ')
                     type = 'unknown'
                     nograde=nil
@@ -259,9 +261,10 @@ class CacheDetails
                         nograde=1
                     end
                     
-                    debug "comment [#{cnum}] is #{type} by #{name}: #{comment}"
+                    debug "comment [#{cnum}] is '#{type}' by #{name} on #{date}: #{comment}"
+                    date = Time.parse(date)                    
                     @waypointHash[wid]["comment#{cnum}Type"] = type.dup
-                    @waypointHash[wid]["comment#{cnum}Date"] = date.dup
+                    @waypointHash[wid]["comment#{cnum}Date"] = date.strftime("%Y-%m-%dT%H:00:00.0000000-07:00")
                     @waypointHash[wid]["comment#{cnum}ID"] = id.dup
                     @waypointHash[wid]["comment#{cnum}Icon"] = icon.dup
                     @waypointHash[wid]["comment#{cnum}Name"] = name.dup
@@ -303,19 +306,19 @@ class CacheDetails
             # these are multi-line matches, so they are out of the scope of our
             # next
             if data =~ /id=\"ShortDescription\"\>(.*?)\<\/span\>/m
-                debug "found short desc: [#{$1}]"
                 shortdesc = $1
-                shortdesc.gsub!(/\'+/, "\'")
-                shortdesc.gsub!(/^\*/, '')
-                @waypointHash[wid]['details'] = CGI.unescapeHTML(shortdesc)
+                debug "found short desc: [#{shortdesc}]"
+                @waypointHash[wid]['shortdesc'] = cleanHTML(shortdesc)
             end
             
             if data =~ /\<span id=\"LongDescription\"\>(.*?)\<\/span\>/m
-                debug "found long desc"
-                details =  cleanHTML(@waypointHash[wid]['details'] << "  " << $1)
-                debug "got details: [#{details}]"
-                @waypointHash[wid]['details'] = details
+                longdesc = $1
+                debug "got long desc [#{longdesc}]"
+                @waypointHash[wid]['longdesc'] = cleanHTML(longdesc)
             end
+            
+            @waypointHash[wid]['details'] = @waypointHash[wid]['shortdesc'] + " ... " + @waypointHash[wid]['longdesc']
+          
         end  # end wid check.
         
         # This checks to see if it's a geocache that at least has coordinates to mention.
