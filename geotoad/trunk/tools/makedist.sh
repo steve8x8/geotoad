@@ -12,7 +12,7 @@ LONGDIST="$DIST"
 echo "Creating $DEST"
 rm -Rf $DEST*
 mkdir $DEST
-cp -R CLI/._* CLI/.DS* FAQ.txt TODO.txt COPYRIGHT.txt lib tools data CLI/interface contrib $DEST
+cp -R CLI/._* CLI/.DS* FAQ.txt COPYRIGHT.txt lib tools data CLI/interface contrib $DEST
 ditto CLI/*Mac* $DEST
 sed s/"%VERSION%"/"$VERSION"/g CLI/geotoad.rb > $DEST/geotoad.rb
 sed s/"%VERSION%"/"$VERSION"/g CLI/README.txt > $DEST/README.txt
@@ -25,8 +25,6 @@ echo "Updating repository..."
 svn update
 echo "Creating Changelog"
 svn log > $DEST/ChangeLog.txt
-joe $DEST/ChangeLog.txt
-rm $DEST/ChangeLog.txt~
 
 # unnecessary tools
 rm $DEST/tools/makedist.sh

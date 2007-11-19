@@ -81,10 +81,7 @@ class GeoToad
         @distanceMax       = @option['distanceMax'] || 10
         @queryTitle        = "GeoToad: #{@queryArg}"
         @defaultOutputFile = "gtout-" + @queryType + "-" + @queryArg.to_s
-        
-        # This is a global. Not cool.
-        $slowLink          = @option['slowlink'] || nil
-        
+                
         if (@option['verbose'])
             enableDebug
         end
@@ -105,17 +102,17 @@ class GeoToad
         
         puts " -o [filename]          output file name (automatic otherwise)"
         puts " -x [format]            output format type, see list below"
-        puts " -q [zip|state|coord|wid]   query type (zip by default)"
+        puts " -q [zip|state|coord|country|user|wid]   query type (zip by default)"
         
         puts " -d/-D [0.0-5.0]        difficulty minimum/maximum"
         puts " -t/-T [0.0-5.0]        terrain minimum/maximum"
         puts " -f/-F [0.0-5.0]        fun factor minimum/maximum"
         puts " -y    [1-500]          distance maximum in miles (10)"
         puts " -k    [keyword]        title keyword search. Use | to delimit multiple"
-        puts " -K    [keyword]        desc keyword search. Use | to delimit multiple"
+        puts " -K    [keyword]        desc keyword search (slow). Use | again..."
         puts " -i/-I [username]       include/exclude caches owned by this person"
-        puts " -s/-S [username]       include/exclude caches found by this person"
-        puts "                            (use : to delimit multiple users!)"
+        puts " -e/-E [username]       include/exclude caches found by this person"
+        puts " -s/-S [virtual|small|regular|large]   min/max size of the cache"
         puts " -j/-J [# days]         include/exclude caches placed in the last X days"
         puts " -r/-R [# days]         include/exclude caches found in the last X days"
         puts " -n                     only include not found caches (virgins)"
@@ -155,29 +152,29 @@ class GeoToad
     
     ## Check the version #######################
     def versionCheck
-        url = "http://geotoad.sourceforge.net/currentversion.php?type=#{$mode}&version=#{$VERSION}&platform=#{RUBY_PLATFORM}&rubyver=#{RUBY_VERSION}&vc=2";
+        url = "http://code.google.com/p/geotoad/wiki/CurrentVersion";
         
         #puts "[^] Checking for latest version of GeoToad..."
         version = ShadowFetch.new(url)
         version.localExpiry=43200
         version.maxFailures = 0
         version.fetch
-        
-        if (($VERSION =~ /^(\d\.\d+\.\d+)$/) && (version.data =~ /^(\d\.\d+\.\d+): (.*)/))
+                
+        if (($VERSION =~ /^(\d\.\d+\.\d+)$/) && (version.data =~ /version=(\d\.\d+\.\d+)/))
             latestVersion = $1;
             releaseNotes = $2;
             
             if (latestVersion != $VERSION)
-                puts " .------------------------------------------------------------------."
-                printf("| %-66.66s |\n", "GeoToad #{latestVersion} is now available. Here are the release notes:");
-                printf("| %-66.66s |\n", "");
-                
-                releaseNotes.split('|').each { |text|
-                    printf("|  * %-63.63s |\n", text);
-                }
-                puts " '------------------------------------------------------------------'"
-                puts ""
-                sleep(2)
+                puts "------------------------------------------------------------------------"
+                puts "* NOTE: GeoToad #{latestVersion} is now available!"
+                puts "* Download from http://code.google.com/p/geotoad/downloads/list"
+                puts "------------------------------------------------------------------------"
+                version.data.scan(/\<pre class="prettyprint"\>(.*?)\<\/pre\>/m) do |notes|
+                  puts notes
+                end
+                puts "------------------------------------------------------------------------"
+                puts "(sleeping for 5 seconds)"
+                sleep(5)
             end
         end
     end
@@ -606,14 +603,14 @@ end
 
 
 ###### MAIN ACTIVITY ###############################################################
-puts "GeoToad #{$VERSION} (#{RUBY_PLATFORM}-#{RUBY_VERSION}) - Please report bugs to geotoad@toadstool.se"
+puts "GeoToad #{$VERSION} (#{RUBY_PLATFORM}-#{RUBY_VERSION})"
+puts "- Report bugs or suggestions at http://code.google.com/p/geotoad/issues/"
+puts "- Please include verbose output (-v) without passwords in the bug report."
 cli = GeoToad.new
 
 while(1)
+    cli.versionCheck
     cli.getoptions
-    if (! $slowLink)
-        cli.versionCheck
-    end
     
     count = cli.downloadGeocacheList
     if count < 1

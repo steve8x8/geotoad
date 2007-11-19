@@ -26,7 +26,6 @@ Requirements
 ------------
 Windows                 - Windows 98 or Higher
 Mac OS                  - Mac OS X 10.4 or Higher
-                          (Mac OS X 10.2 or higher if Ruby 1.8 is installed)
 Other Operating Systems -  You may need to install Ruby before running GeoToad.
                           * RedHat/Fedora Linux: built-in
                           * Debian Linux: apt-get install ruby
@@ -44,27 +43,27 @@ interface" (TUI). Simply double click on the GeoToad program icon, or from
 a command prompt run "geotoad" or if you are on UNIX, run "./geotoad.rb".
 You will then see a screen that looks similar to this:
 
-===========================================================================
-:::          // GeoToad 3.9-CURRENT Text User Interface //              :::
-===========================================================================
-(1)  GC.com login     [wally        ] | (2)  search type          [zipcode]
-(3)  zipcode          [47408        ] | (4)  distance maximum          [10]
+==============================================================================
+:::            // GeoToad 3.9-CURRENT Text User Interface //               :::
+==============================================================================
+(1)  GC.com login     [helixblue    ] | (2)  search type          [zipcode   ]
+(3)  zipcode          [30076        ] | (4)  distance maximum            [7  ]
                                       |
-(5)  difficulty           [2.0 - 5.0] | (6)  terrain            [1.5 - 5.0]
-(7)  fun factor           [0.0 - 5.0] |
-(8) virgin caches only            [ ] | (9) travel bug caches only      [X]
-(10) cache age (days)       [  0-120] | (11) last found (days)    [0 - any] 
+(5)  difficulty           [3.0 - 5.0] | (6)  terrain               [0.0 - 5.0]
+(7)  fun factor           [0.0 - 5.0] | (8) cache size             [any - any]
+(9)  virgin caches only           [ ] | (10) travel bug caches only        [ ]
+(11) cache age (days)       [  0-any] | (12) last found (days)       [  0-any] 
                                       |
-(12) title keyword       [          ] | (13) descr. keyword    [          ]
-(14) cache not found by  [helixblue:] | (15) cache owner isn't [          ]
-(16) cache found by      [          ] | (17) cache owner is    [          ]
-(18) EasyName WP length         [  8] | 
-- - - - - - - - - - - - - - - - - - - + - - - - - - - - - - - - - - - - - -
-(19) output format       [html      ]   (20) filename   [automatic        ]
-(21) output directory    [/Users/thomas/Desktop                           ]
-===========================================================================
+(13) title keyword       [difficult ] | (14) descr. keyword    [             ]
+(15) cache not found by  [sallad    ] | (16) cache owner isn't [             ]
+(17) cache found by      [          ] | (18) cache owner is    [             ]
+(19) EasyName WP length         [ 20] | (20) include disabled caches [ ] 
+- - - - - - - - - - - - - - - - - - - + - - - - - - - - - - - - - - - - - - -
+(21) output format       [gpx       ]   (22) filename   [automatic           ]
+(23) output directory    [/Users/tstromberg/Desktop                          ]
+==============================================================================
 
--- Enter menu number, (s) to start, (r) to reset, or (x) to exit --> 
+-- Enter menu number, (s) to start, (r) to reset, or (x) to exit -->
 
 At this point, follow the prompt and begin typing the number of the item
 you wish to change, pressing enter afterwards. You will need to enter your
@@ -121,31 +120,28 @@ syntax: geotoad [options] <search:search2:search3>
    tpg           National Geographic Topo
    xmap          Delorme Topo USA4/XMap Conduit
 
-   -- the following requires cmconvetr to be installed --
+   -- the following requires cmconvert to be installed --
    cachemate     CacheMate Palm software
 
  -u <username>          Geocaching.com username, required for coordinates
  -p <password>          Geocaching.com password, required for coordinates
-
  -o [filename]          output file name (automatic otherwise)
  -x [format]            output format type, see list below
- -q [zip|state|coord]   query type (zip by default)
-
+ -q [zip|state|coord|country|user|wid]   query type (zip by default)
  -d/-D [0.0-5.0]        difficulty minimum/maximum
  -t/-T [0.0-5.0]        terrain minimum/maximum
  -f/-F [0.0-5.0]        fun factor minimum/maximum
  -y    [1-500]          distance maximum in miles (10)
  -k    [keyword]        title keyword search. Use | to delimit multiple
- -K    [keyword]        desc keyword search. Use | to delimit multiple
+ -K    [keyword]        desc keyword search (slow). Use | again...
  -i/-I [username]       include/exclude caches owned by this person
- -s/-S [username]       include/exclude caches found by this person
-                            (use : to delimit multiple users!)
+ -e/-E [username]       include/exclude caches found by this person 
+ -s/-S [virtual|small|regular|large]   min/max size of the cache
  -j/-J [# days]         include/exclude caches placed in the last X days
  -r/-R [# days]         include/exclude caches found in the last X days
  -n                     only include not found caches (virgins)
  -b                     only include caches with travelbugs
- -l                     set EasyName waypoint id length. (16)     
-
+ -l                     set EasyName waypoint id length. (16)
 
 
 ---------------------
@@ -169,7 +165,7 @@ You've just made a file named geotoad-output.loc containing all the
 geocaches nearby the zipcode 27513 suitable to be read by EasyGPS. Here are
 some more complex examples that you can work with:
 
-1) geotoad.rb -u user -p password q coord "N56 44.392, E015 52.780"  -y 5
+1) geotoad.rb -u user -p password -q coord "N56 44.392, E015 52.780"  -y 5
 Search for caches within 5 miles of the above coordinates
 
 
