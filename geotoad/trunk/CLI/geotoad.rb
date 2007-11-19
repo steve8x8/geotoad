@@ -39,7 +39,7 @@ class GeoToad
     end
     
     $SLEEP=1
-    $SLOWMODE=500
+    $SLOWMODE=350
     
     def initialize
         output        = Output.new
@@ -278,7 +278,6 @@ class GeoToad
     def preFetchFilter
         puts ""
         @filtered = Filter.new(@combinedWaypoints)
-        beforeFilteredMembersTotal = @filtered.totalWaypoints
         debug "Filter running cycle 1, #{@filtered.totalWaypoints} caches left"
         
         if @option['difficultyMin']
@@ -286,25 +285,36 @@ class GeoToad
             @defaultOutputFile = @defaultOutputFile + "-d" + @option['difficultyMin'].to_s
             @filtered.difficultyMin(@option['difficultyMin'].to_f)
         end
-        debug "Filter running cycle 2, #{@filtered.totalWaypoints} caches left"
+
         if @option['difficultyMax']
             @queryTitle = @queryTitle + ", difficulty #{@option['difficultyMax']} or lower"
             @defaultOutputFile = @defaultOutputFile + "-D" + @option['difficultyMin'].to_s
             @filtered.difficultyMax(@option['difficultyMax'].to_f)
         end
-        debug "Filter running cycle 3, #{@filtered.totalWaypoints} caches left"
         
         if @option['terrainMin']
             @queryTitle = @queryTitle + ", terrain #{@option['terrainMin']}+"
             @defaultOutputFile = @defaultOutputFile + "-t" + @option['terrainMin'].to_s
             @filtered.terrainMin(@option['terrainMin'].to_f)
         end
-        debug "Filter running cycle 4, #{@filtered.totalWaypoints} caches left"
         
         if @option['terrainMax']
             @queryTitle = @queryTitle + ", terrain #{@option['terrainMax']} or lower"
             @defaultOutputFile = @defaultOutputFile + "-T" + @option['terrainMax'].to_s
             @filtered.terrainMax(@option['terrainMax'].to_f)
+        end
+
+
+        if @option['sizeMin']
+            @queryTitle = @queryTitle + ", size #{@option['sizeMin']}+"
+            @defaultOutputFile = @defaultOutputFile + "-s" + @option['sizeMin'].to_s
+            @filtered.sizeMin(@option['sizeMin'])
+        end
+
+        if @option['sizeMax']
+            @queryTitle = @queryTitle + ", size #{@option['sizeMax']} or lower"
+            @defaultOutputFile = @defaultOutputFile + "-S" + @option['sizeMin'].to_s
+            @filtered.sizeMax(@option['sizeMax'])
         end
         
         if @option['foundDateInclude']
@@ -424,7 +434,7 @@ class GeoToad
 
         if status == 'login-required'
           displayMessage "Cookie does not appear to be valid, logging in as #{@option['user']}"
-          cookie = login(@option['user'], @option['password'])
+          @detail.cookie = login(@option['user'], @option['password'])
           status = @detail.fetch(wid)
         end
         

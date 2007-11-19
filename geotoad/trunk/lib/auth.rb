@@ -87,7 +87,7 @@ module Auth
       cookie=$1
       return cookie
     else
-      debug "login failed :("          
+      displayWarning "Login failed for #{user}:#{password}"          
       return nil
     end
   end

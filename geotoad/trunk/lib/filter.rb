@@ -4,6 +4,16 @@ class Filter
     include Common
     include Display
     
+    @@sizes = {
+      'virtual' => 0,
+      'micro'   => 1,
+      'small' => 2,
+      'other' => 2,
+      'not chosen' => 2,
+      'regular' => 3,
+      'large' => 4
+    }
+    
     def initialize(data)
         @waypointHash = data
     end
@@ -63,7 +73,31 @@ class Filter
             @waypointHash[wid]['funfactor'] > num
         }
     end
+
+    def sizeMin(size_name)
+        debug "filtering by sizeMin: #{size_name} (#{@@sizes[size_name]})"        
+        @waypointHash.delete_if { |wid, values|
+          debug "size check for #{wid}: #{@waypointHash[wid]['size']}"
+          @@sizes[@waypointHash[wid]['size']] < @@sizes[size_name]
+        }
+    end
     
+
+    def sizeMax(size_name)
+        debug "filtering by sizeMax: #{size_name} (#{@@sizes[size_name]})"        
+        @waypointHash.delete_if { |wid, values|
+          debug "size check for #{wid}: #{@waypointHash[wid]['size']}"
+          @@sizes[@waypointHash[wid]['size']] > @@sizes[size_name]
+        }
+    end
+    
+    def funFactorMax(num)
+        debug "filtering by funFactorMax: #{num}"
+        
+        @waypointHash.delete_if { |wid, values|
+            @waypointHash[wid]['funfactor'] > num
+        }
+    end
     
     def notFound
         debug "filtering by notFound"
@@ -170,7 +204,20 @@ class Filter
             end
         }
     end
-    
+ 
+  
+   def sizeOnly(size)
+       debug "filtering by size: #{size}"
+       
+       @waypointHash.each_key { |wid|
+         this_size = debug @waypointHash[wid]['size']
+         if this_size != size
+              debug @waypointHash[wid]['size']
+               @waypointHash.delete(wid)
+               debug " - #{wid} is size #{@waypointHash[wid]['size']}, filtering."
+           end
+       }
+   end   
     
     def removeByElement(element)
         debug "filtering by removeByElement: #{element}"

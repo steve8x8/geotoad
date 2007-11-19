@@ -46,16 +46,16 @@ class Input
         opts = GetoptLong.new(
                           
         [ "--travelBug",                "-b",    GetoptLong::NO_ARGUMENT ],
-        [ "--includeDisabled",                "-z",    GetoptLong::NO_ARGUMENT ],
+        [ "--includeDisabled",          "-z",    GetoptLong::NO_ARGUMENT ],
         
         [ "--difficultyMax",            "-D",        GetoptLong::OPTIONAL_ARGUMENT ],
         [ "--difficultyMin",            "-d",        GetoptLong::OPTIONAL_ARGUMENT ],
+
+        [ "--userExclude",                "-E",    GetoptLong::OPTIONAL_ARGUMENT ],
+        [ "--userInclude",                "-e",    GetoptLong::OPTIONAL_ARGUMENT ],
         
         [ "--funFactorMax",                "-F",        GetoptLong::OPTIONAL_ARGUMENT ],
         [ "--funFactorMin",                "-f",        GetoptLong::OPTIONAL_ARGUMENT ],
-        
-        [ "--foundDateExclude",                "-R",    GetoptLong::OPTIONAL_ARGUMENT ],
-        [ "--foundDateInclude",                "-r",    GetoptLong::OPTIONAL_ARGUMENT ],
         
         [ "--help",                     "-h",    GetoptLong::NO_ARGUMENT ],
         
@@ -76,8 +76,12 @@ class Input
         
         [ "--queryType",                    "-q",        GetoptLong::OPTIONAL_ARGUMENT ],
         
-        [ "--userExclude",                "-S",    GetoptLong::OPTIONAL_ARGUMENT ],
-        [ "--userInclude",                "-s",    GetoptLong::OPTIONAL_ARGUMENT ],
+        
+        [ "--foundDateExclude",                "-R",    GetoptLong::OPTIONAL_ARGUMENT ],
+        [ "--foundDateInclude",                "-r",    GetoptLong::OPTIONAL_ARGUMENT ],
+
+        [ "--sizeMin",                     "-s",          GetoptLong::REQUIRED_ARGUMENT ],         # * REQ
+        [ "--sizeMax",                     "-S",          GetoptLong::REQUIRED_ARGUMENT ],         # * REQ
         
         [ "--terrainMax",                "-T",        GetoptLong::OPTIONAL_ARGUMENT ],
         [ "--terrainMin",                "-t",        GetoptLong::OPTIONAL_ARGUMENT ],
@@ -147,7 +151,7 @@ class Input
             
         # demonstrate a sample command line
         cmdline = "geotoad.rb"
-        @@optHash.each_key { |option|
+        @@optHash.keys.sort.each { |option|
             if (option != 'queryArg') && (option != 'outDir') && (option != 'outFile') && @@optHash[option]
                 if (@@optHash[option] == 'X')
                     cmdline = cmdline + " --#{option}"
@@ -195,20 +199,21 @@ class Input
             printf("(5)  difficulty           [%-2.1f - %-1.1f] | (6)  terrain               [%-1.1f - %-1.1f]\n",
                     (@@optHash['difficultyMin'] || 0.0), (@@optHash['difficultyMax'] || 5.0), 
                     (@@optHash['terrainMin'] || 0.0), (@@optHash['terrainMax'] || 5.0))
-            printf("(7)  fun factor           [%-1.1f - %-1.1f] |\n", (@@optHash['funFactorMin'] || 0.0), (@@optHash['funFactorMax'] || 5.0))
-            printf("(8) virgin caches only            [%1.1s] | (9) travel bug caches only         [%1.1s]\n", @@optHash['notFound'], @@optHash['travelBug'])
-            printf("(10) cache age (days)       [%3.3s-%-3.3s] | (11) last found (days)       [%3.3s-%-3.3s] \n", 
+            printf("(7)  fun factor           [%-1.1f - %-1.1f] | (8) cache size             [%3.3s - %3.3s]\n", (@@optHash['funFactorMin'] || 0.0), 
+                    (@@optHash['funFactorMax'] || 5.0), @@optHash['sizeMin'] || 'any', @@optHash['sizeMax'] || 'any')
+            printf("(9) virgin caches only            [%1.1s] | (10) travel bug caches only       [%1.1s]\n", @@optHash['notFound'], @@optHash['travelBug'])
+            printf("(11) cache age (days)       [%3.3s-%-3.3s] | (12) last found (days)       [%3.3s-%-3.3s] \n", 
                     (@@optHash['placeDateExclude'] || 0), (@@optHash['placeDateInclude'] || 'any'), 
                     (@@optHash['foundDateExclude'] || 0), (@@optHash['foundDateInclude'] || 'any'))
             puts   "                                      |"
-            printf("(12) title keyword       [%-10.10s] | (13) descr. keyword    [%-13.13s]\n", @@optHash['titleKeyword'], @@optHash['descKeyword'])
-            printf("(14) cache not found by  [%-10.10s] | (15) cache owner isn't [%-13.13s]\n", @@optHash['userExclude'], @@optHash['ownerExclude'])
-            printf("(16) cache found by      [%-10.10s] | (17) cache owner is    [%-13.13s]\n", @@optHash['userInclude'], @@optHash['ownerInclude'])
+            printf("(13) title keyword       [%-10.10s] | (14) descr. keyword    [%-13.13s]\n", @@optHash['titleKeyword'], @@optHash['descKeyword'])
+            printf("(15) cache not found by  [%-10.10s] | (16) cache owner isn't [%-13.13s]\n", @@optHash['userExclude'], @@optHash['ownerExclude'])
+            printf("(17) cache found by      [%-10.10s] | (18) cache owner is    [%-13.13s]\n", @@optHash['userInclude'], @@optHash['ownerInclude'])
            
-            printf("(18) EasyName WP length         [%3.3s] | (19) include disabled caches [%1.1s] \n", @@optHash['waypointLength'] || '0', @@optHash['includeDisabled'])
+            printf("(19) EasyName WP length         [%3.3s] | (20) include disabled caches [%1.1s] \n", @@optHash['waypointLength'] || '0', @@optHash['includeDisabled'])
             puts "- - - - - - - - - - - - - - - - - - - + - - - - - - - - - - - - - - - - - - -"
-            printf("(20) output format       [%-10.10s]   (21) filename   [%-20.20s]\n", (@@optHash['format'] || 'gpx'), (@@optHash['outFile'] || 'automatic'))
-            printf("(22) output directory    [%-51.51s]\n", (@@optHash['outDir'] || findOutputDir))
+            printf("(21) output format       [%-10.10s]   (22) filename   [%-20.20s]\n", (@@optHash['format'] || 'gpx'), (@@optHash['outFile'] || 'automatic'))
+            printf("(23) output directory    [%-51.51s]\n", (@@optHash['outDir'] || findOutputDir))
             puts "=============================================================================="
             if @@optHash['verbose']
                 puts "VERBOSE MODE ENABLED"
@@ -225,7 +230,7 @@ class Input
                 @@optHash['password'] = ask("What is your Geocaching.com password?", 'NO_DEFAULT')
                 
             when '2'
-                type = ask("What type of search would you like to perform? (zipcode, state, user, coordinate, keyword [title only])", nil)
+                type = ask("What type of search would you like to perform? (zipcode, state, country, user, coordinate, keyword [title only])", nil)
                 @@optHash['queryType'] = guessQueryType(type).to_s
             
             when '3'
@@ -236,6 +241,11 @@ class Input
                 if (@@optHash['queryType'] == 'state')
                     @@optHash['queryArg'] = ask('Enter a list of states (seperated by commas)', 'NO_DEFAULT').gsub(/, */, ':')
                 end
+
+                if (@@optHash['queryType'] == 'country')
+                    @@optHash['queryArg'] = ask('Enter a list of countries (seperated by commas)', 'NO_DEFAULT').gsub(/, */, ':')
+                end
+
                 
                 if (@@optHash['queryType'] == 'wid')
                     @@optHash['queryArg'] = ask('Enter a list of waypoint id\'s (seperated by commas)', 'NO_DEFAULT').gsub(/, */, ':')
@@ -306,6 +316,10 @@ class Input
                 @@optHash['funFactorMax'] = ask('What is the maximum fun factor you would like? (5.0)', nil)
                 
             when '8'
+                @@optHash['sizeMin'] = ask("What is the smallest cache you seek (virtual, micro, small, regular, large)?", nil)
+                @@optHash['sizeMax'] = ask("What is the largest cache you seek (virtual, micro, small, regular, large)?", nil)
+                
+            when '9'
                 answer = ask('Would you like to only include virgin geocaches (geocaches that have never been found)?', nil)
                 if (answer =~ /y/)
                     @@optHash['notFound'] = 'X'
@@ -313,7 +327,7 @@ class Input
                     @@optHash['notFound'] = nil
                 end
                 
-            when '9'
+            when '10'
                 answer = ask('Would you like to only include geocaches with travelbugs in them?', nil)
                 if (answer =~ /y/)
                     @@optHash['travelBug'] = 'X'
@@ -322,41 +336,39 @@ class Input
                 end
                 
                 
-            when '10'
+            when '11'
                 @@optHash['placeDateExclude'] = ask('How many days old is the youngest a geocache can be for your list? (0)', nil)
                 @@optHash['placeDateInclude'] = ask('How many days old is the oldest a geocache can be for your list? (any)', nil)
                 
-            when '11'
+            when '12'
                 @@optHash['foundDateExclude'] = ask('How many days ago is the minimum a geocache can be found in for your list? (0)', nil)
                 @@optHash['foundDateInclude'] = ask('How many days ago is the maximum a geocache can be found in for your list? (any)', nil)
                                 
-            when '12'
+            when '13'
                 @@optHash['titleKeyword'] = ask('Only include geocaches with these keywords in their title (seperate by |)?', nil)
                 
-            when '13'
+            when '14'
                 @@optHash['descKeyword'] = ask('Only include geocaches with these keywords in their description (seperate by |)', nil)
                 
-            when '14'
-                @@optHash['userExclude'] = ask('Filter out geocaches found by these people (seperate by commas)', '').gsub(/, */, ':')
-                
-            when '16'
-                @@optHash['userInclude'] = ask('Only include geocaches that have been found by these people (separate by commas)', '').gsub(/, */, ':')
-                
             when '15'
-                @@optHash['ownerExclude'] = ask('Filter out geocaches owned by these people (seperate by commas)', '').gsub(/, */, ':')
+                @@optHash['userExclude'] = ask('Filter out geocaches found by these people (seperate by commas)', '').gsub(/, */, ':')
+
+            when '16'
+                  @@optHash['ownerExclude'] = ask('Filter out geocaches owned by these people (seperate by commas)', '').gsub(/, */, ':')
                 
             when '17'
+                @@optHash['userInclude'] = ask('Only include geocaches that have been found by these people (separate by commas)', '').gsub(/, */, ':')
+                
+            when '18'
                 @@optHash['ownerInclude'] = ask('Only include geocaches owned by these people (seperate by commas)', '').gsub(/, */, ':')
                 
-                
-       
-            when '18'
+            when '19'
                 @@optHash['waypointLength'] = ask('How long can your EasyName waypoint id\'s be? (8 for Magellan, 16 for Garmin, -1 to use full text, 0 to disable and use waypoint id\'s)?', nil)
                 
-            when '19'
+            when '20'
                 @@optHash['includeDisabled'] = ask('Include disabled caches in your results?', nil)
                 
-            when '20'
+            when '21'
                 puts "List of Output Formats: "
                 outputDetails = Output.new
                 i=0
@@ -373,7 +385,7 @@ class Input
                 puts ""
                 @@optHash['format'] = ask('What format would you like your output in?', 'gpx')
                 
-            when '21'
+            when '22'
                 @@optHash['outFile'] = ask('What filename would you like to output to? (press enter for automatic)', nil)
                 if (@@optHash['outFile'])
                     @@optHash['outFile'].gsub!(/\\/,  '/')
@@ -383,7 +395,8 @@ class Input
                     @@optHash['outDir']=File.dirname(@@optHash['outFile'])
                     @@optHash['outFile']=File.basename(@@optHash['outFile'])
                 end
-            when '22'
+                
+            when '23'
                  @@optHash['outDir'] = ask("Output directory (#{findOutputDir})", nil)
                  if @@optHash['outDir']
                     @@optHash['outDir'].gsub!(/\\/,  '/')
@@ -458,6 +471,8 @@ class Input
             return 'coord'
         when /stat/
             return 'state'
+        when /country/
+            return 'country'
         when /wid/
             return 'wid'
         when /waypoint/

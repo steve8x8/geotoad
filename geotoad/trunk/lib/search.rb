@@ -38,25 +38,7 @@ class SearchCache
             @key=keylookup.lookup(key)
             # nearly everything is in this form
             @url=@@baseURL + '?' + @mode + '=' + CGI.escape(@key.to_s)
-            
-            # as of aug2003, geocaching.com has an in-between page for country
-            # lookups to parse. Pretty silly and worthless, imho.
-            ## CURRENTLY BROKEN - NEEDS HELP BADLY!!!! ##
-            displayError "Country searches are currently broken. Please help fix!"
-            return nil
-            
-            #debug 'fetching the country page'
-            # add go button to the URL, just in case.
-            #@url = @url + "&submit3=GO"
-            #data = fetch(@url)
-            #data.each { |line|
-            #    if (line =~ /^\<input type=\"hidden\" name=\"(.*?)\" value=\"(.*?)\" \/\>/)
-            #        debug "found hidden post variable: #{$1}"
-            #        @postVars[$1]=$2
-            #    end
-            #}
-            #debug "country page parsed"
-            
+                        
         when 'coord'
             @mode = 'coordinate'
             @key = key
@@ -391,7 +373,7 @@ class SearchCache
                 debug "cacheDistance=#{@cache['distance']} dir=#{@cache['direction']}"
                 
             when /alt=\"Size: (.*?)\"/
-                @cache['size'] = $1
+                @cache['size'] = $1.downcase
                 debug "cache size is #{$1}"
                 
             when /cache_details.aspx\?guid=(.*?)\">(.*?)\<\/a\>/

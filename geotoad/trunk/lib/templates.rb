@@ -101,7 +101,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
             'templateWP'    =>
                 "\n\n<hr noshade size=\"1\">\n<a name=\"<%out.wid%>\"></a><font color=\"#000099\"><big><b><a href=\"<%out.url%>\"><%wpEntity.name%>&nbsp;<%out.symbols%></a></b></big></font><br>\n" +
                 "<font color=\"#555555\"><b><%wpEntity.creator%></b></font>, <%wp.latwritten%> <%wp.lonwritten%><br>" +
-                "<font color=\"#339933\"><%wp.type%> D<%wp.difficulty%>/T<%wp.terrain%> F:<%wp.funfactor%> <%out.relativedistance%><br>" +
+                "<font color=\"#339933\"><%wp.type%> (<%wp.size%>) D<%wp.difficulty%>/T<%wp.terrain%> F:<%wp.funfactor%> <%out.relativedistance%><br>" +
                 "placed: <%wp.cdate%> last comment: <%wp.mdays%> days ago (<%wp.comment0Type%>)</font><br>" +
                 "<p><%outEntity.details%></p>\n" +
                 "<p><font color=\"#555555\"><%out.hint%></font></p>\n",
@@ -131,7 +131,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
             'templateWP'    =>
             "\n\n<hr noshade size=\"1\">\n<a name=\"<%out.wid%>\"></a><font color=\"#000099\"><big><b><a href=\"<%out.url%>\"><%wpEntity.name%>&nbsp;<%out.symbols%></a></b></big></font><br>\n" +
             "<font color=\"#555555\"><b><%wpEntity.creator%></b></font>, <%wp.latwritten%> <%wp.lonwritten%><br>" +
-            "<font color=\"#339933\"><%wp.type%> D<%wp.difficulty%>/T<%wp.terrain%> F:<%wp.funfactor%> <%out.relativedistance%><br>" +
+            "<font color=\"#339933\"><%wp.type%> (<%wp.size%>) D<%wp.difficulty%>/T<%wp.terrain%> F:<%wp.funfactor%> <%out.relativedistance%><br>" +
              "placed: <%wp.cdate%> last comment: <%wp.mdays%> days ago (<%wp.comment0Type%>)</font><br>" +
             "<p><%outEntity.details%></p>\n" +
             "<p><font color=\"#555555\"><%out.hintdecrypt%></font></p>\n",
@@ -149,7 +149,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
 		"* <%wp.name%>\" (<%out.wid%>) by <%wp.creator%>\r\n" +
                 "Difficulty: <%wp.difficulty%>, Terrain: <%wp.terrain%>, FunFactor: <%wp.funfactor%>\r\n" +
                 "Lat: <%wp.latwritten%> Lon: <%wp.lonwritten%>\r\n" +
-                "Type: <%wp.type%> <%out.relativedistance%>\r\n" +
+                "Type: <%wp.type%> (<%wp.size%>) <%out.relativedistance%>\r\n" +
                 "Creation: <%wp.cdate%>, Last comment: <%wp.mdays%> days ago (<%wp.comment0Type%>)\r\n" +
                 "\r\n<%out.details%>\r\n" +
                 "\r\n<%out.hint%>\r\n\r\n\r\n\r\n"
@@ -165,7 +165,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
 		"* <%wp.name%>\" (<%out.wid%>) by <%wp.creator%>\r\n" +
         "Difficulty: <%wp.difficulty%>, Terrain: <%wp.terrain%>, FunFactor: <%wp.funfactor%>\r\n" +
         "Lat: <%wp.latwritten%> Lon: <%wp.lonwritten%>\r\n" +
-        "Type: <%wp.type%> <%out.relativedistance%>\r\n" +
+        "Type: <%wp.type%> (<%wp.size%>) <%out.relativedistance%>\r\n" +
         "Creation: <%wp.cdate%>, Last comment: <%wp.mdays%> days ago (<%wp.comment0Type%>)\r\n" +
         "\r\n<%out.details%>\r\n" +
         "\r\n<%out.hintdecrypt%>\r\n\r\n\r\n\r\n"
