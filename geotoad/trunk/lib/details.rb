@@ -16,6 +16,7 @@ class CacheDetails
         @waypointHash = data
         @useShadow=1
         
+        # we don't need to do this every cache! very inefficient.
         dataFile="fun_scores.dat"
         dataDirs=[ File.dirname(__FILE__) + "/../data", "../../data", "../data", "data", 
             File.dirname($0) + "/data", File.dirname($0) + "/../data", findConfigDir ]
@@ -96,7 +97,7 @@ class CacheDetails
         
         # We try to download the page one more time.
         if success
-            return 1
+            return success
         else
             displayWarning "Could not parse #{url}, skipping."
             return nil
@@ -157,6 +158,10 @@ class CacheDetails
                 end
             end
             
+            if line =~ /with an account to view/
+              displayWarning "Oops, we are not actually logged in!"
+              return 'login-required'
+            end
             
             # DUPLICATE OF WHAT SEARCH.RB HAS! Only used for failures and or wid searches.
             # May make in the future have it decide which source is newest: search or details.
@@ -193,12 +198,14 @@ class CacheDetails
                 debug "got written lat/lon"
             end
             
+            if line =~ /viewable to subscribers only/
+              return 'subscriber-only'
+            end
             
             # why a geocache is closed. It seems to always be the same.
             if line =~ /\<span id=\"ErrorText\".*?>(.*?)\<\/span\>/
                 warning = $1
                 warning.gsub!(/\<.*?\>/, '')
-                displayWarning "#{warning}"
                 debug "got a warning: #{warning}"
                 if (wid)
                     @waypointHash[wid]['warning'] = warning.dup

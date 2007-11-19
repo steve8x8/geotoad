@@ -6,10 +6,6 @@ require 'ftools'
 require 'uri'
 require 'cgi'
 
-# find out where we want our cache #############################
-cacheDir = nil
-
-
 # Does a webget, but stores a local directory with cached results ###################
 class ShadowFetch
     attr_reader :data, :waypoints, :cookie

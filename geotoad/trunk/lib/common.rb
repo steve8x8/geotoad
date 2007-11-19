@@ -1,14 +1,13 @@
 # $Id$
+require 'fileutils'
 
 module Common
     
     ## finds a place to put temp files on the system ###################################
     def selectDirectory(dirs)
         selected=nil
-        debug "Searching directories: #{dirs.join(':')}"
         dirs.compact.each do |dir|
             begin
-                debug "Checking if #{dir} is suitable"
                 if ((File.stat(dir).directory?) && (File.stat(dir).writable?))
                     selected=dir.dup
                     break
@@ -23,7 +22,6 @@ module Common
         else
             selected.gsub!(/\\/, '/')
         end
-        debug "Found #{selected}"
         return selected
     end
     
@@ -56,6 +54,7 @@ module Common
             configDir=configDir + "/GeoToad"
         end
         debug "#{configDir} is being used for config"
+        FileUtils::mkdir_p(configDir)
         return configDir
     end
     
@@ -66,6 +65,7 @@ module Common
 			"#{ENV['USERPROFILE']}/Desktop", ENV['HOME'] ])
         
         debug "#{outputDir} is being used as the default output directory"
+        FileUtils::mkdir_p(outputDir)
         return outputDir
     end
 end

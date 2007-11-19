@@ -289,7 +289,33 @@ class SearchCache
     def postURL
         @postURL
     end
+
+    def parseDate(date)
+      timestamp = nil
+      case date
+      when /Today/
+        days_ago=0
+      when /Yesterday/
+        days_ago=1
+      when /(\d)+ days ago/
+        days_ago=$1.to_i
+      when /^(\d+) (\w+) (\d+)/
+        # two digit days? peh.
+        yearProper = "20" + $3
+        timestamp = Time.local(yearProper.to_i,$2,$1.to_i,00,00,0)
+      else
+        displayWarning "Could not parse date: #{date}"
+        return nil
+      end
+      if not timestamp and days_ago
+        timestamp = Time.now - (days_ago * 3600 * 24)
+      end
+      return timestamp      
+    end
     
+    def daysAgo(timestamp)
+      return (Time.now - timestamp).to_i / 86400      
+    end
     
     def parseSearch(data)
         wid=nil
@@ -331,33 +357,33 @@ class SearchCache
                 end
                 
             when /WptTypes.*alt=\"(.*?)\" title/
-                @cache['type']=$1
                 @cache['mdays']=-1
+                @cache['type']=$1
                 @cache['type'].gsub!(/\s*cache.*/i, '')
                 @cache['type'].gsub!(/\-/, '')
                 debug "type=#{@cache['type']}"
                 
+            # <td valign="top" align="left" nowrap>(3/1.5)<br />
             when /nowrap\>\(([-\d\.]+)\/([-\d\.]+)\)\<br/
                 @cache['difficulty']=$1.to_f
                 @cache['terrain']=$2.to_f
                 debug "cacheDiff=#{@cache['difficulty']} terr=#{@cache['terrain']}"
+            
+            # <td valign="top" align="left" nowrap>26 Sep 07</td>  
+            when /td valign="top" align="left" nowrap\>([\w ]+)\<\/td\>/
+              @cache['ctime'] = parseDate($1)
+              @cache['cdays'] = daysAgo(@cache['ctime'])
+              debug "ctime=#{@cache['ctime']} cdays=#{@cache['cdays']}"
                 
-            when /<td valign=\"top\" align=\"left\"\>(\d+) (\w+) \'(\d+) *\<[\/I]/
-                cday = $1
-                cmonth = $2
-                cyear = $3
+            # <td valign="top" align="left">05 Nov 07<br />
+            # <td valign="top" align="left">2 days ago*<br />
+            # <td valign="top" align="left">Today<STRONG>*</STRONG><br />
+            when /td valign="top" align="left"\>([\w \*]+)\</
+              @cache['mtime'] = parseDate($1)
+              @cache['mdays'] = daysAgo(@cache['mtime'])
+              debug "mtime=#{@cache['mtime']} cdays=#{@cache['mdays']}"
                 
-                @cache['cdate']=cday + cmonth.downcase + cyear
-                # I hate people who use 2 digit dates.
-                cyearProper = "20" + cyear
-                t = Time.new
-                ctimestamp = Time.local(cyearProper.to_i,cmonth,cday.to_i,00,00,0)
-                cage = t - ctimestamp
-                @cache['cdays'] = (cage / 3600 / 24).to_i
-                
-                debug "cacheDate=#{@cache['cdate']} cdays=#{@cache['cdays']}"
-                
-                # <td valign="top" align="left">0.3mi&nbsp;<br>SE</td>
+            # <td valign="top" align="left">0.3mi&nbsp;<br>SE</td>
                 
             when /([NWSE]+)\<br \/\>([\d\.]+)mi</
                 @cache['distance']=$2.to_f
@@ -408,36 +434,8 @@ class SearchCache
             when /Member-only/
                 debug "Found members only cache. Marking"
                 @cache['membersonly'] = 1
-                
-            when /\<td valign=\"top\" align=\"left\"\>Today\**\</
-                @cache['mdays']=0
-                
-            when /\<td valign=\"top\" align=\"left\"\>Yesterday\**\</
-                @cache['mdays']=1
-                
-            when /\<td valign=\"top\" align=\"left\"\>(\d+) days ago\**\</
-                @cache['mdays']=$1.to_i
-                debug "mdays=#{@cache['mdays']}"
-                
-                # <td valign="top" align="left">24 Apr 03<br>
-            when /<td valign=\"top\" align=\"left\"\>(\d+) (\w+) (\d+)\<br\>/
-                mday = $1
-                mmonth = $2
-                myear = $3
-                
-                myearProper = "20" + myear
-                debug "mod time is #{mday}  #{mmonth} #{myearProper}"
-                t = Time.new
-                mtimestamp = Time.local(myearProper.to_i,mmonth,mday.to_i,00,00,0)
-                mage = t - mtimestamp
-                @cache['mdays'] = (mage / 3600 / 24).to_i
-                
-                debug "mdays=#{@cache['mdays']}"
-                
-            when / ago/
-                debug "missing ago line: #{line}"
-                
-                # There is no good end of record marker, sadly.
+                                
+            # There is no good end of record marker, sadly.
             when /^\t\t\<\/tr\>\<tr\>/
                 if (wid)
                     @waypointHash[wid] = @cache.dup
@@ -448,14 +446,7 @@ class SearchCache
                     if @mode == "users"
                         @waypointHash[wid]['visitors'].push(@key.downcase)
                     end
-                    
-                    if (@cache['mdays'] > -1)
-                        t = Time.now
-                        t2 = t - (@cache['mdays'] * 3600 * 24)
-                        @waypointHash[wid]['mdate'] = t2.strftime("%d%b%y")
-                        debug "mdays = #{@cache['mdays']} mdate=#{@waypointHash[wid]['mdate']}"
-                    end
-                    
+                                        
                     debug "*SCORE* Search found: #{wid}: #{@waypointHash[wid]['name']} (#{@waypointHash[wid]['difficulty']} / #{@waypointHash[wid]['terrain']})"
                     @returnedWaypoints = @returnedWaypoints + 1
                     @cache.clear
@@ -473,7 +464,7 @@ class SearchCache
         } # end loop
         debug "^^^ parsing complete ^^^"
     end #end parsecache
-    
+        
     # This is for wid searches.
     def fakeSearchLoop
         wid = @key

@@ -279,13 +279,6 @@ class GeoToad
         puts ""
         @filtered = Filter.new(@combinedWaypoints)
         beforeFilteredMembersTotal = @filtered.totalWaypoints
-        #@filtered.removeByElement('membersonly')
-        
-        #excludedMembersTotal = beforeFilteredMembersTotal - @filtered.totalWaypoints
-        #if (excludedMembersTotal > 0)
-        #    displayMessage "#{excludedMembersTotal} members-only caches were filtered out (not yet supported)"
-        #end
-        
         debug "Filter running cycle 1, #{@filtered.totalWaypoints} caches left"
         
         if @option['difficultyMin']
@@ -426,28 +419,42 @@ class GeoToad
         token = token + 1
         detailURL = @detail.fullURL(wid)
         page = ShadowFetch.new(detailURL)
-        success = @detail.fetch(wid)
+        status = @detail.fetch(wid)
         message = nil
 
-        if ! success
+        if status == 'login-required'
+          displayMessage "Cookie does not appear to be valid, logging in as #{@option['user']}"
+          cookie = login(@option['user'], @option['password'])
+          status = @detail.fetch(wid)
+        end
+        
+        if status == 'subscriber-only'
+          message = '(subscriber-only)'
+        elsif ! status or status == 'login-required'
           if (wpFiltered[wid]['warning'])
             debug "Could not parse page, but it had a warning, so I am not invalidating"
             message = "(could not fetch, private cache?)"
           else
-            debug "Page for #{wpFiltered[wid]['name']} failed to be parsed, invalidating cache."
-            message = "error"
+            message = "(error)"
           end
         else
           if (wpFiltered[wid]['warning'])
-            message = "(cache is temp. unavailable)"
+            message = "(unavailable)"
           end
         end
-        if (page.src == "remote")
-          downloads = downloads + 1
-          sleep $SLEEP
-        end          
         progress.updateText(token, "[#{wid}] \"#{wpFiltered[wid]['name']}\" from #{page.src} #{message}")  
+        
+        if status == 'subscriber-only'
+          wpFiltered.delete(wid)
+        else
+          if (page.src == "remote")
+            downloads = downloads + 1
+            sleep $SLEEP
+          end          
+        end
+        
         if message == '(error)'
+          debug "Page for #{wpFiltered[wid]['name']} failed to be parsed, invalidating cache."
           wpFiltered.delete(wid)
           page.invalidate()
         end
@@ -456,7 +463,9 @@ class GeoToad
     
     def get_login_cookie
       cookie = loadCookie()
-      if ! cookie
+      if cookie
+        displayMessage "Using stored login cookie for #{@option['user']}"
+      else
         displayMessage "Logging in as #{@option['user']}"
         cookie = login(@option['user'], @option['password'])
       end
