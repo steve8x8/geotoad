@@ -154,7 +154,7 @@ class GeoToad
     def versionCheck
         url = "http://code.google.com/p/geotoad/wiki/CurrentVersion";
         
-        #puts "[^] Checking for latest version of GeoToad..."
+        debug "Checking for latest version of GeoToad from #{url}"
         version = ShadowFetch.new(url)
         version.localExpiry=43200
         version.maxFailures = 0
@@ -177,6 +177,7 @@ class GeoToad
                 sleep(5)
             end
         end
+        debug "Check complete."
     end
     
     ## Make the Initial Query ############################

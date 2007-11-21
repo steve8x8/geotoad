@@ -160,10 +160,6 @@ class SearchCache
         @lastWaypoint
     end
     
-    def returnedWaypoints
-        @returnedWaypoints
-    end
-    
     def currentPage
         @currentPage
     end
@@ -176,7 +172,7 @@ class SearchCache
         debug "fetchNext called, last waypoint was #{@lastWaypoint} of #{@totalWaypoints}, next target is #{@nextTarget}"
         if (@nextTarget) 
             @postVars['__EVENTTARGET']=@nextTarget
-            fetch(@url)
+            @lastWaypointCount = fetch(@url)
             return @nextTarget
         else
             return nil
@@ -185,7 +181,7 @@ class SearchCache
     
     def fetchFirst
       @nextTarget=nil
-      fetch(@url)
+      return fetch(@url)
     end
     
     # This function used to be in the CLI but was moved in here by Mike Capito's
@@ -216,14 +212,20 @@ class SearchCache
                 if (totalPages > currentPage)
                     lastPage = currentPage
                     # I don't think this does anything.
+                    running = fetchNext()
                     page = ShadowFetch.new(@url)
-                    running = fetchNext
+                    if not @lastWaypointCount            
+                      displayError "#{@url} has no waypoints."
+                      return nil
+                      page.invalidate()
+                    end
                     src = page.src
                     # update it.
                     progress.updateText(currentPage, "from #{src}")
                     
                     if (currentPage <= lastPage)
                         displayError "Geocache Search Logic error. I was at page #{lastPage} before, why am I at #{currentPage} now?"
+                        page.invalidate()
                         exit
                     end
                     
@@ -246,22 +248,30 @@ class SearchCache
     end
     
     def fetch(url)
-        page = ShadowFetch.new(url)
-        if (@mode == "user")
-            page.localExpiry=43200
-        else
-            page.localExpiry=72000
-        end
-        
-        if (@postVars)
-            page.postVars=@postVars
-        end
-        
-        if (page.fetch)
-            parseSearch(page.data)
-        else
-            debug "no page to parse!"
-        end
+      count = nil
+      page = ShadowFetch.new(url)
+      if (@mode == "user")
+          page.localExpiry=43200
+      else
+          page.localExpiry=72000
+      end
+      
+      if (@postVars)
+          page.postVars=@postVars
+      end
+      
+      if (page.fetch)
+          count = parseSearch(page.data)
+          if count == 0
+            displayWarning "No waypoints found in #{url} (server error?) - retrying"
+            page.invalidate()
+            page.fetch()
+            count = parseSearch(page.data)
+          end
+      else
+          debug "no page to parse!"
+      end
+      return count
     end
     
     # for the eventstate thing
@@ -300,9 +310,9 @@ class SearchCache
     
     def parseSearch(data)
         wid=nil
-        @cache = Hash.new
+        cache = Hash.new
         @postVars = Hash.new
-        @returnedWaypoints = 0
+        waypointCount = 0
         debug "--- parsing search page ---"
         seen_total_records = nil
         
@@ -313,7 +323,6 @@ class SearchCache
             when /Total Records: \<b\>(\d+)\<\/b\> - Page: \<b\>(\d+)\<\/b\> of \<b\>(\d+)\<\/b\>/
               if seen_total_records
                 debug "skipping redundant records line with #{$1} waypoints listed."
-                next
               else
                 seen_total_records = true
               end
@@ -339,45 +348,45 @@ class SearchCache
                 end
                 
             when /WptTypes.*alt=\"(.*?)\" title/
-                @cache['mdays']=-1
-                @cache['type']=$1
-                @cache['type'].gsub!(/\s*cache.*/i, '')
-                @cache['type'].gsub!(/\-/, '')
-                debug "type=#{@cache['type']}"
+                cache['mdays']=-1
+                cache['type']=$1
+                cache['type'].gsub!(/\s*cache.*/i, '')
+                cache['type'].gsub!(/\-/, '')
+                debug "type=#{cache['type']}"
                 
             # <td valign="top" align="left" nowrap>(3/1.5)<br />
             when /nowrap\>\(([-\d\.]+)\/([-\d\.]+)\)\<br/
-                @cache['difficulty']=$1.to_f
-                @cache['terrain']=$2.to_f
-                debug "cacheDiff=#{@cache['difficulty']} terr=#{@cache['terrain']}"
+                cache['difficulty']=$1.to_f
+                cache['terrain']=$2.to_f
+                debug "cacheDiff=#{cache['difficulty']} terr=#{cache['terrain']}"
             
             # <td valign="top" align="left" nowrap>26 Sep 07</td>  
             when /td valign="top" align="left" nowrap\>([\w ]+)\</
-              @cache['ctime'] = parseDate($1)
-              @cache['cdays'] = daysAgo(@cache['ctime'])
-              debug "ctime=#{@cache['ctime']} cdays=#{@cache['cdays']}"
+              cache['ctime'] = parseDate($1)
+              cache['cdays'] = daysAgo(cache['ctime'])
+              debug "ctime=#{cache['ctime']} cdays=#{cache['cdays']}"
                 
             # <td valign="top" align="left">05 Nov 07<br />
             # <td valign="top" align="left">2 days ago*<br />
             # <td valign="top" align="left">Today<STRONG>*</STRONG><br />
             when /td valign="top" align="left"\>([\w \*]+)\</
-              @cache['mtime'] = parseDate($1)
-              @cache['mdays'] = daysAgo(@cache['mtime'])
-              debug "mtime=#{@cache['mtime']} cdays=#{@cache['mdays']}"
+              cache['mtime'] = parseDate($1)
+              cache['mdays'] = daysAgo(cache['mtime'])
+              debug "mtime=#{cache['mtime']} cdays=#{cache['mdays']}"
                 
             # <td valign="top" align="left">0.3mi&nbsp;<br>SE</td>
                 
             when /([NWSE]+)\<br \/\>([\d\.]+)mi</
-                @cache['distance']=$2.to_f
-                @cache['direction'] = $1
-                debug "cacheDistance=#{@cache['distance']} dir=#{@cache['direction']}"
+                cache['distance']=$2.to_f
+                cache['direction'] = $1
+                debug "cacheDistance=#{cache['distance']} dir=#{cache['direction']}"
                 
             when /alt=\"Size: (.*?)\"/
-                @cache['size'] = $1.downcase
+                cache['size'] = $1.downcase
                 debug "cache size is #{$1}"
                 
             when /cache_details.aspx\?guid=(.*?)\">(.*?)\<\/a\>/
-                @cache['sid']=$1
+                cache['sid']=$1
                 if $2
                     name=$2.dup
                 else
@@ -385,15 +394,15 @@ class SearchCache
                 end
                 name.gsub!(/ +$/, '')
                 if name =~ /\<strike\>(.*?)\<\/strike\>/
-                    @cache['disabled']=1
+                    cache['disabled']=1
                     name=$1.dup
                     debug "#{name} appears to be disabled"
                 end
                 
                 # re-enabled to fix &quot; -- what else will we be messing up?
                 name = CGI.unescapeHTML(name);
-                @cache['name']=name
-                debug "sid=#{@cache['sid']} name=#{@cache['name']} (disabled=#{@cache['disabled']})"
+                cache['name']=name
+                debug "sid=#{cache['sid']} name=#{cache['name']} (disabled=#{cache['disabled']})"
                 
             when /\bby (.*)/
                 creator = $1.dup
@@ -401,9 +410,9 @@ class SearchCache
                     creator =  CGI.unescapeHTML(creator);
                     creator.gsub!(/\s+$/, '')
                 end
-                @cache['creator']=creator
+                cache['creator']=creator
                 #creator.gsub(/[\x80-\xFF]/, '?').chop!
-                debug "creator=#{@cache['creator']}"
+                debug "creator=#{cache['creator']}"
                 
             when /\((GC\w+)\)/
                 wid=$1.dup
@@ -411,16 +420,16 @@ class SearchCache
                 
                 # We have a WID! Lets begin
             when /icon_bug/
-                @cache['travelbug']='Travel Bug!'
+                cache['travelbug']='Travel Bug!'
                 
             when /Member-only/
                 debug "Found members only cache. Marking"
-                @cache['membersonly'] = 1
+                cache['membersonly'] = 1
                                 
             # There is no good end of record marker, sadly.
             when /^\t\t\<\/tr\>\<tr\>/
                 if (wid)
-                    @waypointHash[wid] = @cache.dup
+                    @waypointHash[wid] = cache.dup
                     @waypointHash[wid]['visitors'] = []
                     
                     # if our search is for caches that have been done by a particular user,
@@ -430,8 +439,8 @@ class SearchCache
                     end
                                         
                     debug "*SCORE* Search found: #{wid}: #{@waypointHash[wid]['name']} (#{@waypointHash[wid]['difficulty']} / #{@waypointHash[wid]['terrain']})"
-                    @returnedWaypoints = @returnedWaypoints + 1
-                    @cache.clear
+                    waypointCount = waypointCount + 1
+                    cache.clear
                 end
                 
             when /^\<input type=\"hidden\" name=\"(.*?)\".*value=\"(.*?)\" \/\>/
@@ -445,6 +454,7 @@ class SearchCache
             end # end case
         } # end loop
         debug "^^^ parsing complete ^^^"
+        return waypointCount
     end #end parsecache
         
     # This is for wid searches.
@@ -462,7 +472,6 @@ class SearchCache
         @waypointHash[wid]['terrain'] = 0
         @waypointHash[wid]['difficulty'] = 0
         @waypointHash[wid]['mdays'] = 1
-        @returnedWaypoints = 1
     end
     
 end # end class

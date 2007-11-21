@@ -97,10 +97,17 @@ class CacheDetails
         end
         
         # We try to download the page one more time.
+        if not success
+          debug "Trying to download #{url} again."
+          page.invalidate()
+          page.fetch()
+          success = parseCache(page.data)
+        end
+        
         if success
             return success
         else
-            displayWarning "Could not parse #{url}, skipping."
+            displayWarning "Could not parse #{url} (tried twice)"
             return nil
         end
     end
@@ -316,11 +323,11 @@ class CacheDetails
           
         end  # end wid check.
         
-        # This checks to see if it's a geocache that at least has coordinates to mention.
+        # How valid is this cache?
         if wid && @waypointHash[wid]['latwritten']
             return 1
         else
-            debug "parseCache returning as nil because wid #{wid} has no written latitude!"
+            debug "parseCache returning as nil because wid #{wid} has no coordinates (and the login works?)"
             return nil
         end
         
