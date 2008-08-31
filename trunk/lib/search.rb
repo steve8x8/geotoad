@@ -282,31 +282,6 @@ class SearchCache
     def postURL
         @postURL
     end
-
-    def parseDate(date)
-      timestamp = nil
-      case date
-      when /Today/
-        days_ago=0
-      when /Yesterday/
-        days_ago=1
-      when /(\d)+ days ago/
-        days_ago=$1.to_i
-      when /^(\d+) (\w+) (\d+)/
-        timestamp = Time.parse(date)
-      else
-        displayWarning "Could not parse date: #{date}"
-        return nil
-      end
-      if not timestamp and days_ago
-        timestamp = Time.now - (days_ago * 3600 * 24)
-      end
-      return timestamp      
-    end
-    
-    def daysAgo(timestamp)
-      return (Time.now - timestamp).to_i / 86400      
-    end
     
     def parseSearch(data)
         wid=nil

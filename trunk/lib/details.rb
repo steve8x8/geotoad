@@ -166,6 +166,14 @@ class CacheDetails
                     debug "name was not set, now set to #{$1}"
                 end
             end
+
+            # Duplicate of search.rb data.
+            # <span id="DateHidden">6/28/2005</span>
+            if line =~ /span id=\"DateHidden\">([\w\/]+)\</
+              @waypointHash[wid]['ctime'] = parseDate($1)
+              @waypointHash[wid]['cdays'] = daysAgo(@waypointHash[wid]['ctime'])
+              debug "ctime=#{@waypointHash[wid]['ctime']} cdays=#{@waypointHash[wid]['cdays']}"
+            end
             
             if line =~ /with an account to view/
               displayWarning "Oops, we are not actually logged in!"
