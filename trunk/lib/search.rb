@@ -39,6 +39,40 @@ class SearchCache
             # nearly everything is in this form
             @url=@@baseURL + '?' + @mode + '=' + CGI.escape(@key.to_s)
                         
+	    # The lookup page for some countries have an in-between page for
+	    # State/Province select. Parse and fetch the "Search All" page.
+            debug 'fetching the country page'
+	    @postVars = Hash.new
+	    page = ShadowFetch.new(@url)
+	    data = page.fetch
+
+            @select = ''
+            data.each { |line|
+                if (line =~ /^\<input type=\"hidden\" name=\"([^\"]*?)\".* value=\"([^\"]*?)\" \/\>/)
+                    debug "found hidden post variable: #{$1}"
+                    @postVars[$1]=$2
+                end
+                if (line =~ /^\<input type=\"submit\" name=\"([^\"]*?)\".* value=\"([^\"]*?)\"/)
+                    debug "found submit post variable: #{$1}"
+                    @postVars[$1]=$2
+                end
+                if (line =~ /\<select name=\"([^\"]*?)\"/)
+                    @select=$1
+                elsif (line =~ /\<option selected=\"selected\" value=\"([^\"]*?)\"/)
+                    if (@select != '')
+                        debug "found selected option: [" + @select + "] #{$1}"
+                        @postVars[@select]=$1
+                        @select = ''
+                    else
+                        debug "found selected option: #{$1}"
+                        displayError "Found selected <option>, but no previoys <select> tag."
+                        return nil
+                    end
+                end
+            }
+            debug 'country page parsed'
+	    return @url
+
         when 'coord'
             @mode = 'coordinate'
             @key = key
