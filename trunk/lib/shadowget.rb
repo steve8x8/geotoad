@@ -20,7 +20,7 @@ class ShadowFetch
         @url = url
         @remote = 0
         @localExpiry=518400    		# 6 days
-        @maxFailures = 4
+        @maxFailures = 2
         @httpHeaders = {
           'User-Agent'      => "Mozilla/5.0 (Macintosh; U; Intel Mac OS X; en-US; rv:1.8.1.9; Google-TR-3) Gecko/20071025 Firefox/2.0.0.9",
           'Accept'          => 'text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5',
@@ -211,6 +211,7 @@ class ShadowFetch
         end
         
         http = Net::HTTP.new(uri.host, 80)
+        
         if uri.query
             query=uri.path + "?" + uri.query
         else
@@ -223,22 +224,30 @@ class ShadowFetch
         else
             debug "No cookie to add to #{url}"
         end
-        
-        if (@postVars)
-            @httpHeaders['Content-Type'] =  "application/x-www-form-urlencoded";
-            debug "POST to #{query}, headers are #{@httpHeaders.keys.join(" ")}"
-            resp = http.post(query, @postString, @httpHeaders)
-        else
-            debug "GET to #{query}, headers are #{@httpHeaders.keys.join(" ")}"
-            resp = http.get(query, @httpHeaders)
+
+
+        begin
+          if (@postVars)
+              @httpHeaders['Content-Type'] =  "application/x-www-form-urlencoded";
+              debug "POST to #{query}, headers are #{@httpHeaders.keys.join(" ")}"
+              resp = http.post(query, @postString, @httpHeaders)
+          else
+              debug "GET to #{query}, headers are #{@httpHeaders.keys.join(" ")}"
+              resp = http.get(query, @httpHeaders)
+          end
+        rescue Timeout::Error => e
+          displayWarning "Timed out trying to access #{uri.host}:80"
+          @@downloadErrors = @@downloadErrors + 1
+          sleep(2)
+          return fetchURL(url_str, redirects)
         end
-        
+          
         case resp
         when Net::HTTPSuccess
             debug "#{url_str} successfully downloaded."
             
         when Net::HTTPRedirection
-            fetchURL(resp['location'], limit - 1)
+            return fetchURL(resp['location'], redirects - 1)
             
         else
             debug "error downloading #{url}"
@@ -254,6 +263,7 @@ class ShadowFetch
                 disableRetry = 1
                 displayWarning "Could not fetch #{url}, retrying in 5 seconds.. (failures=#{@@downloadErrors}, max=#{@maxFailures})"
                 sleep(5)
+                return fetchURL(url_str, redirects)
             end
         end    
         
