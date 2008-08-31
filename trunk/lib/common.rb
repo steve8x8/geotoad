@@ -4,6 +4,7 @@ require 'fileutils'
 module Common
   
   def parseDate(date)
+    debug "parsing date: [#{date}]"
     timestamp = nil
     case date
     when /Today/
