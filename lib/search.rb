@@ -21,7 +21,7 @@ class SearchCache
         @distance = dist
     end
     
-    
+     
     # set the search mode. valid modes are 'zip', 'state', 'country', 'keyword', coord, user
     def mode(mode, key)
         case mode
@@ -363,8 +363,8 @@ class SearchCache
                 cache['type'].gsub!(/\-/, '')
                 debug "type=#{cache['type']}"
                 
-            # <td valign="top" align="left" nowrap>(3/1.5)<br />
-            when /nowrap\>\(([-\d\.]+)\/([-\d\.]+)\)\<br/
+            # (3/1.5)<br />
+            when /\(([-\d\.]+)\/([-\d\.]+)\)\<br/
                 cache['difficulty']=$1.to_f
                 cache['terrain']=$2.to_f
                 debug "cacheDiff=#{cache['difficulty']} terr=#{cache['terrain']}"
