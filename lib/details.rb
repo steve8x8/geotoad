@@ -226,7 +226,7 @@ class CacheDetails
         warning = $1
         warning.gsub!(/\<.*?\>/, '')
         debug "got a warning: #{warning}"
-        if warning =~ /if you are a premium member/
+        if warning =~ /log in and be a premium member/
           return 'subscriber-only'
         elif (wid)
           @waypointHash[wid]['warning'] = warning.dup
@@ -241,16 +241,14 @@ class CacheDetails
         debug "got hint: #{hint}"
       end
             
-      if line =~ /\<span id=\"CacheLogs\"\>/
+      if line =~ /id=\"CacheLogs\"/
         debug "inspecting comments"
         cnum = 0
         funTotal = 0.0
         fnum = 0
+         # img src='http://www.geocaching.com/images/icons/icon_smile.gif' align='absmiddle'>&nbsp;August 22 by <a name="51319755" style="text-decoration: underline;"><a href="../profile/?guid=7cdeb63a-0470-4b4d-aa99-64298657a4fe" style="text-decoration: underline;">puggle1</a></strong> (103 found)<br />Nice little cache. Better check things out occasionally, there's construction just a few feet away from the hide. Puggle1<br />
                 
-        # icon_smile.gif' align='absmiddle'>&nbsp;November 24, 2005 by <A NAME="11547243" style='text-decoration: underline;'><A HREF="../profile/?guid=43af89b2-3843-4ac6-85dd-74b489332ddf" 
-        # style='text-decoration: underline;'>TKG</A></strong> (334 found)<br>#316 L! and B.  Finally got this one - took two tries.  My gps zero is about 50 feet east of actual cache.  Took: tb and 2 $1 bills which will become WheresGeorge.com bills.  Left: tb and truck.  Lots of MP3s still here to trade.  Happy Thanksgiving 2005!  Thanks for the cache.  <p>[This entry was edited by TKG on Friday, November 25, 2005 at 4:14:42 AM.]</font>
-        line.scan(/icon_(\w+)\.gif.*?\&nbsp\;.*?([\w, ]+) by \<A NAME=\"(\d+)\".*?HREF.*?\>(.*?)\<.*?\<br\>(.*?)\<\/font\>/) { |icon, date, id, name, comment|
-          comment.gsub!(/\<.*?\>/, ' ')
+         line.scan(/icon_(\w+)\.gif.*?&nbsp;([\w ]+) by \<a name=\"(\d+)".*?\>\<a href.*?\>(.*?)\<\/a.*?\<br \/\>(.*?)\</) { |icon, date, id, name, comment|
           type = 'unknown'
           nograde=nil
                     
@@ -281,6 +279,7 @@ class CacheDetails
           end
                     
           debug "comment [#{cnum}] is '#{type}' by #{name} on #{date}: #{comment}"
+          comment.gsub!(/\<.*?\>/, ' ')
           date = Time.parse(date)                    
           @waypointHash[wid]["comment#{cnum}Type"] = type.dup
           @waypointHash[wid]["comment#{cnum}Date"] = date.strftime("%Y-%m-%dT%H:00:00.0000000-07:00")
