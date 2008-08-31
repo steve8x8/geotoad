@@ -360,21 +360,19 @@ class SearchCache
         cache['terrain']=$2.to_f
         debug "cacheDiff=#{cache['difficulty']} terr=#{cache['terrain']}"
             
-        # <td valign="top" align="left" nowrap>26 Sep 07</td>  
-      when /td valign="top" align="left" nowrap\>([\w ]+)\</
+      #                     15 Jul 08 
+      when /^\s+(\w+[ \w]+)\**\<[bS][rT]/
+        cache['mtime'] = parseDate($1)
+        cache['mdays'] = daysAgo(cache['mtime'])
+        debug "mtime=#{cache['mtime']} mdays=#{cache['mdays']}"
+            
+      #                          22 Aug 08<br />     
+      #                          27 Aug 08 <IMG SRC="../images/new3.gif" alt="new!" title="new!">
+      when /^\s+(\d+ \w+ \d+)\r|^\s+(\d+ \w+ \d+) \<IMG/ 
         cache['ctime'] = parseDate($1)
         cache['cdays'] = daysAgo(cache['ctime'])
         debug "ctime=#{cache['ctime']} cdays=#{cache['cdays']}"
-                
-        # <td valign="top" align="left">05 Nov 07<br />
-        # <td valign="top" align="left">2 days ago*<br />
-        # <td valign="top" align="left">Today<STRONG>*</STRONG><br />
-      when /td valign="top" align="left"\>([\w \*]+)\</
-        cache['mtime'] = parseDate($1)
-        cache['mdays'] = daysAgo(cache['mtime'])
-        debug "mtime=#{cache['mtime']} cdays=#{cache['mdays']}"
-                
-        # <td valign="top" align="left">0.3mi&nbsp;<br>SE</td>
+      
                 
       when /([NWSE]+)\<br \/\>([\d\.]+)mi</
         cache['distance']=$2.to_f
@@ -404,7 +402,7 @@ class SearchCache
         cache['name']=name
         debug "sid=#{cache['sid']} name=#{cache['name']} (disabled=#{cache['disabled']})"
                 
-      when /\bby (.*)/
+      when /^\s+by (.*)/
         creator = $1.dup
         if (creator)
           creator =  CGI.unescapeHTML(creator);
