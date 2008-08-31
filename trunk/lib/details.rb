@@ -182,9 +182,11 @@ class CacheDetails
       # Duplicate of search.rb data.
       # <span id="DateHidden">6/28/2005</span>
       if line =~ /span id=\"DateHidden\">([\w\/]+)\</
-        @waypointHash[wid]['ctime'] = parseDate($1)
-        @waypointHash[wid]['cdays'] = daysAgo(@waypointHash[wid]['ctime'])
-        debug "ctime=#{@waypointHash[wid]['ctime']} cdays=#{@waypointHash[wid]['cdays']}"
+        if $1 != 'N/A'
+          @waypointHash[wid]['ctime'] = parseDate($1)
+          @waypointHash[wid]['cdays'] = daysAgo(@waypointHash[wid]['ctime'])
+          debug "ctime=#{@waypointHash[wid]['ctime']} cdays=#{@waypointHash[wid]['cdays']}"
+        end
       end
             
       if line =~ /with an account to view/
@@ -219,16 +221,14 @@ class CacheDetails
         debug "got written lat/lon"
       end
             
-      if line =~ /viewable to subscribers only/
-        return 'subscriber-only'
-      end
-            
       # why a geocache is closed. It seems to always be the same.
       if line =~ /\<span id=\"ErrorText\".*?>(.*?)\<\/span\>/
         warning = $1
         warning.gsub!(/\<.*?\>/, '')
         debug "got a warning: #{warning}"
-        if (wid)
+        if warning =~ /if you are a premium member/
+          return 'subscriber-only'
+        elif (wid)
           @waypointHash[wid]['warning'] = warning.dup
         end
       end

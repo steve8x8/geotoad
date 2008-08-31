@@ -308,15 +308,6 @@ class SearchCache
     return count
   end
     
-  # for the eventstate thing
-  def postVars
-    @postVars
-  end
-    
-  def postURL
-    @postURL
-  end
-    
   def parseSearch(data)
     wid=nil
     cache = Hash.new
@@ -455,10 +446,6 @@ class SearchCache
       when /^\<input type=\"hidden\" name=\"(.*?)\".*value=\"(.*?)\" \/\>/
         debug "found hidden post variable: #{$1}"
         @postVars[$1]=$2
-      when /\<form name=\"Form1\" method=\"post\" action=\"(.*?)\"/
-        @postURL='http://www.geocaching.com/seek/' + $1
-        @postURL.gsub!('&amp;', '&')
-        debug "post URL is #{@postURL}"
                 
       end # end case
     } # end loop

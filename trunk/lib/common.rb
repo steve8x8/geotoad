@@ -14,6 +14,8 @@ module Common
       days_ago=$1.to_i
     when /^\d+[ \/]\w+[ \/]\d+/
       timestamp = Time.parse(date)
+    when 'N/A'
+      return nil
     else
       displayWarning "Could not parse date: #{date}"
       return nil
