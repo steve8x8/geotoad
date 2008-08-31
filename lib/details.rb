@@ -167,6 +167,18 @@ class CacheDetails
                 end
             end
 
+            # &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Difficulty:</b>&nbsp;<span id="Difficulty"><img src="http://www.geocaching.com/images/stars/stars3_5.gif" alt="3.5 out of 5" title="3.5 out of 5" align="absmiddle"></span>
+            if line =~ /Difficulty.*?([-\d\.]+) out of/
+                @waypointHash[wid]['difficulty']=$1.to_f
+                debug "difficulty: #{$1}"
+            end
+            
+            # &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Terrain:</b>&nbsp;<span id="Terrain"><img src="http://www.geocaching.com/images/stars/stars4.gif" alt="4 out of 5" title="4 out of 5" align="absmiddle"></span>
+            if line =~ /Terrain.*?([-\d\.]+) out of/
+                @waypointHash[wid]['terrain']=$1.to_f
+                debug "terrain: #{$1}"
+            end
+
             # Duplicate of search.rb data.
             # <span id="DateHidden">6/28/2005</span>
             if line =~ /span id=\"DateHidden\">([\w\/]+)\</
@@ -180,14 +192,11 @@ class CacheDetails
               return 'login-required'
             end
             
-            # DUPLICATE OF WHAT SEARCH.RB HAS! Only used for failures and or wid searches.
-            # May make in the future have it decide which source is newest: search or details.
-            if line =~ /\<br\>by (.*?) \[\<A HREF/
-                if (! @waypointHash[wid]['creator'])
-                    @waypointHash[wid]['creator'] = $1
-                    debug "creator was not set, now set to #{$1}"
-                    
-                end
+            # duplicate of search.rb
+            # <span id="CacheOwner">by <a href="http://www.geocaching.com/profile/?guid=fb057a7a-3131-4c75-9211-f77b3ea1c388&amp;wid=3142990f-e3d5-44d4-8a9c-0db0b0fef38c&amp;ds=2">wvgeoeagles</a></span>
+            if line =~ /span id=\"CacheOwner\"\>.*?\"\>(.*)\<\/a/
+              @waypointHash[wid]['creator'] = $1
+              debug "creator is #{$1}"
             end
                         
             # Regexp rewritten by Scott Brynen for Canadian compatibility

@@ -261,7 +261,7 @@ class Output
     def makeXML(str)
         # XML safe chars.. except for &, which is only safe if something is after it.. weird, eh?
         # I'm not actually sure how to handle & that is not part of an element properly.
-        if (str =~ /\&/) && (str !~ /\&[\w\#]+\;/)
+        if str =~ /\&/ && str !~ /\&[\w\#]+\;/ 
             debug "Fixing ampersands in #{str}"
             str.gsub!(/\&/, "&amp;");
         end
@@ -272,9 +272,9 @@ class Output
             debug "makeXML: [#{str}]"
         end
         text = CGI.escapeHTML(str)
-    scan_text = text.dup
+        scan_text = text.dup
         # using scan() here to get around difficulties with \1
-    scan_text.scan(/([\x80-\xFF]+)/) {|highchar|
+        scan_text.scan(/([\x80-\xFF]+)/) {|highchar|
             begin
                 ascii = highchar[0].unpack("U").to_s
                 debug "Replacing high char [#{highchar}] with #{ascii}"
@@ -285,7 +285,7 @@ class Output
                 text.gsub!(/#{highchar}/,'?')
             end
         }
-    return text 
+        return text 
     end
     
     
@@ -388,16 +388,7 @@ class Output
                 if (@wpHash[wid]['mdays'] < 0)
                     symbols[wid] =  symbols[wid] + "<b><font color=\"#9900CC\">@</font></b>"
                 end
-                
-                # not yet ready for consumption
-                #if (@wpHash[wid]['arating'] < 1)
-                #     symbols[wid] =  symbols[wid] + "<b><font color=\"#555555\">--</font></b>"
-                #end
-                
-                #if (@wpHash[wid]['arating'] > 4)
-                #     symbols[wid] =  symbols[wid] + "<b><font color=\"#000000\">++</font></b>"
-                #end
-                
+
                 if (symbols[wid].length < 1)
                     symbols[wid] = "&nbsp;"
                 end
