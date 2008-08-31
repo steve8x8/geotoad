@@ -23,35 +23,35 @@ input = cgi.params
 
 ## fetch code, catch this early on ##################################
 if (input['type'][0] == 'fetch')
-	outputDetails = Output.new
-	mime = outputDetails.formatMIME(input['format'][0])
-	puts "Content-type: #{mime}"
-	puts "Content-disposition: attachment; filename=" + input['file'][0]
-	puts ""
-	input = File.new(input['file'][0]).readlines
-	puts input
-	exit
+  outputDetails = Output.new
+  mime = outputDetails.formatMIME(input['format'][0])
+  puts "Content-type: #{mime}"
+  puts "Content-disposition: attachment; filename=" + input['file'][0]
+  puts ""
+  input = File.new(input['file'][0]).readlines
+  puts input
+  exit
 end
 	
 ## Push out the real deal.
 puts "Content-type: multipart/mixed;boundary=BoundaryString\n\n"
 def pushOut(string)
-	puts "--BoundaryString\n"
-	puts "Content-type: text/html\n\n"
-	puts string
-	$stdout.flush
+  puts "--BoundaryString\n"
+  puts "Content-type: text/html\n\n"
+  puts string
+  $stdout.flush
 end	
 ## Make the Initial Query ############################
 if (! $CACHE_DIR)
-	pushOut "Could not find a place to use as a cache directory. Try making /var/cache"
-	exit
+  pushOut "Could not find a place to use as a cache directory. Try making /var/cache"
+  exit
 end
 
 outputDir = "#{$CACHE_DIR}/output/"
 begin
-	File.stat(outputDir).directory?
+  File.stat(outputDir).directory?
 rescue
-	File.makedirs(outputDir)
+  File.makedirs(outputDir)
 end
 
 
@@ -60,10 +60,10 @@ test = SearchCache.new
 test.mode(input['type'], input['query'])
 test.createURL
 if (test.fetchAll) 
-	pushOut "[.] #{test.totalWaypoints} waypoints found. Running first stage of filters.<br>"
+  pushOut "[.] #{test.totalWaypoints} waypoints found. Running first stage of filters.<br>"
 else
-pushOut "(*) No waypoints found matching query.<br>"
-	exit
+  pushOut "(*) No waypoints found matching query.<br>"
+  exit
 end
 
 ## step #1 in filtering! ############################
@@ -82,8 +82,8 @@ filtered.notUser(input['user'])
 
 pushOut "[=] Filter complete, #{filtered.totalWaypoints} caches left."
 if (filtered.totalWaypoints < 1)
-pushOut "(*) No caches to generate output for!"
-	exit
+  pushOut "(*) No caches to generate output for!"
+  exit
 end
 ## generate the output ########################################
 output.input(filtered.waypoints)

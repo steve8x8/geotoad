@@ -10,41 +10,41 @@ boring = YAML::load( File.open( 'boring.txt' ) )
 $grade = Bishop::Bayes.new	
 
 fun.each_key { |key| 
-	fun[key]['comments'].each do |comment|
-		if comment && comment.length > 4
-			#puts "training good on: [#{comment}]"
-			$grade.train("good", comment)
-		end
-	end
+  fun[key]['comments'].each do |comment|
+    if comment && comment.length > 4
+      #puts "training good on: [#{comment}]"
+      $grade.train("good", comment)
+    end
+  end
 }
 
 boring.each_key { |key| 
-	boring[key]['comments'].each do |comment|
-		if comment && comment.length > 4
-			#puts "training bad on: [#{comment}]"
-			$grade.train("bad", comment)
-		end
-	end
+  boring[key]['comments'].each do |comment|
+    if comment && comment.length > 4
+      #puts "training bad on: [#{comment}]"
+      $grade.train("bad", comment)
+    end
+  end
 }
 
 def test(str)
-	good = $grade.guess(str)[1][1] * 100
-	bad = $grade.guess(str)[0][1] * 100
-	score = (good - bad)
-	scoreText = "Average"
-	if score > 10
-		scoreText = "Good"
-	end
-	if score > 28
-		scoreText = "Very Good"
-	end
-	if score < -10 
-		scoreText = "Dull"
-	end
-	if score < -20
-		scoreText = "Very Dull"
-	end
-	printf("%10.10s (%3.2f, g=%2.2f b=%2.2f): %s\n", scoreText, score,  good, bad, str)
+  good = $grade.guess(str)[1][1] * 100
+  bad = $grade.guess(str)[0][1] * 100
+  score = (good - bad)
+  scoreText = "Average"
+  if score > 10
+    scoreText = "Good"
+  end
+  if score > 28
+    scoreText = "Very Good"
+  end
+  if score < -10 
+    scoreText = "Dull"
+  end
+  if score < -20
+    scoreText = "Very Dull"
+  end
+  printf("%10.10s (%3.2f, g=%2.2f b=%2.2f): %s\n", scoreText, score,  good, bad, str)
 end
 
 
@@ -70,7 +70,7 @@ $grade.save("fun_scores.dat")
 
 puts "enter your own:"
 while (1) do
-	print "> "
-	text = $stdin.gets
-	test(text)
+  print "> "
+  text = $stdin.gets
+  test(text)
 end

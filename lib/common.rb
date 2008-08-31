@@ -6,14 +6,14 @@ module Common
   def parseDate(date)
     timestamp = nil
     case date
-      when /Today/
-        days_ago=0
-      when /Yesterday/
-        days_ago=1
-      when /(\d)+ days ago/
-        days_ago=$1.to_i
-      when /^\d+[ \/]\w+[ \/]\d+/
-        timestamp = Time.parse(date)
+    when /Today/
+      days_ago=0
+    when /Yesterday/
+      days_ago=1
+    when /(\d)+ days ago/
+      days_ago=$1.to_i
+    when /^\d+[ \/]\w+[ \/]\d+/
+      timestamp = Time.parse(date)
     else
       displayWarning "Could not parse date: #{date}"
       return nil
@@ -53,7 +53,7 @@ module Common
   def findCacheDir
     # find out where we want our cache #############################
     cacheDir=selectDirectory([ENV['GEO_DIR'], "#{ENV['HOME']}/Library/Caches", "#{ENV['USERPROFILE']}/Documents and Settings", ENV['HOME'], ENV['TEMP'],
-		"C:/temp/", "C:/windows/temp", "C:/tmp/", "/var/tmp"])
+        "C:/temp/", "C:/windows/temp", "C:/tmp/", "/var/tmp"])
   
     # probably what we fallback to in most UNIX's.
     if cacheDir == ENV['HOME']
@@ -71,7 +71,7 @@ module Common
   def findConfigDir
     # find out where we want our cache #############################
     configDir=selectDirectory([ ENV['GEO_DIR'], "#{ENV['HOME']}/Library/Preferences", 
-		"#{ENV['USERPROFILE']}/Documents and Settings", ENV['HOME'], "C:/temp/", "C:/windows/temp", "/var/cache", "/var/tmp" ])
+        "#{ENV['USERPROFILE']}/Documents and Settings", ENV['HOME'], "C:/temp/", "C:/windows/temp", "/var/cache", "/var/tmp" ])
   
     if configDir == ENV['HOME']
       configDir=configDir + '/.geotoad'
@@ -87,7 +87,7 @@ module Common
   def findOutputDir
     # find out where we want our cache #############################
     outputDir=selectDirectory([ ENV['GEO_DIR'], "#{ENV['HOME']}/Desktop", 
-		"#{ENV['USERPROFILE']}/Desktop", ENV['HOME'] ])
+        "#{ENV['USERPROFILE']}/Desktop", ENV['HOME'] ])
   
     debug "#{outputDir} is being used as the default output directory"
     FileUtils::mkdir_p(outputDir)

@@ -55,16 +55,16 @@ module Auth
         
     data.each do |line| 
       case line
-        when /You are logged in as/
-          debug "Found login confirmation!"
-          return true
-        when /^\<input type=\"hidden\" name=\"(.*?)\".*value=\"(.*?)\"/
-          debug "found hidden post variable: #{$1}"
-          @postVars[$1]=$2
-        when /\<form name=\"frmLogin\" method=\"post\" action=\"(.*?)\"/
-          @postURL='http://www.geocaching.com/login/' + $1
-          @postURL.gsub!('&amp;', '&')
-          debug "post URL is #{@postURL}"
+      when /You are logged in as/
+        debug "Found login confirmation!"
+        return true
+      when /^\<input type=\"hidden\" name=\"(.*?)\".*value=\"(.*?)\"/
+        debug "found hidden post variable: #{$1}"
+        @postVars[$1]=$2
+      when /\<form name=\"frmLogin\" method=\"post\" action=\"(.*?)\"/
+        @postURL='http://www.geocaching.com/login/' + $1
+        @postURL.gsub!('&amp;', '&')
+        debug "post URL is #{@postURL}"
       end
     end
     debug "Looks like we are not logged in."
