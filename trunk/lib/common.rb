@@ -28,7 +28,12 @@ module Common
   end
   
   def daysAgo(timestamp)
-    return (Time.now - timestamp).to_i / 86400    
+    begin
+      return (Time.now - timestamp).to_i / 86400    
+    rescue TypeError
+      warn "Could not convert timestamp '#{timestamp}' to Time object."
+      return nil
+    end
   end
 
   ## finds a place to put temp files on the system ###################################
