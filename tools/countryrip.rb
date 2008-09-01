@@ -1,4 +1,4 @@
-#!/usr/local/bin/ruby
+#!/usr/bin/env ruby
 # Processes the Hide/Seek page to grab countries/state names.
 # $Id$
 
@@ -11,9 +11,8 @@ $stdin.each_line { |line|
     #puts "#{codeType} - #{line}"
     puts "$idHash[\'#{codeType}\'] = Hash.new"
   end
-  line.scan(/OPTION VALUE=(\d+)\>(.*?)\<\/OPTION\>/) {
-    num=$1
-    name=$2.downcase
+  line.scan(/OPTION VALUE=(\d+)\>(.*?\w)\s*\<\/OPTION/) { |num, name|
+    name.downcase!
     name.gsub!('\*', '')
     name.gsub!('\s+$', '')
     puts "$idHash[\'#{codeType}\'][\'#{name}\']=#{num}"
