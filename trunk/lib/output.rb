@@ -141,9 +141,9 @@ class Output
   # select the format for the next set of output
   def formatType=(format)
     if ($Format[format])
-      @outputFormat = $Format[format]
+      @outputFormat = $Format[format].dup
       @outputType = format
-      debug "format switched to #{format}"
+      debug "format switched to #{format}: #{$Format[format]}"
     else
       displayError "[*] Attempted to select invalid format: #{format}"
       return nil
@@ -188,14 +188,13 @@ class Output
     # if we are not actually generating the output, lets do it in a meta-fashion.
     debug "preparing for #{@outputType}"
     if (@outputFormat['filter_exec'])
-      oldformat = @outputType
-      src = @outputFormat['filter_src']
-      exec = @outputFormat['filter_exec']
-      # this should use formatType()
-      @outputFormat = $Format[src]
-      debug "pre-formatting as #{@outputFormat['desc']}"
+      post_format = @outputType
+      debug "pre-formatting as #{@outputFormat['filter_src']} (from #{post_format})"
+      self.formatType=@outputFormat['filter_src']
+      debug "pre-format: #{@outputFormat['desc']}"
       @output = filterInternal(title)
-      @outputFormat = $Format[oldformat]
+      self.formatType=post_format
+      debug "post-format: #{@outputFormat['desc']} via #{@outputFormat['filter_exec']}"
     else
       @output = filterInternal(title)
     end
@@ -213,7 +212,7 @@ class Output
     debug "committing file type #{@outputType} to #{file}"
     if @outputFormat['filter_exec']
       displayMessage "Executing #{@outputFormat['filter_exec']}"
-      exec = @outputFormat['filter_exec']
+      exec = @outputFormat['filter_exec'].dup
       tmpfile = $CACHE_DIR + "/" + @outputType + "." + rand(500000).to_s
       exec.gsub!('INFILE', "\"#{tmpfile}\"")
       exec.gsub!('OUTFILE', "\"#{file}\"")
