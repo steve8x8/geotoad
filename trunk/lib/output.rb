@@ -210,7 +210,7 @@ class Output
     
   # writes the output to a file or to a program #############################
   def commit (file)
-    debug "committing file type #{@outputType}"
+    debug "committing file type #{@outputType} to #{file}"
     if @outputFormat['filter_exec']
       displayMessage "Executing #{@outputFormat['filter_exec']}"
       exec = @outputFormat['filter_exec']

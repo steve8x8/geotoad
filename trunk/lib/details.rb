@@ -226,10 +226,12 @@ class CacheDetails
         warning = $1
         warning.gsub!(/\<.*?\>/, '')
         debug "got a warning: #{warning}"
-        if warning =~ /log in and be a premium member/
-          return 'subscriber-only'
-        elif (wid)
+        if (wid)
           @waypointHash[wid]['warning'] = warning.dup
+        end
+        if warning =~ /subscribers only/
+          debug "This cache appears to be available to subscribers only."
+          return 'subscriber-only'
         end
       end
             

@@ -302,7 +302,8 @@ class GeoToad
       @filtered.terrainMax(@option['terrainMax'].to_f)
     end
 
-
+    debug "Filter running cycle 2, #{@filtered.totalWaypoints} caches left"
+    
     if @option['sizeMin']
       @queryTitle = @queryTitle + ", size #{@option['sizeMin']}+"
       @defaultOutputFile = @defaultOutputFile + "-s" + @option['sizeMin'].to_s
@@ -315,6 +316,7 @@ class GeoToad
       @filtered.sizeMax(@option['sizeMax'])
     end
         
+    debug "Filter running cycle 3, #{@filtered.totalWaypoints} caches left"    
     if @option['foundDateInclude']
       @queryTitle = @queryTitle + ", found in the last  #{@option['foundDateInclude']} days"
       @defaultOutputFile = @defaultOutputFile + "-r=" + @option['foundDateInclude'].to_s
@@ -338,6 +340,7 @@ class GeoToad
       @defaultOutputFile = @defaultOutputFile + "-P=" + @option['placeDateExclude'].to_s
       @filtered.placeDateExclude(@option['placeDateExclude'].to_f)
     end
+    debug "Filter running cycle 4, #{@filtered.totalWaypoints} caches left"        
         
     if @option['notFound']
       @queryTitle = @queryTitle + ", virgins only"
