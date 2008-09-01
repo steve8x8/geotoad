@@ -56,6 +56,7 @@ class SearchCache
           debug "found submit post variable: #{$1}"
           @postVars[$1]=$2
         end
+        
         if (line =~ /\<select name=\"([^\"]*?)\"/)
           @select=$1
         elsif (line =~ /\<option selected=\"selected\" value=\"([^\"]*?)\"/)
@@ -65,7 +66,7 @@ class SearchCache
             @select = ''
           else
             debug "found selected option: #{$1}"
-            displayError "Found selected <option>, but no previoys <select> tag."
+            displayError "Found selected <option>, but no previous <select> tag."
             return nil
           end
         end
@@ -362,17 +363,24 @@ class SearchCache
             
       #                     15 Jul 08 
       when /^\s+(\w+[ \w]+)\**\<[bS][rT]/
+        debug "last found date: #{$1} at line: #{line}"
         cache['mtime'] = parseDate($1)
         cache['mdays'] = daysAgo(cache['mtime'])
         debug "mtime=#{cache['mtime']} mdays=#{cache['mdays']}"
-            
-      #                          22 Aug 08<br />     
+      
+      # New images have a slightly different regexp. Couldn't get an | to work on this one?
       #                          27 Aug 08 <IMG SRC="../images/new3.gif" alt="new!" title="new!">
-      when /^\s+(\d+ \w+ \d+)\r|^\s+(\d+ \w+ \d+) \<IMG/ 
+      when /^\s+(\d+ \w+ \d+) \<IMG/
+      debug "creation date: #{$1} at line: #{line}"
+      cache['ctime'] = parseDate($1)
+      cache['cdays'] = daysAgo(cache['ctime'])
+      debug "ctime=#{cache['ctime']} cdays=#{cache['cdays']}"
+      
+      #                          22 Aug 08<br />           
+      when /^\s+(\d+ \w+ \d+)\r/
         cache['ctime'] = parseDate($1)
         cache['cdays'] = daysAgo(cache['ctime'])
         debug "ctime=#{cache['ctime']} cdays=#{cache['cdays']}"
-      
                 
       when /([NWSE]+)\<br \/\>([\d\.]+)mi</
         cache['distance']=$2.to_f
