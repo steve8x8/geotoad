@@ -259,18 +259,19 @@ class Output
   end
     
   def makeXML(str)
-    # XML safe chars.. except for &, which is only safe if something is after it.. weird, eh?
-    # I'm not actually sure how to handle & that is not part of an element properly.
-    if str =~ /\&/ && str !~ /\&[\w\#]+\;/ 
-      debug "Fixing ampersands in #{str}"
-      str.gsub!(/\&/, "&amp;");
-    end
-        
-    if str =~ /^[\&\#\;\w\s_\-:\?]+$/
-      return str
-    end
+    # Mangle our scraped HTML enough to pass most XML parsers.
     
     text = CGI.escapeHTML(str)
+    if text != str
+      debug "Escaped HTML: #{text}"
+    end
+    
+    # fix CGI.escapeHTML stupidity
+    if text =~ /\&amp\;([\#\w]+\;)/
+      text.gsub!(/\&amp\;([\#\w]+\;)/, "&#{$1}")
+      debug "Post-ampersand fix: #{text}"
+    end
+    
     scan_text = text.dup
     # using scan() here to get around difficulties with \1
     scan_text.scan(/([\x80-\xFF]+)/) {|highchar|
@@ -284,7 +285,9 @@ class Output
         text.gsub!(/#{highchar}/,'?')
       end
     }
-    debug "made XML: %s" % str
+    if text != str
+      debug "made XML: %s" % text
+    end
     return text 
   end
     
