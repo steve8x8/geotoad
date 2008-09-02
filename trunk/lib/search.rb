@@ -348,10 +348,10 @@ class SearchCache
           @lastWaypoint = @totalWaypoints                    
         end
                 
-      when /WptTypes.*alt=\"(.*?)\" title/
+      when /WptTypes.*?alt=\"(.*?)\"/
         cache['mdays']=-1
-        cache['type']=$1
-        cache['type'].gsub!(/\s*cache.*/i, '')
+        cache['type']=$1.downcase
+        cache['type'].gsub!(/\s.*/, '')
         cache['type'].gsub!(/\-/, '')
         debug "type=#{cache['type']}"
                 

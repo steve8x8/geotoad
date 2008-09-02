@@ -52,7 +52,6 @@ class Filter
     
   def terrainMax(num)
     debug "filtering by terrainMax: #{num}"
-        
     @waypointHash.delete_if { |wid, values|
       @waypointHash[wid]['terrain'] > num
     }
@@ -60,7 +59,6 @@ class Filter
     
   def funFactorMin(num)
     debug "filtering by funFactorMin: #{num}"
-        
     @waypointHash.delete_if { |wid, values|
       @waypointHash[wid]['funfactor'] < num
     }
@@ -68,7 +66,6 @@ class Filter
     
   def funFactorMax(num)
     debug "filtering by funFactorMax: #{num}"
-        
     @waypointHash.delete_if { |wid, values|
       @waypointHash[wid]['funfactor'] > num
     }
@@ -81,21 +78,23 @@ class Filter
       @@sizes[@waypointHash[wid]['size']] < @@sizes[size_name]
     }
   end
-    
+  
+  def cacheType(typestr)
+    typestr.gsub!('regular', 'traditional')
+    typestr.gsub!('puzzle', 'unknown')
+    typestr.gsub!('mystery', 'unknown')
+    types = typestr.split(/[:\|]/)
+    debug "filtering by types: #{types}"
+    @waypointHash.delete_if { |wid, values|
+      not types.include?(@waypointHash[wid]['type'])
+    }
+  end  
 
   def sizeMax(size_name)
     debug "filtering by sizeMax: #{size_name} (#{@@sizes[size_name]})"        
     @waypointHash.delete_if { |wid, values|
       debug "size check for #{wid}: #{@waypointHash[wid]['size']}"
       @@sizes[@waypointHash[wid]['size']] > @@sizes[size_name]
-    }
-  end
-    
-  def funFactorMax(num)
-    debug "filtering by funFactorMax: #{num}"
-        
-    @waypointHash.delete_if { |wid, values|
-      @waypointHash[wid]['funfactor'] > num
     }
   end
     
@@ -182,8 +181,6 @@ class Filter
     }
   end
     
-    
-    
   def titleKeyword(string)
     debug "filtering by title keyword: #{string}"
     @waypointHash.each_key { |wid|
@@ -204,21 +201,7 @@ class Filter
       end
     }
   end
- 
-  
-  def sizeOnly(size)
-    debug "filtering by size: #{size}"
-       
-    @waypointHash.each_key { |wid|
-      this_size = debug @waypointHash[wid]['size']
-      if this_size != size
-        debug @waypointHash[wid]['size']
-        @waypointHash.delete(wid)
-        debug " - #{wid} is size #{@waypointHash[wid]['size']}, filtering."
-      end
-    }
-  end   
-    
+     
   def removeByElement(element)
     debug "filtering by removeByElement: #{element}"
         

@@ -211,7 +211,15 @@ class CacheDetails
       if line =~ /LatLon/
         debug "LatLon: #{line}"
       end
-            
+      
+      # duplicated from search.rb exactly.
+      if line =~ /WptTypes.*?alt=\"(.*?)\"/
+        @waypointHash[wid]['type']=$1.downcase
+        @waypointHash[wid]['type'].gsub!(/\s.*/i, '')
+        @waypointHash[wid]['type'].gsub!(/\-/, '')
+        debug "type=#{@waypointHash[wid]['type']}"
+      end
+      
       # latitude and longitude in the written form. Rewritten by Scott Brynen for Southpole compatibility.
       if line =~ /id=\"LatLon\".*\>.*?([NWSE]) (\d+).*? ([\d\.]+) ([NWSE]) (\d+).*? ([\d\.]+)\</
         @waypointHash[wid]['latwritten'] = $1 + $2 + ' ' + $3
@@ -243,6 +251,7 @@ class CacheDetails
         debug "got hint: #{hint}"
       end
             
+      
       if line =~ /id=\"CacheLogs\"/
         debug "inspecting comments"
         cnum = 0
