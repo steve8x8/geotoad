@@ -86,7 +86,7 @@ class Filter
     types = typestr.split(/[:\|]/)
     debug "filtering by types: #{types}"
     @waypointHash.delete_if { |wid, values|
-      not types.include?(@waypointHash[wid]['cacheType'])
+      not types.include?(@waypointHash[wid]['type'])
     }
   end  
 
