@@ -43,25 +43,26 @@ interface" (TUI). Simply double click on the GeoToad program icon, or from
 a command prompt run "geotoad" or if you are on UNIX, run "./geotoad.rb".
 You will then see a screen that looks similar to this:
 
-==============================================================================
 :::            // GeoToad 3.9-CURRENT Text User Interface //               :::
 ==============================================================================
-(1)  GC.com login     [helixblue    ] | (2)  search type          [zipcode   ]
-(3)  zipcode          [30076        ] | (4)  distance maximum            [7  ]
+(1)  GC.com login     [helixblue    ] | (2)  search type          [coord     ]
+(3)  coord             [N 34° 09.839] | (4)  distance maximum            [1  ]
                                       |
-(5)  difficulty           [3.0 - 5.0] | (6)  terrain               [0.0 - 5.0]
-(7)  fun factor           [0.0 - 5.0] | (8) cache size             [any - any]
-(9)  virgin caches only           [ ] | (10) travel bug caches only        [ ]
-(11) cache age (days)       [  0-any] | (12) last found (days)       [  0-any] 
+(5)  difficulty           [0.0 - 2.0] | (6)  terrain               [0.0 - 2.5]
+(7)  fun factor           [0.0 - 5.0] | (8)  cache size            [any - any]
+(9)  cache type           [    event] |
+(10) virgin caches only           [ ] | (11) travel bug caches only        [ ]
+(12) cache age (days)       [  0-any] | (13) last found (days)       [  0-any] 
                                       |
-(13) title keyword       [difficult ] | (14) descr. keyword    [             ]
-(15) cache not found by  [sallad    ] | (16) cache owner isn't [             ]
-(17) cache found by      [          ] | (18) cache owner is    [             ]
-(19) EasyName WP length         [ 20] | (20) include disabled caches [ ] 
+(14) title keyword       [          ] | (15) descr. keyword    [             ]
+(16) cache not found by  [sallad:hel] | (17) cache owner isn't [             ]
+(18) cache found by      [          ] | (19) cache owner is    [             ]
+(20) EasyName WP length         [  0] | (21) include disabled caches [ ] 
 - - - - - - - - - - - - - - - - - - - + - - - - - - - - - - - - - - - - - - -
-(21) output format       [gpx       ]   (22) filename   [automatic           ]
-(23) output directory    [/Users/tstromberg/Desktop                          ]
+(22) output format       [html      ]   (23) filename   [automatic           ]
+(24) output directory    [/Volumes/snabbt/Users/thomas/Desktop               ]
 ==============================================================================
+
 
 -- Enter menu number, (s) to start, (r) to reset, or (x) to exit -->
 
@@ -137,6 +138,7 @@ syntax: geotoad [options] <search:search2:search3>
  -i/-I [username]       include/exclude caches owned by this person
  -e/-E [username]       include/exclude caches found by this person 
  -s/-S [virtual|small|regular|large]   min/max size of the cache
+ -c    [regular|virtual|event|unknown] type of cache (| seperated)
  -j/-J [# days]         include/exclude caches placed in the last X days
  -r/-R [# days]         include/exclude caches found in the last X days
  -n                     only include not found caches (virgins)
