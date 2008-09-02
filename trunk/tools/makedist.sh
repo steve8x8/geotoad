@@ -45,7 +45,7 @@ cp -Rp $DIST_SRC $DIST_WIN
 rm $DIST_WIN/geotoad
 cd $DIST_WIN
 mkdir compile
-mv *.rb lib interface compile
+mv *.rb lib interface data compile
 mv compile/geotoad.rb compile/init.rb
 flip -d *.txt
 perl -pi -e 's/([\s])geotoad\.rb/$1geotoad/g' README.txt
