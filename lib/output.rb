@@ -366,8 +366,7 @@ class Output
       wpList.sort{|a,b| a[1]<=>b[1]}.each {  |wpArray|
         wid = wpArray[0]
         debug "Creating index for \"#{@wpHash[wid]['name']}\" (#{wid})"
-                
-        @wpHash[wid]['details'].gsub!(/\&([A-Z])/, '&amp;(#{$1})');
+
         htmlIndex = htmlIndex + "<li>"
         symbols[wid] = ''
                 
