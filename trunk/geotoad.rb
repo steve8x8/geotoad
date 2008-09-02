@@ -304,10 +304,10 @@ class GeoToad
     end
 
     debug "Filter running cycle 2, #{@filtered.totalWaypoints} caches left"
-    if @option['type']
-      @queryTitle = @queryTitle + ", type #{@option['type']}"
-      @defaultOutputFile = @defaultOutputFile + "-c" + @option['type']
-      @filtered.cacheType(@option['type'])
+    if @option['cacheType']
+      @queryTitle = @queryTitle + ", type #{@option['cacheType']}"
+      @defaultOutputFile = @defaultOutputFile + "-c" + @option['cacheType']
+      @filtered.cacheType(@option['cacheType'])
     end
     
     if @option['sizeMin']

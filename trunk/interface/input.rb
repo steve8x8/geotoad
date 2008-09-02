@@ -201,7 +201,7 @@ class Input
         (@@optHash['terrainMin'] || 0.0), (@@optHash['terrainMax'] || 5.0))
       printf("(7)  fun factor           [%-1.1f - %-1.1f] | (8)  cache size            [%3.3s - %3.3s]\n", (@@optHash['funFactorMin'] || 0.0), 
         (@@optHash['funFactorMax'] || 5.0), @@optHash['sizeMin'] || 'any', @@optHash['sizeMax'] || 'any')
-      printf("(9)  cache type           [%9.9s] |\n", (@@optHash['type'] || 'any'))
+      printf("(9)  cache type           [%9.9s] |\n", (@@optHash['cacheType'] || 'any'))
       printf("(10) virgin caches only           [%1.1s] | (11) travel bug caches only        [%1.1s]\n", @@optHash['notFound'], @@optHash['travelBug'])
       printf("(12) cache age (days)       [%3.3s-%-3.3s] | (13) last found (days)       [%3.3s-%-3.3s] \n", 
         (@@optHash['placeDateExclude'] || 0), (@@optHash['placeDateInclude'] || 'any'), 
@@ -321,7 +321,7 @@ class Input
         @@optHash['sizeMax'] = ask("What is the largest cache you seek (virtual, micro, small, regular, large)?", nil)
 
       when '9'
-        @@optHash['type'] = ask("What kind of caches do you seek (seperate with |) (traditional, multi, event, unknown, letterbox, virtual)?", nil)
+        @@optHash['cacheType'] = ask("What kind of caches do you seek (seperate with |) (traditional, multi, event, unknown, letterbox, virtual)?", nil)
       
       when '10'
         answer = ask('Would you like to only include virgin geocaches (geocaches that have never been found)?', nil)
