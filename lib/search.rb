@@ -354,7 +354,11 @@ class SearchCache
         cache['type'].gsub!(/\s.*/, '')
         cache['type'].gsub!(/\-/, '')
         debug "type=#{cache['type']}"
-                
+
+      when /Travel Bug Dog Tag \((.*?)\)"/
+        debug "Travel Bug Found: #{$1}"
+        cache['travelbug']=$1
+
         # (3/1.5)<br />
       when /\(([-\d\.]+)\/([-\d\.]+)\)\<br/
         cache['difficulty']=$1.to_f
@@ -423,11 +427,7 @@ class SearchCache
       when /\((GC\w+)\)/
         wid=$1.dup
         debug "wid=#{wid}"
-                
-        # We have a WID! Lets begin
-      when /icon_bug/
-        cache['travelbug']='Travel Bug!'
-                
+    
       when /Member-only/
         debug "Found members only cache. Marking"
         cache['membersonly'] = 1
