@@ -6,44 +6,50 @@ SRC=`pwd`
 VERSION=`cat VERSION`
 DISTNAME="geotoad-$VERSION"
 DEST=$HOME/Desktop/GeoToad
-DIST_SRC=$DEST/$DISTNAME
-DIST_MAC=$DEST/${DISTNAME}_for_Mac
-DIST_WIN=$DEST/${DISTNAME}_for_Windows
+GENERIC_DIR=$DEST/$DISTNAME
+GENERIC_PKG="${GENERIC_DIR}.zip"
+
+MAC_DIR="$DEST/GeoToad for Mac"
+MAC_PKG="$DEST/${DISTNAME}_MacOSX.dmg"
+
+WIN_DIR=$DEST/${DISTNAME}_for_Windows
+WIN_PKG="$DEST/${DISTNAME}_Windows.zip"
 
 echo "Updating repository..."
 svn update
 
 echo "Erasing old distributions."
-rm -Rf $DEST
+rm -Rf "$DEST"
 
-echo "Creating $DIST_SRC"
-mkdir -p $DIST_SRC
-rsync -a --exclude "*~" --exclude ".svn/" . $DIST_SRC
-sed s/"%VERSION%"/"$VERSION"/g geotoad.rb > $DIST_SRC/geotoad.rb
-sed s/"%VERSION%"/"$VERSION"/g README.txt > $DIST_SRC/README.txt
-sed s/"%VERSION%"/"$VERSION"/g FAQ.txt > $DIST_SRC/FAQ.txt
-chmod 755 $DIST_SRC/*.rb
-svn log > $DIST_SRC/ChangeLog.txt
-rm $DIST_SRC/VERSION $DIST_SRC/tools/tar2rubyscript.rb $DIST_SRC/tools/countryrip.rb
+echo "Creating $GENERIC_DIR"
+mkdir -p "$GENERIC_DIR"
+rsync -a --exclude "*~" --exclude ".svn/" . $GENERIC_DIR
+sed s/"%VERSION%"/"$VERSION"/g geotoad.rb > $GENERIC_DIR/geotoad.rb
+sed s/"%VERSION%"/"$VERSION"/g README.txt > $GENERIC_DIR/README.txt
+sed s/"%VERSION%"/"$VERSION"/g FAQ.txt > $GENERIC_DIR/FAQ.txt
+chmod 755 $GENERIC_DIR/*.rb
+svn log > $GENERIC_DIR/ChangeLog.txt
+rm $GENERIC_DIR/VERSION $GENERIC_DIR/tools/tar2rubyscript.rb $GENERIC_DIR/tools/countryrip.rb $GENIRIC_DIR/tools/*.sh
 
 # Make a duplicate of it for Macs before we nuke the .command file
-cp -Rp $DIST_SRC $DIST_MAC
-rm $DIST_SRC/*.command
+cp -Rp $GENERIC_DIR "$MAC_DIR"
+rm $GENERIC_DIR/*.command
 ln -s geotoad.rb geotoad
-zip -r ${DIST_SRC}.zip $DIST_SRC
+cd "$DEST"
+zip -r "$GENERIC_PKG" "$DISTNAME"
 
 # Mac OS X
-echo "Creating $DIST_MAC"
-rm $DIST_MAC/geotoad
-echo "Using Finder, rename the .command in $DIST_MAC and apply icon from data/bufos.icns"
+echo "Creating $MAC_DIR"
+rm "$MAC_DIR/geotoad"
+echo "Using Finder, rename the .command in $MAC_DIR and apply icon from data/bufos.icns"
 read 
-hdiutil create -srcfolder $DIST_MAC ${DIST_MAC}.dmg
+hdiutil create -srcfolder "$MAC_DIR" "$MAC_PKG"
 
 # Windows
-echo "Creating $DIST_WIN"
-cp -Rp $DIST_SRC $DIST_WIN
-rm $DIST_WIN/geotoad
-cd $DIST_WIN
+echo "Creating $WIN_DIR"
+cp -Rp "$GENERIC_DIR" "$WIN_DIR"
+rm "$WIN_DIR/geotoad"
+cd "$WIN_DIR"
 mkdir compile
 mv *.rb lib interface data compile
 mv compile/geotoad.rb compile/init.rb
@@ -56,8 +62,8 @@ if [ -f "compile.rb" ]; then
   read ENTER
   if [ -f "compile.exe" ]; then
     mv compile.exe geotoad.exe
-    rm -Rf $DIST_WIN/compile
-    zip -r $DIST_WIN.zip $DIST_WIN
+    rm -Rf "$WIN_DIR/compile"
+    zip -r "$WIN_PKG" *
   else
     echo "compile.exe not found, FAIL."
   fi
