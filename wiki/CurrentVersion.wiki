@@ -1,8 +1,4 @@
 #labels Deprecated
-version=3.9.7
+version=3.9.7.1
 
-  * New filter: --cacheType (traditional, virtual, event, multi, unknown)
-  * Sync with the latest changes to the Geocaching.com website
-  * Update country codes, add support for the new country searching page layout
-  * Fix ampersand munging bugs
-  * Better behavior when run in disconnected mode 
+  * Fixes the new --cacheType filter (all other known bugs are also fixed).
