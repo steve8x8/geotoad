@@ -113,6 +113,7 @@ class GeoToad
     puts " -i/-I [username]       include/exclude caches owned by this person"
     puts " -e/-E [username]       include/exclude caches found by this person"
     puts " -s/-S [virtual|small|regular|large]   min/max size of the cache"
+    puts " -c    [regular|virtual|event|unknown] type of cache (| seperated)"
     puts " -j/-J [# days]         include/exclude caches placed in the last X days"
     puts " -r/-R [# days]         include/exclude caches found in the last X days"
     puts " -n                     only include not found caches (virgins)"
@@ -303,6 +304,11 @@ class GeoToad
     end
 
     debug "Filter running cycle 2, #{@filtered.totalWaypoints} caches left"
+    if @option['type']
+      @queryTitle = @queryTitle + ", type #{@option['type']}"
+      @defaultOutputFile = @defaultOutputFile + "-c" + @option['type']
+      @filtered.cacheType(@option['type'])
+    end
     
     if @option['sizeMin']
       @queryTitle = @queryTitle + ", size #{@option['sizeMin']}+"

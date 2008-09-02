@@ -44,8 +44,8 @@ class Input
     
   def getopt
     opts = GetoptLong.new(
-                          
       [ "--travelBug",                "-b",    GetoptLong::NO_ARGUMENT ],
+      [ "--cacheType",                "-c",    GetoptLong::REQUIRED_ARGUMENT ],        
       [ "--includeDisabled",          "-z",    GetoptLong::NO_ARGUMENT ],
         
       [ "--difficultyMax",            "-D",        GetoptLong::OPTIONAL_ARGUMENT ],
@@ -80,8 +80,8 @@ class Input
       [ "--foundDateExclude",                "-R",    GetoptLong::OPTIONAL_ARGUMENT ],
       [ "--foundDateInclude",                "-r",    GetoptLong::OPTIONAL_ARGUMENT ],
 
-      [ "--sizeMin",                     "-s",          GetoptLong::REQUIRED_ARGUMENT ],         # * REQ
-      [ "--sizeMax",                     "-S",          GetoptLong::REQUIRED_ARGUMENT ],         # * REQ
+      [ "--sizeMin",                     "-s",          GetoptLong::REQUIRED_ARGUMENT ],   
+      [ "--sizeMax",                     "-S",          GetoptLong::REQUIRED_ARGUMENT ],   
         
       [ "--terrainMax",                "-T",        GetoptLong::OPTIONAL_ARGUMENT ],
       [ "--terrainMin",                "-t",        GetoptLong::OPTIONAL_ARGUMENT ],
@@ -199,21 +199,22 @@ class Input
       printf("(5)  difficulty           [%-2.1f - %-1.1f] | (6)  terrain               [%-1.1f - %-1.1f]\n",
         (@@optHash['difficultyMin'] || 0.0), (@@optHash['difficultyMax'] || 5.0), 
         (@@optHash['terrainMin'] || 0.0), (@@optHash['terrainMax'] || 5.0))
-      printf("(7)  fun factor           [%-1.1f - %-1.1f] | (8) cache size             [%3.3s - %3.3s]\n", (@@optHash['funFactorMin'] || 0.0), 
+      printf("(7)  fun factor           [%-1.1f - %-1.1f] | (8)  cache size            [%3.3s - %3.3s]\n", (@@optHash['funFactorMin'] || 0.0), 
         (@@optHash['funFactorMax'] || 5.0), @@optHash['sizeMin'] || 'any', @@optHash['sizeMax'] || 'any')
-      printf("(9)  virgin caches only           [%1.1s] | (10) travel bug caches only        [%1.1s]\n", @@optHash['notFound'], @@optHash['travelBug'])
-      printf("(11) cache age (days)       [%3.3s-%-3.3s] | (12) last found (days)       [%3.3s-%-3.3s] \n", 
+      printf("(9)  cache type           [%9.9s] |\n", (@@optHash['type'] || 'any'))
+      printf("(10) virgin caches only           [%1.1s] | (11) travel bug caches only        [%1.1s]\n", @@optHash['notFound'], @@optHash['travelBug'])
+      printf("(12) cache age (days)       [%3.3s-%-3.3s] | (13) last found (days)       [%3.3s-%-3.3s] \n", 
         (@@optHash['placeDateExclude'] || 0), (@@optHash['placeDateInclude'] || 'any'), 
         (@@optHash['foundDateExclude'] || 0), (@@optHash['foundDateInclude'] || 'any'))
       puts   "                                      |"
-      printf("(13) title keyword       [%-10.10s] | (14) descr. keyword    [%-13.13s]\n", @@optHash['titleKeyword'], @@optHash['descKeyword'])
-      printf("(15) cache not found by  [%-10.10s] | (16) cache owner isn't [%-13.13s]\n", @@optHash['userExclude'], @@optHash['ownerExclude'])
-      printf("(17) cache found by      [%-10.10s] | (18) cache owner is    [%-13.13s]\n", @@optHash['userInclude'], @@optHash['ownerInclude'])
+      printf("(14) title keyword       [%-10.10s] | (15) descr. keyword    [%-13.13s]\n", @@optHash['titleKeyword'], @@optHash['descKeyword'])
+      printf("(16) cache not found by  [%-10.10s] | (17) cache owner isn't [%-13.13s]\n", @@optHash['userExclude'], @@optHash['ownerExclude'])
+      printf("(18) cache found by      [%-10.10s] | (19) cache owner is    [%-13.13s]\n", @@optHash['userInclude'], @@optHash['ownerInclude'])
            
-      printf("(19) EasyName WP length         [%3.3s] | (20) include disabled caches [%1.1s] \n", @@optHash['waypointLength'] || '0', @@optHash['includeDisabled'])
+      printf("(20) EasyName WP length         [%3.3s] | (21) include disabled caches [%1.1s] \n", @@optHash['waypointLength'] || '0', @@optHash['includeDisabled'])
       puts "- - - - - - - - - - - - - - - - - - - + - - - - - - - - - - - - - - - - - - -"
-      printf("(21) output format       [%-10.10s]   (22) filename   [%-20.20s]\n", (@@optHash['format'] || 'gpx'), (@@optHash['outFile'] || 'automatic'))
-      printf("(23) output directory    [%-51.51s]\n", (@@optHash['outDir'] || findOutputDir))
+      printf("(22) output format       [%-10.10s]   (23) filename   [%-20.20s]\n", (@@optHash['format'] || 'gpx'), (@@optHash['outFile'] || 'automatic'))
+      printf("(24) output directory    [%-51.51s]\n", (@@optHash['outDir'] || findOutputDir))
       puts "=============================================================================="
       if @@optHash['verbose']
         puts "VERBOSE MODE ENABLED"
@@ -318,8 +319,11 @@ class Input
       when '8'
         @@optHash['sizeMin'] = ask("What is the smallest cache you seek (virtual, micro, small, regular, large)?", nil)
         @@optHash['sizeMax'] = ask("What is the largest cache you seek (virtual, micro, small, regular, large)?", nil)
-                
+
       when '9'
+        @@optHash['type'] = ask("What kind of caches do you seek (seperate with |) (traditional, multi, event, unknown, letterbox, virtual)?", nil)
+      
+      when '10'
         answer = ask('Would you like to only include virgin geocaches (geocaches that have never been found)?', nil)
         if (answer =~ /y/)
           @@optHash['notFound'] = 'X'
@@ -327,7 +331,7 @@ class Input
           @@optHash['notFound'] = nil
         end
                 
-      when '10'
+      when '11'
         answer = ask('Would you like to only include geocaches with travelbugs in them?', nil)
         if (answer =~ /y/)
           @@optHash['travelBug'] = 'X'
@@ -336,39 +340,39 @@ class Input
         end
                 
                 
-      when '11'
+      when '12'
         @@optHash['placeDateExclude'] = ask('How many days old is the youngest a geocache can be for your list? (0)', nil)
         @@optHash['placeDateInclude'] = ask('How many days old is the oldest a geocache can be for your list? (any)', nil)
                 
-      when '12'
+      when '13'
         @@optHash['foundDateExclude'] = ask('How many days ago is the minimum a geocache can be found in for your list? (0)', nil)
         @@optHash['foundDateInclude'] = ask('How many days ago is the maximum a geocache can be found in for your list? (any)', nil)
                                 
-      when '13'
+      when '14'
         @@optHash['titleKeyword'] = ask('Only include geocaches with these keywords in their title (seperate by |)?', nil)
                 
-      when '14'
+      when '15'
         @@optHash['descKeyword'] = ask('Only include geocaches with these keywords in their description (seperate by |)', nil)
                 
-      when '15'
+      when '16'
         @@optHash['userExclude'] = ask('Filter out geocaches found by these people (seperate by commas)', '').gsub(/, */, ':')
 
-      when '16'
+      when '17'
         @@optHash['ownerExclude'] = ask('Filter out geocaches owned by these people (seperate by commas)', '').gsub(/, */, ':')
                 
-      when '17'
+      when '18'
         @@optHash['userInclude'] = ask('Only include geocaches that have been found by these people (separate by commas)', '').gsub(/, */, ':')
                 
-      when '18'
+      when '19'
         @@optHash['ownerInclude'] = ask('Only include geocaches owned by these people (seperate by commas)', '').gsub(/, */, ':')
                 
-      when '19'
+      when '20'
         @@optHash['waypointLength'] = ask('How long can your EasyName waypoint id\'s be? (8 for Magellan, 16 for Garmin, -1 to use full text, 0 to disable and use waypoint id\'s)?', nil)
                 
-      when '20'
+      when '21'
         @@optHash['includeDisabled'] = ask('Include disabled caches in your results?', nil)
                 
-      when '21'
+      when '22'
         puts "List of Output Formats: "
         outputDetails = Output.new
         i=0
@@ -385,7 +389,7 @@ class Input
         puts ""
         @@optHash['format'] = ask('What format would you like your output in?', 'gpx')
                 
-      when '22'
+      when '23'
         @@optHash['outFile'] = ask('What filename would you like to output to? (press enter for automatic)', nil)
         if (@@optHash['outFile'])
           @@optHash['outFile'].gsub!(/\\/,  '/')
@@ -396,7 +400,7 @@ class Input
           @@optHash['outFile']=File.basename(@@optHash['outFile'])
         end
                 
-      when '23'
+      when '24'
         @@optHash['outDir'] = ask("Output directory (#{findOutputDir})", nil)
         if @@optHash['outDir']
           @@optHash['outDir'].gsub!(/\\/,  '/')
@@ -427,7 +431,7 @@ class Input
           @@optHash['verbose'] = 'X'
         end            
       when 'x'
-        puts "Git'rdone"
+        puts "Cya!"
         exit
                 
                 
