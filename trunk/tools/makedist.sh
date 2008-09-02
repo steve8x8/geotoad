@@ -23,13 +23,14 @@ rm -Rf "$DEST"
 
 echo "Creating $GENERIC_DIR"
 mkdir -p "$GENERIC_DIR"
+/usr/local/svn2cl-0.10/svn2cl.sh
+mv ChangeLog ChangeLog.txt
 rsync -a --exclude "*~" --exclude ".svn/" . $GENERIC_DIR
 sed s/"%VERSION%"/"$VERSION"/g geotoad.rb > $GENERIC_DIR/geotoad.rb
 sed s/"%VERSION%"/"$VERSION"/g README.txt > $GENERIC_DIR/README.txt
 sed s/"%VERSION%"/"$VERSION"/g FAQ.txt > $GENERIC_DIR/FAQ.txt
 chmod 755 $GENERIC_DIR/*.rb
-svn log > $GENERIC_DIR/ChangeLog.txt
-rm $GENERIC_DIR/VERSION $GENERIC_DIR/tools/tar2rubyscript.rb $GENERIC_DIR/tools/countryrip.rb $GENIRIC_DIR/tools/*.sh
+rm $GENERIC_DIR/VERSION $GENERIC_DIR/tools/tar2rubyscript.rb $GENERIC_DIR/tools/countryrip.rb $GENERIC_DIR/tools/*.sh
 
 # Make a duplicate of it for Macs before we nuke the .command file
 cp -Rp $GENERIC_DIR "$MAC_DIR"
