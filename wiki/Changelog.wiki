@@ -2,6 +2,14 @@
 #labels Featured
 
 {{{
+2008-09-02 16:18  helixblue
+
+        * VERSION, tools/makedist.sh: Bump to 3.9.7.1
+
+2008-09-02 16:13  helixblue
+
+        * lib/filter.rb: fix for last minute type filtering breakage
+
 2008-09-02 12:16  helixblue
 
         * geotoad.rb, interface/input.rb, lib/filter.rb: --type should be
