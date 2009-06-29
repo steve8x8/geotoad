@@ -293,7 +293,7 @@ class GeoToad
 
     if @option['difficultyMax']
       @queryTitle = @queryTitle + ", difficulty #{@option['difficultyMax']} or lower"
-      @defaultOutputFile = @defaultOutputFile + "-D" + @option['difficultyMin'].to_s
+      @defaultOutputFile = @defaultOutputFile + "-D" + @option['difficultyMax'].to_s
       @filtered.difficultyMax(@option['difficultyMax'].to_f)
     end
         
