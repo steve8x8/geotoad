@@ -164,6 +164,8 @@ class CacheDetails
         elsif (! @waypointHash[wid]['name'])
           @waypointHash[wid]['name'] = cleanHTML($1)
           debug "name was not set, now set to #{$1}"
+        else
+          debug "Would set name to #{cleanHTML($1)}, but it is already #{@waypointHash[wid]['name']}"          
         end
       end
 
@@ -411,15 +413,13 @@ class CacheDetails
     text.gsub!(/\* /, '*')
     debug "post-combine-process: #{text}"
     text.gsub!(/[\x01-\x1F]/, '')      # low ascii
-    text.gsub!(/\&nbsp\;/, " ")			# unescapeHTML seems to ignore.
+    text.gsub!(/\&nbsp\;/, " ")
     text.gsub!(/\'+/, "\'")			# multiple apostrophes
     text.gsub!(/^\*/, '')			# lines that start with *
         
     # kill the last space, which makes the CSV output nicer.
     text.gsub!(/ $/, '')
-        
-    # convert things into plain text.
-    text = CGI.unescapeHTML(text);
+    return text
   end
     
 end  # end class

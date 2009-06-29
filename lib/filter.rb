@@ -1,4 +1,5 @@
 # $Id$
+require 'cgi'
 
 class Filter
   include Common
@@ -145,7 +146,8 @@ class Filter
   def ownerExclude(nick)
     debug "filtering by ownerExclude: #{nick}"
     @waypointHash.delete_if { |wid, values|
-      @waypointHash[wid]['creator'] =~ /#{nick}/i
+      creator = CGI.UnescapeHTML(@waypointHash[wid]['creator'])
+      creator =~ /#{nick}/i
     }
   end
     
