@@ -328,7 +328,7 @@ class Input
         @@optHash['sizeMax'] = askFromList("Great! What is the largest cache you seek (#{sizes.join(', ')})?", sizes, nil)
         when '9'
         kinds = ['traditional', 'multicache', 'event', 'unknown', 'letterbox', 'virtual']
-        @@optHash['cacheType'] = askFromList("What do you seek (seperate with commas) (#{kinds.join(', ')})?", kinds, nil).gsub(/, */, ':')
+        @@optHash['cacheType'] = askFromList("What do you seek (seperate with commas) (#{kinds.join(', ')})?", kinds, nil)
         
         when '10'
         answer = ask('Would you like to only include virgin geocaches (geocaches that have never been found)?', nil)
@@ -504,8 +504,8 @@ class Input
         if not answer:
           return default
         end
-        answer.gsub!(' ', '')
-        answers = answer.split(',')
+        answer.gsub!(/, */, ':')
+        answers = answer.split(':')
         try_again = nil
         for try_answer in answers:
           if ! choices.include?(try_answer)
