@@ -59,7 +59,11 @@ class GeoToad
       @option = @uin.interactive
       $mode = 'TUI'
     end
-        
+
+    if @option['proxy']
+      ENV['HTTP_PROXY'] = @option['proxy']
+    end
+    
     # We need this for the check following
     @queryType         = @option['queryType'] || 'zipcode'
     @queryArg          = @option['queryArg'] || nil
@@ -120,6 +124,7 @@ class GeoToad
     puts " -n                     only include not found caches (virgins)"
     puts " -b                     only include caches with travelbugs"
     puts " -l                     set EasyName waypoint id length. (16)"
+    puts " -P                     HTTP proxy server, http://username:pass@host:port/"
     puts ""
     puts "::: OUTPUT FORMATS:"
     outputDetails = Output.new

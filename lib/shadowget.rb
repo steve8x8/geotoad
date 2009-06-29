@@ -209,9 +209,17 @@ class ShadowFetch
       debug "Only #{@@downloadErrors} download errors so far, will try until #{@maxFailures}"
       disableRetry = nil
     end
-        
-    http = Net::HTTP.new(uri.host, 80)
-        
+    
+    if ENV['HTTP_PROXY']
+      proxy = URI.parse(ENV['HTTP_PROXY'])
+      proxy_user, proxy_pass = uri.userinfo.split(/:/) if uri.userinfo
+      debug "Using proxy from environment: " + ENV['HTTP_PROXY']
+      http = Net::HTTP::Proxy(proxy.host, proxy.port, proxy_user, proxy_pass).new(uri.host, 80)
+    else
+      debug "No proxy found in environment, using standard HTTP connection."
+      http = Net::HTTP.new(uri.host, 80)
+    end
+    
     if uri.query
       query=uri.path + "?" + uri.query
     else

@@ -144,7 +144,7 @@ syntax: geotoad [options] <search:search2:search3>
  -n                     only include not found caches (virgins)
  -b                     only include caches with travelbugs
  -l                     set EasyName waypoint id length. (16)
-
+ -P                     HTTP proxy server, http://username:pass@host:port/
 
 ---------------------
 Command-Line Examples

@@ -73,7 +73,7 @@ class Input
     [ "--output",                    "-o",        GetoptLong::OPTIONAL_ARGUMENT ],           
     
     [ "--password",                     "-p",          GetoptLong::REQUIRED_ARGUMENT ],         # * REQ
-    
+    [ "--proxy",                        "-P",          GetoptLong::REQUIRED_ARGUMENT ], 
     [ "--queryType",                    "-q",        GetoptLong::OPTIONAL_ARGUMENT ],
     
     
