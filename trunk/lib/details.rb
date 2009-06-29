@@ -162,7 +162,7 @@ class CacheDetails
         if (! wid)
           debug "Invalid cache, title is: #{$1}"
         elsif (! @waypointHash[wid]['name'])
-          @waypointHash[wid]['name'] = $1
+          @waypointHash[wid]['name'] = cleanHTML($1)
           debug "name was not set, now set to #{$1}"
         end
       end
@@ -208,7 +208,7 @@ class CacheDetails
         @waypointHash[wid]['creator'] = $1
         debug "creator is #{$1}"
       end
-                        
+          
       # Regexp rewritten by Scott Brynen for Canadian compatibility
       if line =~ /getmap\.aspx\?lat=([\d\.-]+)\&lon=([\d\.-]+)/
         @waypointHash[wid]['latdata'] = $1
@@ -308,7 +308,7 @@ class CacheDetails
           @waypointHash[wid]["comment#{cnum}ID"] = id.dup
           @waypointHash[wid]["comment#{cnum}Icon"] = icon.dup
           @waypointHash[wid]["comment#{cnum}Name"] = name.dup
-          @waypointHash[wid]["comment#{cnum}Comment"] = comment.dup
+          @waypointHash[wid]["comment#{cnum}Comment"] = cleanHTML(comment.dup)
                     
           if (nograde)
             debug "not grading comment due to type #{icon}"
@@ -410,8 +410,7 @@ class CacheDetails
     text.gsub!(/\*\*\*/, '**')
     text.gsub!(/\* /, '*')
     debug "post-combine-process: #{text}"
-    #text.gsub!(/[\x80-\xFF]/, "\'")		# high ascii
-    #text.gsub!(/\&#\d+\;/, "\'")			# high ascii in entity format
+    text.gsub!(/[\x01-\x1F]/, '')      # low ascii
     text.gsub!(/\&nbsp\;/, " ")			# unescapeHTML seems to ignore.
     text.gsub!(/\'+/, "\'")			# multiple apostrophes
     text.gsub!(/^\*/, '')			# lines that start with *
