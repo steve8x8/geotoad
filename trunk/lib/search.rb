@@ -409,19 +409,13 @@ class SearchCache
           debug "#{name} appears to be disabled"
         end
                 
-        # re-enabled to fix &quot; -- what else will we be messing up?
-        name = CGI.unescapeHTML(name);
         cache['name']=name
         debug "sid=#{cache['sid']} name=#{cache['name']} (disabled=#{cache['disabled']})"
                 
       when /^\s+by (.*)/
         creator = $1.dup
-        if (creator)
-          creator =  CGI.unescapeHTML(creator);
-          creator.gsub!(/\s+$/, '')
-        end
+        creator.gsub!(/\s+$/, '')
         cache['creator']=creator
-        #creator.gsub(/[\x80-\xFF]/, '?').chop!
         debug "creator=#{cache['creator']}"
                 
       when /\((GC\w+)\)/

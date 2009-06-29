@@ -143,7 +143,7 @@ class Output
     if ($Format[format])
       @outputFormat = $Format[format].dup
       @outputType = format
-      debug "format switched to #{format}: #{$Format[format]}"
+      debug "format switched to #{format}"
     else
       displayError "[*] Attempted to select invalid format: #{format}"
       return nil
@@ -275,12 +275,13 @@ class Output
     # using scan() here to get around difficulties with \1
     scan_text.scan(/([\x80-\xFF]+)/) {|highchar|
       begin
+#        debug "Unpacking char: [#{highchar[0]}]"
         ascii = highchar[0].unpack("U").to_s
-        debug "Replacing high char [#{highchar}] with #{ascii}"
+#        debug "Replacing high char [#{highchar}] with #{ascii}"
         text.gsub!(/#{highchar}/, ("&#" + ascii  + ";"))
-      rescue
+      rescue ArgumentError
         # UTF-8 conversion failed. Lets use a ? instead.
-        debug "Could not determine ASCII code conversion for UTF-8 character #{highchar}, using ? instead"
+        debug "Malformed UTF-8 char [#{highchar}] in #{scan_text}, using ? instead"
         text.gsub!(/#{highchar}/,'?')
       end
     }

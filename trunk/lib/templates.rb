@@ -104,7 +104,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
       "<font color=\"#339933\"><%wp.type%> (<%wp.size%>) D<%wp.difficulty%>/T<%wp.terrain%> F:<%wp.funfactor%> <%out.relativedistance%><br>" +
       "placed: <%wp.cdate%> last comment: <%wp.mdays%> days ago (<%wp.comment0Type%>)</font><br>" +
       "<p><%outEntity.details%></p>\n" +
-      "<p><font color=\"#555555\"><%out.hint%></font></p>\n",
+      "<p><font color=\"#555555\"><%outEntity.hint%></font></p>\n",
     'templatePost'    => "</body></html>"
   },
 
