@@ -234,26 +234,29 @@ class Output
   end
     
   def replaceVariables(templateText)
-    text = templateText.dup
     # okay. I will fully admit this is a *very* unusual way to handle
     # the templates. This all came to be due to a lot of debugging.
-    tags = text.scan(/\<%(\w+\.\w+)%\>/)
-        
+    debug "out.wid for #{@currentWid} is [#{@outVars['wid']}]"
+    
+    tags = templateText.scan(/\<%(\w+\.\w+)%\>/)
+    text = templateText.dup
     tags.each { |tag|
-      # puts "scanning #{tag} (#{@currentWid})"
       (type, var) = tag[0].split('.')
+      value = 'UNKNOWN_TAG'
       if (type == "wp")
-        text.gsub!(/\<%wp\.#{var}%\>/, @wpHash[@currentWid][var].to_s)
+        value = @wpHash[@currentWid][var].to_s
       elsif (type == "out")
-        text.gsub!(/\<%out\.#{var}%\>/, @outVars[var].to_s)
+        value = @outVars[var].to_s
       elsif (type == "wpEntity")
-        text.gsub!(/\<%wpEntity\.#{var}%\>/, makeXML(@wpHash[@currentWid][var].to_s))
+        value = makeXML(@wpHash[@currentWid][var].to_s)
       elsif (type == "outEntity")
-        text.gsub!(/\<%outEntity\.#{var}%\>/, makeXML(@outVars[var].to_s))
-      else
-        displayWarning "unknown type: #{type} tag=#{var}"
+        value = makeXML(@outVars[var].to_s)
       end
+      debug "TAG <%#{tag}%> for #{@currentWid} -> #{value}"
+      text.gsub!("<%#{tag}%>", value)
     }
+    
+    debug "Replaced text: #{text}"
     return text
   end
     
@@ -294,7 +297,7 @@ class Output
     
     
   def filterInternal (title)
-    debug "generating output with output: #{@outputType} - #{$Format[@outputType]['desc']}"
+    debug "generating output: #{@outputType} - #{$Format[@outputType]['desc']}"
     @outVars = Hash.new
     wpList = Hash.new
     @outVars['title'] = title
@@ -419,7 +422,7 @@ class Output
         
     wpList.sort{|a,b| a[1]<=>b[1]}.each {  |wpArray|
       @currentWid = wpArray[0]
-      debug "--- Output loop: #{@currentWid} - #{@wpHash[@currentWid]['name']}"
+      debug "--- Output loop: #{@currentWid} - #{@wpHash[@currentWid]['name']} by #{@wpHash[@currentWid]['creator']}"
       detailsLen = @outputFormat['detailsLength'] || 20000
       numEntries = @wpHash[@currentWid]['details'].length / detailsLen
             
