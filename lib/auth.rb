@@ -61,7 +61,7 @@ module Auth
       when /^\<input type=\"hidden\" name=\"(.*?)\".*value=\"(.*?)\"/
         debug "found hidden post variable: #{$1}"
         @postVars[$1]=$2
-      when /\<form name=\"frmLogin\" method=\"post\" action=\"(.*?)\"/
+      when /\<form name=\"aspnetForm\" method=\"post\" action=\"(.*?)\"/
         @postURL='http://www.geocaching.com/login/' + $1
         @postURL.gsub!('&amp;', '&')
         debug "post URL is #{@postURL}"
@@ -74,10 +74,10 @@ module Auth
   def getLoginCookie(user, password)
     page = ShadowFetch.new(@postURL)
     page.localExpiry=1
-    @postVars['myUsername']=user
-    @postVars['myPassword']=password
-    @postVars['cookie']='on'
-    @postVars['Button1']='Login'
+    @postVars['ctl00$ContentBody$myUsername']=user
+    @postVars['ctl00$ContentBody$myPassword']=password
+    @postVars['ctl00$ContentBody$cookie']='on'
+    @postVars['ctl00$ContentBody$Button1']='Login'
     page.postVars=@postVars
     data = page.fetch
     cookie = page.cookie
