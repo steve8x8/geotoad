@@ -348,7 +348,7 @@ class SearchCache
           @lastWaypoint = @totalWaypoints                    
         end
                 
-      when /WptTypes.*?alt=\"(.*?)\"/
+      when /WptTypes\/[\d].*?alt=\"(.*?)\"/
         cache['mdays']=-1
         cache['type']=$1.downcase
         cache['type'].gsub!(/\s.*/, '')
