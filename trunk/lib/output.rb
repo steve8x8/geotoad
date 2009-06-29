@@ -275,9 +275,7 @@ class Output
     # using scan() here to get around difficulties with \1
     scan_text.scan(/([\x80-\xFF]+)/) {|highchar|
       begin
-#        debug "Unpacking char: [#{highchar[0]}]"
         ascii = highchar[0].unpack("U").to_s
-#        debug "Replacing high char [#{highchar}] with #{ascii}"
         text.gsub!(/#{highchar}/, ("&#" + ascii  + ";"))
       rescue ArgumentError
         # UTF-8 conversion failed. Lets use a ? instead.
@@ -452,12 +450,8 @@ class Output
             
       if @wpHash[@currentWid]['hint']
         hint = @wpHash[@currentWid]['hint']
-        @outVars['hint'] = 'Hint: ' + hint
-        # decrypted hints contributed by Jerry Davis <jfdecd%wi.rr.com>
-        hint.tr!('A-MN-Z', 'N-ZA-M')
-        hint.tr!('a-mn-z', 'n-za-m')
-        @outVars['hintdecrypt'] = 'Hint: ' + hint
-
+        @outVars['hint'] = 'Hint: ' + hint        
+        @outVars['hintdecrypt'] = 'Hint: ' + hint.tr('A-MN-Z', 'N-ZA-M').tr('a-mn-z', 'n-za-m')
         debug "Hint: #{@outVars['hint']}"
         debug "Decrypted hint: #{@outVars['hintdecrypt']}"
       end
