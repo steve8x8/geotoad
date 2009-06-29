@@ -305,16 +305,16 @@ class Input
         @@optHash['distanceMax'] = ask("What is the maximum distance from your #{@@optHash['queryType']} that you would like to include geocaches from?", 10)
                 
       when '5'
-        @@optHash['difficultyMin'] = ask('What is the minimum difficulty you would like? (0.0)', nil)
-        @@optHash['difficultyMax'] = ask('What is the maximum difficulty you would like? (5.0)', nil)
+        @@optHash['difficultyMin'] = askFloat('What is the minimum difficulty you would like? (0.0)', nil)
+        @@optHash['difficultyMax'] = askFloat('What is the maximum difficulty you would like? (5.0)', nil)
                 
       when '6'
-        @@optHash['terrainMin'] = ask('What is the minimum terrain you would like? (0.0)', nil)
-        @@optHash['terrainMax'] = ask('What is the maximum terrain you would like? (5.0)', nil)
+        @@optHash['terrainMin'] = askFloat('What is the minimum terrain you would like? (0.0)', nil)
+        @@optHash['terrainMax'] = askFloat('What is the maximum terrain you would like? (5.0)', nil)
                 
       when '7'
-        @@optHash['funFactorMin'] = ask('What is the minimum fun factor you would like? (0.0)', nil)
-        @@optHash['funFactorMax'] = ask('What is the maximum fun factor you would like? (5.0)', nil)
+        @@optHash['funFactorMin'] = askFloat('What is the minimum fun factor you would like? (0.0)', nil)
+        @@optHash['funFactorMax'] = askFloat('What is the maximum fun factor you would like? (5.0)', nil)
                 
       when '8'
         @@optHash['sizeMin'] = ask("What is the smallest cache you seek (virtual, micro, small, regular, large)?", nil)
@@ -466,6 +466,23 @@ class Input
     end
   end
     
+  def askFloat(string, default)
+    # Ask for a floating point number.
+    while 1
+      begin
+        answer = ask(string, default)
+        if not answer
+          return default
+        else
+          answer = Float(answer)
+          return answer
+        end
+      rescue ArgumentError
+        puts "*** #{answer} does not look like a valid number."
+      end
+    end
+  end
+
   def guessQueryType(type)
         
     case type
