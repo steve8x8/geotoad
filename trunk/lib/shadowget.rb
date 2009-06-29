@@ -2,7 +2,7 @@
 
 require 'digest/md5'
 require 'net/http'
-require 'ftools'
+require 'fileutils'
 require 'uri'
 require 'cgi'
 
@@ -167,7 +167,7 @@ class ShadowFetch
         
     if (! File.exists?(localdir))
       debug "creating #{localdir}"
-      File.makedirs(localdir)
+      FileUtils.mkdir_p(localdir)
     end
         
         
@@ -198,10 +198,8 @@ class ShadowFetch
   def fetchURL (url_str, redirects=2)  # full http:// string!
     raise ArgumentError, 'HTTP redirect too deep' if redirects == 0
         
-    debug "Fetching #{url_str}"
-        
+    debug "Fetching [#{url_str}]"        
     uri = URI.parse(url_str)
-        
     if (@@downloadErrors >= @maxFailures)
       debug "#{@@downloadErrors} download errors so far, no more retries will be attempted."
       disableRetry = 1

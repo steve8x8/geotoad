@@ -13,6 +13,9 @@ module Common
       days_ago=1
     when /(\d)+ days ago/
       days_ago=$1.to_i
+    when /^(\d+)\/(\d+)\/(\d{4})$/
+      debug "Looks like a date: year=#{$3} month=#{$1}, date=#{$2}"
+      timestamp = Time.local($3, $1, $2)
     when /^\d+[ \/]\w+[ \/]\d+/
       timestamp = Time.parse(date)
     when 'N/A'
@@ -24,7 +27,8 @@ module Common
     if not timestamp and days_ago
       timestamp = Time.now - (days_ago * 3600 * 24)
     end
-    return timestamp    
+    debug "Timestamp parsed as #{timestamp}"
+    return timestamp
   end
   
   def daysAgo(timestamp)
