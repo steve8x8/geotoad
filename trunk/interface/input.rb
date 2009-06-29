@@ -231,8 +231,15 @@ class Input
         @@optHash['password'] = ask("What is your Geocaching.com password?", 'NO_DEFAULT')
                 
       when '2'
-        type = ask("What type of search would you like to perform? (zipcode, state, country, user, coordinate, keyword [title only])", nil)
-        @@optHash['queryType'] = guessQueryType(type).to_s
+        guess = nil
+        while not guess       
+          type = ask("What type of search would you like to perform? (zipcode, state, country, user, coordinate, keyword [title only])", nil)
+          guess = guessQueryType(type)
+          if not guess
+            puts "** I could not guess what you meant by #{type}"
+          end
+        end
+        @@optHash['queryType'] = guess
             
       when '3'
         if (@@optHash['queryType'] == 'zipcode')
@@ -503,6 +510,8 @@ class Input
     when /key/
       return 'keyword'
     end
+    # Could not guess
+    return nil
   end
     
 end
