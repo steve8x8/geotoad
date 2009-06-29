@@ -43,7 +43,7 @@ $Format = {
       "<keywords>cache, geocache, groundspeak, geotoad</keywords>\r\n",
 
     'templateWP'    => "<wpt lat=\"<%wp.latdata%>\" lon=\"<%wp.londata%>\">\r\n" +
-      "  <time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S")  + ".0000000-00:00</time>\r\n" +
+      "  <time><%out.XMLDate%></time>\r\n" +
       "  <name><%outEntity.id%></name>\r\n" +
       "  <desc><%wpEntity.name%> by <%wpEntity.creator%>, <%wp.type%> (<%wp.difficulty%>/<%wp.terrain%>)</desc>\r\n" +
       "  <url><%out.url%></url>\r\n" +
