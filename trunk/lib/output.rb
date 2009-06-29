@@ -284,6 +284,9 @@ class Output
         text.gsub!(/#{highchar}/,'?')
       end
     }
+    
+    # Fix apostrophes so that they show up as expected. Fixes issue 26.
+    text.gsub!('&#8217;', "'")
     if text != str
       debug "made XML: %s" % text
     end
