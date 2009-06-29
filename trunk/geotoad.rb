@@ -91,6 +91,7 @@ class GeoToad
       usage
       exit
     end
+    return @option
   end
     
     
@@ -620,15 +621,14 @@ cli = GeoToad.new
 
 while(1)
   cli.versionCheck
-  cli.getoptions
-    
+  options = cli.getoptions    
   count = cli.downloadGeocacheList
   if count < 1
     cli.displayError "No caches found in search, exiting early."
   else
     cli.displayMessage "#{count} geocaches found in defined area."
-    if (@queryType != "wid")
-      cli.prepareFilter
+    cli.prepareFilter
+    if options['queryType'] != 'wid'
       cli.preFetchFilter
     end
         
