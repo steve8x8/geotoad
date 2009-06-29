@@ -309,19 +309,19 @@ class Input
         
         
         when '4'
-        @@optHash['distanceMax'] = ask("What is the maximum distance from your #{@@optHash['queryType']} that you would like to include geocaches from?", 10)
+        @@optHash['distanceMax'] = askNumber("What is the maximum distance from your #{@@optHash['queryType']} that you would like to include geocaches from?", 10)
         
         when '5'
-        @@optHash['difficultyMin'] = askFloat('What is the minimum difficulty you would like? (0.0)', nil)
-        @@optHash['difficultyMax'] = askFloat('What is the maximum difficulty you would like? (5.0)', nil)
+        @@optHash['difficultyMin'] = askNumber('What is the minimum difficulty you would like? (0.0)', nil)
+        @@optHash['difficultyMax'] = askNumber('What is the maximum difficulty you would like? (5.0)', nil)
         
         when '6'
-        @@optHash['terrainMin'] = askFloat('What is the minimum terrain you would like? (0.0)', nil)
-        @@optHash['terrainMax'] = askFloat('What is the maximum terrain you would like? (5.0)', nil)
+        @@optHash['terrainMin'] = askNumber('What is the minimum terrain you would like? (0.0)', nil)
+        @@optHash['terrainMax'] = askNumber('What is the maximum terrain you would like? (5.0)', nil)
         
         when '7'
-        @@optHash['funFactorMin'] = askFloat('What is the minimum fun factor you would like? (0.0)', nil)
-        @@optHash['funFactorMax'] = askFloat('What is the maximum fun factor you would like? (5.0)', nil)
+        @@optHash['funFactorMin'] = askNumber('What is the minimum fun factor you would like? (0.0)', nil)
+        @@optHash['funFactorMax'] = askNumber('What is the maximum fun factor you would like? (5.0)', nil)
         
         when '8'
         sizes = ['virtual', 'micro', 'small', 'regular', 'large']
@@ -349,12 +349,12 @@ class Input
         
         
         when '12'
-        @@optHash['placeDateExclude'] = ask('How many days old is the youngest a geocache can be for your list? (0)', nil)
-        @@optHash['placeDateInclude'] = ask('How many days old is the oldest a geocache can be for your list? (any)', nil)
+        @@optHash['placeDateExclude'] = askNumber('How many days old is the youngest a geocache can be for your list? (0)', nil)
+        @@optHash['placeDateInclude'] = askNumber('How many days old is the oldest a geocache can be for your list? (any)', nil)
         
         when '13'
-        @@optHash['foundDateExclude'] = ask('How many days ago is the minimum a geocache can be found in for your list? (0)', nil)
-        @@optHash['foundDateInclude'] = ask('How many days ago is the maximum a geocache can be found in for your list? (any)', nil)
+        @@optHash['foundDateExclude'] = askNumber('How many days ago is the minimum a geocache can be found in for your list? (0)', nil)
+        @@optHash['foundDateInclude'] = askNumber('How many days ago is the maximum a geocache can be found in for your list? (any)', nil)
         
         when '14'
         @@optHash['titleKeyword'] = ask('Only include geocaches with these keywords in their title (seperate by |)?', nil)
@@ -375,7 +375,7 @@ class Input
         @@optHash['ownerInclude'] = ask('Only include geocaches owned by these people (seperate by commas)', '').gsub(/, */, ':')
         
         when '20'
-        @@optHash['waypointLength'] = ask('How long can your EasyName waypoint id\'s be? (8 for Magellan, 16 for Garmin, -1 to use full text, 0 to disable and use waypoint id\'s)?', nil)
+        @@optHash['waypointLength'] = askNumber('How long can your EasyName waypoint id\'s be? (8 for Magellan, 16 for Garmin, -1 to use full text, 0 to disable and use waypoint id\'s)?', nil)
         
         when '21'
         @@optHash['includeDisabled'] = ask('Include disabled caches in your results?', nil)
@@ -474,7 +474,7 @@ class Input
     end
   end
   
-  def askFloat(string, default)
+  def askNumber(string, default)
     # Ask for a floating point number.
     while 1
       begin
@@ -483,7 +483,12 @@ class Input
           return default
         else
           answer = Float(answer)
-          return answer
+          # If it is equivalent to it's integer, return the integer instead
+          if answer == answer.to_i
+            return answer.to_i
+          else
+            return answer
+          end
         end
       rescue ArgumentError
         puts "*** #{answer} does not look like a valid number."
