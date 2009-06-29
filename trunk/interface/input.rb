@@ -156,8 +156,8 @@ class Input
         if (@@optHash[option] == 'X')
           cmdline = cmdline + " --#{option}"
         else
-          # it's just a number..
-          if (@@optHash[option] =~ /^[\w\.]+$/)
+          # Omit the quotes if the argument is 'simple'
+          if @@optHash[option].to_s =~ /^[\w\.:]+$/
             cmdline = cmdline + " --#{option}=#{@@optHash[option]}"
           else
             cmdline = cmdline + " --#{option}=\'#{@@optHash[option]}\'"
@@ -171,7 +171,6 @@ class Input
     displayMessage cmdline
     puts
     sleep(4)
-    #exit
     return @@optHash
   end
   
