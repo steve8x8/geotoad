@@ -317,7 +317,7 @@ class SearchCache
     debug "--- parsing search page ---"
     seen_total_records = nil
         
-    data.each { |line|
+    data.split("\n").each { |line|
       case line
       when /\<tr bgcolor=/
         debug "-- row --"

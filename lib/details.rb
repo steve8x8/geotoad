@@ -137,7 +137,7 @@ class CacheDetails
     # find the geocaching waypoint id.
     wid = nil
         
-    data.each { |line|
+    data.split("\n").each { |line|
       # this matches the <title> on the printable pages. Some pages have ) and some don't.
       if line =~  /^\s+\((GC[A-Z0-9]+)\)/
         # only do it if the wid hasn't been found yet, sometimes pages mention wid's of other caches.

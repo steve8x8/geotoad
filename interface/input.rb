@@ -234,8 +234,10 @@ class Input
         while not guess       
           type = ask("What type of search would you like to perform? (zipcode, state, country, user, coordinate, keyword [title only])", nil)
           guess = guessQueryType(type)
-          if not guess
-            puts "** I could not guess what you meant by #{type}"
+          if not type
+            puts "** You need to specify a search type."
+          elsif not guess
+            puts "** I could not guess what you meant by '#{type}''"
           end
         end
         @@optHash['queryType'] = guess
@@ -452,25 +454,21 @@ class Input
   
   
   def ask(string, default)
-    print string + ": "
-    answer = $stdin.gets.chomp
-    if answer.length > 0
-      return answer
-    elsif default == 'NO_DEFAULT'
-      puts ""
-      puts "You must supply an answer, there is no default. Please try again:"
-      while (answer.length < 1)
-        print string + ": "
-        answer = $stdin.gets.chomp
-        
-        # chomp any trailing slashes.
-        answer.gsub!(/ +$/, '')
+    answer = nil
+    while not answer or answer.length() == 0
+      print string + ": "  
+      answer = $stdin.gets.chomp
+      answer.gsub!(/ +$/, '')
+
+      if not answer or answer.length() == 0
+        if default == 'NO_DEFAULT'
+          puts "You must supply an answer, there is no default!"
+        else
+          return default
+        end
       end
-      return answer
-    else
-      puts "Assuming the default answer \'#{default}\'"
-      return default
     end
+    return answer
   end
   
   def askNumber(string, default)
@@ -501,13 +499,13 @@ class Input
     while try_again
       begin
         answer = ask(string, default)
-        if not answer:
+        if not answer
           return default
         end
         answer.gsub!(/, */, ':')
         answers = answer.split(':')
         try_again = nil
-        for try_answer in answers:
+        for try_answer in answers
           if ! choices.include?(try_answer)
             puts "** #{try_answer} is not valid! Try: #{choices.join(', ')}"
             try_again = 1
