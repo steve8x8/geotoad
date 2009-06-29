@@ -162,7 +162,7 @@ class Filter
         
     @waypointHash.each_key { |wid|
       if (@waypointHash[wid]['visitors'].include?(nick))
-        debug " - #{nick} has visited #{@waypointHash[wid]['name']}, filtering."
+        debug " - #{nick} has visited #{wid} #{@waypointHash[wid]['name']}, filtering."
         @waypointHash.delete(wid)
       end
     }
