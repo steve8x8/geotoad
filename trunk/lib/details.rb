@@ -169,13 +169,21 @@ class CacheDetails
 
       # &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Difficulty:</b>&nbsp;<span id="Difficulty"><img src="http://www.geocaching.com/images/stars/stars3_5.gif" alt="3.5 out of 5" title="3.5 out of 5" align="absmiddle"></span>
       if line =~ /Difficulty.*?([-\d\.]+) out of/
-        @waypointHash[wid]['difficulty']=$1.to_f
+        if $1.include?('.')
+          @waypointHash[wid]['difficulty']=$1.to_f
+        else
+          @waypointHash[wid]['difficulty']=$1.to_i
+        end
         debug "difficulty: #{$1}"
       end
             
       # &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Terrain:</b>&nbsp;<span id="Terrain"><img src="http://www.geocaching.com/images/stars/stars4.gif" alt="4 out of 5" title="4 out of 5" align="absmiddle"></span>
       if line =~ /Terrain.*?([-\d\.]+) out of/
-        @waypointHash[wid]['terrain']=$1.to_f
+        if $1.include?('.')
+          @waypointHash[wid]['terrain']=$1.to_f
+        else
+          @waypointHash[wid]['terrain']=$1.to_i
+        end
         debug "terrain: #{$1}"
       end
 
