@@ -63,7 +63,7 @@ $Format = {
       "  <groundspeak:state><%wp.state%></groundspeak:state>\r\n" +
       "  <groundspeak:short_description html=\"False\"><%wpEntity.shortdesc%></groundspeak:short_description>\r\n" +
       "  <groundspeak:long_description html=\"False\"><%wpEntity.longdesc%></groundspeak:long_description>\r\n" +
-      "  <groundspeak:encoded_hints><%wpEntity.hint%></groundspeak:encoded_hints>\r\n" +
+      "  <groundspeak:encoded_hints><%outEntity.hintdecrypt%></groundspeak:encoded_hints>\r\n" +
       "  <groundspeak:logs>\r\n" +
       "  <%out.gpxlogs%>\r\n" +
       "  </groundspeak:logs>\r\n" +
