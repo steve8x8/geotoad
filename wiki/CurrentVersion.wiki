@@ -1,5 +1,14 @@
 #labels Deprecated
-version=3.9.7.1
+version=3.9.8
 {{{
-  * Fixes the new --cacheType filter (all other known bugs are also fixed).
+   - Updated to handle recent changes to Geocaching.com.
+   - Add country, state fields to GPX and HTML output
+   - Add support for proxy servers (-P or ENV[http_server])
+   - Stricter input checking    
+   - Include log comments from previous years
+   - Now compatible with Ruby 1.9.x
+   - Fix various encoding issues that broke GPX output
+   - Fix encoding of accent characters
+   - Fix hint encryption issues
+   - Loads of other fixes!
 }}}
