@@ -59,8 +59,8 @@ $Format = {
       "  <groundspeak:container><%wp.size%></groundspeak:container>\r\n" +
       "  <groundspeak:difficulty><%wp.difficulty%></groundspeak:difficulty>\r\n" +
       "  <groundspeak:terrain><%wp.terrain%></groundspeak:terrain>\r\n" +
-      "  <groundspeak:country><%wp.country%></groundspeak:country>\r\n" +
-      "  <groundspeak:state><%wp.state%></groundspeak:state>\r\n" +
+      "  <groundspeak:country><%wpEntity.country%></groundspeak:country>\r\n" +
+      "  <groundspeak:state><%wpEntity.state%></groundspeak:state>\r\n" +
       "  <groundspeak:short_description html=\"False\"><%wpEntity.shortdesc%></groundspeak:short_description>\r\n" +
       "  <groundspeak:long_description html=\"False\"><%wpEntity.longdesc%></groundspeak:long_description>\r\n" +
       "  <groundspeak:encoded_hints><%outEntity.hintdecrypt%></groundspeak:encoded_hints>\r\n" +
@@ -100,7 +100,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
     'templateIndex' => "* <a href=\"#<%out.wid%>\"><%wpEntity.name%></a><br>",
     'templateWP'    =>
       "\n\n<hr noshade size=\"1\">\n<a name=\"<%out.wid%>\"></a><font color=\"#000099\"><big><b><a href=\"<%out.url%>\"><%wpEntity.name%>&nbsp;<%out.symbols%></a></b></big></font><br>\n" +
-      "<font color=\"#555555\"><b><%wpEntity.creator%></b></font>, <%wp.latwritten%> <%wp.lonwritten%><br>" +
+      "<font color=\"#555555\"><b><%wpEntity.creator%></b></font>, <%wp.latwritten%> <%wp.lonwritten%> (<%out.location%>)<br>" +
       "<font color=\"#339933\"><%wp.type%> (<%wp.size%>) D<%wp.difficulty%>/T<%wp.terrain%> F:<%wp.funfactor%> <%out.relativedistance%><br>" +
       "placed: <%wp.cdate%> last comment: <%wp.mdays%> days ago (<%wp.comment0Type%>)</font><br>" +
       "<p><%outEntity.details%></p>\n" +
@@ -130,7 +130,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
     'templateIndex' => "* <a href=\"#<%out.wid%>\"><%wpEntity.name%></a><br>",
     'templateWP'    =>
       "\n\n<hr noshade size=\"1\">\n<a name=\"<%out.wid%>\"></a><font color=\"#000099\"><big><b><a href=\"<%out.url%>\"><%wpEntity.name%>&nbsp;<%out.symbols%></a></b></big></font><br>\n" +
-      "<font color=\"#555555\"><b><%wpEntity.creator%></b></font>, <%wp.latwritten%> <%wp.lonwritten%><br>" +
+      "<font color=\"#555555\"><b><%wpEntity.creator%></b></font>, <%wp.latwritten%> <%wp.lonwritten%> (<%out.location%>)<br>" +
       "<font color=\"#339933\"><%wp.type%> (<%wp.size%>) D<%wp.difficulty%>/T<%wp.terrain%> F:<%wp.funfactor%> <%out.relativedistance%><br>" +
       "placed: <%wp.cdate%> last comment: <%wp.mdays%> days ago (<%wp.comment0Type%>)</font><br>" +
       "<p><%outEntity.details%></p>\n" +
