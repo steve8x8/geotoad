@@ -3,6 +3,10 @@
 # $Id: makedist.se,v 1.3 2002/04/23 04:05:41 helix Exp $
 cd ..
 SRC=`pwd`
+if [ ! -f VERSION ];  then
+  echo "VERSION not found"
+  exit 2
+fi
 VERSION=`cat VERSION`
 DISTNAME="geotoad-$VERSION"
 DEST=$HOME/Desktop/GeoToad
@@ -23,8 +27,9 @@ rm -Rf "$DEST"
 
 echo "Creating $GENERIC_DIR"
 mkdir -p "$GENERIC_DIR"
-svn2cl
-mv ChangeLog ChangeLog.txt
+#svn2cl
+#mv ChangeLog ChangeLog.txt
+cp /tmp/ChangeLog.txt .
 rsync -a --exclude "*~" --exclude ".svn/" . $GENERIC_DIR
 sed s/"%VERSION%"/"$VERSION"/g geotoad.rb > $GENERIC_DIR/geotoad.rb
 sed s/"%VERSION%"/"$VERSION"/g README.txt > $GENERIC_DIR/README.txt
@@ -42,9 +47,18 @@ zip -r "$GENERIC_PKG" "$DISTNAME"
 # Mac OS X
 echo "Creating $MAC_DIR"
 rm "$MAC_DIR/geotoad"
-echo "Using Finder, rename the .command in $MAC_DIR and apply icon from data/bufos.icns"
-read 
+
+cd "$MAC_DIR" 
+sips -i data/bufos-icon.icns && DeRez -only icns data/bufos-icon.icns > data/icns.rsrc
+Rez -append data/icns.rsrc -o "GeoToad for Mac.command"
+SetFile -a E "GeoToad for Mac.command"
+SetFile -a C "GeoToad for Mac.command"
+rm data/icns.rsrc
+
+echo "Creating $MAC_PKG"
 hdiutil create -srcfolder "$MAC_DIR" "$MAC_PKG"
+echo "done with $MAC_PKG"
+
 
 # Windows
 echo "Creating $WIN_DIR"
@@ -56,18 +70,14 @@ mv *.rb lib interface data compile
 mv compile/geotoad.rb compile/init.rb
 flip -d *.txt
 perl -pi -e 's/([\s])geotoad\.rb/$1geotoad/g' README.txt
-echo "Running tar2rubyscript.rb compile"
-ruby $SRC/tools/tar2rubyscript.rb compile
-if [ -f "compile.rb" ]; then
-  echo "Under vmware, run: ruby rubyscript2exe.rb compile.rb"
-  read ENTER
-  if [ -f "compile.exe" ]; then
-    mv compile.exe geotoad.exe
-    rm -Rf "$WIN_DIR/compile"
-    zip -r "$WIN_PKG" *
-  else
-    echo "compile.exe not found, FAIL."
-  fi
+
+echo "In Windows, run: ruby rubyscript2exe.rb compile/init.rb"
+read ENTER
+if [ -f "compile.exe" ]; then
+  mv compile.exe geotoad.exe
+  mv compile/data .
+  rm -Rf "$WIN_DIR/compile"
+  zip -r "$WIN_PKG" *
 else
-  echo "Failed to run tar2rubyscript.rb, get it from http://www.erikveen.dds.nl/tar2rubyscript/index.html"
+  echo "compile.exe not found, FAIL."
 fi
