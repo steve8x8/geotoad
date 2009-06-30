@@ -216,8 +216,10 @@ class Input
       printf("(24) output directory    [%-51.51s]\n", (@@optHash['outDir'] || findOutputDir))
       puts "=============================================================================="
       if @@optHash['verbose']
+        enableDebug
         puts "VERBOSE MODE ENABLED"
       else
+        disableDebug
         puts ""
       end
       print "-- Enter menu number, (s) to start, (r) to reset, or (x) to exit --> "
