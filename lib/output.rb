@@ -451,9 +451,14 @@ class Output
       @outVars['latdatapad6'] = sprintf("%2.6f", @wpHash[@currentWid]['latdata'])
       @outVars['londatapad6'] = sprintf("%2.6f", @wpHash[@currentWid]['londata'])
             
-            
       if @wpHash[@currentWid]['distance']
         @outVars['relativedistance'] = 'Distance: ' + @wpHash[@currentWid]['distance'].to_s + 'mi ' + @wpHash[@currentWid]['direction']
+      end
+      
+      if @wpHash[@currentWid]['state']
+        @outVars['location'] = @wpHash[@currentWid]['state'] + ', ' + @wpHash[@currentWid]['country']
+      else
+        @outVars['location'] = @wpHash[@currentWid]['country']
       end
             
       # fix for bug reported by wkraml%a1.net - caches with no hint get the last hint.

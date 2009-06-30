@@ -218,10 +218,19 @@ class CacheDetails
         debug "got digital lat/lon: #{$1} #{$2}"
       end
             
-      if line =~ /LatLon/
-        debug "LatLon: #{line}"
+
+      # <span id="Location">In State, Country</span></p>
+      if line =~ /\<span id=\"Location\"\>In ([\w\-\.\&\; ]+)\, ([\w\-\. ]+)/
+        @waypointHash[wid]['state']=$1
+        @waypointHash[wid]['country']=$2
+        debug "found state: #{$1} country: #{$2}"
+      # <span id="Location">In Country</span></p>
+      elsif line =~ /\<span id=\"Location\"\>In ([\w\-\.\&\; ]+)/
+          @waypointHash[wid]['state']=nil
+          @waypointHash[wid]['country']=$1
+        debug "found country: #{$1}"
       end
-      
+           
       # duplicated from search.rb exactly.
       if line =~ /WptTypes.*?alt=\"(.*?)\"/
         @waypointHash[wid]['type']=$1.downcase
