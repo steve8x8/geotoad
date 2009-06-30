@@ -7,6 +7,10 @@ module Display
   def enableDebug
     $debugMode = 1
   end
+
+  def disableDebug
+    $debugMode = 0
+  end
     
   def debug(text)
     if $debugMode == 1

@@ -88,6 +88,8 @@ class GeoToad
                 
     if (@option['verbose'])
       enableDebug
+    else
+      disableDebug
     end
         
     if ! $validFormats.include?(@formatType)
