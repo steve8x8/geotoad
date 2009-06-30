@@ -267,12 +267,10 @@ class CacheDetails
         cnum = 0
         funTotal = 0.0
         fnum = 0
-         # img src='http://www.geocaching.com/images/icons/icon_smile.gif' align='absmiddle'>&nbsp;August 22 by <a name="51319755" style="text-decoration: underline;"><a href="../profile/?guid=7cdeb63a-0470-4b4d-aa99-64298657a4fe" style="text-decoration: underline;">puggle1</a></strong> (103 found)<br />Nice little cache. Better check things out occasionally, there's construction just a few feet away from the hide. Puggle1<br />
-                
-#<tr><td VALIGN='TOP' ALIGN='LEFT' class='logContainerRow'><font face='Verdana' size='2'><STRONG><img src='http://www.geocaching.com/images/icons/icon_smile.gif' align='absmiddle'>&nbsp;March 1 by <a name="63645129" style="text-decoration: underline;"><a href="../profile/?guid=ee43d577-7650-48b3-81ff-92c1d82ed6b6" style="text-decoration: underline;">Miguelangelo</a></strong> (3 found)<br />Hola Amigos y especialmente Jaume:<p>Esta tarde nubosa de domingo la hemos dedicado a geocachear por Valencia ciudad. Es el segundo cache que Raquel y yo (miguelangelo) encontramos esta tarde (el primero, de quiquean, en el parque de cabecera). Ambos siguen estando intactos!....<p>Muchas gracias por el caché, es emocionante...estaba lleno de policías..jejeje.<br />[<a href="./log.aspx?LUID=351f2111-8e61-41ad-887f-87c8dfb36ae9" >view this log</a>]<br /><br /></font></td></tr>
 
          line.gsub!(/\<p\>/, ' ')
-         line.scan(/icon_(\w+)\.gif.*?&nbsp;([\w ]+) by \<a name=\"(\d+)".*?\>\<a href.*?\>(.*?)\<\/a.*?\<br \/\>(.*?)\</) { |icon, date, id, name, comment|
+#         line.scan(/icon_(\w+)\.gif.*?&nbsp;([\w ]+),?[ ]?\d* by \<a  name=\"(\d+)".*?\>\<a href.*?\>(.*?)\<\/a.*?\<br \/\>(.*?)\</) { |icon,  date, id, name, comment|
+         line.scan(/icon_(\w+)\.gif.*?&nbsp;([\w, ]+) by \<a name=\"(\d+)".*?\>\<a href.*?\>(.*?)\<\/a.*?\<br \/\>(.*?)\</) { |icon, date, id, name, comment|
           type = 'unknown'
           nograde=nil
                     
