@@ -261,19 +261,26 @@ class Output
   end
     
   def makeXML(str)
+    if not str or str.length == 0:
+      return str
+    end
+    
     # Mangle our scraped HTML enough to pass most XML parsers.
     
     text = CGI.escapeHTML(str)
     if text != str
       debug "Escaped HTML: #{text}"
     end
-    
-    # fix CGI.escapeHTML stupidity
-    if text =~ /\&amp\;([\#\w]+\;)/
-      text.gsub!(/\&amp\;([\#\w]+\;)/, "&#{$1}")
-      debug "Post-ampersand fix: #{text}"
+
+    # CGI.escapeHTML will try to re-escape previously escaped entities.
+    # For instance, &amp; would become &amp;amp;. We do have to make sure
+    # not to fix R&R; though, though &Xi; needs to be fixed.
+    if text =~ /&amp;([\#\w][\w]+;)/   
+      debug "Pre-ampersand: [#{text}] #{text.length}"
+      text.gsub!(/&amp;([\#\w][\w]+;)/, "&#{$1}")
+      debug "Post-ampersand: #{text}"
     end
-    
+
     scan_text = text.dup
     # using scan() here to get around difficulties with \1
     scan_text.scan(/([\x80-\xFF]+)/) {|highchar|
@@ -289,6 +296,7 @@ class Output
     
     # Fix apostrophes so that they show up as expected. Fixes issue 26.
     text.gsub!('&#8217;', "'")
+        
     if text != str
       debug "made XML: %s" % text
     end
