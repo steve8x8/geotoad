@@ -23,7 +23,7 @@ rm -Rf "$DEST"
 
 echo "Creating $GENERIC_DIR"
 mkdir -p "$GENERIC_DIR"
-/usr/local/svn2cl-0.10/svn2cl.sh
+svn2cl
 mv ChangeLog ChangeLog.txt
 rsync -a --exclude "*~" --exclude ".svn/" . $GENERIC_DIR
 sed s/"%VERSION%"/"$VERSION"/g geotoad.rb > $GENERIC_DIR/geotoad.rb
