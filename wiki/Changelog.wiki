@@ -1,112 +1,133 @@
-#summary Changes since 3.9.6
+#summary Changes in the 3.9.8 release
 #labels Featured
 
 {{{
-2008-09-02 16:18  helixblue
+2009-06-30 13:19  helixblue
 
-        * VERSION, tools/makedist.sh: Bump to 3.9.7.1
+        * lib/details.rb, lib/output.rb, lib/templates.rb: Add support for
+          displaying country/state in GPX and HTML output. Fixes issue 25
 
-2008-09-02 16:13  helixblue
+2009-06-30 12:40  helixblue
 
-        * lib/filter.rb: fix for last minute type filtering breakage
+        * lib/details.rb: Add comma to comment regexp to grab comments from
+          previous years
 
-2008-09-02 12:16  helixblue
+2009-06-30 12:17  helixblue
 
-        * geotoad.rb, interface/input.rb, lib/filter.rb: --type should be
-          --cacheType to avoid confusion with --queryType
+        * lib/output.rb: Fix R&R; ampersand removal. Fixes issue 50
 
-2008-09-02 12:15  helixblue
+2009-06-30 10:46  helixblue
 
-        * lib/search.rb: Fix travel bug search: issue 14
+        * geotoad.rb, interface/display.rb, interface/input.rb: Make it so
+          that the debug flag disables properly on the fly
 
-2008-09-02 01:49  helixblue
+2009-06-30 06:37  helixblue
 
-        * CGI, CLI/GeoToad for Mac.command, CLI/README.txt, CLI/geotoad.rb,
-          CLI/interface, GeoToad for Mac.command, README.txt, geotoad.rb,
-          interface, interface/display.rb, interface/input.rb,
-          interface/progressbar.rb: Re-arrange geotoad source
+        * lib/templates.rb: Make sure GPX hints are decrypted
 
-2008-09-02 01:33  helixblue
+2009-06-29 20:05  helixblue
 
-        * lib/details.rb, lib/filter.rb, lib/search.rb: add cache type
-          filtering
+        * geotoad.rb: Fix diffcultyMax filename. Fixes issue 48
 
-2008-09-02 01:33  helixblue
+2009-06-29 16:25  helixblue
 
-        * lib/shadowget.rb: update user-agent
+        * lib/output.rb: Some changes to template substitution for easier
+          debugging
 
-008-09-01 23:57  helixblue
+2009-06-29 15:01  helixblue
 
-        * lib/output.rb: Fix filter_exec export issue with multiple runs
-          within a session (issue 10)
+        * lib/output.rb: Fix decrypted hint, issue 38
 
-2008-09-01 14:23  helixblue
+2009-06-29 14:56  helixblue
 
-        * CLI/geotoad.rb, lib/details.rb, lib/output.rb: Fix
-          subscriber-only caching issue, add more filter-logging
+        * lib/details.rb, lib/filter.rb, lib/output.rb, lib/search.rb,
+          lib/templates.rb: Stop unescaping the cache name and creator.
+          Fixes issue 24, most likely breaks text based outputs
 
-2008-09-01 12:54  helixblue
+2009-06-29 13:41  helixblue
 
-        * lib/output.rb: Fix makeXML ampersand issue (issue 8)
+        * interface/input.rb, lib/common.rb, lib/details.rb, lib/search.rb,
+          lib/shadowget.rb: Fixes for Ruby 1.9 compatibility
 
-2008-09-01 12:28  helixblue
+2009-06-29 12:47  helixblue
 
-        * lib/common.rb: Don't crash if a timestamp is not parseable
+        * lib/search.rb: Make WptType regexp stricter to avoid inserting
+          geocoins. Fixes issue 36
 
-2008-09-01 12:28  helixblue
+2009-06-29 12:36  helixblue
 
-        * lib/search.rb: Fix regexp for newly found caches
+        * README.txt, geotoad.rb, interface/input.rb, lib/shadowget.rb: Add
+          http proxy support. -P or --proxy can be specified, or the
+          HTTP_PROXY environment variable
 
-2008-09-01 12:24  helixblue
+2009-06-29 12:15  helixblue
 
-        * lib/searchcode.rb, tools/countryrip.rb: Update country codes
+        * geotoad.rb: Fix it so that wid searches do not go through the
+          preFetchFilter
 
-2008-08-31 21:22  helixblue
+2009-06-29 12:14  helixblue
 
-        * lib/details.rb: fix comment parsing
+        * lib/output.rb: Convert unicode apostrophes to normal ones. Fixes
+          issue 26
 
-2008-08-31 20:28  helixblue
+2009-06-29 11:44  helixblue
 
-        * lib/common.rb, lib/search.rb: fix date parsing in searches
+        * lib/details.rb: Strip low-ascii from most objects. Add HTML
+          clenaing to title and comments. Fixes issue 22
 
-2008-08-31 19:17  helixblue
+2009-06-29 11:00  helixblue
 
-        * lib/common.rb, lib/details.rb, lib/search.rb: Fix subscriber
-          caches, remove some old code
+        * lib/details.rb: Make terrain/difficulty integers if they do not
+          contain a decimal point. Fixes issue 42
 
-2008-08-31 17:06  helixblue
+2009-06-29 10:53  helixblue
 
-        * ., CGI/geoweb.cgi, CLI/geotoad.rb, CLI/interface/display.rb,
-          CLI/interface/input.rb, CLI/interface/progressbar.rb,
-          lib/auth.rb, lib/common.rb, lib/details.rb, lib/filter.rb,
-          lib/output.rb, lib/search.rb, lib/searchcode.rb,
-          lib/shadowget.rb, lib/templates.rb, tools/countryrip.rb,
-          tools/fun_rating_create_data.rb, tools/fun_rating_feed.rb,
-          tools/fun_rating_sort.rb: Reformat ruby code properly, courtesy
-          of Netbeans 6.1
+        * lib/details.rb: Fix from sadumi to make cache Description parsing
+          more strict
 
-2008-08-31 13:49  helixblue
+2009-06-29 10:52  helixblue
 
-        * lib/details.rb, lib/output.rb: Add missing creator, difficulty,
-          and terrain numbers when doing wid searches
+        * interface/input.rb: Fix default answer from askFromList
 
-2008-08-31 13:26  helixblue
+2009-06-29 10:47  helixblue
 
-        * lib/search.rb: Fix parsing for changes in difficulty layout
-          (issue 9)
+        * interface/input.rb: Omit quotes in sample output if the argument
+          is simple
 
-2008-08-31 13:19  helixblue
+2009-06-29 10:41  helixblue
 
-        * lib/search.rb: Add support for countries where there is an
-          additional province selection. (Issue 7), contributed by
-          rigacci.org.
+        * interface/input.rb: Rename askFloat to askNumber. Return int() if
+          it is acceptable
 
-2008-08-31 13:14  helixblue
+2009-06-29 10:33  helixblue
 
-        * lib/common.rb, lib/details.rb, lib/search.rb: Fix wid search: add
-          ctime support to details.rb
+        * interface/input.rb: Implement list checking for cache size and
+          cache type
 
-2008-08-31 12:57  helixblue
+2009-06-29 09:58  helixblue
 
-        * lib/shadowget.rb: Hopefully improve shadowget.rb usage when in
-          disconnected mode.
+        * interface/input.rb: Be more strict about the query type input
+
+2009-06-29 09:49  helixblue
+
+        * FAQ.txt: Add Cachemate for Android, update prices, add SmartGPX
+
+2009-06-29 09:44  helixblue
+
+        * lib/auth.rb: Sync login code to geocaching.com changes. Fixes
+          issue 46, provided by niklas.wendel
+
+2009-06-29 09:39  helixblue
+
+        * interface/input.rb: Check for valid floating point numbers when
+          inputting min/max filters. Fixes issue 19
+
+2009-06-29 09:25  helixblue
+
+        * lib/filter.rb: Add WID to filtering debug message
+
+2009-06-29 08:58  helixblue
+
+        * lib/templates.rb: Change GPX <time> tag to use out.XMLDate
+          instead of the current date. Fixes issue 15.
+}}}
