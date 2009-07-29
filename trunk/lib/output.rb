@@ -277,7 +277,7 @@ class Output
     # not to fix R&R; though, though &Xi; needs to be fixed.
     if text =~ /&amp;([\#\w][\w]+;)/   
       debug "Pre-ampersand: [#{text}] #{text.length}"
-      text.gsub!(/&amp;([\#\w][\w]+;)/, "&#{$1}")
+      text.gsub!(/&amp;([\#\w][\w]+;)/, "&\\1")
       debug "Post-ampersand: #{text}"
     end
 
