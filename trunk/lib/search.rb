@@ -3,471 +3,322 @@
 require 'cgi'
 require 'time'
 
+BASE_URL = 'http://www.geocaching.com/seek/nearest.aspx'
+
 class SearchCache
   include Common
   include Display
-    
-  @@baseURL="http://www.geocaching.com/seek/nearest.aspx"
+  
+  attr_accessor :distance
     
   def initialize
-    @distance=15
-    @waypointHash = Hash.new
-    @fetchID=0
-    @resultsPager=nil
+    @distance = 15
+    @ttl = 72000
+    @waypoints = Hash.new
   end
-    
-  def distance (dist)
-    debug "setting distance to #{dist}"
-    @distance = dist
-  end
-    
-     
-  # set the search mode. valid modes are 'zip', 'state', 'country', 'keyword', coord, user
-  def mode(mode, key)
-    case mode
-    when 'state'
-      keylookup=SearchCode.new(mode)		# i.e. resolve North Carolina to 34.
-      @mode=keylookup.type
-      @key=keylookup.lookup(key)
-      # nearly everything is in this form
-      @url=@@baseURL + '?' + @mode + '=' + CGI.escape(@key.to_s)
-            
-    when 'country'
-      keylookup=SearchCode.new(mode)		# i.e. resolve North Carolina to 34.
-      @mode=keylookup.type
-      @key=keylookup.lookup(key)
-      # nearly everything is in this form
-      @url=@@baseURL + '?' + @mode + '=' + CGI.escape(@key.to_s)
-                        
-      # The lookup page for some countries have an in-between page for
-      # State/Province select. Parse and fetch the "Search All" page.
-      debug 'fetching the country page'
-      @postVars = Hash.new
-      page = ShadowFetch.new(@url)
-      data = page.fetch
 
-      @select = ''
-      data.each { |line|
+  # set the search mode. valid modes are 'zip', 'state', 'country', 'keyword', coord, user
+  def setType(mode, key)
+    @query_type = nil
+    @query_arg = key
+    supports_distance = false    
+    case mode
+      when 'state', 'country'   
+        code = SearchCode.new(mode)
+        @query_type = code.type
+        @query_arg = code.lookup(key)
+      when 'coord'
+        @query_type = 'coord'
+        supports_distance = true
+        lat_dir, lat_h, lat_ms, long_dir, long_h, long_ms, lat_ns, long_ew = parseCoordinates(key)
+        @search_url = BASE_URL + '?lat_ns=' + lat_ns.to_s + '&lat_h=' + lat_h + '&lat_mmss=' + (lat_ms==''?'0':lat_ms) + '&long_ew=' + long_ew.to_s + '&long_h=' + long_h + '&long_mmss=' + (long_ms==''?'0':long_ms)            
+      when 'user':
+        @query_type = 'ul'
+        @ttl = 43200
+      when 'keyword':
+        @query_type = 'key'
+      when 'zipcode':
+        supports_distance = true
+        @query_type = 'zip'
+      when 'wid':
+        @query_type = 'wid'
+        if key =~ /^GC/
+          @search_url = "http://www.geocaching.com/seek/cache_details.aspx?wp=#{@key}"
+        else
+          displayError "Waypoint ID's must start with GC"
+          return nil
+        end
+    end            
+
+    if not @query_type
+      warning "Could not determine what type of query you mean by #{mode}"
+      return nil
+    end      
+
+    if not @search_url:
+      @search_url = BASE_URL + '?' + @query_type + '=' + CGI.escape(@query_arg.to_s)
+    end
+    
+    if supports_distance and @distance:
+      @search_url = @search_url + '&dist=' + @distance.to_s
+    end
+    
+    debug "query_type: #{@query_type} query_arg: #{@query_arg} url: #{@search_url}"
+    return @query_type
+  end
+    
+  def parseCoordinates(key)
+    # This regular expression should probably handle any kind of messed. Thanks sbrynen!
+    re = /^([ns-]?)\s*([\d\.]+)\W*([\d\.]*)[\s,]+([ew-]?)\s*([\d\.]+)\W*([\d\.]+)/i
+    md = re.match(key)            
+    if ! md
+      displayError "Bad format in #{key}! Try something like \"N56 44.392 E015 52.780\" instead"
+    end
+          
+    lat_dir = md[1]
+    lat_h = md[2]
+    lat_ms = md[3]            
+    long_dir = md[4]
+    long_h = md[5]
+    long_ms = md[6]            
+    lat_ns = 1
+    long_ew = 1
+          
+    if lat_dir == 's' || lat_dir == 'S' || lat_dir == '-'
+      lat_ns = -1
+    end
+          
+    if long_dir == 'w' || long_dir == 'W' || long_dir == '-'
+      long_ew = -1
+    end
+    displayMessage "Coordinate's have been parsed as latitude #{lat_dir} #{lat_h}'#{lat_ms}, longitude #{long_dir} #{long_h}'#{long_ms}"
+    coords = [lat_dir, lat_h, lat_ms, long_dir, long_h, long_ms, lat_ns, long_ew]
+    return coords
+  end    
+        
+  def getResults()
+    if @query_type == 'wid'
+      # Yes, we fake it.
+      @waypoints[@query_arg] = {
+        'visitors' => [],
+        'terrain' => 1,
+        'difficulty' => 1,
+        'mdays' => 1
+      }
+      return @waypoints
+    else
+      return searchResults(@search_url)
+    end
+  end
+  
+  def searchResults(url)
+    debug "searchResults: #{url}"
+    if not url
+      warn "searchResults has no URL?"
+    end
+    post_vars = Hash.new
+        
+    page_number, pages_total, parsed_total, post_vars, src = processPage({})
+    progress = ProgressBar.new(1, pages_total, "#{@query_type} query for #{@query_arg}")
+    progress.updateText(page_number, "from #{src}")      
+
+    while(page_number < pages_total)
+      debug "*** On page #{page_number} of #{pages_total}"
+      last_page_number = page_number
+      page_number, total_pages, total_waypoints, post_vars, src = processPage(post_vars)
+      progress.updateText(page_number, "from #{src}")      
+      if (src == "remote")
+        debug "sleeping"
+        sleep($SLEEP * 1.5)
+      end
+
+      if page_number == last_page_number
+        displayError "Stuck on page number #{page_number} of #{total_pages}"
+        sleep(20)
+      end
+    end
+    return @waypoints
+  end
+    
+  def getPage(url, post_vars)
+    page = ShadowFetch.new(url)
+    page.localExpiry = @ttl
+    if (post_vars.length > 0)
+      page.postVars=post_vars.dup
+    end
+      
+    if (page.fetch)
+      return page.data
+    else
+      return nil
+    end
+  end
+  
+  def processPage(post_vars)
+    data = getPage(@search_url, post_vars)
+    page_number, pages_total, parsed_total, post_vars = parseSearchData(data)
+    cache_check = ShadowFetch.new(@url)
+    src = cache_check.src
+    return [page_number, pages_total, parsed_total, post_vars, src]
+  end
+  
+  def fillInFormData(data)
+    # Check if the page has a form. If so, fill it in and return new page data.
+    province_required = false
+    post_vars = Hash.new
+    select = nil
+    
+    data.each {|line|
+      if line =~ /onsubmit=\"/
+          debug "Looks like #{@search_url} requires a State/Province selection."
+          province_required = true
+      end
+
+      if province_required
         if (line =~ /^\<input type=\"hidden\" name=\"([^\"]*?)\".* value=\"([^\"]*?)\" \/\>/)
-          debug "found hidden post variable: #{$1}"
-          @postVars[$1]=$2
+          debug "found hidden post variable: #{$1}=#{$2}"
+          post_vars[$1] = $2
         end
         if (line =~ /^\<input type=\"submit\" name=\"([^\"]*?)\".* value=\"([^\"]*?)\"/)
-          debug "found submit post variable: #{$1}"
-          @postVars[$1]=$2
+          debug "found submit post variable: #{$1}=#{$2}"
+          post_vars[$1] = $2
         end
         
         if (line =~ /\<select name=\"([^\"]*?)\"/)
-          @select=$1
+          select = $1
         elsif (line =~ /\<option selected=\"selected\" value=\"([^\"]*?)\"/)
-          if (@select != '')
-            debug "found selected option: [" + @select + "] #{$1}"
-            @postVars[@select]=$1
-            @select = ''
+          if select
+            debug "found selected option: [" + select + "] #{$1}"
+            post_vars[select]=$1
+            select = nil
           else
             debug "found selected option: #{$1}"
             displayError "Found selected <option>, but no previous <select> tag."
             return nil
           end
         end
-      }
-      debug 'country page parsed'
-      return @url
-
-    when 'coord'
-      @mode = 'coordinate'
-      @key = key
-      # This regular expression should probably handle any kind of messed
-      # up input the user could conjure. Thanks to Scott Brynen for help.
-            
-      #       N             48    �   08.152          E         011    � 39.308 '
-      re = /^([ns-]?)\s*([\d\.]+)\W*([\d\.]*)[\s,]+([ew-]?)\s*([\d\.]+)\W*([\d\.]+)/i
-      #*(\d+)\W(\d+)\W*(\d+)$/i
-      md = re.match(key)
-            
-      if ! md
-        displayError "Bad format in #{key}! Try something like \"N56 44.392 E015 52.780\" instead"
-        return nil
       end
-            
-            
-            
-      lat_dir = md[1]
-      lat_h = md[2]
-      lat_ms = md[3]
-            
-      long_dir = md[4]
-      long_h = md[5]
-      long_ms = md[6]
-            
-      lat_ns = 1
-      long_ew = 1
-            
-      if lat_dir == 's' || lat_dir == 'S' || lat_dir == '-'
-        lat_ns = -1
-      end
-            
-      if long_dir == 'w' || long_dir == 'W' || long_dir == '-'
-        long_ew = -1
-      end
-            
-            
-      displayMessage "Coordinate's have been parsed as latitude #{lat_dir} #{lat_h}'#{lat_ms}, longitude #{long_dir} #{long_h}'#{long_ms}"
-            
-      @url = @@baseURL + '?lat_ns=' + lat_ns.to_s + '&lat_h=' + lat_h + '&lat_mmss=' + (lat_ms==''?'0':lat_ms) + '&long_ew=' + long_ew.to_s + '&long_h=' + long_h + '&long_mmss=' + (long_ms==''?'0':long_ms)
-            
-      if @distance
-        @url = @url + '&dist=' + @distance.to_s
-      end
-            
-    when 'user'
-      @mode = mode
-      @key = key
-      @url=@@baseURL + '?ul=' + CGI.escape(@key)  # I didn't see the point of adding a dummy lookup
-            
-    when 'keyword'
-      @mode = mode
-      @key = key
-      @url=@@baseURL + '?key=' + CGI.escape(@key)  # I didn't see the point of adding a dummy lookup
-            
-    when 'zipcode'
-      # nearly everything is in this form
-      @mode = 'zip'
-      @key = key
-            
-      @url=@@baseURL + '?' + @mode + '=' + CGI.escape(@key.to_s) + "&submit1=Submit"
-            
-      if (@key !~ /^[\w][\w ]+$/)
-        displayError "Invalid zip code format: #{@key}"
-        return nil
-      end
-            
-      if @distance
-        @url = @url + '&dist=' + @distance.to_s
-      end
-    when 'wid'
-      # uhm.
-      @mode = 'wid'
-      @key = key
-            
-      @url = "http://www.geocaching.com/seek/cache_details.aspx?wp=#{@key}"
-            
-      if (@key !~ /^GC/)
-        displayError "Waypoint ID's must start with GC"
-        return nil
-      end
-            
-    else
-      displayWarning "Not sure what kind of search \"#{mode}\" is!"
-    end
-        
-        
-    debug "URL for mode #{mode} is #{@url}"
-    return @url
-  end
-    
-  def baseURL
-    @@baseURL
-  end
-    
-  def URL
-    @url
-  end
-    
-  def waypoints
-    debug "returning waypointHash (#{@waypointHash}) from search."
-    @waypointHash.each_key { |wp|
-      debug "returning #{wp}"
     }
-    @waypointHash
-  end
-    
-  def waypointList
-    @waypointHash.keys
-  end
-    
-  def totalWaypoints
-    debug "returning totalWaypoints available from search: #{@totalWaypoints}"
-    @totalWaypoints
-  end
-    
-  def lastWaypoint
-    @lastWaypoint
-  end
-    
-  def currentPage
-    @currentPage
-  end
-    
-  def totalPages
-    @totalPages
-  end
-    
-  def fetchNext
-    debug "fetchNext called, last waypoint was #{@lastWaypoint} of #{@totalWaypoints}, next target is #{@nextTarget}"
-    if (@nextTarget) 
-      @postVars['__EVENTTARGET']=@nextTarget
-      @lastWaypointCount = fetch(@url)
-      return @nextTarget
+    if province_required
+      displayInfo 'Resubmitting search with state/province form data'
+      return getPage(@search_url, post_vars)
     else
-      return nil
+      return data
     end
   end
-    
-  def fetchFirst
-    @nextTarget=nil
-    return fetch(@url)
-  end
-    
-  # This function used to be in the CLI but was moved in here by Mike Capito's
-  # userlist patch. This loop downloads all the pages needed.
-  def fetchSearchLoop
-    # Wid's don't actually have a search loop, so we fake it.
-    if (@mode == 'wid')
-      fakeSearchLoop
-      return
-    end
-        
-        
-    # fetches the first page in the search listing, so we can determine
-    # how many search pages we need to download.
-    fetchFirst
-        
-    if (totalWaypoints)
-      progress = ProgressBar.new(1, totalPages, "#{@mode} query for #{@key}")
-            
-      # the loop that gets all of them.
-      running = 1
-      downloads = 0
-      resultsPager = 5
-      while(running)
-        # short-circuit for lack of understanding.
-        debug "(download while loop - #{currentPage} of #{totalPages})"
-                
-        if (totalPages > currentPage)
-          lastPage = currentPage
-          # I don't think this does anything.
-          running = fetchNext()
-          page = ShadowFetch.new(@url)
-          if not @lastWaypointCount            
-            displayError "#{@url} has no waypoints."
-            return nil
-            page.invalidate()
-          end
-          src = page.src
-          # update it.
-          progress.updateText(currentPage, "from #{src}")
-                    
-          if (currentPage <= lastPage)
-            displayError "Geocache Search Logic error. I was at page #{lastPage} before, why am I at #{currentPage} now?"
-            page.invalidate()
-            exit
-          end
-                    
-          if (src == "remote")
-            # give the server a wee bit o' rest.
-            downloads = downloads + 1
-            # half the rest for this.
-            debug "sleeping"
-            sleep=$SLEEP*1.5
-            sleep(sleep)
-          end
-        else
-          debug "We have already downloaded the waypoints needed, lets get out of here"
-          running = nil
-        end # end totalPages if
-      end # end while(running)
-    else
-      displayWarning "No waypoints found in #{@mode}=#{@key} search. Possible error fetching #{@url}"
-    end
-  end
-    
-  def fetch(url)
-    count = nil
-    page = ShadowFetch.new(url)
-    if (@mode == "user")
-      page.localExpiry=43200
-    else
-      page.localExpiry=72000
-    end
       
-    if (@postVars)
-      page.postVars=@postVars
-    end
-      
-    if (page.fetch)
-      count = parseSearch(page.data)
-      if count == 0
-        displayWarning "No waypoints found in #{url} (server error?) - retrying"
-        page.invalidate()
-        page.fetch()
-        count = parseSearch(page.data)
-      end
-    else
-      debug "no page to parse!"
-    end
-    return count
-  end
-    
-  def parseSearch(data)
-    wid=nil
-    cache = Hash.new
-    @postVars = Hash.new
-    waypointCount = 0
-    debug "--- parsing search page ---"
-    seen_total_records = nil
-        
+  def parseSearchData(data)
+    page_number = nil
+    pages_total = nil
+    parsed_total = 0
+    wid = nil
+    waypoints_total = nil
+    @next_page_target = nil
+    post_vars = Hash.new
+    cache = {}
+
+    data = fillInFormData(data)        
     data.split("\n").each { |line|
       case line
-      when /\<tr bgcolor=/
-        debug "-- row --"
-      when /Total Records: \<b\>(\d+)\<\/b\> - Page: \<b\>(\d+)\<\/b\> of \<b\>(\d+)\<\/b\>/
-        if seen_total_records
-          debug "skipping redundant records line with #{$1} waypoints listed."
-        else
-          seen_total_records = true
-        end
-        @totalWaypoints = $1.to_i
-        @currentPage = $2.to_i
-        @totalPages = $3.to_i
-        # ;<a disabled="disabled"><b>Next</b></a>
-        # <a href="javascript:__doPostBack('pgrTop$_ctl16','')"><b>Next</b></a>
-        if line =~ /doPostBack\(\'([\w\$_]+)\',\'\'\)\"\>\<b\>Next\</
-          @nextTarget = $1
-          debug "Found next target: #{@nextTarget}"
-        else
-          debug "Could not find next target, we must be at the end!"
-          @nextTarget = nil
-        end
-                
-        @firstWaypoint = (currentPage * 20) - 20  # 1st on the page
-        @lastWaypoint = (currentPage * 20)        # last on the page
-        debug "current page is #{currentPage} of #{totalPages} (first=#{@firstWaypoint} total=#{@totalWaypoints}, target=#{@nextTarget})"
-        if (@lastWaypoint > @totalWaypoints)
-          debug "last is greater than total, fixing?"
-          @lastWaypoint = @totalWaypoints                    
-        end
-                
-      when /WptTypes\/[\d].*?alt=\"(.*?)\"/
-        cache['mdays']=-1
-        cache['type']=$1.downcase
-        cache['type'].gsub!(/\s.*/, '')
-        cache['type'].gsub!(/\-/, '')
-        debug "type=#{cache['type']}"
-
-      when /Travel Bug Dog Tag \((.*?)\)"/
-        debug "Travel Bug Found: #{$1}"
-        cache['travelbug']=$1
-
-        # (3/1.5)<br />
-      when /\(([-\d\.]+)\/([-\d\.]+)\)\<br/
-        cache['difficulty']=$1.to_f
-        cache['terrain']=$2.to_f
-        debug "cacheDiff=#{cache['difficulty']} terr=#{cache['terrain']}"
-            
-      #                     15 Jul 08 
-      when /^\s+(\w+[ \w]+)\**\<[bS][rT]/
-        debug "last found date: #{$1} at line: #{line}"
-        cache['mtime'] = parseDate($1)
-        cache['mdays'] = daysAgo(cache['mtime'])
-        debug "mtime=#{cache['mtime']} mdays=#{cache['mdays']}"
-      
-      # New images have a slightly different regexp. Couldn't get an | to work on this one?
-      #                          27 Aug 08 <IMG SRC="../images/new3.gif" alt="new!" title="new!">
-      when /^\s+(\d+ \w+ \d+) \<IMG/
-      debug "creation date: #{$1} at line: #{line}"
-      cache['ctime'] = parseDate($1)
-      cache['cdays'] = daysAgo(cache['ctime'])
-      debug "ctime=#{cache['ctime']} cdays=#{cache['cdays']}"
-      
-      #                          22 Aug 08<br />           
-      when /^\s+(\d+ \w+ \d+)\r/
-        cache['ctime'] = parseDate($1)
-        cache['cdays'] = daysAgo(cache['ctime'])
-        debug "ctime=#{cache['ctime']} cdays=#{cache['cdays']}"
-                
-      when /([NWSE]+)\<br \/\>([\d\.]+)mi</
-        cache['distance']=$2.to_f
-        cache['direction'] = $1
-        debug "cacheDistance=#{cache['distance']} dir=#{cache['direction']}"
-                
-      when /alt=\"Size: (.*?)\"/
-        cache['size'] = $1.downcase
-        debug "cache size is #{$1}"
-                
-      when /cache_details.aspx\?guid=(.*?)\">(.*?)\<\/a\>/
-        cache['sid']=$1
-        if $2
-          name=$2.dup
-        else
-          name='not_parsed'
-        end
-        name.gsub!(/ +$/, '')
-        if name =~ /\<strike\>(.*?)\<\/strike\>/
-          cache['disabled']=1
-          name=$1.dup
-          debug "#{name} appears to be disabled"
-        end
-                
-        cache['name']=name
-        debug "sid=#{cache['sid']} name=#{cache['name']} (disabled=#{cache['disabled']})"
-                
-      when /^\s+by (.*)/
-        creator = $1.dup
-        creator.gsub!(/\s+$/, '')
-        cache['creator']=creator
-        debug "creator=#{cache['creator']}"
-                
-      when /\((GC\w+)\)/
-        wid=$1.dup
-        debug "wid=#{wid}"
-    
-      when /Member-only/
-        debug "Found members only cache. Marking"
-        cache['membersonly'] = 1
-                                
-        # There is no good end of record marker, sadly.
-      when /^\t\t\<\/tr\>\<tr\>/
-        if (wid)
-          @waypointHash[wid] = cache.dup
-          @waypointHash[wid]['visitors'] = []
-                    
-          # if our search is for caches that have been done by a particular user,
-          # we may as well add that user to the hash!
-          if @mode == "users"
-            @waypointHash[wid]['visitors'].push(@key.downcase)
+        when /Total Records: \<b\>(\d+)\<\/b\> - Page: \<b\>(\d+)\<\/b\> of \<b\>(\d+)\<\/b\>/
+          if not waypoints_total
+            waypoints_total = $1.to_i
+            page_number = $2.to_i
+            pages_total = $3.to_i
           end
-                                        
-          debug "*SCORE* Search found: #{wid}: #{@waypointHash[wid]['name']} (#{@waypointHash[wid]['difficulty']} / #{@waypointHash[wid]['terrain']})"
-          waypointCount = waypointCount + 1
-          cache.clear
-        end
-                
-      when /^\<input type=\"hidden\" name=\"(.*?)\".*value=\"(.*?)\" \/\>/
-        debug "found hidden post variable: #{$1}"
-        @postVars[$1]=$2
+          # <a href="javascript:__doPostBack('pgrTop$_ctl16','')"><b>Next</b></a>
+          if line =~ /doPostBack\(\'([\w\$_]+)\',\'\'\)\"\>\<b\>Next\</
+            debug "Found next target: #{$1}"
+            post_vars['__EVENTTARGET'] = $1
+          end
+
+        when /WptTypes\/[\d].*?alt=\"(.*?)\"/
+          cache['mdays']=-1
+          cache['type']=$1.downcase.gsub(/\s.*/, '').gsub(/\-/, '')
+          debug "type=#{cache['type']}"
+  
+        when /Travel Bug Dog Tag \((.*?)\)"/
+          debug "Travel Bug Found: #{$1}"
+          cache['travelbug']=$1
+  
+        when /\(([-\d\.]+)\/([-\d\.]+)\)\<br/
+          cache['difficulty']=$1.to_f
+          cache['terrain']=$2.to_f
+          debug "cacheDiff=#{cache['difficulty']} terr=#{cache['terrain']}"
+              
+        when /^\s+(\w+[ \w]+)\**\<[bS][rT]/
+          debug "last found date: #{$1} at line: #{line}"
+          cache['mtime'] = parseDate($1)
+          cache['mdays'] = daysAgo(cache['mtime'])
+          debug "mtime=#{cache['mtime']} mdays=#{cache['mdays']}"
+         
+        # New caches have a slightly different regexp. Couldn't get an | to work on this one?
+        when /^\s+(\d+ \w+ \d+) \<IMG/
+          cache['ctime'] = parseDate($1)
+          cache['cdays'] = daysAgo(cache['ctime'])
+          debug "ctime=#{cache['ctime']} cdays=#{cache['cdays']}"
+        
+        when /^\s+(\d+ \w+ \d+)\r/
+          cache['ctime'] = parseDate($1)
+          cache['cdays'] = daysAgo(cache['ctime'])
+          debug "ctime=#{cache['ctime']} cdays=#{cache['cdays']}"
+                  
+        when /([NWSE]+)\<br \/\>([\d\.]+)mi</
+          cache['distance']=$2.to_f
+          cache['direction'] = $1
+          debug "cacheDistance=#{cache['distance']} dir=#{cache['direction']}"
+                  
+        when /alt=\"Size: (.*?)\"/
+          cache['size'] = $1.downcase
+          debug "cache size is #{$1}"
+                  
+        when /cache_details.aspx\?guid=(.*?)\">(.*?)\<\/a\>/
+          cache['sid']=$1
+          name = $2
+          if name =~ /\<strike\>(.*?)\<\/strike\>/
+            cache['disabled']=1
+            debug "#{name} appears to be disabled"
+            name=$1
+          end
+  
+          cache['name']=name.gsub(/ +$/, '')
+          debug "sid=#{cache['sid']} name=#{cache['name']} (disabled=#{cache['disabled']})"
+                  
+        when /^\s+by (.*)/
+          cache['creator'] = $1.gsub(/\s+$/, '')
+          debug "creator=#{cache['creator']}"
+                  
+        when /\((GC\w+)\)/
+          wid=$1.dup
+          debug "wid=#{wid}"
+      
+        when /Member-only/
+          debug "Found members only cache. Marking"
+          cache['membersonly'] = 1
+                                  
+          # There is no good end of record marker, sadly.
+        when /^\t\t\<\/tr\>\<tr\>/
+          debug "- end of row -"
+          if (wid)
+            debug "- end of #{wid} record -"
+            parsed_total += 1
+            @waypoints[wid] = cache.dup
+            @waypoints[wid]['visitors'] = []
+                      
+            # if our search is for caches that have been done by a particular user, add to the hash
+            if @query_type == "users"
+              @waypoints[wid]['visitors'].push(@key.downcase)
+            end                                        
+            cache.clear
+          end
+                  
+        when /^\<input type=\"hidden\" name=\"(.*?)\".*value=\"(.*?)\" \/\>/
+          debug "found hidden post variable: #{$1}"
+          post_vars[$1]=$2
                 
       end # end case
     } # end loop
-    debug "^^^ parsing complete ^^^"
-    return waypointCount
-  end #end parsecache
-        
-  # This is for wid searches.
-  def fakeSearchLoop
-    wid = @key
-    debug "Faking a search loop for wid search for #{wid}"
-    @waypointHash[wid] = Hash.new
-        
-    # I don't like that we need to set it, but otherwise we get an error later on
-    # in details.rb
-    @waypointHash[wid]['visitors'] = []
-        
-    # temporary, until I write some details sniffers for these. It's ugly cause it's
-    # not just a number in details, it's a *** 1/2 diagram.
-    @waypointHash[wid]['terrain'] = 0
-    @waypointHash[wid]['difficulty'] = 0
-    @waypointHash[wid]['mdays'] = 1
-  end
-    
-end # end class
+    debug "processPage done: page:#{page_number} total_pages: #{pages_total} parsed: #{parsed_total}"
+    return [page_number, pages_total, parsed_total, post_vars]
+  end #end parsecache        
+end

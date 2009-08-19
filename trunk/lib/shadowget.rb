@@ -43,6 +43,7 @@ class ShadowFetch
     
   def postVars=(vars)
     vars.each_key {|key|
+      debug "SET #{key}: #{vars[key]}"
       if (@postString)
         @postString = @postString + "&"
       else

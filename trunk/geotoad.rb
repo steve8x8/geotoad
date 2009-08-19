@@ -209,21 +209,20 @@ class GeoToad
         puts "(constraining to #{@distanceMax} miles)"
         @queryTitle = @queryTitle + " (#{@distanceMax}mi. radius)"
         @defaultOutputFile = @defaultOutputFile + "-y" + @distanceMax.to_s
-        search.distance(@distanceMax.to_i)
+        search.distance=@distanceMax.to_i
       else
         puts
       end
             
-      if (! search.mode(@queryType, queryArg))
+      if (! search.setType(@queryType, queryArg))
         displayError "(could not determine search type for #{@queryType}, exiting)"
         exit
       end
             
-      search.fetchSearchLoop
-            
+      waypoints = search.getResults()
       # this gives us support for multiple searches. It adds together the search.waypoints hashes
       # and pops them into the @combinedWaypoints hash.
-      @combinedWaypoints.update(search.waypoints)
+      @combinedWaypoints.update(waypoints)
       @combinedWaypoints.rehash
     }
         

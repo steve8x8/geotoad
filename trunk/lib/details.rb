@@ -201,7 +201,7 @@ class CacheDetails
             
       if line =~ /with an account to view/
         displayWarning "Oops, we are not actually logged in!"
-        return 'login-required'
+        return nil
       end
             
       # duplicate of search.rb
