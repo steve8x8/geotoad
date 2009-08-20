@@ -269,9 +269,9 @@ class GeoToad
         
     userLookups.each { |user|
       search = SearchCache.new
-      search.mode('user', user)
-      search.fetchSearchLoop
-      search.waypointList.each { |wid|
+      search.setType('user', user)
+      waypoints = search.getResults()
+      waypoints.keys.each { |wid|
         @filtered.addVisitor(wid, user)
       }
     }
