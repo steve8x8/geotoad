@@ -236,10 +236,9 @@ class CacheDetails
       end
            
       # duplicated from search.rb exactly.
-      if line =~ /WptTypes.*?alt=\"(.*?)\"/
-        @waypointHash[wid]['type']=$1.downcase
-        @waypointHash[wid]['type'].gsub!(/\s.*/i, '')
-        @waypointHash[wid]['type'].gsub!(/\-/, '')
+      if line =~ /WptTypes.*?alt=\"(.*?)\"/i
+        @waypointHash[wid]['fulltype']=$1
+        @waypointHash[wid]['type']=$1.downcase.gsub(/\s.*/i, '').gsub!(/\-/, '')
         debug "type=#{@waypointHash[wid]['type']}"
       end
       
