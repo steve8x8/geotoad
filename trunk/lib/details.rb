@@ -224,12 +224,12 @@ class CacheDetails
             
 
       # <span id="Location">In State, Country</span></p>
-      if line =~ /\<span id=\"Location\"\>In ([\w\-\.\&\; ]+)\, ([\w\-\. ]+)/
+      if line =~ /\<span id=\"Location\"\>In ([^,<]+)\, ([^<]+)/
         @waypointHash[wid]['state']=$1
         @waypointHash[wid]['country']=$2
         debug "found state: #{$1} country: #{$2}"
       # <span id="Location">In Country</span></p>
-      elsif line =~ /\<span id=\"Location\"\>In ([\w\-\.\&\; ]+)/
+      elsif line =~ /\<span id=\"Location\"\>In ([^<]+)/
           @waypointHash[wid]['state']=nil
           @waypointHash[wid]['country']=$1
         debug "found country: #{$1}"
