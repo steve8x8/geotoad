@@ -76,7 +76,7 @@ class GeoToad
       if (! @option['user']) ||  (! @option['password'])
         displayError "You must specify a username and password to download coordinates from Geocaching.com"
       end
-      usage
+      @uin.usage
       exit
     end
         
@@ -94,70 +94,14 @@ class GeoToad
         
     if ! $validFormats.include?(@formatType)
       displayError "#{@formatType} is not a valid supported format."
-      usage
+      @uin.usage
       exit
     end
     return @option
   end
     
     
-  def usage
-    puts "::: SYNTAX: geotoad.rb [options] <search>"
-    puts ""
-    puts " -u <username>          Geocaching.com username, required for coordinates"
-    puts " -p <password>          Geocaching.com password, required for coordinates"
-        
-    puts " -o [filename]          output file name (automatic otherwise)"
-    puts " -x [format]            output format type, see list below"
-    puts " -q [zip|state|coord|country|user|wid]   query type (zip by default)"
-        
-    puts " -d/-D [0.0-5.0]        difficulty minimum/maximum"
-    puts " -t/-T [0.0-5.0]        terrain minimum/maximum"
-    puts " -f/-F [0.0-5.0]        fun factor minimum/maximum"
-    puts " -y    [1-500]          distance maximum in miles (10)"
-    puts " -k    [keyword]        title keyword search. Use | to delimit multiple"
-    puts " -K    [keyword]        desc keyword search (slow). Use | again..."
-    puts " -i/-I [username]       include/exclude caches owned by this person"
-    puts " -e/-E [username]       include/exclude caches found by this person"
-    puts " -s/-S [virtual|small|regular|large]   min/max size of the cache"
-    puts " -c    [regular|virtual|event|unknown] type of cache (| seperated)"
-    puts " -j/-J [# days]         include/exclude caches placed in the last X days"
-    puts " -r/-R [# days]         include/exclude caches found in the last X days"
-    puts " -n                     only include not found caches (virgins)"
-    puts " -b                     only include caches with travelbugs"
-    puts " -l                     set EasyName waypoint id length. (16)"
-    puts " -P                     HTTP proxy server, http://username:pass@host:port/"
-    puts ""
-    puts "::: OUTPUT FORMATS:"
-    outputDetails = Output.new
-    i=0
-    print ""
-    $validFormats.each { |type|
-      desc = outputDetails.formatDesc(type)
-      if (i>5)
-        puts ""
-        print ""
-        i=0
-      end
-      i=i+1
-            
-            
-      if (outputDetails.formatRequirement(type) == 'gpsbabel')
-        type = type + "+"
-      elsif (outputDetails.formatRequirement(type) == 'cmconvert')
-        type = type + "="
-      end
-            
-      printf(" %-12.12s", type);
-            
-    }
-    puts ""
-    puts "    + requires gpsbabel in PATH           = requires cmconvert in PATH"
-    puts ""
-    puts "::: EXAMPLES:"
-    puts "  geotoad.rb -u helixblue -p password 27502"
-    puts "  geotoad.rb -u john -p password -d 3 -s helixblue -f vcf -o NC.vcf -q state \'North Carolina\'"
-  end
+ 
     
   ## Check the version #######################
   def versionCheck
