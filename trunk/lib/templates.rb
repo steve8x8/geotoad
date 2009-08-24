@@ -55,7 +55,7 @@ $Format = {
       " <groundspeak:full_name><%wpEntity.name%></groundspeak:full_name>\r\n"+
       "  <groundspeak:placed_by><%wpEntity.creator%></groundspeak:placed_by>\r\n" +
       "  <groundspeak:owner id=\"999\"><%wpEntity.creator%></groundspeak:owner>\r\n" +
-      "  <groundspeak:type><%wp.type%></groundspeak:type>\r\n" +
+      "  <groundspeak:type><%wp.fulltype%></groundspeak:type>\r\n" +
       "  <groundspeak:container><%wp.size%></groundspeak:container>\r\n" +
       "  <groundspeak:difficulty><%wp.difficulty%></groundspeak:difficulty>\r\n" +
       "  <groundspeak:terrain><%wp.terrain%></groundspeak:terrain>\r\n" +
