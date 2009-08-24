@@ -280,6 +280,13 @@ class SearchCache
             debug "#{name} appears to be disabled"
             name=$1
           end
+
+          if name =~ /\<font color="red"\>(.*?)\<\/font\>/
+            cache['archived']=1
+            debug "#{name} appears to be archived"
+            name=$1
+          end
+
   
           cache['name']=name.gsub(/ +$/, '')
           debug "sid=#{cache['sid']} name=#{cache['name']} (disabled=#{cache['disabled']})"
