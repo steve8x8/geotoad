@@ -105,6 +105,9 @@ class CacheDetails
     end
         
     if success
+      if success == 'login-required'
+        page.invalidate()
+      end
       return success
     else
       displayWarning "Could not parse #{url} (tried twice)"
@@ -201,7 +204,7 @@ class CacheDetails
             
       if line =~ /with an account to view/
         displayWarning "Oops, we are not actually logged in!"
-        return nil
+        return 'login-required'
       end
             
       # duplicate of search.rb
