@@ -175,7 +175,7 @@ class ShadowFetch
     debug "outputting #{localfile}"
     cache = File.new(localfile, "w")
     cache.puts @data
-        
+    cache.close
     debug "Returning #{@data.length} bytes: #{@data[0..512]}"
     return @data
   end
