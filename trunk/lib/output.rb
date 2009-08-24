@@ -441,7 +441,10 @@ class Output
       @outVars['id']      = @wpHash[@currentWid]['sname'].dup
       # This should clear out the hint-dup issue that Scott Brynen mentioned.
       @outVars['hint']    = ''
-            
+
+      @outVars['mdate'] = @wpHash[@currentWid]['mtime'].strftime("%Y-%m-%d")
+      @outVars['cdate'] = @wpHash[@currentWid]['ctime'].strftime("%Y-%m-%d")
+
       # For GPX
       @outVars['XMLDate'] = @wpHash[@currentWid]['ctime'].strftime("%Y-%m-%dT%H:00:00.0000000-07:00")
             
