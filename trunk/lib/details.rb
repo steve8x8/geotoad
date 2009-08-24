@@ -151,6 +151,7 @@ class CacheDetails
           # We give this a predefined value, because some caches have no details!
           @waypointHash[wid]['shortdesc'] = ''
           @waypointHash[wid]['longdesc'] = ''
+          @waypointHash[wid]['details'] = ''
                     
           # Set what URL we used as our details source. We do not use baseURL because
           # some GPX parsers freak if there is a & in this URL.
