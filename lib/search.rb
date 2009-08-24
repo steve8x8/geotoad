@@ -42,8 +42,8 @@ class SearchCache
         @query_type = 'zip'
       when 'wid':
         @query_type = 'wid'
-        if key =~ /^GC/
-          @search_url = "http://www.geocaching.com/seek/cache_details.aspx?wp=#{@key}"
+        if key =~ /^GC/i
+          @search_url = "http://www.geocaching.com/seek/cache_details.aspx?wp=#{key.upcase}"
         else
           displayError "Waypoint ID's must start with GC"
           return nil
