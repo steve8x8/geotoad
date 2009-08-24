@@ -111,8 +111,13 @@ class ShadowFetch
   def invalidate
     filename = cacheFile(@url)
     if File.exist?(filename)
-      debug "invalidating cache at #{filename}"
-      File.unlink(filename)
+      displayInfo "Invalidating cache at #{filename}"
+      begin
+        File.unlink(filename)
+      rescue Errno::EACCES => e
+        displayWarning "Could not delete #{filename}: #{e} - attempting truncation."
+        f = File.truncate(filename, 0)
+      end
     end  
   end
       
@@ -168,12 +173,12 @@ class ShadowFetch
         
     if (! File.exists?(localdir))
       debug "creating #{localdir}"
-      FileUtils.mkdir_p(localdir)
+      FileUtils::mkdir_p(localdir)
     end
         
         
     debug "outputting #{localfile}"
-    cache = File.new(localfile, "w")
+    cache = File.open(localfile, File::WRONLY|File::TRUNC|File::CREAT, 0666)
     cache.puts @data
     cache.close
     debug "Returning #{@data.length} bytes: #{@data[0..512]}"
@@ -184,7 +189,13 @@ class ShadowFetch
   ## the real fetch methods ########################################################
     
   def fetchLocal(file)
-    data = IO.readlines(file).join
+    begin
+      data = IO.readlines(file).join
+    rescue Errno::EACCES => e
+      displayWarning "Could not read #{file}: #{e}"
+      invalidate()
+      return nil
+    end
     debug "#{data.length} bytes retrieved from local cache"
     return data
   end

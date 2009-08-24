@@ -42,24 +42,12 @@ module Common
 
   ## finds a place to put temp files on the system ###################################
   def selectDirectory(dirs)
-    selected=nil
     dirs.compact.each do |dir|
-      begin
-        if ((File.stat(dir).directory?) && (File.stat(dir).writable?))
-          selected=dir.dup
-          break
-        end
-      rescue
+      if File.exists?(dir) && File.stat(dir).directory? && File.stat(dir).writable? 
+        return dir.gsub(/\\/, '/')
       end
     end
-  
-    # fall back on the current directory if everything else fails!
-    if (! selected)
-      selected=Dir.pwd
-    else
-      selected.gsub!(/\\/, '/')
-    end
-    return selected
+    return Dir.pwd.gsub(/\\/, '/')
   end
 
   def findCacheDir
@@ -81,17 +69,25 @@ module Common
     ## finds a place to put temp files on the system ###################################
   end
   def findConfigDir
-    # find out where we want our cache #############################
-    configDir=selectDirectory([ ENV['GEO_DIR'], "#{ENV['HOME']}/Library/Preferences", 
-        "#{ENV['USERPROFILE']}/Documents and Settings", ENV['HOME'], "C:/temp/", "C:/windows/temp", "/var/cache", "/var/tmp" ])
-  
+    # find out where we want our cache #############################    
+    # First check for the .geotoad directory. We may have accidentally been using it already.
+    dirs = ["#{ENV['HOME']}/.geotoad",
+            ENV['GEO_DIR'],
+            "#{ENV['HOME']}/Library/Preferences", 
+            "#{ENV['USERPROFILE']}/Documents and Settings",
+            ENV['HOME'],
+            'C:/temp/',
+            'C:/windows/temp', 
+            '/var/cache', 
+            '/var/tmp']
+    configDir=selectDirectory(dirs)
     if configDir == ENV['HOME']
-      configDir=configDir + '/.geotoad'
-    else
-      configDir=configDir + "/GeoToad"
+      configDir = configDir + '/.geotoad'
+    elsif configDir !~ /geotoad/i
+      configDir = configDir + "/GeoToad"
     end
     debug "#{configDir} is being used for config"
-    FileUtils::mkdir_p(configDir)
+    FileUtils::mkdir_p(configDir, :mode => 0700)
     return configDir
   end
 
