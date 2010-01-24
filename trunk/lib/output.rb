@@ -384,23 +384,23 @@ class Output
         symbols[wid] = ''
                 
         if (@wpHash[wid]['travelbug'])
-          symbols[wid] = "<b><font color=\"#11CC11\">$</font></b>"
+          symbols[wid] = "<b><font color=\"#11CC11\">&euro;</font></b>"
         end
                 
         if (@wpHash[wid]['terrain'] > 3)
-          symbols[wid] =  symbols[wid] + "<b><font color=\"#229999\">%</font></b>"
+          symbols[wid] =  symbols[wid] + "<b><font color=\"#999922\">&sect;</font></b>"
         end
 
         if (@wpHash[wid]['funfactor'] >= 3.5)
-          symbols[wid] =  symbols[wid] + "<b><font color=\"#E2BF2B\">#</font></b>"
+          symbols[wid] =  symbols[wid] + "<b><font color=\"#BB2222\">&hearts;</font></b>"
         end
                 
         if (@wpHash[wid]['difficulty'] > 3)
-          symbols[wid] =  symbols[wid] + "<b><font color=\"#BB0000\">&gt;</font></b>"
+          symbols[wid] =  symbols[wid] + "<b><font color=\"#440000\">&uarr;</font></b>"
         end
                 
         if (@wpHash[wid]['mdays'] < 0)
-          symbols[wid] =  symbols[wid] + "<b><font color=\"#9900CC\">@</font></b>"
+          symbols[wid] =  symbols[wid] + "<b><font color=\"#9900CC\">&infin;</font></b>"
         end
 
         if (symbols[wid].length < 1)
