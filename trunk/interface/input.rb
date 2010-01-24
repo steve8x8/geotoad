@@ -243,7 +243,8 @@ class Input
       if RUBY_PLATFORM =~ /win32/
         system("cls");
       else
-        system("stty erase ^H >/dev/null 2>/dev/null")
+# This could be bad under Ubuntu
+#        system("stty erase ^H >/dev/null 2>/dev/null")
         system("clear")
       end
       
