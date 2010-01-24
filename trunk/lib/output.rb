@@ -254,12 +254,9 @@ class Output
         value = makeText(@outVars[var].to_s)
       end
       debug "TAG <%#{tag}%> for #{@currentWid} -> #{value}"
-      full_tag = '<%' + tag[0] + '%>'
-      text.gsub!(full_tag, value)
-      if text.index(full_tag)
-        debug "fucking backrefrences for #{full_tag}. fixing."
-        text.gsub!(full_tag, '\\')
-      end
+
+      # This looks very ugly, but it works around backreference issues. Thanks ddollar!
+      text.gsub!('<%' + tag[0] + '%>') { value }
     }
 
     debug "Replaced text: #{text}"
