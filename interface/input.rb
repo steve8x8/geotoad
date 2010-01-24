@@ -483,7 +483,7 @@ class Input
           if (! File.exists?(@@optHash['outDir']))
             answer = ask("This directory does not exist. Would you like me to create it?", 'n')
             if answer =~ /y/
-              File.makedirs(@@optHash['outDir'])
+              FileUtils::mkdir_p(@@optHash['outDir'], :mode => 0700)
             else
               puts "Fine, suit yourself."
               sleep(1)
