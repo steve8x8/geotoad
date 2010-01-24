@@ -253,11 +253,16 @@ class Output
       elsif (type == "outText")
         value = makeText(@outVars[var].to_s)
       end
-#      debug "TAG <%#{tag}%> for #{@currentWid} -> #{value}"
-      text.gsub!("<%#{tag}%>", value)
+      debug "TAG <%#{tag}%> for #{@currentWid} -> #{value}"
+      full_tag = '<%' + tag[0] + '%>'
+      text.gsub!(full_tag, value)
+      if text.index(full_tag)
+        debug "fucking backrefrences for #{full_tag}. fixing."
+        text.gsub!(full_tag, '\\')
+      end
     }
 
-#    debug "Replaced text: #{text}"
+    debug "Replaced text: #{text}"
     return text
   end
 
