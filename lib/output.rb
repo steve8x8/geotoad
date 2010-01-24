@@ -322,7 +322,11 @@ class Output
     text.gsub!(/\<li\>/i, "\n * (o) ")
     text.gsub!(/<\/*b>/i, '')
     text.gsub!(/\<img.*?\>/i, '[img]')
-    text.gsub!(/\<.*?\>/, ' *')
+    text.gsub!(/\<.*?\>/m, ' *')
+    text.gsub!(/\&nbsp\;/, ' ')
+    text.gsub!(/\&rsquo\;/, "'")
+    text.gsub!(/\&ndash;/, " - ")
+    text.gsub!(/\&deg;/, "'")
 
     # combine all the tags we nuked. These regexps
     # could probably be cleaned up pretty well.
