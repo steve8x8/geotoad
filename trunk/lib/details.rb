@@ -141,61 +141,40 @@ class CacheDetails
     wid = nil
         
     data.split("\n").each { |line|
-      # this matches the <title> on the printable pages. Some pages have ) and some don't.
-      if line =~  /^\s+\((GC[A-Z0-9]+)\)/
-        # only do it if the wid hasn't been found yet, sometimes pages mention wid's of other caches.
-        if (! wid)
-          wid = $1
-          debug "wid is #{wid}"
-                    
-          # We give this a predefined value, because some caches have no details!
-          @waypointHash[wid]['shortdesc'] = ''
-          @waypointHash[wid]['longdesc'] = ''
-          @waypointHash[wid]['details'] = ''
-                    
-          # Set what URL we used as our details source. We do not use baseURL because
-          # some GPX parsers freak if there is a & in this URL.
-          @waypointHash[wid]['url'] = "http://www.geocaching.com/seek/cache_details.aspx?wp=" + wid
-        end
-      end
-            
-            
-      # DUPLICATE OF WHAT SEARCH.RB HAS! Only used for failures and or wid searches.
-      # May make in the future have it decide which source is newest: search or details.
-      if line =~ /\<span id=\"CacheName\"\>(.*?)\<\/span\>/
-        if (! wid)
-          debug "Invalid cache, title is: #{$1}"
-        elsif (! @waypointHash[wid]['name'])
-          @waypointHash[wid]['name'] = cleanHTML($1)
-          debug "name was not set, now set to #{$1}"
-        else
-          debug "Would set name to #{cleanHTML($1)}, but it is already #{@waypointHash[wid]['name']}"          
-        end
-      end
+      # GC1N069 Cacti in the Woods (Traditional Cache) in North Carolina, United States created by eminwf
+      if line =~  /^\s+(GC[A-Z0-9]+) (.*?) \((.*?)\) in.*created by (.*)/
+        wid = $1
+        name = $2
+        type = $3
+        creator = $4
+        debug "wid = #{wid} name=#{name} type=#{type} creator=#{creator}"
+        @waypointHash[wid]['fulltype']=type
+        @waypointHash[wid]['type']=type.downcase.gsub(/\s.*/i, '').gsub!(/\-/, '')
+        @waypointHash[wid]['name'] = name
+        @waypointHash[wid]['creator'] = creator
+        @waypointHash[wid]['shortdesc'] = ''
+        @waypointHash[wid]['longdesc'] = ''
+        @waypointHash[wid]['details'] = ''
 
-      # &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Difficulty:</b>&nbsp;<span id="Difficulty"><img src="http://www.geocaching.com/images/stars/stars3_5.gif" alt="3.5 out of 5" title="3.5 out of 5" align="absmiddle"></span>
-      if line =~ /Difficulty.*?([-\d\.]+) out of/
-        if $1.include?('.')
-          @waypointHash[wid]['difficulty']=$1.to_f
-        else
-          @waypointHash[wid]['difficulty']=$1.to_i
-        end
+        # Set what URL we used as our details source. We do not use baseURL because
+        # some GPX parsers freak if there is a & in this URL.
+        @waypointHash[wid]['url'] = "http://www.geocaching.com/seek/cache_details.aspx?wp=" + wid
+      end   
+        
+      # <strong>Difficulty:</strong> <span id="ctl00_ContentBody_Difficulty"><img src="http://www.geocaching.com/images/stars/stars2.gif" alt="2 out of 5" />
+      if line =~ /Difficulty:.*?([-\d\.]+) out of 5/
         debug "difficulty: #{$1}"
-      end
-            
-      # &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Terrain:</b>&nbsp;<span id="Terrain"><img src="http://www.geocaching.com/images/stars/stars4.gif" alt="4 out of 5" title="4 out of 5" align="absmiddle"></span>
-      if line =~ /Terrain.*?([-\d\.]+) out of/
-        if $1.include?('.')
-          @waypointHash[wid]['terrain']=$1.to_f
-        else
-          @waypointHash[wid]['terrain']=$1.to_i
-        end
-        debug "terrain: #{$1}"
+        @waypointHash[wid]['difficulty']=$1.to_f
       end
 
-      # Duplicate of search.rb data.
-      # <span id="DateHidden">6/28/2005</span>
-      if line =~ /span id=\"DateHidden\">([\w\/]+)\</
+      # strong>Terrain:</strong> <span id="ctl00_ContentBody_Terrain"><img src="http://www.geocaching.com/images/stars/stars2.gif" alt="2 out of 5" />
+      if line =~ /Terrain:.*?([-\d\.]+) out of 5/
+        debug "terrain: #{$1}"
+        @waypointHash[wid]['terrain']=$1.to_f
+      end
+
+      # DateHidden">2/22/2009</span>
+      if line =~ /DateHidden\">([\w\/]+)\</
         if $1 != 'N/A'
           @waypointHash[wid]['ctime'] = parseDate($1)
           @waypointHash[wid]['cdays'] = daysAgo(@waypointHash[wid]['ctime'])
@@ -207,43 +186,29 @@ class CacheDetails
         displayWarning "Oops, we are not actually logged in!"
         return 'login-required'
       end
-            
-      # duplicate of search.rb
-      # <span id="CacheOwner">by <a href="http://www.geocaching.com/profile/?guid=fb057a7a-3131-4c75-9211-f77b3ea1c388&amp;wid=3142990f-e3d5-44d4-8a9c-0db0b0fef38c&amp;ds=2">wvgeoeagles</a></span>
-      if line =~ /span id=\"CacheOwner\"\>.*?\"\>(.*)\<\/a/
-        @waypointHash[wid]['creator'] = $1
-        debug "creator is #{$1}"
-      end
-          
-      # Regexp rewritten by Scott Brynen for Canadian compatibility
-      if line =~ /getmap\.aspx\?lat=([\d\.-]+)\&lon=([\d\.-]+)/
+ 
+      # href="/wpt/?lat=35.933717&amp;lon=-78.487483&amp;detail=1" 
+      if line =~ /\?lat=([\d\.-]+)\&lon=([\d\.-]+)/
         @waypointHash[wid]['latdata'] = $1
         @waypointHash[wid]['londata'] = $2
         debug "got digital lat/lon: #{$1} #{$2}"
       end
             
 
-      # <span id="Location">In State, Country</span></p>
-      if line =~ /\<span id=\"Location\"\>In ([^,<]+)\, ([^<]+)/
+      # span id="ctl00_ContentBody_Location">In North Carolina, United States <small>
+      if line =~ /Location\"\>In ([^,<]+)\, ([^<]+)/
         @waypointHash[wid]['state']=$1
         @waypointHash[wid]['country']=$2
         debug "found state: #{$1} country: #{$2}"
-      # <span id="Location">In Country</span></p>
-      elsif line =~ /\<span id=\"Location\"\>In ([^<]+)/
-          @waypointHash[wid]['state']=nil
-          @waypointHash[wid]['country']=$1
+        # <span id="Location">In Country</span></p>
+      elsif line =~ /Location\"\>In ([^<]+)/
+        @waypointHash[wid]['state']=nil
+        @waypointHash[wid]['country']=$1
         debug "found country: #{$1}"
-      end
-           
-      # duplicated from search.rb exactly.
-      if line =~ /WptTypes.*?alt=\"(.*?)\"/i
-        @waypointHash[wid]['fulltype']=$1
-        @waypointHash[wid]['type']=$1.downcase.gsub(/\s.*/i, '').gsub!(/\-/, '')
-        debug "type=#{@waypointHash[wid]['type']}"
       end
       
       # latitude and longitude in the written form. Rewritten by Scott Brynen for Southpole compatibility.
-      if line =~ /id=\"LatLon\".*\>.*?([NWSE]) (\d+).*? ([\d\.]+) ([NWSE]) (\d+).*? ([\d\.]+)\</
+      if line =~ /LatLon\".*\>.*?([NWSE]) (\d+).*? ([\d\.]+) ([NWSE]) (\d+).*? ([\d\.]+)\</
         @waypointHash[wid]['latwritten'] = $1 + $2 + ' ' + $3
         @waypointHash[wid]['lonwritten'] = $4 + $5 + ' ' + $6
         @waypointHash[wid]['latdata'] = ($2.to_f + $3.to_f / 60) * ($1 == 'S' ? -1:1)
@@ -252,21 +217,22 @@ class CacheDetails
       end
             
       # why a geocache is closed. It seems to always be the same.
-      if line =~ /\<span id=\"ErrorText\".*?>(.*?)\<\/span\>/
+      # <span id="ctl00_ContentBody_ErrorText"><p class="OldWarning"><strong>Cache Issues:</strong></p><ul class="OldWarning"><li>This cache is temporarily unavailable. Read the logs below to read the status for this cache.</li></ul></span>
+      if line =~ /ErrorText\".*?>(.*?)\<\/span\>/
         warning = $1
         warning.gsub!(/\<.*?\>/, '')
         debug "got a warning: #{warning}"
         if (wid)
           @waypointHash[wid]['warning'] = warning.dup
         end
-        if warning =~ /subscribers only/
-          debug "This cache appears to be available to subscribers only."
+        if warning =~ /Premium Member/
+          debug "This cache appears to be available to premium members only."
           return 'subscriber-only'
         end
       end
             
-      # encrypted hint
-      if line =~ /\<span id=\"Hints\".*?\>(.*?)\<\/span\>/m
+      # pan id="ctl00_ContentBody_Hints" class="displayMe">GuERR sbhe hfr gur onpx qbbe!!</span><span id="ctl00_ContentBody_decryptHint" class="hideMe">(Decrypted Hints)</span><
+      if line =~ /class="displayMe"\>(.*?)\<\/span/
         hint = $1.dup
         hint.gsub!(/\<.*?\>/, '')
         @waypointHash[wid]['hint'] = hint
@@ -274,15 +240,17 @@ class CacheDetails
       end
             
       
-      if line =~ /id=\"CacheLogs\"/
+      if line =~ /CacheLogs\"\>/
         debug "inspecting comments"
         cnum = 0
         funTotal = 0.0
         fnum = 0
 
-         line.gsub!(/\<p\>/, ' ')
-#         line.scan(/icon_(\w+)\.gif.*?&nbsp;([\w ]+),?[ ]?\d* by \<a  name=\"(\d+)".*?\>\<a href.*?\>(.*?)\<\/a.*?\<br \/\>(.*?)\</) { |icon,  date, id, name, comment|
-         line.scan(/icon_(\w+)\.gif.*?&nbsp;([\w, ]+) by \<a name=\"(\d+)".*?\>\<a href.*?\>(.*?)\<\/a.*?\<br \/\>(.*?)\</) { |icon, date, id, name, comment|
+        line.gsub!(/\<p\>/, ' ')
+        #         line.scan(/icon_(\w+)\.gif.*?&nbsp;([\w ]+),?[ ]?\d* by \<a  name=\"(\d+)".*?\>\<a href.*?\>(.*?)\<\/a.*?\<br \/\>(.*?)\</) { |icon,  date, id, name, comment|
+
+        # <td class="Nothing"><strong><img src="http://www.geocaching.com/images/icons/icon_smile.gif" alt="" />&nbsp;December 8, 2009 by <a href="/profile/?guid=55c35fc8-b0e9-407f-b182-9d9aff86eca6" id="92528794">The Shire</a></strong> (2589 found)<br />I found this one today while out caching with GHAS.  TFTC!<br />
+        line.scan(/icon_(\w+)\.gif.*?&nbsp;([\w, ]+) by \<a href.*?id=\"(\d+)".*?\>(.*?)\<\/a\>.*?<br \/\>(.*?)\</) { |icon, date, id, name, comment|
           type = 'unknown'
           nograde=nil
                     
