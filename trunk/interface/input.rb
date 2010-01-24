@@ -588,7 +588,7 @@ class Input
     case type
     when /auto/
       return 'location'
-    when /location/
+    when /loc/
       return 'location'
     when /zip/
       return 'zipcode'
