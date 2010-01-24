@@ -148,7 +148,7 @@ class SearchCache
     post_vars = Hash.new
         
     page_number, pages_total, parsed_total, post_vars, src = processPage({})
-    progress = ProgressBar.new(1, pages_total, "Processing results for #{@query_type}: #{@query_arg}")
+    progress = ProgressBar.new(1, pages_total, "Processing search results for #{@query_arg}")
     progress.updateText(page_number, "from #{src}")
 
     while(page_number < pages_total)

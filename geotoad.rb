@@ -379,7 +379,7 @@ class GeoToad
 
     displayMessage "Fetching geocache pages with #{$SLEEP} second rests between remote fetches"
     wpFiltered = @filtered.waypoints
-    progress = ProgressBar.new(0, @filtered.totalWaypoints, "Fetching details")
+    progress = ProgressBar.new(0, @filtered.totalWaypoints, "Reading")
     @detail = CacheDetails.new(wpFiltered)
     @detail.cookie = get_login_cookie()
     token = 0

@@ -252,8 +252,8 @@ class Input
       printf(":::           %46.46s               :::\n", "// GeoToad #$VERSION Text User Interface //")
       puts "=============================================================================="
 
-      printf("(1)  GC.com login     [%-13.13s] | (2)  search type          [%-10.10s]\n", (@@optHash['user'] || 'REQUIRED'), @@optHash['queryType'])
-      printf("(3)  %-16.16s [%-13.13s] | (4)  distance maximum            [%-3.3s]\n", @@optHash['queryType'], (@@optHash['queryArg'] || 'REQUIRED'), (@@optHash['distanceMax'] || 10))
+      printf("(1)  GC.com login  [%-16.16s] | (2)  search type          [%-10.10s]\n", (@@optHash['user'] || 'REQUIRED'), @@optHash['queryType'])
+      printf("(3)  %-13.13s [%-16.16s] | (4)  distance maximum            [%-3.3s]\n", @@optHash['queryType'], (@@optHash['queryArg'] || 'REQUIRED'), (@@optHash['distanceMax'] || 10))
       puts   "                                      |"
       printf("(5)  difficulty           [%-2.1f - %-1.1f] | (6)  terrain               [%-1.1f - %-1.1f]\n",
         (@@optHash['difficultyMin'] || 0.0), (@@optHash['difficultyMax'] || 5.0),
