@@ -23,31 +23,31 @@ class SearchCache
     @query_arg = key
     supports_distance = false    
     case mode
-      when 'state', 'country'   
-        code = SearchCode.new(mode)
-        @query_type = code.type
-        @query_arg = code.lookup(key)
-      when 'coord'
-        @query_type = 'coord'
-        supports_distance = true
-        lat_dir, lat_h, lat_ms, long_dir, long_h, long_ms, lat_ns, long_ew = parseCoordinates(key)
-        @search_url = BASE_URL + '?lat_ns=' + lat_ns.to_s + '&lat_h=' + lat_h + '&lat_mmss=' + (lat_ms==''?'0':lat_ms) + '&long_ew=' + long_ew.to_s + '&long_h=' + long_h + '&long_mmss=' + (long_ms==''?'0':long_ms)            
-      when 'user':
+    when 'state', 'country'
+      code = SearchCode.new(mode)
+      @query_type = code.type
+      @query_arg = code.lookup(key)
+    when 'coord'
+      @query_type = 'coord'
+      supports_distance = true
+      lat_dir, lat_h, lat_ms, long_dir, long_h, long_ms, lat_ns, long_ew = parseCoordinates(key)
+      @search_url = BASE_URL + '?lat_ns=' + lat_ns.to_s + '&lat_h=' + lat_h + '&lat_mmss=' + (lat_ms==''?'0':lat_ms) + '&long_ew=' + long_ew.to_s + '&long_h=' + long_h + '&long_mmss=' + (long_ms==''?'0':long_ms)
+    when 'user':
         @query_type = 'ul'
-        @ttl = 43200
-      when 'keyword':
+      @ttl = 43200
+    when 'keyword':
         @query_type = 'key'
-      when 'zipcode':
+    when 'zipcode':
         supports_distance = true
-        @query_type = 'zip'
-      when 'wid':
+      @query_type = 'zip'
+    when 'wid':
         @query_type = 'wid'
-        if key =~ /^GC/i
-          @search_url = "http://www.geocaching.com/seek/cache_details.aspx?wp=#{key.upcase}"
-        else
-          displayError "Waypoint ID's must start with GC"
-          return nil
-        end
+      if key =~ /^GC/i
+        @search_url = "http://www.geocaching.com/seek/cache_details.aspx?wp=#{key.upcase}"
+      else
+        displayError "Waypoint ID's must start with GC"
+        return nil
+      end
     end            
 
     if not @query_type
@@ -56,11 +56,11 @@ class SearchCache
     end      
 
     if not @search_url:
-      @search_url = BASE_URL + '?' + @query_type + '=' + CGI.escape(@query_arg.to_s)
+        @search_url = BASE_URL + '?' + @query_type + '=' + CGI.escape(@query_arg.to_s)
     end
     
     if supports_distance and @distance:
-      @search_url = @search_url + '&dist=' + @distance.to_s
+        @search_url = @search_url + '&dist=' + @distance.to_s
     end
     
     debug "query_type: #{@query_type} query_arg: #{@query_arg} url: #{@search_url}"
@@ -170,8 +170,8 @@ class SearchCache
     
     data.each {|line|
       if line =~ /onsubmit=\"/
-          debug "Looks like #{@search_url} requires a State/Province selection."
-          province_required = true
+        debug "Looks like #{@search_url} requires a State/Province selection."
+        province_required = true
       end
 
       if province_required
@@ -220,108 +220,106 @@ class SearchCache
     data = fillInFormData(data)        
     data.split("\n").each { |line|
       case line
-        when /Total Records: \<b\>(\d+)\<\/b\> - Page: \<b\>(\d+)\<\/b\> of \<b\>(\d+)\<\/b\>/
-          if not waypoints_total
-            waypoints_total = $1.to_i
-            page_number = $2.to_i
-            pages_total = $3.to_i
-          end
-          # <a href="javascript:__doPostBack('pgrTop$_ctl16','')"><b>Next</b></a>
-          if line =~ /doPostBack\(\'([\w\$_]+)\',\'\'\)\"\>\<b\>Next\</
-            debug "Found next target: #{$1}"
-            post_vars['__EVENTTARGET'] = $1
-          end
+      # <TD class="PageBuilderWidget"><SPAN>Total Records: <B>2938</B> - Page: <B>147</B> of <B>147</B>
+      when /Total Records: \<b\>(\d+)\<\/b\> - Page: \<b\>(\d+)\<\/b\> of \<b\>(\d+)\<\/b\>/
+        if not waypoints_total
+          waypoints_total = $1.to_i
+          page_number = $2.to_i
+          pages_total = $3.to_i
+        end
+        # <a href="javascript:__doPostBack('pgrTop$_ctl16','')"><b>Next</b></a>
+        if line =~ /doPostBack\(\'([\w\$_]+)\',\'\'\)\"\>\<b\>Next\</
+          debug "Found next target: #{$1}"
+          post_vars['__EVENTTARGET'] = $1
+        end
 
-        when /WptTypes\/[\d].*?alt=\"(.*?)\"/
-          cache['mdays']=-1
-          cache['type']=$1.downcase.gsub(/\s.*/, '').gsub(/\-/, '')
-          debug "type=#{cache['type']}"
-  
-        when /Travel Bug Dog Tag \((.*?)\)"/
-          debug "Travel Bug Found: #{$1}"
-          cache['travelbug']=$1
-  
-        when /\(([-\d\.]+)\/([-\d\.]+)\)\<br/
-          cache['difficulty']=$1.to_f
-          cache['terrain']=$2.to_f
-          debug "cacheDiff=#{cache['difficulty']} terr=#{cache['terrain']}"
-              
-        when /^\s+(\w+[ \w]+)\**\<[bS][rT]/
-          debug "last found date: #{$1} at line: #{line}"
-          cache['mtime'] = parseDate($1)
-          cache['mdays'] = daysAgo(cache['mtime'])
-          debug "mtime=#{cache['mtime']} mdays=#{cache['mdays']}"
-         
-        # New caches have a slightly different regexp. Couldn't get an | to work on this one?
-        when /^\s+(\d+ \w+ \d+) \<IMG/
-          cache['ctime'] = parseDate($1)
-          cache['cdays'] = daysAgo(cache['ctime'])
-          debug "ctime=#{cache['ctime']} cdays=#{cache['cdays']}"
+      #<img src="/images/WptTypes/2.gif" alt="Traditional Cache"
+      when /WptTypes\/[\d].*?alt=\"(.*?)\"/
+        cache['mdays']=-1
+        cache['type']=$1.downcase.gsub(/\s.*/, '').gsub(/\-/, '')
+        debug "type=#{cache['type']}"
+
+      # <img src="http://www.geocaching.com/images/wpttypes/21.gif" alt="Travel Bug Dog Tag (1 item)" />
+      when /Travel Bug Dog Tag \((.*?)\)"/
+        debug "Travel Bug Found: #{$1}"
+        cache['travelbug']=$1
+
+      # <td>(2.5/2)<br /><img src="/images/icons/container/small.gif" alt="Size: Small" /></td>
+      when /\(([-\d\.]+)\/([-\d\.]+)\)\<br.*Size: (.*?)\"/
+        cache['difficulty']=$1.to_f
+        cache['terrain']=$2.to_f
+        cache['size'] = $3.downcase
+        debug "difficulty=#{cache['difficulty']} terr=#{cache['terrain']} size=#{cache['size']}"
+
+      # <td>15 Jan 10<br /><span class="Success"></span></td>
+      when /\<td\>(\w+[ \w]+)\**\<br/
+        debug "last found date: #{$1} at line: #{line}"
+        cache['mtime'] = parseDate($1)
+        cache['mdays'] = daysAgo(cache['mtime'])
+        debug "mtime=#{cache['mtime']} mdays=#{cache['mdays']}"
         
-        when /^\s+(\d+ \w+ \d+)\r/
-          cache['ctime'] = parseDate($1)
-          cache['cdays'] = daysAgo(cache['ctime'])
-          debug "ctime=#{cache['ctime']} cdays=#{cache['cdays']}"
+      # <td>17 Mar 08</td>
+      when /\<td\>(\d+ \w+ \d+).*\<\/td\>\r/
+        cache['ctime'] = parseDate($1)
+        cache['cdays'] = daysAgo(cache['ctime'])
+        debug "ctime=#{cache['ctime']} cdays=#{cache['cdays']}"
+        
+      # <img src="/images/icons/compass/SW.gif" alt="SW" />SW<br />0.9mi</td>
+      when /([NWSE]+)\<br \/\>([\d\.]+)mi\</
+        cache['distance']=$2.to_f
+        cache['direction'] = $1
+        debug "cacheDistance=#{cache['distance']} dir=#{cache['direction']}"
                   
-        when /([NWSE]+)\<br \/\>([\d\.]+)mi</
-          cache['distance']=$2.to_f
-          cache['direction'] = $1
-          debug "cacheDistance=#{cache['distance']} dir=#{cache['direction']}"
-                  
-        when /alt=\"Size: (.*?)\"/
-          cache['size'] = $1.downcase
-          debug "cache size is #{$1}"
-                  
-        when /cache_details.aspx\?guid=(.*?)\">(.*?)\<\/a\>/
-          cache['sid']=$1
-          name = $2
-          if name =~ /\<strike\>(.*?)\<\/strike\>/
-            cache['disabled']=1
-            debug "#{name} appears to be disabled"
-            name=$1
-          end
+      # <a href="/seek/cache_details.aspx?guid=14b1e198-2bdb-487f-99b0-4b283ef70dd7">
+      # <span class="Strike">Grandma's house!</span></a> by ExtraTerrestrial (GC1T6Q9)<br />Georgia
+      when /cache_details.aspx\?guid=(.*?)\">(.*?)\<\/a\> by (.*?) \((GC.*?)\)/
+        cache['sid']=$1
+        name = $2
+        creator = $3
+        wid = $4
 
-          if name =~ /\<font color="red"\>(.*?)\<\/font\>/
-            cache['archived']=1
-            debug "#{name} appears to be archived"
-            name=$1
-          end
+        debug "Found cache details link for #{wid} by #{creator}"
 
-  
-          cache['name']=name.gsub(/ +$/, '')
-          debug "sid=#{cache['sid']} name=#{cache['name']} (disabled=#{cache['disabled']})"
-                  
-        when /^\s+by (.*)/
-          cache['creator'] = $1.gsub(/\s+$/, '')
-          debug "creator=#{cache['creator']}"
-                  
-        when /\((GC\w+)\)/
-          wid=$1.dup
-          debug "wid=#{wid}"
-      
-        when /Member-only/
-          debug "Found members only cache. Marking"
-          cache['membersonly'] = 1
+        if name =~ /class=\"Warning/
+          cache['archived']=1
+          debug "#{name} appears to be archived"
+        end
+
+        if name =~ /Strike"\>(.*?)\<\//
+          cache['disabled']=1
+          debug "#{name} appears to be disabled"
+          name=$1
+        else
+          cache['disabled']=nil
+        end
+
+        cache['creator'] = creator.gsub(/\s+$/, '')
+        cache['name']=name.gsub(/ +$/, '')
+        debug "sid=#{cache['sid']} name=#{cache['name']} (disabled=#{cache['disabled']})"
+
+      # small_profile.gif" alt="Premium Member Only Cache" with="15" height="13"></TD
+      when /Premium Member Only Cache/
+        debug "Found members only cache. Marking"
+        cache['membersonly'] = 1
                                   
-          # There is no good end of record marker, sadly.
-        when /^\t\t\<\/tr\>\<tr\>/
-          debug "- end of row -"
-          if (wid)
-            debug "- end of #{wid} record -"
-            parsed_total += 1
-            @waypoints[wid] = cache.dup
-            @waypoints[wid]['visitors'] = []
+      when /^\s+<\/tr\>/
+        debug "--- end of row ---"
+        if wid and not @waypoints.has_key?(wid):
+          debug "- closing #{wid} record -"
+          parsed_total += 1
+          @waypoints[wid] = cache.dup
+          @waypoints[wid]['visitors'] = []
                       
-            # if our search is for caches that have been done by a particular user, add to the hash
-            if @query_type == "users"
-              @waypoints[wid]['visitors'].push(@key.downcase)
-            end                                        
-            cache.clear
+          # if our search is for caches that have been done by a particular user, add to the hash
+          if @query_type == "users"
+            @waypoints[wid]['visitors'].push(@key.downcase)
           end
+          cache.clear
+        end
                   
-        when /^\<input type=\"hidden\" name=\"(.*?)\".*value=\"(.*?)\" \/\>/
-          debug "found hidden post variable: #{$1}"
-          post_vars[$1]=$2
+      when /^\<input type=\"hidden\" name=\"(.*?)\".*value=\"(.*?)\" \/\>/
+        debug "found hidden post variable: #{$1}"
+        post_vars[$1]=$2
                 
       end # end case
     } # end loop
