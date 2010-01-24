@@ -129,7 +129,7 @@ class SearchCache
       progress.updateText(page_number, "from #{src}")      
       if (src == "remote")
         debug "sleeping"
-        sleep($SLEEP * 1.5)
+        sleep($SLEEP)
       end
 
       if page_number == last_page_number
@@ -307,6 +307,11 @@ class SearchCache
         if wid and not @waypoints.has_key?(wid):
           debug "- closing #{wid} record -"
           parsed_total += 1
+          if not cache['mtime']:
+            cache['mdays'] = -1
+            cache['mtime'] = Time.at(0)
+          end
+
           @waypoints[wid] = cache.dup
           @waypoints[wid]['visitors'] = []
                       
