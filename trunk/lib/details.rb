@@ -329,7 +329,7 @@ class CacheDetails
             funTotal=funTotal + fun
             fnum=fnum+1
           end
-          debug "COMMENT #{cnum}: i=#{icon} d=#{date} id=#{id} n=#{name} c=#{comment} fun=#{fun}"
+          debug "COMMENT #{cnum}: i=#{icon} d=#{date} n=#{name} c=#{comment} fun=#{fun}"
           cnum = cnum + 1
         }   # no more comments
 
