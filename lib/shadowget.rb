@@ -5,6 +5,8 @@ require 'net/http'
 require 'fileutils'
 require 'uri'
 require 'cgi'
+require 'common'
+require 'messages'
 
 # Does a webget, but stores a local directory with cached results ###################
 class ShadowFetch
@@ -12,7 +14,7 @@ class ShadowFetch
   attr_accessor :url
     
   include Common
-  include Display
+  include Messages
   @@downloadErrors = 0
     
   # gets a URL, but stores it in a nice webcache
@@ -96,8 +98,11 @@ class ShadowFetch
     # make a friendly filename
     localfile.gsub!(/[=\?\*\%\&\$:\-\.]/, "_")
     localfile.gsub!(/_+/, "_")
-    localfile = $CACHE_DIR + localfile;
-        
+    if $CACHE_DIR
+      localfile = $CACHE_DIR + localfile;
+    else
+      localfile = '/tmp' + localfile
+    end
     # Windows users have a max of 255 characters I believe.
     if (localfile.length > 250)
       debug "truncating #{localfile} -- too long"

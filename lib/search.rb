@@ -1,13 +1,15 @@
 # $Id$
 
 require 'cgi'
+require 'geocode'
+require 'shadowget'
 require 'time'
 
 BASE_URL = 'http://www.geocaching.com/seek/nearest.aspx'
 
 class SearchCache
   include Common
-  include Display
+  include Messages
   
   attr_accessor :distance
     
@@ -23,6 +25,32 @@ class SearchCache
     @query_arg = key
     supports_distance = false    
     case mode
+    when 'location':
+      # Try country/state search, then fall back to geocoding.
+      code = SearchCode.new("country")
+      @query_arg = code.lookup(key)
+      if not @query_arg:
+        code = SearchCode.new("state")
+        @query_arg = code.lookup(key)
+      end
+     
+      if @query_arg
+        debug "#{key} was found in #{code.type} database, skipping geocode."
+        @query_type = code.type
+      else
+        @query_type = 'location'
+        geocoder = GeoCode.new()
+        accuracy, lat, lon = geocoder.lookup(key)
+        debug "geocoder returned: a:#{accuracy} x:#{lat} y:#{lon}"
+        if not accuracy:
+          displayWarning "Google Maps failed to determine the location of #{key}"
+          return nil
+        else
+          displayMessage "Google Maps found \"#{key}\". Accuracy level: #{accuracy}"
+        end
+        @search_url = BASE_URL + "?lat=#{lat}&lng=#{lon}"
+        supports_distance = true
+      end
     when 'state', 'country'
       code = SearchCode.new(mode)
       @query_type = code.type
@@ -51,7 +79,7 @@ class SearchCache
     end            
 
     if not @query_type
-      warning "Could not determine what type of query you mean by #{mode}"
+      displayWarning "Could not determine what type of query you mean by #{mode}"
       return nil
     end      
 

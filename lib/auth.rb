@@ -3,7 +3,7 @@
 
 module Auth
   include Common
-  include Display 
+  include Messages 
   @@login_url = 'http://www.geocaching.com/login/'
   
   def login(user, password)

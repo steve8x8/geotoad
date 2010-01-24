@@ -2,7 +2,7 @@
 
 class SearchCode
   include Common
-  include Display
+  include Messages
     
   # output from tools/countryrip.rb
   $idHash = Hash.new
