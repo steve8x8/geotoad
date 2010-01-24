@@ -249,11 +249,11 @@ class Output
       elsif (type == "outEntity")
         value = makeXML(@outVars[var].to_s)
       end
-      debug "TAG <%#{tag}%> for #{@currentWid} -> #{value}"
+#      debug "TAG <%#{tag}%> for #{@currentWid} -> #{value}"
       text.gsub!("<%#{tag}%>", value)
     }
 
-    debug "Replaced text: #{text}"
+#    debug "Replaced text: #{text}"
     return text
   end
 
