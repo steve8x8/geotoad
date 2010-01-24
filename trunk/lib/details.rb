@@ -6,7 +6,7 @@ class CacheDetails
   attr_writer :useShadow, :cookie
 
   include Common
-  include Display
+  include Messages
   include Bishop
 
   # This now uses the printable version of the cache data. For now, we get the last 10

@@ -3,7 +3,7 @@
 # $HeadURL$
 # $Id$
 
-module Display
+module Messages
   def enableDebug
     $debugMode = 1
   end
@@ -11,13 +11,13 @@ module Display
   def disableDebug
     $debugMode = 0
   end
-    
+
   def debug(text)
     if $debugMode == 1
       puts "D: #{text}"
     end
   end
-    
+
   # Text that's just fluff that can be ignored.
   def displayInfo(text)
     puts "( - ) #{text}"

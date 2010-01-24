@@ -3,7 +3,7 @@ require 'cgi'
 
 class Filter
   include Common
-  include Display
+  include Messages
     
   @@sizes = {
     'virtual' => 0,

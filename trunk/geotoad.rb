@@ -3,6 +3,7 @@
 # This is the main geotoad binary.
 #
 $LOAD_PATH << File.dirname(__FILE__.gsub(/\\/, '/'))
+$LOAD_PATH << File.dirname(__FILE__.gsub(/\\/, '/')) + '/lib'
 $LOAD_PATH << (File.dirname(__FILE__.gsub(/\\/, '/')) + '/' + '..')
 
 if RUBY_VERSION.gsub('.', '').to_i < 180
@@ -12,9 +13,9 @@ if RUBY_VERSION.gsub('.', '').to_i < 180
 end
 
 # toss in our own libraries.
-require 'interface/display'
 require 'interface/progressbar'
 require 'lib/common'
+require 'lib/messages'
 require 'interface/input'
 require 'lib/shadowget'
 require 'lib/searchcode'
@@ -28,13 +29,13 @@ require 'getoptlong'
 
 class GeoToad
   include Common
-  include Display
+  include Messages
   include Auth
 
   # The version gets inserted by makedist.sh
   versionID='%VERSION%'
   if versionID !~ /^\d/
-    $VERSION = '3.9-CURRENT'
+    $VERSION = '3.10-CURRENT'
   else
     $VERSION = versionID.dup
   end
@@ -85,7 +86,7 @@ class GeoToad
     @cacheExpiry       = @option['cacheExpiry'].to_i || 3
     @distanceMax       = @option['distanceMax'] || 10
     @queryTitle        = "GeoToad: #{@queryArg}"
-    @defaultOutputFile = "gtout-" + @queryType + "-" + @queryArg.to_s
+    @defaultOutputFile = "gt_" + @queryArg.to_s
 
     if (@option['verbose'])
       enableDebug

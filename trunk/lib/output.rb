@@ -4,7 +4,7 @@ require 'lib/templates'
 
 class Output
   include Common
-  include Display
+  include Messages
 
   $MAX_NOTES_LEN = 1999
   $ReplaceWords = {
