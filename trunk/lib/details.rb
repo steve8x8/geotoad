@@ -247,8 +247,6 @@ class CacheDetails
         fnum = 0
 
         line.gsub!(/\<p\>/, ' ')
-        #         line.scan(/icon_(\w+)\.gif.*?&nbsp;([\w ]+),?[ ]?\d* by \<a  name=\"(\d+)".*?\>\<a href.*?\>(.*?)\<\/a.*?\<br \/\>(.*?)\</) { |icon,  date, id, name, comment|
-
         # <td class="Nothing"><strong><img src="http://www.geocaching.com/images/icons/icon_smile.gif" alt="" />&nbsp;December 8, 2009 by <a href="/profile/?guid=55c35fc8-b0e9-407f-b182-9d9aff86eca6" id="92528794">The Shire</a></strong> (2589 found)<br />I found this one today while out caching with GHAS.  TFTC!<br />
         line.scan(/icon_(\w+)\.gif.*?&nbsp;([\w, ]+) by \<a href.*?id=\"(\d+)".*?\>(.*?)\<\/a\>.*?<br \/\>(.*?)\</) { |icon, date, id, name, comment|
           type = 'unknown'
@@ -282,7 +280,12 @@ class CacheDetails
                     
           debug "comment [#{cnum}] is '#{type}' by #{name} on #{date}: #{comment}"
           comment.gsub!(/\<.*?\>/, ' ')
-          date = Time.parse(date)                    
+          date = Time.parse(date)
+          if type == 'Found it' and not @waypointHash[wid]['mtime']:
+            debug "Found successful comment, updating mtime to #{date}"
+            @waypointHash[wid]['mtime'] = date
+            @waypointHash[wid]['mdays'] = daysAgo(date)
+          end
           @waypointHash[wid]["comment#{cnum}Type"] = type.dup
           @waypointHash[wid]["comment#{cnum}Date"] = date.strftime("%Y-%m-%dT%H:00:00.0000000-07:00")
           @waypointHash[wid]["comment#{cnum}ID"] = id.dup
