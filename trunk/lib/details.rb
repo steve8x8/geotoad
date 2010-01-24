@@ -157,6 +157,12 @@ class CacheDetails
         @waypointHash[wid]['longdesc'] = ''
         @waypointHash[wid]['details'] = ''
 
+        if not @waypointHash[wid]['mtime']:
+          @waypointHash[wid]['mdays'] = -1
+          @waypointHash[wid]['mtime'] = Time.at(0)
+        end
+
+
         # Set what URL we used as our details source. We do not use baseURL because
         # some GPX parsers freak if there is a & in this URL.
         @waypointHash[wid]['url'] = "http://www.geocaching.com/seek/cache_details.aspx?wp=" + wid
@@ -304,6 +310,7 @@ class CacheDetails
           end
           @waypointHash[wid]["comment#{cnum}Type"] = type.dup
           @waypointHash[wid]["comment#{cnum}Date"] = date.strftime("%Y-%m-%dT%H:00:00.0000000-07:00")
+          @waypointHash[wid]["comment#{cnum}DaysAgo"] = daysAgo(date)
           @waypointHash[wid]["comment#{cnum}ID"] = cnum
           @waypointHash[wid]["comment#{cnum}UID"] = user_id.dup
           @waypointHash[wid]["comment#{cnum}Icon"] = icon.dup
@@ -348,13 +355,13 @@ class CacheDetails
       if data =~ /ShortDescription\"\>(.*?)\<\/span\>\s\s\s\s/m
         shortdesc = $1
         debug "found short desc: [#{shortdesc}]"
-        @waypointHash[wid]['shortdesc'] = shortdesc
+        @waypointHash[wid]['shortdesc'] = removeSpam(shortdesc)
       end
 
       if data =~ /LongDescription\"\>(.*?)<\/span\>\s\s\s\s/m
         longdesc = $1
         debug "got long desc [#{longdesc}]"
-        @waypointHash[wid]['longdesc'] = longdesc
+        @waypointHash[wid]['longdesc'] = removeSpam(longdesc)
       end
 
       @waypointHash[wid]['details'] = @waypointHash[wid]['shortdesc'] + " ... " + @waypointHash[wid]['longdesc']
@@ -370,5 +377,18 @@ class CacheDetails
     end
 
   end  # end function
+
+  def removeSpam(text)
+    # <a href="http://s06.flagcounter.com/more/NOk"><img src= "http://s06.flagcounter.com/count/NOk/bg=E2FFC4/txt=000000/border=CCCCCC/columns=4/maxflags=32/viewers=0/labels=1/pageviews=1/" alt="free counters" /></a>
+    removed = text.gsub(/\<a href.*?flagcounter.*?\<\/a\>/m, '[ counter disabled ]')
+    removed.gsub!(/\<\/*center\>/, '')
+    if removed != text:
+      debug "Removed spam from: ----------------------------------"
+      debug removed
+      debug "-----------------------------------------------------"
+    end
+
+    return removed
+  end
 
 end  # end class
