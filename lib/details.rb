@@ -142,11 +142,11 @@ class CacheDetails
 
     data.split("\n").each { |line|
       # GC1N069 Cacti in the Woods (Traditional Cache) in North Carolina, United States created by eminwf
-      if line =~  /^\s+(GC[A-Z0-9]+) (.*?) \((.*?)\) in.*created by (.*\w)/
+      if line =~  /^\s+(GC[A-Z0-9]+) (.*?) \((.*?)\) in.*created by (.*)/
         wid = $1
         name = $2
         type = $3
-        creator = $4
+        creator = $4.chomp
         debug "wid = #{wid} name=#{name} type=#{type} creator=#{creator}"
         @waypointHash[wid]['fulltype']=type
         @waypointHash[wid]['type']=type.downcase.gsub(/\s.*/i, '').gsub!(/\-/, '')
