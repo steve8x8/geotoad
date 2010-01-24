@@ -39,6 +39,7 @@ class SearchCache
         @query_type = code.type
       else
         @query_type = 'location'
+        @query_arg = key
         geocoder = GeoCode.new()
         accuracy, lat, lon = geocoder.lookup(key)
         debug "geocoder returned: a:#{accuracy} x:#{lat} y:#{lon}"
@@ -90,8 +91,8 @@ class SearchCache
     if supports_distance and @distance:
         @search_url = @search_url + '&dist=' + @distance.to_s
     end
-    
-    debug "query_type: #{@query_type} query_arg: #{@query_arg} url: #{@search_url}"
+
+    displayInfo @search_url
     return @query_type
   end
     
@@ -147,8 +148,8 @@ class SearchCache
     post_vars = Hash.new
         
     page_number, pages_total, parsed_total, post_vars, src = processPage({})
-    progress = ProgressBar.new(1, pages_total, "#{@query_type} query for #{@query_arg}")
-    progress.updateText(page_number, "from #{src}")      
+    progress = ProgressBar.new(1, pages_total, "Processing results for #{@query_type}: #{@query_arg}")
+    progress.updateText(page_number, "from #{src}")
 
     while(page_number < pages_total)
       debug "*** On page #{page_number} of #{pages_total}"
