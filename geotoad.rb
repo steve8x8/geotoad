@@ -151,7 +151,7 @@ class GeoToad
 
       # only valid for zip or coordinate searches
 
-      if @queryType == "zipcode" || @queryType == "coord"
+      if @queryType == "zipcode" || @queryType == "coord" || @queryType == 'location'
         puts "(constraining to #{@distanceMax} miles)"
         @queryTitle = @queryTitle + " (#{@distanceMax}mi. radius)"
         @defaultOutputFile = @defaultOutputFile + "-y" + @distanceMax.to_s
