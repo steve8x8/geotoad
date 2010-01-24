@@ -101,7 +101,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
       "\n\n<hr noshade size=\"1\">\n<a name=\"<%out.wid%>\"></a><font color=\"#000099\"><big><b><a href=\"<%out.url%>\"><%wpEntity.name%>&nbsp;<%out.symbols%></a></b></big></font><br>\n" +
       "<font color=\"#555555\"><b><%wpEntity.creator%></b></font>, <%wp.latwritten%> <%wp.lonwritten%> (<%out.location%>)<br>" +
       "<font color=\"#339933\"><%wp.type%> (<%wp.size%>) D<%wp.difficulty%>/T<%wp.terrain%> F:<%wp.funfactor%> <%out.relativedistance%><br>" +
-      "placed: <%wp.cdate%> last comment: <%wp.comment0DaysAgo%> days ago (<%wp.comment0Type%>)</font><br>" +
+      "placed: <%out.cdate%> last comment: <%wp.comment0DaysAgo%> days ago (<%wp.comment0Type%>)</font><br>" +
       "<p><%wp.shortdesc%></p>\n" +
       "<p><%wp.longdesc%></p>\n" +
       "<p><font color=\"#555555\"><%outEntity.hint%></font></p>\n",
@@ -117,12 +117,13 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
     'spacer'    => "\r\n",
     'templatePre' =>  "== <%out.title%>\r\n\r\nDecryption Key (letter above equals below, and vice versa)\r\n\r\nA|B|C|D|E|F|G|H|I|J|K|L|M\r\n-------------------------\r\nN|O|P|Q|R|S|T|U|V|W|X|Y|Z\r\n\r\n\r\n",
     'templateWP'    => "----------------------------------------------------------------\r\n" +
-      "* <%wp.name%>\" (<%out.wid%>) by <%wp.creator%>\r\n" +
+      "* <%wpText.name%> (<%out.wid%>) by <%wpText.creator%>\r\n" +
       "Difficulty: <%wp.difficulty%>, Terrain: <%wp.terrain%>, FunFactor: <%wp.funfactor%>\r\n" +
       "Lat: <%wp.latwritten%> Lon: <%wp.lonwritten%>\r\n" +
       "Type: <%wp.type%> (<%wp.size%>) <%out.relativedistance%>\r\n" +
-      "Creation: <%wp.cdate%>, Last comment: <%wp.mdays%> days ago (<%wp.comment0Type%>)\r\n" +
-      "\r\n<%outText.details%>\r\n" +
+      "Creation: <%out.cdate%>, Last comment: <%wp.mdays%> days ago (<%wp.comment0Type%>)\r\n" +
+      "\r\n<%wpText.shortdesc%>\r\n" +
+      "\r\n<%wpText.longdesc%>\r\n" +
       "\r\n<%out.hint%>\r\n\r\n\r\n\r\n"
   },
 
@@ -145,7 +146,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
       "\"Latitude\",\"Longitude\",\"Type\",\"Creation Date\",\"Details\"\r\n",
     'templateWP'    => "\"<%wp.name%>\",\"<%out.wid%>\",\"<%wp.creator%>\"," +
       "<%wp.difficulty%>,<%wp.terrain%>,\"<%wp.latwritten%>\",\"<%wp.lonwritten%>\"," +
-      "\"<%wp.type%>\",\"<%wp.cdate%>\",\"<%outText.details%>\"\r\n"
+      "\"<%wp.type%>\",\"<%out.cdate%>\",\"<%outText.details%>\"\r\n"
   },
 
   'vcf'    => {
