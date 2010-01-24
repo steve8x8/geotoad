@@ -1,14 +1,8 @@
 #labels Deprecated
-version=3.9.8
+version=3.10.0
 {{{
-   - Updated to handle recent changes to Geocaching.com.
-   - Add country, state fields to GPX and HTML output
-   - Add support for proxy servers (-P or ENV[http_server])
-   - Stricter input checking    
-   - Include log comments from previous years
-   - Now compatible with Ruby 1.9.x
-   - Fix various encoding issues that broke GPX output
-   - Fix encoding of accent characters
-   - Fix hint encryption issues
-   - Loads of other fixes!
+   - New location search type, uses Google Maps to resolve search terms
+   - HTML, GPX, and KML output now includes full HTML descriptions
+   - Backspace should now work properly on Linux
+   - Compatible with latest changes (2010-01) to geocaching.com
 }}}
