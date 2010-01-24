@@ -53,15 +53,15 @@ $Format = {
       "  <groundspeak:name><%wpEntity.name%></groundspeak:name>\r\n" +
       " <groundspeak:full_name><%wpEntity.name%></groundspeak:full_name>\r\n"+
       "  <groundspeak:placed_by><%wpEntity.creator%></groundspeak:placed_by>\r\n" +
-      "  <groundspeak:owner id=\"999\"><%wpEntity.creator%></groundspeak:owner>\r\n" +
+      "  <groundspeak:owner id=\"<%wpEntity.creator_id%>\"><%wpEntity.creator%></groundspeak:owner>\r\n" +
       "  <groundspeak:type><%wp.fulltype%></groundspeak:type>\r\n" +
       "  <groundspeak:container><%wp.size%></groundspeak:container>\r\n" +
       "  <groundspeak:difficulty><%wp.difficulty%></groundspeak:difficulty>\r\n" +
       "  <groundspeak:terrain><%wp.terrain%></groundspeak:terrain>\r\n" +
       "  <groundspeak:country><%wpEntity.country%></groundspeak:country>\r\n" +
       "  <groundspeak:state><%wpEntity.state%></groundspeak:state>\r\n" +
-      "  <groundspeak:short_description html=\"False\"><%wpEntity.shortdesc%></groundspeak:short_description>\r\n" +
-      "  <groundspeak:long_description html=\"False\"><%wpEntity.longdesc%></groundspeak:long_description>\r\n" +
+      "  <groundspeak:short_description html=\"True\"><%wpEntity.shortdesc%></groundspeak:short_description>\r\n" +
+      "  <groundspeak:long_description html=\"True\"><%wpEntity.longdesc%></groundspeak:long_description>\r\n" +
       "  <groundspeak:encoded_hints><%outEntity.hintdecrypt%></groundspeak:encoded_hints>\r\n" +
       "  <groundspeak:logs>\r\n" +
       "  <%out.gpxlogs%>\r\n" +
