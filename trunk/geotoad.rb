@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
-# $Id$
-
+#
+# This is the main geotoad binary.
+#
 $LOAD_PATH << File.dirname(__FILE__.gsub(/\\/, '/'))
 $LOAD_PATH << (File.dirname(__FILE__.gsub(/\\/, '/')) + '/' + '..')
 
@@ -29,7 +30,7 @@ class GeoToad
   include Common
   include Display
   include Auth
-    
+
   # The version gets inserted by makedist.sh
   versionID='%VERSION%'
   if versionID !~ /^\d/
@@ -37,18 +38,18 @@ class GeoToad
   else
     $VERSION = versionID.dup
   end
-    
+
   $SLEEP=1
   $SLOWMODE=350
-    
+
   def initialize
     output        = Output.new
     $validFormats = output.formatList.sort
     @uin          = Input.new
     $CACHE_DIR    = findCacheDir
   end
-    
-    
+
+
   def getoptions
     if ARGV[0]
       # command line arguments
@@ -63,11 +64,11 @@ class GeoToad
     if @option['proxy']
       ENV['HTTP_PROXY'] = @option['proxy']
     end
-    
+
     # We need this for the check following
     @queryType         = @option['queryType'] || 'zipcode'
     @queryArg          = @option['queryArg'] || nil
-        
+
     # Get this out of the way now.
     if (! @queryArg) || @option['help'] || (! @option['user']) ||  (! @option['password'])
       if (! @queryArg)
@@ -79,19 +80,19 @@ class GeoToad
       @uin.usage
       exit
     end
-        
+
     @formatType        = @option['format'] || 'gpx'
     @cacheExpiry       = @option['cacheExpiry'].to_i || 3
     @distanceMax       = @option['distanceMax'] || 10
     @queryTitle        = "GeoToad: #{@queryArg}"
     @defaultOutputFile = "gtout-" + @queryType + "-" + @queryArg.to_s
-                
+
     if (@option['verbose'])
       enableDebug
     else
       disableDebug
     end
-        
+
     if ! $validFormats.include?(@formatType)
       displayError "#{@formatType} is not a valid supported format."
       @uin.usage
@@ -99,24 +100,24 @@ class GeoToad
     end
     return @option
   end
-    
-    
- 
-    
+
+
+
+
   ## Check the version #######################
   def versionCheck
     url = "http://code.google.com/p/geotoad/wiki/CurrentVersion";
-        
+
     debug "Checking for latest version of GeoToad from #{url}"
     version = ShadowFetch.new(url)
     version.localExpiry=43200
     version.maxFailures = 0
     version.fetch
-                
+
     if (($VERSION =~ /^(\d\.\d+\.\d+)$/) && (version.data =~ /version=(\d\.\d+[\.\d]+)/))
       latestVersion = $1;
       releaseNotes = $2;
-            
+
       if (latestVersion != $VERSION)
         puts "------------------------------------------------------------------------"
         puts "* NOTE: GeoToad #{latestVersion} is now available!"
@@ -132,23 +133,23 @@ class GeoToad
     end
     debug "Check complete."
   end
-    
+
   ## Make the Initial Query ############################
   def downloadGeocacheList
     displayInfo "Your cache directory is " + $CACHE_DIR
-        
+
     # Mike Capito contributed a patch to allow for multiple
     # queries. He did it as a hash earlier, I'm just simplifying
     # and making it as an array because you probably don't want to
     # mix multiple @queryType's anyways
     @combinedWaypoints = Hash.new
-        
+
     @queryArg.to_s.split(/[:\|]/).each { |queryArg|
       print "\n( o ) Performing #{@queryType} search for #{queryArg} "
       search = SearchCache.new
-            
+
       # only valid for zip or coordinate searches
-            
+
       if @queryType == "zipcode" || @queryType == "coord"
         puts "(constraining to #{@distanceMax} miles)"
         @queryTitle = @queryTitle + " (#{@distanceMax}mi. radius)"
@@ -157,60 +158,60 @@ class GeoToad
       else
         puts
       end
-            
+
       if (! search.setType(@queryType, queryArg))
         displayError "(could not determine search type for #{@queryType}, exiting)"
         exit
       end
-            
+
       waypoints = search.getResults()
       # this gives us support for multiple searches. It adds together the search.waypoints hashes
       # and pops them into the @combinedWaypoints hash.
       @combinedWaypoints.update(waypoints)
       @combinedWaypoints.rehash
     }
-        
-        
+
+
     # Here we make sure that the amount of waypoints we've downloaded (@combinedWaypoints) matches the
     # amount of waypoints we found information for. This is just to check for buggy search code, and
     # really doesn't make much sense.
-        
+
     waypointsExtracted = 0
     @combinedWaypoints.each_key { |wp|
       debug "pre-filter: #{wp}"
       waypointsExtracted = waypointsExtracted + 1
     }
-        
+
     if (waypointsExtracted < (@combinedWaypoints.length - 2))
       displayWarning "downloaded #{@combinedWaypoints.length} waypoints, but I can only parse #{waypointsExtracted} of them!"
     end
     return waypointsExtracted
   end
-    
-    
+
+
   def prepareFilter
     # Prepare for the manipulation
     @filtered = Filter.new(@combinedWaypoints)
-        
-        
+
+
     # This is where we do a little bit of cheating. In order to avoid downloading the
     # cache details for each cache to see if it's been visited, we do a search for the
     # users on the include or exclude list. We then populate @combinedWaypoints[wid]['visitors']
     # with our discovery.
-        
+
     userLookups = Array.new
     if (@option['userExclude'])
       @queryTitle = @queryTitle + ", excluding caches done by " + @option['userExclude']
       @defaultOutputFile = @defaultOutputFile + "-U=" + @option['userExclude']
       userLookups = @option['userExclude'].split(':')
     end
-        
+
     if (@option['userInclude'])
       @queryTitle = @queryTitle + ", excluding caches not done by " + @option['userInclude']
       @defaultOutputFile = @defaultOutputFile + "-u=" + @option['userInclude']
       userLookups = userLookups + @option['userInclude'].split(':')
     end
-        
+
     userLookups.each { |user|
       search = SearchCache.new
       search.setType('user', user)
@@ -220,8 +221,8 @@ class GeoToad
       }
     }
   end
-    
-    
+
+
   ## step #1 in filtering! ############################
   # This step filters out all the geocaches by information
   # found from the searches.
@@ -229,7 +230,7 @@ class GeoToad
     puts ""
     @filtered = Filter.new(@combinedWaypoints)
     debug "Filter running cycle 1, #{@filtered.totalWaypoints} caches left"
-        
+
     if @option['difficultyMin']
       @queryTitle = @queryTitle + ", difficulty #{@option['difficultyMin']}+"
       @defaultOutputFile = @defaultOutputFile + "-d" + @option['difficultyMin'].to_s
@@ -241,13 +242,13 @@ class GeoToad
       @defaultOutputFile = @defaultOutputFile + "-D" + @option['difficultyMax'].to_s
       @filtered.difficultyMax(@option['difficultyMax'].to_f)
     end
-        
+
     if @option['terrainMin']
       @queryTitle = @queryTitle + ", terrain #{@option['terrainMin']}+"
       @defaultOutputFile = @defaultOutputFile + "-t" + @option['terrainMin'].to_s
       @filtered.terrainMin(@option['terrainMin'].to_f)
     end
-        
+
     if @option['terrainMax']
       @queryTitle = @queryTitle + ", terrain #{@option['terrainMax']} or lower"
       @defaultOutputFile = @defaultOutputFile + "-T" + @option['terrainMax'].to_s
@@ -260,7 +261,7 @@ class GeoToad
       @defaultOutputFile = @defaultOutputFile + "-c" + @option['cacheType']
       @filtered.cacheType(@option['cacheType'])
     end
-    
+
     if @option['sizeMin']
       @queryTitle = @queryTitle + ", size #{@option['sizeMin']}+"
       @defaultOutputFile = @defaultOutputFile + "-s" + @option['sizeMin'].to_s
@@ -272,46 +273,46 @@ class GeoToad
       @defaultOutputFile = @defaultOutputFile + "-S" + @option['sizeMin'].to_s
       @filtered.sizeMax(@option['sizeMax'])
     end
-        
-    debug "Filter running cycle 3, #{@filtered.totalWaypoints} caches left"    
+
+    debug "Filter running cycle 3, #{@filtered.totalWaypoints} caches left"
     if @option['foundDateInclude']
       @queryTitle = @queryTitle + ", found in the last  #{@option['foundDateInclude']} days"
       @defaultOutputFile = @defaultOutputFile + "-r=" + @option['foundDateInclude'].to_s
       @filtered.foundDateInclude(@option['foundDateInclude'].to_f)
     end
-        
+
     if @option['foundDateExclude']
       @queryTitle = @queryTitle + ", not found in the last #{@option['foundDateExclude']} days"
       @defaultOutputFile = @defaultOutputFile + "-R=" + @option['foundDateExclude'].to_s
       @filtered.foundDateExclude(@option['foundDateExclude'].to_f)
     end
-        
+
     if @option['placeDateInclude']
       @queryTitle = @queryTitle + ", newer than #{@option['placeDateInclude']} days"
       @defaultOutputFile = @defaultOutputFile + "-p=" + @option['placeDateInclude'].to_s
       @filtered.placeDateInclude(@option['placeDateInclude'].to_f)
     end
-        
+
     if @option['placeDateExclude']
       @queryTitle = @queryTitle + ", over #{@option['placeDateExclude']} days old"
       @defaultOutputFile = @defaultOutputFile + "-P=" + @option['placeDateExclude'].to_s
       @filtered.placeDateExclude(@option['placeDateExclude'].to_f)
     end
-    debug "Filter running cycle 4, #{@filtered.totalWaypoints} caches left"        
-        
+    debug "Filter running cycle 4, #{@filtered.totalWaypoints} caches left"
+
     if @option['notFound']
       @queryTitle = @queryTitle + ", virgins only"
       @defaultOutputFile = @defaultOutputFile + "-n"
       @filtered.notFound
     end
-        
+
     if @option['travelBug']
       @queryTitle = @queryTitle + ", only with TB's"
       @defaultOutputFile = @defaultOutputFile + "-b"
       @filtered.travelBug
     end
-        
-        
+
+
     beforeOwnersTotal = @filtered.totalWaypoints
     if (@option['ownerExclude'])
       @queryTitle = @queryTitle + ", excluding caches by #{@option['ownerExclude']}"
@@ -319,50 +320,50 @@ class GeoToad
         @filtered.ownerExclude(owner)
       }
     end
-        
+
     if (@option['ownerInclude'])
       @queryTitle = @queryTitle + ", excluding caches not by #{@option['ownerInclude']}"
       @option['ownerInclude'].split(/[:\|]/).each { |owner|
         @filtered.ownerInclude(owner)
       }
     end
-        
+
     excludedOwnersTotal = beforeOwnersTotal - @filtered.totalWaypoints
     if (excludedOwnersTotal > 0)
       displayMessage "Owner filtering removed #{excludedOwnersTotal} caches from your listing."
     end
-        
+
     beforeUsersTotal = @filtered.totalWaypoints
     if (@option['userExclude'])
       @option['userExclude'].split(/[:\|]/).each { |user|
         @filtered.userExclude(user)
       }
     end
-        
+
     if (@option['userInclude'])
       @option['userInclude'].split(/[:\|]/).each { |user|
         @filtered.userInclude(user)
       }
     end
-        
+
     if @option['titleKeyword']
       @queryTitle = @queryTitle + ", matching title keywords #{@option['titleKeyword']}"
       @defaultOutputFile = @defaultOutputFile + "-k=" + @option['titleKeyword']
       @filtered.titleKeyword(@option['titleKeyword'])
     end
-        
+
     excludedUsersTotal = beforeUsersTotal - @filtered.totalWaypoints
     if (excludedUsersTotal > 0)
       displayMessage "User filtering removed #{excludedUsersTotal} caches from your listing."
     end
-        
-        
+
+
     displayMessage "First stage filtering complete, #{@filtered.totalWaypoints} caches left"
   end
-    
-    
-    
-    
+
+
+
+
   def fetchGeocaches
     # We should really check our local cache and shadowhosts first before
     # doing this. This is just to be nice.
@@ -372,9 +373,9 @@ class GeoToad
       displayMessage "       load on the geocaching.com webservers. You may want to constrain"
       displayMessage "       the number of waypoints to download by limiting by difficulty,"
       displayMessage "       terrain, or placement date. Please see README.txt for help."
-      $SLEEP=15
+      $SLEEP = $SLEEP * 2
     end
-      
+
     displayMessage "Fetching geocache pages with #{$SLEEP} second rests between remote fetches"
     wpFiltered = @filtered.waypoints
     progress = ProgressBar.new(0, @filtered.totalWaypoints, "Fetching details")
@@ -382,7 +383,7 @@ class GeoToad
     @detail.cookie = get_login_cookie()
     token = 0
     downloads = 0
-      
+
     wpFiltered.each_key { |wid|
       token = token + 1
       detailURL = @detail.fullURL(wid)
@@ -395,7 +396,7 @@ class GeoToad
         @detail.cookie = login(@option['user'], @option['password'])
         status = @detail.fetch(wid)
       end
-        
+
       if status == 'subscriber-only'
         message = '(subscriber-only)'
       elsif ! status or status == 'login-required'
@@ -410,17 +411,17 @@ class GeoToad
           message = "(unavailable)"
         end
       end
-      progress.updateText(token, "[#{wid}] \"#{wpFiltered[wid]['name']}\" from #{page.src} #{message}")  
-        
+      progress.updateText(token, "[#{wid}] \"#{wpFiltered[wid]['name']}\" from #{page.src} #{message}")
+
       if status == 'subscriber-only'
         wpFiltered.delete(wid)
       else
         if (page.src == "remote")
           downloads = downloads + 1
           sleep $SLEEP
-        end          
+        end
       end
-        
+
       if message == '(error)'
         debug "Page for #{wpFiltered[wid]['name']} failed to be parsed, invalidating cache."
         wpFiltered.delete(wid)
@@ -428,7 +429,7 @@ class GeoToad
       end
     }
   end
-    
+
   def get_login_cookie
     cookie = loadCookie()
     if cookie
@@ -438,39 +439,39 @@ class GeoToad
       cookie = login(@option['user'], @option['password'])
     end
     return cookie
-  end  
-    
+  end
+
   ## step #2 in filtering! ############################
   # In this stage, we actually have to download all the information on the caches in order to decide
   # whether or not they are keepers.
   def postFetchFilter
     @filtered= Filter.new(@detail.waypoints)
-        
+
     # caches with warnings we choose not to include.
     if ! @option['includeDisabled']
       displayMessage "Filtering out disabled caches"
       @filtered.removeByElement('warning')
     end
-        
+
     if @option['descKeyword']
       @queryTitle = @queryTitle + ", matching desc keywords #{@option['descKeyword']}"
       @defaultOutputFile = @defaultOutputFile + "-K=" + @option['descKeyword']
       @filtered.descKeyword(@option['descKeyword'])
     end
-        
+
     if @option['funFactorMin']
       @queryTitle = @queryTitle + ", funFactor #{@option['funFactorMin']}+"
       @defaultOutputFile = @defaultOutputFile + "-f" + @option['funFactorMin'].to_s
       @filtered.funFactorMin(@option['funFactorMin'].to_f)
     end
-        
+
     if @option['funFactorMax']
       @queryTitle = @queryTitle + ", funFactor #{@option['funFactorMax']} or lower"
       @defaultOutputFile = @defaultOutputFile + '-A' + @option['funFactorMax'].to_s
       @filtered.funFactorMax(@option['funFactorMax'].to_f)
     end
-        
-        
+
+
     # We filter for users again. While this may be a bit obsessive, this is in case
     # our local cache is not valid.
     beforeUsersTotal = @filtered.totalWaypoints
@@ -479,25 +480,25 @@ class GeoToad
         @filtered.userExclude(user)
       }
     end
-        
+
     if (@option['userInclude'])
       @option['userInclude'].split(/[:\|]/).each { |user|
         @filtered.userInclude(user)
       }
     end
-        
+
     excludedUsersTotal = beforeUsersTotal - @filtered.totalWaypoints
     if (excludedUsersTotal > 0)
       displayMessage "User filtering removed #{excludedUsersTotal} caches from your listing."
     end
-        
-        
+
+
     displayMessage "Filter complete, #{@filtered.totalWaypoints} caches left"
     return @filtered.totalWaypoints
   end
-    
-    
-    
+
+
+
   ## save the file #############################################
   def saveFile
     puts ""
@@ -508,8 +509,8 @@ class GeoToad
     if (@option['waypointLength'])
       output.waypointLength=@option['waypointLength'].to_i
     end
-        
-        
+
+
     # if we have selected the name of the output file, use it.
     # otherwise, take our invented name, sanitize it, and slap a file extension on it.
     if @option['output'] && (@option['output'] !~ /\/$/)
@@ -519,17 +520,17 @@ class GeoToad
       outputFile.gsub!(/_+/, '_')
       outputFile = outputFile + "." + output.formatExtension(@formatType)
     end
-        
+
     # prepend the current working directory. This is mostly done as a service to
     # users who just double click to launch GeoToad, and wonder where their output file went.
-        
+
     if (! @option['output']) || (@option['output'] !~ /\//)
-      # rubyscript2exe is self extracting and overwrites the Pwd. 
+      # rubyscript2exe is self extracting and overwrites the Pwd.
       # rather than dumping files in a temp dir, lets put it where geotoad is installed
       if defined?(RUBYSCRIPT2EXE_APPEXE)
         if ENV["OLDDIR"]
           outputDir=ENV["OLDDIR"]
-        else 
+        else
           outputDir=File.dirname(RUBYSCRIPT2EXE_APPEXE)
         end
       else
@@ -539,27 +540,27 @@ class GeoToad
       # fool it so that trailing slashes work.
       outputDir = File.dirname(@option['output'] + "x")
     end
-        
+
     outputFile = outputDir + '/' + outputFile
-        
-        
+
+
     # Lets not mix and match DOS and UNIX /'s, we'll just make everyone like us!
     outputFile.gsub!(/\\/, '/')
-        
+
     # append time to our title
     @queryTitle = @queryTitle + " (" + Time.now.strftime("%d%b%y %H:%M") + ")"
-        
+
     # and do the dirty.
     outputData = output.prepare(@queryTitle);
     output.commit(outputFile)
     displayMessage "Saved to #{outputFile}"
   end
-    
-    
+
+
   def close
     # Not currently used.
   end
-    
+
 end
 
 
@@ -571,7 +572,7 @@ cli = GeoToad.new
 
 while(1)
   cli.versionCheck
-  options = cli.getoptions    
+  options = cli.getoptions
   count = cli.downloadGeocacheList
   if count < 1
     cli.displayError "No caches found in search, exiting early."
@@ -581,7 +582,7 @@ while(1)
     if options['queryType'] != 'wid'
       cli.preFetchFilter
     end
-        
+
     cli.fetchGeocaches
     caches = cli.postFetchFilter
     if caches > 0
@@ -591,8 +592,8 @@ while(1)
     end
     cli.close
   end
-    
-    
+
+
   # Don't loop if you're in automatic mode.
   if ($mode == "TUI")
     puts ""
