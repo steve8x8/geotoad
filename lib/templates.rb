@@ -82,11 +82,11 @@ $Format = {
       "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n" + "</head>\n" +
       "<body link=\"#000099\" vlink=\"#000044\" alink=\"#000099\">\n" +
       "<h3><%out.title%></h3>" +
-      "<b><font color=\"#11CC11\">$</font></b> have travelbugs&nbsp;&nbsp;&nbsp;" +
-      "<b><font color=\"#9900CC\">@</font></b> never been found&nbsp;&nbsp;&nbsp;" +
-      "<b><font color=\"#229999\">%</font></b> terrain rating of 3.5+&nbsp;&nbsp;&nbsp;" +
-      "<b><font color=\"#BB0000\">&gt;</font></b> difficulty rating of 3.5+&nbsp;&nbsp;&nbsp;" +
-      "<b><font color=\"#E2BF2B\">#</font></b> fun factor rating of 3.5+<br>" +
+      "<b><font color=\"#11CC11\">&euro;</font></b> have travelbugs&nbsp;&nbsp;&nbsp;" +
+      "<b><font color=\"#9900CC\">&infin;</font></b> never been found&nbsp;&nbsp;&nbsp;" +
+      "<b><font color=\"#999922\">&sect;</font></b> terrain rating of 3.5+&nbsp;&nbsp;&nbsp;" +
+      "<b><font color=\"#440000\">&uarr;</font></b> difficulty rating of 3.5+&nbsp;&nbsp;&nbsp;" +
+      "<b><font color=\"#BB2222\">&hearts;</font></b> fun factor rating of 3.5+<br>" +
       # Not yet ready for consumption
     #"<b><font color=\"#333333\">--</font></b> comments seem negative&nbsp;&nbsp;&nbsp;" +
     #"<b><font color=\"#000000\">++</font></b> comments seem very positive" +
@@ -102,41 +102,13 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
       "<font color=\"#555555\"><b><%wpEntity.creator%></b></font>, <%wp.latwritten%> <%wp.lonwritten%> (<%out.location%>)<br>" +
       "<font color=\"#339933\"><%wp.type%> (<%wp.size%>) D<%wp.difficulty%>/T<%wp.terrain%> F:<%wp.funfactor%> <%out.relativedistance%><br>" +
       "placed: <%wp.cdate%> last comment: <%wp.mdays%> days ago (<%wp.comment0Type%>)</font><br>" +
-      "<p><%outEntity.details%></p>\n" +
+      "<p><%wp.shortdesc%></p>\n" +
+      "<p><%wp.longdesc%></p>\n" +
       "<p><font color=\"#555555\"><%outEntity.hint%></font></p>\n",
     'templatePost'    => "</body></html>"
   },
 
-
-  'html-decrypt'    => {
-    'ext'        => 'html',
-    'mime'    => 'text/html',
-    'desc'    => 'Simple HTML with hint decrypted',
-    'spacer'    => "<br>&nbsp;\n",
-    'templatePre' => "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n" +
-      "<html><head>\n<title><%out.title%></title>\n" +
-      "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n" + "</head>\n" +
-      "<body link=\"#000099\" vlink=\"#000044\" alink=\"#000099\">\n" +
-      "<h3><%out.title%></h3>" +
-      "<b><font color=\"#11CC11\">$</font></b> have travelbugs&nbsp;&nbsp;&nbsp;" +
-      "<b><font color=\"#9900CC\">@</font></b> never been found&nbsp;&nbsp;&nbsp;" +
-      "<b><font color=\"#229999\">%</font></b> terrain rating of 3.5+&nbsp;&nbsp;&nbsp;" +
-      "<b><font color=\"#BB0000\">&gt;</font></b> difficulty rating of 3.5+&nbsp;&nbsp;&nbsp;",
-    "<b><font color=\"#E2BF2B\">#</font></b> fun factor rating of 3.5+<br>" +
-      # Not yet ready for consumption
-    #"<b><font color=\"#333333\">--</font></b> comments seem negative&nbsp;&nbsp;&nbsp;" +
-    #"<b><font color=\"#000000\">++</font></b> comments seem very positive" +
-    'templateIndex' => "* <a href=\"#<%out.wid%>\"><%wpEntity.name%></a><br>",
-    'templateWP'    =>
-      "\n\n<hr noshade size=\"1\">\n<a name=\"<%out.wid%>\"></a><font color=\"#000099\"><big><b><a href=\"<%out.url%>\"><%wpEntity.name%>&nbsp;<%out.symbols%></a></b></big></font><br>\n" +
-      "<font color=\"#555555\"><b><%wpEntity.creator%></b></font>, <%wp.latwritten%> <%wp.lonwritten%> (<%out.location%>)<br>" +
-      "<font color=\"#339933\"><%wp.type%> (<%wp.size%>) D<%wp.difficulty%>/T<%wp.terrain%> F:<%wp.funfactor%> <%out.relativedistance%><br>" +
-      "placed: <%wp.cdate%> last comment: <%wp.mdays%> days ago (<%wp.comment0Type%>)</font><br>" +
-      "<p><%outEntity.details%></p>\n" +
-      "<p><font color=\"#555555\"><%out.hintdecrypt%></font></p>\n",
-    'templatePost'    => "</body></html>"
-  },
-
+  # TODO(thomas): Add html-decrypt and text-decrypt back without too much duplication.
 
   'text'    => {
     'ext'        => 'txt',
@@ -152,22 +124,6 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
       "Creation: <%wp.cdate%>, Last comment: <%wp.mdays%> days ago (<%wp.comment0Type%>)\r\n" +
       "\r\n<%out.details%>\r\n" +
       "\r\n<%out.hint%>\r\n\r\n\r\n\r\n"
-  },
-
-  'text-decrypt'    => {
-    'ext'        => 'txt',
-    'mime'    => 'text/plain',
-    'desc'    =>     'Plain ASCII with hint decrypted',
-    'spacer'    => "\r\n",
-    'templatePre' =>  "== <%out.title%>\r\n\r\nDecryption Key (letter above equals below, and vice versa)\r\n\r\nA|B|C|D|E|F|G|H|I|J|K|L|M\r\n-------------------------\r\nN|O|P|Q|R|S|T|U|V|W|X|Y|Z\r\n\r\n\r\n",
-    'templateWP'    => "----------------------------------------------------------------\r\n" +
-      "* <%wp.name%>\" (<%out.wid%>) by <%wp.creator%>\r\n" +
-      "Difficulty: <%wp.difficulty%>, Terrain: <%wp.terrain%>, FunFactor: <%wp.funfactor%>\r\n" +
-      "Lat: <%wp.latwritten%> Lon: <%wp.lonwritten%>\r\n" +
-      "Type: <%wp.type%> (<%wp.size%>) <%out.relativedistance%>\r\n" +
-      "Creation: <%wp.cdate%>, Last comment: <%wp.mdays%> days ago (<%wp.comment0Type%>)\r\n" +
-      "\r\n<%out.details%>\r\n" +
-      "\r\n<%out.hintdecrypt%>\r\n\r\n\r\n\r\n"
   },
 
 
