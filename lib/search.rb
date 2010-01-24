@@ -267,8 +267,8 @@ class SearchCache
         cache['mdays']=-1
         full_type = $1
         short_type = full_type.split(' ')[0].downcase.gsub(/\-/, '')
-        @cache['fulltype']=full_type
-        @cache['type']=short_type
+        cache['fulltype']=full_type
+        cache['type']=short_type
         debug "type=#{cache['type']}"
 
       # <img src="http://www.geocaching.com/images/wpttypes/21.gif" alt="Travel Bug Dog Tag (1 item)" />
