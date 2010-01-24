@@ -248,6 +248,10 @@ class Output
         value = makeXML(@wpHash[@currentWid][var].to_s)
       elsif (type == "outEntity")
         value = makeXML(@outVars[var].to_s)
+      elsif (type == "wpText")
+        value = makeText(@wpHash[@currentWid][var].to_s)
+      elsif (type == "outText")
+        value = makeText(@outVars[var].to_s)
       end
 #      debug "TAG <%#{tag}%> for #{@currentWid} -> #{value}"
       text.gsub!("<%#{tag}%>", value)
@@ -295,6 +299,39 @@ class Output
     return text
   end
 
+  def makeText(str)
+    # Take HTML-like input, no matter how hacked up, and turn it into text
+    text = CGI.unescapeHTML(str)
+
+    # rip some tags out.
+    text.gsub!(/\<\/li\>/i, '')
+    text.gsub!(/\<\/p\>/i, '')
+    text.gsub!(/<\/*i\>/i, '')
+    text.gsub!(/<\/*body\>/i, '')
+    text.gsub!(/<\/*option.*?\>/i, '')
+    text.gsub!(/<\/*select.*?\>/i, '')
+    text.gsub!(/<\/*span.*?\>/i, '')
+    text.gsub!(/<\/*font.*?\>/i, '')
+    text.gsub!(/<\/*ul\>/i, '')
+    text.gsub!(/style=\".*?\"/i, '')
+
+    # substitute
+    text.gsub!(/\<p\>/i, "\n\n")
+    text.gsub!(/\<li\>/i, "\n * (o) ")
+    text.gsub!(/<\/*b>/i, '')
+    text.gsub!(/\<img.*?\>/i, '[img]')
+    text.gsub!(/\<.*?\>/, ' *')
+
+    # combine all the tags we nuked. These regexps
+    # could probably be cleaned up pretty well.
+    text.gsub!(/\*[\s\*]+/m, "* ")
+    text.gsub!(/\*/, "\n* ")
+    text.gsub!(/[\x01-\x1F]/, '')      # low ascii
+
+    # kill the last space, which makes the CSV output nicer.
+    text.gsub!(/ $/, '')
+    return text
+  end
 
   def filterInternal (title)
     debug "generating output: #{@outputType} - #{$Format[@outputType]['desc']}"

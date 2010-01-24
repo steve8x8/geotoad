@@ -122,7 +122,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
       "Lat: <%wp.latwritten%> Lon: <%wp.lonwritten%>\r\n" +
       "Type: <%wp.type%> (<%wp.size%>) <%out.relativedistance%>\r\n" +
       "Creation: <%wp.cdate%>, Last comment: <%wp.mdays%> days ago (<%wp.comment0Type%>)\r\n" +
-      "\r\n<%out.details%>\r\n" +
+      "\r\n<%outText.details%>\r\n" +
       "\r\n<%out.hint%>\r\n\r\n\r\n\r\n"
   },
 
@@ -145,7 +145,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
       "\"Latitude\",\"Longitude\",\"Type\",\"Creation Date\",\"Details\"\r\n",
     'templateWP'    => "\"<%wp.name%>\",\"<%out.wid%>\",\"<%wp.creator%>\"," +
       "<%wp.difficulty%>,<%wp.terrain%>,\"<%wp.latwritten%>\",\"<%wp.lonwritten%>\"," +
-      "\"<%wp.type%>\",\"<%wp.cdate%>\",\"<%out.details%>\"\r\n"
+      "\"<%wp.type%>\",\"<%wp.cdate%>\",\"<%outText.details%>\"\r\n"
   },
 
   'vcf'    => {
