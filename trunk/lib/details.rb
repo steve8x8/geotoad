@@ -145,11 +145,12 @@ class CacheDetails
       if line =~  /^\s+(GC[A-Z0-9]+) (.*?) \((.*?)\) in.*created by (.*)/
         wid = $1
         name = $2
-        type = $3
+        full_type = $3
         creator = $4.chomp
-        debug "wid = #{wid} name=#{name} type=#{type} creator=#{creator}"
-        @waypointHash[wid]['fulltype']=type
-        @waypointHash[wid]['type']=type.downcase.gsub(/\s.*/i, '').gsub!(/\-/, '')
+        short_type = full_type.split(' ')[0].downcase.gsub(/\-/, '')
+        debug "wid = #{wid} name=#{name} ftype=#{full_type} stype=#{short_type} creator=#{creator}"
+        @waypointHash[wid]['fulltype']=full_type
+        @waypointHash[wid]['type']=short_type
         @waypointHash[wid]['name'] = name
         @waypointHash[wid]['creator'] = creator
         @waypointHash[wid]['creator_id'] = 1
@@ -217,8 +218,8 @@ class CacheDetails
 
       # span id="ctl00_ContentBody_Location">In North Carolina, United States <small>
       if line =~ /Location\"\>In ([^,<]+)\, ([^<]+)/
-        @waypointHash[wid]['state']=$1
-        @waypointHash[wid]['country']=$2
+        @waypointHash[wid]['state']=$1.chomp
+        @waypointHash[wid]['country']=$2.chomp
         debug "found state: #{$1} country: #{$2}"
         # <span id="Location">In Country</span></p>
       elsif line =~ /Location\"\>In ([^<]+)/
