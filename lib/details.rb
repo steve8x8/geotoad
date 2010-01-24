@@ -142,7 +142,7 @@ class CacheDetails
 
     data.split("\n").each { |line|
       # GC1N069 Cacti in the Woods (Traditional Cache) in North Carolina, United States created by eminwf
-      if line =~  /^\s+(GC[A-Z0-9]+) (.*?) \((.*?)\) in.*created by (.*)/
+      if line =~  /^\s+(GC[A-Z0-9]+) (.*?) \((.*?)\) in.*created by (.*\w)/
         wid = $1
         name = $2
         type = $3
@@ -152,6 +152,7 @@ class CacheDetails
         @waypointHash[wid]['type']=type.downcase.gsub(/\s.*/i, '').gsub!(/\-/, '')
         @waypointHash[wid]['name'] = name
         @waypointHash[wid]['creator'] = creator
+        @waypointHash[wid]['creator_id'] = 1
         @waypointHash[wid]['shortdesc'] = ''
         @waypointHash[wid]['longdesc'] = ''
         @waypointHash[wid]['details'] = ''
@@ -159,6 +160,13 @@ class CacheDetails
         # Set what URL we used as our details source. We do not use baseURL because
         # some GPX parsers freak if there is a & in this URL.
         @waypointHash[wid]['url'] = "http://www.geocaching.com/seek/cache_details.aspx?wp=" + wid
+      end
+
+      # CacheOwner">by <a href="http://www.geocaching.com/profile/?guid=aacbe3b8-6531-4e11-b131-afc518b392b0&wid=4bcdcfa8-2672-4a6d-a25a-15d86129a088&ds=2">Sascha Wyss</a>
+      if line =~ /CacheOwner\"\>.*?by \<a .*?guid=([\w-]+).*?>(.*?)\<\/a/
+        @waypointHash[wid]['creator_id'] = $1
+        @waypointHash[wid]['creator'] = $2
+        debug "found creator id: #{@waypointHash[wid]['creator_id']}"
       end
 
       # <strong>Difficulty:</strong> <span id="ctl00_ContentBody_Difficulty"><img src="http://www.geocaching.com/images/stars/stars2.gif" alt="2 out of 5" />
@@ -185,6 +193,12 @@ class CacheDetails
       if line =~ /with an account to view/
         displayWarning "Oops, we are not actually logged in!"
         return 'login-required'
+      end
+
+      # <img src="/images/icons/container/small.gif" alt="Size: Small" />&nbsp<small>(Small)</small>
+      if line =~ /\<img src=".*?" alt="Size: (.*?)" \/\>/
+        @waypointHash[wid]['size'] = $1.downcase
+        debug "found size: #{$1}"
       end
 
       # href="/wpt/?lat=35.933717&amp;lon=-78.487483&amp;detail=1"
@@ -241,14 +255,16 @@ class CacheDetails
 
 
       if line =~ /CacheLogs\"\>/
-        debug "inspecting comments"
+        debug "inspecting comments: #{line}"
         cnum = 0
         funTotal = 0.0
         fnum = 0
 
         line.gsub!(/\<p\>/, ' ')
-        # <td class="Nothing"><strong><img src="http://www.geocaching.com/images/icons/icon_smile.gif" alt="" />&nbsp;December 8, 2009 by <a href="/profile/?guid=55c35fc8-b0e9-407f-b182-9d9aff86eca6" id="92528794">The Shire</a></strong> (2589 found)<br />I found this one today while out caching with GHAS.  TFTC!<br />
-        line.scan(/icon_(\w+)\.gif.*?&nbsp;([\w, ]+) by \<a href.*?id=\"(\d+)".*?\>(.*?)\<\/a\>.*?<br \/\>(.*?)\</) { |icon, date, id, name, comment|
+        # <img src="http://www.geocaching.com/images/icons/icon_smile.gif" alt="" />&nbsp;January 9 by <a href="/profile/?guid=8e3afe9c-5bc0-44ea-abde-2e5d680b90d5"
+        # id="94849032">Happy Wayfarer</a></strong> (215 found)<br />A nice walk early in the morning. There whereno muggles at this time.
+        # <br>Made some nice picture from this lovely park and view to the Bosporus and walked back to Eminönü.<p>Thanks from Germany<br>Happy Wayfarer</td>
+        line.scan(/\/icon_(\w+)\.gif.*?\>\&nbsp\;([\w, ]+) by \<a href=".*?id=\"(.*?)\"\>(.*?)\<\/a\>.*?\<br \/\>(.*?)\<\/td\>/) { |icon, date, user_id, name, comment|
           type = 'unknown'
           nograde=nil
 
@@ -278,7 +294,7 @@ class CacheDetails
             nograde=1
           end
 
-          debug "comment [#{cnum}] is '#{type}' by #{name} on #{date}: #{comment}"
+          debug "comment [#{cnum}] is '#{type}' by #{name}[#{user_id}] on #{date}: #{comment}"
           comment.gsub!(/\<.*?\>/, ' ')
           date = Time.parse(date)
           if type == 'Found it' and not @waypointHash[wid]['mtime']:
@@ -288,7 +304,8 @@ class CacheDetails
           end
           @waypointHash[wid]["comment#{cnum}Type"] = type.dup
           @waypointHash[wid]["comment#{cnum}Date"] = date.strftime("%Y-%m-%dT%H:00:00.0000000-07:00")
-          @waypointHash[wid]["comment#{cnum}ID"] = id.dup
+          @waypointHash[wid]["comment#{cnum}ID"] = cnum
+          @waypointHash[wid]["comment#{cnum}UID"] = user_id.dup
           @waypointHash[wid]["comment#{cnum}Icon"] = icon.dup
           @waypointHash[wid]["comment#{cnum}Name"] = name.dup
           @waypointHash[wid]["comment#{cnum}Comment"] = comment.dup
