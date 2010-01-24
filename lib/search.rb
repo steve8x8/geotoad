@@ -265,7 +265,10 @@ class SearchCache
       #<img src="/images/WptTypes/2.gif" alt="Traditional Cache"
       when /WptTypes\/[\d].*?alt=\"(.*?)\"/
         cache['mdays']=-1
-        cache['type']=$1.downcase.gsub(/\s.*/, '').gsub(/\-/, '')
+        full_type = $1
+        short_type = full_type.split(' ')[0].downcase.gsub(/\-/, '')
+        @cache['fulltype']=full_type
+        @cache['type']=short_type
         debug "type=#{cache['type']}"
 
       # <img src="http://www.geocaching.com/images/wpttypes/21.gif" alt="Travel Bug Dog Tag (1 item)" />
