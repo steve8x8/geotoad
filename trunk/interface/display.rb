@@ -14,7 +14,7 @@ module Display
     
   def debug(text)
     if $debugMode == 1
-      puts "< d > #{text}"
+      puts "D: #{text}"
     end
   end
     
