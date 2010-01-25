@@ -262,19 +262,28 @@ class SearchCache
           post_vars['__EVENTTARGET'] = $1
         end
 
-      #<img src="/images/WptTypes/2.gif" alt="Traditional Cache"
+      #<IMG src="./gc_files/8.gif" alt="Unknown Cache" width="32" height="32"></A>
+      # <IMG src="./gc_files/21.gif" alt="Travel Bug Dog Tag (1 item)">  </TD>
       when /WptTypes\/[\d].*?alt=\"(.*?)\"/
-        cache['mdays']=-1
+        # This line also has travel bug data
         full_type = $1
+        if line =~ /Travel Bug.*?\((.*?)\)/ 
+          debug "Travel Bug Found: #{$1}"
+          cache['travelbug']=$1
+        else
+          debug "type line: #{line}"
+        end
+        cache['mdays']=-1
         short_type = full_type.split(' ')[0].downcase.gsub(/\-/, '')
         cache['fulltype']=full_type
         cache['type']=short_type
         debug "type=#{cache['type']}"
-
-      # <img src="http://www.geocaching.com/images/wpttypes/21.gif" alt="Travel Bug Dog Tag (1 item)" />
-      when /Travel Bug Dog Tag \((.*?)\)"/
-        debug "Travel Bug Found: #{$1}"
-        cache['travelbug']=$1
+        
+        # This line also has travel bug data
+        if line =~ /Travel Bug.*?(\d+) item"/
+          debug "Travel Bug Found: #{$1}"
+          cache['travelbug']=$1
+        end
 
       # <td>(2.5/2)<br /><img src="/images/icons/container/small.gif" alt="Size: Small" /></td>
       when /\(([-\d\.]+)\/([-\d\.]+)\)\<br.*Size: (.*?)\"/
