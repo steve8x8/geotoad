@@ -1,8 +1,8 @@
 #labels Deprecated
-version=3.10.0
+version=3.10.1
 {{{
-   - New location search type, uses Google Maps to resolve search terms
-   - HTML, GPX, and KML output now includes full HTML descriptions
-   - Backspace should now work properly on Linux
-   - Compatible with latest changes (2010-01) to geocaching.com
+   - Additional Waypoints table now included in HTML, GPX, and KML output
+   - Fix title parsing for caches with a parenthesis in the name
+   - Fix bugs in "last found" time parsing
+   - Fix travelbug parsing
 }}}
