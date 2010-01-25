@@ -60,7 +60,7 @@ $Format = {
       "  <groundspeak:terrain><%wp.terrain%></groundspeak:terrain>\r\n" +
       "  <groundspeak:country><%wpEntity.country%></groundspeak:country>\r\n" +
       "  <groundspeak:state><%wpEntity.state%></groundspeak:state>\r\n" +
-      "  <groundspeak:short_description html=\"True\"><%wpEntity.shortdesc%></groundspeak:short_description>\r\n" +
+      "  <groundspeak:short_description html=\"True\"><%wpEntity.additional_raw%><%wpEntity.shortdesc%></groundspeak:short_description>\r\n" +
       "  <groundspeak:long_description html=\"True\"><%wpEntity.longdesc%></groundspeak:long_description>\r\n" +
       "  <groundspeak:encoded_hints><%outEntity.hintdecrypt%></groundspeak:encoded_hints>\r\n" +
       "  <groundspeak:logs>\r\n" +
@@ -102,7 +102,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
       "<font color=\"#555555\"><b><%wpEntity.creator%></b></font>, <%wp.latwritten%> <%wp.lonwritten%> (<%out.location%>)<br>" +
       "<font color=\"#339933\"><%wp.type%> (<%wp.size%>) D<%wp.difficulty%>/T<%wp.terrain%> F:<%wp.funfactor%> <%out.relativedistance%><br>" +
       "placed: <%out.cdate%> last comment: <%wp.comment0DaysAgo%> days ago (<%wp.comment0Type%>)</font><br>" +
-      "<p><%wp.shortdesc%></p>\n" +
+      "<p><%wp.additional_raw%><%wp.shortdesc%></p>\n" +
       "<p><%wp.longdesc%></p>\n" +
       "<p><font color=\"#555555\"><%outEntity.hint%></font></p>\n",
     'templatePost'    => "</body></html>"

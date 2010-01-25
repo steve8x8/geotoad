@@ -304,8 +304,8 @@ class CacheDetails
           debug "comment [#{cnum}] is '#{type}' by #{name}[#{user_id}] on #{date}: #{comment}"
           comment.gsub!(/\<.*?\>/, ' ')
           date = Time.parse(date)
-          if type == 'Found it' and not @waypointHash[wid]['mtime']:
-              debug "Found successful comment, updating mtime to #{date}"
+          if type == 'Found it' and @waypointHash[wid]['mdays'] == -1:
+            debug "Found successful comment, updating mtime to #{date}"
             @waypointHash[wid]['mtime'] = date
             @waypointHash[wid]['mdays'] = daysAgo(date)
           end
@@ -356,18 +356,23 @@ class CacheDetails
       if data =~ /ShortDescription\"\>(.*?)\<\/span\>\s\s\s\s/m
         shortdesc = $1
         debug "found short desc: [#{shortdesc}]"
-        @waypointHash[wid]['shortdesc'] = removeSpam(shortdesc)
+        @waypointHash[wid]['shortdesc'] = fixRelativeImageLinks(removeSpam(shortdesc))
       end
 
       if data =~ /LongDescription\"\>(.*?)<\/span\>\s\s\s\s/m
         longdesc = $1
         debug "got long desc [#{longdesc}]"
-        @waypointHash[wid]['longdesc'] = removeSpam(longdesc)
+        @waypointHash[wid]['longdesc'] = fixRelativeImageLinks(removeSpam(longdesc))
       end
 
       @waypointHash[wid]['details'] = @waypointHash[wid]['shortdesc'] + " ... " + @waypointHash[wid]['longdesc']
 
     end  # end wid check.
+
+    # Parse the additional waypoints table. Needs additional work for non-HTML templates.
+    debug "will addit"
+    @waypointHash[wid]['additional_raw'] = parseAdditionalWaypoints(data)
+
 
     # How valid is this cache?
     if wid && @waypointHash[wid]['latwritten']
@@ -376,8 +381,26 @@ class CacheDetails
       debug "parseCache returning as nil because wid #{wid} has no coordinates (and the login works?)"
       return nil
     end
-
   end  # end function
+  
+  def fixRelativeImageLinks(text)
+    new_text = text.gsub(' src="/', ' src="http://www.geocaching.com/')
+    if text != new_text:
+      debug "fixed relative links in #{new_text}"
+    end
+    return new_text
+  end
+  
+  def parseAdditionalWaypoints(text)
+    debug "additional: #{text}"
+    # <p><p><strong>Additional Waypoints</strong></p></p> 
+    if text =~ /Additional Waypoints.*?(\<table.*?\/table\>)/m
+      additional = $1
+      return fixRelativeImageLinks(additional)
+    else
+      return nil
+    end    
+  end
 
   def removeSpam(text)
     # <a href="http://s06.flagcounter.com/more/NOk"><img src= "http://s06.flagcounter.com/count/NOk/bg=E2FFC4/txt=000000/border=CCCCCC/columns=4/maxflags=32/viewers=0/labels=1/pageviews=1/" alt="free counters" /></a>
