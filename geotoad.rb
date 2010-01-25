@@ -102,11 +102,20 @@ class GeoToad
     return @option
   end
 
-
-
-
   ## Check the version #######################
+  def comparableVersion(text)
+    # Make a calculatable/comparable version number
+    parts = text.split('.')
+    version = (parts[0].to_i * 10000) + (parts[1].to_i * 100) + parts[2].to_i
+    puts version
+    return version
+  end
+    
   def versionCheck
+    if $VERSION =~ /CURRENT/
+      return nil
+    end
+  
     url = "http://code.google.com/p/geotoad/wiki/CurrentVersion";
 
     debug "Checking for latest version of GeoToad from #{url}"
@@ -116,10 +125,10 @@ class GeoToad
     version.fetch
 
     if (($VERSION =~ /^(\d\.\d+\.\d+)$/) && (version.data =~ /version=(\d\.\d+[\.\d]+)/))
-      latestVersion = $1;
+      latestVersion = $1
       releaseNotes = $2;
 
-      if (latestVersion != $VERSION)
+      if comparableVersion(latestVersion) > comparableVersion($VERSION)
         puts "------------------------------------------------------------------------"
         puts "* NOTE: GeoToad #{latestVersion} is now available!"
         puts "* Download from http://code.google.com/p/geotoad/downloads/list"
@@ -570,9 +579,9 @@ puts "GeoToad #{$VERSION} (#{RUBY_PLATFORM}-#{RUBY_VERSION})"
 puts "- Report bugs or suggestions at http://code.google.com/p/geotoad/issues/"
 puts "- Please include verbose output (-v) without passwords in the bug report."
 cli = GeoToad.new
+cli.versionCheck
 
 while(1)
-  cli.versionCheck
   options = cli.getoptions
   count = cli.downloadGeocacheList
   if count < 1
