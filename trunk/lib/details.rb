@@ -142,7 +142,7 @@ class CacheDetails
 
     data.split("\n").each { |line|
       # GC1N069 Cacti in the Woods (Traditional Cache) in North Carolina, United States created by eminwf
-      if line =~  /^\s+(GC[A-Z0-9]+) (.*?) \((.*?)\) in.*created by (.*)/
+      if line =~  /^\s+(GC[A-Z0-9]+) (.*) \((.*?)\) in.*created by (.*)/
         wid = $1
         name = $2
         full_type = $3
