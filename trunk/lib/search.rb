@@ -292,8 +292,9 @@ class SearchCache
         cache['size'] = $3.downcase
         debug "difficulty=#{cache['difficulty']} terr=#{cache['terrain']} size=#{cache['size']}"
 
+      # <td>Yesterday<strong>*</strong><br /><span class="Success"></span></td> 
       # <td>15 Jan 10<br /><span class="Success"></span></td>
-      when /\<td\>(\w+[ \w]+)\**\<br/
+      when /\<td\>(\w+[ \w]+)\**\<[bs][rt]/
         debug "last found date: #{$1} at line: #{line}"
         cache['mtime'] = parseDate($1)
         cache['mdays'] = daysAgo(cache['mtime'])
