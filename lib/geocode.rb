@@ -26,7 +26,7 @@ class GeoCode
   def create_url(location)
     q = CGI.escape(location)
     url = "#{MAPS_URL}?q=#{q}&output=csv&oe=utf8&sensor=false&key=#{KEY}"
-    debug 'url: #{url}'
+    debug "url: #{url}"
     return url
   end
 
