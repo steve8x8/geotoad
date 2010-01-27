@@ -150,6 +150,21 @@ class SearchCache
     page_number, pages_total, parsed_total, post_vars, src = processPage({})
     progress = ProgressBar.new(1, pages_total, "Processing results for #{@query_arg}")
     progress.updateText(page_number, "from #{src}")
+    if not parsed_total or parsed_total == 0
+      displayMessage "No geocaches were found."
+      return @waypoints
+    end
+    
+    if not page_number
+      displayError "Could not determine current page number from #{url}"
+      return @waypoints
+    end
+    
+    if not pages_total
+      displayError "Could not determine total pages from #{url}"
+      return @waypoints
+    end
+      
 
     while(page_number < pages_total)
       debug "*** On page #{page_number} of #{pages_total}"
