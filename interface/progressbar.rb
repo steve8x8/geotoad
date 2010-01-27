@@ -34,7 +34,7 @@ class ProgressBar
     end
         
     # if the value is 0 or less, don't bother to print up a bar.
-    if (@value < 1)
+    if not @value or @value < 1
       return
     end
 
