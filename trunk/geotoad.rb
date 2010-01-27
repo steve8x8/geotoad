@@ -528,6 +528,10 @@ class GeoToad
     else
       outputFile = @defaultOutputFile.gsub(/\W/, '_')
       outputFile.gsub!(/_+/, '_')
+      if outputFile.length > 220
+        outputFile = outputFile[0..215] + "_etc"
+      end
+      
       outputFile = outputFile + "." + output.formatExtension(@formatType)
     end
 
