@@ -67,7 +67,7 @@ class GeoToad
     end
 
     # We need this for the check following
-    @queryType         = @option['queryType'] || 'zipcode'
+    @queryType         = @option['queryType'] || 'location'
     @queryArg          = @option['queryArg'] || nil
 
     # Get this out of the way now.
