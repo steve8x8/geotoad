@@ -269,15 +269,14 @@ class Output
     end
 
     text = CGI.escapeHTML(str)
-
     # CGI.escapeHTML will try to re-escape previously escaped entities.
-    # For instance, &amp; would become &amp;amp;. We do have to make sure
-    # not to fix R&R; though, though &Xi; needs to be fixed.
-    #    if text =~ /&amp;([\#\w][\w]+;)/
-    #      debug "Pre-ampersand: [#{text}] #{text.length}"
-    #     text.gsub!(/&amp;([\#\w][\w]+;)/, "&\\1")
-    #      debug "Post-ampersand: #{text}"
-    #    end
+    # Fix numerical entities such as Pateniemen l&amp;#228;mp&amp;#246;keskus
+    text.gsub!(/&amp;([\#\d][\d]+;)/, "&\\1")
+    # XML only pre-defines the following named character entities:
+    text.gsub!(/&amp;(lg]t);/, "&\\1")
+    text.gsub!('&amp;amp;', '&amp;')
+    text.gsub!(/&amp;(quot);/, "&\\1")
+    text.gsub!(/&amp;(apos);/, "&\\1")
 
     scan_text = text.dup
     # using scan() here to get around difficulties with \1
