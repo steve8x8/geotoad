@@ -273,10 +273,11 @@ class Output
     # Fix numerical entities such as Pateniemen l&amp;#228;mp&amp;#246;keskus
     text.gsub!(/&amp;([\#\d][\d]+;)/, "&\\1")
     # XML only pre-defines the following named character entities:
-    text.gsub!(/&amp;(lg]t);/, "&\\1")
-    text.gsub!('&amp;amp;', '&amp;')
-    text.gsub!(/&amp;(quot);/, "&\\1")
-    text.gsub!(/&amp;(apos);/, "&\\1")
+    text.gsub!('&amp;(amp;)', "&\\1")
+# It would appear that the following are handled properly already.
+#    text.gsub!(/&amp;(lg]t;)/, "&\\1")
+#    text.gsub!(/&amp;(quot;)/, "&\\1")
+#    text.gsub!(/&amp;(apos;)/, "&\\1")
 
     scan_text = text.dup
     # using scan() here to get around difficulties with \1
