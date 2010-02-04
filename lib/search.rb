@@ -25,7 +25,7 @@ class SearchCache
     @query_arg = key
     supports_distance = false    
     case mode
-    when 'location':
+    when 'location'
       # Try country/state search, then fall back to geocoding.
       code = SearchCode.new("country")
       @query_arg = code.lookup(key)
