@@ -1,7 +1,5 @@
 #labels Deprecated
-version=3.10.2
+version=3.10.3
 {{{
- - Truncate output filenames longer than 220 characters
- - Fix crash if a search has no results
- - Don't crash the progressbar if @value is nil
+ - Updated for latest HTML changes on geocaching.com
 }}}
