@@ -300,12 +300,16 @@ class SearchCache
           cache['travelbug']=$1
         end
 
-      # <td>(2.5/2)<br /><img src="/images/icons/container/small.gif" alt="Size: Small" /></td>
-      when /\(([-\d\.]+)\/([-\d\.]+)\)\<br.*Size: (.*?)\"/
+      # (2/1)<br />
+      when /\(([-\d\.]+)\/([-\d\.]+)\)\<br\>/
         cache['difficulty']=$1.to_f
         cache['terrain']=$2.to_f
-        cache['size'] = $3.downcase
-        debug "difficulty=#{cache['difficulty']} terr=#{cache['terrain']} size=#{cache['size']}"
+        debug "difficulty=#{cache['difficulty']} terr=#{cache['terrain']}"
+        
+      # <img src="/images/icons/container/micro.gif" alt="Size: Micro" />
+      when /\<img src=\"\/images\/icons\/container\/.*\" alt=\"Size: (.*?)\"/
+        cache['size'] = $1.downcase
+        debug "size=#{cache['size']}"
 
       # <td>Yesterday<strong>*</strong><br /><span class="Success"></span></td> 
       # <td>15 Jan 10<br /><span class="Success"></span></td>
@@ -326,16 +330,12 @@ class SearchCache
         cache['distance']=$2.to_f
         cache['direction'] = $1
         debug "cacheDistance=#{cache['distance']} dir=#{cache['direction']}"
-                  
-      # <a href="/seek/cache_details.aspx?guid=14b1e198-2bdb-487f-99b0-4b283ef70dd7">
-      # <span class="Strike">Grandma's house!</span></a> by ExtraTerrestrial (GC1T6Q9)<br />Georgia
-      when /cache_details.aspx\?guid=(.*?)\">(.*?)\<\/a\> by (.*?) \((GC.*?)\)/
+      
+      # <a href="/seek/cache_details.aspx?guid=c9f28e67-5f18-45c0-90ee-76ec8c57452f">Yasaka-Shrine@Zerosen</a>
+      when /cache_details.aspx\?guid=(.*?)\">(.*?)\<\/a\>/
         cache['sid']=$1
         name = $2
-        creator = $3
-        wid = $4
-
-        debug "Found cache details link for #{wid} by #{creator}"
+        debug "Found cache details link for #{name}"
 
         if name =~ /class=\"Warning/
           cache['archived']=1
@@ -350,9 +350,19 @@ class SearchCache
           cache['disabled']=nil
         end
 
-        cache['creator'] = creator.gsub(/\s+$/, '')
         cache['name']=name.gsub(/ +$/, '')
         debug "sid=#{cache['sid']} name=#{cache['name']} (disabled=#{cache['disabled']})"
+
+      # by gonsuke@Zerosen and Bakatono@Zerosen
+      when /^ +by (.*?)$/
+        creator = $1
+        cache['creator'] = creator.gsub(/\s+$/, '')
+        debug "creator=#{cache['creator']}"
+      
+      # (GC1Z0RT)<br />
+      when /^ +\((GC.*?)\)\<br \/\>/
+        wid = $1
+        debug "wid=#{wid}"
 
       # small_profile.gif" alt="Premium Member Only Cache" with="15" height="13"></TD
       when /Premium Member Only Cache/
