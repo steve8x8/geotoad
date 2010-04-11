@@ -3,6 +3,9 @@
 # $Id: makedist.se,v 1.3 2002/04/23 04:05:41 helix Exp $
 
 # this must be run from the geotoad directory.
+
+# For Windows build, we require: http://github.com/ryanbooker/rubyscript2exe
+
 if [ ! -f VERSION ];  then
   echo "VERSION not found"
   exit 2
@@ -73,6 +76,8 @@ if [ ! -x "/usr/local/bin/flip" -o ! -x "/usr/bin/flip" ]; then
   perl -pi -e 's/([\s])geotoad\.rb/$1geotoad/g' README.txt
 
   echo "In Windows, run: ruby rubyscript2exe.rb compile/init.rb"
+  echo ""
+  echo "Then copy the resulting init.exe into $WIN_DIR"
   read ENTER
   cd $WIN_DIR
   ls
