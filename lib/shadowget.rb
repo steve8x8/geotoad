@@ -261,8 +261,13 @@ class ShadowFetch
     rescue Timeout::Error => e
       displayWarning "Timed out trying to access #{uri.host}:80"
       @@downloadErrors = @@downloadErrors + 1
-      sleep(2)
+      sleep(5)
       return fetchURL(url_str, redirects)
+    rescue Errno::ECONNREFUSED => e
+      displayWarning "Connection refused accessing #{uri.host}:80"
+      @@downloadErrors = @@downloadErrors + 1
+      sleep(5)
+      return fetchURL(url_str, redirects)      
     end
           
     case resp
