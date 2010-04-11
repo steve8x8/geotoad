@@ -40,7 +40,7 @@ class GeoToad
     $VERSION = versionID.dup
   end
 
-  $SLEEP=1
+  $SLEEP=1.5
   $SLOWMODE=350
 
   def initialize

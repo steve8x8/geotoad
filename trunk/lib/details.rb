@@ -98,6 +98,7 @@ class CacheDetails
 
     # We try to download the page one more time.
     if not success
+      sleep(5)
       debug "Trying to download #{url} again."
       page.invalidate()
       page.fetch()
@@ -367,11 +368,13 @@ class CacheDetails
 
       @waypointHash[wid]['details'] = @waypointHash[wid]['shortdesc'] + " ... " + @waypointHash[wid]['longdesc']
 
+
+      # Parse the additional waypoints table. Needs additional work for non-HTML templates.
+      debug "will addit"
+      @waypointHash[wid]['additional_raw'] = parseAdditionalWaypoints(data)
+
     end  # end wid check.
 
-    # Parse the additional waypoints table. Needs additional work for non-HTML templates.
-    debug "will addit"
-    @waypointHash[wid]['additional_raw'] = parseAdditionalWaypoints(data)
 
 
     # How valid is this cache?
