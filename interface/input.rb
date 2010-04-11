@@ -398,8 +398,8 @@ class Input
         @@optHash['sizeMin'] = askFromList("What is the smallest cache you seek (#{sizes.join(', ')})?", sizes, nil)
         @@optHash['sizeMax'] = askFromList("Great! What is the largest cache you seek (#{sizes.join(', ')})?", sizes, nil)
       when '9'
-        kinds = ['traditional', 'multicache', 'event', 'unknown', 'letterbox', 'virtual']
-        @@optHash['cacheType'] = askFromList("What do you seek (seperate with commas) (#{kinds.join(', ')})?", kinds, nil)
+        kinds = ['traditional', 'multicache', 'event', 'unknown', 'letterbox', 'virtual', 'earthcache']
+        @@optHash['cacheType'] = askFromList("Valid types: #{kinds.join(', ')}\nWhat do you seek (seperate with commas)?", kinds, nil)
 
       when '10'
         answer = ask('Would you like to only include virgin geocaches (geocaches that have never been found)?', nil)

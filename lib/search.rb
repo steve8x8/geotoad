@@ -279,7 +279,7 @@ class SearchCache
 
       #<IMG src="./gc_files/8.gif" alt="Unknown Cache" width="32" height="32"></A>
       # <IMG src="./gc_files/21.gif" alt="Travel Bug Dog Tag (1 item)">  </TD>
-      when /WptTypes\/[\d].*?alt=\"(.*?)\"/
+      when /WptTypes\/[\w].*?alt=\"(.*?)\"/
         # This line also has travel bug data
         full_type = $1
         if line =~ /Travel Bug.*?\((.*?)\)/ 
