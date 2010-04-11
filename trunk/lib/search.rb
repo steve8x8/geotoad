@@ -301,7 +301,8 @@ class SearchCache
         end
 
       # (2/1)<br />
-      when /\(([-\d\.]+)\/([-\d\.]+)\)\<br\>/
+      # (1/1.5)<br />
+      when /\(([-\d\.]+)\/([-\d\.]+)\)\<br/
         cache['difficulty']=$1.to_f
         cache['terrain']=$2.to_f
         debug "difficulty=#{cache['difficulty']} terr=#{cache['terrain']}"
