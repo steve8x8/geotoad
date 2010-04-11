@@ -46,7 +46,7 @@ class Input
     opts = GetoptLong.new(
       [ "--travelBug",                "-b",    GetoptLong::NO_ARGUMENT ],
       [ "--cacheType",                "-c",    GetoptLong::REQUIRED_ARGUMENT ],
-      [ "--includeDisabled",          "-z",    GetoptLong::NO_ARGUMENT ],
+      [ "--clearCache",                "-C",    GetoptLong::NO_ARGUMENT ],
 
       [ "--difficultyMax",            "-D",        GetoptLong::OPTIONAL_ARGUMENT ],
       [ "--difficultyMin",            "-d",        GetoptLong::OPTIONAL_ARGUMENT ],
@@ -91,7 +91,8 @@ class Input
       [ "--verbose",                    "-v",    GetoptLong::NO_ARGUMENT ],
       [ "--format",                    "-x",        GetoptLong::OPTIONAL_ARGUMENT ],
 
-      [ "--distanceMax",                "-y",        GetoptLong::OPTIONAL_ARGUMENT ]
+      [ "--distanceMax",                "-y",        GetoptLong::OPTIONAL_ARGUMENT ],
+      [ "--includeDisabled",          "-z",    GetoptLong::NO_ARGUMENT ]      
     ) || usage
 
     # put the stupid crap in a hash. Much nicer to deal with.
@@ -197,10 +198,12 @@ class Input
     puts " -c    [regular|virtual|event|unknown] type of cache (| seperated)"
     puts " -j/-J [# days]         include/exclude caches placed in the last X days"
     puts " -r/-R [# days]         include/exclude caches found in the last X days"
+    puts " -z                     include disabled caches"
     puts " -n                     only include not found caches (virgins)"
     puts " -b                     only include caches with travelbugs"
     puts " -l                     set EasyName waypoint id length. (16)"
     puts " -P                     HTTP proxy server, http://username:pass@host:port/"
+    puts " -C                     Clear local browser cache"
     puts ""
     puts "::: OUTPUT FORMATS:"
     outputDetails = Output.new
