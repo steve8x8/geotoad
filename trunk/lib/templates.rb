@@ -143,10 +143,10 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
     'desc'    => 'CSV for spreadsheet imports',
     'spacer'    => "",
     'templatePre' => "\"Name\",\"Waypoint ID\",\"Creator\",\"Difficulty\",\"Terrain\"," +
-      "\"Latitude\",\"Longitude\",\"Type\",\"Creation Date\",\"Details\"\r\n",
+      "\"Latitude\",\"Longitude\",\"Type\",\"Size\",\"Creation Date\",\"Details\"\r\n",
     'templateWP'    => "\"<%wp.name%>\",\"<%out.wid%>\",\"<%wp.creator%>\"," +
       "<%wp.difficulty%>,<%wp.terrain%>,\"<%wp.latwritten%>\",\"<%wp.lonwritten%>\"," +
-      "\"<%wp.type%>\",\"<%out.cdate%>\",\"<%outText.details%>\"\r\n"
+      "\"<%wp.type%>\",\"<%wp.size%>\",\"<%out.cdate%>\",\"<%outText.details%>\"\r\n"
   },
 
   'vcf'    => {
