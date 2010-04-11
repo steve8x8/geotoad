@@ -24,7 +24,7 @@ class ShadowFetch
     @localExpiry=518400    		# 6 days
     @maxFailures = 2
     @httpHeaders = {
-      'User-Agent'      => "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.5; en-US; rv:1.9.0.1) Gecko/2008070206 Firefox/3.0.1",
+      'User-Agent'      => "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_2; en-US) AppleWebKit/532.9 (KHTML, like Gecko) Chrome/5.0.307.11 Safari/532.9",
       'Accept'          => 'text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5',
       'Accept-Language' => 'en-us,en;q=0.5',
       'Accept-Charset'  => 'ISO-8859-1,utf-8;q=0.7,*;q=0.7'
