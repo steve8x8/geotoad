@@ -1,6 +1,4 @@
 GeoToad %VERSION% by Thomas Stromberg (c) 2002 - 2010
-$Id$
-
 ==========================================================================
 
 Table of Contents:
