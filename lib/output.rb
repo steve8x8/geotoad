@@ -264,7 +264,7 @@ class Output
   end
 
   def makeXML(str)
-    if not str or str.length == 0:
+    if not str or str.length == 0
         return str
     end
 
@@ -274,27 +274,15 @@ class Output
     text.gsub!(/&amp;([\#\d][\d]+;)/, "&\\1")
     # XML only pre-defines the following named character entities:
     text.gsub!('&amp;(amp;)', "&\\1")
-# It would appear that the following are handled properly already.
-#    text.gsub!(/&amp;(lg]t;)/, "&\\1")
-#    text.gsub!(/&amp;(quot;)/, "&\\1")
-#    text.gsub!(/&amp;(apos;)/, "&\\1")
 
-    scan_text = text.dup
-    # using scan() here to get around difficulties with \1
-    scan_text.scan(/([\x80-\xFF]+)/) {|highchar|
-      begin
-        ascii = highchar[0].unpack("U").to_s
-        text.gsub!(/#{highchar}/, ("&#" + ascii  + ";"))
-      rescue ArgumentError
-        # UTF-8 conversion failed. Lets use a ? instead.
-        debug "Malformed UTF-8 char [#{highchar}] in #{scan_text}, using ? instead"
-        text.gsub!(/#{highchar}/,'?')
-      end
-    }
+    # There is also [lg]t; &quot; &apos;, but they seem to be handled properly.
+
+    # From http://snippets.dzone.com/posts/show/1161
+    str.unpack("U*").collect {|s| (s > 127 ? "&##{s};" : s.chr) }.join("")
+     
 
     # Fix apostrophes so that they show up as expected. Fixes issue 26.
     text.gsub!('&#8217;', "'")
-
     if text != str
       debug "makeXML: %s" % text
     end
@@ -502,12 +490,12 @@ class Output
       # fix for bug reported by wkraml%a1.net - caches with no hint get the last hint.
       @outVars['hintdecrypt'] = nil
 
-      if @wpHash[@currentWid]['hint']
+      if @wpHash[@currentWid]['hint'] && @wpHash[@currentWid]['hint'].length > 0
         hint = @wpHash[@currentWid]['hint']
         @outVars['hint'] = 'Hint: ' + hint
         @outVars['hintdecrypt'] = 'Hint: ' + hint.tr('A-MN-Z', 'N-ZA-M').tr('a-mn-z', 'n-za-m')
-        debug "Hint: #{@outVars['hint']}"
-        debug "Decrypted hint: #{@outVars['hintdecrypt']}"
+        debug "Hint: [#{@outVars['hint']}]"
+        debug "Decrypted hint: [#{@outVars['hintdecrypt']}]"
       end
 
 

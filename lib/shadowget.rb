@@ -214,7 +214,6 @@ class ShadowFetch
     
   def fetchURL (url_str, redirects=2)  # full http:// string!
     raise ArgumentError, 'HTTP redirect too deep' if redirects == 0
-        
     debug "Fetching [#{url_str}]"        
     uri = URI.parse(url_str)
     if (@@downloadErrors >= @maxFailures)
