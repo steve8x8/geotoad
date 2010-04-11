@@ -1,4 +1,4 @@
-GeoToad %VERSION% by Thomas Stromberg (c) 2003
+GeoToad %VERSION% by Thomas Stromberg (c) 2002 - 2010
 $Id$
 
 ==========================================================================
@@ -43,26 +43,26 @@ interface" (TUI). Simply double click on the GeoToad program icon, or from
 a command prompt run "geotoad" or if you are on UNIX, run "./geotoad.rb".
 You will then see a screen that looks similar to this:
 
-:::            // GeoToad 3.9-CURRENT Text User Interface //               :::
 ==============================================================================
-(1)  GC.com login     [helixblue    ] | (2)  search type          [coord     ]
-(3)  coord             [N 34° 09.839] | (4)  distance maximum            [1  ]
+:::                 // GeoToad 3.11.0 Text User Interface //               :::
+==============================================================================
+(1)  GC.com login [helixblue        ] | (2)  search type          [location  ]
+(3)  location     [bromma, sweden   ] | (4)  distance maximum            [2  ]
                                       |
-(5)  difficulty           [0.0 - 2.0] | (6)  terrain               [0.0 - 2.5]
+(5)  difficulty           [0.0 - 5.0] | (6)  terrain               [0.0 - 5.0]
 (7)  fun factor           [0.0 - 5.0] | (8)  cache size            [any - any]
-(9)  cache type           [    event] |
+(9)  cache type           [tradition] |
 (10) virgin caches only           [ ] | (11) travel bug caches only        [ ]
 (12) cache age (days)       [  0-any] | (13) last found (days)       [  0-any] 
                                       |
 (14) title keyword       [          ] | (15) descr. keyword    [             ]
-(16) cache not found by  [sallad:hel] | (17) cache owner isn't [             ]
+(16) cache not found by  [          ] | (17) cache owner isn't [IT-gubben    ]
 (18) cache found by      [          ] | (19) cache owner is    [             ]
 (20) EasyName WP length         [  0] | (21) include disabled caches [ ] 
 - - - - - - - - - - - - - - - - - - - + - - - - - - - - - - - - - - - - - - -
 (22) output format       [html      ]   (23) filename   [automatic           ]
-(24) output directory    [/Volumes/snabbt/Users/thomas/Desktop               ]
+(24) output directory    [/Volumes/snabbt/Users/tstromberg/Desktop           ]
 ==============================================================================
-
 
 -- Enter menu number, (s) to start, (r) to reset, or (x) to exit -->
 
@@ -89,41 +89,6 @@ with a list of of options such as the following:
 
 syntax: geotoad [options] <search:search2:search3>
 
- -x format for output. Formats available are:
-   csv           CSV for spreadsheet imports
-   delorme       DeLorme TXT import datafile  
-   easygps       Geocaching.com .loc XML file
-   gpsdrive      GpsDrive
-   gpspoint      gpspoint datafile
-   gpx           GPX XML format
-   html          Simple HTML table format
-   html-decrypt  Simple HTML table format with decrypted hints
-   mxf           MapTech Exchange
-   ozi           OziExplorer
-   text          Plain ASCII
-   text-decrypt  Plain ASCII with decrypted hints
-   tab           Tabbed text, for GPS Connect
-   tiger         U.S. Census Bureau Tiger Mapping Service Data
-   vcf           VCF for iPod Contacts export
-
-   -- the following require gpsbabel to be installed --
-   cetus         Cetus for PalmOS
-   dna           Navitrak DNA marker
-   gpsman        GPSman datafile
-   gpspilot      GPSPilot for PalmOS
-   gpsutil       gpsutil
-   holux         Holux gm-100
-   magnav        Magellan NAV Companion for PalmOS
-   mapsend       Magellan MapSend software
-   pcx           Garmin PCX5
-   psp           Microsoft PocketStreets 2002 Pushpin
-   tmpro         TopoMapPro Places
-   tpg           National Geographic Topo
-   xmap          Delorme Topo USA4/XMap Conduit
-
-   -- the following requires cmconvert to be installed --
-   cachemate     CacheMate Palm software
-
  -u <username>          Geocaching.com username, required for coordinates
  -p <password>          Geocaching.com password, required for coordinates
  -o [filename]          output file name (automatic otherwise)
@@ -136,15 +101,25 @@ syntax: geotoad [options] <search:search2:search3>
  -k    [keyword]        title keyword search. Use | to delimit multiple
  -K    [keyword]        desc keyword search (slow). Use | again...
  -i/-I [username]       include/exclude caches owned by this person
- -e/-E [username]       include/exclude caches found by this person 
+ -e/-E [username]       include/exclude caches found by this person
  -s/-S [virtual|small|regular|large]   min/max size of the cache
  -c    [regular|virtual|event|unknown] type of cache (| seperated)
  -j/-J [# days]         include/exclude caches placed in the last X days
  -r/-R [# days]         include/exclude caches found in the last X days
+ -z                     include disabled caches
  -n                     only include not found caches (virgins)
  -b                     only include caches with travelbugs
  -l                     set EasyName waypoint id length. (16)
  -P                     HTTP proxy server, http://username:pass@host:port/
+ -C                     Clear local browser cache
+
+::: OUTPUT FORMATS:
+ cachemate=   cetus+       csv          delorme      delorme-nour dna+        
+ easygps      gpsdrive     gpsman       gpspilot+    gpspoint     gpsutil+    
+ gpx          holux+       html         kml+         magnav+      mapsend+    
+ mxf          ozi          pcx+         psp+         tab          text        
+ tiger        tmpro+       tpg+         vcf          xmap+       
+    + requires gpsbabel in PATH           = requires cmconvert in PATH
 
 ---------------------
 Command-Line Examples
@@ -167,7 +142,7 @@ You've just made a file named geotoad-output.loc containing all the
 geocaches nearby the zipcode 27513 suitable to be read by EasyGPS. Here are
 some more complex examples that you can work with:
 
-1) geotoad.rb -u user -p password -q coord "N56 44.392, E015 52.780"  -y 5
+1) geotoad.rb -u user -p password "N56 44.392, E015 52.780"  -y 5
 Search for caches within 5 miles of the above coordinates
 
 
