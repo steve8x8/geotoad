@@ -63,10 +63,10 @@ module Common
     else
       cacheDir=cacheDir + "/GeoToad"
       debug "#{cacheDir} is being used for cache"
-      return cacheDir
     end
-  
-    ## finds a place to put temp files on the system ###################################
+
+    FileUtils::mkdir_p(cacheDir, :mode => 0700)  
+    return cacheDir
   end
   def findConfigDir
     # find out where we want our cache #############################    

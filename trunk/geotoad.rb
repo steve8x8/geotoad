@@ -25,6 +25,7 @@ require 'lib/output'
 require 'lib/details'
 require 'lib/auth'
 require 'getoptlong'
+require 'fileutils'
 
 
 class GeoToad
@@ -40,14 +41,14 @@ class GeoToad
     $VERSION = versionID.dup
   end
 
-  $SLEEP=1.5
-  $SLOWMODE=350
+  $SLEEP = 1.5
+  $SLOWMODE = 350
 
   def initialize
     output        = Output.new
     $validFormats = output.formatList.sort
     @uin          = Input.new
-    $CACHE_DIR    = findCacheDir
+    $CACHE_DIR    = findCacheDir()
   end
 
 
@@ -71,7 +72,7 @@ class GeoToad
     @queryArg          = @option['queryArg'] || nil
 
     # Get this out of the way now.
-    if (! @queryArg) || @option['help'] || (! @option['user']) ||  (! @option['password'])
+    if (! @option['clearCache']) && ((! @queryArg) || @option['help'] || (! @option['user']) || (! @option['password']))
       if (! @queryArg)
         displayError "You forgot to specify a #{@queryType} search argument"
       end
@@ -144,6 +145,13 @@ class GeoToad
     debug "Check complete."
   end
 
+  def clearCacheDirectory
+    puts "* Clearing #{$CACHE_DIR}"
+    FileUtils::remove_dir($CACHE_DIR)
+    puts "* Cleared!"
+    $CACHE_DIR = findCacheDir()
+  end
+    
   ## Make the Initial Query ############################
   def downloadGeocacheList
     displayInfo "Your cache directory is " + $CACHE_DIR
@@ -587,7 +595,11 @@ cli.versionCheck
 
 while(1)
   options = cli.getoptions
-  count = cli.downloadGeocacheList
+  if options['clearCache']
+    cli.clearCacheDirectory()
+  end
+  
+  count = cli.downloadGeocacheList()
   if count < 1
     cli.displayError "No caches found in search, exiting early."
   else
