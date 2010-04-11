@@ -314,14 +314,14 @@ class SearchCache
 
       # <td>Yesterday<strong>*</strong><br /><span class="Success"></span></td> 
       # <td>15 Jan 10<br /><span class="Success"></span></td>
-      when /\<td\>(\w+[ \w]+)\**\<[bs][rt]/
+      when /^ +(\w+[ \w]+)\**\<[bs][rt]/
         debug "last found date: #{$1} at line: #{line}"
         cache['mtime'] = parseDate($1)
         cache['mdays'] = daysAgo(cache['mtime'])
         debug "mtime=#{cache['mtime']} mdays=#{cache['mdays']}"
         
-      # <td>17 Mar 08</td>
-      when /\<td\>(\d+ \w+ \d+).*\<\/td\>\r/
+      # 21 May 09
+      when /^ +(\d+ \w{3} \d+).*/
         cache['ctime'] = parseDate($1)
         cache['cdays'] = daysAgo(cache['ctime'])
         debug "ctime=#{cache['ctime']} cdays=#{cache['cdays']}"
