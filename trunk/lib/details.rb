@@ -253,15 +253,6 @@ class CacheDetails
         end
       end
 
-      # pan id="ctl00_ContentBody_Hints" class="displayMe">GuERR sbhe hfr gur onpx qbbe!!</span><span id="ctl00_ContentBody_decryptHint" class="hideMe">(Decrypted Hints)</span><
-      if line =~ /class="displayMe"\>(.*?)\<\/span/
-        hint = $1.dup
-        hint.gsub!(/\<.*?\>/, '')
-        @waypointHash[wid]['hint'] = hint
-        debug "got hint: #{hint}"
-      end
-
-
       if line =~ /CacheLogs\"\>/
         debug "inspecting comments: #{line}"
         cnum = 0
@@ -347,6 +338,16 @@ class CacheDetails
 
     }
 
+    # <div id="div_hint" class="HalfLeft"> 
+    #         Hfntr vaunovghry cbhe har pbdhr qr tenaq ongrnh<br>"Pncfvmrq" "Hcfvqr-qbja"<br>Neoer à cebkvzvgé
+    # </div>
+    if data =~ /id="div_hint".*?\>(.*?)\<\/div/m
+      hint = $1.strip
+      hint.gsub!(/^ +/, '')
+      hint.gsub!(/[\r\n]/, '')
+      @waypointHash[wid]['hint'] = hint
+      debug "got hint: [#{hint}]"
+    end
 
     # this data is all on one line, so we should just use scan and forget reparsing.
     if (wid)
