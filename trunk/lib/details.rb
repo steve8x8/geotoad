@@ -159,7 +159,7 @@ class CacheDetails
         @waypointHash[wid]['longdesc'] = ''
         @waypointHash[wid]['details'] = ''
 
-        if not @waypointHash[wid]['mtime']:
+        if not @waypointHash[wid]['mtime']
           @waypointHash[wid]['mdays'] = -1
           @waypointHash[wid]['mtime'] = Time.at(0)
         end
@@ -296,7 +296,7 @@ class CacheDetails
           debug "comment [#{cnum}] is '#{type}' by #{name}[#{user_id}] on #{date}: #{comment}"
           comment.gsub!(/\<.*?\>/, ' ')
           date = Time.parse(date)
-          if type == 'Found it' and @waypointHash[wid]['mdays'] == -1:
+          if type == 'Found it' and @waypointHash[wid]['mdays'] == -1
             debug "Found successful comment, updating mtime to #{date}"
             @waypointHash[wid]['mtime'] = date
             @waypointHash[wid]['mdays'] = daysAgo(date)
@@ -389,7 +389,7 @@ class CacheDetails
   
   def fixRelativeImageLinks(text)
     new_text = text.gsub(' src="/', ' src="http://www.geocaching.com/')
-    if text != new_text:
+    if text != new_text
       debug "fixed relative links in #{new_text}"
     end
     return new_text
@@ -410,7 +410,7 @@ class CacheDetails
     # <a href="http://s06.flagcounter.com/more/NOk"><img src= "http://s06.flagcounter.com/count/NOk/bg=E2FFC4/txt=000000/border=CCCCCC/columns=4/maxflags=32/viewers=0/labels=1/pageviews=1/" alt="free counters" /></a>
     removed = text.gsub(/\<a href.*?flagcounter.*?\<\/a\>/m, '')
     removed.gsub!(/\<\/*center\>/, '')
-    if removed != text:
+    if removed != text
       debug "Removed spam from: ----------------------------------"
       debug removed
       debug "-----------------------------------------------------"

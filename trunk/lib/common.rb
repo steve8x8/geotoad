@@ -15,7 +15,7 @@ module Common
       days_ago=$1.to_i
     when /^(\d+)\/(\d+)\/(\d{4})$/
       debug "Looks like a date: year=#{$3} month=#{$1}, date=#{$2}"
-      if $3.to_i < 1970:
+      if $3.to_i < 1970
         debug "The year appears to be earlier than 1970. Patching to 1970."
         year = 1970
       else

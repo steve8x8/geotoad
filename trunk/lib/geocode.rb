@@ -14,7 +14,7 @@ class GeoCode
   def lookup(location)
     data = get_url(create_url(location))
     code, accuracy, lat, lon = parse_data(data)
-    if code == "200":
+    if code == "200"
       return_data = [decode_accuracy(accuracy), lat, lon]
     else
       return_data = [nil, nil, nil]

@@ -29,7 +29,7 @@ class SearchCache
       # Try country/state search, then fall back to geocoding.
       code = SearchCode.new("country")
       @query_arg = code.lookup(key)
-      if not @query_arg:
+      if not @query_arg
         code = SearchCode.new("state")
         @query_arg = code.lookup(key)
       end
@@ -43,7 +43,7 @@ class SearchCache
         geocoder = GeoCode.new()
         accuracy, lat, lon = geocoder.lookup(key)
         debug "geocoder returned: a:#{accuracy} x:#{lat} y:#{lon}"
-        if not accuracy:
+        if not accuracy
           displayWarning "Google Maps failed to determine the location of #{key}"
           return nil
         else
@@ -52,25 +52,31 @@ class SearchCache
         @search_url = BASE_URL + "?lat=#{lat}&lng=#{lon}"
         supports_distance = true
       end
+
     when 'state', 'country'
       code = SearchCode.new(mode)
       @query_type = code.type
       @query_arg = code.lookup(key)
+
     when 'coord'
       @query_type = 'coord'
       supports_distance = true
       lat_dir, lat_h, lat_ms, long_dir, long_h, long_ms, lat_ns, long_ew = parseCoordinates(key)
       @search_url = BASE_URL + '?lat_ns=' + lat_ns.to_s + '&lat_h=' + lat_h + '&lat_mmss=' + (lat_ms==''?'0':lat_ms) + '&long_ew=' + long_ew.to_s + '&long_h=' + long_h + '&long_mmss=' + (long_ms==''?'0':long_ms)
-    when 'user':
-        @query_type = 'ul'
+
+    when 'user'
+      @query_type = 'ul'
       @ttl = 43200
-    when 'keyword':
-        @query_type = 'key'
-    when 'zipcode':
-        supports_distance = true
+
+    when 'keyword'
+      @query_type = 'key'
+
+    when 'zipcode'
+      supports_distance = true
       @query_type = 'zip'
-    when 'wid':
-        @query_type = 'wid'
+
+    when 'wid'
+      @query_type = 'wid'
       if key =~ /^GC/i
         @search_url = "http://www.geocaching.com/seek/cache_details.aspx?wp=#{key.upcase}"
       else
@@ -84,11 +90,11 @@ class SearchCache
       return nil
     end      
 
-    if not @search_url:
+    if not @search_url
         @search_url = BASE_URL + '?' + @query_type + '=' + CGI.escape(@query_arg.to_s)
     end
     
-    if supports_distance and @distance:
+    if supports_distance and @distance
         @search_url = @search_url + '&dist=' + @distance.to_s
     end
 
@@ -212,7 +218,7 @@ class SearchCache
     post_vars = Hash.new
     select = nil
     
-    data.each {|line|
+    data.each_line {|line|
       if line =~ /onsubmit=\"/
         debug "Looks like #{@search_url} requires a State/Province selection."
         province_required = true
@@ -372,10 +378,10 @@ class SearchCache
                                   
       when /^\s+<\/tr\>/
         debug "--- end of row ---"
-        if wid and not @waypoints.has_key?(wid):
+        if wid and not @waypoints.has_key?(wid)
           debug "- closing #{wid} record -"
           parsed_total += 1
-          if not cache['mtime']:
+          if not cache['mtime']
             cache['mdays'] = -1
             cache['mtime'] = Time.at(0)
           end
@@ -389,7 +395,7 @@ class SearchCache
           end
           cache.clear
         end
-                  
+
       when /^\<input type=\"hidden\" name=\"(.*?)\".*value=\"(.*?)\" \/\>/
         debug "found hidden post variable: #{$1}"
         post_vars[$1]=$2
