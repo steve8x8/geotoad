@@ -72,7 +72,12 @@ class GeoToad
     @queryArg          = @option['queryArg'] || nil
 
     # Get this out of the way now.
-    if (! @option['clearCache']) && ((! @queryArg) || @option['help'] || (! @option['user']) || (! @option['password']))
+    if @option['help']
+      @uin.usage
+      exit
+    end    
+    
+    if (! @option['clearCache']) && ((! @queryArg) || (! @option['user']) || (! @option['password']))
       if (! @queryArg)
         displayError "You forgot to specify a #{@queryType} search argument"
       end
