@@ -75,19 +75,19 @@ if [ ! -x "/usr/local/bin/flip" -o ! -x "/usr/bin/flip" ]; then
   flip -m *.txt
   perl -pi -e 's/([\s])geotoad\.rb/$1geotoad/g' README.txt
 
-  echo "In Windows, run: ruby rubyscript2exe.rb compile/init.rb"
+  echo "In Windows, run: ruby rubyscript2exe.rb geotoad/geotoad.rb"
   echo ""
-  echo "Then copy the resulting init.exe into $WIN_DIR"
+  echo "Then copy geotoad.exe into $WIN_DIR"
   read ENTER
   cd $WIN_DIR
   ls
-  if [ -f "init.exe" ]; then
+  if [ -f "geotoad.exe" ]; then
     mv init.exe geotoad.exe
     mv compile/data .
     rm -Rf "$WIN_DIR/compile"
     zip -r "$WIN_PKG" *
   else
-    echo "init.exe not found"
+    echo "geotoad.exe not found"
   fi
 else
   echo "Skipping Windows Release (no flip found)"
