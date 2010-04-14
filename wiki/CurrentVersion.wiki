@@ -1,5 +1,10 @@
 #labels Deprecated
-version=3.10.3
+version=3.11.0
 {{{
- - Updated for latest HTML changes on geocaching.com
+ - Improved handling of connection failures
+ - Added -C / --clearCache option
+ - Compatible with Ruby 1.9
+ - Size added to CSV output
+ - Support added for earthcaches
+ -  Update to handle latest HTML changes to geocaching.com
 }}}
