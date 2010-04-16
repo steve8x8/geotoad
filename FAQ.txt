@@ -74,12 +74,13 @@ Questions and Answers:
     - - - - - - - - - - - - -
     AFTrack         (Free)    http://afischer-online.de/sos/AFTrack/
     PowerNavigation ($23)     http://www.symbianware.com/product.php?id=powernavigation80
-    SmartGPX        (free)    http://www.smartcaching.de/smartgpx.html
+    SmartGPX        (Free)    http://www.smartcaching.de/smartgpx.html
 
     Windows Mobile/CE/Pocket PC
     - - - - - - - - - - - - - - 
     CacheMate       ($10)      http://www.smittyware.com/palm/cachemate/
-    GPXView         (Free)    http://strandberg.org/gpxview/
+    GPXView         (Free)     http://strandberg.org/gpxview/
+    cachebox        (Free)     http://getcachebox.net
 
 
 
