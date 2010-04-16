@@ -2,7 +2,6 @@
 #labels Featured
 
 {{{
-
 Table of Contents:
 ------------------
 1. How do you change the output to display friendly names such as
@@ -56,25 +55,30 @@ Questions and Answers:
     GPSbabel        (Free)    http://gpsbabel.sourceforge.net/
     GPSMan          (Free)    http://www.ncc.up.pt/gpsman/
 
+    Android
+    - - - - - - - - - - - - - - 
+    CacheMate       ($10)      http://www.smittyware.com/droid/cachemate/
+
     PalmOS:
     - - - -
-    CacheMate       ($8)      http://www.smittyware.com/palm/cachemate/
+    CacheMate       ($10)      http://www.smittyware.com/palm/cachemate/
 
     Symbian UIQ (Sony Ericsson, Motorola)
     - - - - - - - - - - - - - - - - - - -
     GPS-Navigator   ($16)     http://www.wohlfahrt-edv.de/
     PowerNavigation ($20)     http://www.symbianware.com/product.php?id=powernavigation_uiq
+    SmartGPX        (free)    http://www.smartcaching.de/smartgpx.html
 
     Symbian Series 60 & 80 (Nokia)
     - - - - - - - - - - - - -
     AFTrack         (Free)    http://afischer-online.de/sos/AFTrack/
     PowerNavigation ($23)     http://www.symbianware.com/product.php?id=powernavigation80
+    SmartGPX        (Free)    http://www.smartcaching.de/smartgpx.html
 
     Windows Mobile/CE/Pocket PC
     - - - - - - - - - - - - - - 
-    CacheMate       ($8)      http://www.smittyware.com/palm/cachemate/
-    GPXView         (Free)    http://strandberg.org/gpxview/
-
+    CacheMate       ($10)      http://www.smittyware.com/palm/cachemate/
+    GPXView         (Free)     http://strandberg.org/gpxview/
 
 4. Why is there no GUI for GeoToad?
 
@@ -103,4 +107,6 @@ which seems to forget the current working directory. Because of this,
 if you are using a relative path, it will default to the directory
 that GeoToad is installed to, rather than the working directory it
 was launched from.
+
+
 }}}
