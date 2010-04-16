@@ -5,7 +5,7 @@
 Table of Contents:
 ------------------
 1. How do you change the output to display friendly names such as
-  BrnCntyTour instead of the original waypoint id's like GC2034?
+   BrnCntyTour instead of ids like GC2034?
 2. Geocaching Swiss Army Knife complains about the GPX format. How do I
    make them compatible?
 3. What software can you use the GPX files in?
@@ -18,10 +18,8 @@ Questions and Answers:
 
 1. How do you enable friendly waypoint id names?
 
-    The synthesized waypoint id's are a feature named EasyName. Set
-    your maximum EasyName waypoint length (16 for Garmin), and it will
-    use them.
-
+    These synthesized names are a feature named EasyName. Set your maximum
+    EasyName waypoint length (16 for Garmin), and they will be enabled.
 
 2. Geocaching Swiss Army Knife complains about the GPX format. How do I
    make them compatible?
@@ -79,6 +77,8 @@ Questions and Answers:
     - - - - - - - - - - - - - - 
     CacheMate       ($10)      http://www.smittyware.com/palm/cachemate/
     GPXView         (Free)     http://strandberg.org/gpxview/
+    cachebox        (Free)     http://getcachebox.net
+
 
 4. Why is there no GUI for GeoToad?
 
@@ -99,14 +99,14 @@ Questions and Answers:
     
 6. geotoad.exe gets relative paths wrong in Windows
 
-This only affects users of the command-line, rather than the text user
-interface.
+  This only affects users of the command-line, rather than the text user
+  interface.
 
-GeoToad for Windows is packaged by tar2rubyscript and rubyscript2exe,
-which seems to forget the current working directory. Because of this,
-if you are using a relative path, it will default to the directory
-that GeoToad is installed to, rather than the working directory it
-was launched from.
+  GeoToad for Windows is packaged by tar2rubyscript and rubyscript2exe,
+  which seems to forget the current working directory. Because of this,
+  if you are using a relative path, it will default to the directory
+  that GeoToad is installed to, rather than the working directory it
+  was launched from.
 
 
 }}}
