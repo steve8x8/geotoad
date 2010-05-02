@@ -414,8 +414,10 @@ class Output
           symbols[wid] =  symbols[wid] + "<b><font color=\"#999922\">&sect;</font></b>"
         end
 
-        if (@wpHash[wid]['funfactor'] >= 3.5)
+        if (@wpHash[wid]['funfactor'] >= 2.5)
           symbols[wid] =  symbols[wid] + "<b><font color=\"#BB2222\">&hearts;</font></b>"
+        elsif (@wpHash[wid]['funfactor'] >= 1.5)
+          symbols[wid] =  symbols[wid] + "<b><font color=\"#BB9999\">&hearts;</font></b>"
         end
 
         if (@wpHash[wid]['difficulty'] > 3)
