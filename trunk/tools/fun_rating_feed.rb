@@ -18,9 +18,10 @@ if uri !~ /decrypt=/
   uri += '&decrypt=y'
 end
 
+#puts uri
 open(uri).readlines.each do |line|
 	
-  if line =~ /\t+\((\w+)\) (.*)/
+  if line =~ /^\s+(GC\w+) (.*) \(/
     id=$1
     name=$2
     puts "#{id}: "
@@ -29,7 +30,8 @@ open(uri).readlines.each do |line|
     puts "  comments: "
   end
 	
-  line.scan(/\d+ found\)\<br\>(.*?)\<\/font\>\<\/td\>/) do |match|
+  # (45 found)<br /><br />Very creative and a fun change of pace from average caches.</td>
+  line.scan(/\d+ found\)\<br \/\>\<br \/\>(.*?)\<\/td\>/) do |match|
     string = match.join('')
     string.gsub!(/^\s+/, '')
     string.gsub!(/[\[:\]\>\<\=\-\)\(\/\*]/, ' ')
