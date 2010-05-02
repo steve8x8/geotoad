@@ -309,8 +309,18 @@ class SearchCache
       # (2/1)<br />
       # (1/1.5)<br />
       when /\(([-\d\.]+)\/([-\d\.]+)\)\<br/
-        cache['difficulty']=$1.to_f
-        cache['terrain']=$2.to_f
+        # Use integers when we can
+        if $1.to_f == $1.to_i
+          cache['difficulty']=$1.to_i
+        else
+          cache['difficulty']=$1.to_f
+        end 
+
+        if $1.to_f == $1.to_i
+          cache['terrain']=$2.to_i
+        else
+          cache['terrain']=$2.to_f
+        end
         debug "difficulty=#{cache['difficulty']} terr=#{cache['terrain']}"
         
       # <img src="/images/icons/container/micro.gif" alt="Size: Micro" />
