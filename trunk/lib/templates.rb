@@ -86,8 +86,8 @@ $Format = {
       "<b><font color=\"#9900CC\">&infin;</font></b> never been found&nbsp;&nbsp;&nbsp;" +
       "<b><font color=\"#999922\">&sect;</font></b> terrain rating of 3.5+&nbsp;&nbsp;&nbsp;" +
       "<b><font color=\"#440000\">&uarr;</font></b> difficulty rating of 3.5+&nbsp;&nbsp;&nbsp;<br />" +
-      "<b><font color=\"#BB9999\">&hearts;</font></b> fun factor of 1.5+&nbsp;&nbsp;&nbsp;" +
-      "<b><font color=\"#BB2222\">&hearts;</font></b> fun factor of 2.5+<br>" +
+      "<b><font color=\"#BB9999\">&hearts;</font></b> fun factor of 2.1+&nbsp;&nbsp;&nbsp;" +
+      "<b><font color=\"#BB2222\">&hearts;</font></b> fun factor of 3.0+<br>" +
       # Not yet ready for consumption
     #"<b><font color=\"#333333\">--</font></b> comments seem negative&nbsp;&nbsp;&nbsp;" +
     #"<b><font color=\"#000000\">++</font></b> comments seem very positive" +

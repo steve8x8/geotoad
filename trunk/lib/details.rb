@@ -122,12 +122,12 @@ class CacheDetails
       return 3.0
     end
 
-    score=total / comments
+    score=total.to_f / comments.to_f
 
     # a grade of >28 is considered awesome
     # a grade of <-20 is considered pretty bad
-    debug "total=#{total} comments=#{comments} score=#{score}"
-    grade=((score + 25) / 5.3).round.to_f / 2
+    debug "fun total=#{total} comments=#{comments} score=#{score}"
+    grade=((score + 25) / 5.3).round.to_f / 2.0
     if grade > 5.0
       grade=5.0
     elsif grade < 0.0
@@ -298,6 +298,11 @@ class CacheDetails
             nograde=1
           else
             type = 'Other'
+            nograde=1
+          end
+          
+          if @waypointHash[wid]['creator'] == name
+            debug "not grading comment by owner: #{name}"
             nograde=1
           end
 
