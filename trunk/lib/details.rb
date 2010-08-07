@@ -1,6 +1,7 @@
 # $Id$
 require 'lib/bishop'
 require 'time'
+require 'zlib'
 
 class CacheDetails
   attr_writer :useShadow, :cookie
@@ -9,9 +10,8 @@ class CacheDetails
   include Messages
   include Bishop
 
-  # This now uses the printable version of the cache data. For now, we get the last 10
-  # logs to a cache.
-  @@baseURL="http://www.geocaching.com/seek/cache_details.aspx?pf=y&log=y&numlogs=5&decrypt="
+  # Use a printable template that shows the last 10 logs.
+  @@baseURL="http://www.geocaching.com/seek/cdpf.aspx?lc=10"
 
   def initialize(data)
     @waypointHash = data
@@ -142,42 +142,39 @@ class CacheDetails
     wid = nil
 
     data.split("\n").each { |line|
-      # GC1N069 Cacti in the Woods (Traditional Cache) in North Carolina, United States created by eminwf
-      if line =~  /^\s+(GC[A-Z0-9]+) (.*) \((.*?)\) in.*created by (.*)/
+      # <title id="pageTitle">(GC1145) Lake Crabtree computer software store by darylb</title> 
+      if line =~ /\<title.*\((GC\w+)\) (.*?) by (.*?)\</
         wid = $1
         name = $2
-        full_type = $3
-        creator = $4.chomp
-        short_type = full_type.split(' ')[0].downcase.gsub(/\-/, '')
-        debug "wid = #{wid} name=#{name} ftype=#{full_type} stype=#{short_type} creator=#{creator}"
-        @waypointHash[wid]['fulltype']=full_type
-        @waypointHash[wid]['type']=short_type
+        creator = $4
+        debug "wid = #{wid} name=#{name} creator=#{creator}"
         @waypointHash[wid]['name'] = name
         @waypointHash[wid]['creator'] = creator
-        @waypointHash[wid]['creator_id'] = 1
+        # Calculate a semi-unique integer creator id, since we can no longer get it from this page.
+        @waypointHash[wid]['creator_id'] = Zlib.crc32(creator)
         @waypointHash[wid]['shortdesc'] = ''
         @waypointHash[wid]['longdesc'] = ''
         @waypointHash[wid]['details'] = ''
+        @waypointHash[wid]['funfactor'] = 0
+        @waypointHash[wid]['url'] = "http://www.geocaching.com/seek/cache_details.aspx?wp=" + wid
 
         if not @waypointHash[wid]['mtime']
           @waypointHash[wid]['mdays'] = -1
           @waypointHash[wid]['mtime'] = Time.at(0)
         end
-
-
-        # Set what URL we used as our details source. We do not use baseURL because
-        # some GPX parsers freak if there is a & in this URL.
-        @waypointHash[wid]['url'] = "http://www.geocaching.com/seek/cache_details.aspx?wp=" + wid
       end
 
-      # CacheOwner">by <a href="http://www.geocaching.com/profile/?guid=aacbe3b8-6531-4e11-b131-afc518b392b0&wid=4bcdcfa8-2672-4a6d-a25a-15d86129a088&ds=2">Sascha Wyss</a>
-      if line =~ /CacheOwner\"\>.*?by \<a .*?guid=([\w-]+).*?>(.*?)\<\/a/
-        @waypointHash[wid]['creator_id'] = $1
-        @waypointHash[wid]['creator'] = $2
-        debug "found creator id: #{@waypointHash[wid]['creator_id']}"
+      # <h2><img src="../images/WptTypes/2.gif" alt="Traditional Cache" width="32" height="32" />&nbsp;Lake Crabtree computer software store</h2> 
+      if line =~ /WptTypes.*? alt="(.*?)"/
+        if ! @waypointHash.has_key?(wid)
+          displayWarning "Found waypoint type, but never saw cache title. Did geocaching.com change their layout again?"
+        end
+        @waypointHash[wid]['fulltype'] = $1
+        @waypointHash[wid]['type'] = $1.split(' ')[0].downcase.gsub(/\-/, '')
+        debug "stype=#{@waypointHash[wid]['type']} full_type=#{$1}"
       end
-
-      # <strong>Difficulty:</strong> <span id="ctl00_ContentBody_Difficulty"><img src="http://www.geocaching.com/images/stars/stars2.gif" alt="2 out of 5" />
+      
+      # <p class="Meta"><strong>Difficulty:</strong> <img src="http://www.geocaching.com/images/stars/stars2_5.gif" alt="2.5 out of 5" /></p> 
       if line =~ /Difficulty:.*?([-\d\.]+) out of 5/
         if $1.to_f == $1.to_i
           @waypointHash[wid]['difficulty']=$1.to_i
@@ -187,7 +184,7 @@ class CacheDetails
         debug "difficulty: #{@waypointHash[wid]['difficulty']}"
       end
 
-      # strong>Terrain:</strong> <span id="ctl00_ContentBody_Terrain"><img src="http://www.geocaching.com/images/stars/stars2.gif" alt="2 out of 5" />
+      # <p class="Meta"><strong>Terrain:</strong> <img src="http://www.geocaching.com/images/stars/stars2.gif" alt="2 out of 5" /></p> 
       if line =~ /Terrain:.*?([-\d\.]+) out of 5/
         if $1.to_f == $1.to_i
           @waypointHash[wid]['terrain']=$1.to_i
@@ -197,8 +194,8 @@ class CacheDetails
         debug "terrain: #{@waypointHash[wid]['terrain']}"
       end
 
-      # DateHidden">2/22/2009</span>
-      if line =~ /DateHidden\">([\w\/]+)\</
+      # <p class="Meta">Placed Date: 7/17/2001</p> 
+      if line =~ /Placed Date: ([\w\/]+)\</
         if $1 != 'N/A'
           @waypointHash[wid]['ctime'] = parseDate($1)
           @waypointHash[wid]['cdays'] = daysAgo(@waypointHash[wid]['ctime'])
@@ -211,34 +208,14 @@ class CacheDetails
         return 'login-required'
       end
 
-      # <img src="/images/icons/container/small.gif" alt="Size: Small" />&nbsp<small>(Small)</small>
+      # <p class="Meta"><strong>Size:</strong> <img src="../images/icons/container/regular.gif" alt="Size: Regular" />&nbsp;<small>(Regular)</small></p> 
       if line =~ /\<img src=".*?" alt="Size: (.*?)" \/\>/
         @waypointHash[wid]['size'] = $1.downcase
         debug "found size: #{$1}"
       end
 
-      # href="/wpt/?lat=35.933717&amp;lon=-78.487483&amp;detail=1"
-      if line =~ /\?lat=([\d\.-]+)\&lon=([\d\.-]+)/
-        @waypointHash[wid]['latdata'] = $1
-        @waypointHash[wid]['londata'] = $2
-        debug "got digital lat/lon: #{$1} #{$2}"
-      end
-
-
-      # span id="ctl00_ContentBody_Location">In North Carolina, United States <small>
-      if line =~ /Location\"\>In ([^,<]+)\, ([^<]+)/
-        @waypointHash[wid]['state']=$1.chomp
-        @waypointHash[wid]['country']=$2.chomp
-        debug "found state: #{$1} country: #{$2}"
-        # <span id="Location">In Country</span></p>
-      elsif line =~ /Location\"\>In ([^<]+)/
-        @waypointHash[wid]['state']=nil
-        @waypointHash[wid]['country']=$1
-        debug "found country: #{$1}"
-      end
-
       # latitude and longitude in the written form. Rewritten by Scott Brynen for Southpole compatibility.
-      if line =~ /LatLon\".*\>.*?([NWSE]) (\d+).*? ([\d\.]+) ([NWSE]) (\d+).*? ([\d\.]+)\</
+      if line =~ /=\"LatLon.*\>.*?([NWSE]) (\d+).*? ([\d\.]+) ([NWSE]) (\d+).*? ([\d\.]+)\</
         @waypointHash[wid]['latwritten'] = $1 + $2 + ' ' + $3
         @waypointHash[wid]['lonwritten'] = $4 + $5 + ' ' + $6
         @waypointHash[wid]['latdata'] = ($2.to_f + $3.to_f / 60) * ($1 == 'S' ? -1:1)
@@ -352,12 +329,16 @@ class CacheDetails
     }
 
     # <div id="div_hint" class="HalfLeft"> 
-    #         Hfntr vaunovghry cbhe har pbdhr qr tenaq ongrnh<br>"Pncfvmrq" "Hcfvqr-qbja"<br>Neoer à cebkvzvgé
-    # </div>
-    if data =~ /id="div_hint".*?\>(.*?)\<\/div/m
+    #    <div> 
+    #        Vs lbh ner pyrire, lbh pna cebonoyl svaq n cnexvat ybg gb fgneg sebz gung jvyy trg lbh pybfre gb gur pnpur. Vs lbh ragre gur pnpur nern sebz gur rnfg lbh jvyy tb vagb gur bcra nern naq gura onpx vagb gur jbbqf. Nsgre lbh ragre gur jbbqf, ybbx sbe n gerr ba gur evtug gung unf gbccyrq jvgu gur onfr orvat evtug ng gur rqtr bs gur cngu (guvf jbhyq or n tbbq cynpr sbe gur pnpur, ohg vg vfa’g urer.) Tb qverpgyl yrsg hc gur uvyy naq ybbx sbe fbzr gbccyrq gerrf. Gur pnpur vf pybfr ol – naq cerggl jryy uvqqra.
+    #    </div>
+            
+    if data =~ /id="div_hint".*?\>(.*?)\s*\<\/div/m
       hint = $1.strip
       hint.gsub!(/^ +/, '')
       hint.gsub!(/[\r\n]/, '')
+      hint.gsub!('<br>', ' / ')
+      hint.gsub!('<div>', '')
       @waypointHash[wid]['hint'] = hint
       debug "got hint: [#{hint}]"
     end
@@ -365,19 +346,17 @@ class CacheDetails
     # this data is all on one line, so we should just use scan and forget reparsing.
     if (wid)
       debug "we have a wid"
-
-      # these are multi-line matches, so they are out of the scope of our
-      # next
-      if data =~ /ShortDescription\"\>(.*?)\<\/span\>\s\s\s\s/m
+      if data =~ /\<div id="div_sd"\>\s*\<div\>(.*?)\<\/div\>\s*\<\/div\>/m
         shortdesc = $1
         debug "found short desc: [#{shortdesc}]"
-        @waypointHash[wid]['shortdesc'] = fixRelativeImageLinks(removeSpam(shortdesc))
+        @waypointHash[wid]['shortdesc'] = removeAlignments(fixRelativeImageLinks(removeSpam(shortdesc)))
       end
 
-      if data =~ /LongDescription\"\>(.*?)<\/span\>\s\s\s\s/m
+      if data =~ /\<div id="div_ld"\>\s*\<div\>(.*?)\<\/div\>\s*\<\/div\>/m
         longdesc = $1
         debug "got long desc [#{longdesc}]"
-        @waypointHash[wid]['longdesc'] = fixRelativeImageLinks(removeSpam(longdesc))
+        longdesc = removeAlignments(fixRelativeImageLinks(removeSpam(longdesc)))
+        @waypointHash[wid]['longdesc'] = longdesc
       end
 
       @waypointHash[wid]['details'] = @waypointHash[wid]['shortdesc'] + " ... " + @waypointHash[wid]['longdesc']
@@ -389,8 +368,6 @@ class CacheDetails
 
     end  # end wid check.
 
-
-
     # How valid is this cache?
     if wid && @waypointHash[wid]['latwritten']
       return 1
@@ -399,6 +376,16 @@ class CacheDetails
       return nil
     end
   end  # end function
+  
+  def removeAlignments(text)
+    new_text = text.gsub(/(\<div .*?)align=/m, '\1noalign=')
+    new_text.gsub!(/(\<p .*?)align="/m, '\1noalign=')
+    new_text.gsub!('<center>', '')
+    if text != new_text
+      debug "fixed alignments in #{new_text}"
+    end
+    return new_text
+  end
   
   def fixRelativeImageLinks(text)
     new_text = text.gsub(' src="/', ' src="http://www.geocaching.com/')
