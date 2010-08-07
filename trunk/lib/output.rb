@@ -104,7 +104,7 @@ class Output
     if tempwords.length == 1		# if there is only one word, use it!
       tempname.gsub!(/\W/, '')
       debug "shortname: only one word in #{tempname}, using it"
-      #@wpHash[wid]['sname'] = newwords[0]
+      #cache['sname'] = newwords[0]
       return tempname
     else
       debug "#{tempwords.length} words left in this, processing"
@@ -184,16 +184,16 @@ class Output
 
     # if we are not actually generating the output, lets do it in a meta-fashion.
     debug "preparing for #{@outputType}"
-    if (@outputFormat['filter_exec'])
+    if @outputFormat['filter_exec']
       post_format = @outputType
       debug "pre-formatting as #{@outputFormat['filter_src']} (from #{post_format})"
       self.formatType=@outputFormat['filter_src']
       debug "pre-format: #{@outputFormat['desc']}"
-      @output = filterInternal(title)
-      self.formatType=post_format
+      @output = generateOutput(title)
+      self.formatType = post_format
       debug "post-format: #{@outputFormat['desc']} via #{@outputFormat['filter_exec']}"
     else
-      @output = filterInternal(title)
+      @output = generateOutput(title)
     end
     return @output
   end
@@ -230,30 +230,29 @@ class Output
     end
   end
 
-  def replaceVariables(templateText)
+  def replaceVariables(templateText, wid)
     # okay. I will fully admit this is a *very* unusual way to handle
     # the templates. This all came to be due to a lot of debugging.
-    debug "out.wid for #{@currentWid} is [#{@outVars['wid']}]"
-
+    debug "out.wid for #{wid} is [#{@outVars['wid']}]"
     tags = templateText.scan(/\<%(\w+\.\w+)%\>/)
     text = templateText.dup
     tags.each { |tag|
       (type, var) = tag[0].split('.')
       value = 'UNKNOWN_TAG'
       if (type == "wp")
-        value = @wpHash[@currentWid][var].to_s
+        value = @wpHash[wid][var].to_s
       elsif (type == "out")
         value = @outVars[var].to_s
       elsif (type == "wpEntity")
-        value = makeXML(@wpHash[@currentWid][var].to_s)
+        value = makeXML(@wpHash[wid][var].to_s)
       elsif (type == "outEntity")
         value = makeXML(@outVars[var].to_s)
       elsif (type == "wpText")
-        value = makeText(@wpHash[@currentWid][var].to_s)
+        value = makeText(@wpHash[wid][var].to_s)
       elsif (type == "outText")
         value = makeText(@outVars[var].to_s)
       end
-      debug "TAG <%#{tag}%> for #{@currentWid} -> #{value}"
+      debug "TAG <%#{tag}%> for #{wid} -> #{value}"
 
       # This looks very ugly, but it works around backreference issues. Thanks ddollar!
       text.gsub!('<%' + tag[0] + '%>') { value }
@@ -327,250 +326,171 @@ class Output
     return text
   end
 
-  def filterInternal (title)
-    debug "generating output: #{@outputType} - #{$Format[@outputType]['desc']}"
-    @outVars = Hash.new
-    wpList = Hash.new
-    @outVars['title'] = title
-    @currentWid = 0
-    # output is what we generate. We start with the templates pre.
-    output = replaceVariables(@outputFormat['templatePre'])
-    @outVars['counter'] = 0
-
-
-    # this is a strange maintenance loop of sorts. First it builds a list, which
-    # I'm not sure what it's used for. Second, it inserts a new item named "sname"
-    # which is the caches short name or geocache name.
-
+  def generatePreOutput(title)
+    output = replaceVariables(@outputFormat['templatePre'], nil)
+  end
+  
+  def updateShortNames()
+    snames = {}
     @wpHash.each_key { |wid|
-      if (! @wpHash[wid]['name'])
-        displayError "#{wid} has no name, what gives?"
-        exit
-      end
-
-      wpList[wid] = @wpHash[wid]['name'].dup
-
+      cache = @wpHash[wid]
       if @waypointLength > 1
-        sname = shortName(@wpHash[wid]['name'])
-
-        # This loop checks for any other caches with the same generated waypoint id
-        # If a conflict is found, it looks for the unique characters in them, and
-        # puts something nice together.
-        @wpHash.each_key { |conflictWid|
-          if (@wpHash[conflictWid]['sname']) && (@wpHash[conflictWid]['sname'][0..7] == sname[0..7])
-            debug "Conflict found with #{sname} and #{@wpHash[conflictWid]['snameUncut']}"
-            # Get the first 3 characters
-            unique = ''
-            x = 0
-
-            # and then the unique ones after that
-            sname.split('').each { |ch|
-              if sname[x] != @wpHash[conflictWid]['snameUncut'][x]
-                unique = unique + sname[x].chr
-                #puts "unique: #{sname[x].chr} does not match #{@wpHash[conflictWid]['sname'][x].chr}"
-              end
-              x = x + 1
-            }
-
-            if unique.length > 6
-              sname = sname[0..3] + unique
-            else
-              sname = sname[0..(7-unique.length)] + unique
+        shorter_name = shortName(cache['name'])
+        shortest_name = shorter_name[0..(@waypointLength - 1)]
+        # If we have two caches that generate the same short name        
+        if snames.has_key?(shortest_name):
+          other_wid = snames[shortest_name]
+          other_cache = @wpHash[other_wid]
+          debug "Conflict found with #{shortest_name} (#{wid} vs #{other_wid})"
+          unique_chars = []
+          0.upto(shortest.length-1) { |x| 
+            if shorter_name[x] != other_cache['snameUncut'][x]
+              unique_chars << shorter_name[x]
             end
-
-            debug "Conflict resolved with short name: #{sname} (unique = #{unique})"
-          end
-        }
-        @wpHash[wid]['sname'] = sname[0..(@waypointLength - 1)]
-        @wpHash[wid]['snameUncut'] = sname
+          }
+          shortest_name = shorter_name[0..(@waypointLength - 4)] + unique_chars.join('')[0..3]
+          displayMessage "Resolved short-name conflict for #{wid} (#{shortest_name}) and #{other_wid} (#{other_cache['sname']})"
+        end
+        
+        snames[shortest_name] = wid
+        cache['sname'] = sname[0..(@waypointLength - 1)]
+        cache['snameUncut'] = sname
+      # Full length short-name
       elsif @waypointLength == -1
-        # full text names.. useful for Google Earth
-        @wpHash[wid]['sname'] = @wpHash[wid]['name']
+        cache['sname'] = @wpHash[wid]['name']
       else
-        # use waypoint id
-        @wpHash[wid]['sname'] = wid.dup
+        cache['sname'] = wid.dup
       end
     }
+  end
+  
+  def generateHtmlIndex()
+    # Returns an index and a hash of wid -> symbol list
+    index = '<ul>'
+    symbolHash = Hash.new
 
+    @wpHash.keys.sort.each { |wid| 
+      cache = @wpHash[wid]
+      symbolHash[wid] = ''
+      if (@wpHash[wid]['travelbug'])
+        symbolHash[wid] = "<b><font color=\"#11CC11\">&euro;</font></b>"
+      end
 
-    # ** This will be removed for GeoToad 4.0, when we use a real templating engine that can do loops **
-    if @outputType == "html" || @outputType == "html-decrypt"
-      htmlIndex=''
-      debug "I should generate an index, I'm html"
-      symbols = Hash.new
+      if (@wpHash[wid]['terrain'] > 3)
+        symbolHash[wid] << "<b><font color=\"#999922\">&sect;</font></b>"
+      end
 
-      wpList.sort{|a,b| a[1]<=>b[1]}.each {  |wpArray|
-        wid = wpArray[0]
-        debug "Creating index for \"#{@wpHash[wid]['name']}\" (#{wid})"
+      if (@wpHash[wid]['funfactor'] >= 3.0)
+        symbolHash[wid] << "<b><font color=\"#BB2222\">&hearts;</font></b>"
+      elsif (@wpHash[wid]['funfactor'] >= 2.1)
+        symbolHash[wid] << "<b><font color=\"#BB9999\">&hearts;</font></b>"
+      end
 
-        htmlIndex = htmlIndex + "<li>"
-        symbols[wid] = ''
+      if (@wpHash[wid]['difficulty'] > 3)
+        symbolHash[wid] << "<b><font color=\"#440000\">&uarr;</font></b>"
+      end
 
-        if (@wpHash[wid]['travelbug'])
-          symbols[wid] = "<b><font color=\"#11CC11\">&euro;</font></b>"
-        end
+      if (@wpHash[wid]['mdays'] < 0)
+        symbolHash[wid] << "<b><font color=\"#9900CC\">&infin;</font></b>"
+      end
 
-        if (@wpHash[wid]['terrain'] > 3)
-          symbols[wid] =  symbols[wid] + "<b><font color=\"#999922\">&sect;</font></b>"
-        end
+      index_item = "<li>#{symbolHash[wid]}"
+      if @wpHash[wid]['mdays'] < 0
+        index_item << '<strong>'
+      end
+      
+      index_item << "<a href=\"\##{wid}\">#{cache['name']}</a>"
+      if @wpHash[wid]['mdays'] < 0
+        index_item << '</strong>'
+      end
 
-        if (@wpHash[wid]['funfactor'] >= 3.0)
-          symbols[wid] =  symbols[wid] + "<b><font color=\"#BB2222\">&hearts;</font></b>"
-        elsif (@wpHash[wid]['funfactor'] >= 2.1)
-          symbols[wid] =  symbols[wid] + "<b><font color=\"#BB9999\">&hearts;</font></b>"
-        end
+      index_item << " <font color=\"#444444\">(#{cache['sname']})</font></li>\n"
+      index << index_item
+    }
+    index << '</ul>'
+    return [index, symbolHash]
+  end
+  
+  def createGpxCommentLogs(cache)
+  end
 
-        if (@wpHash[wid]['difficulty'] > 3)
-          symbols[wid] =  symbols[wid] + "<b><font color=\"#440000\">&uarr;</font></b>"
-        end
+  def decryptHint(hint)
+    if hint
+      return hint.tr('A-MN-Z', 'N-ZA-M').tr('a-mn-z', 'n-za-m')
+    else
+      return ''
+    end
+  end
 
-        if (@wpHash[wid]['mdays'] < 0)
-          symbols[wid] =  symbols[wid] + "<b><font color=\"#9900CC\">&infin;</font></b>"
-        end
-
-        if (symbols[wid].length < 1)
-          symbols[wid] = "&nbsp;"
-        end
-
-        htmlIndex = htmlIndex + symbols[wid]
-
-        # make the names bold if they are virgins. Broken when we moved everything into symbols.
-        if (@wpHash[wid]['mdays'] < 0)
-          htmlIndex = htmlIndex + "<b>"
-        end
-
-        htmlIndex = htmlIndex + "<a href=\"\##{wid}\">#{@wpHash[wid]['name']}</a>"
-
-        if (@wpHash[wid]['mdays'] < 0)
-          htmlIndex = htmlIndex + "</b>"
-        end
-
-        htmlIndex = htmlIndex + " <font color=\"#444444\">(#{@wpHash[wid]['sname']})</font></li>\n"
-      }
-
-      output = output + "<ul>\n" + htmlIndex + "</ul>\n"
+  def createExtraVariablesForWid(wid, symbolHash, get_location)
+    cache = @wpHash[wid]
+    if symbolHash
+      symbols = symbolHash[wid]
+    else
+      symbols = ''
     end
 
+    if cache['distance']
+      relative_distance = cache['distance'].to_s + 'mi ' + cache['direction']
+    else
+      relative_distance = ''
+    end
+    
+    if get_location
+      geocoder = GeoCode.new()
+      location = geocoder.lookup_coords(cache['latdata'], cache['londata'])
+    else
+      location = 'Undetermined'
+    end
+    
+    variables = {
+      'wid' => wid,
+      'symbols' => symbols,
+      'id' => cache['sname'],
+      'mdate' => cache['mtime'].strftime("%Y-%m-%d"),
+      'cdate' => cache['ctime'].strftime("%Y-%m-%d"),
+      'XMLDate' => cache['ctime'].strftime("%Y-%m-%dT%H:00:00.0000000-07:00"),
+      'latdatapad5' => sprintf("%2.5f", cache['latdata']),
+      'londatapad5' => sprintf("%2.5f", cache['londata']),
+      'latdatapad6' => sprintf("%2.6f", cache['latdata']),
+      'londatapad6' => sprintf("%2.6f", cache['londata']),
+      'relativedistance' => relative_distance,
+      'hintdecrypt' => decryptHint(cache['hint']),
+      'hint' => cache['hint'],
+      'gpxlogs' => createGpxCommentLogs(cache)
+    }
+  end
+    
+  def generateOutput(title)
+    debug "generating output: #{@outputType} - #{$Format[@outputType]['desc']}"
+    @outVars = Hash.new
+    @outVars['title'] = title
+    @outVars['counter'] = 0
+    updateShortNames()
+    output = generatePreOutput(title)
 
-
-    wpList.sort{|a,b| a[1]<=>b[1]}.each {  |wpArray|
-      @currentWid = wpArray[0]
-      debug "--- Output loop: #{@currentWid} - #{@wpHash[@currentWid]['name']} by #{@wpHash[@currentWid]['creator']}"
-      detailsLen = @outputFormat['detailsLength'] || 20000
-      numEntries = @wpHash[@currentWid]['details'].length / detailsLen
-
-      @outVars['wid']     = @currentWid.dup
-      if symbols
-        @outVars['symbols'] = symbols[@currentWid]
-      end
-      @outVars['id']      = @wpHash[@currentWid]['sname'].dup
-      # This should clear out the hint-dup issue that Scott Brynen mentioned.
-      @outVars['hint']    = ''
-
-      @outVars['mdate'] = @wpHash[@currentWid]['mtime'].strftime("%Y-%m-%d")
-      @outVars['cdate'] = @wpHash[@currentWid]['ctime'].strftime("%Y-%m-%d")
-
-      # For GPX
-      @outVars['XMLDate'] = @wpHash[@currentWid]['ctime'].strftime("%Y-%m-%dT%H:00:00.0000000-07:00")
-
-      # for some templates, we pad.
-      @outVars['latdatapad5'] = sprintf("%2.5f", @wpHash[@currentWid]['latdata'])
-      @outVars['londatapad5'] = sprintf("%2.5f", @wpHash[@currentWid]['londata'])
-      @outVars['latdatapad6'] = sprintf("%2.6f", @wpHash[@currentWid]['latdata'])
-      @outVars['londatapad6'] = sprintf("%2.6f", @wpHash[@currentWid]['londata'])
-
-      if @wpHash[@currentWid]['distance']
-        @outVars['relativedistance'] = 'Distance: ' + @wpHash[@currentWid]['distance'].to_s + 'mi ' + @wpHash[@currentWid]['direction']
-      end
-
-      if @wpHash[@currentWid]['state']
-        @outVars['location'] = @wpHash[@currentWid]['state'] + ', ' + @wpHash[@currentWid]['country']
-      else
-        @outVars['location'] = @wpHash[@currentWid]['country']
-      end
-
-      # fix for bug reported by wkraml%a1.net - caches with no hint get the last hint.
-      @outVars['hintdecrypt'] = nil
-
-      if @wpHash[@currentWid]['hint'] && @wpHash[@currentWid]['hint'].length > 0
-        hint = @wpHash[@currentWid]['hint']
-        @outVars['hint'] = 'Hint: ' + hint
-        @outVars['hintdecrypt'] = 'Hint: ' + hint.tr('A-MN-Z', 'N-ZA-M').tr('a-mn-z', 'n-za-m')
-        debug "Hint: [#{@outVars['hint']}]"
-        debug "Decrypted hint: [#{@outVars['hintdecrypt']}]"
-      end
-
-
-      if (@outVars['id'].length < 1)
-        debug "our id is no good, using the wid"
-        displayWarning "We could not make an id from \"#{@outVars['sname']}\" so we are using #{@currentWid}"
-        @outVars['id'] = @currentWid.dup
-      end
-      @outVars['url'] =  @wpHash[@currentWid]['url']
-
-      if (! @wpHash[@currentWid]['terrain'])
-        displayError "[*] Error: no terrain found for #{@currentWid}"
-        @wpHash[@currentWid].each_key { |key|
-          displayError "#{key} = #{@wpHash[@currentWid][key]}"
-        }
-        exit
-      end
-      if (! @wpHash[@currentWid]['difficulty'])
-        displayError "[*] Error: no difficulty found"
-
-        exit
-      end
-      @outVars['average'] = (@wpHash[@currentWid]['terrain'] + @wpHash[@currentWid]['difficulty'] / 2).to_i
-
-      # This comment is only here to make ArmedBear-J parse the ruby properly: /\*/, "[SPACER]");
-
-
-      # ** This will be removed for GeoToad 4.0, when we use a real templating engine that can do loops **
-      if @outputType == 'gpx'
-        @outVars['gpxlogs'] = ''
-        0.upto(4) { |x|
-          debug "Looking for comment #{x}"
-          if @wpHash[@currentWid]["comment#{x}Type"]
-            rawcomment =
-              "    <groundspeak:log id=\"<%wpEntity.comment#{x}ID%>\">\r\n" +
-              "      <groundspeak:date><%wpEntity.comment#{x}Date%></groundspeak:date>\r\n" +
-              "      <groundspeak:type><%wpEntity.comment#{x}Type%></groundspeak:type>\r\n" +
-              "      <groundspeak:finder id=\"<%wpEntity.comment#{x}UID%>\"><%wpEntity.comment#{x}Name%></groundspeak:finder>\r\n" +
-              "      <groundspeak:text encoded=\"False\"><%wpEntity.comment#{x}Comment%></groundspeak:text>\r\n" +
-              "    </groundspeak:log>\r\n"
-            @outVars['gpxlogs'] = @outVars['gpxlogs'] + replaceVariables(rawcomment)
-          end
-        }
-      end
-
-      @outVars['counter'] = @outVars['counter'] + 1
-
-      # this crazy mess is all due to iPod's VCF reader only supporting 2k chars!
-      0.upto(numEntries) { |entry|
-        if (entry > 0)
-          @outVars['sname'] = shortName(@wpHash[@currentWid]['name'])[0..12] << ":" << (entry + 1).to_s
-        end
-
-        detailByteStart = entry * detailsLen
-        detailByteEnd = detailByteStart + detailsLen - 1
-        @outVars['details'] = @wpHash[@currentWid]['details'][detailByteStart..detailByteEnd]
-
-        # a bad hack.
-        @outVars['details'].gsub!(/\*/, "[SPACER]");
-        tempOutput = replaceVariables(@outputFormat['templateWP'])
-
-        # we move this to after our escapeHTML's so the HTML in here doesn't get
-        # encoded itself! I think it should be handled a little better than this.
-        if (tempOutput)
-          output << tempOutput.gsub(/\[SPACER\]/, @outputFormat['spacer']);
-        end
-      }
+    # ** This will be removed for GeoToad 4.0, when we use a real templating engine that can do loops **
+    if @outputType =~ /html/
+      html_index, symbolHash = generateHtmlIndex()
+      output << html_index
+    else
+      symbolHash = nil
+    end
+    
+    counter = 0
+    @wpHash.keys.sort.each { |wid|
+      cache = @wpHash[wid]
+      debug "--- Output loop: #{wid} - #{cache['name']} by #{cache['creator']}"
+      counter += 1
+      @outVars = createExtraVariablesForWid(wid, symbolHash, @outputFormat.fetch('uses_location', false))
+      @outVars['counter'] = counter
+      output << replaceVariables(@outputFormat['templateWP'], wid)
     }
 
     if @outputFormat['templatePost']
-      output << replaceVariables(@outputFormat['templatePost'])
+      output << replaceVariables(@outputFormat['templatePost'], nil)
     end
-
     return output
-  end
+  end # end generateOutput
+
 end

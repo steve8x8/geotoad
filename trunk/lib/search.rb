@@ -41,7 +41,7 @@ class SearchCache
         @query_type = 'location'
         @query_arg = key
         geocoder = GeoCode.new()
-        accuracy, lat, lon = geocoder.lookup(key)
+        accuracy, lat, lon = geocoder.lookup_location(key)
         debug "geocoder returned: a:#{accuracy} x:#{lat} y:#{lon}"
         if not accuracy
           displayWarning "Google Maps failed to determine the location of #{key}"
