@@ -6,12 +6,13 @@ require 'shadowget'
 
 MAPS_URL = 'http://maps.google.com/maps/geo'
 KEY = 'ABQIAAAAfYtme_pyDnFOuJLGZiXvPxRuVmV2GDBxlUzS4Tl93rTyZWZiOBRL-7BgtHIJc12HxIcS5teMAlIPzw'
+CACHE_SECONDS = 86400 * 180
 
 class GeoCode
   include Common
   include Messages
   
-  def lookup(location)
+  def lookup_location(location)
     data = get_url(create_url(location))
     code, accuracy, lat, lon = parse_data(data)
     if code == "200"
@@ -23,6 +24,10 @@ class GeoCode
     return return_data
   end
 
+  def lookup_coords(lat, lon)
+    return 'Kalamazoo, MI, USA'
+  end
+
   def create_url(location)
     q = CGI.escape(location)
     url = "#{MAPS_URL}?q=#{q}&output=csv&oe=utf8&sensor=false&key=#{KEY}"
@@ -32,7 +37,7 @@ class GeoCode
 
   def get_url(url)
     http = ShadowFetch.new(url)
-    http.localExpiry=86400 * 30
+    http.localExpiry = CACHE_SECONDS
     http.maxFailures = 5
     results = http.fetch
     debug "geocode data: #{results}"
