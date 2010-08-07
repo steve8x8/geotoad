@@ -90,7 +90,7 @@ class CacheDetails
     end
 
     page.fetch
-    if (page.data)
+    if page.data
       success = parseCache(page.data)
     else
       debug "No data found, not attempting to parse the entry at #{url}"
@@ -116,17 +116,17 @@ class CacheDetails
     end
   end
 
-  def calculateFun(total, comments)
-    # if no comments, it must be at least somewhat interesting!
-    if comments == 0
+  def calculateFun(total, num_graded)
+    # if no num_graded, it must be at least somewhat interesting!
+    if num_graded == 0
       return 3.0
     end
 
-    score=total.to_f / comments.to_f
+    score=total.to_f / num_graded.to_f
 
     # a grade of >28 is considered awesome
     # a grade of <-20 is considered pretty bad
-    debug "fun total=#{total} comments=#{comments} score=#{score}"
+    debug "fun total=#{total} num_graded=#{num_graded} score=#{score}"
     grade=((score + 25) / 5.3).round.to_f / 2.0
     if grade > 5.0
       grade=5.0
@@ -140,6 +140,7 @@ class CacheDetails
   def parseCache(data)
     # find the geocaching waypoint id.
     wid = nil
+    cache = nil
 
     data.split("\n").each { |line|
       # <title id="pageTitle">(GC1145) Lake Crabtree computer software store by darylb</title> 
@@ -148,58 +149,59 @@ class CacheDetails
         name = $2
         creator = $4
         debug "wid = #{wid} name=#{name} creator=#{creator}"
-        @waypointHash[wid]['name'] = name
-        @waypointHash[wid]['creator'] = creator
+        cache = @waypointHash[wid]
+        cache['name'] = name
+        cache['creator'] = creator
         # Calculate a semi-unique integer creator id, since we can no longer get it from this page.
-        @waypointHash[wid]['creator_id'] = Zlib.crc32(creator)
-        @waypointHash[wid]['shortdesc'] = ''
-        @waypointHash[wid]['longdesc'] = ''
-        @waypointHash[wid]['details'] = ''
-        @waypointHash[wid]['funfactor'] = 0
-        @waypointHash[wid]['url'] = "http://www.geocaching.com/seek/cache_details.aspx?wp=" + wid
+        cache['creator_id'] = Zlib.crc32(creator)
+        cache['shortdesc'] = ''
+        cache['longdesc'] = ''
+        cache['details'] = ''
+        cache['funfactor'] = 0
+        cache['url'] = "http://www.geocaching.com/seek/cache_details.aspx?wp=" + wid
 
-        if not @waypointHash[wid]['mtime']
-          @waypointHash[wid]['mdays'] = -1
-          @waypointHash[wid]['mtime'] = Time.at(0)
+        if not cache['mtime']
+          cache['mdays'] = -1
+          cache['mtime'] = Time.at(0)
         end
       end
 
       # <h2><img src="../images/WptTypes/2.gif" alt="Traditional Cache" width="32" height="32" />&nbsp;Lake Crabtree computer software store</h2> 
       if line =~ /WptTypes.*? alt="(.*?)"/
-        if ! @waypointHash.has_key?(wid)
+        if ! cache
           displayWarning "Found waypoint type, but never saw cache title. Did geocaching.com change their layout again?"
         end
-        @waypointHash[wid]['fulltype'] = $1
-        @waypointHash[wid]['type'] = $1.split(' ')[0].downcase.gsub(/\-/, '')
-        debug "stype=#{@waypointHash[wid]['type']} full_type=#{$1}"
+        cache['fulltype'] = $1
+        cache['type'] = $1.split(' ')[0].downcase.gsub(/\-/, '')
+        debug "stype=#{cache['type']} full_type=#{$1}"
       end
       
       # <p class="Meta"><strong>Difficulty:</strong> <img src="http://www.geocaching.com/images/stars/stars2_5.gif" alt="2.5 out of 5" /></p> 
       if line =~ /Difficulty:.*?([-\d\.]+) out of 5/
         if $1.to_f == $1.to_i
-          @waypointHash[wid]['difficulty']=$1.to_i
+          cache['difficulty']=$1.to_i
         else
-          @waypointHash[wid]['difficulty']=$1.to_f
+          cache['difficulty']=$1.to_f
         end
-        debug "difficulty: #{@waypointHash[wid]['difficulty']}"
+        debug "difficulty: #{cache['difficulty']}"
       end
 
       # <p class="Meta"><strong>Terrain:</strong> <img src="http://www.geocaching.com/images/stars/stars2.gif" alt="2 out of 5" /></p> 
       if line =~ /Terrain:.*?([-\d\.]+) out of 5/
         if $1.to_f == $1.to_i
-          @waypointHash[wid]['terrain']=$1.to_i
+          cache['terrain']=$1.to_i
         else
-          @waypointHash[wid]['terrain']=$1.to_f
+          cache['terrain']=$1.to_f
         end
-        debug "terrain: #{@waypointHash[wid]['terrain']}"
+        debug "terrain: #{cache['terrain']}"
       end
 
       # <p class="Meta">Placed Date: 7/17/2001</p> 
       if line =~ /Placed Date: ([\w\/]+)\</
         if $1 != 'N/A'
-          @waypointHash[wid]['ctime'] = parseDate($1)
-          @waypointHash[wid]['cdays'] = daysAgo(@waypointHash[wid]['ctime'])
-          debug "ctime=#{@waypointHash[wid]['ctime']} cdays=#{@waypointHash[wid]['cdays']}"
+          cache['ctime'] = parseDate($1)
+          cache['cdays'] = daysAgo(cache['ctime'])
+          debug "ctime=#{cache['ctime']} cdays=#{cache['cdays']}"
         end
       end
 
@@ -210,16 +212,16 @@ class CacheDetails
 
       # <p class="Meta"><strong>Size:</strong> <img src="../images/icons/container/regular.gif" alt="Size: Regular" />&nbsp;<small>(Regular)</small></p> 
       if line =~ /\<img src=".*?" alt="Size: (.*?)" \/\>/
-        @waypointHash[wid]['size'] = $1.downcase
+        cache['size'] = $1.downcase
         debug "found size: #{$1}"
       end
 
       # latitude and longitude in the written form. Rewritten by Scott Brynen for Southpole compatibility.
       if line =~ /=\"LatLon.*\>.*?([NWSE]) (\d+).*? ([\d\.]+) ([NWSE]) (\d+).*? ([\d\.]+)\</
-        @waypointHash[wid]['latwritten'] = $1 + $2 + ' ' + $3
-        @waypointHash[wid]['lonwritten'] = $4 + $5 + ' ' + $6
-        @waypointHash[wid]['latdata'] = ($2.to_f + $3.to_f / 60) * ($1 == 'S' ? -1:1)
-        @waypointHash[wid]['londata'] = ($5.to_f + $6.to_f / 60) * ($4 == 'W' ? -1:1)
+        cache['latwritten'] = $1 + $2 + ' ' + $3
+        cache['lonwritten'] = $4 + $5 + ' ' + $6
+        cache['latdata'] = ($2.to_f + $3.to_f / 60) * ($1 == 'S' ? -1:1)
+        cache['londata'] = ($5.to_f + $6.to_f / 60) * ($4 == 'W' ? -1:1)
         debug "got written lat/lon"
       end
 
@@ -230,151 +232,63 @@ class CacheDetails
         warning.gsub!(/\<.*?\>/, '')
         debug "got a warning: #{warning}"
         if (wid)
-          @waypointHash[wid]['warning'] = warning.dup
+          cache['warning'] = warning.dup
         end
         if warning =~ /Premium Member/
           debug "This cache appears to be available to premium members only."
           return 'subscriber-only'
         end
       end
-
-      if line =~ /CacheLogs\"\>/
-        debug "inspecting comments: #{line}"
-        cnum = 0
-        funTotal = 0.0
-        fnum = 0
-
-        line.gsub!(/\<p\>/, ' ')
-        # <img src="http://www.geocaching.com/images/icons/icon_smile.gif" alt="" />&nbsp;January 9 by <a href="/profile/?guid=8e3afe9c-5bc0-44ea-abde-2e5d680b90d5"
-        # id="94849032">Happy Wayfarer</a></strong> (215 found)<br />A nice walk early in the morning. There whereno muggles at this time.
-        # <br>Made some nice picture from this lovely park and view to the Bosporus and walked back to Eminönü.<p>Thanks from Germany<br>Happy Wayfarer</td>
-        line.scan(/\/icon_(\w+)\.gif.*?\>\&nbsp\;([\w, ]+) by \<a href=".*?id=\"(.*?)\"\>(.*?)\<\/a\>.*?\<br \/\>(.*?)\<\/td\>/) { |icon, date, user_id, name, comment|
-          type = 'unknown'
-          nograde=nil
-
-          # these are the types that I have seen before in GPX files
-          # Archive (show)       Attended      Didn't find it      Found it
-          # Needs Archived       Note          Other               Unarchive
-          # Webcam Photo Taken   Write note
-
-          case icon
-          when /smile|happy/
-            type = 'Found it'
-            @waypointHash[wid]['visitors'].push(name.downcase)
-          when 'sad'
-            type = 'Didn\'t find it'
-          when 'note'
-            type = 'Note'
-          when 'remove'
-            type = 'Archive (show)'
-            nograde=1
-          when 'camera'
-            type = 'Webcam Photo Taken'
-          when 'disabled'
-            type = 'Cache Disabled!'
-            nograde=1
-          else
-            type = 'Other'
-            nograde=1
-          end
-          
-          if @waypointHash[wid]['creator'] == name
-            debug "not grading comment by owner: #{name}"
-            nograde=1
-          end
-
-          debug "comment [#{cnum}] is '#{type}' by #{name}[#{user_id}] on #{date}: #{comment}"
-          comment.gsub!(/\<.*?\>/, ' ')
-          date = Time.parse(date)
-          if type == 'Found it' and @waypointHash[wid]['mdays'] == -1
-            debug "Found successful comment, updating mtime to #{date}"
-            @waypointHash[wid]['mtime'] = date
-            @waypointHash[wid]['mdays'] = daysAgo(date)
-          end
-          @waypointHash[wid]["comment#{cnum}Type"] = type.dup
-          @waypointHash[wid]["comment#{cnum}Date"] = date.strftime("%Y-%m-%dT%H:00:00.0000000-07:00")
-          @waypointHash[wid]["comment#{cnum}DaysAgo"] = daysAgo(date)
-          @waypointHash[wid]["comment#{cnum}ID"] = cnum
-          @waypointHash[wid]["comment#{cnum}UID"] = user_id.dup
-          @waypointHash[wid]["comment#{cnum}Icon"] = icon.dup
-          @waypointHash[wid]["comment#{cnum}Name"] = name.dup
-          @waypointHash[wid]["comment#{cnum}Comment"] = comment.dup
-
-          if (nograde)
-            debug "not grading comment due to type #{icon}"
-          elsif (! @@bayes)
-            funTotal=1
-            fnum=1
-          else
-            guess=@@bayes.guess(comment)
-            if (guess[0] && guess[1])
-              fun = (guess[1][1] - guess[0][1]) * 100
-              if fun > 28.0
-                fun=28.0
-              end
-            else
-              debug "could not determine fun factor for comment: #{comment}"
-              fun=0
-            end
-            funTotal=funTotal + fun
-            fnum=fnum+1
-          end
-          debug "COMMENT #{cnum}: i=#{icon} d=#{date} n=#{name} c=#{comment} fun=#{fun}"
-          cnum = cnum + 1
-        }   # no more comments
-
-        @waypointHash[wid]['funfactor']=calculateFun(funTotal, fnum)
-      end
-
     }
 
+    # Short-circuit and abort if the data is no good.
+    if not cache:
+      displayWarning "Unable to parse any cache details from data."
+      return false
+    elsif not cache['latwritten']
+      displayWarning "#{cache['wid']} was parsed, but no coordinates found."
+      return false
+    end
+    
+    
     # <div id="div_hint" class="HalfLeft"> 
     #    <div> 
     #        Vs lbh ner pyrire, lbh pna cebonoyl svaq n cnexvat ybg gb fgneg sebz gung jvyy trg lbh pybfre gb gur pnpur. Vs lbh ragre gur pnpur nern sebz gur rnfg lbh jvyy tb vagb gur bcra nern naq gura onpx vagb gur jbbqf. Nsgre lbh ragre gur jbbqf, ybbx sbe n gerr ba gur evtug gung unf gbccyrq jvgu gur onfr orvat evtug ng gur rqtr bs gur cngu (guvf jbhyq or n tbbq cynpr sbe gur pnpur, ohg vg vfa’g urer.) Tb qverpgyl yrsg hc gur uvyy naq ybbx sbe fbzr gbccyrq gerrf. Gur pnpur vf pybfr ol – naq cerggl jryy uvqqra.
-    #    </div>
-            
+    #    </div>            
     if data =~ /id="div_hint".*?\>(.*?)\s*\<\/div/m
       hint = $1.strip
       hint.gsub!(/^ +/, '')
       hint.gsub!(/[\r\n]/, '')
       hint.gsub!('<br>', ' / ')
       hint.gsub!('<div>', '')
-      @waypointHash[wid]['hint'] = hint
+      cache['hint'] = hint
       debug "got hint: [#{hint}]"
     end
-
-    # this data is all on one line, so we should just use scan and forget reparsing.
-    if (wid)
-      debug "we have a wid"
-      if data =~ /\<div id="div_sd"\>\s*\<div\>(.*?)\<\/div\>\s*\<\/div\>/m
-        shortdesc = $1
-        debug "found short desc: [#{shortdesc}]"
-        @waypointHash[wid]['shortdesc'] = removeAlignments(fixRelativeImageLinks(removeSpam(shortdesc)))
-      end
-
-      if data =~ /\<div id="div_ld"\>\s*\<div\>(.*?)\<\/div\>\s*\<\/div\>/m
-        longdesc = $1
-        debug "got long desc [#{longdesc}]"
-        longdesc = removeAlignments(fixRelativeImageLinks(removeSpam(longdesc)))
-        @waypointHash[wid]['longdesc'] = longdesc
-      end
-
-      @waypointHash[wid]['details'] = @waypointHash[wid]['shortdesc'] + " ... " + @waypointHash[wid]['longdesc']
-
-
-      # Parse the additional waypoints table. Needs additional work for non-HTML templates.
-      debug "will addit"
-      @waypointHash[wid]['additional_raw'] = parseAdditionalWaypoints(data)
-
-    end  # end wid check.
-
-    # How valid is this cache?
-    if wid && @waypointHash[wid]['latwritten']
-      return 1
-    else
-      debug "parseCache returning as nil because wid #{wid} has no coordinates (and the login works?)"
-      return nil
+    
+    if data =~ /\<div id="div_sd"\>\s*\<div\>(.*?)\<\/div\>\s*\<\/div\>/m
+      shortdesc = $1
+      debug "found short desc: [#{shortdesc}]"
+      cache['shortdesc'] = removeAlignments(fixRelativeImageLinks(removeSpam(shortdesc)))
     end
+
+    if data =~ /\<div id="div_ld"\>\s*\<div\>(.*?)\<\/div\>\s*\<\/div\>/m
+      longdesc = $1
+      debug "got long desc [#{longdesc}]"
+      longdesc = removeAlignments(fixRelativeImageLinks(removeSpam(longdesc)))
+      cache['longdesc'] = longdesc
+    end
+
+    # Parse the additional waypoints table. Needs additional work for non-HTML templates.
+    comments, last_find, fun_factor = parseComments(data, cache['creator'])
+    cache[comments] = comments
+    if cache['mdays'] == -1 and last_find:
+      cache['mtime'] = last_find
+      cache['mdays'] = daysAgo(cache['mtime'])
+    end
+    cache['funfactor'] = fun_factor      
+    cache['additional_raw'] = parseAdditionalWaypoints(data)
+    cache['details'] = cache['shortdesc'] + " ... " + cache['longdesc']
+    return cache
   end  # end function
   
   def removeAlignments(text)
@@ -404,6 +318,62 @@ class CacheDetails
     else
       return nil
     end    
+  end
+
+  def parseComments(data, creator)
+    comments = []
+    visitors = []
+    last_find = nil
+    total_grade = 0
+    graded = 0
+  
+    # <dt>[<img src='http://www.geocaching.com/images/icons/icon_smile.gif' alt="Found it" />&nbsp;Found it] Saturday, April 03, 2010 by <strong>SirPatrick</strong> (143 found) </dt> 
+    # <dd>Coordinates were spot on.  Found myself within 6 feet of the cache when I first got to the zone but could not find this very well hid cache. Found it after a few minutes of searching.  Nice hide.  SL TFTH.  
+    # </dd>
+    data.scan(/<dt.*?icon_(\w+).*?alt=\"(.*?)\".*?, ([\w, ]+) by \<strong\>(.*?)\<\/strong\>.*?\<dd\>(.*?)\<\/dd\>/m) { |icon, type, datestr, user, comment|
+      should_grade = true
+      grade = 0
+      date = Time.parse(datestr)
+
+      if icon == 'smile':
+        visitors << user
+        if not last_find:
+          last_find = Time.parse(datestr)
+        end
+      elsif icon == 'remove' or icon == 'disabled' or icon == 'greenlight' or icon == 'maint':
+        should_grade = false
+      end
+        
+      if user == creator:
+        debug "comment from creator #{creator}, not grading"
+        should_grade = false
+      end
+
+      if should_grade:
+        good_or_bad = @@bayes.guess(comment)
+        if good_or_bad[0] && good_or_bad[1]
+          grade = (good_or_bad[1][1] - good_or_bad[0][1]) * 100
+          # Put an upper cap on goodness
+          if grade > 28.0
+            grade = 28.0
+          end
+          graded =+ 1
+          total_grade =+ grade
+        end
+      end
+      
+      comment = {
+        'type' => type,
+        'date' => date,
+        'icon' => icon,
+        'user' => user,
+        'user_id' => Zlib.crc32(user),
+        'comment' => comment,
+        'grade' => grade
+      }
+      debug "COMMENT: #{comment.inspect}"      
+    }
+    return [comments, last_find, calculateFun(total_grade, graded)]
   end
 
   def removeSpam(text)
