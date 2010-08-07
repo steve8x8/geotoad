@@ -277,8 +277,9 @@ class SearchCache
           page_number = $2.to_i
           pages_total = $3.to_i
         end
+        # href="javascript:__doPostBack('ctl00$ContentBody$pgrTop$ctl08','')"><b>Next &gt;</b></a></td> 
         # <a href="javascript:__doPostBack('pgrTop$_ctl16','')"><b>Next</b></a>
-        if line =~ /doPostBack\(\'([\w\$_]+)\',\'\'\)\"\>\<b\>Next\</
+        if line =~ /doPostBack\(\'([\w\$_]+)\',\'\'\)\"\>\<b\>Next/
           debug "Found next target: #{$1}"
           post_vars['__EVENTTARGET'] = $1
         end
@@ -328,15 +329,14 @@ class SearchCache
         cache['size'] = $1.downcase
         debug "size=#{cache['size']}"
 
-      # <td>Yesterday<strong>*</strong><br /><span class="Success"></span></td> 
-      # <td>15 Jan 10<br /><span class="Success"></span></td>
-      when /^ +(\w+[ \w]+)\**\<[bs][rt]/
+      #                             11 Jul 10<br /> 
+      when /^ (\w+[ \w]+)\**\<[bs][rt]/
         debug "last found date: #{$1} at line: #{line}"
         cache['mtime'] = parseDate($1)
         cache['mdays'] = daysAgo(cache['mtime'])
         debug "mtime=#{cache['mtime']} mdays=#{cache['mdays']}"
         
-      # 21 May 09
+      #  9 Sep 06
       when /^ +(\d+ \w{3} \d+).*/
         cache['ctime'] = parseDate($1)
         cache['cdays'] = daysAgo(cache['ctime'])
@@ -354,7 +354,7 @@ class SearchCache
         name = $2
         debug "Found cache details link for #{name}"
 
-        if name =~ /class=\"Warning/
+        if name =~ /class=\"Warning/ or name =~ /class=\"OldWarning/
           cache['archived']=1
           debug "#{name} appears to be archived"
         end
@@ -368,7 +368,7 @@ class SearchCache
         end
 
         cache['name']=name.gsub(/ +$/, '')
-        debug "sid=#{cache['sid']} name=#{cache['name']} (disabled=#{cache['disabled']})"
+        debug "sid=#{cache['sid']} name=#{cache['name']} (disabled=#{cache['disabled']}, archived=#{cache['archived']})"
 
       # by gonsuke@Zerosen and Bakatono@Zerosen
       when /^ +by (.*?)$/
