@@ -241,10 +241,10 @@ class ShadowFetch
     end
         
     if @cookie 
-      debug "Added Cookie to #{url}: #{@cookie}"
+      debug "Added Cookie to #{url_str}: #{@cookie}"
       @httpHeaders['Cookie']=@cookie
     else
-      debug "No cookie to add to #{url}"
+      debug "No cookie to add to #{url_str}"
     end
 
 
@@ -274,21 +274,30 @@ class ShadowFetch
       debug "#{url_str} successfully downloaded."
             
     when Net::HTTPRedirection
-      return fetchURL(resp['location'], redirects - 1)
-            
+      location = resp['location']
+      debug "REDIRECT: [#{location}]"
+      # relative redirects are against RFC, but we may encounter them.
+      if location =~ /^\//
+        if uri.port == 80:
+          location = "#{uri.scheme}://#{uri.host}#{location}"
+        else
+          location = "#{uri.scheme}:#{uri.port}//#{uri.host}#{location}"
+        end
+      end
+      return fetchURL(location, redirects - 1)            
     else
-      debug "error downloading #{url}"
+      debug "error downloading #{url_str}"
       @@downloadErrors = @@downloadErrors + 1
             
       if (disableRetry)
         # only show the first few failures..
         if @@downloadErrors < @maxFailures
-          displayWarning "Could not fetch #{url}, no more retries available. (failures=#{@@downloadErrors})"
+          displayWarning "Could not fetch #{url_str}, no more retries available. (failures=#{@@downloadErrors})"
         end
         return nil
       else
         disableRetry = 1
-        displayWarning "Could not fetch #{url}, retrying in 5 seconds.. (failures=#{@@downloadErrors}, max=#{@maxFailures})"
+        displayWarning "Could not fetch #{url_str}, retrying in 5 seconds.. (failures=#{@@downloadErrors}, max=#{@maxFailures})"
         sleep(5)
         return fetchURL(url_str, redirects)
       end
