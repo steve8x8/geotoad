@@ -206,7 +206,7 @@ class CacheDetails
         end
       end
 
-      if line =~ /with an account to view/
+      if line =~ /with an account to view|You must be logged in/
         displayWarning "Oops, we are not actually logged in!"
         return 'login-required'
       end
