@@ -34,8 +34,8 @@ $Format = {
     'templatePre' => "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n" +
       "<gpx xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" version=\"1.0\" creator=\"GeoToad\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd http://www.groundspeak.com/cache/1/0 http://www.groundspeak.com/cache/1/0/cache.xsd\" xmlns=\"http://www.topografix.com/GPX/1/0\">\r\n" +
       "<desc><%outEntity.title%></desc>\r\n" +
-      "<author>GeoToad #{$VERSION}</author>\r\n" +
-      "<email>geotoad@toadstool.se</email>\r\n" +
+      "<author>GeoToad <%outEntity.version%></author>\r\n" +
+      "<email>geotoad@googlegroups.com</email>\r\n" +
       "<time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S")  + ".0000000-00:00</time>\r\n" +
       "<keywords>cache, geocache, groundspeak, geotoad</keywords>\r\n",
 
@@ -47,7 +47,7 @@ $Format = {
       "  <urlname><%wpEntity.name%></urlname>\r\n" +
       "  <sym>Geocache</sym>\r\n" + 
       "  <type>Geocache|<%wp.fulltype%></type>\r\n" +
-      "  <groundspeak:cache id=\"<%wp.sid%>\" available=\"True\" archived=\"False\" xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0\">\r\n" +
+      "  <groundspeak:cache id=\"<%wp.guid%>\" available=\"<%out.IsAvailable%>\" archived=\"<%out.IsArchived%>\" xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0\">\r\n" +
       "  <groundspeak:name><%wpEntity.name%></groundspeak:name>\r\n" +
       "  <groundspeak:placed_by><%wpEntity.creator%></groundspeak:placed_by>\r\n" +
       "  <groundspeak:owner id=\"<%wpEntity.creator_id%>\"><%wpEntity.creator%></groundspeak:owner>\r\n" +
@@ -139,7 +139,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
       "\"Latitude\",\"Longitude\",\"Type\",\"Size\",\"Creation Date\",\"Details\"\r\n",
     'templateWP'    => "\"<%wp.name%>\",\"<%out.wid%>\",\"<%wp.creator%>\"," +
       "<%wp.difficulty%>,<%wp.terrain%>,\"<%wp.latwritten%>\",\"<%wp.lonwritten%>\"," +
-      "\"<%wp.type%>\",\"<%wp.size%>\",\"<%out.cdate%>\",\"<%outText.details%>\"\r\n"
+      "\"<%wp.type%>\",\"<%wp.size%>\",\"<%out.cdate%>\",\"<%outText.short_desc%> ... <%outText.long_desc%>\"\r\n"
   },
 
   'gpsman' => {

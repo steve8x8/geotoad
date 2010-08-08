@@ -24,23 +24,15 @@ require 'lib/filter'
 require 'lib/output'
 require 'lib/details'
 require 'lib/auth'
+require 'lib/version'
 require 'getoptlong'
 require 'fileutils'
-
 
 class GeoToad
   include Common
   include Messages
   include Auth
-
-  # The version gets inserted by makedist.sh
-  versionID='%VERSION%'
-  if versionID !~ /^\d/
-    $VERSION = '3.10-CURRENT'
-  else
-    $VERSION = versionID.dup
-  end
-
+  $VERSION = GTVersion.version
   $SLEEP = 1.5
   $SLOWMODE = 350
 
