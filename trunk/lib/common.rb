@@ -49,9 +49,13 @@ module Common
   ## finds a place to put temp files on the system ###################################
   def selectDirectory(dirs)
     dirs.compact.each do |dir|
+      dir.gsub!(/\\/, '/')
       debug "Checking #{dir} for writability."
-      if File.exists?(dir) && File.stat(dir).directory? && File.stat(dir).writable?
-        return dir.gsub(/\\/, '/')
+      if File.exists?(dir) && File.stat(dir).directory?
+        # write tests seem to be broken in Windows occassionaly.
+        if dir =~ /^\w:/ or File.stat(dir).writable?
+          return dir
+        end
       end
     end
     return Dir.pwd.gsub(/\\/, '/')
