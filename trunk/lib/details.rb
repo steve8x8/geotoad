@@ -280,9 +280,8 @@ class CacheDetails
 
     # Parse the additional waypoints table. Needs additional work for non-HTML templates.
     comments, last_find_date, fun_factor = parseComments(data, cache['creator'])
-    cache[comments] = comments
+    cache['comments'] = comments
     if comments:
-      debug comments.inspect
       cache['last_find_type'] = comments[0]['type']
       cache['last_find_days'] = daysAgo(comments[0]['date'])
     end
@@ -293,7 +292,6 @@ class CacheDetails
     end
     cache['funfactor'] = fun_factor      
     cache['additional_raw'] = parseAdditionalWaypoints(data)
-    cache['details'] = cache['shortdesc'] + " ... " + cache['longdesc']
     return cache
   end  # end function
   
@@ -316,7 +314,6 @@ class CacheDetails
   end
   
   def parseAdditionalWaypoints(text)
-    debug "additional: #{text}"
     # <p><p><strong>Additional Waypoints</strong></p></p> 
     if text =~ /Additional Waypoints.*?(\<table.*?\/table\>)/m
       additional = $1
@@ -374,7 +371,7 @@ class CacheDetails
         'icon' => icon,
         'user' => user,
         'user_id' => Zlib.crc32(user),
-        'comment' => comment,
+        'text' => comment,
         'grade' => grade
       }
       debug "COMMENT: #{comment.inspect}"

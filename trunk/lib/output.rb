@@ -1,6 +1,8 @@
 # $Id$
 require 'cgi'
 require 'lib/templates'
+require 'lib/version'
+require 'zlib'
 
 GOOGLE_MAPS_URL = 'http://maps.google.com/maps'
 
@@ -416,6 +418,30 @@ class Output
   end
   
   def createGpxCommentLogs(cache)
+    if not cache['comments']
+      debug "No comments found for #{cache['name']}"
+      return nil
+    end
+    
+    entries = []
+    debug "Generating comment XML for #{cache['name']}"
+    cache['comments'].each { |comment|
+      comment_id = Zlib.crc32(comment['text'])
+      debug "Comment ID: #{comment_id} by #{comment['user']}: #{comment['text']}"
+      formatted_date = comment['date'].strftime("%Y-%m-%dT%H:00:00.0000000-07:00")
+      entry = ''
+      entry << "    <groundspeak:log id=\"#{comment_id}\">\r\n"
+      entry << "      <groundspeak:date>#{formatted_date}</groundspeak:date>\r\n"
+      entry << "      <groundspeak:type>#{comment['type']}</groundspeak:type>\r\n"
+      entry << "      <groundspeak:finder id=\"#{comment['user_id']}\">#{comment['user']}</groundspeak:finder>\r\n"
+      entry << "      <groundspeak:text encoded=\"False\">#{comment['text']}</groundspeak:text>\r\n"
+      entry << "    </groundspeak:log>\r\n"
+      entries << entry
+    }
+    debug "Finished generating comment XML for #{cache['name']}"
+    debug "Comment Data: #{entries}"
+    debug "Comment Data Length: #{entries.length}"
+    return entries.join('')
   end
 
   def decryptHint(hint)
@@ -440,15 +466,14 @@ class Output
       relative_distance = ''
     end
     
-    debug "LOCATION: #{get_location}"
     if get_location
       geocoder = GeoCode.new()
       location = geocoder.lookup_coords(cache['latdata'], cache['londata'])
     else
       location = 'Undetermined'
     end
-    debug "LOCATION SET: #{location}"
     coord_query = URI.escape("#{cache['latdata']},#{cache['londata']}")
+    available = (not cache['disabled'])
     
     variables = {
       'wid' => wid,
@@ -462,11 +487,12 @@ class Output
       'latdatapad6' => sprintf("%2.6f", cache['latdata']),
       'londatapad6' => sprintf("%2.6f", cache['londata']),
       'maps_url' => "#{GOOGLE_MAPS_URL}?q=#{coord_query}",
+      'IsAvailable' => available.to_s.capitalize,
+      'IsArchived' => cache['archived'].to_s.capitalize,
       'location' => location,
       'relativedistance' => relative_distance,
       'hintdecrypt' => decryptHint(cache['hint']),
       'hint' => cache['hint'],
-      'gpxlogs' => createGpxCommentLogs(cache)
     }
   end
     
@@ -474,7 +500,8 @@ class Output
     debug "generating output: #{@outputType} - #{$Format[@outputType]['desc']}"
     @outVars = Hash.new
     @outVars['title'] = title
-    @outVars['counter'] = 0
+    @outVars['version'] = GTVersion.version
+    debug "title: #{title} version: #{GTVersion.version}"
     updateShortNames()
     output = generatePreOutput(title)
 
@@ -493,6 +520,9 @@ class Output
       counter += 1
       @outVars = createExtraVariablesForWid(wid, symbolHash, @outputFormat.fetch('usesLocation', false))
       @outVars['counter'] = counter
+      if @outputType =~ /gpx/
+        @outVars['gpxlogs'] = createGpxCommentLogs(cache)
+      end
       output << replaceVariables(@outputFormat['templateWP'], wid)
     }
 

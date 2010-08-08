@@ -145,6 +145,8 @@ class SearchCache
     end
     cache_data = {
       'guid' => guid,
+      'disabled' => false,
+      'archived' => false
     }
     return cache_data
   end
@@ -268,7 +270,10 @@ class SearchCache
     waypoints_total = nil
     @next_page_target = nil
     post_vars = Hash.new
-    cache = {}
+    cache = {
+      'disabled' => false,
+      'archived' => false
+    }
 
     data = fillInFormData(data)        
     data.split("\n").each { |line|
@@ -358,16 +363,16 @@ class SearchCache
         debug "Found cache details link for #{name}"
 
         if name =~ /class=\"Warning/ or name =~ /class=\"OldWarning/
-          cache['archived']=1
+          cache['archived'] = true
           debug "#{name} appears to be archived"
         end
 
         if name =~ /Strike"\>(.*?)\<\//
-          cache['disabled']=1
+          cache['disabled'] = true
           debug "#{name} appears to be disabled"
           name=$1
         else
-          cache['disabled']=nil
+          cache['disabled'] = false
         end
 
         cache['name']=name.gsub(/ +$/, '')
