@@ -146,7 +146,8 @@ class SearchCache
     cache_data = {
       'guid' => guid,
       'disabled' => false,
-      'archived' => false
+      'archived' => false,
+      'membersonly' => false      
     }
     return cache_data
   end
@@ -272,7 +273,8 @@ class SearchCache
     post_vars = Hash.new
     cache = {
       'disabled' => false,
-      'archived' => false
+      'archived' => false,
+      'membersonly' => true
     }
 
     data = fillInFormData(data)        
@@ -391,8 +393,8 @@ class SearchCache
 
       # small_profile.gif" alt="Premium Member Only Cache" with="15" height="13"></TD
       when /Premium Member Only Cache/
-        debug "Found members only cache. Marking"
-        cache['membersonly'] = 1
+        debug "#{wid} is a members only cache. Marking"
+        cache['membersonly'] = true
                                   
       when /^\s+<\/tr\>/
         debug "--- end of row ---"
