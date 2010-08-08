@@ -64,8 +64,8 @@ class CacheDetails
     if (id =~ /^GC/)
       # If we can look up the guid, use it. It's not actually required, but
       # it behaves a lot more like a standard web browser on the gc.com website.
-      if @waypointHash[id]['sid']
-        suffix = 'guid=' + @waypointHash[id]['sid'].to_s
+      if @waypointHash[id]['guid']
+        suffix = 'guid=' + @waypointHash[id]['guid'].to_s
       else
         suffix = 'wp=' + id.to_s
       end

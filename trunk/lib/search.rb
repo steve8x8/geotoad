@@ -77,13 +77,8 @@ class SearchCache
 
     when 'wid'
       @query_type = 'wid'
-      if key =~ /^GC/i
-        @search_url = "http://www.geocaching.com/seek/cache_details.aspx?wp=#{key.upcase}"
-      else
-        displayError "Waypoint ID's must start with GC"
-        return nil
-      end
-    end            
+      @search_url = "http://www.geocaching.com/seek/cache_details.aspx?wp=#{key.upcase}"
+    end     
 
     if not @query_type
       displayWarning "Could not determine what type of query you mean by #{mode}"
@@ -132,18 +127,26 @@ class SearchCache
   end    
         
   def getResults()
+    debug "Getting results: #{@query_type} at #{@search_url}"
     if @query_type == 'wid'
-      # Yes, we fake it.
-      @waypoints[@query_arg] = {
-        'visitors' => [],
-        'terrain' => 1,
-        'difficulty' => 1,
-        'mdays' => 1
-      }
+      @waypoints[@query_arg] = getWidSearchResult(@search_url)
       return @waypoints
     else
       return searchResults(@search_url)
     end
+  end
+
+  def getWidSearchResult(url)
+    data = getPage(@search_url, {})
+    guid = nil
+    if data =~ /cdpf\.aspx\?guid=([\w-]+)/m
+      guid = $1
+      debug "Found GUID: #{guid}"
+    end
+    cache_data = {
+      'guid' => guid,
+    }
+    return cache_data
   end
   
   def searchResults(url)
@@ -350,7 +353,7 @@ class SearchCache
       
       # <a href="/seek/cache_details.aspx?guid=c9f28e67-5f18-45c0-90ee-76ec8c57452f">Yasaka-Shrine@Zerosen</a>
       when /cache_details.aspx\?guid=(.*?)\">(.*?)\<\/a\>/
-        cache['sid']=$1
+        cache['guid']=$1
         name = $2
         debug "Found cache details link for #{name}"
 
@@ -368,7 +371,7 @@ class SearchCache
         end
 
         cache['name']=name.gsub(/ +$/, '')
-        debug "sid=#{cache['sid']} name=#{cache['name']} (disabled=#{cache['disabled']}, archived=#{cache['archived']})"
+        debug "guid=#{cache['guid']} name=#{cache['name']} (disabled=#{cache['disabled']}, archived=#{cache['archived']})"
 
       # by gonsuke@Zerosen and Bakatono@Zerosen
       when /^ +by (.*?)$/
