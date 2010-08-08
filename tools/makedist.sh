@@ -82,7 +82,6 @@ if [ ! -x "/usr/local/bin/flip" -o ! -x "/usr/bin/flip" ]; then
   cd $WIN_DIR
   ls
   if [ -f "geotoad.exe" ]; then
-    mv init.exe geotoad.exe
     mv compile/data .
     rm -Rf "$WIN_DIR/compile"
     zip -r "$WIN_PKG" *
