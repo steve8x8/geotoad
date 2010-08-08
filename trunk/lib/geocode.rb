@@ -56,7 +56,7 @@ class GeoCode
   def decode_accuracy(value)
     table = ['Continent', 'Country', 'Region (state, province)',
              'Sub-region (county, municipality)', 'Town', 'Post code', 'Street',
-             'Intersection', 'Address', 'Premise (building-name)']
+             'Intersection', 'Address', 'Area']
     if value
       desc = table[value.to_i]
     else
