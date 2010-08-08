@@ -227,14 +227,14 @@ class CacheDetails
 
       # why a geocache is closed. It seems to always be the same.
       # <span id="ctl00_ContentBody_ErrorText"><p class="OldWarning"><strong>Cache Issues:</strong></p><ul class="OldWarning"><li>This cache is temporarily unavailable. Read the logs below to read the status for this cache.</li></ul></span>
-      if line =~ /ErrorText\".*?>(.*?)\<\/span\>/
+      if line =~ /Warning\".*?>(.*?)\</
         warning = $1
         warning.gsub!(/\<.*?\>/, '')
         debug "got a warning: #{warning}"
         if (wid)
           cache['warning'] = warning.dup
         end
-        if warning =~ /Premium Member/
+        if warning =~ /be a Premium Member to view/
           debug "This cache appears to be available to premium members only."
           return 'subscriber-only'
         end
