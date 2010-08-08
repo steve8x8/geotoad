@@ -154,8 +154,10 @@ class Input
     cmdline = "geotoad.rb"
     @@optHash.keys.sort.each { |option|
       if (option != 'queryArg') && (option != 'outDir') && (option != 'outFile') && @@optHash[option]
-        if (@@optHash[option] == 'X')
+        if @@optHash[option] == 'X'
           cmdline = cmdline + " --#{option}"
+        elsif @@optHash[option] == ''
+          cmdline = cmdline
         else
           # Omit the quotes if the argument is 'simple'
           if @@optHash[option].to_s =~ /^[\w\.:]+$/
