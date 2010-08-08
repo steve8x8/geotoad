@@ -34,7 +34,7 @@ echo "Creating $GENERIC_DIR"
 mkdir -p "$GENERIC_DIR"
 rsync -a --exclude ".svn/" . $GENERIC_DIR
 
-sed s/"%VERSION%"/"$VERSION"/g geotoad.rb > $GENERIC_DIR/geotoad.rb
+sed s/"%VERSION%"/"$VERSION"/g lib/version.rb > $GENERIC_DIR/lib/version.rb
 sed s/"%VERSION%"/"$VERSION"/g README.txt > $GENERIC_DIR/README.txt
 sed s/"%VERSION%"/"$VERSION"/g FAQ.txt > $GENERIC_DIR/FAQ.txt
 chmod 755 $GENERIC_DIR/*.rb
