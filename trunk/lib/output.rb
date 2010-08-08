@@ -125,7 +125,7 @@ class Output
       # if it is STILL >wplength
       if word && (word.length > @waypointLength)
         debug "shortname: cutting #{word} in #{name} to #{@waypointLength - 2} chars"
-        word.slice!(0,(@waypointLength - 2))
+        word = word[0..@waypointLength-2]
       end
 
       if word
@@ -133,8 +133,8 @@ class Output
       end
     }
 
-    debug "shortname: final result is #{newwords[0..4].to_s}"
-    newwords[0..4].to_s
+    debug "shortname: final result is #{newwords[0..8].to_s}"
+    newwords[0..8].to_s
   end
 
   # select the format for the next set of output
@@ -340,23 +340,25 @@ class Output
         shorter_name = shortName(cache['name'])
         shortest_name = shorter_name[0..(@waypointLength - 1)]
         # If we have two caches that generate the same short name        
-        if snames.has_key?(shortest_name):
-          other_wid = snames[shortest_name]
+        if snames.has_key?(shortest_name.upcase):
+          other_wid = snames[shortest_name.upcase]
           other_cache = @wpHash[other_wid]
           debug "Conflict found with #{shortest_name} (#{wid} vs #{other_wid})"
-          unique_chars = []
-          0.upto(shortest.length-1) { |x| 
+          unique_chars = ''
+          debug "Conflict resolution using #{shorter_name} and #{other_cache['snameUncut']}"
+          0.upto(shorter_name.length-1) { |x|
             if shorter_name[x] != other_cache['snameUncut'][x]
-              unique_chars << shorter_name[x]
+              unique_chars << shorter_name[x].chr
             end
           }
-          shortest_name = shorter_name[0..(@waypointLength - 4)] + unique_chars.join('')[0..3]
+          debug "short name unique chars: #{unique_chars}"
+          shortest_name = shorter_name[0..(@waypointLength - 4)] + unique_chars[0..3]
           displayMessage "Resolved short-name conflict for #{wid} (#{shortest_name}) and #{other_wid} (#{other_cache['sname']})"
         end
         
-        snames[shortest_name] = wid
-        cache['sname'] = sname[0..(@waypointLength - 1)]
-        cache['snameUncut'] = sname
+        snames[shortest_name.upcase] = wid
+        cache['sname'] = shortest_name
+        cache['snameUncut'] = shorter_name
       # Full length short-name
       elsif @waypointLength == -1
         cache['sname'] = @wpHash[wid]['name']
