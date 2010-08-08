@@ -139,7 +139,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
       "\"Latitude\",\"Longitude\",\"Type\",\"Size\",\"Creation Date\",\"Details\"\r\n",
     'templateWP'    => "\"<%wp.name%>\",\"<%out.wid%>\",\"<%wp.creator%>\"," +
       "<%wp.difficulty%>,<%wp.terrain%>,\"<%wp.latwritten%>\",\"<%wp.lonwritten%>\"," +
-      "\"<%wp.type%>\",\"<%wp.size%>\",\"<%out.cdate%>\",\"<%outText.short_desc%> ... <%outText.long_desc%>\"\r\n"
+      "\"<%wp.type%>\",\"<%wp.size%>\",\"<%out.cdate%>\",\"<%outText.short_desc%> <%outText.long_desc%>\"\r\n"
   },
 
   'gpsman' => {
