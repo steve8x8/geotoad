@@ -2,6 +2,8 @@
 require 'cgi'
 require 'lib/templates'
 
+GOOGLE_MAPS_URL = 'http://maps.google.com/maps'
+
 class Output
   include Common
   include Messages
@@ -436,12 +438,15 @@ class Output
       relative_distance = ''
     end
     
+    debug "LOCATION: #{get_location}"
     if get_location
       geocoder = GeoCode.new()
       location = geocoder.lookup_coords(cache['latdata'], cache['londata'])
     else
       location = 'Undetermined'
     end
+    debug "LOCATION SET: #{location}"
+    coord_query = URI.escape("#{cache['latdata']},#{cache['londata']}")
     
     variables = {
       'wid' => wid,
@@ -454,6 +459,8 @@ class Output
       'londatapad5' => sprintf("%2.5f", cache['londata']),
       'latdatapad6' => sprintf("%2.6f", cache['latdata']),
       'londatapad6' => sprintf("%2.6f", cache['londata']),
+      'maps_url' => "#{GOOGLE_MAPS_URL}?q=#{coord_query}",
+      'location' => location,
       'relativedistance' => relative_distance,
       'hintdecrypt' => decryptHint(cache['hint']),
       'hint' => cache['hint'],
@@ -482,7 +489,7 @@ class Output
       cache = @wpHash[wid]
       debug "--- Output loop: #{wid} - #{cache['name']} by #{cache['creator']}"
       counter += 1
-      @outVars = createExtraVariablesForWid(wid, symbolHash, @outputFormat.fetch('uses_location', false))
+      @outVars = createExtraVariablesForWid(wid, symbolHash, @outputFormat.fetch('usesLocation', false))
       @outVars['counter'] = counter
       output << replaceVariables(@outputFormat['templateWP'], wid)
     }

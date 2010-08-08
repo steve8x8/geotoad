@@ -21,7 +21,7 @@ $Format = {
     'templatePre'    => "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><loc version=\"1.0\" src=\"EasyGPS\">",
     'templateWP'    => "<waypoint><name id=\"<%out.id%>\"><![CDATA[<%wp.name%>]]></name>" +
       "<coord lat=\"<%wp.latdata%>\" lon=\"<%wp.londata%>\"/>" +
-      "<type>geocache</type><link text=\"Cache Details\"><%out.url%></link></waypoint>",
+      "<type>geocache</type><link text=\"Cache Details\"><%wp.url%></link></waypoint>",
     'templatePost'    => '</loc>',
   },
 
@@ -43,7 +43,7 @@ $Format = {
       "  <time><%out.XMLDate%></time>\r\n" +
       "  <name><%outEntity.id%></name>\r\n" +
       "  <desc><%wpEntity.name%> by <%wpEntity.creator%>, <%wp.type%> (<%wp.difficulty%>/<%wp.terrain%>)</desc>\r\n" +
-      "  <url><%out.url%></url>\r\n" +
+      "  <url><%wp.url%></url>\r\n" +
       "  <urlname><%wpEntity.name%></urlname>\r\n" +
       "  <sym>Geocache</sym>\r\n" + 
       "  <type>Geocache|<%wp.fulltype%></type>\r\n" +
@@ -96,13 +96,13 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
     'templateIndex' => "* <a href=\"#<%out.wid%>\"><%wpEntity.name%></a><br>",
     'usesLocation' => true,
     'templateWP'    =>
-      "\n\n<hr noshade size=\"1\">\n<a name=\"<%out.wid%>\"></a><font color=\"#000099\"><big><b><a href=\"<%out.url%>\"><%wp.name%>&nbsp;<%out.symbols%></a></b></big></font><br>\n" +
-      "<font color=\"#555555\"><b><%wpEntity.creator%></b></font>, <%wp.latwritten%> <%wp.lonwritten%> (<%out.location%>)<br>" +
+      "\n\n<hr noshade size=\"1\">\n<a name=\"<%out.wid%>\"></a><font color=\"#000099\"><big><b><a href=\"<%wp.url%>\"><%wp.name%>&nbsp;<%out.symbols%></a></b></big></font> by <font color=\"#555555\"><b><%wpEntity.creator%></b></font><br>\n" +
+      "<a href=\"<%out.maps_url%>\"><%wp.latwritten%> <%wp.lonwritten%></a> near <%out.location%><br>" +
       "<font color=\"#339933\"><%wp.type%> (<%wp.size%>) D<%wp.difficulty%>/T<%wp.terrain%> F:<%wp.funfactor%> <%out.relativedistance%><br>" +
-      "placed: <%out.cdate%> last comment: <%wp.comment0DaysAgo%> days ago (<%wp.comment0Type%>)</font><br>" +
+      "placed: <%out.cdate%> last comment: <%wp.last_find_days%> days ago (<%wp.last_find_type%>)</font><br>" +
       "<p><%wp.additional_raw%><%wp.shortdesc%></p>\n" +
       "<p><%wp.longdesc%></p>\n" +
-      "<p><font color=\"#555555\"><%outEntity.hint%></font></p>\n",
+      "<p><font color=\"#555555\"><%out.hint%></font></p>\n",
     'templatePost'    => "</body></html>"
   },
 
@@ -316,7 +316,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
     'desc'         => 'DeLorme TXT import datafile',
     'templatePre'  => "BEGIN SYMBOL\n",
     'templateWP'   => "<%wp.latdata%>,<%wp.londata%>," +
-      "<%out.id%>\{URL=<%out.url%>\},<%wp.type%>\n",
+      "<%out.id%>\{URL=<%wp.url%>\},<%wp.type%>\n",
     'templatePost' => "END",
   },
 

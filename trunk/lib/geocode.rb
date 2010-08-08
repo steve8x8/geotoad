@@ -1,4 +1,5 @@
 # A library for automatic location searches, using the Google Geocoding API
+require 'csv'
 
 require 'common'
 require 'cgi'
@@ -25,13 +26,21 @@ class GeoCode
   end
 
   def lookup_coords(lat, lon)
-    return 'Kalamazoo, MI, USA'
+    coords = "#{lat},#{lon}"
+    debug "geocode looking up #{coords}"
+    data = get_url(create_url(coords))
+    code, accuracy, location = parse_data(data)
+    if code == "200"
+      return location
+    else
+      return "Unknown"
+    end
   end
 
   def create_url(location)
     q = CGI.escape(location)
     url = "#{MAPS_URL}?q=#{q}&output=csv&oe=utf8&sensor=false&key=#{KEY}"
-    debug "url: #{url}"
+    debug "geocode url: #{url}"
     return url
   end
 
@@ -45,7 +54,7 @@ class GeoCode
   end
 
   def decode_accuracy(value)
-    table = [nil, 'Country', 'Region (state, province)',
+    table = ['Continent', 'Country', 'Region (state, province)',
              'Sub-region (county, municipality)', 'Town', 'Post code', 'Street',
              'Intersection', 'Address', 'Premise (building-name)']
     if value
@@ -59,7 +68,7 @@ class GeoCode
 
   # Parse the CSV returned by http://code.google.com/apis/maps/documentation/geocoding/
   def parse_data(data)
-    return data.chomp.split(',')
+    return CSV.parse_line(data)
   end
 
 end
