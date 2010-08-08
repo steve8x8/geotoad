@@ -147,7 +147,7 @@ class CacheDetails
       if line =~ /\<title.*\((GC\w+)\) (.*?) by (.*?)\</
         wid = $1
         name = $2
-        creator = $4
+        creator = $3
         debug "wid = #{wid} name=#{name} creator=#{creator}"
         cache = @waypointHash[wid]
         cache['name'] = name
@@ -266,23 +266,29 @@ class CacheDetails
     end
     
     if data =~ /\<div id="div_sd"\>\s*\<div\>(.*?)\<\/div\>\s*\<\/div\>/m
-      shortdesc = $1
+      shortdesc = $1.gsub(/^\s+/, '').gsub(/\s+$/, '')
       debug "found short desc: [#{shortdesc}]"
       cache['shortdesc'] = removeAlignments(fixRelativeImageLinks(removeSpam(shortdesc)))
     end
 
     if data =~ /\<div id="div_ld"\>\s*\<div\>(.*?)\<\/div\>\s*\<\/div\>/m
-      longdesc = $1
+      longdesc = $1.gsub(/^\s+/, '').gsub(/\s+$/, '')
       debug "got long desc [#{longdesc}]"
       longdesc = removeAlignments(fixRelativeImageLinks(removeSpam(longdesc)))
       cache['longdesc'] = longdesc
     end
 
     # Parse the additional waypoints table. Needs additional work for non-HTML templates.
-    comments, last_find, fun_factor = parseComments(data, cache['creator'])
+    comments, last_find_date, fun_factor = parseComments(data, cache['creator'])
     cache[comments] = comments
-    if cache['mdays'] == -1 and last_find:
-      cache['mtime'] = last_find
+    if comments:
+      debug comments.inspect
+      cache['last_find_type'] = comments[0]['type']
+      cache['last_find_days'] = daysAgo(comments[0]['date'])
+    end
+    
+    if cache['mdays'] == -1 and last_find_date:
+      cache['mtime'] = last_find_date
       cache['mdays'] = daysAgo(cache['mtime'])
     end
     cache['funfactor'] = fun_factor      
@@ -371,7 +377,8 @@ class CacheDetails
         'comment' => comment,
         'grade' => grade
       }
-      debug "COMMENT: #{comment.inspect}"      
+      debug "COMMENT: #{comment.inspect}"
+      comments <<  comment
     }
     return [comments, last_find, calculateFun(total_grade, graded)]
   end
