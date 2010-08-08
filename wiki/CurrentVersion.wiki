@@ -1,10 +1,8 @@
 #labels Deprecated
-version=3.11.0
+version=3.12.0
 {{{
- - Improved handling of connection failures
- - Added -C / --clearCache option
- - Compatible with Ruby 1.9
- - Size added to CSV output
- - Support added for earthcaches
- -  Update to handle latest HTML changes to geocaching.com
+- Update to the latest geocaching.com layout changes
+- HTML output now includes more detailed address location (including address)
+- Improved GPX output (available, archived, version tags)
+- Comment logs now include 10 caches (up from 5)
 }}}
