@@ -163,6 +163,7 @@ class Filter
     debug "filtering by notUser: #{nick}"
         
     @waypointHash.each_key { |wid|
+      debug "#{wid} visitors: #{@waypointHash[wid]['visitors']}"
       if (@waypointHash[wid]['visitors'].include?(nick))
         debug " - #{nick} has visited #{wid} #{@waypointHash[wid]['name']}, filtering."
         @waypointHash.delete(wid)
@@ -175,7 +176,7 @@ class Filter
     debug "filtering by User: #{nick}"
         
     @waypointHash.each_key { |wid|
-      debug "notUser #{nick}: #{wid}"
+      debug "#{wid} visitors: #{@waypointHash[wid]['visitors']}"
       if (! @waypointHash[wid]['visitors'].include?(nick))
         debug " - #{nick} has not visited #{@waypointHash[wid]['name']}, filtering."
         @waypointHash.delete(wid)

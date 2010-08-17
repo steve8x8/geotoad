@@ -45,7 +45,7 @@ $Format = {
       "  <desc><%wpEntity.name%> by <%wpEntity.creator%>, <%wp.type%> (<%wp.difficulty%>/<%wp.terrain%>)</desc>\r\n" +
       "  <url><%wp.url%></url>\r\n" +
       "  <urlname><%wpEntity.name%></urlname>\r\n" +
-      "  <sym>Geocache</sym>\r\n" + 
+      "  <sym><%outEntity.cacheSymbol%></sym>\r\n" + 
       "  <type>Geocache|<%wp.fulltype%></type>\r\n" +
       "  <groundspeak:cache id=\"<%wp.guid%>\" available=\"<%out.IsAvailable%>\" archived=\"<%out.IsArchived%>\" xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0\">\r\n" +
       "  <groundspeak:name><%wpEntity.name%></groundspeak:name>\r\n" +
