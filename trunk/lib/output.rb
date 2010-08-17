@@ -77,6 +77,7 @@ class Output
   def initialize
     @output = Array.new
     @waypointLength = 0
+    @username = nil
   end
 
   def input(data)
@@ -183,8 +184,9 @@ class Output
   end
 
   ## sets up for the filtering process ################3
-  def prepare (title)
+  def prepare (title, username)
     @title = title
+    @username = username
 
     # if we are not actually generating the output, lets do it in a meta-fashion.
     debug "preparing for #{@outputType}"
@@ -475,6 +477,12 @@ class Output
     coord_query = URI.escape("#{cache['latdata']},#{cache['londata']}")
     available = (not cache['disabled'])
     
+    if @username and cache['visitors'].include?(@username)
+      symbol = 'Geocache Found'
+    else
+      symbol = 'Geocache'
+    end
+    
     variables = {
       'wid' => wid,
       'symbols' => symbols,
@@ -493,6 +501,7 @@ class Output
       'relativedistance' => relative_distance,
       'hintdecrypt' => decryptHint(cache['hint']),
       'hint' => cache['hint'],
+      'cacheSymbol' => symbol,
     }
   end
     

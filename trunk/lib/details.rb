@@ -151,6 +151,9 @@ class CacheDetails
         debug "wid = #{wid} name=#{name} creator=#{creator}"
         cache = @waypointHash[wid]
         cache['name'] = name
+        if ! cache.key?('visitors')
+          cache['visitors'] = []
+        end
         cache['creator'] = creator
         # Calculate a semi-unique integer creator id, since we can no longer get it from this page.
         cache['creator_id'] = Zlib.crc32(creator)
@@ -279,7 +282,8 @@ class CacheDetails
     end
 
     # Parse the additional waypoints table. Needs additional work for non-HTML templates.
-    comments, last_find_date, fun_factor = parseComments(data, cache['creator'])
+    comments, last_find_date, fun_factor, visitors = parseComments(data, cache['creator'])
+    cache['visitors'] = cache['visitors'] + visitors
     cache['comments'] = comments
     if comments:
       cache['last_find_type'] = comments[0]['type']
@@ -339,7 +343,7 @@ class CacheDetails
       date = Time.parse(datestr)
 
       if icon == 'smile':
-        visitors << user
+        visitors << user.downcase
         if not last_find:
           last_find = Time.parse(datestr)
         end
@@ -377,7 +381,7 @@ class CacheDetails
       debug "COMMENT: #{comment.inspect}"
       comments <<  comment
     }
-    return [comments, last_find, calculateFun(total_grade, graded)]
+    return [comments, last_find, calculateFun(total_grade, graded), visitors]
   end
 
   def removeSpam(text)

@@ -570,7 +570,7 @@ class GeoToad
     @queryTitle = @queryTitle + " (" + Time.now.strftime("%d%b%y %H:%M") + ")"
 
     # and do the dirty.
-    outputData = output.prepare(@queryTitle);
+    outputData = output.prepare(@queryTitle, @option['user']);
     output.commit(outputFile)
     displayMessage "Saved to #{outputFile}"
   end
