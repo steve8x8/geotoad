@@ -52,7 +52,6 @@ class SearchCache
 
     when 'keyword'
       @query_type = 'key'
-      @query_type = 'zip'
 
     when 'wid'
       @query_type = 'wid'
