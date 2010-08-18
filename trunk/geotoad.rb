@@ -464,7 +464,7 @@ class GeoToad
     # caches with warnings we choose not to include.
     if ! @option['includeDisabled']
       displayMessage "Filtering out disabled caches"
-      @filtered.removeByElement('warning')
+      @filtered.removeByElement('disabled')
     end
 
     if @option['descKeyword']
