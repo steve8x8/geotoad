@@ -328,5 +328,16 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
     'templateWP'   => "<%wp.latdata%>,<%wp.londata%>," +
       "<%out.id%>,<%wp.type%>\n",
     'templatePost' => "END",
-  }
+  },
+  # contributed by regengott.nass
+  'sms' => {
+    'ext'         => 'sms',
+    'mime'        => 'text/plain',
+    'desc'        => '(SMS) Shorten relevant infos for SMS info',
+    'spacer'      => "",
+    'templatePre' => "",
+    'templateWP'  => "<%wpText.name%>,<%out.wid%>,<%wpText.creator%>," +
+      "D<%wp.difficulty%>,T<%wp.terrain%>,<%out.relativedistance%>,<%wp.latwritten%>,<%wp.lonwritten%>," +
+      "<%wp.type%>,<%wp.size%>\r\n"
+  },  
 }
