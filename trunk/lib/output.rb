@@ -286,8 +286,11 @@ class Output
     
     # From http://snippets.dzone.com/posts/show/1161
     str.unpack("U*").collect {|s| (s > 127 ? "&##{s};" : s.chr) }.join("")
+    
+    # Strip out control characters
+    text.gsub!(/[\x00-\x1f]/, '?')
+    text.gsub!(/\x7f/, '?')
      
-
     # Fix apostrophes so that they show up as expected. Fixes issue 26.
     text.gsub!('&#8217;', "'")
     if text != str
