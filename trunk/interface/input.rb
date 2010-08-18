@@ -311,7 +311,7 @@ class Input
 
       when '3'
         if (@@optHash['queryType'] == 'location')
-          @@optHash['queryArg'] = ask('Type in an address, city, state, postal code, or coordinates (uses Google Maps)', 'NO_DEFAULT')
+          @@optHash['queryArg'] = ask("Type in an address, city, state, postal code, or coordinates (uses Google Maps).\nMultiple locations may be separated by the | symbol\n\n", 'NO_DEFAULT')
         end
 
         if (@@optHash['queryType'] == 'wid')
