@@ -527,8 +527,12 @@ class GeoToad
 
     # if we have selected the name of the output file, use it.
     # otherwise, take our invented name, sanitize it, and slap a file extension on it.
-    if @option['output'] && (@option['output'] !~ /\/$/)
-      outputFile = File.basename(@option['output'])
+    filename = @option['output']
+    displayInfo "Output filename: #{filename}"
+    filename.gsub!('\\', '/')
+    
+    if filename and filename !~ /\/$/
+      outputFile = File.basename(filename)
     else
       outputFile = @defaultOutputFile.gsub(/\W/, '_')
       outputFile.gsub!(/_+/, '_')
