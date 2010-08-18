@@ -25,54 +25,33 @@ class SearchCache
     @query_arg = key
     supports_distance = false    
     case mode
-    when 'location'
-      # Try country/state search, then fall back to geocoding.
-      code = SearchCode.new("country")
-      @query_arg = code.lookup(key)
-      if not @query_arg
-        code = SearchCode.new("state")
-        @query_arg = code.lookup(key)
-      end
-     
-      if @query_arg
-        debug "#{key} was found in #{code.type} database, skipping geocode."
-        @query_type = code.type
+    when 'location', 'state', 'country', 'zipcode'
+      @query_type = 'location'
+      @query_arg = key
+      geocoder = GeoCode.new()
+      accuracy, lat, lon = geocoder.lookup_location(key)
+      debug "geocoder returned: a:#{accuracy} x:#{lat} y:#{lon}"
+      if not accuracy
+        displayWarning "Google Maps failed to determine the location of #{key}"
+        return nil
       else
-        @query_type = 'location'
-        @query_arg = key
-        geocoder = GeoCode.new()
-        accuracy, lat, lon = geocoder.lookup_location(key)
-        debug "geocoder returned: a:#{accuracy} x:#{lat} y:#{lon}"
-        if not accuracy
-          displayWarning "Google Maps failed to determine the location of #{key}"
-          return nil
-        else
-          displayMessage "Google Maps found \"#{key}\". Accuracy level: #{accuracy}"
-        end
-        @search_url = BASE_URL + "?lat=#{lat}&lng=#{lon}"
-        supports_distance = true
+        displayMessage "Google Maps found \"#{key}\". Accuracy level: #{accuracy}"
       end
-
-    when 'state', 'country'
-      code = SearchCode.new(mode)
-      @query_type = code.type
-      @query_arg = code.lookup(key)
+      @search_url = BASE_URL + "?lat=#{lat}&lng=#{lon}"
+      supports_distance = true
 
     when 'coord'
       @query_type = 'coord'
       supports_distance = true
       lat_dir, lat_h, lat_ms, long_dir, long_h, long_ms, lat_ns, long_ew = parseCoordinates(key)
       @search_url = BASE_URL + '?lat_ns=' + lat_ns.to_s + '&lat_h=' + lat_h + '&lat_mmss=' + (lat_ms==''?'0':lat_ms) + '&long_ew=' + long_ew.to_s + '&long_h=' + long_h + '&long_mmss=' + (long_ms==''?'0':long_ms)
-
+    
     when 'user'
       @query_type = 'ul'
       @ttl = 43200
 
     when 'keyword'
       @query_type = 'key'
-
-    when 'zipcode'
-      supports_distance = true
       @query_type = 'zip'
 
     when 'wid'
