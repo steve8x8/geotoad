@@ -159,7 +159,6 @@ class CacheDetails
         cache['creator_id'] = Zlib.crc32(creator)
         cache['shortdesc'] = ''
         cache['longdesc'] = ''
-        cache['details'] = ''
         cache['funfactor'] = 0
         cache['url'] = "http://www.geocaching.com/seek/cache_details.aspx?wp=" + wid
 
