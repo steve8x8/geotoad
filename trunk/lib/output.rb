@@ -319,6 +319,8 @@ class Output
     text.gsub!(/\<img.*?\>/i, '[img]')
     text.gsub!(/\<.*?\>/m, ' *')
     text.gsub!(/\&nbsp\;/, ' ')
+    text.gsub!(/\&quot\;/, '"')
+    text.gsub!(/\&apos\;/, "'")
     text.gsub!(/\&rsquo\;/, "'")
     text.gsub!(/\&ndash;/, " - ")
     text.gsub!(/\&deg;/, "'")
@@ -467,7 +469,7 @@ class Output
     if cache['distance']
       relative_distance = cache['distance'].to_s + 'mi ' + cache['direction']
     else
-      relative_distance = ''
+      relative_distance = 'N/A'
     end
     
     if get_location
