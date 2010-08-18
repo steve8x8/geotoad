@@ -186,7 +186,7 @@ class Input
 
     puts " -o [filename]          output file name (automatic otherwise)"
     puts " -x [format]            output format type, see list below"
-    puts " -q [zip|state|coord|country|user|wid]   query type (zip by default)"
+    puts " -q [location|user|wid]   query type (location by default)"
 
     puts " -d/-D [0.0-5.0]        difficulty minimum/maximum"
     puts " -t/-T [0.0-5.0]        terrain minimum/maximum"
@@ -235,7 +235,7 @@ class Input
     puts ""
     puts "::: EXAMPLES:"
     puts "  geotoad.rb -u helixblue -p password 27502"
-    puts "  geotoad.rb -u john -p password -d 3 -s helixblue -f vcf -o NC.vcf -q state \'North Carolina\'"
+    puts "  geotoad.rb -u john -p password -d 3 -s helixblue -f vcf -o NC.vcf \'North Carolina\'"
   end
 
   def showMenu
@@ -299,7 +299,7 @@ class Input
       when '2'
         guess = nil
         while not guess
-          type = ask("What type of search would you like to perform? (location, state, country, user, keyword [title only])", nil)
+          type = ask("What type of search would you like to perform? (location, user, keyword [title only])", nil)
           guess = guessQueryType(type)
           if not type
             puts "** You need to specify a search type."
@@ -311,21 +311,8 @@ class Input
 
       when '3'
         if (@@optHash['queryType'] == 'location')
-          @@optHash['queryArg'] = ask('Type in an address, city/state/country, zip, or coordinates (uses Google Maps)', 'NO_DEFAULT')
+          @@optHash['queryArg'] = ask('Type in an address, city, state, postal code, or coordinates (uses Google Maps)', 'NO_DEFAULT')
         end
-
-        if (@@optHash['queryType'] == 'zipcode')
-          @@optHash['queryArg'] = ask('Enter a list of zipcodes (seperated by commas)', 'NO_DEFAULT').gsub(/, */, ':')
-        end
-
-        if (@@optHash['queryType'] == 'state')
-          @@optHash['queryArg'] = ask('Enter a list of states (seperated by commas)', 'NO_DEFAULT').gsub(/, */, ':')
-        end
-
-        if (@@optHash['queryType'] == 'country')
-          @@optHash['queryArg'] = ask('Enter a list of countries (seperated by commas)', 'NO_DEFAULT').gsub(/, */, ':')
-        end
-
 
         if (@@optHash['queryType'] == 'wid')
           @@optHash['queryArg'] = ask('Enter a list of waypoint id\'s (seperated by commas)', 'NO_DEFAULT').gsub(/, */, ':')
@@ -429,10 +416,10 @@ class Input
         @@optHash['foundDateInclude'] = askNumber('How many days ago is the maximum a geocache can be found in for your list? (any)', nil)
 
       when '14'
-        @@optHash['titleKeyword'] = ask('Only include geocaches with these keywords in their title (seperate by |)?', nil)
+        @@optHash['titleKeyword'] = ask('Filter caches by title keywords (negate using !, seperate multiple using |): ', nil)
 
       when '15'
-        @@optHash['descKeyword'] = ask('Only include geocaches with these keywords in their description (seperate by |)', nil)
+        @@optHash['descKeyword'] = ask('Filter caches by description keywords (negate using !, seperate multiple using |): ', nil)
 
       when '16'
         @@optHash['userExclude'] = ask('Filter out geocaches found by these people (seperate by commas)', '').gsub(/, */, ':')
@@ -596,13 +583,13 @@ class Input
     when /loc/
       return 'location'
     when /zip/
-      return 'zipcode'
+      return 'location'
     when /coo/
       return 'coord'
     when /stat/
-      return 'state'
+      return 'location'
     when /country/
-      return 'country'
+      return 'location'
     when /wid/
       return 'wid'
     when /waypoint/
