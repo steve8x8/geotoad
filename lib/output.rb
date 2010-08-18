@@ -277,11 +277,13 @@ class Output
     # CGI.escapeHTML will try to re-escape previously escaped entities.
     # Fix numerical entities such as Pateniemen l&amp;#228;mp&amp;#246;keskus
     text.gsub!(/&amp;([\#\d][\d]+;)/, "&\\1")
+
     # XML only pre-defines the following named character entities:
-    text.gsub!('&amp;(amp;)', "&\\1")
-
-    # There is also [lg]t; &quot; &apos;, but they seem to be handled properly.
-
+    text.gsub!(/\&amp;(amp;)/, "&\\1")
+    text.gsub!(/\&amp;([lg]t;)/, "&\\1")
+    text.gsub!(/\&amp;(quot;)/, "&\\1")
+    text.gsub!(/\&amp;(apos;)/, "&\\1")
+    
     # From http://snippets.dzone.com/posts/show/1161
     str.unpack("U*").collect {|s| (s > 127 ? "&##{s};" : s.chr) }.join("")
      
