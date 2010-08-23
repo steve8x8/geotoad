@@ -115,7 +115,7 @@ class CacheDetails
     cache = nil
 
     data.split("\n").each { |line|
-      # <title id="pageTitle">(GC1145) Lake Crabtree computer software store by darylb</title> 
+      # <title id="pageTitle">(GC1145) Lake Crabtree computer software store by darylb</title>
       if line =~ /\<title.*\((GC\w+)\) (.*?) by (.*?)\</
         wid = $1
         name = $2
@@ -140,7 +140,7 @@ class CacheDetails
         end
       end
 
-      # <h2><img src="../images/WptTypes/2.gif" alt="Traditional Cache" width="32" height="32" />&nbsp;Lake Crabtree computer software store</h2> 
+      # <h2><img src="../images/WptTypes/2.gif" alt="Traditional Cache" width="32" height="32" />&nbsp;Lake Crabtree computer software store</h2>
       if line =~ /WptTypes.*? alt="(.*?)"/
         if ! cache
           displayWarning "Found waypoint type, but never saw cache title. Did geocaching.com change their layout again?"
@@ -149,8 +149,8 @@ class CacheDetails
         cache['type'] = $1.split(' ')[0].downcase.gsub(/\-/, '')
         debug "stype=#{cache['type']} full_type=#{$1}"
       end
-      
-      # <p class="Meta"><strong>Difficulty:</strong> <img src="http://www.geocaching.com/images/stars/stars2_5.gif" alt="2.5 out of 5" /></p> 
+
+      # <p class="Meta"><strong>Difficulty:</strong> <img src="http://www.geocaching.com/images/stars/stars2_5.gif" alt="2.5 out of 5" /></p>
       if line =~ /Difficulty:.*?([-\d\.]+) out of 5/
         if $1.to_f == $1.to_i
           cache['difficulty']=$1.to_i
@@ -160,7 +160,7 @@ class CacheDetails
         debug "difficulty: #{cache['difficulty']}"
       end
 
-      # <p class="Meta"><strong>Terrain:</strong> <img src="http://www.geocaching.com/images/stars/stars2.gif" alt="2 out of 5" /></p> 
+      # <p class="Meta"><strong>Terrain:</strong> <img src="http://www.geocaching.com/images/stars/stars2.gif" alt="2 out of 5" /></p>
       if line =~ /Terrain:.*?([-\d\.]+) out of 5/
         if $1.to_f == $1.to_i
           cache['terrain']=$1.to_i
@@ -170,7 +170,7 @@ class CacheDetails
         debug "terrain: #{cache['terrain']}"
       end
 
-      # <p class="Meta">Placed Date: 7/17/2001</p> 
+      # <p class="Meta">Placed Date: 7/17/2001</p>
       if line =~ /Placed Date: ([\w\/]+)\</
         if $1 != 'N/A'
           cache['ctime'] = parseDate($1)
@@ -184,7 +184,7 @@ class CacheDetails
         return 'login-required'
       end
 
-      # <p class="Meta"><strong>Size:</strong> <img src="../images/icons/container/regular.gif" alt="Size: Regular" />&nbsp;<small>(Regular)</small></p> 
+      # <p class="Meta"><strong>Size:</strong> <img src="../images/icons/container/regular.gif" alt="Size: Regular" />&nbsp;<small>(Regular)</small></p>
       if line =~ /\<img src=".*?" alt="Size: (.*?)" \/\>/
         cache['size'] = $1.downcase
         debug "found size: #{$1}"
@@ -216,19 +216,19 @@ class CacheDetails
     }
 
     # Short-circuit and abort if the data is no good.
-    if not cache:
+    if not cache
       displayWarning "Unable to parse any cache details from data."
       return false
     elsif not cache['latwritten']
       displayWarning "#{cache['wid']} was parsed, but no coordinates found."
       return false
     end
-    
-    
-    # <div id="div_hint" class="HalfLeft"> 
-    #    <div> 
+
+
+    # <div id="div_hint" class="HalfLeft">
+    #    <div>
     #        Vs lbh ner pyrire, lbh pna cebonoyl svaq n cnexvat ybg gb fgneg sebz gung jvyy trg lbh pybfre gb gur pnpur. Vs lbh ragre gur pnpur nern sebz gur rnfg lbh jvyy tb vagb gur bcra nern naq gura onpx vagb gur jbbqf. Nsgre lbh ragre gur jbbqf, ybbx sbe n gerr ba gur evtug gung unf gbccyrq jvgu gur onfr orvat evtug ng gur rqtr bs gur cngu (guvf jbhyq or n tbbq cynpr sbe gur pnpur, ohg vg vfa’g urer.) Tb qverpgyl yrsg hc gur uvyy naq ybbx sbe fbzr gbccyrq gerrf. Gur pnpur vf pybfr ol – naq cerggl jryy uvqqra.
-    #    </div>            
+    #    </div>
     if data =~ /id="div_hint".*?\>(.*?)\s*\<\/div/m
       hint = $1.strip
       hint.gsub!(/^ +/, '')
@@ -238,7 +238,7 @@ class CacheDetails
       cache['hint'] = hint
       debug "got hint: [#{hint}]"
     end
-    
+
     if data =~ /\<div id="div_sd"\>\s*\<div\>(.*?)\<\/div\>\s*\<\/div\>/m
       shortdesc = $1.gsub(/^\s+/, '').gsub(/\s+$/, '')
       debug "found short desc: [#{shortdesc}]"
@@ -256,20 +256,20 @@ class CacheDetails
     comments, last_find_date, fun_factor, visitors = parseComments(data, cache['creator'])
     cache['visitors'] = cache['visitors'] + visitors
     cache['comments'] = comments
-    if comments:
+    if comments
       cache['last_find_type'] = comments[0]['type']
       cache['last_find_days'] = daysAgo(comments[0]['date'])
     end
-    
-    if cache['mdays'] == -1 and last_find_date:
+
+    if cache['mdays'] == -1 and last_find_date
       cache['mtime'] = last_find_date
       cache['mdays'] = daysAgo(cache['mtime'])
     end
-    cache['funfactor'] = fun_factor      
+    cache['funfactor'] = fun_factor
     cache['additional_raw'] = parseAdditionalWaypoints(data)
     return cache
   end  # end function
-  
+
   def removeAlignments(text)
     new_text = text.gsub(/(\<div .*?)align=/m, '\1noalign=')
     new_text.gsub!(/(\<p .*?)align="/m, '\1noalign=')
@@ -279,7 +279,7 @@ class CacheDetails
     end
     return new_text
   end
-  
+
   def fixRelativeImageLinks(text)
     new_text = text.gsub(' src="/', ' src="http://www.geocaching.com/')
     if text != new_text
@@ -287,15 +287,15 @@ class CacheDetails
     end
     return new_text
   end
-  
+
   def parseAdditionalWaypoints(text)
-    # <p><p><strong>Additional Waypoints</strong></p></p> 
+    # <p><p><strong>Additional Waypoints</strong></p></p>
     if text =~ /Additional Waypoints.*?(\<table.*?\/table\>)/m
       additional = $1
       return fixRelativeImageLinks(additional)
     else
       return nil
-    end    
+    end
   end
 
   def parseComments(data, creator)
@@ -304,32 +304,29 @@ class CacheDetails
     last_find = nil
     total_grade = 0
     graded = 0
-  
-    # <dt>[<img src='http://www.geocaching.com/images/icons/icon_smile.gif' alt="Found it" />&nbsp;Found it] Saturday, April 03, 2010 by <strong>SirPatrick</strong> (143 found) </dt> 
-    # <dd>Coordinates were spot on.  Found myself within 6 feet of the cache when I first got to the zone but could not find this very well hid cache. Found it after a few minutes of searching.  Nice hide.  SL TFTH.  
+
+    # <dt>[<img src='http://www.geocaching.com/images/icons/icon_smile.gif' alt="Found it" />&nbsp;Found it] Saturday, April 03, 2010 by <strong>SirPatrick</strong> (143 found) </dt>
+    # <dd>Coordinates were spot on.  Found myself within 6 feet of the cache when I first got to the zone but could not find this very well hid cache. Found it after a few minutes of searching.  Nice hide.  SL TFTH.
     # </dd>
     data.scan(/<dt.*?icon_(\w+).*?alt=\"(.*?)\".*?, ([\w, ]+) by \<strong\>(.*?)\<\/strong\>.*?\<dd\>(.*?)\<\/dd\>/m) { |icon, type, datestr, user, comment|
       should_grade = true
       grade = 0
       date = Time.parse(datestr)
 
-      if icon == 'smile':
+      if icon == 'smile'
         visitors << user.downcase
-        if not last_find:
+        if not last_find
           last_find = Time.parse(datestr)
         end
-      elsif icon == 'remove' or icon == 'disabled' or icon == 'greenlight' or icon == 'maint':
+      elsif icon == 'remove' or icon == 'disabled' or icon == 'greenlight' or icon == 'maint'
         should_grade = false
       end
-        
-      if user == creator:
+
+      if user == creator
         debug "comment from creator #{creator}, not grading"
         should_grade = false
       end
 
-      if should_grade:
-      end
-      
       comment = {
         'type' => type,
         'date' => date,

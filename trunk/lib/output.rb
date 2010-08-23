@@ -283,14 +283,14 @@ class Output
     text.gsub!(/\&amp;([lg]t;)/, "&\\1")
     text.gsub!(/\&amp;(quot;)/, "&\\1")
     text.gsub!(/\&amp;(apos;)/, "&\\1")
-    
+
     # From http://snippets.dzone.com/posts/show/1161
     str.unpack("U*").collect {|s| (s > 127 ? "&##{s};" : s.chr) }.join("")
-    
+
     # Strip out control characters
     text.gsub!(/[\x00-\x1f]/, '?')
     text.gsub!(/\x7f/, '?')
-     
+
     # Fix apostrophes so that they show up as expected. Fixes issue 26.
     text.gsub!('&#8217;', "'")
     if text != str
@@ -342,7 +342,7 @@ class Output
   def generatePreOutput(title)
     output = replaceVariables(@outputFormat['templatePre'], nil)
   end
-  
+
   def updateShortNames()
     snames = {}
     @wpHash.each_key { |wid|
@@ -350,8 +350,8 @@ class Output
       if @waypointLength > 1
         shorter_name = shortName(cache['name'])
         shortest_name = shorter_name[0..(@waypointLength - 1)]
-        # If we have two caches that generate the same short name        
-        if snames.has_key?(shortest_name.upcase):
+        # If we have two caches that generate the same short name
+        if snames.has_key?(shortest_name.upcase)
           other_wid = snames[shortest_name.upcase]
           other_cache = @wpHash[other_wid]
           debug "Conflict found with #{shortest_name} (#{wid} vs #{other_wid})"
@@ -366,7 +366,7 @@ class Output
           shortest_name = shorter_name[0..(@waypointLength - 4)] + unique_chars[0..3]
           displayMessage "Resolved short-name conflict for #{wid} (#{shortest_name}) and #{other_wid} (#{other_cache['sname']})"
         end
-        
+
         snames[shortest_name.upcase] = wid
         cache['sname'] = shortest_name
         cache['snameUncut'] = shorter_name
@@ -378,13 +378,13 @@ class Output
       end
     }
   end
-  
+
   def generateHtmlIndex()
     # Returns an index and a hash of wid -> symbol list
     index = '<ul>'
     symbolHash = Hash.new
 
-    @wpHash.keys.sort.each { |wid| 
+    @wpHash.keys.sort.each { |wid|
       cache = @wpHash[wid]
       symbolHash[wid] = ''
       if (@wpHash[wid]['travelbug'])
@@ -413,7 +413,7 @@ class Output
       if @wpHash[wid]['mdays'] < 0
         index_item << '<strong>'
       end
-      
+
       index_item << "<a href=\"\##{wid}\">#{cache['name']}</a>"
       if @wpHash[wid]['mdays'] < 0
         index_item << '</strong>'
@@ -425,13 +425,13 @@ class Output
     index << '</ul>'
     return [index, symbolHash]
   end
-  
+
   def createGpxCommentLogs(cache)
     if not cache['comments']
       debug "No comments found for #{cache['name']}"
       return nil
     end
-    
+
     entries = []
     debug "Generating comment XML for #{cache['name']}"
     cache['comments'].each { |comment|
@@ -474,7 +474,7 @@ class Output
     else
       relative_distance = 'N/A'
     end
-    
+
     if get_location
       geocoder = GeoCode.new()
       location = geocoder.lookup_coords(cache['latdata'], cache['londata'])
@@ -483,13 +483,13 @@ class Output
     end
     coord_query = URI.escape("#{cache['latdata']},#{cache['londata']}")
     available = (not cache['disabled'])
-    
+
     if @username and cache['visitors'].include?(@username)
       symbol = 'Geocache Found'
     else
       symbol = 'Geocache'
     end
-    
+
     variables = {
       'wid' => wid,
       'symbols' => symbols,
@@ -511,7 +511,7 @@ class Output
       'cacheSymbol' => symbol,
     }
   end
-    
+
   def generateOutput(title)
     debug "generating output: #{@outputType} - #{$Format[@outputType]['desc']}"
     @outVars = Hash.new
@@ -528,7 +528,7 @@ class Output
     else
       symbolHash = nil
     end
-    
+
     counter = 0
     @wpHash.keys.sort.each { |wid|
       cache = @wpHash[wid]
