@@ -19,13 +19,12 @@ class SearchCache
     @waypoints = Hash.new
   end
 
-  # set the search mode. valid modes are 'zip', 'state', 'country', 'keyword', coord, user
   def setType(mode, key)
     @query_type = nil
     @query_arg = key
     supports_distance = false    
     case mode
-    when 'location', 'state', 'country', 'zipcode'
+    when 'location'
       @query_type = 'location'
       @query_arg = key
       geocoder = GeoCode.new()
@@ -59,7 +58,7 @@ class SearchCache
     end     
 
     if not @query_type
-      displayWarning "Could not determine what type of query you mean by #{mode}"
+      displayWarning "Invalid query type: #{mode}. Valid types include: location, coord, keyword, wid"
       return nil
     end      
 
@@ -76,7 +75,7 @@ class SearchCache
   end
     
   def parseCoordinates(key)
-    # This regular expression should probably handle any kind of messed. Thanks sbrynen!
+    # This regular expression should probably handle any kind of mess. Thanks sbrynen!
     re = /^([ns-]?)\s*([\d\.]+)\W*([\d\.]*)[\s,]+([ew-]?)\s*([\d\.]+)\W*([\d\.]+)/i
     md = re.match(key)            
     if ! md
@@ -196,50 +195,6 @@ class SearchCache
     return [page_number, pages_total, parsed_total, post_vars, src]
   end
   
-  def fillInFormData(data)
-    # Check if the page has a form. If so, fill it in and return new page data.
-    province_required = false
-    post_vars = Hash.new
-    select = nil
-    
-    data.each_line {|line|
-      if line =~ /onsubmit=\"/
-        debug "Looks like #{@search_url} requires a State/Province selection."
-        province_required = true
-      end
-
-      if province_required
-        if (line =~ /^\<input type=\"hidden\" name=\"([^\"]*?)\".* value=\"([^\"]*?)\" \/\>/)
-          debug "found hidden post variable: #{$1}=#{$2}"
-          post_vars[$1] = $2
-        end
-        if (line =~ /^\<input type=\"submit\" name=\"([^\"]*?)\".* value=\"([^\"]*?)\"/)
-          debug "found submit post variable: #{$1}=#{$2}"
-          post_vars[$1] = $2
-        end
-        
-        if (line =~ /\<select name=\"([^\"]*?)\"/)
-          select = $1
-        elsif (line =~ /\<option selected=\"selected\" value=\"([^\"]*?)\"/)
-          if select
-            debug "found selected option: [" + select + "] #{$1}"
-            post_vars[select]=$1
-            select = nil
-          else
-            debug "found selected option: #{$1}"
-            displayError "Found selected <option>, but no previous <select> tag."
-            return nil
-          end
-        end
-      end
-    }
-    if province_required
-      displayInfo 'Resubmitting search with state/province form data'
-      return getPage(@search_url, post_vars)
-    else
-      return data
-    end
-  end
       
   def parseSearchData(data)
     page_number = nil
@@ -255,7 +210,6 @@ class SearchCache
       'membersonly' => true
     }
 
-    data = fillInFormData(data)        
     data.split("\n").each { |line|
       case line
       # <TD class="PageBuilderWidget"><SPAN>Total Records: <B>2938</B> - Page: <B>147</B> of <B>147</B>
@@ -284,6 +238,7 @@ class SearchCache
           debug "type line: #{line}"
         end
         cache['mdays']=-1
+        debug "Creating short type for #{full_type}"
         short_type = full_type.split(' ')[0].downcase.gsub(/\-/, '')
         cache['fulltype']=full_type
         cache['type']=short_type
