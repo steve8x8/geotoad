@@ -15,7 +15,7 @@ BASE_URL = 'http://www.geocaching.com/seek/nearest.aspx'
 class CountryState
   include Common
   include Messages
-  
+
   def initialize
     @ttl = 86400 * 180
   end
@@ -26,7 +26,7 @@ class CountryState
     if post_vars
       page.postVars=post_vars.dup
     end
-      
+
     if (page.fetch)
       return page.data
     else
@@ -34,18 +34,18 @@ class CountryState
     end
   end
 
-  
+
   def getCountriesPage()
     post_vars, options = parseSearchPage(BASE_URL, nil)
     option, key = findOptionAndValue(options, "By Country")
     debug "Changing #{option} from #{post_vars[option]} to #{key}"
-    post_vars[option] = key        
-    
+    post_vars[option] = key
+
     post_vars, options = parseSearchPage(BASE_URL, post_vars)
     return [post_vars, options]
   end
-  
-  def getCountriesList()
+
+  def getCountryValues()
     post_vars, options = getCountriesPage()
     options.each_key do |option|
       if option =~ /selectCountry/
@@ -53,14 +53,29 @@ class CountryState
       end
     end
   end
-  
+
+  def getCountryList()
+    return getCountryValues.map { |y| y[1] if y[0] != '-1'}
+  end
+
+  def findMatchingCountry(try_country)
+    countries = getCountryList()
+    found = []
+    countries.each do |country|
+      if country =~ /#{try_country}/i
+        found << country
+      end
+    end
+    return found
+  end
+
   def getStatesPage(country)
     post_vars, options = getCountriesPage()
     found_country = nil
     options.each_key do |option|
       if option =~ /selectCountry/
         options[option].each do |key, desc|
-          if key == country or desc == country:
+          if key == country or desc == country
             debug "Setting country option #{option} to #{key} (#{desc})"
             found_country = key
             post_vars[option] = key
@@ -68,8 +83,8 @@ class CountryState
         end
       end
     end
-    
-    if not found_country:
+
+    if not found_country
       displayError "Could not find country: #{country}"
       puts options.inspect
       return nil
@@ -87,7 +102,7 @@ class CountryState
       end
     end
   end
-    
+
   # Find the country option, return it's value
   def findOptionAndValue(options, keyword)
     options.each_key do |option|
@@ -98,13 +113,13 @@ class CountryState
       end
     end
   end
-  
+
   def parseSearchPage(url, post_vars)
     data = getPage(url, post_vars)
     current_select_name = nil
     post_vars = Hash.new
     options = Hash.new
-    
+
     data.each_line {|line|
       if line =~ /^\<input type=\"hidden\" name=\"([^\"]*?)\".* value=\"([^\"]*?)\" \/\>/
         debug "found hidden post variable: #{$1}=#{$2}"
@@ -133,6 +148,4 @@ class CountryState
   end
 end
 
-cs = CountryState.new()
-#puts cs.getCountriesList().inspect
-puts cs.getStatesList("Australia").inspect
+
