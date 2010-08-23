@@ -8,7 +8,6 @@ class CacheDetails
 
   include Common
   include Messages
-  include Bishop
 
   # Use a printable template that shows the last 10 logs.
   @@baseURL="http://www.geocaching.com/seek/cdpf.aspx?lc=10"
@@ -16,33 +15,6 @@ class CacheDetails
   def initialize(data)
     @waypointHash = data
     @useShadow=1
-
-    # we don't need to do this every cache! very inefficient.
-    dataFile="fun_scores.dat"
-    dataDirs=[ File.dirname(__FILE__) + "/../data", "../../data", "../data", "data",
-      File.dirname($0) + "/data", File.dirname($0) + "/../data", findConfigDir ]
-
-    dataDirs.each do |dir|
-      debug "checking #{dir} for #{dataFile}"
-      if File.exists?(dir + "/" + dataFile)
-        @funfile=dir + "/" + dataFile
-        debug "found #{dir}/#{dataFile}"
-      end
-    end
-
-    if @funfile
-      @@bayes = Bishop::Bayes.new
-      if ! @@bayes.load(@funfile)
-        displayMessage "Reading Bayesian data for FunFactor scores from {#@funfile}"
-        @@funfactor=nil
-      else
-        debug "Loaded #{@funfile}"
-        @@funfactor=1
-      end
-    else
-      @@bayes=nil
-      displayWarning "Could not find data/fun_scores.dat, FunFactor scores disabled"
-    end
   end
 
 
@@ -356,16 +328,6 @@ class CacheDetails
       end
 
       if should_grade:
-        good_or_bad = @@bayes.guess(comment)
-        if good_or_bad[0] && good_or_bad[1]
-          grade = (good_or_bad[1][1] - good_or_bad[0][1]) * 100
-          # Put an upper cap on goodness
-          if grade > 28.0
-            grade = 28.0
-          end
-          graded =+ 1
-          total_grade =+ grade
-        end
       end
       
       comment = {
@@ -375,12 +337,12 @@ class CacheDetails
         'user' => user,
         'user_id' => Zlib.crc32(user),
         'text' => comment,
-        'grade' => grade
+        'grade' => 0
       }
       debug "COMMENT: #{comment.inspect}"
       comments <<  comment
     }
-    return [comments, last_find, calculateFun(total_grade, graded), visitors]
+    return [comments, last_find, 0.0, visitors]
   end
 
   def removeSpam(text)

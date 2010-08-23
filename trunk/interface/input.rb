@@ -368,7 +368,7 @@ class Input
 
 
       when '4'
-        @@optHash['distanceMax'] = askNumber("What is the maximum distance from your #{@@optHash['queryType']} that you would like to include geocaches from?", 10)
+        @@optHash['distanceMax'] = askNumber("How far away are you willing to search (miles)", 10)
 
       when '5'
         @@optHash['difficultyMin'] = askNumber('What is the minimum difficulty you would like? (0.0)', nil)

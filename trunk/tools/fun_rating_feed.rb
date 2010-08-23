@@ -5,6 +5,7 @@ $LOAD_PATH << (File.dirname(__FILE__.gsub(/\\/, '/')) + '/' + '../lib')
 
 require 'shadowget'
 require 'auth'
+$debugMode = 0
 
 # If passed a URL to a geocache, this tool downloads all comments
 # and outputs them in a format that can be appended to the funfactor data
@@ -45,7 +46,7 @@ class FunRatingFeed
   end
 
   def parse_comments(uri, data)
-    owner = nil
+    creator = nil
     id = nil
     name = nil
     if data =~ /Log in to view this page/m
@@ -57,17 +58,22 @@ class FunRatingFeed
       if line =~ /(GC\w+) (.*?) \(.*? by (.*)/
         id = $1
         name = $2
-        owner = $3
+        creator = $3
+        name = name.gsub("'", '').chomp
+        creator = creator.gsub("'", '').chomp
         puts "#{id}: "
-        puts "  name: #{name}"
+        puts "  name: '#{name}'"
         puts "  url: #{uri}"
-        puts "  owner: #{owner}"
+        puts "  creator: '#{creator}'"
         puts "  comments: "
       end
   	end
 	
-	
-  	visitors = [owner]
+	  if not creator:
+	    puts "# UNPARSEABLE: {uri}"
+	  end
+
+  	visitors = [creator]
   	comments = []
   	data.scan(/icon_(\w+)\.\w+\" title=\"(.*?)\".*? by \<a href=.*?\>(.*?)\<.*?\)\<br \/\>\<br \/\>(.*?)\<br \/\>\<br \/\>/) do |icon, type, user, comment|
       # <tr><td class="AlternatingRow"><strong><img src="http://www.geocaching.com/images/icons/icon_smile.gif"
@@ -77,11 +83,13 @@ class FunRatingFeed
       # find this one, but then we were victorious!  Took the gecko, although I told my son it was
       # a salamander as this is his school mascot.  :)  TFTH!<br /><br /><small><    
       visitors << user
-      if user == owner or icon == 'remove' or icon == 'disabled' or icon == 'greenlight' or icon == 'maint' or icon == 'note'
+      if user == creator or icon == 'remove' or icon == 'disabled' or icon == 'greenlight' or icon == 'maint' or icon == 'note'
         next
       end
+#      puts "COMMENT: #{comment}"
       comment.gsub!(/\<.*?\>/, ' ')
       comment.gsub!(/This entry was.*/, '') 
+      comment.gsub!(/\[last edit:.*/, '') 
       comment.gsub!(/\s+/, ' ')
       comment.gsub!(/^\s+/, '')
       comment.gsub!(/\s+$/, '')
@@ -103,11 +111,16 @@ class FunRatingFeed
       comment.gsub!(/\!+/, '!')
       comment.gsub!(/[\[:\]\>\<\=\-\)\(\/\*\#\~\%\+]/, ' ')
       # Remove last paragraph (signature)
+      comment.gsub!(/\s+/, ' ')
+      comment.gsub!(/ $/, '')
+      comment.gsub!(/^\W+/, '')
       comment.gsub!(/\<p\>.{4,30}$/, '')
       comment.gsub!(/\<br\>.{4,30}$/, '')
-      puts "  - #{comment}"
+      if comment.length > 2
+        puts "  - '#{comment}'"
+      end
     end
-  
+    puts ""  
   end
 end
 
