@@ -2,7 +2,7 @@
 require 'fileutils'
 
 module Common
-  
+
   def parseDate(date)
     debug "parsing date: [#{date}]"
     timestamp = nil
@@ -36,10 +36,10 @@ module Common
     debug "Timestamp parsed as #{timestamp}"
     return timestamp
   end
-  
+
   def daysAgo(timestamp)
     begin
-      return (Time.now - timestamp).to_i / 86400    
+      return (Time.now - timestamp).to_i / 86400
     rescue TypeError
       warn "Could not convert timestamp '#{timestamp}' to Time object."
       return nil
@@ -49,7 +49,7 @@ module Common
   ## finds a place to put temp files on the system ###################################
   def selectDirectory(dirs)
     dirs.compact.each do |dir|
-      dir.gsub!(/\\/, '/')
+      dir = dir.gsub(/\\/, '/')
       debug "Checking #{dir} for writability."
       if File.exists?(dir) && File.stat(dir).directory?
         # write tests seem to be broken in Windows occassionaly.
@@ -65,7 +65,7 @@ module Common
     # find out where we want our cache #############################
     cacheDir=selectDirectory([ENV['GEO_DIR'], "#{ENV['HOME']}/Library/Caches", "#{ENV['USERPROFILE']}/Documents and Settings", ENV['HOME'], ENV['TEMP'],
         "C:/temp/", "C:/windows/temp", "C:/tmp/", "/var/tmp"])
-  
+
     # probably what we fallback to in most UNIX's.
     if cacheDir == ENV['HOME']
       cacheDir=cacheDir + '/.geotoad/cache'
@@ -76,20 +76,20 @@ module Common
       debug "#{cacheDir} is being used for cache"
     end
 
-    FileUtils::mkdir_p(cacheDir, :mode => 0700)  
+    FileUtils::mkdir_p(cacheDir, :mode => 0700)
     return cacheDir
   end
   def findConfigDir
-    # find out where we want our cache #############################    
+    # find out where we want our cache #############################
     # First check for the .geotoad directory. We may have accidentally been using it already.
     dirs = ["#{ENV['HOME']}/.geotoad",
             ENV['GEO_DIR'],
-            "#{ENV['HOME']}/Library/Preferences", 
+            "#{ENV['HOME']}/Library/Preferences",
             "#{ENV['USERPROFILE']}/Documents and Settings",
             ENV['HOME'],
             'C:/temp/',
-            'C:/windows/temp', 
-            '/var/cache', 
+            'C:/windows/temp',
+            '/var/cache',
             '/var/tmp']
     configDir=selectDirectory(dirs)
     if configDir == ENV['HOME']
@@ -105,9 +105,9 @@ module Common
   ## finds a place to put temp files on the system ###################################
   def findOutputDir
     # find out where we want our cache #############################
-    outputDir=selectDirectory([ ENV['GEO_DIR'], "#{ENV['HOME']}/Desktop", 
+    outputDir=selectDirectory([ ENV['GEO_DIR'], "#{ENV['HOME']}/Desktop",
         "#{ENV['USERPROFILE']}/Desktop", ENV['HOME'] ])
-  
+
     debug "#{outputDir} is being used as the default output directory"
     FileUtils::mkdir_p(outputDir)
     return outputDir

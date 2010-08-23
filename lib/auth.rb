@@ -3,9 +3,9 @@
 
 module Auth
   include Common
-  include Messages 
+  include Messages
   @@login_url = 'http://www.geocaching.com/login/'
-  
+
   def login(user, password)
     debug "login called for user=#{user} pass=#{password}"
     cookie = loadCookie()
@@ -18,11 +18,11 @@ module Auth
     end
     return cookie
   end
-  
+
   def cookieFile()
     return findConfigDir() + '/cookie'
   end
-  
+
   def loadCookie()
     cookie_file = cookieFile()
     if File.exist?(cookie_file)
@@ -33,7 +33,7 @@ module Auth
       return nil
     end
   end
-  
+
   def saveCookie(cookie)
     cookie_file = cookieFile()
     debug "Saving cookie in #{cookie_file}: [#{cookie}]"
@@ -41,19 +41,19 @@ module Auth
     f.puts cookie
     f.close
   end
-      
+
   def checkLoginScreen(cookie)
-    @postVars = Hash.new        
+    @postVars = Hash.new
     page = ShadowFetch.new(@@login_url)
     page.localExpiry=0
-    
+
     if cookie
       debug "Checking to see if my previous cookie is valid (#{cookie})"
       page.cookie = cookie
     end
     data = page.fetch
-        
-    data.each do |line| 
+
+    data.each_line do |line|
       case line
       when /You are logged in as/
         debug "Found login confirmation!"
@@ -70,7 +70,7 @@ module Auth
     debug "Looks like we are not logged in."
     return nil
   end
-    
+
   def getLoginCookie(user, password)
     page = ShadowFetch.new(@postURL)
     page.localExpiry=1
@@ -82,14 +82,14 @@ module Auth
     data = page.fetch
     cookie = page.cookie
     debug "getLoginCookie got cookie: [#{cookie}]"
-    if (cookie =~ /userid/) && (cookie =~ /(ASP.NET_SessionId=\w+)/) 
+    if (cookie =~ /userid/) && (cookie =~ /(ASP.NET_SessionId=\w+)/)
       debug "userid found in cookie, rock on. Setting session to #{$1}"
       cookie=$1
       return cookie
     else
-      displayWarning "Login failed for #{user}:#{password}"          
+      displayWarning "Login failed for #{user}:#{password}"
       return nil
     end
   end
-  
+
 end
