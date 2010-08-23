@@ -12,11 +12,11 @@ require 'messages'
 class ShadowFetch
   attr_reader :data, :waypoints, :cookie
   attr_accessor :url
-    
+
   include Common
   include Messages
   @@downloadErrors = 0
-    
+
   # gets a URL, but stores it in a nice webcache
   def initialize (url)
     @url = url
@@ -30,19 +30,19 @@ class ShadowFetch
       'Accept-Charset'  => 'ISO-8859-1,utf-8;q=0.7,*;q=0.7'
     }
   end
-    
-    
+
+
   def maxFailures=(maxfail)
     debug "setting max failures to #{maxfail}"
     @maxFailures=maxfail
   end
-    
-    
+
+
   def localExpiry=(expiry)
     debug "setting local expiry to #{expiry}"
     @localExpiry=expiry
   end
-    
+
   def postVars=(vars)
     vars.each_key {|key|
       debug "SET #{key}: #{vars[key]}"
@@ -56,17 +56,17 @@ class ShadowFetch
     @postVars=vars
     debug "Set POST string to: #{@postString}"
   end
-    
+
   def src
     debug "src of last get was #{@@src}"
     @@src
   end
-    
+
   def cookie=(cookie)
     debug "set cookie to #{cookie}"
     @cookie=cookie
   end
-    
+
   # returns the cache filename that the URL will be stored as
   def cacheFile(url)
     if (@postVars)
@@ -74,27 +74,27 @@ class ShadowFetch
       @postVars.each_key { |key|
         postdata = postdata + "#{key}=#{@postVars[key]}"
       }
-            
+
       # we used to just keep the postdata in the filename, but DOS has
       # a 255 character limit on filenames. Lets hash it instead.
       url = url + "-P=" + Digest::MD5.hexdigest(postdata)
       debug "added post vars to url: #{url}"
     end
-        
+
     fileParts = url.split('/')
     host = fileParts[2]
-        
-        
+
+
     if fileParts[3]
       dir = fileParts[3..-2].join('/')
       file = fileParts[-1]
       localfile = '/' + host + '/' + dir + '/' + file
     end
-        
+
     if url =~ /\/$/
       localfile = localfile + '/index.html'
     end
-        
+
     # make a friendly filename
     localfile.gsub!(/[=\?\*\%\&\$:\-\.]/, "_")
     localfile.gsub!(/_+/, "_")
@@ -108,11 +108,11 @@ class ShadowFetch
       debug "truncating #{localfile} -- too long"
       localfile = localfile.slice(0,250)
     end
-        
+
     debug "cachefile: #{localfile}"
     return localfile
   end
-    
+
   def invalidate
     filename = cacheFile(@url)
     if File.exist?(filename)
@@ -123,10 +123,10 @@ class ShadowFetch
         displayWarning "Could not delete #{filename}: #{e} - attempting truncation."
         f = File.truncate(filename, 0)
       end
-    end  
+    end
   end
-      
-    
+
+
   # gets the file
   def fetch
     @@src = nil
@@ -136,7 +136,7 @@ class ShadowFetch
     localdir = localparts[0..-2].join("/")		# basename sucks in Windows.
     debug "====+ Fetch URL: #{url}"
     debug "====+ Fetch File: #{localfile}"
-        
+
     # expiry?
     if (File.exists?(localfile))
       age = time.to_i - File.mtime(localfile).to_i
@@ -155,8 +155,8 @@ class ShadowFetch
     else
       debug "no local cache file found for #{localfile}"
     end
-        
-        
+
+
     @data = fetchRemote
     size = nil
     if (@data)
@@ -175,13 +175,13 @@ class ShadowFetch
         return nil
       end
     end
-        
+
     if (! File.exists?(localdir))
       debug "creating #{localdir}"
       FileUtils::mkdir_p(localdir)
     end
-        
-        
+
+
     debug "outputting #{localfile}"
     cache = File.open(localfile, File::WRONLY|File::TRUNC|File::CREAT, 0666)
     cache.puts @data
@@ -189,10 +189,10 @@ class ShadowFetch
     debug "Returning #{@data.length} bytes: #{@data[0..512]}"
     return @data
   end
-    
-    
+
+
   ## the real fetch methods ########################################################
-    
+
   def fetchLocal(file)
     begin
       data = IO.readlines(file).join
@@ -204,17 +204,17 @@ class ShadowFetch
     debug "#{data.length} bytes retrieved from local cache"
     return data
   end
-    
-    
+
+
   def fetchRemote
     debug "fetching remote data from #{@url}"
     @httpHeaders['Referer'] = @url
     data = fetchURL(@url)
   end
-    
+
   def fetchURL (url_str, redirects=2)  # full http:// string!
     raise ArgumentError, 'HTTP redirect too deep' if redirects == 0
-    debug "Fetching [#{url_str}]"        
+    debug "Fetching [#{url_str}]"
     uri = URI.parse(url_str)
     if (@@downloadErrors >= @maxFailures)
       debug "#{@@downloadErrors} download errors so far, no more retries will be attempted."
@@ -223,7 +223,7 @@ class ShadowFetch
       debug "Only #{@@downloadErrors} download errors so far, will try until #{@maxFailures}"
       disableRetry = nil
     end
-    
+
     if ENV['HTTP_PROXY']
       proxy = URI.parse(ENV['HTTP_PROXY'])
       proxy_user, proxy_pass = uri.userinfo.split(/:/) if uri.userinfo
@@ -233,14 +233,14 @@ class ShadowFetch
       debug "No proxy found in environment, using standard HTTP connection."
       http = Net::HTTP.new(uri.host, 80)
     end
-    
+
     if uri.query
       query=uri.path + "?" + uri.query
     else
       query=uri.path
     end
-        
-    if @cookie 
+
+    if @cookie
       debug "Added Cookie to #{url_str}: #{@cookie}"
       @httpHeaders['Cookie']=@cookie
     else
@@ -266,29 +266,29 @@ class ShadowFetch
       displayWarning "Connection refused accessing #{uri.host}:80"
       @@downloadErrors = @@downloadErrors + 1
       sleep(5)
-      return fetchURL(url_str, redirects)      
+      return fetchURL(url_str, redirects)
     end
-          
+
     case resp
     when Net::HTTPSuccess
       debug "#{url_str} successfully downloaded."
-            
+
     when Net::HTTPRedirection
       location = resp['location']
       debug "REDIRECT: [#{location}]"
       # relative redirects are against RFC, but we may encounter them.
       if location =~ /^\//
-        if uri.port == 80:
+        if uri.port == 80
           location = "#{uri.scheme}://#{uri.host}#{location}"
         else
           location = "#{uri.scheme}:#{uri.port}//#{uri.host}#{location}"
         end
       end
-      return fetchURL(location, redirects - 1)            
+      return fetchURL(location, redirects - 1)
     else
       debug "error downloading #{url_str}"
       @@downloadErrors = @@downloadErrors + 1
-            
+
       if (disableRetry)
         # only show the first few failures..
         if @@downloadErrors < @maxFailures
@@ -301,14 +301,14 @@ class ShadowFetch
         sleep(5)
         return fetchURL(url_str, redirects)
       end
-    end    
-        
-        
+    end
+
+
     if resp.response && resp.response['set-cookie']
       @cookie = resp.response['set-cookie']
       debug "receieved cookie: #{@cookie}"
     end
-        
+
     return resp.body
   end
 end
