@@ -1,4 +1,9 @@
 # $Id$
+$LOAD_PATH << (File.dirname(__FILE__.gsub(/\\/, '/')) + '/' + '..')
+$LOAD_PATH << (File.dirname(__FILE__.gsub(/\\/, '/')) + '/' + '../lib')
+
+require 'country_state'
+
 
 class Input
   include Common
@@ -92,7 +97,7 @@ class Input
       [ "--format",                    "-x",        GetoptLong::OPTIONAL_ARGUMENT ],
 
       [ "--distanceMax",                "-y",        GetoptLong::OPTIONAL_ARGUMENT ],
-      [ "--includeDisabled",          "-z",    GetoptLong::NO_ARGUMENT ]      
+      [ "--includeDisabled",          "-z",    GetoptLong::NO_ARGUMENT ]
     ) || usage
 
     # put the stupid crap in a hash. Much nicer to deal with.
@@ -297,21 +302,30 @@ class Input
         @@optHash['password'] = ask("What is your Geocaching.com password?", 'NO_DEFAULT')
 
       when '2'
-        guess = nil
-        while not guess
-          type = ask("What type of search would you like to perform? (location, user, keyword [title only])", nil)
-          guess = guessQueryType(type)
-          if not type
-            puts "** You need to specify a search type."
-          elsif not guess
-            puts "** I could not guess what you meant by '#{type}''"
-          end
+        chosen = askFromList("What type of search would you like to perform:
+
+  1. Within distance of a location (landmark, city, postal code, coordinates) - DEFAULT
+  2. All caches in a country
+  3. All caches in a state or province
+  4. All caches found by a user
+  5. Title keyword search
+
+", ['location', 'country', 'state', 'user', 'keyword'], 'location')
+
+        # Clear the query argument if the type has changed.
+        if @@optHash['queryType'] != chosen
+          @@optHash['queryArg'] = nil
         end
-        @@optHash['queryType'] = guess
+
+        @@optHash['queryType'] = chosen
 
       when '3'
         if (@@optHash['queryType'] == 'location')
           @@optHash['queryArg'] = ask("Type in an address, city, state, postal code, or coordinates (uses Google Maps).\nMultiple locations may be separated by the | symbol\n\n", 'NO_DEFAULT')
+        end
+
+        if (@@optHash['queryType'] == 'country')
+          @@optHash['queryArg'] = askCountry()
         end
 
         if (@@optHash['queryType'] == 'wid')
@@ -551,6 +565,28 @@ class Input
     end
   end
 
+  def askCountry()
+    country = nil
+    c = CountryState.new()
+    while not country
+      try_country = ask("What country would you like to search for?", nil)
+      countries = c.findMatchingCountry(try_country)
+      if countries.length == 1
+        country = countries[0]
+      elsif countries.length > 1
+        i = 0
+        countries.each do |country|
+          i += 1
+          puts "  #{i}. #{country}"
+        end
+        country = askFromList("", countries, nil)
+      else
+        puts "No matches found. Try something else!"
+      end
+    end
+    return country
+  end
+
   def askFromList(string, choices, default)
     # Ask for a floating point number.
     try_again = 1
@@ -584,6 +620,12 @@ class Input
       return 'location'
     when /zip/
       return 'location'
+    when /country/
+      return 'country'
+    when /state/
+      return 'state'
+    when /province/
+      return 'state'
     when /coo/
       return 'coord'
     when /stat/
