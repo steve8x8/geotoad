@@ -45,7 +45,7 @@ $Format = {
       "  <desc><%wpEntity.name%> by <%wpEntity.creator%>, <%wp.type%> (<%wp.difficulty%>/<%wp.terrain%>)</desc>\r\n" +
       "  <url><%wp.url%></url>\r\n" +
       "  <urlname><%wpEntity.name%></urlname>\r\n" +
-      "  <sym><%outEntity.cacheSymbol%></sym>\r\n" + 
+      "  <sym><%outEntity.cacheSymbol%></sym>\r\n" +
       "  <type>Geocache|<%wp.fulltype%></type>\r\n" +
       "  <groundspeak:cache id=\"<%wp.guid%>\" available=\"<%out.IsAvailable%>\" archived=\"<%out.IsArchived%>\" xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0\">\r\n" +
       "  <groundspeak:name><%wpEntity.name%></groundspeak:name>\r\n" +
@@ -82,8 +82,8 @@ $Format = {
       "<b><font color=\"#9900CC\">&infin;</font></b> never been found&nbsp;&nbsp;&nbsp;" +
       "<b><font color=\"#999922\">&sect;</font></b> terrain rating of 3.5+&nbsp;&nbsp;&nbsp;" +
       "<b><font color=\"#440000\">&uarr;</font></b> difficulty rating of 3.5+&nbsp;&nbsp;&nbsp;<br />" +
-      "<b><font color=\"#BB9999\">&hearts;</font></b> fun factor of 2.1+&nbsp;&nbsp;&nbsp;" +
-      "<b><font color=\"#BB2222\">&hearts;</font></b> fun factor of 3.0+<br>" +
+      "<b><font color=\"#BB9999\">&hearts;</font></b> fun factor of 3.0+&nbsp;&nbsp;&nbsp;" +
+      "<b><font color=\"#BB2222\">&hearts;</font></b> fun factor of 4.0+<br>" +
       # Not yet ready for consumption
     #"<b><font color=\"#333333\">--</font></b> comments seem negative&nbsp;&nbsp;&nbsp;" +
     #"<b><font color=\"#000000\">++</font></b> comments seem very positive" +
@@ -339,5 +339,5 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
     'templateWP'  => "<%wpText.name%>,<%out.wid%>,<%wpText.creator%>," +
       "D<%wp.difficulty%>,T<%wp.terrain%>,<%out.relativedistance%>,<%wp.latwritten%>,<%wp.lonwritten%>," +
       "<%wp.type%>,<%wp.size%>\r\n"
-  },  
+  },
 }
