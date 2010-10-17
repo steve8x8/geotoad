@@ -147,7 +147,10 @@ class Input
 
   def interactive
     # pop up the menu
-    @@optHash = loadConfig()
+    loaded_config = loadConfig()
+    if loaded_config
+      @@optHash = loaded_config
+    end
     showMenu()
     saveConfig()
 
@@ -172,6 +175,11 @@ class Input
 
     @@optHash.keys.sort.each { |option|
       if ! @@optHash[option].to_s.empty? and ! hidden_opts.include?(option)
+        # This is the default query type
+        if option == 'queryType' and @@optHash[option] == 'location'
+          next
+        end
+
         if @@optHash[option] == 'X'
           cmdline = cmdline + " --#{option}"
         elsif not @@optHash[option].to_s.empty?
@@ -276,7 +284,6 @@ class Input
       puts "=============================================================================="
       printf(":::           %46.46s               :::\n", "// GeoToad #$VERSION Text User Interface //")
       puts "=============================================================================="
-
       printf("(1)  GC.com login [%-17.17s] | (2)  search type          [%-10.10s]\n", (@@optHash['user'] || 'REQUIRED'), @@optHash['queryType'])
       printf("(3)  %-12.12s [%-17.17s] | (4)  distance maximum            [%-3.3s]\n", @@optHash['queryType'], (@@optHash['queryArg'] || 'REQUIRED'), (@@optHash['distanceMax'] || 10))
       puts   "                                      |"
