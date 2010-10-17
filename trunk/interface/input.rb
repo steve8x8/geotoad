@@ -302,7 +302,7 @@ class Input
       printf("(16) cache not found by  [%-10.10s] | (17) cache owner isn't [%-13.13s]\n", @@optHash['userExclude'], @@optHash['ownerExclude'])
       printf("(18) cache found by      [%-10.10s] | (19) cache owner is    [%-13.13s]\n", @@optHash['userInclude'], @@optHash['ownerInclude'])
 
-      printf("(20) EasyName WP length         [%3.3s] | (21) include disabled caches [%1.1s] \n", @@optHash['waypointLength'] || '0', @@optHash['includeDisabled'])
+      printf("(20) EasyName WP length         [%3.3s] | (21) include disabled caches       [%1.1s] \n", @@optHash['waypointLength'] || '0', @@optHash['includeDisabled'])
       puts "- - - - - - - - - - - - - - - - - - - + - - - - - - - - - - - - - - - - - - -"
       printf("(22) output format       [%-10.10s]   (23) filename   [%-20.20s]\n", (@@optHash['format'] || 'gpx'), (@@optHash['outFile'] || 'automatic'))
       printf("(24) output directory    [%-51.51s]\n", (@@optHash['outDir'] || findOutputDir))
@@ -324,15 +324,16 @@ class Input
         @@optHash['password'] = ask("What is your Geocaching.com password?", 'NO_DEFAULT')
 
       when '2'
+        # TODO(helixblue): Add state searches back in once things settle down.
         chosen = askFromList("What type of search would you like to perform:
 
   1. Within distance of a location (landmark, city, postal code, coordinates) - DEFAULT
-  2. All caches in a country
-  3. All caches in a state or province
-  4. All caches found by a user
-  5. Title keyword search
+  2. All caches found by a user
+  3. By title keyword
+  4. By coordinates
+  5. By waypoint ID
 
-", ['location', 'country', 'state', 'user', 'keyword'], 'location')
+", ['location', 'user', 'keyword', 'coord', 'wid'], 'location')
 
         # Clear the query argument if the type has changed.
         if @@optHash['queryType'] != chosen
@@ -342,23 +343,23 @@ class Input
         @@optHash['queryType'] = chosen
 
       when '3'
-        if (@@optHash['queryType'] == 'location')
+        case @@optHash['queryType']
+        when 'location'
           @@optHash['queryArg'] = ask("Type in an address, city, state, postal code, or coordinates (uses Google Maps).\nMultiple locations may be separated by the | symbol\n\n", 'NO_DEFAULT')
-        end
 
-        if (@@optHash['queryType'] == 'country')
+        when 'country'
           @@optHash['queryArg'] = askCountry()
-        end
 
-        if (@@optHash['queryType'] == 'wid')
+        when 'state'
+          @@optHash['queryArg'] = askState()
+
+        when 'wid'
           @@optHash['queryArg'] = ask('Enter a list of waypoint id\'s (seperated by commas)', 'NO_DEFAULT').gsub(/, */, ':')
-        end
 
-        if (@@optHash['queryType'] == 'user')
+        when 'user'
           @@optHash['queryArg'] = ask('Enter a list of users (seperated by commas)', 'NO_DEFAULT').gsub(/, */, ':')
-        end
 
-        if (@@optHash['queryType'] == 'coord')
+        when 'coord'
           puts "You will be asked to enter in a list of coordinates in the following format:"
           puts "N56 44.392 E015 52.780"
           puts ""
@@ -379,9 +380,8 @@ class Input
 
           query.gsub!(/:$/, '')
           @@optHash['queryArg'] = query
-        end
 
-        if (@@optHash['queryType'] == 'keyword')
+        when 'keyword'
           puts "Please enter a list of keywords, pressing enter after each one."
           puts "Press (q) when done."
 
@@ -609,12 +609,20 @@ class Input
     return country
   end
 
+  def askState()
+    puts "NOT YET IMPLEMENTED"
+  end
+
   def askFromList(string, choices, default)
-    # Ask for a floating point number.
+    # Ask for an item from a list. We accept either a number or word.
+
     try_again = 1
     while try_again
       begin
         answer = ask(string, default)
+        if answer.to_i > 0
+          return choices[answer.to_i - 1]
+        end
         if not answer
           return default
         end
@@ -622,6 +630,7 @@ class Input
         answers = answer.split(':')
         try_again = nil
         for try_answer in answers
+
           if ! choices.include?(try_answer)
             puts "** #{try_answer} is not valid! Try: #{choices.join(', ')}"
             try_again = 1
