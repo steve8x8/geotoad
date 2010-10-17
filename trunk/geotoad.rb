@@ -68,15 +68,18 @@ class GeoToad
       exit
     end
 
-    if (! @option['clearCache']) && ((! @queryArg) || (! @option['user']) || (! @option['password']))
-      if (! @queryArg)
-        displayError "You forgot to specify a #{@queryType} search argument"
-      end
-      if (! @option['user']) ||  (! @option['password'])
-        displayError "You must specify a username and password to download coordinates from Geocaching.com"
-      end
+    if ! @option['clearCache'] && ! @queryArg
+      displayError "You forgot to specify a #{@queryType} search argument"
       @uin.usage
       exit
+    end
+
+    if (! @option['user']) || (! @option['password'])
+      debug "No user/password option given, loading from config."
+      (@option['user'], @option['password']) = @uin.loadUserAndPasswordFromConfig()
+      if (! @option['user']) || (! @option['password'])
+        displayError "You must specify a username and password to download coordinates from Geocaching.com"
+      end
     end
 
     @formatType        = @option['format'] || 'gpx'
@@ -528,10 +531,12 @@ class GeoToad
     # otherwise, take our invented name, sanitize it, and slap a file extension on it.
     filename = @option['output']
     displayInfo "Output filename: #{filename}"
-    filename.gsub!('\\', '/')
 
-    if filename and filename !~ /\/$/
-      outputFile = File.basename(filename)
+    if filename
+      filename.gsub!('\\', '/')
+      if filename and filename !~ /\/$/
+        outputFile = File.basename(filename)
+      end
     else
       outputFile = @defaultOutputFile.gsub(/\W/, '_')
       outputFile.gsub!(/_+/, '_')
@@ -541,6 +546,7 @@ class GeoToad
 
       outputFile = outputFile + "." + output.formatExtension(@formatType)
     end
+    debug "Base output path: #{outputFile}"
 
     # prepend the current working directory. This is mostly done as a service to
     # users who just double click to launch GeoToad, and wonder where their output file went.
