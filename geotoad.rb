@@ -521,7 +521,7 @@ class GeoToad
     output = Output.new
     displayInfo "Output format selected is #{output.formatDesc(@formatType)} format"
     output.input(@filtered.waypoints)
-    output.formatType=@formatType
+    output.formatType = @formatType
     if (@option['waypointLength'])
       output.waypointLength=@option['waypointLength'].to_i
     end
@@ -540,8 +540,8 @@ class GeoToad
       end
     end
 
-    if not outputFile 
-      outputFile = @defaultOutputFile.gsub(/\W/, '_')
+    if not outputFile
+      outputFile = @defaultOutputFile.gsub(/[^0-9A-Za-z\.-]/, '_')
       outputFile.gsub!(/_+/, '_')
       if outputFile.length > 220
         outputFile = outputFile[0..215] + "_etc"
