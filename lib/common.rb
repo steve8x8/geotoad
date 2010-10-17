@@ -105,9 +105,15 @@ module Common
   ## finds a place to put temp files on the system ###################################
   def findOutputDir
     # find out where we want our cache #############################
-    outputDir=selectDirectory([ ENV['GEO_DIR'], "#{ENV['HOME']}/Desktop",
-        "#{ENV['USERPROFILE']}/Desktop", ENV['HOME'] ])
+    dirs = [
+      ENV['GEO_DIR'],
+      "#{ENV['HOME']}/Desktop",
+      "#{ENV['HOME']}/Skrivbord",
+      "#{ENV['USERPROFILE']}/Desktop",
+      ENV['HOME']
+    ]
 
+    outputDir=selectDirectory(dirs)
     debug "#{outputDir} is being used as the default output directory"
     FileUtils::mkdir_p(outputDir)
     return outputDir
