@@ -171,7 +171,7 @@ class GeoToad
         puts "(constraining to #{@distanceMax} miles)"
         @queryTitle = @queryTitle + " (#{@distanceMax}mi. radius)"
         @defaultOutputFile = @defaultOutputFile + "-y" + @distanceMax.to_s
-        search.distance=@distanceMax.to_i
+        search.distance = @distanceMax
       else
         puts
       end
