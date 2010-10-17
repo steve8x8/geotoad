@@ -223,7 +223,7 @@ class ShadowFetch
     elsif @@downloadErrors > @maxFailures
       displayInfo "Offline mode: not fetching #{url_str}"
       return nil
-    elsif @@downloadErrors < @maxFailures
+    elsif @@downloadErrors > 0 && @@downloadErrors < @maxFailures
       debug "Only #{@@downloadErrors} download errors so far, will try until #{@maxFailures}"
       sleep(5)
     end
