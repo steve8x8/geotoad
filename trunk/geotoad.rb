@@ -79,6 +79,7 @@ class GeoToad
       (@option['user'], @option['password']) = @uin.loadUserAndPasswordFromConfig()
       if (! @option['user']) || (! @option['password'])
         displayError "You must specify a username and password to download coordinates from Geocaching.com"
+        exit
       end
     end
 

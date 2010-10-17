@@ -5,13 +5,14 @@ require 'geocode'
 require 'shadowget'
 require 'time'
 
-BASE_URL = 'http://www.geocaching.com/seek/nearest.aspx'
 
 class SearchCache
   include Common
   include Messages
 
   attr_accessor :distance
+
+  @@base_url = 'http://www.geocaching.com/seek/nearest.aspx'
 
   def initialize
     @distance = 15
@@ -36,14 +37,14 @@ class SearchCache
       else
         displayMessage "Google Maps found \"#{key}\". Accuracy level: #{accuracy}"
       end
-      @search_url = BASE_URL + "?lat=#{lat}&lng=#{lon}"
+      @search_url = @@base_url + "?lat=#{lat}&lng=#{lon}"
       supports_distance = true
 
     when 'coord'
       @query_type = 'coord'
       supports_distance = true
       lat_dir, lat_h, lat_ms, long_dir, long_h, long_ms, lat_ns, long_ew = parseCoordinates(key)
-      @search_url = BASE_URL + '?lat_ns=' + lat_ns.to_s + '&lat_h=' + lat_h + '&lat_mmss=' + (lat_ms==''?'0':lat_ms) + '&long_ew=' + long_ew.to_s + '&long_h=' + long_h + '&long_mmss=' + (long_ms==''?'0':long_ms)
+      @search_url = @@base_url + '?lat_ns=' + lat_ns.to_s + '&lat_h=' + lat_h + '&lat_mmss=' + (lat_ms==''?'0':lat_ms) + '&long_ew=' + long_ew.to_s + '&long_h=' + long_h + '&long_mmss=' + (long_ms==''?'0':long_ms)
 
     when 'user'
       @query_type = 'ul'
@@ -63,7 +64,7 @@ class SearchCache
     end
 
     if not @search_url
-        @search_url = BASE_URL + '?' + @query_type + '=' + CGI.escape(@query_arg.to_s)
+        @search_url = @@base_url + '?' + @query_type + '=' + CGI.escape(@query_arg.to_s)
     end
 
     if supports_distance and @distance
@@ -153,7 +154,6 @@ class SearchCache
       displayError "Could not determine total pages from #{url}"
       return @waypoints
     end
-
 
     while(page_number < pages_total)
       debug "*** On page #{page_number} of #{pages_total}"

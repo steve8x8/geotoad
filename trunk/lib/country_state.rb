@@ -9,12 +9,11 @@ require 'time'
 
 $debugMode = 1
 
-
-BASE_URL = 'http://www.geocaching.com/seek/nearest.aspx'
-
 class CountryState
   include Common
   include Messages
+
+  @@base_url = 'http://www.geocaching.com/seek/nearest.aspx'
 
   def initialize
     @ttl = 86400 * 180
@@ -36,12 +35,12 @@ class CountryState
 
 
   def getCountriesPage()
-    post_vars, options = parseSearchPage(BASE_URL, nil)
+    post_vars, options = parseSearchPage(@@base_url, nil)
     option, key = findOptionAndValue(options, "By Country")
     debug "Changing #{option} from #{post_vars[option]} to #{key}"
     post_vars[option] = key
 
-    post_vars, options = parseSearchPage(BASE_URL, post_vars)
+    post_vars, options = parseSearchPage(@@base_url, post_vars)
     return [post_vars, options]
   end
 
@@ -90,7 +89,7 @@ class CountryState
       return nil
     end
 
-    post_vars, options = parseSearchPage(BASE_URL, post_vars)
+    post_vars, options = parseSearchPage(@@base_url, post_vars)
     return [post_vars, options]
   end
 
