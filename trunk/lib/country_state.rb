@@ -33,7 +33,6 @@ class CountryState
     end
   end
 
-
   def getCountriesPage()
     post_vars, options = parseSearchPage(@@base_url, nil)
     option, key = findOptionAndValue(options, "By Country")

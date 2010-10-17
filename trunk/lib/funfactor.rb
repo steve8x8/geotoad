@@ -20,7 +20,6 @@ end
 class FunFactor
 
   def initialize()
-    puts __FILE__
     @data_dir =  $DATA_PATH
     @bishop = Bishop::Bayes.new
     @good_skew = 1
