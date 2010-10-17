@@ -286,7 +286,7 @@ class GeoToad
 
     if @option['sizeMax']
       @queryTitle = @queryTitle + ", size #{@option['sizeMax']} or lower"
-      @defaultOutputFile = @defaultOutputFile + "-S" + @option['sizeMin'].to_s
+      @defaultOutputFile = @defaultOutputFile + "-S" + @option['sizeMax'].to_s
       @filtered.sizeMax(@option['sizeMax'])
     end
 
