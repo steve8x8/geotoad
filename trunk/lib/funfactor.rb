@@ -58,7 +58,7 @@ class FunFactor
       end
     }
     avg_score = average(scores)
-    puts "FUN SCORE #{avg_score}: #{list}"
+    return avg_score
   end
 
   def calculate_score(str)

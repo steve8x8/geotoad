@@ -277,6 +277,7 @@ class CacheDetails
     comment_text = comments.collect{ |x| x['text'] }
 
     cache['funfactor'] = @funfactor.calculate_score_from_list(comment_text)
+    debug "Funfactor score: #{cache['funfactor']}"
     cache['additional_raw'] = parseAdditionalWaypoints(data)
     return cache
   end  # end function
