@@ -212,6 +212,8 @@ class CacheDetails
         warning.gsub!(/\<.*?\>/, '')
         debug "got a warning: #{warning}"
         if (wid)
+          # This may be a bit aggressive.
+          cache['archived'] = true
           cache['warning'] = warning.dup
         end
         if warning =~ /be a Premium Member to view/
