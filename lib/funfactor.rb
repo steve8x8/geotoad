@@ -102,18 +102,15 @@ class FunFactor
 
   def load_adjustments()
     adjustments = YAML.load(open("#{@data_dir}/funfactor_adjustment.txt"))
-    puts "Loaded adjustments: #{adjustments}"
     @good_skew = adjustments['good_skew']
     @adjusted_max = adjustments['max']
     @adjusted_min = adjustments['min']
     @adjusted_mid = adjustments['mid']
-    puts "good skew adjusted: #{@good_skew}"
   end
 
   def calculate_adjustments()
     good_comments, bad_comments = load_training_files()
     good_skew = bad_comments.to_f / good_comments.to_f
-    puts "BASE ADJUSTMENT: #{good_skew} (g=#{good_comments} b=#{bad_comments})"
 
     training = YAML::load(File.open("#{@data_dir}/adjustment_training.txt"))
     trained_scores = {}
@@ -126,13 +123,10 @@ class FunFactor
 
     trained_scores.each_key do |type|
       average = average(trained_scores[type])
-      puts "#{type}: AVG=#{average} | #{trained_scores[type].join(', ')}"
     end
 
     bottom_end = average(trained_scores['boring'])
     top_end = trained_scores['awesome'].max()
-    puts bottom_end
-    puts top_end
 
     adjustments = {
       'max' => trained_scores['awesome'].max(),
