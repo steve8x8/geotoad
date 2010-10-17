@@ -46,7 +46,16 @@ class Input
   def loadConfig
     if File.exists?(@configFile)
       displayMessage "Loading configuration from #{@configFile}"
-      @@optHash = YAML::load( File.open(@configFile) )
+      return YAML::load(File.open(@configFile))
+    end
+  end
+
+  def loadUserAndPasswordFromConfig
+    data = loadConfig()
+    if data
+      return [data['user'], data['password']]
+    else
+      return [nil, nil]
     end
   end
 
@@ -138,9 +147,10 @@ class Input
 
   def interactive
     # pop up the menu
-    loadConfig
-    showMenu
-    saveConfig
+    @@optHash = loadConfig()
+    showMenu()
+    saveConfig()
+
     if (@@optHash['outDir'])
       @@optHash['output']=@@optHash['outDir'] + "/"
     else
@@ -174,7 +184,7 @@ class Input
 
     }
     if @@optHash['queryArg'].to_s =~ /^[\w\.:]+$/
-      cmdline = cmdline + " " + @@optHash['queryArg'].to_s 
+      cmdline = cmdline + " " + @@optHash['queryArg'].to_s
     else
       cmdline = cmdline + " \'" + @@optHash['queryArg'].to_s + '\''
     end
