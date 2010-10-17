@@ -151,25 +151,6 @@ class CacheDetails
         debug "stype=#{cache['type']} full_type=#{$1}"
       end
 
-      # <p class="Meta"><strong>Difficulty:</strong> <img src="http://www.geocaching.com/images/stars/stars2_5.gif" alt="2.5 out of 5" /></p>
-      if line =~ /Difficulty:.*?([-\d\.]+) out of 5/
-        if $1.to_f == $1.to_i
-          cache['difficulty']=$1.to_i
-        else
-          cache['difficulty']=$1.to_f
-        end
-        debug "difficulty: #{cache['difficulty']}"
-      end
-
-      # <p class="Meta"><strong>Terrain:</strong> <img src="http://www.geocaching.com/images/stars/stars2.gif" alt="2 out of 5" /></p>
-      if line =~ /Terrain:.*?([-\d\.]+) out of 5/
-        if $1.to_f == $1.to_i
-          cache['terrain']=$1.to_i
-        else
-          cache['terrain']=$1.to_f
-        end
-        debug "terrain: #{cache['terrain']}"
-      end
 
       # <p class="Meta">Placed Date: 7/17/2001</p>
       if line =~ /Placed Date: ([\w\/]+)\</
@@ -212,7 +193,6 @@ class CacheDetails
         warning.gsub!(/\<.*?\>/, '')
         debug "got a warning: #{warning}"
         if (wid)
-          # This may be a bit aggressive.
           cache['archived'] = true
           cache['warning'] = warning.dup
         end
@@ -232,11 +212,22 @@ class CacheDetails
       return false
     end
 
+    if data =~ /Difficulty:.*?([\d\.]+) out of 5/m
+      cache['difficulty'] = $1.to_f
+      if $1.to_f == $1.to_i
+        cache['difficulty'] = $1.to_i
+      end
+      debug "difficulty: #{cache['difficulty']}"
+    end
 
-    # <div id="div_hint" class="HalfLeft">
-    #    <div>
-    #        Vs lbh ner pyrire, lbh pna cebonoyl svaq n cnexvat ybg gb fgneg sebz gung jvyy trg lbh pybfre gb gur pnpur. Vs lbh ragre gur pnpur nern sebz gur rnfg lbh jvyy tb vagb gur bcra nern naq gura onpx vagb gur jbbqf. Nsgre lbh ragre gur jbbqf, ybbx sbe n gerr ba gur evtug gung unf gbccyrq jvgu gur onfr orvat evtug ng gur rqtr bs gur cngu (guvf jbhyq or n tbbq cynpr sbe gur pnpur, ohg vg vfa’g urer.) Tb qverpgyl yrsg hc gur uvyy naq ybbx sbe fbzr gbccyrq gerrf. Gur pnpur vf pybfr ol – naq cerggl jryy uvqqra.
-    #    </div>
+    if data =~ /Terrain:.*?([\d\.]+) out of 5/m
+      cache['terrain'] = $1.to_f
+      if $1.to_f == $1.to_i
+        cache['terrain'] = $1.to_i
+      end
+      debug "terrain: #{cache['terrain']}"
+    end
+
     if data =~ /id="uxDecryptedHint".*?\>(.*?)\s*\<\/div/m
       hint = $1.strip
       hint.gsub!(/^ +/, '')
@@ -313,10 +304,17 @@ class CacheDetails
     total_grade = 0
     graded = 0
 
-    # <dt>[<img src='http://www.geocaching.com/images/icons/icon_smile.gif' alt="Found it" />&nbsp;Found it] Saturday, April 03, 2010 by <strong>SirPatrick</strong> (143 found) </dt>
-    # <dd>Coordinates were spot on.  Found myself within 6 feet of the cache when I first got to the zone but could not find this very well hid cache. Found it after a few minutes of searching.  Nice hide.  SL TFTH.
-    # </dd>
+    # <dt> 
+    #   [<img src='http://www.geocaching.com/images/icons/icon_smile.gif' alt="Found it" />&nbsp;Found it]
+    #   Sunday, 10 October 2010
+    #   by <strong> 
+    #       silvinator</strong> (52
+    #   found)
+    # </dt> 
+    # <dd> 
+    # Gut gefunden. Man sollte nur auf Muggels achten!  Danke!</dd> 
     data.scan(/<dt.*?icon_(\w+).*?alt=\"(.*?)\".*?, ([\w, ]+)\s+by \<strong\>\s*(.*?)\s*\<\/strong\>.*?\<dd\>\s*(.*?)\s*\<\/dd\>/m) { |icon, type, datestr, user, comment|
+      debug "comment date: #{datestr}"
       should_grade = true
       grade = 0
       date = Time.parse(datestr)
