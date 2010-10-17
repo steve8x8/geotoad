@@ -1,5 +1,5 @@
 # $Id$
-require 'lib/bishop'
+require 'lib/funfactor'
 require 'time'
 require 'zlib'
 
@@ -15,8 +15,13 @@ class CacheDetails
   def initialize(data)
     @waypointHash = data
     @useShadow=1
-  end
 
+    debug "Loading funfactor"
+    @funfactor = FunFactor.new()
+    @funfactor.load_scores()
+    @funfactor.load_adjustments()
+    debug "Loaded funfactor: #{@funfactor}"
+  end
 
   def waypoints
     @waypointHash
@@ -30,7 +35,6 @@ class CacheDetails
   def fetchWid(id)
     fetch(id)
   end
-
 
   def fullURL(id)
     if (id =~ /^GC/)
@@ -269,7 +273,10 @@ class CacheDetails
       cache['mtime'] = last_find_date
       cache['mdays'] = daysAgo(cache['mtime'])
     end
-    cache['funfactor'] = fun_factor
+
+    comment_text = comments.collect{ |x| x['text'] }
+
+    cache['funfactor'] = @funfactor.calculate_score_from_list(comment_text)
     cache['additional_raw'] = parseAdditionalWaypoints(data)
     return cache
   end  # end function
