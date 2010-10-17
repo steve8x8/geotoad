@@ -133,7 +133,7 @@ class ShadowFetch
     time = Time.now
     localfile = cacheFile(@url)
     localparts = localfile.split(/[\\\/]/)
-    localdir = localparts[0..-2].join("/")		# basename sucks in Windows.
+    localdir = localparts[0..-2].join("/")  # basename sucks in Windows.
     debug "====+ Fetch URL: #{url}"
     debug "====+ Fetch File: #{localfile}"
 
@@ -216,12 +216,16 @@ class ShadowFetch
     raise ArgumentError, 'HTTP redirect too deep' if redirects == 0
     debug "Fetching [#{url_str}]"
     uri = URI.parse(url_str)
-    if (@@downloadErrors >= @maxFailures)
+
+    if @@downloadErrors == @maxFailures
+      sleep(10)
       debug "#{@@downloadErrors} download errors so far, no more retries will be attempted."
-      disableRetry = 1
-    else
+    elsif @@downloadErrors > @maxFailures
+      displayInfo "Offline mode: not fetching #{url_str}"
+      return nil
+    elsif @@downloadErrors < @maxFailures
       debug "Only #{@@downloadErrors} download errors so far, will try until #{@maxFailures}"
-      disableRetry = nil
+      sleep(5)
     end
 
     if ENV['HTTP_PROXY']
@@ -247,7 +251,6 @@ class ShadowFetch
       debug "No cookie to add to #{url_str}"
     end
 
-
     begin
       if (@postVars)
         @httpHeaders['Content-Type'] =  "application/x-www-form-urlencoded";
@@ -258,14 +261,19 @@ class ShadowFetch
         resp = http.get(query, @httpHeaders)
       end
     rescue Timeout::Error => e
-      displayWarning "Timed out trying to access #{uri.host}:80"
       @@downloadErrors = @@downloadErrors + 1
-      sleep(5)
+      displayWarning "Timed out trying to access #{uri.host}:80 (try #{@@downloadErrors})"
+
       return fetchURL(url_str, redirects)
+
     rescue Errno::ECONNREFUSED => e
-      displayWarning "Connection refused accessing #{uri.host}:80"
       @@downloadErrors = @@downloadErrors + 1
-      sleep(5)
+      displayWarning "Connection refused accessing #{uri.host}:80 (try #{@@downloadErrors})"
+      return fetchURL(url_str, redirects)
+
+    rescue => e
+      @@downloadErrors = @@downloadErrors + 1
+      displayWarning "Unable to connect to #{uri.host}:80: #{e} (try #{@@downloadErrors})"
       return fetchURL(url_str, redirects)
     end
 
@@ -286,21 +294,9 @@ class ShadowFetch
       end
       return fetchURL(location, redirects - 1)
     else
-      debug "error downloading #{url_str}"
       @@downloadErrors = @@downloadErrors + 1
-
-      if (disableRetry)
-        # only show the first few failures..
-        if @@downloadErrors < @maxFailures
-          displayWarning "Could not fetch #{url_str}, no more retries available. (failures=#{@@downloadErrors})"
-        end
-        return nil
-      else
-        disableRetry = 1
-        displayWarning "Could not fetch #{url_str}, retrying in 5 seconds.. (failures=#{@@downloadErrors}, max=#{@maxFailures})"
-        sleep(5)
-        return fetchURL(url_str, redirects)
-      end
+      debug "unknown response downloading #{url_str} (try #{@@downloadErrors})"
+      return fetchURL(url_str, redirects)
     end
 
 
