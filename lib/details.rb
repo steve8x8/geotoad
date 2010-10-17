@@ -50,7 +50,7 @@ class CacheDetails
 
   # fetches by geocaching.com sid
   def fetch(id)
-    if ((! id) || (id.length < 1))
+    if id.to_s.empty?
       displayError "Empty fetch by id, quitting."
       exit
     end
@@ -153,7 +153,8 @@ class CacheDetails
 
 
       # <p class="Meta">Placed Date: 7/17/2001</p>
-      if line =~ /Placed Date: ([\w\/]+)\</
+      # also, event dates.
+      if line =~ /[lE][av][ce][ne][dt] Date: ([\w\/]+)\</
         if $1 != 'N/A'
           cache['ctime'] = parseDate($1)
           cache['cdays'] = daysAgo(cache['ctime'])
@@ -200,6 +201,10 @@ class CacheDetails
           debug "This cache appears to be available to premium members only."
           return 'subscriber-only'
         end
+      end
+
+      if line =~ /Cache is Unpublished/
+        return "unpublished"
       end
     }
 
@@ -304,15 +309,15 @@ class CacheDetails
     total_grade = 0
     graded = 0
 
-    # <dt> 
+    # <dt>
     #   [<img src='http://www.geocaching.com/images/icons/icon_smile.gif' alt="Found it" />&nbsp;Found it]
     #   Sunday, 10 October 2010
-    #   by <strong> 
+    #   by <strong>
     #       silvinator</strong> (52
     #   found)
-    # </dt> 
-    # <dd> 
-    # Gut gefunden. Man sollte nur auf Muggels achten!  Danke!</dd> 
+    # </dt>
+    # <dd>
+    # Gut gefunden. Man sollte nur auf Muggels achten!  Danke!</dd>
     data.scan(/<dt.*?icon_(\w+).*?alt=\"(.*?)\".*?, ([\w, ]+)\s+by \<strong\>\s*(.*?)\s*\<\/strong\>.*?\<dd\>\s*(.*?)\s*\<\/dd\>/m) { |icon, type, datestr, user, comment|
       debug "comment date: #{datestr}"
       should_grade = true

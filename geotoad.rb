@@ -415,6 +415,10 @@ class GeoToad
 
       if status == 'subscriber-only'
         message = '(subscriber-only)'
+      elsif status == 'unpublished'
+        wpFiltered.delete(wid)
+        displayMessage "#{wid} is unpublished, skipping."
+        next
       elsif ! status or status == 'login-required'
         if (wpFiltered[wid]['warning'])
           debug "Could not parse page, but it had a warning, so I am not invalidating"
