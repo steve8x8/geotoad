@@ -31,11 +31,14 @@ class Input
     end
 
     # File contains password, keep it safe..
-    f=File.open(@configFile, 'w', 0600)
+    f = File.open(@configFile, 'w', 0600)
+    @@optHash.each_key {|key|
+      if @@optHash[key].to_s.empty?
+        @@optHash.delete(key)
+      end
+    }
+
     f.puts @@optHash.to_yaml
-    #@@optHash.each_key { |option|
-    #    f.puts option + ": " + @@optHash[option].to_s
-    #}
     f.close
     debug "Saved configuration"
   end
@@ -118,9 +121,7 @@ class Input
       exit
     end
 
-
     @@optHash['queryArg'] = ARGV.shift
-
     # if there are still remaining arguments, error out. Usually missed quote marks.
     # We used to make assumptions about this, but it ended up being more confusing when
     # wrong.
@@ -161,9 +162,7 @@ class Input
       if (option != 'queryArg') && (option != 'outDir') && (option != 'outFile') && @@optHash[option]
         if @@optHash[option] == 'X'
           cmdline = cmdline + " --#{option}"
-        elsif @@optHash[option] == ''
-          cmdline = cmdline
-        else
+        elsif not @@optHash[option].to_s.empty?
           # Omit the quotes if the argument is 'simple'
           if @@optHash[option].to_s =~ /^[\w\.:]+$/
             cmdline = cmdline + " --#{option}=#{@@optHash[option]}"
@@ -174,7 +173,11 @@ class Input
       end
 
     }
-    cmdline = cmdline + " \'" + @@optHash['queryArg'].to_s + '\''
+    if @@optHash['queryArg'].to_s =~ /^[\w\.:]+$/
+      cmdline = cmdline + " " + @@optHash['queryArg'].to_s 
+    else
+      cmdline = cmdline + " \'" + @@optHash['queryArg'].to_s + '\''
+    end
     displayMessage "To use this query in the future, type:"
     displayMessage cmdline
     puts
