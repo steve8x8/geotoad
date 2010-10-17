@@ -168,8 +168,10 @@ class Input
 
     # demonstrate a sample command line
     cmdline = "geotoad.rb"
+    hidden_opts = ['queryArg', 'outDir', 'outFile', 'user', 'password']
+
     @@optHash.keys.sort.each { |option|
-      if (option != 'queryArg') && (option != 'outDir') && (option != 'outFile') && @@optHash[option]
+      if ! @@optHash[option].to_s.empty? and ! hidden_opts.include?(option)
         if @@optHash[option] == 'X'
           cmdline = cmdline + " --#{option}"
         elsif not @@optHash[option].to_s.empty?
