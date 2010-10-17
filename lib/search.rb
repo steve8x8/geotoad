@@ -300,6 +300,8 @@ class SearchCache
         if name =~ /class=\"Warning/ or name =~ /class=\"OldWarning/
           cache['archived'] = true
           debug "#{name} appears to be archived"
+        else
+          cache['archived'] = false
         end
 
         if name =~ /Strike"\>(.*?)\<\//

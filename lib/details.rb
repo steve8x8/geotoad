@@ -113,6 +113,7 @@ class CacheDetails
     # find the geocaching waypoint id.
     wid = nil
     cache = nil
+    nextline_coords = false
 
     data.split("\n").each { |line|
       # <title id="pageTitle">(GC1145) Lake Crabtree computer software store by darylb</title>
@@ -191,12 +192,17 @@ class CacheDetails
       end
 
       # latitude and longitude in the written form. Rewritten by Scott Brynen for Southpole compatibility.
-      if line =~ /=\"LatLon.*\>.*?([NWSE]) (\d+).*? ([\d\.]+) ([NWSE]) (\d+).*? ([\d\.]+)\</
+      if line =~ /=\"LatLong Meta"\>/
+        nextline_coords = true
+      end
+
+      if nextline_coords && (line =~ /([NWSE]) (\d+).*? ([\d\.]+) ([NWSE]) (\d+).*? ([\d\.]+)\</)
         cache['latwritten'] = $1 + $2 + ' ' + $3
         cache['lonwritten'] = $4 + $5 + ' ' + $6
         cache['latdata'] = ($2.to_f + $3.to_f / 60) * ($1 == 'S' ? -1:1)
         cache['londata'] = ($5.to_f + $6.to_f / 60) * ($4 == 'W' ? -1:1)
         debug "got written lat/lon"
+        nextline_coords = false
       end
 
       # why a geocache is closed. It seems to always be the same.
@@ -229,7 +235,7 @@ class CacheDetails
     #    <div>
     #        Vs lbh ner pyrire, lbh pna cebonoyl svaq n cnexvat ybg gb fgneg sebz gung jvyy trg lbh pybfre gb gur pnpur. Vs lbh ragre gur pnpur nern sebz gur rnfg lbh jvyy tb vagb gur bcra nern naq gura onpx vagb gur jbbqf. Nsgre lbh ragre gur jbbqf, ybbx sbe n gerr ba gur evtug gung unf gbccyrq jvgu gur onfr orvat evtug ng gur rqtr bs gur cngu (guvf jbhyq or n tbbq cynpr sbe gur pnpur, ohg vg vfa’g urer.) Tb qverpgyl yrsg hc gur uvyy naq ybbx sbe fbzr gbccyrq gerrf. Gur pnpur vf pybfr ol – naq cerggl jryy uvqqra.
     #    </div>
-    if data =~ /id="div_hint".*?\>(.*?)\s*\<\/div/m
+    if data =~ /id="uxDecryptedHint".*?\>(.*?)\s*\<\/div/m
       hint = $1.strip
       hint.gsub!(/^ +/, '')
       hint.gsub!(/[\r\n]/, '')
@@ -239,13 +245,13 @@ class CacheDetails
       debug "got hint: [#{hint}]"
     end
 
-    if data =~ /\<div id="div_sd"\>\s*\<div\>(.*?)\<\/div\>\s*\<\/div\>/m
+    if data =~ /Short Description\<\/h2\>\s*\<\/div\>\s*\<div class="item-content"\>(.*?)\<\/div\>\s*\<\/div\>\s*\<div class="item"\>/m
       shortdesc = $1.gsub(/^\s+/, '').gsub(/\s+$/, '')
       debug "found short desc: [#{shortdesc}]"
       cache['shortdesc'] = removeAlignments(fixRelativeImageLinks(removeSpam(shortdesc)))
     end
 
-    if data =~ /\<div id="div_ld"\>\s*\<div\>(.*?)\<\/div\>\s*\<\/div\>/m
+    if data =~ /Long Description\<\/h2\>\s*\<\/div\>\s*\<div class="item-content"\>(.*?)\<\/div\>\s*\<\/div\>\s*\<div class="item"\>/m
       longdesc = $1.gsub(/^\s+/, '').gsub(/\s+$/, '')
       debug "got long desc [#{longdesc}]"
       longdesc = removeAlignments(fixRelativeImageLinks(removeSpam(longdesc)))
@@ -308,7 +314,7 @@ class CacheDetails
     # <dt>[<img src='http://www.geocaching.com/images/icons/icon_smile.gif' alt="Found it" />&nbsp;Found it] Saturday, April 03, 2010 by <strong>SirPatrick</strong> (143 found) </dt>
     # <dd>Coordinates were spot on.  Found myself within 6 feet of the cache when I first got to the zone but could not find this very well hid cache. Found it after a few minutes of searching.  Nice hide.  SL TFTH.
     # </dd>
-    data.scan(/<dt.*?icon_(\w+).*?alt=\"(.*?)\".*?, ([\w, ]+) by \<strong\>(.*?)\<\/strong\>.*?\<dd\>(.*?)\<\/dd\>/m) { |icon, type, datestr, user, comment|
+    data.scan(/<dt.*?icon_(\w+).*?alt=\"(.*?)\".*?, ([\w, ]+)\s+by \<strong\>\s*(.*?)\s*\<\/strong\>.*?\<dd\>\s*(.*?)\s*\<\/dd\>/m) { |icon, type, datestr, user, comment|
       should_grade = true
       grade = 0
       date = Time.parse(datestr)
