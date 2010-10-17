@@ -66,8 +66,8 @@ class GeoToad
     if @option['help']
       @uin.usage
       exit
-    end    
-    
+    end
+
     if (! @option['clearCache']) && ((! @queryArg) || (! @option['user']) || (! @option['password']))
       if (! @queryArg)
         displayError "You forgot to specify a #{@queryType} search argument"
@@ -107,12 +107,12 @@ class GeoToad
     puts version
     return version
   end
-    
+
   def versionCheck
     if $VERSION =~ /CURRENT/
       return nil
     end
-  
+
     url = "http://code.google.com/p/geotoad/wiki/CurrentVersion";
 
     debug "Checking for latest version of GeoToad from #{url}"
@@ -147,7 +147,7 @@ class GeoToad
     puts "* Cleared!"
     $CACHE_DIR = findCacheDir()
   end
-    
+
   ## Make the Initial Query ############################
   def downloadGeocacheList
     displayInfo "Your cache directory is " + $CACHE_DIR
@@ -207,22 +207,21 @@ class GeoToad
     # Prepare for the manipulation
     @filtered = Filter.new(@combinedWaypoints)
 
-
     # This is where we do a little bit of cheating. In order to avoid downloading the
     # cache details for each cache to see if it's been visited, we do a search for the
     # users on the include or exclude list. We then populate @combinedWaypoints[wid]['visitors']
     # with our discovery.
 
     userLookups = Array.new
-    if (@option['userExclude'])
+    if @option['userExclude'] and not @option['userExclude'].empty?
       @queryTitle = @queryTitle + ", excluding caches done by " + @option['userExclude']
-      @defaultOutputFile = @defaultOutputFile + "-U=" + @option['userExclude']
+      @defaultOutputFile = @defaultOutputFile + "-E=" + @option['userExclude']
       userLookups = @option['userExclude'].split(':')
     end
 
-    if (@option['userInclude'])
+    if @option['userInclude'] and not @option['userInclude'].empty?
       @queryTitle = @queryTitle + ", excluding caches not done by " + @option['userInclude']
-      @defaultOutputFile = @defaultOutputFile + "-u=" + @option['userInclude']
+      @defaultOutputFile = @defaultOutputFile + "-e=" + @option['userInclude']
       userLookups = userLookups + @option['userInclude'].split(':')
     end
 
@@ -303,13 +302,13 @@ class GeoToad
 
     if @option['placeDateInclude']
       @queryTitle = @queryTitle + ", newer than #{@option['placeDateInclude']} days"
-      @defaultOutputFile = @defaultOutputFile + "-p=" + @option['placeDateInclude'].to_s
+      @defaultOutputFile = @defaultOutputFile + "-j=" + @option['placeDateInclude'].to_s
       @filtered.placeDateInclude(@option['placeDateInclude'].to_f)
     end
 
     if @option['placeDateExclude']
       @queryTitle = @queryTitle + ", over #{@option['placeDateExclude']} days old"
-      @defaultOutputFile = @defaultOutputFile + "-P=" + @option['placeDateExclude'].to_s
+      @defaultOutputFile = @defaultOutputFile + "-J=" + @option['placeDateExclude'].to_s
       @filtered.placeDateExclude(@option['placeDateExclude'].to_f)
     end
     debug "Filter running cycle 4, #{@filtered.totalWaypoints} caches left"
@@ -481,7 +480,7 @@ class GeoToad
 
     if @option['funFactorMax']
       @queryTitle = @queryTitle + ", funFactor #{@option['funFactorMax']} or lower"
-      @defaultOutputFile = @defaultOutputFile + '-A' + @option['funFactorMax'].to_s
+      @defaultOutputFile = @defaultOutputFile + '-F' + @option['funFactorMax'].to_s
       @filtered.funFactorMax(@option['funFactorMax'].to_f)
     end
 
@@ -530,7 +529,7 @@ class GeoToad
     filename = @option['output']
     displayInfo "Output filename: #{filename}"
     filename.gsub!('\\', '/')
-    
+
     if filename and filename !~ /\/$/
       outputFile = File.basename(filename)
     else
@@ -539,7 +538,7 @@ class GeoToad
       if outputFile.length > 220
         outputFile = outputFile[0..215] + "_etc"
       end
-      
+
       outputFile = outputFile + "." + output.formatExtension(@formatType)
     end
 
@@ -598,7 +597,7 @@ while(1)
   if options['clearCache']
     cli.clearCacheDirectory()
   end
-  
+
   count = cli.downloadGeocacheList()
   if count < 1
     cli.displayError "No caches found in search, exiting early."
