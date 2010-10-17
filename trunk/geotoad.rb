@@ -531,13 +531,16 @@ class GeoToad
     # otherwise, take our invented name, sanitize it, and slap a file extension on it.
     filename = @option['output']
     displayInfo "Output filename: #{filename}"
+    outputFile = nil
 
     if filename
       filename.gsub!('\\', '/')
       if filename and filename !~ /\/$/
         outputFile = File.basename(filename)
       end
-    else
+    end
+
+    if not outputFile 
       outputFile = @defaultOutputFile.gsub(/\W/, '_')
       outputFile.gsub!(/_+/, '_')
       if outputFile.length > 220
