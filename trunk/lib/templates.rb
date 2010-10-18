@@ -97,7 +97,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
     'templateWP'    =>
       "\n\n<hr noshade size=\"1\">\n<a name=\"<%out.wid%>\"></a><font color=\"#000099\"><big><b><%out.symbols%><a href=\"<%wp.url%>\"><%wp.name%></a></b></big></font> by <font color=\"#555555\"><b><%wpEntity.creator%></b></font> <font color=\"#444444\">(<%out.id%>)</font><br>\n" +
       "<a href=\"<%out.maps_url%>\"><%wp.latwritten%> <%wp.lonwritten%></a> near <%out.location%><br>" +
-      "<font color=\"#339933\"><%wp.type%> (<%wp.size%>) D<%wp.difficulty%>/T<%wp.terrain%> F:<%wp.funfactor%> <%out.relativedistance%><br>" +
+      "<font color=\"#339933\"><%wp.type%> (<%wp.size%>) D<%wp.difficulty%>/T<%wp.terrain%> F:<%wp.funfactor%> &rarr; <%out.relativedistance%><br>" +
       "placed: <%out.cdate%> last comment: <%wp.last_find_days%> days ago (<%wp.last_find_type%>)</font><br>" +
       "<p><%wp.additional_raw%><%wp.shortdesc%></p>\n" +
       "<p><%wp.longdesc%></p>\n" +
