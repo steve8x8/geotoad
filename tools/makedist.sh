@@ -51,7 +51,7 @@ zip -r "$GENERIC_PKG" "$DISTNAME"
 if [ -d "/Applications" ]; then
   echo "Creating $MAC_DIR"
   rm "$MAC_DIR/geotoad"
-  cd "$MAC_DIR" 
+  cd "$MAC_DIR"
   sips -i data/bufos-icon.icns && DeRez -only icns data/bufos-icon.icns > data/icns.rsrc
   Rez -append data/icns.rsrc -o "GeoToad for Mac.command"
   SetFile -a E "GeoToad for Mac.command"
@@ -75,9 +75,11 @@ if [ ! -x "/usr/local/bin/flip" -o ! -x "/usr/bin/flip" ]; then
   flip -m *.txt
   perl -pi -e 's/([\s])geotoad\.rb/$1geotoad/g' README.txt
 
-  echo "In Windows, run: ruby rubyscript2exe.rb geotoad/geotoad.rb"
+  echo "In Windows, run:"
   echo ""
-  echo "Then copy geotoad.exe into $WIN_DIR"
+  echo "cd Z:\\dist\\${DISTNAME}_for_Windows"
+  echo "ruby C:\\ruby\\bin\\rubyscript2exe.rb init.rb"
+  echo "move init.exe ..\\geotoad.exe"
   read ENTER
   cd $WIN_DIR
   ls
