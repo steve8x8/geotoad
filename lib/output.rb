@@ -391,19 +391,17 @@ class Output
         symbolHash[wid] = "<b><font color=\"#11CC11\">&euro;</font></b>"
       end
 
-      if (@wpHash[wid]['terrain'] > 3)
+      if (@wpHash[wid]['terrain'] >= 3.5)
         symbolHash[wid] << "<b><font color=\"#999922\">&sect;</font></b>"
       end
 
       if @wpHash[wid]['funfactor']
-        if @wpHash[wid]['funfactor'] >= 4 
-          symbolHash[wid] << "<b><font color=\"#BB2222\">&hearts;</font></b>"
-        elsif @wpHash[wid]['funfactor'] >= 3 
-          symbolHash[wid] << "<b><font color=\"#BB9999\">&hearts;</font></b>"
+        if @wpHash[wid]['funfactor'] >= 3.5
+          symbolHash[wid] << "<b><font color=\"#BB6666\">&hearts;</font></b>"
         end
       end
 
-      if (@wpHash[wid]['difficulty'] > 3)
+      if (@wpHash[wid]['difficulty'] >= 3)
         symbolHash[wid] << "<b><font color=\"#440000\">&uarr;</font></b>"
       end
 

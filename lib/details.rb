@@ -275,8 +275,9 @@ class CacheDetails
     end
 
     comment_text = comments.collect{ |x| x['text'] }
-
-    cache['funfactor'] = @funfactor.calculate_score_from_list(comment_text)
+    ff_score = @funfactor.calculate_score_from_list(comment_text)
+    # A primitive form of approximate rounding
+    cache['funfactor'] = (ff_score * 20).round / 20.0
     debug "Funfactor score: #{cache['funfactor']}"
     cache['additional_raw'] = parseAdditionalWaypoints(data)
     return cache
