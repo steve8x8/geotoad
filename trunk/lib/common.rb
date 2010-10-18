@@ -102,6 +102,22 @@ module Common
     return configDir
   end
 
+  def findDataDir
+    dirs = [
+      "data",
+      "../data",
+      File.dirname(__FILE__) + "/../data",
+      "/usr/share/geotoad",
+      "/usr/local/share/geotoad"
+    ]
+    dirs.each {|dir|
+      if File.exist?("#{dir}/funfactor.txt")
+        return dir
+      end
+    }
+    return "../data"
+  end
+
   ## finds a place to put temp files on the system ###################################
   def findOutputDir
     # find out where we want our cache #############################

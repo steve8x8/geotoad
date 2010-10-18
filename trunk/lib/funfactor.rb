@@ -6,21 +6,19 @@
 $LOAD_PATH << (File.dirname(__FILE__.gsub(/\\/, '/')) + '/' + '..')
 $LOAD_PATH << (File.dirname(__FILE__.gsub(/\\/, '/')) + '/' + '../lib')
 
-# TODO(helixblue): Find a more portable way to handle data files
-$DATA_PATH =  File.dirname(__FILE__) + "/../data"
-
 require 'yaml'
 require 'bishop'
-
+require 'common'
 
 def average(list)
   list.inject(0.0) { |sum, el| sum + el } / list.size
 end
 
 class FunFactor
-
+  include Common
+  
   def initialize()
-    @data_dir =  $DATA_PATH
+    @data_dir = findDataDir()
     @bishop = Bishop::Bayes.new
     @good_skew = 1
     @adjusted_min = nil
