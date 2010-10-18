@@ -42,27 +42,28 @@ a command prompt run "geotoad" or if you are on UNIX, run "./geotoad.rb".
 You will then see a screen that looks similar to this:
 
 ==============================================================================
-:::                 // GeoToad 3.11.0 Text User Interface //               :::
+:::                // GeoToad 3.12.1 Text User Interface //                :::
 ==============================================================================
-(1)  GC.com login [helixblue        ] | (2)  search type          [location  ]
-(3)  location     [bromma, sweden   ] | (4)  distance maximum            [2  ]
+(1)  GC.com login [REQUIRED         ] | (2)  search type          [location  ]
+(3)  location     [roswell, ga      ] | (4)  distance maximum            [10 ]
                                       |
-(5)  difficulty           [0.0 - 5.0] | (6)  terrain               [0.0 - 5.0]
-(7)  fun factor           [0.0 - 5.0] | (8)  cache size            [any - any]
-(9)  cache type           [tradition] |
+(5)  difficulty           [2.0 - 5.0] | (6)  terrain               [0.0 - 5.0]
+(7)  fun factor           [1.5 - 5.0] | (8)  cache size            [any - any]
+(9)  cache type           [      any] |
 (10) virgin caches only           [ ] | (11) travel bug caches only        [ ]
 (12) cache age (days)       [  0-any] | (13) last found (days)       [  0-any] 
                                       |
 (14) title keyword       [          ] | (15) descr. keyword    [             ]
-(16) cache not found by  [          ] | (17) cache owner isn't [IT-gubben    ]
+(16) cache not found by  [          ] | (17) cache owner isn't [             ]
 (18) cache found by      [          ] | (19) cache owner is    [             ]
-(20) EasyName WP length         [  0] | (21) include disabled caches [ ] 
+(20) EasyName WP length         [  0] | (21) include disabled caches       [ ] 
 - - - - - - - - - - - - - - - - - - - + - - - - - - - - - - - - - - - - - - -
-(22) output format       [html      ]   (23) filename   [automatic           ]
-(24) output directory    [/Volumes/snabbt/Users/tstromberg/Desktop           ]
+(22) output format       [kml       ]   (23) filename   [automatic           ]
+(24) output directory    [/home/tstromberg/Skrivbord                         ]
 ==============================================================================
 
--- Enter menu number, (s) to start, (r) to reset, or (x) to exit -->
+-- Enter menu number, (s) to start, (r) to reset, or (x) to exit --> 
+
 
 At this point, follow the prompt and begin typing the number of the item
 you wish to change, pressing enter afterwards. You will need to enter your
@@ -91,7 +92,7 @@ syntax: geotoad [options] <search:search2:search3>
  -p <password>          Geocaching.com password, required for coordinates
  -o [filename]          output file name (automatic otherwise)
  -x [format]            output format type, see list below
- -q [zip|state|coord|country|user|wid]   query type (zip by default)
+ -q [location|user|wid]   query type (location by default)
  -d/-D [0.0-5.0]        difficulty minimum/maximum
  -t/-T [0.0-5.0]        terrain minimum/maximum
  -f/-F [0.0-5.0]        fun factor minimum/maximum
@@ -115,9 +116,10 @@ syntax: geotoad [options] <search:search2:search3>
  cachemate=   cetus+       csv          delorme      delorme-nour dna+        
  easygps      gpsdrive     gpsman       gpspilot+    gpspoint     gpsutil+    
  gpx          holux+       html         kml+         magnav+      mapsend+    
- mxf          ozi          pcx+         psp+         tab          text        
- tiger        tmpro+       tpg+         vcf          xmap+       
+ mxf          ozi          pcx+         psp+         sms          tab         
+ text         tiger        tmpro+       tpg+         xmap+       
     + requires gpsbabel in PATH           = requires cmconvert in PATH
+
 
 ---------------------
 Command-Line Examples
@@ -168,3 +170,4 @@ Please note: Put quotes around your username if it has any spaces in it.
 5) geotoad.rb -u user -p password -x html -b -K 'stream|creek|lake|river|ocean' -o watery.html -q state Indiana
 Gets every cache in Sweden with travel bugs that matches those water keywords.
 Makes a pretty HTML file out of it.
+
