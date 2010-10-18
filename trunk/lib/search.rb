@@ -286,8 +286,8 @@ class SearchCache
         cache['cdays'] = daysAgo(cache['ctime'])
         debug "ctime=#{cache['ctime']} cdays=#{cache['cdays']}"
 
-      # <img src="/images/icons/compass/SW.gif" alt="SW" />SW<br />0.9mi</td>
-      when /([NWSE]+)\<br \/\>([\d\.]+)mi\</
+      #     <img src="/images/icons/compass/NW.gif" alt="NW" title="NW" />NW<br />0.1mi
+      when /([NWSE]+)\<br \/\>([\d\.]+)mi/
         cache['distance']=$2.to_f
         cache['direction'] = $1
         debug "cacheDistance=#{cache['distance']} dir=#{cache['direction']}"
