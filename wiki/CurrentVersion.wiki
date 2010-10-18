@@ -1,8 +1,8 @@
 #labels Deprecated
-version=3.12.0
+version=3.12.1
 {{{
-- Update to the latest geocaching.com layout changes
-- HTML output now includes more detailed address location (including address)
-- Improved GPX output (available, archived, version tags)
-- Comment logs now include 10 caches (up from 5)
+- Updated to latest GC.com changes
+- Username and Password is now saved to configuration file after first use, no longer required on the command-line
+- Improved HTML output and offline mode
+- New automatic funfactor adjustment (English only)
 }}}
