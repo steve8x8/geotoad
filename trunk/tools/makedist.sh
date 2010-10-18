@@ -77,7 +77,7 @@ if [ ! -x "/usr/local/bin/flip" -o ! -x "/usr/bin/flip" ]; then
 
   echo "In Windows, run:"
   echo ""
-  echo "cd Z:\\dist\\${DISTNAME}_for_Windows"
+  echo "cd Z:\\dist\\${DISTNAME}_for_Windows\\compile"
   echo "ruby C:\\ruby\\bin\\rubyscript2exe.rb init.rb"
   echo "move init.exe ..\\geotoad.exe"
   read ENTER
