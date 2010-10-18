@@ -273,7 +273,8 @@ class SearchCache
         debug "size=#{cache['size']}"
 
       #                             11 Jul 10<br />
-      when /^ (\w+[ \w]+)\**\<[bs][rt]/
+      # Yesterday<strong>*</strong><br /> 
+      when /^ +(\w+[ \w]+)\<[bs][rt]/
         debug "last found date: #{$1} at line: #{line}"
         cache['mtime'] = parseDate($1)
         cache['mdays'] = daysAgo(cache['mtime'])
