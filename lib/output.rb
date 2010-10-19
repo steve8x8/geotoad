@@ -464,6 +464,22 @@ class Output
     end
   end
 
+  def cacheID(wid)
+    if wid
+      wp = wid.gsub(/^GC/, '')
+      if wp.length <= 4 && wp < 'G000'
+        # base 16 is easy
+        return wp.to_i(16)
+      else
+        # base 31: consider gaps in char set, and correction offset
+        # (GCG000 = GCFFFF + 1)
+        return wp.upcase.tr('0-9A-HJKMNPQRTV-Z', '0-9A-U').to_i(31) - 411120
+      end
+    else
+      return 0
+    end
+  end
+
   def createExtraVariablesForWid(wid, symbolHash, get_location)
     cache = @wpHash[wid]
     if symbolHash
@@ -512,6 +528,7 @@ class Output
       'hintdecrypt' => decryptHint(cache['hint']),
       'hint' => cache['hint'],
       'cacheSymbol' => symbol,
+      'cacheID' => cacheID(wid),
     }
   end
 
