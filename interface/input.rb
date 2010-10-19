@@ -225,7 +225,7 @@ class Input
     puts " -i/-I [username]       include/exclude caches owned by this person"
     puts " -e/-E [username]       include/exclude caches found by this person"
     puts " -s/-S [virtual|small|regular|large]   min/max size of the cache"
-    puts " -c    [regular|virtual|event|unknown] type of cache (| seperated)"
+    puts " -c    [regular|virtual|event|unknown] type of cache (| separated)"
     puts " -j/-J [# days]         include/exclude caches placed in the last X days"
     puts " -r/-R [# days]         include/exclude caches found in the last X days"
     puts " -z                     include disabled caches"
@@ -354,10 +354,10 @@ class Input
           @@optHash['queryArg'] = askState()
 
         when 'wid'
-          @@optHash['queryArg'] = ask('Enter a list of waypoint id\'s (seperated by commas)', 'NO_DEFAULT').gsub(/, */, ':')
+          @@optHash['queryArg'] = ask('Enter a list of waypoint id\'s (separated by commas)', 'NO_DEFAULT').gsub(/, */, ':')
 
         when 'user'
-          @@optHash['queryArg'] = ask('Enter a list of users (seperated by commas)', 'NO_DEFAULT').gsub(/, */, ':')
+          @@optHash['queryArg'] = ask('Enter a list of users (separated by commas)', 'NO_DEFAULT').gsub(/, */, ':')
 
         when 'coord'
           puts "You will be asked to enter in a list of coordinates in the following format:"
@@ -424,7 +424,7 @@ class Input
         @@optHash['sizeMax'] = askFromList("Great! What is the largest cache you seek (#{sizes.join(', ')})?", sizes, nil)
       when '9'
         kinds = ['traditional', 'multicache', 'event', 'unknown', 'letterbox', 'virtual', 'earthcache']
-        @@optHash['cacheType'] = askFromList("Valid types: #{kinds.join(', ')}\nWhat do you seek (seperate with commas)?", kinds, nil)
+        @@optHash['cacheType'] = askFromList("Valid types: #{kinds.join(', ')}\nWhat do you seek (separate with commas)?", kinds, nil)
 
       when '10'
         answer = ask('Would you like to only include virgin geocaches (geocaches that have never been found)?', nil)
@@ -452,22 +452,22 @@ class Input
         @@optHash['foundDateInclude'] = askNumber('How many days ago is the maximum a geocache can be found in for your list? (any)', nil)
 
       when '14'
-        @@optHash['titleKeyword'] = ask('Filter caches by title keywords (negate using !, seperate multiple using |): ', nil)
+        @@optHash['titleKeyword'] = ask('Filter caches by title keywords (negate using !, separate multiple using |): ', nil)
 
       when '15'
-        @@optHash['descKeyword'] = ask('Filter caches by description keywords (negate using !, seperate multiple using |): ', nil)
+        @@optHash['descKeyword'] = ask('Filter caches by description keywords (negate using !, separate multiple using |): ', nil)
 
       when '16'
-        @@optHash['userExclude'] = ask('Filter out geocaches found by these people (seperate by commas)', '').gsub(/, */, ':')
+        @@optHash['userExclude'] = ask('Filter out geocaches found by these people (separate by commas)', '').gsub(/, */, ':')
 
       when '17'
-        @@optHash['ownerExclude'] = ask('Filter out geocaches owned by these people (seperate by commas)', '').gsub(/, */, ':')
+        @@optHash['ownerExclude'] = ask('Filter out geocaches owned by these people (separate by commas)', '').gsub(/, */, ':')
 
       when '18'
         @@optHash['userInclude'] = ask('Only include geocaches that have been found by these people (separate by commas)', '').gsub(/, */, ':')
 
       when '19'
-        @@optHash['ownerInclude'] = ask('Only include geocaches owned by these people (seperate by commas)', '').gsub(/, */, ':')
+        @@optHash['ownerInclude'] = ask('Only include geocaches owned by these people (separate by commas)', '').gsub(/, */, ':')
 
       when '20'
         @@optHash['waypointLength'] = askNumber('How long can your EasyName waypoint id\'s be? (8 for Magellan, 16 for Garmin, -1 to use full text, 0 to disable and use waypoint id\'s)?', nil)

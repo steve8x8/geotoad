@@ -387,7 +387,7 @@ class GeoToad
     if (@filtered.totalWaypoints > $SLOWMODE)
       displayMessage "NOTE: Because you may be downloading more than #{$SLOWMODE} waypoints"
       displayMessage "       We will sleep longer between remote downloads to lessen the load"
-      displayMessage "       load on the geocaching.com webservers. You may want to constrain"
+      displayMessage "       on the geocaching.com webservers. You may want to constrain"
       displayMessage "       the number of waypoints to download by limiting by difficulty,"
       displayMessage "       terrain, or placement date. Please see README.txt for help."
       $SLEEP = $SLEEP * 2
