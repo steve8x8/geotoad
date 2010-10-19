@@ -47,7 +47,7 @@ $Format = {
       "  <urlname><%wpEntity.name%></urlname>\r\n" +
       "  <sym><%outEntity.cacheSymbol%></sym>\r\n" +
       "  <type>Geocache|<%wp.fulltype%></type>\r\n" +
-      "  <groundspeak:cache id=\"<%wp.guid%>\" available=\"<%out.IsAvailable%>\" archived=\"<%out.IsArchived%>\" xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0\">\r\n" +
+      "  <groundspeak:cache id=\"<%out.cacheID%>\" available=\"<%out.IsAvailable%>\" archived=\"<%out.IsArchived%>\" xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0\">\r\n" +
       "  <groundspeak:name><%wpEntity.name%></groundspeak:name>\r\n" +
       "  <groundspeak:placed_by><%wpEntity.creator%></groundspeak:placed_by>\r\n" +
       "  <groundspeak:owner id=\"<%wpEntity.creator_id%>\"><%wpEntity.creator%></groundspeak:owner>\r\n" +
