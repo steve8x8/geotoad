@@ -473,7 +473,12 @@ class Input
         @@optHash['waypointLength'] = askNumber('How long can your EasyName waypoint id\'s be? (8 for Magellan, 16 for Garmin, -1 to use full text, 0 to disable and use waypoint id\'s)?', nil)
 
       when '21'
-        @@optHash['includeDisabled'] = ask('Include disabled caches in your results?', nil)
+        answer = ask('Include disabled caches in your results?', nil)
+        if (answer =~ /y/)
+          @@optHash['includeDisabled'] = 'X'
+        else
+          @@optHash['includeDisabled'] = nil
+        end
 
       when '22'
         puts "List of Output Formats: "
