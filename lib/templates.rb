@@ -57,8 +57,8 @@ $Format = {
       "  <groundspeak:terrain><%wp.terrain%></groundspeak:terrain>\r\n" +
       "  <groundspeak:country><%wpEntity.country%></groundspeak:country>\r\n" +
       "  <groundspeak:state><%wpEntity.state%></groundspeak:state>\r\n" +
-      "  <groundspeak:short_description html=\"True\"><%wpEntity.additional_raw%><%wpEntity.shortdesc%></groundspeak:short_description>\r\n" +
-      "  <groundspeak:long_description html=\"True\"><%wpEntity.longdesc%></groundspeak:long_description>\r\n" +
+      "  <groundspeak:short_description html=\"True\"><%wpEntity.shortdesc%></groundspeak:short_description>\r\n" +
+      "  <groundspeak:long_description html=\"True\"><%wpEntity.additional_raw%><%wpEntity.longdesc%></groundspeak:long_description>\r\n" +
       "  <groundspeak:encoded_hints><%outEntity.hintdecrypt%></groundspeak:encoded_hints>\r\n" +
       "  <groundspeak:logs>\r\n" +
       "  <%out.gpxlogs%>\r\n" +
