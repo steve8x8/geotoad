@@ -287,6 +287,10 @@ class Output
     # From http://snippets.dzone.com/posts/show/1161
     str.unpack("U*").collect {|s| (s > 127 ? "&##{s};" : s.chr) }.join("")
 
+    # Collapse white space
+    text.gsub!(/\&(amp;)*nbsp;/, ' ')
+    text.gsub!(/[\x09\x0a\x0d]/, ' ')
+    text.gsub!(/ +/, ' ')
     # Strip out control characters
     text.gsub!(/[\x00-\x1f]/, '?')
     text.gsub!(/\x7f/, '?')
