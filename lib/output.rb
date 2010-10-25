@@ -277,6 +277,9 @@ class Output
     # CGI.escapeHTML will try to re-escape previously escaped entities.
     # Fix numerical entities such as Pateniemen l&amp;#228;mp&amp;#246;keskus
     text.gsub!(/&amp;([\#\d][\d]+;)/, "&\\1")
+    # Fix hex entities too
+    #text.gsub!(/&amp;#x([0-9a-fA-F]+);/) { "&\##{$1.to_i(16)")
+    text.gsub!(/&amp;(\#x[0-9a-fA-F][0-9a-fA-F]+;)/, "&\\1")
 
     # XML only pre-defines the following named character entities:
     text.gsub!(/\&amp;(amp;)/, "&\\1")
