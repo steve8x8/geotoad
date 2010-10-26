@@ -65,8 +65,9 @@ $Format = {
       "  </groundspeak:logs>\r\n" +
       "  <groundspeak:travelbugs />\r\n" +
       "  </groundspeak:cache>\r\n" +
-      "</wpt>\r\n",
-    'templatePost'    => " </gpx>\r\n"
+      "</wpt>\r\n" +
+      "<%out.xmlWpts%>",
+    'templatePost'    => "</gpx>\r\n"
   },
 
   'html'    => {
