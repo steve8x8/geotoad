@@ -667,6 +667,24 @@ class Output
       shortWpts = "<hr />" + shortWpts + "<hr />"
     end
 
+    # code by yeryry, slightly modified
+    xmlAttrs = ''
+    # limit counter - otherwise "old" values would slip in (why?)
+    numattrib = cache['attributeCount']
+    # may be uninitialized
+    if numattrib
+      (0 ... numattrib).each { |x|
+        #debug "Looking for attribute #{x}"
+        if cache["attribute#{x}id"]
+          rawattrib = "      <groundspeak:attribute " +
+            sprintf("id=\"%s\" inc=\"%s\">", cache["attribute#{x}id"], cache["attribute#{x}inc"]) +
+            "</groundspeak:attribute>\r\n"
+          debug "Attribute #{x} XML: #{rawattrib}"
+          xmlAttrs << rawattrib
+        end
+      }
+    end
+
     variables = {
       'wid' => wid,
       'symbols' => symbols,
@@ -689,6 +707,8 @@ class Output
       'cacheID' => cacheID(wid),
       'shortWpts' => shortWpts.to_s,
       'xmlWpts' => xmlWpts.to_s.gsub(/XXXWIDXXX/, wid[2 .. -1]),
+      'xmlAttrs' => xmlAttrs.to_s,
+      'txtAttrs' => cache['attributeText'].to_s,
     }
   end
 

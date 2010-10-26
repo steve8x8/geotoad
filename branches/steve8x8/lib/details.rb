@@ -113,6 +113,89 @@ class CacheDetails
     return grade
   end
 
+  def parseAttr(text)
+    # "bicycles-yes" -> 32, 1
+    attrmap = {
+      # list confirmed 2010-10-20 ("edit attributes")
+      "attribute-blank"  =>  0,
+      "dogs"             =>  1,
+      "fee"              =>  2,
+      "rappelling"       =>  3,
+      "boat"             =>  4,
+      "scuba"            =>  5,
+      "kids"             =>  6,
+      "onehour"          =>  7,
+      "scenic"           =>  8,
+      "hiking"           =>  9,
+      "climbing"         => 10,
+      "wading"           => 11,
+      "swimming"         => 12,
+      "available"        => 13,
+      "night"            => 14,
+      "winter"           => 15,
+      "16"               => 16,
+      "poisonoak"        => 17,
+      "dangerousanimals" => 18,
+      "ticks"            => 19,
+      "mine"             => 20,
+      "cliff"            => 21,
+      "hunting"          => 22,
+      "danger"           => 23,
+      "wheelchair"       => 24,
+      "parking"          => 25,
+      "public"           => 26,
+      "water"            => 27,
+      "restrooms"        => 28,
+      "phone"            => 29,
+      "picnic"           => 30,
+      "camping"          => 31,
+      "bicycles"         => 32,
+      "motorcycles"      => 33,
+      "quads"            => 34,
+      "jeeps"            => 35,
+      "snowmobiles"      => 36,
+      "horses"           => 37,
+      "campfires"        => 38,
+      "thorn"            => 39,
+      "stealth"          => 40,
+      "stroller"         => 41,
+      "firstaid"         => 42,
+      "cow"              => 43,
+      "flashlight"       => 44,
+      "landf"            => 45,
+      "rv"               => 46,
+      "field_puzzle"     => 47,
+      "UV"               => 48,
+      "snowshoes"        => 49,
+      "skiis"            => 50,
+      "s-tool"           => 51,
+      "nightcache"       => 52,
+      "parkngrab"        => 53,
+      "AbandonedBuilding"=> 54,
+      "hike_short"       => 55,
+      "hike_med"         => 56,
+      "hike_long"        => 57,
+      "fuel"             => 58,
+      "food"             => 59,
+      "wirelessbeacon"   => 60,
+      # obsolete?, but image still exists
+      "snakes"           => 18,
+    }
+    if text == "attribute-blank"
+      return 0, 0
+    end
+    what = text.gsub(/(.*)-.*/, "\\1") # only strip "yes" or "no"!
+    how = text.gsub(/^.*-/, "")
+    # get mapping
+    attrid = attrmap[what]
+    attrval = (how=="yes")?1:0
+    if not attrid
+      debug "Unknown attribute #{text}"
+      return 0, 0
+    end
+    return attrid, attrval
+  end
+
   def parseCache(data)
     # find the geocaching waypoint id.
     wid = nil
@@ -205,6 +288,31 @@ class CacheDetails
           debug "This cache appears to be available to premium members only."
           return 'subscriber-only'
         end
+      end
+
+      if line =~ /title=\"What are Attributes\?\">/
+        debug "inspecting attributes: #{line}"
+        # list of attributes only in cdpf version :(
+        atxt = ""
+        anum = 0
+        # is this really necessary?
+        line.gsub!(/\<p\>/, ' ')
+        # <img src="/images/attributes/bicycles-no.gif" alt="no bikes" width="30" height="30" />
+        line.scan(/\/images\/attributes\/(.+?)\.gif" alt="(.*?)"[^\>]*\/>/) { |icon, alt|
+          aid, ainc = parseAttr(icon)
+          debug "attribute #{anum}: ic=#{icon} id=#{aid} inc=#{ainc} alt=#{alt} "
+          if aid > 0
+            # make this a 3d array instead? ...['attributes'][aid]=ainc
+            @waypointHash[wid]["attribute#{anum}id"] = aid
+            @waypointHash[wid]["attribute#{anum}inc"] = ainc
+            anum = anum + 1
+            atxt << alt + ", "
+          end
+        }   # no more attributes
+        # keep the collected text in wp hash
+        @waypointHash[wid]['attributeText'] = atxt.gsub(/, $/, '')
+        @waypointHash[wid]['attributeCount'] = anum
+        debug "Found #{anum} attributes: #{atxt}"
       end
 
       if line =~ /Cache is Unpublished/
