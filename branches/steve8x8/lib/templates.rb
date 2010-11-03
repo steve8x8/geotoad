@@ -58,7 +58,7 @@ $Format = {
       "  <groundspeak:country><%wpEntity.country%></groundspeak:country>\r\n" +
       "  <groundspeak:state><%wpEntity.state%></groundspeak:state>\r\n" +
       "  <groundspeak:short_description html=\"True\"><%wpEntity.shortdesc%></groundspeak:short_description>\r\n" +
-      "  <groundspeak:long_description html=\"True\"><%wpEntity.additional_raw%><%wpEntity.longdesc%></groundspeak:long_description>\r\n" +
+      "  <groundspeak:long_description html=\"True\"><%outEntity.shortWpts%><%wpEntity.longdesc%></groundspeak:long_description>\r\n" +
       "  <groundspeak:encoded_hints><%outEntity.hintdecrypt%></groundspeak:encoded_hints>\r\n" +
       "  <groundspeak:logs>\r\n" +
       "  <%out.gpxlogs%>\r\n" +
@@ -77,7 +77,7 @@ $Format = {
     'desc'    => 'GPX Geocaching XML',
     'templatePre' => "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n" +
       "<gpx xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" version=\"1.0\" creator=\"GeoToad\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd http://www.groundspeak.com/cache/1/0/1 http://www.groundspeak.com/cache/1/0/1/cache.xsd\" xmlns=\"http://www.topografix.com/GPX/1/0\">\r\n" +
-      "<name>" + Time.new.gmtime.strftime("%Y%m%dT%H%M%S") + "</name>" +
+      "<name>" + Time.new.gmtime.strftime("%Y%m%dT%H%M%S") + "</name>\r\n" +
       "<desc><%outEntity.title%></desc>\r\n" +
       "<author>GeoToad <%outEntity.version%></author>\r\n" +
       "<email>geotoad@googlegroups.com</email>\r\n" +
@@ -106,7 +106,7 @@ $Format = {
       "<%out.xmlAttrs%>" +
       "  </groundspeak:attributes>\r\n" +
       "  <groundspeak:short_description html=\"True\"><%wpEntity.shortdesc%></groundspeak:short_description>\r\n" +
-      "  <groundspeak:long_description html=\"True\"><%wpEntity.additional_raw%><%wpEntity.longdesc%></groundspeak:long_description>\r\n" +
+      "  <groundspeak:long_description html=\"True\"><%outEntity.shortWpts%><%wpEntity.longdesc%></groundspeak:long_description>\r\n" +
       "  <groundspeak:encoded_hints><%outEntity.hintdecrypt%></groundspeak:encoded_hints>\r\n" +
       "  <groundspeak:logs>\r\n" +
       "  <%out.gpxlogs%>\r\n" +
