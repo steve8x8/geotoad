@@ -678,6 +678,7 @@ class Output
         if cache["attribute#{x}id"]
           rawattrib = "      <groundspeak:attribute " +
             sprintf("id=\"%s\" inc=\"%s\">", cache["attribute#{x}id"], cache["attribute#{x}inc"]) +
+            cache["attribute#{x}txt"].to_s.capitalize +
             "</groundspeak:attribute>\r\n"
           debug "Attribute #{x} XML: #{rawattrib}"
           xmlAttrs << rawattrib

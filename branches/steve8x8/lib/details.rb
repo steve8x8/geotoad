@@ -305,6 +305,7 @@ class CacheDetails
             # make this a 3d array instead? ...['attributes'][aid]=ainc
             @waypointHash[wid]["attribute#{anum}id"] = aid
             @waypointHash[wid]["attribute#{anum}inc"] = ainc
+            @waypointHash[wid]["attribute#{anum}txt"] = alt
             anum = anum + 1
             atxt << alt + ", "
           end
@@ -393,7 +394,7 @@ class CacheDetails
 
   def removeAlignments(text)
     new_text = text.gsub(/(\<div .*?)align=/m, '\1noalign=')
-    new_text.gsub!(/(\<p .*?)align="/m, '\1noalign=')
+    new_text.gsub!(/(\<p .*?)align=/m, '\1noalign=')
     new_text.gsub!('<center>', '')
     if text != new_text
       debug "fixed alignments in #{new_text}"

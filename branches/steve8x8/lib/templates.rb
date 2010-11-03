@@ -76,11 +76,12 @@ $Format = {
     'mime'    => 'text/ascii',
     'desc'    => 'GPX Geocaching XML',
     'templatePre' => "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n" +
-      "<gpx xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" version=\"1.0\" creator=\"GeoToad\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/0/1 http://www.topografix.com/GPX/1/0/1/gpx.xsd http://www.groundspeak.com/cache/1/0/1 http://www.groundspeak.com/cache/1/0/1/cache.xsd\" xmlns=\"http://www.topografix.com/GPX/1/0/1\">\r\n" +
+      "<gpx xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" version=\"1.0\" creator=\"GeoToad\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd http://www.groundspeak.com/cache/1/0/1 http://www.groundspeak.com/cache/1/0/1/cache.xsd\" xmlns=\"http://www.topografix.com/GPX/1/0\">\r\n" +
+      "<name>" + Time.new.gmtime.strftime("%Y%m%dT%H%M%S") + "</name>" +
       "<desc><%outEntity.title%></desc>\r\n" +
       "<author>GeoToad <%outEntity.version%></author>\r\n" +
       "<email>geotoad@googlegroups.com</email>\r\n" +
-      "<time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S")  + ".0000000-00:00</time>\r\n" +
+      "<time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S")  + ".000Z</time>\r\n" +
       "<keywords>cache, geocache, groundspeak, geotoad</keywords>\r\n",
 
     'templateWP'    => "<wpt lat=\"<%wp.latdata%>\" lon=\"<%wp.londata%>\">\r\n" +
