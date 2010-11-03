@@ -285,7 +285,7 @@ class CacheDetails
 
   def removeAlignments(text)
     new_text = text.gsub(/(\<div .*?)align=/m, '\1noalign=')
-    new_text.gsub!(/(\<p .*?)align="/m, '\1noalign=')
+    new_text.gsub!(/(\<p .*?)align=/m, '\1noalign=')
     new_text.gsub!('<center>', '')
     if text != new_text
       debug "fixed alignments in #{new_text}"
