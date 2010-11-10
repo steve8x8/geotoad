@@ -111,15 +111,13 @@ syntax: geotoad [options] <search:search2:search3>
  -l                     set EasyName waypoint id length. (16)
  -P                     HTTP proxy server, http://username:pass@host:port/
  -C                     Clear local browser cache
-
 ::: OUTPUT FORMATS:
  cachemate=   cetus+       csv          delorme      delorme-nour dna+        
  easygps      gpsdrive     gpsman       gpspilot+    gpspoint     gpsutil+    
- gpx          holux+       html         kml+         magnav+      mapsend+    
- mxf          ozi          pcx+         psp+         sms          tab         
- text         tiger        tmpro+       tpg+         xmap+       
-    + requires gpsbabel in PATH           = requires cmconvert in PATH
-
+ gpx          holux+       html         kml+         list         magnav+     
+ mapsend+     mxf          ozi          pcx+         psp+         sms         
+ tab          text         tiger        tmpro+       tpg+         xmap+       
+ + requires gpsbabel in PATH           = requires cmconvert in PATH
 
 ---------------------
 Command-Line Examples
