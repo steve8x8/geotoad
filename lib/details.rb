@@ -150,8 +150,17 @@ class CacheDetails
         if ! cache
           displayWarning "Found waypoint type, but never saw cache title. Did geocaching.com change their layout again?"
         end
-        cache['fulltype'] = $1
-        cache['type'] = $1.split(' ')[0].downcase.gsub(/\-/, '')
+        full_type = $1
+        cache['fulltype'] = full_type
+        cache['type'] = full_type.split(' ')[0].downcase.gsub(/\-/, '')
+        # two special cases: "Cache In Trash Out" and "Lost and Found"
+        case full_type
+        when /Cache In Trash Out/
+          cache['type'] = 'cito'
+        when /Lost [Aa]nd Found/
+          # spelling to be confirmed!
+          cache['type'] = 'lost+found'
+        end
         debug "stype=#{cache['type']} full_type=#{$1}"
       end
 
