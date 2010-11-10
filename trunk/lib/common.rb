@@ -50,7 +50,6 @@ module Common
   def selectDirectory(dirs)
     dirs.compact.each do |dir|
       dir = dir.gsub(/\\/, '/')
-      debug "Checking #{dir} for writability."
       if File.exists?(dir) && File.stat(dir).directory?
         # write tests seem to be broken in Windows occassionaly.
         if dir =~ /^\w:/ or File.stat(dir).writable?
@@ -130,7 +129,6 @@ module Common
     ]
 
     outputDir=selectDirectory(dirs)
-    debug "#{outputDir} is being used as the default output directory"
     FileUtils::mkdir_p(outputDir)
     return outputDir
   end
