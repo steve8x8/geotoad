@@ -211,6 +211,8 @@ class SearchCache
     }
 
     data.split("\n").each { |line|
+      # GC change 2010-11-09
+      line.gsub!(/&#39;/, '\'')
       case line
       # <TD class="PageBuilderWidget"><SPAN>Total Records: <B>2938</B> - Page: <B>147</B> of <B>147</B>
       when /Total Records: \<b\>(\d+)\<\/b\> - Page: \<b\>(\d+)\<\/b\> of \<b\>(\d+)\<\/b\>/
@@ -219,10 +221,9 @@ class SearchCache
           page_number = $2.to_i
           pages_total = $3.to_i
         end
-
-        # href="javascript:__doPostBack(&#39;ctl00$ContentBody$pgrBottom$ctl08&#39;,&#39;&#39;)"><b>Next &gt;</b></a
-        if line =~ /(ctl[\w\$]+)[&#\d;'",]+\)"\>\<b\>Next / 
-          debug "Found next target: #{$1} line: #{line}"
+        # href="javascript:__doPostBack('ctl00$ContentBody$pgrTop$ctl08','')"><b>Next &gt;</b></a></td>
+        if line =~ /doPostBack\(\'([\w\$_]+)\',\'\'\)\"\>\<b\>Next/
+          debug "Found next target: #{$1}"
           post_vars['__EVENTTARGET'] = $1
         end
 
@@ -271,7 +272,7 @@ class SearchCache
         debug "size=#{cache['size']}"
 
       #                             11 Jul 10<br />
-      # Yesterday<strong>*</strong><br />
+      # Yesterday<strong>*</strong><br /> 
       when /^ +(\w+[ \w]+)\<[bs][rt]/
         debug "last found date: #{$1} at line: #{line}"
         cache['mtime'] = parseDate($1)
