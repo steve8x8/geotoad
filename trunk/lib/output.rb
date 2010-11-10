@@ -450,7 +450,7 @@ class Output
       entry << "      <groundspeak:date>#{formatted_date}</groundspeak:date>\r\n"
       entry << "      <groundspeak:type>#{comment['type']}</groundspeak:type>\r\n"
       entry << "      <groundspeak:finder id=\"#{comment['user_id']}\">#{comment['user']}</groundspeak:finder>\r\n"
-      entry << "      <groundspeak:text encoded=\"False\">#{comment['text']}</groundspeak:text>\r\n"
+      entry << "      <groundspeak:text encoded=\"False\">" + makeXML(comment['text']) + "</groundspeak:text>\r\n"
       entry << "    </groundspeak:log>\r\n"
       entries << entry
     }
