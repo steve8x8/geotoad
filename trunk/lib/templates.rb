@@ -347,4 +347,18 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
       "D<%wp.difficulty%>,T<%wp.terrain%>,<%out.relativedistance%>,<%wp.latwritten%>,<%wp.lonwritten%>," +
       "<%wp.type%>,<%wp.size%>\r\n"
   },
+  # contributed by Steve8x8: table, "tab" extended
+  'list'    => {
+    'ext'        => 'lst',
+    'mime'    => 'text/plain',
+    'desc'    =>     'whitespace delimited, detailed table',
+    'templatePre' => "",
+    'templateWP'    => "<%out.id%>\t" +
+      "<%out.latdatapad5%> <%out.londatapad5%> " +
+      "<%out.cdate%> " +
+      "<%wp.difficulty%>/<%wp.terrain%>\t" +
+      "<%wp.type%>\t" +
+      "<%out.relativedistancekm%>\t" +
+      "\"<%wp.name%>\" by <%wp.creator%>\n"
+  },
 }
