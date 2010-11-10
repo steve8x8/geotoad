@@ -58,15 +58,16 @@ $Format = {
       "  <groundspeak:country><%wpEntity.country%></groundspeak:country>\r\n" +
       "  <groundspeak:state><%wpEntity.state%></groundspeak:state>\r\n" +
       "  <groundspeak:short_description html=\"True\"><%wpEntity.shortdesc%></groundspeak:short_description>\r\n" +
-      "  <groundspeak:long_description html=\"True\"><%wpEntity.additional_raw%><%wpEntity.longdesc%></groundspeak:long_description>\r\n" +
+      "  <groundspeak:long_description html=\"True\"><%outEntity.shortWpts%><%wpEntity.longdesc%></groundspeak:long_description>\r\n" +
       "  <groundspeak:encoded_hints><%outEntity.hintdecrypt%></groundspeak:encoded_hints>\r\n" +
       "  <groundspeak:logs>\r\n" +
-      "  <%out.gpxlogs%>\r\n" +
+      "<%out.gpxlogs%>" +
       "  </groundspeak:logs>\r\n" +
       "  <groundspeak:travelbugs />\r\n" +
       "  </groundspeak:cache>\r\n" +
-      "</wpt>\r\n",
-    'templatePost'    => " </gpx>\r\n"
+      "</wpt>\r\n" +
+      "<%out.xmlWpts%>",
+    'templatePost'    => "</gpx>\r\n"
   },
 
   'html'    => {
