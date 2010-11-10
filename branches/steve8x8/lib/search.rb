@@ -167,7 +167,8 @@ class SearchCache
 
       if page_number == last_page_number
         displayError "Stuck on page number #{page_number} of #{total_pages}"
-        sleep(20)
+      elsif page_number < last_page_number
+        displayError "We were on page #{last_page_number}, but just read #{page_number}. Parsing error?"
       end
     end
     return @waypoints
@@ -202,7 +203,6 @@ class SearchCache
     parsed_total = 0
     wid = nil
     waypoints_total = nil
-    @next_page_target = nil
     post_vars = Hash.new
     cache = {
       'disabled' => false,
@@ -211,6 +211,8 @@ class SearchCache
     }
 
     data.split("\n").each { |line|
+      # GC change 2010-11-09
+      line.gsub!(/&#39;/, '\'')
       case line
       # <TD class="PageBuilderWidget"><SPAN>Total Records: <B>2938</B> - Page: <B>147</B> of <B>147</B>
       when /Total Records: \<b\>(\d+)\<\/b\> - Page: \<b\>(\d+)\<\/b\> of \<b\>(\d+)\<\/b\>/
@@ -220,7 +222,6 @@ class SearchCache
           pages_total = $3.to_i
         end
         # href="javascript:__doPostBack('ctl00$ContentBody$pgrTop$ctl08','')"><b>Next &gt;</b></a></td>
-        # <a href="javascript:__doPostBack('pgrTop$_ctl16','')"><b>Next</b></a>
         if line =~ /doPostBack\(\'([\w\$_]+)\',\'\'\)\"\>\<b\>Next/
           debug "Found next target: #{$1}"
           post_vars['__EVENTTARGET'] = $1
@@ -229,26 +230,24 @@ class SearchCache
       #<IMG src="./gc_files/8.gif" alt="Unknown Cache" width="32" height="32"></A>
       # <IMG src="./gc_files/21.gif" alt="Travel Bug Dog Tag (1 item)">  </TD>
       when /WptTypes\/[\w].*?alt=\"(.*?)\"/
-        # This line also has travel bug data
         full_type = $1
+        cache['fulltype'] = full_type
+        debug "Creating short type for #{full_type}"
+        cache['type'] = full_type.split(' ')[0].downcase.gsub(/\-/, '')
+        # two special cases: "Cache In Trash Out" and "Lost and Found"
+        case full_type
+        when /Cache In Trash Out/
+          cache['type'] = 'cito'
+        when /Lost [Aa]nd Found/
+          cache['type'] = 'lost+found'
+        end
+        debug "type=#{cache['type']}"
+        # This line also has travel bug data
         if line =~ /Travel Bug.*?\((.*?)\)/
           debug "Travel Bug Found: #{$1}"
           cache['travelbug']=$1
-        else
-          debug "type line: #{line}"
         end
-        cache['mdays']=-1
-        debug "Creating short type for #{full_type}"
-        short_type = full_type.split(' ')[0].downcase.gsub(/\-/, '')
-        cache['fulltype']=full_type
-        cache['type']=short_type
-        debug "type=#{cache['type']}"
-
-        # This line also has travel bug data
-        if line =~ /Travel Bug.*?(\d+) item"/
-          debug "Travel Bug Found: #{$1}"
-          cache['travelbug']=$1
-        end
+        cache['mdays'] = -1
 
       # (2/1)<br />
       # (1/1.5)<br />

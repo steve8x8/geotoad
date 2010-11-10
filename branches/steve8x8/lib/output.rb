@@ -450,7 +450,7 @@ class Output
       entry << "      <groundspeak:date>#{formatted_date}</groundspeak:date>\r\n"
       entry << "      <groundspeak:type>#{comment['type']}</groundspeak:type>\r\n"
       entry << "      <groundspeak:finder id=\"#{comment['user_id']}\">#{comment['user']}</groundspeak:finder>\r\n"
-      entry << "      <groundspeak:text encoded=\"False\">#{comment['text']}</groundspeak:text>\r\n"
+      entry << "      <groundspeak:text encoded=\"False\">" + makeXML(comment['text']) + "</groundspeak:text>\r\n"
       entry << "    </groundspeak:log>\r\n"
       entries << entry
     }
@@ -471,6 +471,7 @@ class Output
     end
   end
 
+  # convert cache "waypoint ID" (GC.....) to numeric value
   def cacheID(wid)
     if wid
       wp = wid.gsub(/^GC/, '')
@@ -479,7 +480,7 @@ class Output
         return wp.to_i(16)
       else
         # base 31: consider gaps in char set, and correction offset
-        # (GCG000 = GCFFFF + 1)
+        # magic number -411120 reflects that GCG000 = GCFFFF + 1
         return wp.upcase.tr('0-9A-HJKMNPQRTV-Z', '0-9A-U').to_i(31) - 411120
       end
     else
@@ -487,6 +488,8 @@ class Output
     end
   end
 
+  # reduce HTML content (of waypoint table) to a minimum
+  # suited for GPSr and parsing in toWptList()
   def reduceHtml(text)
     if !text
       return nil
@@ -496,7 +499,7 @@ class Output
     # remove images
     new_text.gsub!(/\s*\<img\s+[^\>]*\>/, '')
     # remove hyperlinks
-    # note: this will drop waypoint URLs.
+    # note: this will drop waypoint URLs!
     new_text.gsub!(/\s*\<a\s+[^\>]*\>/, '')
     new_text.gsub!(/\s*\<\/a\>/, '')
     # not yet ready: do not remove but clean up hyperlinks
@@ -517,13 +520,15 @@ class Output
     # ToDo: fuse continuation lines together between <td> .. </td>
     # remove "class" string from <tr>
     new_text.gsub!(/\s*class=\"[^\"]*\"/, '')
+    # we have to keep the "ishidden" information for later
     if text != new_text
-      debug "shortened HTML to #{new_text}"
+      debug "reduced HTML to #{new_text}"
     end
-    debug "shorten old: #{text.length} new: #{new_text.length}"
+    debug "reduceHTML old: #{text.length} new: #{new_text.length}"
     return new_text
   end
 
+  # convert waypoint "table light" into a sequence of <wpt> elements
   def toWptList(text)
     if !text
       return nil
@@ -543,10 +548,13 @@ class Output
     wptlist = ""
     trcount = 0
     tdcount = 0
+    # table consists of row pairs: 1st row with WP details, 2nd with note
     text.gsub(/\<br[^\>]*\>/, '|').split("\n").each { |line|
       if line =~ /\<tr/
+        # start of a row - trcount is 1 for 1st, 2 for 2nd
         trcount += 1
         tdcount = 0
+        # hidden waypoints will not be shown (set only in 1st row of pair)
         if line =~ /ishidden=\"true\"/
           hidden = true
         end
@@ -559,25 +567,26 @@ class Output
             # two-letter prefix
             prefix = $1
           elsif tdcount == 5
-            # dunno what it's for
+            # dunno what it's for - future extension by gc.com?
             lookup = $1
           elsif tdcount == 6
             # WP name and type
             wpname = $1
-            # extract sym type
+            # extract sym type (in parentheses)
             wptype = wpname.gsub(/^.*\(/, '').gsub(/\).*/, '')
             # and drop type from name
             if wpname =~ /(.*) \(/
               wpname = $1
             end
-            # we have thrown away the WID link in shortenHTML
-            # how bad is this? certainly FIXME later...
-            # there's not much we can do now
+            # we must escape special characters in WP name (as in "Park & Ride")
+            wpname = makeXML(wpname)
+            # we have thrown away the WID link in reduceHTML
+            # this may be bad, but for now we'll wait for requests
             widurl = ""
           elsif tdcount == 7
             # coords in "written" format
             coord = $1
-            # do some transformations
+            # do some transformations (taken from details.rb)
             if coord =~ /([NS]) (\d+).*? ([\d\.]+) ([WE]) (\d+).*? ([\d\.]+)/
               wplat = ($2.to_f + $3.to_f / 60) * ($1 == 'S' ? -1:1)
               wplon = ($5.to_f + $6.to_f / 60) * ($4 == 'W' ? -1:1)
@@ -587,31 +596,35 @@ class Output
           # second row of two
           if tdcount == 3
             desc = $1
-            # clean from HTML stuff
-            # keep line breaks (somehow)
+            # remove some HTML stuff, but keep track of line breaks
             desc.gsub!(/\<(br|p|\/p)[^\>]*\>/, "|")
             # remove all other tags
             desc.gsub!(/\<[^\>]*\>/, "")
-            # &euro; confuses gpsbabel, seen nowhere else?
+            # &euro; confuses gpsbabel, try to avoid - FIXME
             desc.gsub!(/\&euro;/, "EURO")
+            # escape special characters, just in case
+            desc = makeXML(desc)
           end
         end
       elsif line =~ /\<\/tr/
+        # end of table row: did we collect info from two rows?
         if trcount == 2
           # output what has been gathered
           if hidden == false
-            # replace XXXWIDXXX by WID string later
+            # replace XXXWIDXXX by WID string later!
+            # Garmin Oregon shows only <desc>, not <cmt>, and limits to 48 chars
             wptlist = wptlist +
               "<wpt lat=\"#{wplat}\" lon=\"#{wplon}\">\n" +
               "  <name>#{prefix}XXXWIDXXX</name>\n" +
               "  <cmt>#{desc}</cmt>\n" +
-              "  <desc>#{wpname}</desc>\n" +
+              "  <desc>#{wpname}:#{desc}</desc>\n" +
               "  <url>http://www.geocaching.com/seek/wpt.aspx?WID=#{widurl}</url>\n" +
               "  <urlname>#{wpname}</urlname>\n" +
               "  <sym>#{wptype}</sym>\n" +
               "  <type>Waypoint|#{wptype}</type>\n" +
               "</wpt>\n"
           end
+          # reset row counter and hidden flag for next WP
           hidden = false
           trcount = 0
         end
@@ -656,10 +669,14 @@ class Output
 
     # waypoints
     rawWpts = cache['additional_raw']
+    # make "table light": only little HTML left
+    # this contains hidden WPs because of possibly important hints!
     shortWpts = nil
     if rawWpts.to_s.length > 0
       shortWpts = reduceHtml(rawWpts)
     end
+    # make series of <wpt> elements containing non-hidden waypoints
+    # (the ones with real coordinates)
     xmlWpts = nil
     if shortWpts.to_s.length > 0
       xmlWpts = toWptList(shortWpts)
@@ -667,12 +684,13 @@ class Output
       shortWpts = "<hr />" + shortWpts + "<hr />"
     end
 
-    # code by yeryry, slightly modified
+    # convert attributes into XML - original code by yeryry, slightly modified
     xmlAttrs = ''
-    # limit counter - otherwise "old" values would slip in (why?)
+    # limit counter - to prevent "old" values slip in
     numattrib = cache['attributeCount']
     # may be uninitialized
     if numattrib
+      # use attributes 0 .. (numattrib-1)
       (0 ... numattrib).each { |x|
         #debug "Looking for attribute #{x}"
         if cache["attribute#{x}id"]
@@ -709,7 +727,7 @@ class Output
       'shortWpts' => shortWpts.to_s,
       'xmlWpts' => xmlWpts.to_s.gsub(/XXXWIDXXX/, wid[2 .. -1]),
       'xmlAttrs' => xmlAttrs.to_s,
-      'txtAttrs' => cache['attributeText'].to_s,
+      'txtAttrs' => '<b>' + cache['attributeText'].to_s.capitalize + '</b><br />',
     }
   end
 

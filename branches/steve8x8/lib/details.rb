@@ -113,6 +113,7 @@ class CacheDetails
     return grade
   end
 
+  # Parse attributes: convert name of image into index and yes/no value
   def parseAttr(text)
     # "bicycles-yes" -> 32, 1
     attrmap = {
@@ -190,7 +191,8 @@ class CacheDetails
     attrid = attrmap[what]
     attrval = (how=="yes")?1:0
     if not attrid
-      debug "Unknown attribute #{text}"
+      # we may have missed an addition or change to the list
+      debug "Unknown attribute #{text}, please report!"
       return 0, 0
     end
     return attrid, attrval
@@ -233,8 +235,17 @@ class CacheDetails
         if ! cache
           displayWarning "Found waypoint type, but never saw cache title. Did geocaching.com change their layout again?"
         end
-        cache['fulltype'] = $1
-        cache['type'] = $1.split(' ')[0].downcase.gsub(/\-/, '')
+        full_type = $1
+        cache['fulltype'] = full_type
+        cache['type'] = full_type.split(' ')[0].downcase.gsub(/\-/, '')
+        # two special cases: "Cache In Trash Out" and "Lost and Found"
+        case full_type
+        when /Cache In Trash Out/
+          cache['type'] = 'cito'
+        when /Lost [Aa]nd Found/
+          # spelling to be confirmed!
+          cache['type'] = 'lost+found'
+        end
         debug "stype=#{cache['type']} full_type=#{$1}"
       end
 
@@ -290,15 +301,19 @@ class CacheDetails
         end
       end
 
+      # extract attributes assigned, and their value, plus the short text
       if line =~ /title=\"What are Attributes\?\">/
         debug "inspecting attributes: #{line}"
         # list of attributes only in cdpf version :(
+        # cumulative text
         atxt = ""
+        # attribute counter
         anum = 0
         # is this really necessary?
         line.gsub!(/\<p\>/, ' ')
         # <img src="/images/attributes/bicycles-no.gif" alt="no bikes" width="30" height="30" />
         line.scan(/\/images\/attributes\/(.+?)\.gif" alt="(.*?)"[^\>]*\/>/) { |icon, alt|
+          # convert each image name into index/value pair, keep related text
           aid, ainc = parseAttr(icon)
           debug "attribute #{anum}: ic=#{icon} id=#{aid} inc=#{ainc} alt=#{alt} "
           if aid > 0
@@ -310,7 +325,7 @@ class CacheDetails
             atxt << alt + ", "
           end
         }   # no more attributes
-        # keep the collected text in wp hash
+        # keep the collected text in wp hash, for GPSr units to show
         @waypointHash[wid]['attributeText'] = atxt.gsub(/, $/, '')
         @waypointHash[wid]['attributeCount'] = anum
         debug "Found #{anum} attributes: #{atxt}"

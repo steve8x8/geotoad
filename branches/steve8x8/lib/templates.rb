@@ -27,51 +27,10 @@ $Format = {
 
 
   # ** The gpx.hints be removed for GeoToad 4.0, when we use a real templating engine that can do loops **
+  # GPX with GroundSpeak extended attributes, modified headers
+  # Successfully tested with a GArmin Oregon 300, firmware 4.10:
+  # doesn't show any attributes, but doesn't complain either
   'gpx'    => {
-    'ext'        => 'gpx',
-    'mime'    => 'text/ascii',
-    'desc'    => 'GPX Geocaching XML',
-    'templatePre' => "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n" +
-      "<gpx xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" version=\"1.0\" creator=\"GeoToad\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd http://www.groundspeak.com/cache/1/0 http://www.groundspeak.com/cache/1/0/cache.xsd\" xmlns=\"http://www.topografix.com/GPX/1/0\">\r\n" +
-      "<desc><%outEntity.title%></desc>\r\n" +
-      "<author>GeoToad <%outEntity.version%></author>\r\n" +
-      "<email>geotoad@googlegroups.com</email>\r\n" +
-      "<time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S")  + ".0000000-00:00</time>\r\n" +
-      "<keywords>cache, geocache, groundspeak, geotoad</keywords>\r\n",
-
-    'templateWP'    => "<wpt lat=\"<%wp.latdata%>\" lon=\"<%wp.londata%>\">\r\n" +
-      "  <time><%out.XMLDate%></time>\r\n" +
-      "  <name><%outEntity.id%></name>\r\n" +
-      "  <desc><%wpEntity.name%> by <%wpEntity.creator%>, <%wp.type%> (<%wp.difficulty%>/<%wp.terrain%>)</desc>\r\n" +
-      "  <url><%wp.url%></url>\r\n" +
-      "  <urlname><%wpEntity.name%></urlname>\r\n" +
-      "  <sym><%outEntity.cacheSymbol%></sym>\r\n" +
-      "  <type>Geocache|<%wp.fulltype%></type>\r\n" +
-      "  <groundspeak:cache id=\"<%out.cacheID%>\" available=\"<%out.IsAvailable%>\" archived=\"<%out.IsArchived%>\" xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0\">\r\n" +
-      "  <groundspeak:name><%wpEntity.name%></groundspeak:name>\r\n" +
-      "  <groundspeak:placed_by><%wpEntity.creator%></groundspeak:placed_by>\r\n" +
-      "  <groundspeak:owner id=\"<%wpEntity.creator_id%>\"><%wpEntity.creator%></groundspeak:owner>\r\n" +
-      "  <groundspeak:type><%wp.fulltype%></groundspeak:type>\r\n" +
-      "  <groundspeak:container><%wp.size%></groundspeak:container>\r\n" +
-      "  <groundspeak:difficulty><%wp.difficulty%></groundspeak:difficulty>\r\n" +
-      "  <groundspeak:terrain><%wp.terrain%></groundspeak:terrain>\r\n" +
-      "  <groundspeak:country><%wpEntity.country%></groundspeak:country>\r\n" +
-      "  <groundspeak:state><%wpEntity.state%></groundspeak:state>\r\n" +
-      "  <groundspeak:short_description html=\"True\"><%wpEntity.shortdesc%></groundspeak:short_description>\r\n" +
-      "  <groundspeak:long_description html=\"True\"><%outEntity.shortWpts%><%wpEntity.longdesc%></groundspeak:long_description>\r\n" +
-      "  <groundspeak:encoded_hints><%outEntity.hintdecrypt%></groundspeak:encoded_hints>\r\n" +
-      "  <groundspeak:logs>\r\n" +
-      "  <%out.gpxlogs%>\r\n" +
-      "  </groundspeak:logs>\r\n" +
-      "  <groundspeak:travelbugs />\r\n" +
-      "  </groundspeak:cache>\r\n" +
-      "</wpt>\r\n" +
-      "<%out.xmlWpts%>",
-    'templatePost'    => "</gpx>\r\n"
-  },
-
-  # GPX with GroundSpeak attributes, need modified headers
-  'gpxa'    => {
     'ext'        => 'gpx',
     'mime'    => 'text/ascii',
     'desc'    => 'GPX Geocaching XML',
@@ -105,11 +64,11 @@ $Format = {
       "  <groundspeak:attributes>\r\n" +
       "<%out.xmlAttrs%>" +
       "  </groundspeak:attributes>\r\n" +
-      "  <groundspeak:short_description html=\"True\"><%wpEntity.shortdesc%></groundspeak:short_description>\r\n" +
+      "  <groundspeak:short_description html=\"True\"><%outEntity.txtAttrs%><%wpEntity.shortdesc%></groundspeak:short_description>\r\n" +
       "  <groundspeak:long_description html=\"True\"><%outEntity.shortWpts%><%wpEntity.longdesc%></groundspeak:long_description>\r\n" +
       "  <groundspeak:encoded_hints><%outEntity.hintdecrypt%></groundspeak:encoded_hints>\r\n" +
       "  <groundspeak:logs>\r\n" +
-      "  <%out.gpxlogs%>\r\n" +
+      "<%out.gpxlogs%>" +
       "  </groundspeak:logs>\r\n" +
       "  <groundspeak:travelbugs />\r\n" +
       "  </groundspeak:cache>\r\n" +
