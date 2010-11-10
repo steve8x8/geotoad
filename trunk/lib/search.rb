@@ -229,26 +229,24 @@ class SearchCache
       #<IMG src="./gc_files/8.gif" alt="Unknown Cache" width="32" height="32"></A>
       # <IMG src="./gc_files/21.gif" alt="Travel Bug Dog Tag (1 item)">  </TD>
       when /WptTypes\/[\w].*?alt=\"(.*?)\"/
-        # This line also has travel bug data
         full_type = $1
+        cache['fulltype'] = full_type
+        debug "Creating short type for #{full_type}"
+        cache['type'] = full_type.split(' ')[0].downcase.gsub(/\-/, '')
+        # two special cases: "Cache In Trash Out" and "Lost and Found"
+        case full_type
+        when /Cache In Trash Out/
+          cache['type'] = 'cito'
+        when /Lost [Aa]nd Found/
+          cache['type'] = 'lost+found'
+        end
+        debug "type=#{cache['type']}"
+        # This line also has travel bug data
         if line =~ /Travel Bug.*?\((.*?)\)/
           debug "Travel Bug Found: #{$1}"
           cache['travelbug']=$1
-        else
-          debug "type line: #{line}"
         end
         cache['mdays'] = -1
-        debug "Creating short type for #{full_type}"
-        short_type = full_type.split(' ')[0].downcase.gsub(/\-/, '')
-        cache['fulltype'] = full_type
-        cache['type'] = short_type
-        debug "type=#{cache['type']}"
-
-        # This line also has travel bug data
-        if line =~ /Travel Bug.*?(\d+) item"/
-          debug "Travel Bug Found: #{$1}"
-          cache['travelbug']=$1
-        end
 
       # (2/1)<br />
       # (1/1.5)<br />
