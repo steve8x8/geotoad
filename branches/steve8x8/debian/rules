@@ -1,0 +1,37 @@
+#!/usr/bin/make -f
+
+build:
+	dh_testdir
+
+clean:
+	dh_testdir
+	dh_testroot
+	dh_clean
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs usr/bin
+	install geotoad.rb debian/geotoad/usr/bin/geotoad
+	dh_install contrib data interface lib tools usr/share/geotoad
+
+binary-arch: build install
+
+binary-indep: build install
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs ChangeLog.txt
+	dh_installdocs FAQ.txt TODO.txt README.txt
+	dh_installmenu
+	dh_installman geotoad.1
+	dh_compress
+	dh_fixperms
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install

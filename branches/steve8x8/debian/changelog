@@ -1,0 +1,61 @@
+geotoad (3.9.0-4) unstable; urgency=low
+
+  * Fix a bug in xml high character escaping code that caused it to crash
+    generating gpx output.
+
+ -- Joey Hess <joeyh@debian.org>  Mon, 13 Nov 2006 17:57:52 -0500
+
+geotoad (3.9.0-3) unstable; urgency=low
+
+  * Update watch file.
+
+ -- Joey Hess <joeyh@debian.org>  Sun, 11 Jun 2006 16:58:02 -0400
+
+geotoad (3.9.0-2) unstable; urgency=low
+
+  * Needs ruby 1.8, so version dependency.
+
+ -- Joey Hess <joeyh@debian.org>  Sun, 12 Mar 2006 18:54:38 -0500
+
+geotoad (3.9.0-1) unstable; urgency=low
+
+  * New upstream release. Closes: #337729
+  * Modified to create config.yaml mode 600, since it contains a password.
+
+ -- Joey Hess <joeyh@debian.org>  Sun, 12 Mar 2006 09:28:10 -0500
+
+geotoad (3.7.6-1) unstable; urgency=low
+
+  * Add a watch file.
+  * New upstream release with different fix for detail page change.
+    Closes: #319124
+  * Change the user-agent string to let the grocaching.com people know that
+    they have linux users (upstream's user-agent claims to be running under
+    windows).
+
+ -- Joey Hess <joeyh@debian.org>  Tue, 19 Jul 2005 21:45:41 -0400
+
+geotoad (3.7.5-2) unstable; urgency=low
+
+  * Patch from Ken Bowley to fix details page parsing. Closes: #312737
+
+ -- Joey Hess <joeyh@debian.org>  Thu,  9 Jun 2005 20:56:28 -0400
+
+geotoad (3.7.5-1) unstable; urgency=low
+
+  * First release.
+  * Repacked upstream .zip source into tarball.
+  * Commented out stty command in input.rb since it breaks things badly with
+    the default Debian erase character and should not be needed in any
+    configuration.
+  * Wrote a man page.
+  * Basic security audit:
+  	- Found temp race in temporary file code; exploitable if geotoad was
+          run in /tmp or if $TEMP was set to point to a world-writable
+          directory. Fixed by making it always use ~/.geotoad unless GEO_TEMP
+          is set. Setting GEO_TEMP=/tmp is not recommended.
+  * Changed a few of the more obvious places where it calls the program
+    geotoad.rb (it's just "geotoad" in Debian); add README.Debian to document
+    the rest.
+
+ -- Joey Hess <joeyh@debian.org>  Tue,  4 Jan 2005 23:27:07 -0500

@@ -1,0 +1,3 @@
+version=2
+# Yes, it's a bloody zip file. Shoot me.
+http://geotoad.sourceforge.net/download.php .*/geotoad-([0-9.]+).zip

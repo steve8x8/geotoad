@@ -1,0 +1,17 @@
+Source: geotoad
+Section: utils
+Priority: optional
+Maintainer: Joey Hess <joeyh@debian.org>
+Build-Depends: debhelper (>= 4)
+Standards-Version: 3.6.1
+XS-Vcs-Svn: svn://svn.kitenet.net/joey/trunk/src/packages/geotoad
+
+Package: geotoad
+Architecture: all
+Depends: ruby (>= 1.8), ${shlibs:Depends}, ${misc:Depends}
+Recommends: gpsbabel
+Description: geocaching query tool
+ Geotoad is software to help speed up the boring part of geocaching:
+ choosing the cache and collecting the data. GeoToad lets you perform
+ queries against the Geocaching website, and export the matching geocaches
+ to numerous devices and over 20 file formats.
