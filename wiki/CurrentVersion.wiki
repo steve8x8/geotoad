@@ -1,8 +1,10 @@
 #labels Deprecated
-version=3.12.1
+version=3.13.0
 {{{
-- Updated to latest GC.com changes
-- Username and Password is now saved to configuration file after first use, no longer required on the command-line
-- Improved HTML output and offline mode
-- New automatic funfactor adjustment (English only)
+- New "list" output template, for simple ASCII output
+- Now uses GPX 1.0.1 for output, with attributes
+- Added support for outputting additional waypoints
+- Better support for Cash In Trash Out and Lost & Found caches
+- Proper generation of numeric cache ID's
+- Many other minor improvements and bug fixes
 }}}
