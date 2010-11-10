@@ -22,25 +22,24 @@ module Messages
   def displayInfo(text)
     puts "( - ) #{text}"
   end
-    
+
   # often worth displaying
   def displayTitleMessage(text)
     puts "( = ) #{text}"
   end
-    
+
   # often worth displaying
   def displayMessage(text)
     puts "( o ) #{text}"
   end
-    
+
   # mindless warnings
   def displayWarning(text)
     puts " ***  #{text}"
   end
-    
+
   # fatal errors
   def displayError(text)
-    puts " *!*  ERROR: #{text}"
-    sleep(1)
+    abort("ERROR: #{text}")
   end
 end
