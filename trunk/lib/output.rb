@@ -471,6 +471,7 @@ class Output
     end
   end
 
+  # convert cache "waypoint ID" (GC.....) to numeric value
   def cacheID(wid)
     if wid
       wp = wid.gsub(/^GC/, '')
@@ -479,7 +480,7 @@ class Output
         return wp.to_i(16)
       else
         # base 31: consider gaps in char set, and correction offset
-        # (GCG000 = GCFFFF + 1)
+        # magic number -411120 reflects that GCG000 = GCFFFF + 1
         return wp.upcase.tr('0-9A-HJKMNPQRTV-Z', '0-9A-U').to_i(31) - 411120
       end
     else
