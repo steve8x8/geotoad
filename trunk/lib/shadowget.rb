@@ -295,7 +295,7 @@ class ShadowFetch
       return fetchURL(location, redirects - 1)
     else
       @@downloadErrors = @@downloadErrors + 1
-      debug "unknown response downloading #{url_str} (try #{@@downloadErrors})"
+      displayWarning "unknown response #{resp} downloading #{url_str} (try #{@@downloadErrors})"
       return fetchURL(url_str, redirects)
     end
 
