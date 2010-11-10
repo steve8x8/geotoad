@@ -358,7 +358,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
       "<%out.cdate%> " +
       "<%wp.difficulty%>/<%wp.terrain%>\t" +
       "<%wp.type%>\t" +
-      "<%out.relativedistancekm%>\t" +
+      "<%out.relativedistance%>\t" +
       "\"<%wp.name%>\" by <%wp.creator%>\n"
   },
 }
