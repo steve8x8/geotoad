@@ -27,16 +27,20 @@ $Format = {
 
 
   # ** The gpx.hints be removed for GeoToad 4.0, when we use a real templating engine that can do loops **
+  # GPX with GroundSpeak extended attributes, modified headers
+  # Successfully tested with a GArmin Oregon 300, firmware 4.10:
+  # doesn't show any attributes, but doesn't complain either
   'gpx'    => {
     'ext'        => 'gpx',
     'mime'    => 'text/ascii',
     'desc'    => 'GPX Geocaching XML',
     'templatePre' => "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n" +
-      "<gpx xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" version=\"1.0\" creator=\"GeoToad\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd http://www.groundspeak.com/cache/1/0 http://www.groundspeak.com/cache/1/0/cache.xsd\" xmlns=\"http://www.topografix.com/GPX/1/0\">\r\n" +
+      "<gpx xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" version=\"1.0\" creator=\"GeoToad\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd http://www.groundspeak.com/cache/1/0/1 http://www.groundspeak.com/cache/1/0/1/cache.xsd\" xmlns=\"http://www.topografix.com/GPX/1/0\">\r\n" +
+      "<name>" + Time.new.gmtime.strftime("%Y%m%dT%H%M%S") + "</name>\r\n" +
       "<desc><%outEntity.title%></desc>\r\n" +
       "<author>GeoToad <%outEntity.version%></author>\r\n" +
       "<email>geotoad@googlegroups.com</email>\r\n" +
-      "<time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S")  + ".0000000-00:00</time>\r\n" +
+      "<time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S")  + ".000Z</time>\r\n" +
       "<keywords>cache, geocache, groundspeak, geotoad</keywords>\r\n",
 
     'templateWP'    => "<wpt lat=\"<%wp.latdata%>\" lon=\"<%wp.londata%>\">\r\n" +
@@ -47,7 +51,7 @@ $Format = {
       "  <urlname><%wpEntity.name%></urlname>\r\n" +
       "  <sym><%outEntity.cacheSymbol%></sym>\r\n" +
       "  <type>Geocache|<%wp.fulltype%></type>\r\n" +
-      "  <groundspeak:cache id=\"<%out.cacheID%>\" available=\"<%out.IsAvailable%>\" archived=\"<%out.IsArchived%>\" xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0\">\r\n" +
+      "  <groundspeak:cache id=\"<%out.cacheID%>\" available=\"<%out.IsAvailable%>\" archived=\"<%out.IsArchived%>\" xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0/1\">\r\n" +
       "  <groundspeak:name><%wpEntity.name%></groundspeak:name>\r\n" +
       "  <groundspeak:placed_by><%wpEntity.creator%></groundspeak:placed_by>\r\n" +
       "  <groundspeak:owner id=\"<%wpEntity.creator_id%>\"><%wpEntity.creator%></groundspeak:owner>\r\n" +
@@ -57,7 +61,10 @@ $Format = {
       "  <groundspeak:terrain><%wp.terrain%></groundspeak:terrain>\r\n" +
       "  <groundspeak:country><%wpEntity.country%></groundspeak:country>\r\n" +
       "  <groundspeak:state><%wpEntity.state%></groundspeak:state>\r\n" +
-      "  <groundspeak:short_description html=\"True\"><%wpEntity.shortdesc%></groundspeak:short_description>\r\n" +
+      "  <groundspeak:attributes>\r\n" +
+      "<%out.xmlAttrs%>" +
+      "  </groundspeak:attributes>\r\n" +
+      "  <groundspeak:short_description html=\"True\"><%outEntity.txtAttrs%><%wpEntity.shortdesc%></groundspeak:short_description>\r\n" +
       "  <groundspeak:long_description html=\"True\"><%outEntity.shortWpts%><%wpEntity.longdesc%></groundspeak:long_description>\r\n" +
       "  <groundspeak:encoded_hints><%outEntity.hintdecrypt%></groundspeak:encoded_hints>\r\n" +
       "  <groundspeak:logs>\r\n" +
