@@ -167,7 +167,8 @@ class SearchCache
 
       if page_number == last_page_number
         displayError "Stuck on page number #{page_number} of #{total_pages}"
-        sleep(20)
+      elsif page_number < last_page_number
+        displayError "We were on page #{last_page_number}, but just read #{page_number}. Parsing error?"
       end
     end
     return @waypoints
@@ -202,7 +203,6 @@ class SearchCache
     parsed_total = 0
     wid = nil
     waypoints_total = nil
-    @next_page_target = nil
     post_vars = Hash.new
     cache = {
       'disabled' => false,
@@ -219,10 +219,10 @@ class SearchCache
           page_number = $2.to_i
           pages_total = $3.to_i
         end
-        # href="javascript:__doPostBack('ctl00$ContentBody$pgrTop$ctl08','')"><b>Next &gt;</b></a></td>
-        # <a href="javascript:__doPostBack('pgrTop$_ctl16','')"><b>Next</b></a>
-        if line =~ /doPostBack\(\'([\w\$_]+)\',\'\'\)\"\>\<b\>Next/
-          debug "Found next target: #{$1}"
+
+        # href="javascript:__doPostBack(&#39;ctl00$ContentBody$pgrBottom$ctl08&#39;,&#39;&#39;)"><b>Next &gt;</b></a
+        if line =~ /(ctl[\w\$]+)[&#\d;'",]+\)"\>\<b\>Next / 
+          debug "Found next target: #{$1} line: #{line}"
           post_vars['__EVENTTARGET'] = $1
         end
 
@@ -237,11 +237,11 @@ class SearchCache
         else
           debug "type line: #{line}"
         end
-        cache['mdays']=-1
+        cache['mdays'] = -1
         debug "Creating short type for #{full_type}"
         short_type = full_type.split(' ')[0].downcase.gsub(/\-/, '')
-        cache['fulltype']=full_type
-        cache['type']=short_type
+        cache['fulltype'] = full_type
+        cache['type'] = short_type
         debug "type=#{cache['type']}"
 
         # This line also has travel bug data
@@ -273,7 +273,7 @@ class SearchCache
         debug "size=#{cache['size']}"
 
       #                             11 Jul 10<br />
-      # Yesterday<strong>*</strong><br /> 
+      # Yesterday<strong>*</strong><br />
       when /^ +(\w+[ \w]+)\<[bs][rt]/
         debug "last found date: #{$1} at line: #{line}"
         cache['mtime'] = parseDate($1)
