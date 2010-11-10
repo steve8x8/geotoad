@@ -99,7 +99,7 @@ class SearchCache
     if long_dir == 'w' || long_dir == 'W' || long_dir == '-'
       long_ew = -1
     end
-    displayMessage "Coordinate's have been parsed as latitude #{lat_dir} #{lat_h}'#{lat_ms}, longitude #{long_dir} #{long_h}'#{long_ms}"
+    displayMessage "Coordinates have been parsed as latitude #{lat_dir} #{lat_h}'#{lat_ms}, longitude #{long_dir} #{long_h}'#{long_ms}"
     coords = [lat_dir, lat_h, lat_ms, long_dir, long_h, long_ms, lat_ns, long_ew]
     return coords
   end

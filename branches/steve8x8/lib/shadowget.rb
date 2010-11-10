@@ -302,7 +302,7 @@ class ShadowFetch
 
     if resp.response && resp.response['set-cookie']
       @cookie = resp.response['set-cookie']
-      debug "receieved cookie: #{@cookie}"
+      debug "received cookie: #{@cookie}"
     end
 
     return resp.body
