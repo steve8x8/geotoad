@@ -1,10 +1,10 @@
 Source: geotoad
 Section: utils
 Priority: optional
-Maintainer: Joey Hess <joeyh@debian.org>
+Old-Maintainer: Joey Hess <joeyh@debian.org>
+Maintainer: Steffen Grunewald <steve8x8@gmail.com>
 Build-Depends: debhelper (>= 4)
 Standards-Version: 3.6.1
-XS-Vcs-Svn: svn://svn.kitenet.net/joey/trunk/src/packages/geotoad
 
 Package: geotoad
 Architecture: all
@@ -15,3 +15,7 @@ Description: geocaching query tool
  choosing the cache and collecting the data. GeoToad lets you perform
  queries against the Geocaching website, and export the matching geocaches
  to numerous devices and over 20 file formats.
+ Unfortunately, geocaching.com frequently changes the format of their
+ webpages, resulting in geotoad malfunctioning. For this reason, there
+ will probably never be a stable package. Better use the latest SVN:
+ svn checkout http://geotoad.googlecode.com/svn/trunk/ geotoad-read-only

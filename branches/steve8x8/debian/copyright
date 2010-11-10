@@ -1,7 +1,12 @@
-The Debian package of geotoad is maintained by Joey Hess
+The Debian package of geotoad (up to 3.9.0) was maintained by Joey Hess
 <joeyh@debian.org>. It was downloaded from http://geotoad.sourceforge.net/
 
-The copyright is as follows:
+The Debian package is currently orphaned, and has been dropped from official
+Debian archives a couple of releases ago.
+Upstream releases can be downloaded from http://code.google.com/p/geotoad/;
+there is also a SVN at http://geotoad.googlecode.com/svn/trunk/
+
+The copyright is (as of 2007) as follows (and probably should be fixed):
 
 All of the documentation and software included in the GeoToad distribution
 Releases is copyrighted by Thomas Stromberg.

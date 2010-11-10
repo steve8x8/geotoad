@@ -1,3 +1,11 @@
+geotoad (3.12.1+svn696-1) unstable; urgency=low
+
+  * After about 4 years without geotoad packaging, try to start again.
+    Use latest SVN since 3.12.1 has been partially obsoleted by recent
+    geocaching.com changes.
+
+ -- Steffen Grunewald <steve8x8@gmail.com>  Tue, 10 Nov 2010 21:10:00 +0100
+
 geotoad (3.9.0-4) unstable; urgency=low
 
   * Fix a bug in xml high character escaping code that caused it to crash
