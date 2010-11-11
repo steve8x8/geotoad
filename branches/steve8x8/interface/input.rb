@@ -407,7 +407,12 @@ class Input
 
 
       when '4'
-        @@optHash['distanceMax'] = askNumber("How far away are you willing to search (" + (@@optHash['usemetric'] && "km" || "mi") + ")", 10)
+        answer = askNumber("How far away are you willing to search (" + (@@optHash['usemetric'] && "km" || "mi") + ")", 10)
+        if answer < 0
+          answer = -answer
+          @@optHash['usemetric'] = ! @@optHash['usemetric']
+        end
+        @@optHash['distanceMax'] = answer
 
       when '5'
         @@optHash['difficultyMin'] = askNumber('What is the minimum difficulty you would like? (0.0)', nil)
