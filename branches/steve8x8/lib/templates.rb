@@ -64,7 +64,7 @@ $Format = {
       "  <groundspeak:attributes>\r\n" +
       "<%out.xmlAttrs%>" +
       "  </groundspeak:attributes>\r\n" +
-      "  <groundspeak:short_description html=\"True\"><%outEntity.txtAttrs%><%wpEntity.shortdesc%></groundspeak:short_description>\r\n" +
+      "  <groundspeak:short_description html=\"True\"><%outEntity.warnArchiv%><%outEntity.warnAvail%><%outEntity.txtAttrs%><%wpEntity.shortdesc%></groundspeak:short_description>\r\n" +
       "  <groundspeak:long_description html=\"True\"><%outEntity.shortWpts%><%wpEntity.longdesc%></groundspeak:long_description>\r\n" +
       "  <groundspeak:encoded_hints><%outEntity.hintdecrypt%></groundspeak:encoded_hints>\r\n" +
       "  <groundspeak:logs>\r\n" +
@@ -346,5 +346,19 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
     'templateWP'  => "<%wpText.name%>,<%out.wid%>,<%wpText.creator%>," +
       "D<%wp.difficulty%>,T<%wp.terrain%>,<%out.relativedistance%>,<%wp.latwritten%>,<%wp.lonwritten%>," +
       "<%wp.type%>,<%wp.size%>\r\n"
+  },
+  # contributed by Steve8x8: table, "tab" extended
+  'list'    => {
+    'ext'        => 'lst',
+    'mime'    => 'text/plain',
+    'desc'    =>     'whitespace delimited, detailed table',
+    'templatePre' => "",
+    'templateWP'    => "<%out.id%>\t" +
+      "<%out.latdatapad5%> <%out.londatapad5%> " +
+      "<%out.cdate%> " +
+      "<%wp.difficulty%>/<%wp.terrain%>\t" +
+      "<%wp.type%>\t" +
+      "<%out.relativedistancekm%>\t" +
+      "\"<%wp.name%>\" by <%wp.creator%>\n"
   },
 }

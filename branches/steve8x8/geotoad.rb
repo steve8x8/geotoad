@@ -86,6 +86,9 @@ class GeoToad
     @formatType        = @option['format'] || 'gpx'
     @cacheExpiry       = @option['cacheExpiry'].to_i || 3
     @distanceMax       = @option['distanceMax'] || 10
+    if (@option['usemetric'])
+      @distanceMax /= 1.609344
+    end
     @queryTitle        = "GeoToad: #{@queryArg}"
     @defaultOutputFile = "gt_" + @queryArg.to_s
 
