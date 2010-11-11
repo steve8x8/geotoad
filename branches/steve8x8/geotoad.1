@@ -1,0 +1,84 @@
+.TH GEOTOAD 6
+.SH NAME
+geotoad \- geocaching query tool
+.SH SYNOPSIS
+ geotoad
+ 
+ geotoad [options] <search>
+.SH DESCRIPTION
+Geotoad is software to help speed up the boring part of geocaching:
+choosing the cache and collecting the data. GeoToad lets you perform
+queries against the Geocaching website, and export the matching geocaches
+to numerous devices and over 20 file formats.
+.P
+If run without any parameters, geotoad will launch the interactive mode.
+It can also be used in command-line mode for specific queries.
+.SH OPTIONS
+.TP
+.B -o filename
+output file name (automatic otherwise)
+.TP
+.B -f format
+output format type
+.TP
+.B -f -q [zip|state|coord]
+query type (zip by default)
+.TP
+.B -d 0.0-5.0
+set minimum difficulty
+.TP
+.B -D 0.0-5.0
+set maximum difficulty
+.TP
+.B -t 0.0-5.0
+set minimum terrain
+.TP
+.B -T 0.0-5.0
+set maximum terrain
+.TP
+.B -y 1-500
+distance maximum in miles (10)
+.TP
+.B -k keyword
+title keyword search. Use | to delimit multiple
+.TP
+.B -K keyword
+description keyword search. Use | to delimit multiple
+.TP
+.B -c username
+include caches owned by this person (use : to delimit multiple users)
+.TP
+.B -C username
+exclude caches owned by this person (use : to delimit multiple users)
+.TP
+.B -p X
+include caches placed in the last X days
+.TP
+.B -P X
+exclude caches placed in the last X days
+.TP
+.B -r X
+include caches found in the last X days
+.TP
+.B -R X
+exclude caches found in the last X days
+.TP
+.B -n
+only include not found caches
+.TP
+.B -b
+only include caches with travelbugs
+.TP
+.B -e
+enable EasyName waypoint ids
+.TP
+.B -l
+set EasyName waypoint id length. (16)
+.SH ENVIRONMENT
+.TP
+.B GEO_DIR
+If set, geotoad will put its cache in this directory. If not the cache is
+placed in ~/.geotoad/ . Note that it is not secure to set GEO_DIR to point
+to a world-writable directory such as /tmp.
+.SH AUTHOR
+Thomas Stromberg
