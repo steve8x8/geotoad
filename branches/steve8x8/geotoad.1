@@ -1,10 +1,13 @@
-.TH GEOTOAD 6
+.TH GEOTOAD 1
 .SH NAME
 geotoad \- geocaching query tool
 .SH SYNOPSIS
- geotoad
- 
- geotoad [options] <search>
+.TP
+geotoad
+ (will invoke text user interface (TUI)
+.TP
+geotoad [options] <search>
+ (command-line version)
 .SH DESCRIPTION
 Geotoad is software to help speed up the boring part of geocaching:
 choosing the cache and collecting the data. GeoToad lets you perform
@@ -15,14 +18,20 @@ If run without any parameters, geotoad will launch the interactive mode.
 It can also be used in command-line mode for specific queries.
 .SH OPTIONS
 .TP
+.B -u username
+geocaching.com username (required for coordinates)
+.TP
+.B -p password
+geocaching.com password (required for coordinates)
+.TP
 .B -o filename
 output file name (automatic otherwise)
 .TP
-.B -f format
-output format type
+.B -x format
+output format type (see list below)
 .TP
-.B -f -q [zip|state|coord]
-query type (zip by default)
+.B -q [location|user|wid]
+query type (location by default)
 .TP
 .B -d 0.0-5.0
 set minimum difficulty
@@ -36,25 +45,46 @@ set minimum terrain
 .B -T 0.0-5.0
 set maximum terrain
 .TP
-.B -y 1-500
+.B -f 0.0-5.0
+set minimum fun factor
+.TP
+.B -F 0.0-5.0
+set maximum fun factor
+.TP
+.B -s [virtual|small|regular|large]
+set minimum cache size
+.TP
+.B -S [virtual|small|regular|large]
+set maximum cache size
+.TP
+.B -c [regular|virtual|event|...]
+set cache type (separated by '|')
+.TP
+.B -y 0-500
 distance maximum in miles (10)
 .TP
 .B -k keyword
 title keyword search. Use | to delimit multiple
 .TP
 .B -K keyword
-description keyword search. Use | to delimit multiple
+description keyword search (slow). Use | to delimit
 .TP
-.B -c username
+.B -i username
 include caches owned by this person (use : to delimit multiple users)
 .TP
-.B -C username
+.B -I username
 exclude caches owned by this person (use : to delimit multiple users)
 .TP
-.B -p X
+.B -e username
+include caches found by this person (use : to delimit multiple users)
+.TP
+.B -E username
+exclude caches found by this person (use : to delimit multiple users)
+.TP
+.B -j X
 include caches placed in the last X days
 .TP
-.B -P X
+.B -J X
 exclude caches placed in the last X days
 .TP
 .B -r X
@@ -63,22 +93,42 @@ include caches found in the last X days
 .B -R X
 exclude caches found in the last X days
 .TP
+.B -z
+include disabled caches
+.TP
 .B -n
 only include not found caches
 .TP
 .B -b
 only include caches with travelbugs
 .TP
-.B -e
-enable EasyName waypoint ids
-.TP
 .B -l
 set EasyName waypoint id length. (16)
+.TP
+.B -P proxy
+HTTP proxy server, http://username@password@host:port/
+.TP
+.B -C
+clear browser cache
 .SH ENVIRONMENT
 .TP
 .B GEO_DIR
 If set, geotoad will put its cache in this directory. If not the cache is
 placed in ~/.geotoad/ . Note that it is not secure to set GEO_DIR to point
 to a world-writable directory such as /tmp.
+.SH OUTPUT FORMATS
+.TP
+ cachemate=   cetus+       csv          delorme      delorme-nour dna+        
+ easygps      gpsdrive     gpsman       gpspilot+    gpspoint     gpsutil+    
+ gpx          holux+       html         kml+         list         magnav+     
+ mapsend+     mxf          ozi          pcx+         psp+         sms         
+ tab          text         tiger        tmpro+       tpg+         xmap+       
+.TP
+    + requires gpsbabel in PATH           = requires cmconvert in PATH
+.SH EXAMPLES
+.TP
+  geotoad.rb -u helixblue -p password 27502
+.TP
+  geotoad.rb -u john -p password -d 3 -s helixblue -f vcf -o NC.vcf 'North Carolina'
 .SH AUTHOR
 Thomas Stromberg
