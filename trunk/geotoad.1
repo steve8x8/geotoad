@@ -1,0 +1,172 @@
+.TH GEOTOAD 1
+.SH NAME
+geotoad \- geocaching query tool
+.SH SYNOPSIS
+.TP
+geotoad
+ (will invoke text user interface (TUI)
+.TP
+geotoad [options] <search>
+ (command-line version)
+.SH DESCRIPTION
+Geotoad is software to help speed up the boring part of geocaching:
+choosing the cache and collecting the data. GeoToad lets you perform
+queries against the Geocaching website, and export the matching geocaches
+to numerous devices and over 20 file formats.
+.P
+If run without any parameters, geotoad will launch the interactive mode.
+It can also be used in command-line mode for specific queries.
+.SH OPTIONS
+.TP
+.B -u username
+geocaching.com username (required for coordinates)
+.TP
+.B -p password
+geocaching.com password (required for coordinates)
+.TP
+.B -o filename
+output file name (automatic otherwise)
+.TP
+.B -x format
+output format type (see list below)
+.TP
+.B -q [location|user|wid]
+query type (location by default)
+.TP
+.B -s [virtual|small|regular|large]
+set minimum cache size
+.TP
+.B -S [virtual|small|regular|large]
+set maximum cache size
+.TP
+.B -c [regular|virtual|event|...]
+set cache type (separated by '|')
+.TP
+.B -d 0.0-5.0
+set minimum difficulty
+.TP
+.B -D 0.0-5.0
+set maximum difficulty
+.TP
+.B -t 0.0-5.0
+set minimum terrain
+.TP
+.B -T 0.0-5.0
+set maximum terrain
+.TP
+.B -f 0.0-5.0
+set minimum fun factor
+.TP
+.B -F 0.0-5.0
+set maximum fun factor
+.TP
+.B -y 0-500
+distance maximum in miles (10)
+.TP
+.B -k keyword
+title keyword search. Use | to delimit multiple
+.TP
+.B -K keyword
+description keyword search (slow). Use | to delimit
+.TP
+.B -i username
+include caches owned by this person (use : to delimit multiple users)
+.TP
+.B -I username
+exclude caches owned by this person (use : to delimit multiple users)
+.TP
+.B -e username
+include caches found by this person (use : to delimit multiple users)
+.TP
+.B -E username
+exclude caches found by this person (use : to delimit multiple users)
+.TP
+.B -j X
+include caches placed in the last X days
+.TP
+.B -J X
+exclude caches placed in the last X days
+.TP
+.B -r X
+include caches found in the last X days
+.TP
+.B -R X
+exclude caches found in the last X days
+.TP
+.B -z
+include disabled caches
+.TP
+.B -n
+only include not found caches
+.TP
+.B -b
+only include caches with travelbugs
+.TP
+.B -l
+set EasyName waypoint id length. (16)
+.TP
+.B -P proxy
+HTTP proxy server, http://username@password@host:port/
+.TP
+.B -C
+clear browser cache
+.SH ENVIRONMENT
+.TP
+.B GEO_DIR
+If set, geotoad will put its cache in this directory. If not the cache is
+placed in ~/.geotoad/ . Note that it is not secure to set GEO_DIR to point
+to a world-writable directory such as /tmp.
+.SH OUTPUT FORMATS
+.TP
+ cachemate=   cetus+       csv          delorme      delorme-nour dna+
+ easygps      gpsdrive     gpsman       gpspilot+    gpspoint     gpsutil+
+ gpx          holux+       html         kml+         list         magnav+
+ mapsend+     mxf          ozi          pcx+         psp+         sms
+ tab          text         tiger        tmpro+       tpg+         xmap+
+.TP
+    + requires gpsbabel in PATH           = requires cmconvert in PATH
+.SH EXAMPLES
+.TP
+.B  geotoad.rb
+invokes the text user interface
+.TP
+.B  geotoad.rb -u user -p password 27513
+Why do we need a username and password? In October of 2004, Geocaching.com
+began to require a login in order to see the coordinates of a geocache.
+Please note: Put quotes around your username if it has any spaces in it.
+You've just made a file named geotoad-output.loc containing all the
+geocaches nearby the zipcode 27513 suitable to be read by EasyGPS. Here are
+some more complex examples that you can work with:
+.TP
+.B  geotoad.rb -u user -p password "N56 44.392, E015 52.780"  -y 5
+Search for caches within 5 miles of the above coordinates
+.TP
+.B  geotoad.rb -u user -p password 27513:27502:33434
+You can combine searches with the : delimiter. This works for all types,
+though it's most often used with coordinate searches.
+.TP
+.B  geotoad.rb -u user -p password -x text -o nc.txt -n -q state "North Carolina"
+Outputs a text file with all of the caches in North Carolina that are
+virgins (have never been found).
+Please note the quotes around "North Carolina". Any parameters with spaces in
+them must have quotes around them.
+.TP
+.B  geotoad.rb -u user -p password -t 2.5 -x vcf -E "helixblue:Sallad" -o charlotte.vcf 28272
+Gets every cache in the 100 mile radius of zipcode 28272, with a terrain
+score of 2.5 or higher, and that helixblue and Sallad have not visited.
+Outputs a VCF format file, which is usable by iPod's and other devices.
+.TP
+.B  geotoad.rb -u user -p password -x html -b -K 'stream|creek|lake|river|ocean' -o watery.html -q state Indiana
+Gets every cache in the state with travel bugs that matches those water keywords.
+Makes a pretty HTML file out of it.
+.TP
+.B  geotoad.rb -u user -p password -x gpx -o mylocal.gpx -z -y 1.75 -T 4 -q coord "N 51 23.456 E 012 34.567"
+Create a GPX (1.0.1, with attributes) file with all caches around the location above,
+max. 1.75 miles away, terrain value below or equal 4, include disabled ones.
+.SH AUTHOR
+Thomas Stromberg
+
+
+
+
+
