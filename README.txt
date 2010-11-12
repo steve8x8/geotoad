@@ -153,11 +153,11 @@ though it's most often used with coordinate searches.
 Outputs a text file with all of the caches in North Carolina that are
 virgins (have never been found).
 
-Please note the quotes around North Carolina. Any parameters with spaces in
+Please note the quotes around "North Carolina". Any parameters with spaces in
 them must have quotes around them.
 
 
-4) geotoad.rb -u user -p password -t 2.5 -x vcf -S "helixblue:Sallad" -o charlotte.vcf 28272
+4) geotoad.rb -u user -p password -t 2.5 -x vcf -E "helixblue:Sallad" -o charlotte.vcf 28272
 Gets every cache in the 100 mile radius of zipcode 28272, with a terrain
 score of 2.5 or higher, and that helixblue and Sallad have not visited.
 Outputs a VCF format file, which is usable by iPod's and other devices.
@@ -166,6 +166,6 @@ Please note: Put quotes around your username if it has any spaces in it.
 
 
 5) geotoad.rb -u user -p password -x html -b -K 'stream|creek|lake|river|ocean' -o watery.html -q state Indiana
-Gets every cache in Sweden with travel bugs that matches those water keywords.
+Gets every cache in Indiana with travel bugs that matches those water keywords.
 Makes a pretty HTML file out of it.
 
