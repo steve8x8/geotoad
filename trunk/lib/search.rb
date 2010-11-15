@@ -272,15 +272,17 @@ class SearchCache
         debug "size=#{cache['size']}"
 
       #                             11 Jul 10<br />
-      # Yesterday<strong>*</strong><br /> 
-      when /^ +(\w+[ \w]+)\<[bs][rt]/
+      # Yesterday<strong>*</strong><br />
+      when /^ +(\w+[ \w]+)(\<strong\>)?\*?(\<\/strong\>)?\<br/
         debug "last found date: #{$1} at line: #{line}"
         cache['mtime'] = parseDate($1)
         cache['mdays'] = daysAgo(cache['mtime'])
         debug "mtime=#{cache['mtime']} mdays=#{cache['mdays']}"
 
+      # creation date: date alone on line
       #  9 Sep 06
-      when /^ +(\d+ \w{3} \d+)\s+$/
+      when /^ +(\d+ \w{3} \d+)\s?$/
+        debug "create date: #{$1} at line: #{line}"
         cache['ctime'] = parseDate($1)
         cache['cdays'] = daysAgo(cache['ctime'])
         debug "ctime=#{cache['ctime']} cdays=#{cache['cdays']}"
