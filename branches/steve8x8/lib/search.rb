@@ -228,7 +228,6 @@ class SearchCache
         end
 
       #<IMG src="./gc_files/8.gif" alt="Unknown Cache" width="32" height="32"></A>
-      # <IMG src="./gc_files/21.gif" alt="Travel Bug Dog Tag (1 item)">  </TD>
       when /WptTypes\/[\w].*?alt=\"(.*?)\"/
         full_type = $1
         cache['fulltype'] = full_type
@@ -242,12 +241,43 @@ class SearchCache
           cache['type'] = 'lost+found'
         end
         debug "type=#{cache['type']}"
-        # This line also has travel bug data
-        if line =~ /Travel Bug.*?\((.*?)\)/
-          debug "Travel Bug Found: #{$1}"
-          cache['travelbug']=$1
-        end
         cache['mdays'] = -1
+
+      # trackables: all in one separate line, usually after the cache type line
+      # <img src="http://www.geocaching.com/images/wpttypes/21.gif" alt="Travel Bug Dog Tag (1 item)" title="Travel Bug Dog Tag (1 item)" /> \
+      # ... <img src="/images/WptTypes/coins.gif" alt="Geocoins:  Happy Caching - Black Cat Geocoin (1), Geocaching meets Geodäsie Geocoin (1)" title="Geocoins:  Happy Caching - Black Cat Geocoin (1), Geocaching meets Geodäsie Geocoin (1)" />
+      # or
+      # <img src="/images/travelbugsicon.gif" alt="Travel Bug Dog Tag (2 items)" title="Travel Bug Dog Tag (2 items)" /> \
+      # ... <img src="http://www.geocaching.com/images/wpttypes/2934.gif" alt="Africa Geocoin (1 item(s))" title="Africa Geocoin (1 item(s))" />
+      # only count for TBs, coins by name - single-coin and multi-coin cases!
+      when /\/wpttypes\/\d+\.gif\".*?alt=\".*? \((.*?) item(\(s\))?\)\"/
+        # This line has travel bug data
+        debug "List of trackables: #{line}"
+        trackables = ''
+        # split at alt tag, drop everything before
+        line.gsub(/^.*?alt=\"/, '').split(" alt=\"").each { |item|
+          debug "trackable item #{item}"
+          # "Travel Bug Dog Tag (1 item)" ...
+          # "Travel Bug Dog Tag (2 items)" ...
+          # "Africa Geocoin (1 item(s))" ...
+          # "Geocoins:  Happy Caching - Black Cat Geocoin (1), Geocaching meets Geodäsie Geocoin (1)" ...
+          # "Cachekinz (1 item(s))" ...
+          # "Unite for Diabetes Travel Bug (1 item(s))" ...
+          item.gsub!(/\".*/, '')
+          # shorten the name a bit
+          item.gsub!(/Travel Bug( Dog Tag)?/, 'TB')
+          item.gsub!(/Geocoin/, 'GC')
+          item.gsub!(/^The /, '')
+          # drop counter if 1
+          item.gsub!(/ \(1 item\(?s?\)?\)/, '')
+          item.gsub!(/ \((.*?) item\(?s?\)?\)/) {"(#{$1})"}
+          trackables << item + ', '
+        }
+        if trackables.length > 0
+          trackables.gsub!(/, $/, '')
+          debug "Trackables Found: #{trackables}"
+          cache['travelbug'] = trackables
+        end
 
       # (2/1)<br />
       # (1/1.5)<br />
