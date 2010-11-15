@@ -272,37 +272,26 @@ class SearchCache
         debug "size=#{cache['size']}"
 
       #                             11 Jul 10<br />
-      # Yesterday<strong>*</strong><br /> 
-      when /^ +(\w+[ \w]+)\<[bs][rt]/
+      # Yesterday<strong>*</strong><br />
+      when /^ +(\w+[ \w]+)(\<strong\>)?\*?(\<\/strong\>)?\<br/
         debug "last found date: #{$1} at line: #{line}"
         cache['mtime'] = parseDate($1)
         cache['mdays'] = daysAgo(cache['mtime'])
         debug "mtime=#{cache['mtime']} mdays=#{cache['mdays']}"
 
+      # creation date: date alone on line
       #  9 Sep 06
-      when /^ +(\d+ \w{3} \d+)\s+$/
+      when /^ +(\d+ \w{3} \d+)\s?$/
+        debug "create date: #{$1} at line: #{line}"
         cache['ctime'] = parseDate($1)
         cache['cdays'] = daysAgo(cache['ctime'])
         debug "ctime=#{cache['ctime']} cdays=#{cache['cdays']}"
 
       #     <img src="/images/icons/compass/NW.gif" alt="NW" title="NW" />NW<br />0.1mi
-      # GC user prefs set to imperial units
-      when /\>([NWSE]+)\<br \/\>([\d\.]+)mi/
-        cache['distance'] = $2.to_f
+      when /([NWSE]+)\<br \/\>([\d\.]+)mi/
+        cache['distance']=$2.to_f
         cache['direction'] = $1
-        debug "cacheDistance=#{cache['distance']}mi dir=#{cache['direction']}"
-      # or  <img src="/images/icons/compass/SE.gif" alt="SE" title="SE" />SE<br />6.7km
-      # GC user prefs set to metric units
-      when /\>([NWSE]+)\<br \/\>([\d\.]+)km/
-        cache['distance'] = $2.to_f / 1.609344
-        cache['direction'] = $1
-        debug "cacheDistance=#{cache['distance']}mi dir=#{cache['direction']}"
-      # or just              <br />Here
-      when /^\s+\<br \/\>Here\s?$/
-        # less than 0.01 miles
-        cache['distance'] = 0.0
-        cache['direction'] = "N"
-        debug "cacheDistance=#{cache['distance']}mi dir=#{cache['direction']}"
+        debug "cacheDistance=#{cache['distance']} dir=#{cache['direction']}"
 
       # <a href="/seek/cache_details.aspx?guid=c9f28e67-5f18-45c0-90ee-76ec8c57452f">Yasaka-Shrine@Zerosen</a>
       when /cache_details.aspx\?guid=(.*?)\">(.*?)\<\/a\>/

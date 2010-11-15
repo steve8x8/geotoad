@@ -109,7 +109,6 @@ class Input
       [ "--format",                    "-x",        GetoptLong::OPTIONAL_ARGUMENT ],
 
       [ "--distanceMax",                "-y",        GetoptLong::OPTIONAL_ARGUMENT ],
-      [ "--usemetric",               "-m",    GetoptLong::NO_ARGUMENT ],
       [ "--includeDisabled",          "-z",    GetoptLong::NO_ARGUMENT ]
     ) || usage
 
@@ -221,7 +220,6 @@ class Input
     puts " -t/-T [0.0-5.0]        terrain minimum/maximum"
     puts " -f/-F [0.0-5.0]        fun factor minimum/maximum"
     puts " -y    [1-500]          distance maximum in miles (10)"
-    puts " -m                     use kilometers instead of miles"
     puts " -k    [keyword]        title keyword search. Use | to delimit multiple"
     puts " -K    [keyword]        desc keyword search (slow). Use | again..."
     puts " -i/-I [username]       include/exclude caches owned by this person"
@@ -287,8 +285,7 @@ class Input
       printf(":::           %46.46s               :::\n", "// GeoToad #$VERSION Text User Interface //")
       puts "=============================================================================="
       printf("(1)  GC.com login [%-17.17s] | (2)  search type          [%-10.10s]\n", (@@optHash['user'] || 'REQUIRED'), @@optHash['queryType'])
-      printf("(3)  %-12.12s [%-17.17s] | (4)  distance maximum (%2.2s)     [%-5.5s]\n",
-         @@optHash['queryType'], (@@optHash['queryArg'] || 'REQUIRED'), (@@optHash['usemetric'] && 'km' || 'mi'), (@@optHash['distanceMax'] || 10))
+      printf("(3)  %-12.12s [%-17.17s] | (4)  distance maximum (mi)     [%-5.5s]\n", @@optHash['queryType'], (@@optHash['queryArg'] || 'REQUIRED'), (@@optHash['distanceMax'] || 10))
       puts   "                                      |"
       printf("(5)  difficulty           [%-2.1f - %-1.1f] | (6)  terrain               [%-1.1f - %-1.1f]\n",
         (@@optHash['difficultyMin'] || 0.0), (@@optHash['difficultyMax'] || 5.0),
@@ -407,12 +404,7 @@ class Input
 
 
       when '4'
-        answer = askNumber("How far away are you willing to search (" + (@@optHash['usemetric'] && "km" || "mi") + ")", 10)
-        if answer < 0
-          answer = -answer
-          @@optHash['usemetric'] = ! @@optHash['usemetric']
-        end
-        @@optHash['distanceMax'] = answer
+        @@optHash['distanceMax'] = askNumber("How far away are you willing to search (miles)", 10)
 
       when '5'
         @@optHash['difficultyMin'] = askNumber('What is the minimum difficulty you would like? (0.0)', nil)

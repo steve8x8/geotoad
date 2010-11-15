@@ -647,11 +647,9 @@ class Output
     end
 
     if cache['distance']
-      relative_distance = cache['distance'].to_s + 'mi@' + cache['direction']
-      relative_distance_km = sprintf("%.1f",(cache['distance'] * 1.609344)) + 'km@' + cache['direction']
+      relative_distance = cache['distance'].to_s + 'mi ' + cache['direction']
     else
       relative_distance = 'N/A'
-      relative_distance_km = 'N/A'
     end
 
     if get_location
@@ -722,7 +720,6 @@ class Output
       'IsArchived' => cache['archived'].to_s.capitalize,
       'location' => location,
       'relativedistance' => relative_distance,
-      'relativedistancekm' => relative_distance_km,
       'hintdecrypt' => decryptHint(cache['hint']),
       'hint' => cache['hint'],
       'cacheSymbol' => symbol,
@@ -731,8 +728,6 @@ class Output
       'xmlWpts' => xmlWpts.to_s.gsub(/XXXWIDXXX/, wid[2 .. -1]),
       'xmlAttrs' => xmlAttrs.to_s,
       'txtAttrs' => '<b>' + cache['attributeText'].to_s.capitalize + '</b><br />',
-      'warnAvail' => (available)?'':'<b>*UNAVAILABLE*</b>',
-      'warnArchiv' => (cache['archived'])?'<b>*ARCHIVED*</b>':'',
     }
   end
 
