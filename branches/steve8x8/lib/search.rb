@@ -371,6 +371,22 @@ class SearchCache
         wid = $1
         debug "wid=#{wid}"
 
+      # country/state: prefixed by 28 blanks
+      # Mecklenburg-Vorpommern, Germany
+      # East Midlands, United Kingdom
+      # Comunidad Valenciana, Spain
+      # North Carolina (will be interpreted as country, not U.S. state!)
+      # also valid (country only):
+      # Croatia; Isle of Man; Bosnia and Herzegovina, St. Martin, Guinea-Bissau; Cocos (Keeling) Islands
+      #             |>$2|    |->$3 -------------------------------|
+      when /^\s{28}((.*?), )?([A-Z][a-z]+\.?([ -]\(?[A-Za-z]+\)?)*)\s?$/
+        debug "COUNTRY STATE 2=#{$2} 3=#{$3}"
+        if ($3 != "Icons" && $3 != "Placed" && $3 != "Description" && $3 != "Last Found")
+          cache['country'] = $3
+          cache['state'] = ($2)?$2:'-' # GCStatistic doesn't like empty state elements
+          debug "COUNTRY #{cache['country']} STATE #{cache['state']}"
+        end
+
       # small_profile.gif" alt="Premium Member Only Cache" with="15" height="13"></TD
       when /Premium Member Only Cache/
         debug "#{wid} is a members only cache. Marking"
