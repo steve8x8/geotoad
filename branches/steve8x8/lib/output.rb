@@ -728,6 +728,8 @@ class Output
       'xmlWpts' => xmlWpts.to_s.gsub(/XXXWIDXXX/, wid[2 .. -1]),
       'xmlAttrs' => xmlAttrs.to_s,
       'txtAttrs' => '<b>' + cache['attributeText'].to_s.capitalize + '</b><br />',
+      'warnAvail' => (available)?'':'<b>(*UNAVAIL*)</b>',
+      'warnArchiv' => (cache['archived'])?'<b>(*ARCHIVED*)</b>':'',
     }
   end
 
