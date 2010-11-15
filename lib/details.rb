@@ -318,16 +318,16 @@ class CacheDetails
           debug "attribute #{anum}: ic=#{icon} id=#{aid} inc=#{ainc} alt=#{alt} "
           if aid > 0
             # make this a 3d array instead? ...['attributes'][aid]=ainc
-            @waypointHash[wid]["attribute#{anum}id"] = aid
-            @waypointHash[wid]["attribute#{anum}inc"] = ainc
-            @waypointHash[wid]["attribute#{anum}txt"] = alt
+            cache["attribute#{anum}id"] = aid
+            cache["attribute#{anum}inc"] = ainc
+            cache["attribute#{anum}txt"] = alt
             anum = anum + 1
             atxt << alt + ", "
           end
         }   # no more attributes
         # keep the collected text in wp hash, for GPSr units to show
-        @waypointHash[wid]['attributeText'] = atxt.gsub(/, $/, '')
-        @waypointHash[wid]['attributeCount'] = anum
+        cache['attributeText'] = atxt.gsub(/, $/, '')
+        cache['attributeCount'] = anum
         debug "Found #{anum} attributes: #{atxt}"
       end
 
