@@ -435,7 +435,7 @@ class SearchCache
       # Croatia; Isle of Man; Bosnia and Herzegovina, St. Martin, Guinea-Bissau; Cocos (Keeling) Islands
       #             |>$2|    |->$3 -------------------------------|
       when /^\s{28}((.*?), )?([A-Z][a-z]+\.?([ -]\(?[A-Za-z]+\)?)*)\s?$/
-        debug "COUNTRY STATE 2=#{$2} 3=#{$3}"
+        debug "Country/state found #{$2}/#{$3}"
         if ($3 != "Icons" && $3 != "Placed" && $3 != "Description" && $3 != "Last Found")
           # special case US states:
           if (usstates[$3])
@@ -445,7 +445,7 @@ class SearchCache
             cache['country'] = $3
             cache['state'] = ($2)?$2:'-' # GCStatistic doesn't like empty state elements
           end
-          debug "COUNTRY #{cache['country']} STATE #{cache['state']}"
+          debug "Using country #{cache['country']} state #{cache['state']}"
         end
 
       # small_profile.gif" alt="Premium Member Only Cache" with="15" height="13"></TD

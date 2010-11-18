@@ -717,7 +717,7 @@ class Output
         tbid = 801205108 + rand(923520) # = X0abcd
         # convert into string
         tbref = 'TB' + (tbid + 411120).to_s(31).upcase.tr('0-9A-U', '0-9A-HJKMNPQRTV-Z')
-        debug "TRACKABLES: use fake id #{tbid} = #{tbref} for #{tbname}"
+        debug "Trackables: use fake id #{tbid} = #{tbref} for #{tbname}"
         xmlTrackables << "\r\n"
         xmlTrackables << "    <groundspeak:travelbug id=\"#{tbid}\" ref=\"#{tbref}\">\r\n"
         xmlTrackables << "      <groundspeak:name>" + makeXML(tbname) + "</groundspeak:name>\r\n"
@@ -725,7 +725,7 @@ class Output
       }
     end
     if xmlTrackables.length > 0
-      debug "TRACKABLES XML: #{xmlTrackables}"
+      debug "Generated trackables XML: #{xmlTrackables}"
     end
 
     variables = {
