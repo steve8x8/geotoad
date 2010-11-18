@@ -1,0 +1,4 @@
+TODO: come up with a TODO list
+
+- makedist.sh runs "svn log >ChangeLog.txt"
+- makedist.sh create a .tar.gz file instead of .zip

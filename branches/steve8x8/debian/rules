@@ -22,7 +22,7 @@ binary-indep: build install
 	dh_testdir
 	dh_testroot
 	dh_installchangelogs ChangeLog.txt
-	dh_installdocs FAQ.txt README.txt #TODO.txt
+	dh_installdocs FAQ.txt README.txt TODO.txt
 	dh_installmenu
 	dh_installman geotoad.1
 	dh_compress

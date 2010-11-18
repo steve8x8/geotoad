@@ -64,7 +64,7 @@ $Format = {
       "  <groundspeak:attributes>\r\n" +
       "<%out.xmlAttrs%>" +
       "  </groundspeak:attributes>\r\n" +
-      "  <groundspeak:short_description html=\"True\"><%outEntity.warnArchiv%><%outEntity.warnAvail%><%outEntity.txtAttrs%><%wpEntity.shortdesc%></groundspeak:short_description>\r\n" +
+      "  <groundspeak:short_description html=\"True\"><%outEntity.txtAttrs%><%wpEntity.shortdesc%></groundspeak:short_description>\r\n" +
       "  <groundspeak:long_description html=\"True\"><%outEntity.shortWpts%><%wpEntity.longdesc%></groundspeak:long_description>\r\n" +
       "  <groundspeak:encoded_hints><%outEntity.hintdecrypt%></groundspeak:encoded_hints>\r\n" +
       "  <groundspeak:logs>\r\n" +
