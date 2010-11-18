@@ -430,9 +430,10 @@ class SearchCache
       # Mecklenburg-Vorpommern, Germany
       # East Midlands, United Kingdom
       # Comunidad Valenciana, Spain
-      # North Carolina (will be interpreted as country, not U.S. state!)
+      # North Carolina (!)
       # also valid (country only):
       # Croatia; Isle of Man; Bosnia and Herzegovina, St. Martin, Guinea-Bissau; Cocos (Keeling) Islands
+      # country names: English spelling; state names: local spelling
       #             |>$2|    |->$3 -------------------------------|
       when /^\s{28}((.*?), )?([A-Z][a-z]+\.?([ -]\(?[A-Za-z]+\)?)*)\s?$/
         debug "Country/state found #{$2}/#{$3}"
