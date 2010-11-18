@@ -127,10 +127,10 @@ to a world-writable directory such as /tmp.
     + requires gpsbabel in PATH           = requires cmconvert in PATH
 .SH EXAMPLES
 .TP
-.B  geotoad.rb
+.B  geotoad
 invokes the text user interface
 .TP
-.B  geotoad.rb -u user -p password 27513
+.B  geotoad -u user -p password 27513
 Why do we need a username and password? In October of 2004, Geocaching.com
 began to require a login in order to see the coordinates of a geocache.
 Please note: Put quotes around your username if it has any spaces in it.
@@ -138,29 +138,29 @@ You've just made a file named geotoad-output.loc containing all the
 geocaches nearby the zipcode 27513 suitable to be read by EasyGPS. Here are
 some more complex examples that you can work with:
 .TP
-.B  geotoad.rb -u user -p password "N56 44.392, E015 52.780"  -y 5
+.B  geotoad -u user -p password "N56 44.392, E015 52.780"  -y 5
 Search for caches within 5 miles of the above coordinates
 .TP
-.B  geotoad.rb -u user -p password 27513:27502:33434
+.B  geotoad -u user -p password 27513:27502:33434
 You can combine searches with the : delimiter. This works for all types,
 though it's most often used with coordinate searches.
 .TP
-.B  geotoad.rb -u user -p password -x text -o nc.txt -n -q state "North Carolina"
+.B  geotoad -u user -p password -x text -o nc.txt -n -q state "North Carolina"
 Outputs a text file with all of the caches in North Carolina that are
 virgins (have never been found).
 Please note the quotes around "North Carolina". Any parameters with spaces in
 them must have quotes around them.
 .TP
-.B  geotoad.rb -u user -p password -t 2.5 -x vcf -E "helixblue:Sallad" -o charlotte.vcf 28272
+.B  geotoad -u user -p password -t 2.5 -x vcf -E "helixblue:Sallad" -o charlotte.vcf 28272
 Gets every cache in the 100 mile radius of zipcode 28272, with a terrain
 score of 2.5 or higher, and that helixblue and Sallad have not visited.
 Outputs a VCF format file, which is usable by iPod's and other devices.
 .TP
-.B  geotoad.rb -u user -p password -x html -b -K 'stream|creek|lake|river|ocean' -o watery.html -q state Indiana
+.B  geotoad -u user -p password -x html -b -K 'stream|creek|lake|river|ocean' -o watery.html -q state Indiana
 Gets every cache in the state with travel bugs that matches those water keywords.
 Makes a pretty HTML file out of it.
 .TP
-.B  geotoad.rb -u user -p password -x gpx -o mylocal.gpx -z -y 1.75 -T 4 -q coord "N 51 23.456 E 012 34.567"
+.B  geotoad -u user -p password -x gpx -o mylocal.gpx -z -y 1.75 -T 4 -q coord "N 51 23.456 E 012 34.567"
 Create a GPX (1.0.1, with attributes) file with all caches around the location above,
 max. 1.75 miles away, terrain value below or equal 4, include disabled ones.
 .SH AUTHOR
