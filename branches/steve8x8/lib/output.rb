@@ -648,9 +648,11 @@ class Output
     end
 
     if cache['distance']
-      relative_distance = cache['distance'].to_s + 'mi ' + cache['direction']
+      relative_distance = cache['distance'].to_s + 'mi@' + cache['direction']
+      relative_distance_km = sprintf("%.1f",(cache['distance'] * 1.609344)) + 'km@' + cache['direction']
     else
       relative_distance = 'N/A'
+      relative_distance_km = 'N/A'
     end
 
     if get_location
@@ -742,6 +744,7 @@ class Output
       'IsArchived' => cache['archived'].to_s.capitalize,
       'location' => location,
       'relativedistance' => relative_distance,
+      'relativedistancekm' => relative_distance_km,
       'hintdecrypt' => decryptHint(cache['hint']),
       'hint' => cache['hint'],
       'cacheSymbol' => symbol,
