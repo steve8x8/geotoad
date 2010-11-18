@@ -705,6 +705,27 @@ class Output
       }
     end
 
+    # trackables in XML
+    xmlTrackables = ''
+    if cache['travelbug'].to_s.length > 0
+      cache['travelbug'].split(', ').each { |tbname|
+        # we don't have the real trackable ref or id
+        # therefore create a random number for the trackable
+        # use a number range far above what exists now
+        tbid = 801205108 + rand(923520) # = X0abcd
+        # convert into string
+        tbref = 'TB' + (tbid + 411120).to_s(31).upcase.tr('0-9A-U', '0-9A-HJKMNPQRTV-Z')
+        debug "TRACKABLES: use fake id #{tbid} = #{tbref} for #{tbname}"
+        xmlTrackables << "\r\n"
+        xmlTrackables << "    <groundspeak:travelbug id=\"#{tbid}\" ref=\"#{tbref}\">\r\n"
+        xmlTrackables << "      <groundspeak:name>" + makeXML(tbname) + "</groundspeak:name>\r\n"
+        xmlTrackables << "    </groundspeak:travelbug>\r\n"
+      }
+    end
+    if xmlTrackables.length > 0
+      debug "TRACKABLES XML: #{xmlTrackables}"
+    end
+
     variables = {
       'wid' => wid,
       'symbols' => symbols,
@@ -726,6 +747,7 @@ class Output
       'cacheSymbol' => symbol,
       'cacheID' => cacheID(wid),
       'trackables' => cache['travelbug'].to_s,
+      'xmlTrackables' => xmlTrackables,
       'shortWpts' => shortWpts.to_s,
       'xmlWpts' => xmlWpts.to_s.gsub(/XXXWIDXXX/, wid[2 .. -1]),
       'xmlAttrs' => xmlAttrs.to_s,

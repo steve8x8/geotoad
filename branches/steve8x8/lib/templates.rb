@@ -70,7 +70,7 @@ $Format = {
       "  <groundspeak:logs>\r\n" +
       "<%out.gpxlogs%>" +
       "  </groundspeak:logs>\r\n" +
-      "  <groundspeak:travelbugs><%outEntity.trackables%></groundspeak:travelbugs>\r\n" +
+      "  <groundspeak:travelbugs><%out.xmlTrackables%></groundspeak:travelbugs>\r\n" +
       "  </groundspeak:cache>\r\n" +
       "</wpt>\r\n" +
       "<%out.xmlWpts%>",
