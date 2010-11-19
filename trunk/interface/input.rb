@@ -571,19 +571,23 @@ class Input
   end
 
   def askNumber(string, default)
-    # Ask for a floating point number.
+    # Ask for a floating point number. Only accept non-negative values.
     while 1
       begin
         answer = ask(string, default)
         if not answer
           return default
         else
-          answer = Float(answer)
+          # this may throw an ArgumentError
+          answerf = Float(answer)
+          # negative values aren't allowed
+          if answerf < 0
+            puts "*** #{answer} is negative, not allowed."
           # If it is equivalent to it's integer, return the integer instead
-          if answer == answer.to_i
-            return answer.to_i
+          elsif answerf == answerf.to_i
+            return answerf.to_i
           else
-            return answer
+            return answerf
           end
         end
       rescue ArgumentError
