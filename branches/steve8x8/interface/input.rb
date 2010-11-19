@@ -171,7 +171,7 @@ class Input
 
     # demonstrate a sample command line
     cmdline = "geotoad.rb"
-    hidden_opts = ['queryArg', 'outDir', 'outFile', 'user', 'password']
+    hidden_opts = ['queryArg', 'outDir', 'outFile', 'user', 'password', 'usemetric']
 
     @@optHash.keys.sort.each { |option|
       if ! @@optHash[option].to_s.empty? and ! hidden_opts.include?(option)
@@ -189,6 +189,10 @@ class Input
           else
             cmdline = cmdline + " --#{option}=\'#{@@optHash[option]}\'"
           end
+        end
+        # in the metric case, we must append "km" to the distance
+        if option == 'distanceMax' and @@optHash['usemetric']
+          cmdline << "km"
         end
       end
 
@@ -285,7 +289,8 @@ class Input
       printf(":::           %46.46s               :::\n", "// GeoToad #$VERSION Text User Interface //")
       puts "=============================================================================="
       printf("(1)  GC.com login [%-17.17s] | (2)  search type          [%-10.10s]\n", (@@optHash['user'] || 'REQUIRED'), @@optHash['queryType'])
-      printf("(3)  %-12.12s [%-17.17s] | (4)  distance maximum (mi)     [%-5.5s]\n", @@optHash['queryType'], (@@optHash['queryArg'] || 'REQUIRED'), (@@optHash['distanceMax'] || 10))
+      printf("(3)  %-12.12s [%-17.17s] | (4)  distance maximum (%-2.2s)     [%-5.5s]\n", @@optHash['queryType'], (@@optHash['queryArg'] || 'REQUIRED'),
+        (@@optHash['usemetric'] && "km" || "mi"), (@@optHash['distanceMax'] || 10))
       puts   "                                      |"
       printf("(5)  difficulty           [%-2.1f - %-1.1f] | (6)  terrain               [%-1.1f - %-1.1f]\n",
         (@@optHash['difficultyMin'] || 0.0), (@@optHash['difficultyMax'] || 5.0),
@@ -404,7 +409,11 @@ class Input
 
 
       when '4'
-        @@optHash['distanceMax'] = askNumber("How far away are you willing to search (miles)", 10)
+        unit = (@@optHash['usemetric'] && "km" || "mi")
+        # re-use old unit by default
+        value, unit = askNumberandUnit("How far away are you willing to search? (10 " + unit +")", 10, unit)
+        @@optHash['distanceMax'] = value
+        @@optHash['usemetric'] = (unit=="km" || nil)
 
       when '5'
         @@optHash['difficultyMin'] = askNumber('What is the minimum difficulty you would like? (0.0)', nil)
@@ -571,23 +580,63 @@ class Input
   end
 
   def askNumber(string, default)
-    # Ask for a floating point number.
+    # Ask for a floating point number. Only accept non-negative values.
     while 1
       begin
         answer = ask(string, default)
         if not answer
           return default
         else
-          answer = Float(answer)
+          # this may throw an ArgumentError
+          answerf = Float(answer)
+          # negative values aren't allowed
+          if answerf < 0
+            puts "*** #{answer} is negative, not allowed."
           # If it is equivalent to it's integer, return the integer instead
-          if answer == answer.to_i
-            return answer.to_i
+          elsif answerf == answerf.to_i
+            return answerf.to_i
           else
-            return answer
+            return answerf
           end
         end
       rescue ArgumentError
         puts "*** #{answer} does not look like a valid number."
+      end
+    end
+  end
+
+  def askNumberandUnit(string, default, defaultunit)
+    # Ask for a (non-negative) floating point number, optionally followed by a unit.
+    while 1
+      begin
+        answer = ask(string, "#{default} #{defaultunit}")
+        if not answer
+          return default, defaultunit
+        else
+          # split into numeric and string part
+          if answer =~ /([\d\.]+)\s*(\w*)/
+            # this may throw an ArgumentError
+            answerf = Float($1)
+            # If it is equivalent to it's integer, return the integer instead
+            if answerf == answerf.to_i
+              answerf = answerf.to_i
+            end
+            # if we got a valid unit, return that
+            if $2.length > 0
+              if $2[0,2] == "mi"
+                return answerf, "mi"
+              elsif $2[0,2] == "km"
+                return answerf, "km"
+              end
+            else
+              return answerf, defaultunit
+            end
+          else
+            puts "*** Cannot parse #{answer}!"
+          end
+        end
+      rescue ArgumentError
+        puts "*** #{answer} does not look like valid input."
       end
     end
   end
