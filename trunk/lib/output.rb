@@ -464,8 +464,8 @@ class Output
     if hint
       decrypted = hint.tr('A-MN-Z', 'N-ZA-M').tr('a-mn-z', 'n-za-m')
       # Oops, we don't need to decrypt the text within brackets - it's raw.
-      decrypted.gsub!(/(\[.*?\])/) { $1.tr('A-MN-Z', 'N-ZA-M').tr('a-mn-z', 'n-za-m') }
       decrypted.gsub!(/(\&.*?;)/) { $1.tr('A-MN-Z', 'N-ZA-M').tr('a-mn-z', 'n-za-m') }
+      decrypted.gsub!(/(\[.*?\])/) { $1.tr('A-MN-Z', 'N-ZA-M').tr('a-mn-z', 'n-za-m') }
       return decrypted
     else
       return ''
