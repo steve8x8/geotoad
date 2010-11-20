@@ -363,9 +363,12 @@ class CacheDetails
 
     if data =~ /id="uxDecryptedHint".*?\>(.*?)\s*\<\/div/m
       hint = $1.strip
+      if hint =~ /[\<\>]/
+        debug "Hint contains HTML: #{hint}"
+      end
       hint.gsub!(/^ +/, '')
       hint.gsub!(/[\r\n]+/, '|')
-      hint.gsub!('<br[^>]*>', '|')
+      hint.gsub!(/\<[bB][rR] *\/?\>/, '|')
       hint.gsub!('<div>', '')
       cache['hint'] = hint
       debug "got hint: [#{hint}]"
