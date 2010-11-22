@@ -12,22 +12,62 @@ class Output
 
   $MAX_NOTES_LEN = 1999
   $ReplaceWords = {
-    'OF'			=> '',
-    'A'				=> '',
-    'AND'			=> '',
-    'ON'			=> '',
-    'CACHE'		=> '',
-    'FROM'		=> '',
-    'GEOCACHE'	=> '',
+    'KILOMETER' => 'km',
+    'METER'     => 'm',
+    'MILES'     => 'mi',
+    'MILE'      => 'mi',
+
+    'CACHE'     => 'C',
+    'GEOCACHE'  => 'C',
+    'GEOCACHING' => 'GC',
+    'GEOKRETY'  => 'GK',
+    'NIGHTC'    => 'NC',
+    'FINAL'     => 'FI',
+
+    'A'         => '',
+    'AN'        => '',
+    'THE'       => '',
+    'AND'       => '+',
+    'OR'        => '|',
+    'EITHER'    => 'E',
+    'ON'        => '',
+    'OF'        => '',
+    'FROM'      => '',
+    'BY'        => '',
+    'FOR'       => '',
+    'IS'        => '',
+    'IN'        => '',
+    'WITH'      => 'W',
+    'THAT'      => 'T',
+
+    'PARK'      => 'Pk',
+    'LAKE'      => 'Lk',
+    'ROAD'      => 'Rd',
+    'RIVER'     => '',
+    'CREEK'     => 'Ck',
+    'LOOP'      => 'Lp',
+    'TRAIL'     => 'Tr',
+    'MOUNTAIN'  => 'Mt',
+    'MOUNT'     => 'Mt',
+    'COUNTY'    => 'Cty',
+    'OVERLOOK'  => 'Ovlk',
+    'RIDGE'     => 'Rdg',
+    'FOREST'    => 'Frst',
+    'POINT'     => 'Pt',
+    'HOTEL'     => 'Hl',
+    'MOTEL'     => 'Ml',
+    'CHURCH'    => 'Ch',
+    'STATION'   => 'St',
+
     'MISSION'   => 'Msn',
-    'PARK'		=> 'Pk',
     'IMPOSSIBLE' => 'Imp',
-    'THE'			=> '',
-    'FOR'			=> '',
-    'LAKE'		=> 'Lk',
-    'ROAD'		=> 'Rd',
-    'RIVER'		=> '',
-    'ONE'		=> '1',
+    'DOUBLE'    => 'Dbl',
+    'LITTLE'    => 'Lil',
+    'BLACK'     => 'Blk',
+    'BROWN'     => 'Brn',
+    'ORANGE'    => 'Org',
+
+    'ONE'       => '1',
     'TWO'       => '2',
     'THREE'     => '3',
     'FOUR'      => '4',
@@ -37,39 +77,105 @@ class Output
     'EIGHT'     => '8',
     'NINE'      => '9',
     'TEN'       => '10',
-    'CREEK'		=> 'Ck',
-    'LITTLE'    => 'Lil',
-    'BLACK'     => 'Blk',
-    'LOOP'      => 'Lp',
-    'TRAIL'     => 'Tr',
-    'EITHER'    => 'E',
-    'BROWN'     => 'Brn',
-    'ORANGE'    => 'Org',
-    'MOUNTAIN'	=> 'Mt',
-    'COUNTY'    => 'Cty',
-    'WITH'		=> 'W',
-    'DOUBLE'    => 'Dbl',
-    'IS'        => '',
-    'THAT'      => 'T',
-    'IN'        => '',
-    'OVERLOOK'  => 'Ovlk',
-    'Ridge'     => 'Rdg',
-    'Forest'    => 'Frst',
     'II'        => '2',
     'III'       => '3',
     'IV'        => '4',
-    'BY'        => '',
-    'HOTEL'     => 'Htl',
-    'MOTEL'     => 'Mtl',
+    #'V'         => '5',
+    'VI'        => '6',
+    'VII'       => '7',
+    'VIII'      => '8',
+    'IX'        => '9',
+    #'X'         => '10',
+
+    'YEARS'     => 'yr',
+    'YEAR'      => 'yr',
+    'JANUARY'   => 'Jan',
+    'FEBRUARY'  => 'Feb',
+    'MARCH'     => 'Mar',
+    'APRIL'     => 'Apr',
+    'JUNE'      => 'Jun',
+    'JULY'      => 'Jul',
+    'AUGUST'    => 'Aug',
+    'SEPTEMBER' => 'Sep',
+    'OCTOBER'   => 'Oct',
+    'NOVEMBER'  => 'Nov',
+    'DECEMBER'  => 'Dec',
 
     # German Words Follow
-    'DIE'       => '',
+    'NACHTC'    => 'NC',
+
     'DER'       => '',
+    'DIE'       => '',
+    'DAS'       => '',
     'DEN'       => '',
-    'ZUM'       => '',
+    'DEM'       => '',
+    'DES'       => '',
+    'AM'        => '',
+    'ZUM'       => 'Z',
+    'ZUR'       => 'Z',
     'IM'        => '',
+    'INS'       => '',
+    'VON'       => '',
+    'VOM'       => '',
+    'BEI'       => '',
+    'BEIM'      => '',
+    'F~R'       => '',
+    'AUS'       => '',
+    'AUF'       => '',
+    'UM'        => '',
+    'MIT'       => 'M',
+    'BIS'       => '',
+    'ZWISCHEN'  => 'Zw',
+    '~BER'      => '',
+    'UEBER'     => '',
+    'OBERHALB'  => '',
+    'UNTER'     => '',
+    'UNTERHALB' => '',
+    'OBEN'      => '',
+    'UNTEN'     => '',
+    'UND'       => '+',
+    'ODER'      => '|',
+    'ABER'      => '-',
+
+    'KIRCHE'    => 'Ki',
+    'BAHNHOF'   => 'Bf',
+    'PLATZ'     => 'Pl',
+    'PARKPLATZ' => 'PPl',
+    'NATURLEHRPFAD' => 'NLP',
+    'KLEINE'    => 'Kl',
+    'GRO~E'     => 'Gr',
+    'RUND'      => 'Rd',
+    'RUNDE'     => 'Rd',
+    'TEIL'      => 'T',
+    #'SEE'       => 'S',
+    #'BERG'      => 'Bg',
+    #'BURG'      => 'Bg',
+
     'EIN'       => '',
-    'DAS'       => ''
+    'EINE'      => '',
+    'EINEN'     => '',
+    'EINEM'     => '',
+    'EINER'     => '',
+    'ZWEI'      => '2',
+    'DREI'      => '3',
+    'VIER'      => '4',
+    'F~NF'      => '5',
+    'SECHS'     => '6',
+    'SIEBEN'    => '7',
+    'ACHT'      => '8',
+    'NEUN'      => '9',
+    'ZEHN'      => '10',
+
+    'JAHRE'     => 'J',
+    'JAHR'      => 'J',
+    'JANUAR'    => 'Jan',
+    'FEBRUAR'   => 'Feb',
+    'M~RZ'      => 'Mar',
+    'JUNI'      => 'Jun',
+    'JULI'      => 'Jul',
+    'OKTOBER'   => 'Okt',
+    'DEZEMBER'  => 'Dez',
+
   }
 
   ## the functions themselves ####################################################
@@ -87,57 +193,151 @@ class Output
   # converts a geocache name into a much shorter name. This algorithm is
   # very sketchy and needs some real work done to it by a brave volunteer.
   def shortName(name)
-    tempname = name.dup
-    tempname.gsub!('cache', '')
+    # the "fudge factor" has to be adjusted
+    #maxlength = (@waypointLength * 1.25).to_i
+    maxlength = @waypointLength #+ 1
+    debug "shortname: \"#{name}\"" #+ " to max. #{maxlength}"
+    tempname = name[0..0].upcase + name[1..-1]
+    tempname.gsub!(/[Cc][Aa][Cc][Hh][Ee]/, 'C')
+    tempname.gsub!(/[Ll][Oo][Ss][Tt][\s-]*[Pp][Ll][Aa][Cc][Ee]/, 'LP')
+    tempname.gsub!(/[Bb][Oo][Nn][Uu][Ss]/, 'BO')
+    tempname.gsub!(/[Ll][Ee][Tt][Tt][Ee][Rr][\s-]*[Bb][Oo][Xx]/, 'LBx')
+    tempname.gsub!(/[Dd][Rr][Ii][Vv][Ee][\s-]*[Ii][Nn]/, 'DrIn')
+    tempname.gsub!(/\s+\&amp;\s+/, ' + ')
     # not sure why this isn't being handled by the \W regexps, but
     # I'm taking care of it to fix a bug with caches with _ in their name.
-
     tempname.gsub!(/_/, '')
+    tempname.gsub!(/[~\-\#]/, ' ')
+    tempname.gsub!(/\&quot;/, ' ')
 
-    # acronym.
+    # acronym. [Steve8x8] Do we actually need special handling?
     if tempname =~ /(\w)\. (\w)\. (\w)/
       debug "shortname: acronym detected.. removing extraneous dots and spaces"
       tempname.gsub!(/\. /, '')
     end
 
+    # Umlauts and other special characters: mark for later removal
+    tempname.gsub!(/\&[^;]*;/, '~')
 
-    tempwords=tempname.split(' ')
-    newwords=Array.new
-
-    debug "shortname: making a short name from #{name} (now #{tempname})"
-
-    if tempwords.length == 1		# if there is only one word, use it!
-      tempname.gsub!(/\W/, '')
-      debug "shortname: only one word in #{tempname}, using it"
-      #cache['sname'] = newwords[0]
-      return tempname
-    else
-      debug "#{tempwords.length} words left in this, processing"
+    tempwords = tempname.split(' ')
+    wordcount = tempwords.length
+    #debug "shortname: split \"#{tempname}\" into #{wordcount} words"
+    if wordcount == 1 and false
+      # if there is only one word, use it!
+      #debug "shortname: single word \"#{tempname}\""
+      # if it's already short enough: return it
+      if tempname.length <= maxlength
+        debug "shortname: returning \"#{tempname}\" (#{tempname.length})"
+        return tempname
+      end
+      # strip extra characters
+      tempname.gsub!(/[^\w~+]/, '')
+      if tempname.length <= maxlength
+        debug "shortname: returning \"#{tempname}\" (#{tempname.length})"
+        return tempname
+      end
+      # strip vowels
+      #result = tempname[0..0] + tempname[1..-1].gsub(/[AEIOUaeiou~]/, '')
+      result = tempname[0..0] + tempname[1..-1].gsub(/[aeiou~]/, '')
+      debug "shortname: last exit, returning \"#{result}\" (#{result.length})"
+      return result
     end
-
+    # multiple words
+    newwords = Array.new
     tempwords.each { |word|
-      word.gsub!(/\W/, '')
-      testWord = word.tr('[a-z]', '[A-Z]')			# lame way for case insensitive
-      if $ReplaceWords[testWord]
-        debug "shortname: #{word} is changing to #{$ReplaceWords[testWord]}"
-        word = $ReplaceWords[testWord]
-      elsif (word.length > 6)
-        debug "shortname: word #{word} is still long, stripping vowels"
-        word = word[0..0] + word[1..15].gsub(/[AEIOUaeiou]/, '')	# remove vowels
+      #debug "shortname: capitalizing \"#{word}\""
+      # word.capitalize! would downcase everything else
+      word = word[0..0].upcase + word[1..-1]
+      newwords.push(word)
+    }
+    # check for short enough
+    result = newwords[0..-1].to_s
+    if result.length <= maxlength
+      debug "shortname: returning \"#{result}\" (#{result.length})"
+      return result
+    end
+    # handle all-capitals
+    (1  .. wordcount).each { |index|
+      # clean up
+      word = newwords[-index]
+      # if word is longer than 4 characters and contains no lc letter, force down
+      if (word =~ /[A-Z][A-Z][A-Z][A-Z]/) and (word !~ /[a-z]/)
+        word.downcase!
       end
-      # if it is STILL >wplength
-      if word && (word.length > @waypointLength)
-        debug "shortname: cutting #{word} in #{name} to #{@waypointLength - 2} chars"
-        word = word[0..@waypointLength-2]
-      end
-
-      if word
-        newwords.push(word)
+      word = word[0..0].upcase + word[1..-1]
+      newwords[-index] = word
+    }
+    # total length hasn't changed- no check!
+    # remove extra characters word by word from right to left
+    (1  .. wordcount).each { |index|
+      # clean up
+      word = newwords[-index]
+      word.gsub!(/[^\w~+]/, '')
+      newwords[-index] = word
+      # check for short enough
+      result = newwords[0..-1].to_s
+      if result.length <= maxlength
+        debug "shortname: returning \"#{result}\" (#{result.length})"
+        return result
       end
     }
-
-    debug "shortname: final result is #{newwords[0..8].to_s}"
-    newwords[0..8].to_s
+    # shorten by replacing some keywords, again right to left
+    (1 .. wordcount).each { |index|
+      # case insensitive replacement
+      word = newwords[-index]
+      if word.length > 0
+        #debug "shortname: testing \"#{word}\" (#{index}) for replacements"
+        testWord = word.upcase
+        if $ReplaceWords[testWord]
+          #debug "shortname: replacing \"#{word}\" (#{index}) with \"#{$ReplaceWords[testWord]}\""
+          word = $ReplaceWords[testWord]
+          # do not capitalize!
+          newwords[-index] = word
+        end
+      end
+      # check for short enough
+      result = newwords[0..-1].to_s
+      if result.length <= maxlength
+        debug "shortname: returning \"#{result}\" (#{result.length})"
+        return result
+      end
+    }
+    # shorten by removing vowels from long words first
+    (1 .. wordcount).each { |index|
+      word = newwords[-index]
+      if word.length >= 8
+        #debug "shortname: removing vowels from \"#{word}\""
+        #word = word[0..0] + word[1..-1].gsub(/[AEIOUaeiou~]/, '')
+        word = word[0..0] + word[1..-1].gsub(/[aeiou~]/, '')
+        newwords[-index] = word
+      end
+      # check for short enough
+      result = newwords[0..-1].to_s
+      if result.length <= maxlength
+        debug "shortname: returning \"#{result}\" (#{result.length})"
+        return result
+      end
+    }
+    # shorten by removing vowels from all words
+    (1 .. wordcount).each { |index|
+      word = newwords[-index]
+      if word.length > 0
+        #debug "shortname: removing vowels from \"#{word}\""
+        #word = word[0..0] + word[1..-1].gsub(/[AEIOUaeiou~]/, '')
+        word = word[0..0] + word[1..-1].gsub(/[aeiou~]/, '')
+        newwords[-index] = word
+      end
+      # check for short enough
+      result = newwords[0..-1].to_s
+      if result.length <= maxlength
+        debug "shortname: returning \"#{result}\" (#{result.length})"
+        return result
+      end
+    }
+    # if we got here we can't do a lot more
+    result = newwords[0..-1].to_s
+    debug "shortname: last exit, returning \"#{result}\" (#{result.length})"
+    return result
   end
 
   # select the format for the next set of output
@@ -357,20 +557,21 @@ class Output
       if @waypointLength > 1
         shorter_name = shortName(cache['name'])
         shortest_name = shorter_name[0..(@waypointLength - 1)]
+        debug "updateshortnames: #{shorter_name} -> #{shortest_name}"
         # If we have two caches that generate the same short name
         if snames.has_key?(shortest_name.upcase)
           other_wid = snames[shortest_name.upcase]
           other_cache = @wpHash[other_wid]
-          debug "Conflict found with #{shortest_name} (#{wid} vs #{other_wid})"
+          debug "updateshortnames: Conflict found with #{shortest_name} (#{wid} vs #{other_wid})"
           unique_chars = ''
-          debug "Conflict resolution using #{shorter_name} and #{other_cache['snameUncut']}"
+          debug "updateshortnames: Conflict resolution using #{shorter_name} and #{other_cache['snameUncut']}"
           0.upto(shorter_name.length-1) { |x|
             if shorter_name[x] != other_cache['snameUncut'][x]
               unique_chars << shorter_name[x].chr
             end
           }
-          debug "short name unique chars: #{unique_chars}"
           shortest_name = shorter_name[0..(@waypointLength - 4)] + unique_chars[0..3]
+          debug "updateshortnames: short name unique chars: #{unique_chars} -> #{shortest_name}"
           displayMessage "Resolved short-name conflict for #{wid} (#{shortest_name}) and #{other_wid} (#{other_cache['sname']})"
         end
 
