@@ -288,7 +288,7 @@ class Output
     text.gsub!(/\&amp;(apos;)/, "&\\1")
 
     # From http://snippets.dzone.com/posts/show/1161
-    str.unpack("U*").collect {|s| (s > 127 ? "&##{s};" : s.chr) }.join("")
+    text = text.unpack("U*").collect {|s| (s > 127 ? "&##{s};" : s.chr) }.join("")
 
     # Collapse white space
     text.gsub!(/\&(amp;)*nbsp;/, ' ')
