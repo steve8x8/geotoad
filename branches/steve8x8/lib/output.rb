@@ -17,7 +17,7 @@ class Output
     'KILOMETRES' => 'km',
     'METER'     => 'm',
     'METERS'    => 'm',
-    'METRES'    => 'm'
+    'METRES'    => 'm',
     'MILE'      => 'mi',
     'MILES'     => 'mi',
 
