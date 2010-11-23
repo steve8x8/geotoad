@@ -13,16 +13,21 @@ class Output
   $MAX_NOTES_LEN = 1999
   $ReplaceWords = {
     'KILOMETER' => 'km',
+    'KILOMETERS' => 'km',
+    'KILOMETRES' => 'km',
     'METER'     => 'm',
-    'MILES'     => 'mi',
+    'METERS'    => 'm',
+    'METRES'    => 'm'
     'MILE'      => 'mi',
+    'MILES'     => 'mi',
 
     'CACHE'     => 'C',
     'GEOCACHE'  => 'C',
+    'GEOC'	=> 'C',
     'GEOCACHING' => 'GC',
+    'GEOKRET'   => 'GK',
     'GEOKRETY'  => 'GK',
     'NIGHTC'    => 'NC',
-    'FINAL'     => 'FI',
 
     'A'         => '',
     'AN'        => '',
@@ -57,7 +62,9 @@ class Output
     'HOTEL'     => 'Hl',
     'MOTEL'     => 'Ml',
     'CHURCH'    => 'Ch',
+    'CHAPEL'    => 'Chp',
     'STATION'   => 'St',
+    'FINAL'     => 'Fi',
 
     'MISSION'   => 'Msn',
     'IMPOSSIBLE' => 'Imp',
@@ -66,6 +73,8 @@ class Output
     'BLACK'     => 'Blk',
     'BROWN'     => 'Brn',
     'ORANGE'    => 'Org',
+    'WHITE'     => 'Wht',
+    'GREEN'     => 'Grn',
 
     'ONE'       => '1',
     'TWO'       => '2',
@@ -135,7 +144,7 @@ class Output
     'UNTEN'     => '',
     'UND'       => '+',
     'ODER'      => '|',
-    'ABER'      => '-',
+    'ABER'      => '',
 
     'KIRCHE'    => 'Ki',
     'BAHNHOF'   => 'Bf',
@@ -143,7 +152,11 @@ class Output
     'PARKPLATZ' => 'PPl',
     'NATURLEHRPFAD' => 'NLP',
     'KLEINE'    => 'Kl',
+    'KLEINER'   => 'Kl',
+    'KLEINEN'   => 'Kl',
     'GRO~E'     => 'Gr',
+    'GRO~ER'    => 'Gr',
+    'GRO~EN'    => 'Gr',
     'RUND'      => 'Rd',
     'RUNDE'     => 'Rd',
     'TEIL'      => 'T',
@@ -210,9 +223,10 @@ class Output
     tempname.gsub!(/[~\-\#]/, ' ')
     tempname.gsub!(/\&quot;/, ' ')
 
-    # acronym. [Steve8x8] Do we actually need special handling?
+    # acronym.
     if tempname =~ /(\w)\. (\w)\. (\w)/
       debug "shortname: acronym detected.. removing extraneous dots and spaces"
+      # Note: a bit dangerous
       tempname.gsub!(/\. /, '')
     end
 
@@ -222,7 +236,9 @@ class Output
     tempwords = tempname.split(' ')
     wordcount = tempwords.length
     #debug "shortname: split \"#{tempname}\" into #{wordcount} words"
-    if wordcount == 1 and false
+
+    # this part of code has been disabled: 1 word is no longer a special case!
+    if false and wordcount == 1
       # if there is only one word, use it!
       #debug "shortname: single word \"#{tempname}\""
       # if it's already short enough: return it
@@ -242,6 +258,8 @@ class Output
       debug "shortname: last exit, returning \"#{result}\" (#{result.length})"
       return result
     end
+    # ---- end of disabled code
+
     # multiple words
     newwords = Array.new
     tempwords.each { |word|
@@ -251,7 +269,7 @@ class Output
       newwords.push(word)
     }
     # check for short enough
-    result = newwords[0..-1].to_s
+    result = newwords[0..-1].join
     if result.length <= maxlength
       debug "shortname: returning \"#{result}\" (#{result.length})"
       return result
@@ -275,7 +293,7 @@ class Output
       word.gsub!(/[^\w~+]/, '')
       newwords[-index] = word
       # check for short enough
-      result = newwords[0..-1].to_s
+      result = newwords[0..-1].join
       if result.length <= maxlength
         debug "shortname: returning \"#{result}\" (#{result.length})"
         return result
@@ -296,7 +314,7 @@ class Output
         end
       end
       # check for short enough
-      result = newwords[0..-1].to_s
+      result = newwords[0..-1].join
       if result.length <= maxlength
         debug "shortname: returning \"#{result}\" (#{result.length})"
         return result
@@ -312,7 +330,7 @@ class Output
         newwords[-index] = word
       end
       # check for short enough
-      result = newwords[0..-1].to_s
+      result = newwords[0..-1].join
       if result.length <= maxlength
         debug "shortname: returning \"#{result}\" (#{result.length})"
         return result
@@ -328,14 +346,14 @@ class Output
         newwords[-index] = word
       end
       # check for short enough
-      result = newwords[0..-1].to_s
+      result = newwords[0..-1].join
       if result.length <= maxlength
         debug "shortname: returning \"#{result}\" (#{result.length})"
         return result
       end
     }
     # if we got here we can't do a lot more
-    result = newwords[0..-1].to_s
+    result = newwords[0..-1].join
     debug "shortname: last exit, returning \"#{result}\" (#{result.length})"
     return result
   end
