@@ -506,7 +506,7 @@ class Output
     text.gsub!(/\&amp;(apos;)/, "&\\1")
 
     # From http://snippets.dzone.com/posts/show/1161
-    str.unpack("U*").collect {|s| (s > 127 ? "&##{s};" : s.chr) }.join("")
+    text = text.unpack("U*").collect {|s| (s > 127 ? "&##{s};" : s.chr) }.join("")
 
     # Collapse white space
     text.gsub!(/\&(amp;)*nbsp;/, ' ')
@@ -683,8 +683,8 @@ class Output
     if hint
       decrypted = hint.tr('A-MN-Z', 'N-ZA-M').tr('a-mn-z', 'n-za-m')
       # Oops, we don't need to decrypt the text within brackets - it's raw.
-      decrypted.gsub!(/(\[.*?\])/) { $1.tr('A-MN-Z', 'N-ZA-M').tr('a-mn-z', 'n-za-m') }
       decrypted.gsub!(/(\&.*?;)/) { $1.tr('A-MN-Z', 'N-ZA-M').tr('a-mn-z', 'n-za-m') }
+      decrypted.gsub!(/(\[.*?\])/) { $1.tr('A-MN-Z', 'N-ZA-M').tr('a-mn-z', 'n-za-m') }
       return decrypted
     else
       return ''
@@ -973,7 +973,9 @@ class Output
       'shortWpts' => shortWpts.to_s,
       'xmlWpts' => xmlWpts.to_s.gsub(/XXXWIDXXX/, wid[2 .. -1]),
       'xmlAttrs' => xmlAttrs.to_s,
-      'txtAttrs' => '<b>' + cache['attributeText'].to_s.capitalize + '</b><br />',
+      'txtAttrs' => (cache['attributeText'].to_s.empty?)?'':'[' + cache['attributeText'].to_s.capitalize + ']',
+      'warnAvail' => (available)?'':'(*UNAVAIL*)',
+      'warnArchiv' => (cache['archived'])?'(*ARCHIVED*)':'',
     }
   end
 

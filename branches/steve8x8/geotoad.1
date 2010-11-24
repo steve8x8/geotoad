@@ -3,18 +3,32 @@
 geotoad \- geocaching query tool
 .SH SYNOPSIS
 .TP
-geotoad
+.B geotoad
  (will invoke text user interface (TUI)
 .TP
-geotoad [options] <search>
+.B geotoad [options] <search>
  (command-line version)
+.SH NOTE
+If GeoToad was not installed from a (distribution-specific) package
+(like .rpm for RedHat/OpenSuse/CentOS and derivatives, .deb for Debian
+and Ubuntu, etc.), it may be necessary to invoke GeoToad with the
+.B .rb
+suffix, as in
+.B geotoad.rb
+or
+.B ./geotoad.rb
+or even
+.B ruby geotoad.rb
+.
 .SH DESCRIPTION
-Geotoad is software to help speed up the boring part of geocaching:
+GeoToad is software to help speed up the boring part of geocaching:
 choosing the cache and collecting the data. GeoToad lets you perform
 queries against the Geocaching website, and export the matching geocaches
 to numerous devices and over 20 file formats.
 .P
-If run without any parameters, geotoad will launch the interactive mode.
+If run without any parameters,
+.B geotoad
+will launch the interactive mode.
 It can also be used in command-line mode for specific queries.
 .SH OPTIONS
 .TP
@@ -30,16 +44,16 @@ output file name (automatic otherwise)
 .B -x format
 output format type (see list below)
 .TP
-.B -q [location|user|wid]
+.B -q [location|user|keyword|coord|wid]
 query type (location by default)
 .TP
-.B -s [virtual|small|regular|large]
+.B -s [virtual|micro|small|regular|large]
 set minimum cache size
 .TP
-.B -S [virtual|small|regular|large]
+.B -S [virtual|micro|small|regular|large]
 set maximum cache size
 .TP
-.B -c [regular|virtual|event|...]
+.B -c [traditional|multicache|event|unknown|letterbox|virtual|earthcache|...]
 set cache type (separated by '|')
 .TP
 .B -d 0.0-5.0
@@ -60,8 +74,8 @@ set minimum fun factor
 .B -F 0.0-5.0
 set maximum fun factor
 .TP
-.B -y 0-500
-distance maximum in miles (10)
+.B -y 0-999[km]
+distance maximum in miles or km (10mi)
 .TP
 .B -k keyword
 title keyword search. Use | to delimit multiple
@@ -164,9 +178,4 @@ Makes a pretty HTML file out of it.
 Create a GPX (1.0.1, with attributes) file with all caches around the location above,
 max. 1.75 miles away, terrain value below or equal 4, include disabled ones.
 .SH AUTHOR
-Thomas Stromberg
-
-
-
-
-
+Thomas Stromberg and The GeoToad Project

@@ -614,7 +614,7 @@ class Input
           return default, defaultunit
         else
           # split into numeric and string part
-          if answer =~ /([\d\.]+)\s*(\w*)/
+          if answer =~ /([\d\.]+)\s*(mi|km)?/
             # this may throw an ArgumentError
             answerf = Float($1)
             # If it is equivalent to it's integer, return the integer instead
@@ -622,12 +622,8 @@ class Input
               answerf = answerf.to_i
             end
             # if we got a valid unit, return that
-            if $2.length > 0
-              if $2[0,2] == "mi"
-                return answerf, "mi"
-              elsif $2[0,2] == "km"
-                return answerf, "km"
-              end
+            if $2
+              return answerf, $2
             else
               return answerf, defaultunit
             end

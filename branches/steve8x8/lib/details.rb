@@ -236,17 +236,23 @@ class CacheDetails
           displayWarning "Found waypoint type, but never saw cache title. Did geocaching.com change their layout again?"
         end
         full_type = $1
-        cache['fulltype'] = full_type
-        cache['type'] = full_type.split(' ')[0].downcase.gsub(/\-/, '')
-        # two special cases: "Cache In Trash Out" and "Lost and Found"
-        case full_type
-        when /Cache In Trash Out/
-          cache['type'] = 'cito'
-        when /Lost [Aa]nd Found/
-          # spelling to be confirmed!
-          cache['type'] = 'lost+found'
+        # there may be more than 1 match, don't overwrite (see GC1PQKR, GC1PQKT)
+        # actually, types have been set by search - is this code obsolete then?
+        if cache['fulltype']
+          debug "Not overwriting \"#{cache['fulltype']}\"(#{cache['type']}) with \"#{full_type}\""
+        else
+          cache['fulltype'] = full_type
+          cache['type'] = full_type.split(' ')[0].downcase.gsub(/\-/, '')
+          # two special cases: "Cache In Trash Out" and "Lost and Found"
+          case full_type
+          when /Cache In Trash Out/
+            cache['type'] = 'cito'
+          when /Lost [Aa]nd Found/
+            # spelling to be confirmed!
+            cache['type'] = 'lost+found'
+          end
+          debug "stype=#{cache['type']} full_type=#{cache['fulltype']}"
         end
-        debug "stype=#{cache['type']} full_type=#{$1}"
       end
 
 
@@ -363,9 +369,12 @@ class CacheDetails
 
     if data =~ /id="uxDecryptedHint".*?\>(.*?)\s*\<\/div/m
       hint = $1.strip
+      if hint =~ /[\<\>]/
+        debug "Hint contains HTML: #{hint}"
+      end
       hint.gsub!(/^ +/, '')
       hint.gsub!(/[\r\n]+/, '|')
-      hint.gsub!('<br[^>]*>', '|')
+      hint.gsub!(/\<[bB][rR] *\/?\>/, '|')
       hint.gsub!('<div>', '')
       cache['hint'] = hint
       debug "got hint: [#{hint}]"
