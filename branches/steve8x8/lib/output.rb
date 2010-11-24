@@ -948,6 +948,7 @@ class Output
     end
 
     variables = {
+      'username' => @username,
       'wid' => wid,
       'symbols' => symbols,
       'id' => cache['sname'],
