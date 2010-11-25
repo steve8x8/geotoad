@@ -479,7 +479,7 @@ class Input
         @@optHash['ownerInclude'] = ask('Only include geocaches owned by these people (separate by commas)', '').gsub(/, */, ':')
 
       when '20'
-        @@optHash['waypointLength'] = askNumber('How long can your EasyName waypoint id\'s be? (8 for Magellan, 16 for Garmin, -1 to use full text, 0 to disable and use waypoint id\'s)?', nil)
+        @@optHash['waypointLength'] = askNumber('How long can your EasyName waypoint id\'s be? (8 for Magellan, 16 for Garmin, -1 to use full text, 0 to disable and use waypoint id\'s)?', nil, true)
 
       when '21'
         answer = ask('Include disabled caches in your results?', nil)
@@ -579,7 +579,7 @@ class Input
     return answer
   end
 
-  def askNumber(string, default)
+  def askNumber(string, default, allowNegative = false)
     # Ask for a floating point number. Only accept non-negative values.
     while 1
       begin
@@ -590,7 +590,7 @@ class Input
           # this may throw an ArgumentError
           answerf = Float(answer)
           # negative values aren't allowed
-          if answerf < 0
+          if (answerf < 0) and (not allowNegative)
             puts "*** #{answer} is negative, not allowed."
           # If it is equivalent to it's integer, return the integer instead
           elsif answerf == answerf.to_i
