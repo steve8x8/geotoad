@@ -361,7 +361,8 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
       "<%out.relativedistancekm%>\t" +
       "\"<%wp.name%>\" by <%wp.creator%>\n"
   },
-  # myfinds (Steve8x8) - use with "-q user"
+  # myfinds (Steve8x8) - use as follows:
+  # geotoad -x myfindgpx -o myfinds.gpx -z -q user $USERNAME
   'myfindgpx'    => {
     'ext'        => 'gpx',
     'mime'    => 'text/ascii',
