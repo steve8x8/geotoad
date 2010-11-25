@@ -284,17 +284,21 @@ class SearchCache
       #<IMG src="./gc_files/8.gif" alt="Unknown Cache" width="32" height="32"></A>
       when /WptTypes\/[\w].*?alt=\"(.*?)\"/
         full_type = $1
-        cache['fulltype'] = full_type
-        debug "Creating short type for #{full_type}"
-        cache['type'] = full_type.split(' ')[0].downcase.gsub(/\-/, '')
-        # two special cases: "Cache In Trash Out" and "Lost and Found"
-        case full_type
-        when /Cache In Trash Out/
-          cache['type'] = 'cito'
-        when /Lost [Aa]nd Found/
-          cache['type'] = 'lost+found'
+        # there may be more than 1 match, don't overwrite
+        if cache['fulltype']
+          debug "Not overwriting \"#{cache['fulltype']}\"(#{cache['type']} with \"#{full_type}\""
+        else
+          cache['fulltype'] = full_type
+          cache['type'] = full_type.split(' ')[0].downcase.gsub(/\-/, '')
+          # two special cases: "Cache In Trash Out" and "Lost and Found"
+          case full_type
+          when /Cache In Trash Out/
+            cache['type'] = 'cito'
+          when /Lost [Aa]nd Found/
+            cache['type'] = 'lost+found'
+          end
+          debug "short type=#{cache['type']} for #{full_type}"
         end
-        debug "type=#{cache['type']}"
         cache['mdays'] = -1
 
       # trackables: all in one separate line, usually after the cache type line
@@ -471,8 +475,9 @@ class SearchCache
           if @query_type == "users"
             @waypoints[wid]['visitors'].push(@key.downcase)
           end
-          cache.clear
         end
+        # clear cache even if there's no wid (yet)
+        cache.clear
 
       when /^\<input type=\"hidden\" name=\"(.*?)\".*value=\"(.*?)\" \/\>/
         debug "found hidden post variable: #{$1}"
