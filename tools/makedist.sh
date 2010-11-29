@@ -14,12 +14,14 @@ base_dir=`pwd`
 src_dir="/tmp/namebench-$$"
 svn checkout http://geotoad.googlecode.com/svn/trunk/ $src_dir
 cd $src_dir
+svn log >ChangeLog.txt
 
 VERSION=`cat VERSION`
 DISTNAME="geotoad-$VERSION"
 DEST="${base_dir}/dist"
 GENERIC_DIR=$DEST/$DISTNAME
 GENERIC_PKG="${GENERIC_DIR}.zip"
+GENERIC_TGZ="${GENERIC_DIR}.tar.gz"
 
 MAC_DIR="$DEST/GeoToad for Mac"
 MAC_PKG="$DEST/${DISTNAME}_MacOSX.dmg"
@@ -46,6 +48,7 @@ rm $GENERIC_DIR/*.command
 ln -s geotoad.rb geotoad
 cd "$DEST"
 zip -r "$GENERIC_PKG" "$DISTNAME"
+tar zcf "$GENERIC_TGZ" "$DISTNAME"
 
 # Mac OS X
 if [ -d "/Applications" ]; then
