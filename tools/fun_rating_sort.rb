@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 # $Id$
 
 fun = YAML::load( File.open( 'good.txt' ) )
