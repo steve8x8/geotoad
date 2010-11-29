@@ -96,7 +96,7 @@ class ShadowFetch
     end
 
     # make a friendly filename
-    localfile.gsub!(/[=\?\*\%\&\$:\-\.]/, "_")
+    localfile.gsub!(/[^\/\w\.\-]/, "_")
     localfile.gsub!(/_+/, "_")
     if $CACHE_DIR
       localfile = $CACHE_DIR + localfile;
