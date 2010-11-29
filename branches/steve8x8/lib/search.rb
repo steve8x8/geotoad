@@ -475,6 +475,9 @@ class SearchCache
           if @query_type == "users"
             @waypoints[wid]['visitors'].push(@key.downcase)
           end
+
+          # cache counter (1..n) - need that to reconstruct search order
+          @waypoints[wid]['index'] = @waypoints.length
         end
         # clear cache even if there's no wid (yet)
         cache.clear

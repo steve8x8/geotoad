@@ -413,4 +413,67 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
       "</wpt>\r\n",
     'templatePost'    => "</gpx>\r\n"
   },
+  # myfinds (Steve8x8) - use as follows:
+  # geotoad -x myfindgpx -o myfinds.gpx -z -q user $USERNAME
+  'myfindgpx'    => {
+    'ext'        => 'gpx',
+    'mime'    => 'text/ascii',
+    'desc'    => 'GPX Geocaching XML (my finds)',
+    'templatePre' => "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n" +
+      "<gpx xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" version=\"1.0\" creator=\"GeoToad\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd http://www.groundspeak.com/cache/1/0/1 http://www.groundspeak.com/cache/1/0/1/cache.xsd\" xmlns=\"http://www.topografix.com/GPX/1/0\">\r\n" +
+      "<name>My Finds Pocket Query</name>\r\n" +
+      "<desc><%outEntity.title%></desc>\r\n" +
+      "<author>GeoToad <%outEntity.version%></author>\r\n" +
+      "<email>geotoad@googlegroups.com</email>\r\n" +
+      "<time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S")  + ".000Z</time>\r\n" +
+      "<keywords>cache, geocache, groundspeak, geotoad</keywords>\r\n",
+
+    'templateWP'    => "<wpt lat=\"<%out.latdatapad5%>\" lon=\"<%out.londatapad5%>\">\r\n" +
+      "  <time><%out.cdate%>T08:00:00Z</time>\r\n" +
+      "  <name><%outEntity.id%></name>\r\n" +
+      "  <desc><%wpEntity.name%> by <%wpEntity.creator%>, <%wp.fulltype%> (<%wp.difficulty%>/<%wp.terrain%>)</desc>\r\n" +
+      "  <url>http://www.geocaching.com/seek/cache_details.aspx?wp=<%outEntity.wid%></url>\r\n" +
+      "  <urlname><%wpEntity.name%></urlname>\r\n" +
+      "  <sym>Geocache Found</sym>\r\n" +
+      "  <type>Geocache|<%wp.fulltype%></type>\r\n" +
+      "  <groundspeak:cache id=\"<%out.cacheID%>\" available=\"<%out.IsAvailable%>\" archived=\"<%out.IsArchived%>\" xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0/1\">\r\n" +
+      "  <groundspeak:name><%wpEntity.name%></groundspeak:name>\r\n" +
+      "  <groundspeak:placed_by><%wpEntity.creator%></groundspeak:placed_by>\r\n" +
+      "  <groundspeak:owner id=\"<%wpEntity.creator_id%>\"><%wpEntity.creator%></groundspeak:owner>\r\n" +
+      "  <groundspeak:type><%wp.fulltype%></groundspeak:type>\r\n" +
+      "  <groundspeak:container><%wp.size%></groundspeak:container>\r\n" +
+      "  <groundspeak:difficulty><%wp.difficulty%></groundspeak:difficulty>\r\n" +
+      "  <groundspeak:terrain><%wp.terrain%></groundspeak:terrain>\r\n" +
+      "  <groundspeak:country><%wpEntity.country%></groundspeak:country>\r\n" +
+      "  <groundspeak:state><%wpEntity.state%></groundspeak:state>\r\n" +
+      "  <groundspeak:attributes>\r\n" +
+      "<%out.xmlAttrs%>" +
+      "  </groundspeak:attributes>\r\n" +
+      "  <groundspeak:short_description html=\"True\">short</groundspeak:short_description>\r\n" +
+      "  <groundspeak:long_description html=\"True\">long</groundspeak:long_description>\r\n" +
+      "  <groundspeak:encoded_hints>hint</groundspeak:encoded_hints>\r\n" +
+      "  <groundspeak:logs>\r\n" +
+      "    <groundspeak:log id=\"1\">\r\n" +
+      "      <groundspeak:date><%out.mdate%>T08:00:00Z</groundspeak:date>\r\n" +
+      "      <groundspeak:type>Found it</groundspeak:type>\r\n" +
+      "      <groundspeak:finder id=\"666\"><%outEntity.username%></groundspeak:finder>\r\n" +
+      "      <groundspeak:text encoded=\"False\"></groundspeak:text>\r\n" +
+      "    </groundspeak:log>\r\n" +
+      "  </groundspeak:logs>\r\n" +
+      "  <groundspeak:travelbugs />\r\n" +
+      "  </groundspeak:cache>\r\n" +
+      "</wpt>\r\n",
+    'templatePost'    => "</gpx>\r\n"
+  },
+  'myfindlist'    => {
+    'ext'        => 'lst',
+    'mime'    => 'text/plain',
+    'desc'    =>     'whitespace delimited, detailed table (my finds)',
+    'templatePre' => "",
+    'templateWP'    => "<%out.id%>\t" +
+      "<%out.latdatapad5%> <%out.londatapad5%> " +
+      "<%wp.type%>\t" +
+      "<%out.mdate%> " +
+      "\n"
+  },
 }

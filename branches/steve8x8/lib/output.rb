@@ -610,7 +610,9 @@ class Output
     index = '<ul>'
     symbolHash = Hash.new
 
-    @wpHash.keys.sort.each { |wid|
+    #@wpHash.keys.sort.each { |wid|
+    # sort GC1 < GCZZZZ < GC10000 < GCZZZZZ < GC100000
+    @wpHash.keys.sort{|a,b| a[2..-1].rjust(6)<=>b[2..-1].rjust(6)}.each { |wid|
       cache = @wpHash[wid]
       symbolHash[wid] = ''
       if (@wpHash[wid]['travelbug'])
@@ -997,8 +999,26 @@ class Output
       symbolHash = nil
     end
 
+    # restore [backwards] search order from cache counter
+    wpSearchOrder = Array.new
+    @wpHash.keys.each { |wid|
+      wpSearchOrder[@wpHash[wid]['index']] = wid
+    }
+    # remove unset elements ([0])
+    wpSearchOrder.compact!
+    debug "WPs in search order: #{wpSearchOrder.inspect}"
+    # use wpSearchOrder.reverse_each{} for reverse search order
+
     counter = 0
-    @wpHash.keys.sort.each { |wid|
+    #@wpHash.keys.sort.each { |wid|
+    (
+     (@outputType =~ /^myfind/) ?
+      # special case: myfind* requires reverse search order
+      (wpSearchOrder.reverse)
+      :
+      # sort GC1 < GCZZZZ < GC10000 < GCZZZZZ < GC100000
+      (@wpHash.keys.sort{|a,b| a[2..-1].rjust(6)<=>b[2..-1].rjust(6)})
+    ).each { |wid|
       cache = @wpHash[wid]
       debug "--- Output loop: #{wid} - #{cache['name']} by #{cache['creator']}"
       counter += 1
