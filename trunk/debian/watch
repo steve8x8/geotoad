@@ -1,4 +1,4 @@
 version=3
-# yes, it's still a ZIP file, no .tar.gz
-http://code.google.com/p/geotoad/downloads/list .*/geotoad-([0-9.]+).zip
-#http://code.google.com/p/geotoad/downloads/list .*/geotoad-([0-9.]+).tar.gz
+# it's no longer a ZIP file, it's a tarball now
+#http://code.google.com/p/geotoad/downloads/list .*/geotoad-([0-9.]+).zip
+http://code.google.com/p/geotoad/downloads/list .*/geotoad-([0-9.]+).tar.gz
