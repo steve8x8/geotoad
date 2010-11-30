@@ -498,7 +498,7 @@ class CacheDetails
   def removeSpam(text)
     # <a href="http://s06.flagcounter.com/more/NOk"><img src= "http://s06.flagcounter.com/count/NOk/bg=E2FFC4/txt=000000/border=CCCCCC/columns=4/maxflags=32/viewers=0/labels=1/pageviews=1/" alt="free counters" /></a>
     #removed = text.gsub(/\<a href.*?flagcounter.*?\<\/a\>/m, '')
-    removed = text.gsub(/\<a href[^\>]*flagcounter[^\>]*\>\<img src[^\>]*\>\<\/a\>/m, '')
+    removed = text.gsub(/\<a href[^\>]*\>\<img src[^\>]*(flagcounter|gccounter|andyhoppe\.com\/count|gcstat\.selfip|gcvote)[^\>]*\>\<\/a\>/m, '')
     removed.gsub!(/\<\/*center\>/, '')
     if removed != text
       debug "Removed spam from: ----------------------------------"
