@@ -683,10 +683,19 @@ class Output
 
   def decryptHint(hint)
     if hint
-      decrypted = hint.tr('A-MN-Z', 'N-ZA-M').tr('a-mn-z', 'n-za-m')
-      # Oops, we don't need to decrypt the text within brackets - it's raw.
-      decrypted.gsub!(/(\&.*?;)/) { $1.tr('A-MN-Z', 'N-ZA-M').tr('a-mn-z', 'n-za-m') }
-      decrypted.gsub!(/(\[.*?\])/) { $1.tr('A-MN-Z', 'N-ZA-M').tr('a-mn-z', 'n-za-m') }
+      # split hint into bracketed and unbracketed fragments
+      decrypted = hint.gsub(/\[/, '\n[').gsub(/\]/, ']\n').split('\n').collect { |x|
+        debug "hint fragment #{x}"
+        if x[0..0] != '['
+          # only decrypt text not within brackets
+          x.tr!('A-MN-Za-mn-z', 'N-ZA-Mn-za-m')
+          # re-"en"crypt HTML entities
+          x.gsub!(/(\&.*?;)/) { $1.tr('A-MN-Za-mn-z', 'N-ZA-Mn-za-m') }
+          debug "decrypted #{x}"
+        end
+        # join decrypted and unchanged fragments
+        x }.join
+      debug "full hint: #{decrypted}"
       return decrypted
     else
       return ''
