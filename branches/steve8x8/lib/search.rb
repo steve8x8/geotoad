@@ -43,8 +43,8 @@ class SearchCache
     when 'coord'
       @query_type = 'coord'
       supports_distance = true
-      lat_dir, lat_h, lat_ms, long_dir, long_h, long_ms, lat_ns, long_ew = parseCoordinates(key)
-      @search_url = @@base_url + '?lat_ns=' + lat_ns.to_s + '&lat_h=' + lat_h + '&lat_mmss=' + (lat_ms==''?'0':lat_ms) + '&long_ew=' + long_ew.to_s + '&long_h=' + long_h + '&long_mmss=' + (long_ms==''?'0':long_ms)
+      lat, lon = parseCoordinates(key)
+      @search_url = @@base_url + "?lat=#{lat}&lng=#{lon}"
 
     when 'user'
       @query_type = 'ul'
@@ -75,33 +75,78 @@ class SearchCache
     return @query_type
   end
 
-  def parseCoordinates(key)
-    # This regular expression should probably handle any kind of mess. Thanks sbrynen!
-    re = /^([ns-]?)\s*([\d\.]+)\W*([\d\.]*)[\s,]+([ew-]?)\s*([\d\.]+)\W*([\d\.]+)/i
-    md = re.match(key)
-    if ! md
-      displayError "Bad format in #{key}! Try something like \"N56 44.392 E015 52.780\" instead"
-    end
+  def parseCoordinates(input)
+    # kinds of coordinate representations to parse (cf. geo-*):
+    #
+    #        -93.49130       DegDec (decimal degrees, simple format)
+    #        W93.49130       DegDec (decimal degrees)
+    #        -93 29.478      MinDec (decimal minutes, caching format)
+    #        W93 29.478      MinDec (decimal minutes)
+    #        -93 29 25       DMS
+    #        W 93 29 25       DMS
+    # not yet (":" is separator for input)
+    #        -93:29.478      MinDec (decimal minutes, gccalc format)
+    #        W93:29.478      MinDec (decimal minutes)
+    #
+    # we've got two of them separated by whitespace and/or comma!
 
-    lat_dir = md[1]
-    lat_h = md[2]
-    lat_ms = md[3]
-    long_dir = md[4]
-    long_h = md[5]
-    long_ms = md[6]
-    lat_ns = 1
-    long_ew = 1
+    # older version of parseCoordinates() returned big array
+    # newer version will return latitude and longitude only
+    # for a while, both formats will be filled in
+    # ToDo: activate proper code path
 
-    if lat_dir == 's' || lat_dir == 'S' || lat_dir == '-'
-      lat_ns = -1
+    # replace NESW by signs, remove extra space, colon/comma by blank
+    key = input.upcase.tr(':,', '  ').gsub(/[NE\+]\s*/, '').gsub(/[SW-]\s*/, '-')
+    # Both coordinates must have same format. Count number of fields.
+    case key.split("\s").length #may be 2, 4, 6
+    when 2 # Deg
+      if key =~ /(-?)([\d\.]+)\W+(-?)([\d\.]+)/
+        lat = $2.to_f
+        if $1 == '-'
+          lat = -lat
+        end
+        lon = $4.to_f
+        if $3 == '-'
+          lon = -lon
+        end
+      else
+        displayError "Cannot parse #{input} as two degree values!"
+      end
+    when 4 # Deg Min
+      if key =~ /(-?)([\d\.]+)\W+([\d\.]+)\W+(-?)([\d\.]+)\W+([\d\.]+)/
+        lat = $2.to_f + $3.to_f/60.0
+        if $1 == '-'
+          lat = -lat
+        end
+        lon = $5.to_f + $6.to_f/60.0
+        if $4 == '-'
+          lon = -lon
+        end
+      else
+        displayError "Cannot parse #{input} as two degree/minute values!"
+      end
+    when 6 # Deg Min Sec
+      if key =~ /(-?)([\d\.]+)\W+([\d\.]+)\W+([\d\.]+)\W+(-?)([\d\.]+)\W+([\d\.]+)\W+([\d\.]+)/
+        lat = $2.to_f + $3.to_f/60.0 + $4.to_f/3600.0
+        if $1 == '-'
+          lat = -lat
+        end
+        lon = $6.to_f + $7.to_f/60.0 + $8.to_f/3600.0
+        if $5 == '-'
+          lon = -lon
+        end
+      else
+        displayError "Cannot parse #{input} as two degree/minute/second values!"
+      end
+    else
+      # did not recognize format
+      displayError "Bad format in #{input}: #{key.split("\s").length} fields found."
     end
-
-    if long_dir == 'w' || long_dir == 'W' || long_dir == '-'
-      long_ew = -1
-    end
-    displayMessage "Coordinates have been parsed as latitude #{lat_dir} #{lat_h}'#{lat_ms}, longitude #{long_dir} #{long_h}'#{long_ms}"
-    coords = [lat_dir, lat_h, lat_ms, long_dir, long_h, long_ms, lat_ns, long_ew]
-    return coords
+    # sub-meter precision
+    lat = sprintf("%.7f", lat)
+    lon = sprintf("%.7f", lon)
+    displayMessage "Coordinates \"#{input}\" parsed as latitude #{lat}, longitude #{lon}"
+    return lat, lon
   end
 
   def getResults()
