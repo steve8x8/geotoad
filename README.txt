@@ -45,7 +45,7 @@ You will then see a screen that looks similar to this:
 :::                // GeoToad 3.13.0 Text User Interface //                :::
 ==============================================================================
 (1)  GC.com login [REQUIRED         ] | (2)  search type          [location  ]
-(3)  location     [roswell, ga      ] | (4)  distance maximum            [10 ]
+(3)  location     [roswell, ga      ] | (4)  distance maximum (mi)     [10   ]
                                       |
 (5)  difficulty           [2.0 - 5.0] | (6)  terrain               [0.0 - 5.0]
 (7)  fun factor           [1.5 - 5.0] | (8)  cache size            [any - any]
