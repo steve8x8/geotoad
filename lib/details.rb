@@ -373,9 +373,12 @@ class CacheDetails
         debug "Hint contains HTML: #{hint}"
       end
       hint.gsub!(/^ +/, '')
-      hint.gsub!(/[\r\n]+/, '|')
-      hint.gsub!(/\<[bB][rR] *\/?\>/, '|')
+      # remove whitespace/linebreaks
+      hint.gsub!(/\s*[\r\n]+\s*/, '|')
+      hint.gsub!(/\s*\<[bB][rR] *\/?\>\s*/, '|')
       hint.gsub!('<div>', '')
+      # only one linebreak
+      hint.gsub!(/\|\|+/, '|')
       cache['hint'] = hint
       debug "got hint: [#{hint}]"
     end
