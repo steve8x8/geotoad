@@ -85,7 +85,20 @@ class GeoToad
 
     @formatType        = @option['format'] || 'gpx'
     @cacheExpiry       = @option['cacheExpiry'].to_i || 3
-    @distanceMax       = @option['distanceMax'] || 10
+    # there is no "usemetric" cmdline option but the TUI may set it
+    @useMetric         = @option['usemetric']
+    # distanceMax from command line can contain the unit
+    @distanceMax       = @option['distanceMax'].to_f || 10
+    if @option['distanceMax'] =~ /(mi|km)/
+      @useMetric     = ($1 == "km" || nil)
+      # else leave usemetric unchanged
+    end
+    if @useMetric
+      @distanceMax    /= 1.609344
+      # round to multiple of ~5ft
+      @distanceMax     = sprintf("%.3f", @distanceMax).to_f
+    end
+    debug "Internally using distance #{@distanceMax} miles."
     @queryTitle        = "GeoToad: #{@queryArg}"
     @defaultOutputFile = "gt_" + @queryArg.to_s
 
