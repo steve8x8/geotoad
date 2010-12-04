@@ -1021,12 +1021,9 @@ class Output
     counter = 0
     #@wpHash.keys.sort.each { |wid|
     (
-     (@outputType =~ /^myfind/) ?
-      # special case: myfind* requires reverse search order
-      (wpSearchOrder.reverse)
-      :
-      # sort GC1 < GCZZZZ < GC10000 < GCZZZZZ < GC100000
-      (@wpHash.keys.sort{|a,b| a[2..-1].rjust(6)<=>b[2..-1].rjust(6)})
+     # special case: myfind* requires reverse search order
+     # otherwise, sort GC1 < GCZZZZ < GC10000 < GCZZZZZ < GC100000
+     (@outputType =~ /^myfind/) ? (wpSearchOrder.reverse) : (@wpHash.keys.sort{|a,b| a[2..-1].rjust(6)<=>b[2..-1].rjust(6)})
     ).each { |wid|
       cache = @wpHash[wid]
       debug "--- Output loop: #{wid} - #{cache['name']} by #{cache['creator']}"
