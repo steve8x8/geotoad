@@ -18,9 +18,9 @@ cat $FILE \
 | cut -d_ -f4- \
 | sed 's~\([^0-9]*\)\([0-9][0-9]*\) \(.*\)~\2 \1 \3~' \
 | sort -n \
+| tr '[A-Z]' '[a-z]' \
 | awk '
     BEGIN{print "    attrmap = {"}
     {if($1)printf("      %-19s=> %d,\n", "\"" $2 "\"", $1)}
     END{print "    }"}
     '
-
