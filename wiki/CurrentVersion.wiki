@@ -1,10 +1,10 @@
 #labels Deprecated
-version=3.13.0
+version=3.14.1
 {{{
-- New "list" output template, for simple ASCII output
-- Now uses GPX 1.0.1 for output, with attributes
-- Added support for outputting additional waypoints
-- Better support for Cash In Trash Out and Lost & Found caches
-- Proper generation of numeric cache ID's
-- Many other minor improvements and bug fixes
+- Support for distances in km
+- Support for travelbug details in GPX
+- New output formats for statistics: myfindgpx and myfindlist
+- Improved EasyName generation
+- Improved coordinate parsing
+- Other minor bugfixes and enhancements
 }}}
