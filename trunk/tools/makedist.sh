@@ -54,6 +54,8 @@ tar zcf "$GENERIC_TGZ" "$DISTNAME"
 if [ -d "/Applications" ]; then
   echo "Creating $MAC_DIR"
   rm "$MAC_DIR/geotoad"
+  rm "$MAC_DIR/geotoad.1"
+  rm -Rf "$MAC_DIR/debian"
   cd "$MAC_DIR"
   sips -i data/bufos-icon.icns && DeRez -only icns data/bufos-icon.icns > data/icns.rsrc
   Rez -append data/icns.rsrc -o "GeoToad for Mac.command"
@@ -71,6 +73,8 @@ fi
 if [ ! -x "/usr/local/bin/flip" -o ! -x "/usr/bin/flip" ]; then
   echo "Creating $WIN_DIR"
   cp -Rp "$GENERIC_DIR" "$WIN_DIR"
+  rm "$WIN_DIR/geotoad.1"
+  rm -Rf "$WIN_DIR/debian"
   cd "$WIN_DIR"
   mkdir compile
   mv *.rb lib interface data compile
