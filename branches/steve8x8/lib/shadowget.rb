@@ -141,12 +141,12 @@ class ShadowFetch
     if (File.exists?(localfile))
       age = time.to_i - File.mtime(localfile).to_i
       if (age > ttl)
-        debug "local cache is #{age} old, older than #{@localExpiry}"
+        debug "local cache is #{age} old, older than #{ttl}"
       elsif (File.size(localfile) < 6)
         debug "local cache appears corrupt. removing.."
         File.unlink(localfile)
       else
-        debug "local cache is only #{age} old (#{@localExpiry}), using local file."
+        debug "local cache is only #{age} old (#{ttl}), using local file."
         @data = fetchLocal(localfile)
         @@src='local'
         # short-circuit out of here!
