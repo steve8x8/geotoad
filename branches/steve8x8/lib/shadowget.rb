@@ -128,7 +128,7 @@ class ShadowFetch
 
 
   # gets the file
-  def fetch
+  def fetch(ttl = @localExpiry)
     @@src = nil
     time = Time.now
     localfile = cacheFile(@url)
@@ -140,7 +140,7 @@ class ShadowFetch
     # expiry?
     if (File.exists?(localfile))
       age = time.to_i - File.mtime(localfile).to_i
-      if (age > @localExpiry)
+      if (age > ttl)
         debug "local cache is #{age} old, older than #{@localExpiry}"
       elsif (File.size(localfile) < 6)
         debug "local cache appears corrupt. removing.."
