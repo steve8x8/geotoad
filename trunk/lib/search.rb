@@ -415,7 +415,9 @@ class SearchCache
 
       # creation date: date alone on line
       #  9 Sep 06
-      when /^ +(\d+ \w{3} \d+)\s?$/
+      # may have a "New!" flag next to it
+      #  6 Dec 10 <img src="/images/new3.gif" alt="New!" title="New!" />
+      when /^ +(\d+ \w{3} \d+)(\s+\<img [^\>]* title="New!" \/\>)?\s?$/
         debug "create date: #{$1} at line: #{line}"
         cache['ctime'] = parseDate($1)
         cache['cdays'] = daysAgo(cache['ctime'])
