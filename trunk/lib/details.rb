@@ -411,7 +411,12 @@ class CacheDetails
     end
 
     comment_text = comments.collect{ |x| x['text'] }
+    # may return NaN when comment_text is empty
     ff_score = @funfactor.calculate_score_from_list(comment_text)
+    # replace NaN by zero
+    if ff_score.nan?
+      ff_score = 0.0
+    end
     # A primitive form of approximate rounding
     cache['funfactor'] = (ff_score * 20).round / 20.0
     debug "Funfactor score: #{cache['funfactor']}"
