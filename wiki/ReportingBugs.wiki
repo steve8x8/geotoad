@@ -21,5 +21,6 @@ To make it work for you again, we therefore need some input to be able to identi
   * If you are using _non-standard settings_ with gc.com's web pages (language, measurement units) that may also be important.
   * If the problem cannot be reproduced, the culprit seems to be the old cache file. Can you compare the two versions?
 
+  * Before reporting an issue, please check with the [https://code.google.com/p/geotoad/source/list SVN browser] whether there might be a patch addressing your problem. Show-stopper fixes usually are committed directly to the trunk; development work takes also place in branches. Whether a commit went to trunk or branch can be seen by selecting it. You are welcome to review the changes, and leave your comments and suggestions (does this work? check)
 
 (to be extended)
