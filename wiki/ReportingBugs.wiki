@@ -1,0 +1,25 @@
+#summary Hints for bug reports
+
+= Introduction =
+
+Some hints for reporting bugs.
+
+
+
+= Details =
+
+GeoToad is supposed to work.
+If it doesn't, there's a variety of possible reasons.
+To make it work for you again, we therefore need some input to be able to identify the problem.
+
+  * Always try to reproduce the problem, and allow us to reproduce it - the TUI writes out a _sample command line_ that will be helpful.
+  * Toggle _verbose output_ on (using "v" in the TUI, or "-v"/"--verbose" from the command line), and write the (copious!) output to a file.
+  * Check for the last occurrence of *"wid = "* in the debugging output. A few lines before, there should be a line *"cachefile: ..."*.
+  * Rename that file in your cache. Do _not remove_ it, we might need it later.
+  * Rename the debug output file too, and run again.
+  * If the problem persists, we need *the last output lines*, starting with the "cachefile:" line, including the error thrown by Ruby.
+  * If you are using _non-standard settings_ with gc.com's web pages (language, measurement units) that may also be important.
+  * If the problem cannot be reproduced, the culprit seems to be the old cache file. Can you compare the two versions?
+
+
+(to be extended)
