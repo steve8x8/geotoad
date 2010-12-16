@@ -416,7 +416,7 @@ class CacheDetails
     comments, last_find_date, fun_factor, visitors = parseComments(data, cache['creator'])
     cache['visitors'] = cache['visitors'] + visitors
     cache['comments'] = comments
-    if comments
+    if comments.length > 0
       cache['last_find_type'] = comments[0]['type']
       cache['last_find_days'] = daysAgo(comments[0]['date'])
     end
@@ -424,6 +424,11 @@ class CacheDetails
     if cache['mdays'] == -1 and last_find_date
       cache['mtime'] = last_find_date
       cache['mdays'] = daysAgo(cache['mtime'])
+    end
+
+    if not cache['ctime']
+      cache['cdays'] = -1
+      cache['ctime'] = Time.now
     end
 
     comment_text = comments.collect{ |x| x['text'] }
