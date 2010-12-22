@@ -443,7 +443,7 @@ class SearchCache
         debug "cacheDistance=#{cache['distance']}mi dir=#{cache['direction']}"
 
       # <a href="/seek/cache_details.aspx?guid=c9f28e67-5f18-45c0-90ee-76ec8c57452f">Yasaka-Shrine@Zerosen</a>
-      when /cache_details.aspx\?guid=(.*?)\">(.*?)\<\/a\>/
+      when /cache_details.aspx\?guid=([0-9a-f-]*)[^\>]*>(.*?)\<\/a\>/
         cache['guid']=$1
         name = $2
         debug "Found cache details link for #{name}"
