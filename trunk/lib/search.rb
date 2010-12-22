@@ -454,9 +454,33 @@ class SearchCache
         debug "cacheDistance=#{cache['distance']}mi dir=#{cache['direction']}"
 
       # <a href="/seek/cache_details.aspx?guid=c9f28e67-5f18-45c0-90ee-76ec8c57452f">Yasaka-Shrine@Zerosen</a>
-      when /cache_details.aspx\?guid=([0-9a-f-]*)[^\>]*>(.*?)\<\/a\>/
-        cache['guid']=$1
-        name = $2
+      # now (2010-12-22, one line!):
+      # <a href="/seek/cache_details.aspx?guid=ecfd0038-8e51-4ac8-a073-1aebe7c10cbc" class="lnk">
+      # ...<img src="http://www.geocaching.com/images/wpttypes/sm/3.gif" alt="Multi-cache" title="Multi-cache" /></a> 
+      # ... <a href="/seek/cache_details.aspx?guid=ecfd0038-8e51-4ac8-a073-1aebe7c10cbc" class="lnk  Strike"><span>Besinnungsweg</span></a>
+      #when /cache_details.aspx\?guid=([0-9a-f-]*)[^\>]*>(.*?)\<\/a\>/
+      when /(<img[^\>]*alt=\"(.*?)\".*)?cache_details.aspx\?guid=([0-9a-f-]*)([^\>]*)>\<span\>(.*?)\<\/span\>\<\/a\>/
+        debug "found type=#{$2} guid=#{$3} name=#{$5}"
+        cache['guid'] = $3
+        strike = $4
+        name = $5
+      # type is also in here!
+        full_type = $2
+        # there may be more than 1 match, don't overwrite
+        if cache['fulltype']
+          debug "Not overwriting \"#{cache['fulltype']}\"(#{cache['type']} with \"#{full_type}\""
+        else
+          cache['fulltype'] = full_type
+          cache['type'] = full_type.split(' ')[0].downcase.gsub(/\-/, '')
+          # two special cases: "Cache In Trash Out" and "Lost and Found"
+          case full_type
+          when /Cache In Trash Out/
+            cache['type'] = 'cito'
+          when /Lost [Aa]nd Found/
+            cache['type'] = 'lost+found'
+          end
+          debug "short type=#{cache['type']} for #{full_type}"
+        end
         debug "Found cache details link for #{name}"
 
         if name =~ /class=\"Warning/ or name =~ /class=\"OldWarning/
@@ -466,10 +490,9 @@ class SearchCache
           cache['archived'] = false
         end
 
-        if name =~ /Strike"\>(.*?)\<\//
+        if strike =~ /Strike/
           cache['disabled'] = true
           debug "#{name} appears to be disabled"
-          name=$1
         else
           cache['disabled'] = false
         end
