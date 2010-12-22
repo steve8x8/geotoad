@@ -383,6 +383,17 @@ class SearchCache
           cache['travelbug'] = trackables
         end
 
+      # new travelbug list 2010-12-22
+      # single:
+      # <a id="ctl00_ContentBody_dlResults_ctl01_uxTravelBugList" class="tblist" data-tbcount="1" data-id="1763522" data-guid="ecfd0038-8e51-4ac8-a073-1aebe7c10cbc" href="javascript:void();"><img src="http://www.geocaching.com/images/wpttypes/sm/21.gif" alt="Travel Bug Dog Tag" title="Travel Bug Dog Tag" /></a>
+      # multiple:
+      # <a id="ctl00_ContentBody_dlResults_ctl06_uxTravelBugList" class="tblist" data-tbcount="3" data-id="1622703" data-guid="8fc9f301-99fe-4933-90f7-48617e446058" href="javascript:void();"><img src="/images/WptTypes/sm/tb_coin.gif" /></a>
+      # this is better handled in cdpf parsing (details.rb)
+      # but we need an entry for filtering!
+      when /uxTravelBugList/
+        debug "trackables flagged: #{line}"
+        cache['travelbug'] = "yes"
+
       # (2/1)<br />
       # (1/1.5)<br />
       when /\(([-\d\.]+)\/([-\d\.]+)\)\<br/
