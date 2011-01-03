@@ -342,6 +342,9 @@ class SearchCache
           when /Lost [Aa]nd Found/
             cache['type'] = 'lost+found'
           end
+          if full_type =~ /Event/
+            cache['event'] = true
+          end
           debug "short type=#{cache['type']} for #{full_type}"
         end
         cache['mdays'] = -1

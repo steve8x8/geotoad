@@ -251,6 +251,9 @@ class CacheDetails
             # spelling to be confirmed!
             cache['type'] = 'lost+found'
           end
+          if full_type =~ /Event/
+            cache['event'] = true
+          end
           debug "stype=#{cache['type']} full_type=#{cache['fulltype']}"
         end
       end
@@ -262,6 +265,9 @@ class CacheDetails
         if $1 != 'N/A'
           cache['ctime'] = parseDate($1)
           cache['cdays'] = daysAgo(cache['ctime'])
+          if line =~ /Event Date:/
+            cache['event'] = true
+          end
           debug "ctime=#{cache['ctime']} cdays=#{cache['cdays']}"
         end
       end
