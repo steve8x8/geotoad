@@ -5,7 +5,7 @@ module GTVersion
 
   def self.version
     if MY_VERSION !~ /^\d/
-      return '3.13-CURRENT'
+      return '(CURRENT)'
     else
       return MY_VERSION
     end
