@@ -166,13 +166,13 @@ class CacheDetails
       "landf"            => 45,
       "rv"               => 46,
       "field_puzzle"     => 47,
-      "UV"               => 48,
+      "uv"               => 48,
       "snowshoes"        => 49,
       "skiis"            => 50,
       "s-tool"           => 51,
       "nightcache"       => 52,
       "parkngrab"        => 53,
-      "AbandonedBuilding"=> 54,
+      "abandonedbuilding"=> 54,
       "hike_short"       => 55,
       "hike_med"         => 56,
       "hike_long"        => 57,
@@ -188,8 +188,8 @@ class CacheDetails
     what = text.gsub(/(.*)-.*/, "\\1") # only strip "yes" or "no"!
     how = text.gsub(/^.*-/, "")
     # get mapping
-    attrid = attrmap[what]
-    attrval = (how=="yes")?1:0
+    attrid = attrmap[what.downcase]
+    attrval = (how.downcase=="yes")?1:0
     if not attrid
       # we may have missed an addition or change to the list
       debug "Unknown attribute #{text}, please report!"
