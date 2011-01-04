@@ -1011,7 +1011,12 @@ class Output
     # restore [backwards] search order from cache counter
     wpSearchOrder = Array.new
     @wpHash.keys.each { |wid|
-      wpSearchOrder[@wpHash[wid]['index']] = wid
+      index = @wpHash[wid]['index']
+      # in "-q wid" mode, there's no index
+      if not index
+        index = 1
+      end
+      wpSearchOrder[index] = wid
     }
     # remove unset elements ([0])
     wpSearchOrder.compact!
