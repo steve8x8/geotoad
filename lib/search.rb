@@ -395,7 +395,7 @@ class SearchCache
       # but we need an entry for filtering!
       when /uxTravelBugList/
         debug "trackables flagged: #{line}"
-        cache['travelbug'] = "yes"
+        cache['travelbug'] = "Unspecified Trackable"
 
       # (2/1)<br />
       # (1/1.5)<br />
