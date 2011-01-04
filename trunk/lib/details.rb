@@ -433,7 +433,7 @@ class CacheDetails
     comments, last_find_date, fun_factor, visitors = parseComments(data, cache['creator'])
     cache['visitors'] = cache['visitors'] + visitors
     cache['comments'] = comments
-    if comments
+    if comments.length > 0
       cache['last_find_type'] = comments[0]['type']
       cache['last_find_days'] = daysAgo(comments[0]['date'])
     end
@@ -442,6 +442,23 @@ class CacheDetails
       cache['mtime'] = last_find_date
       cache['mdays'] = daysAgo(cache['mtime'])
     end
+
+    if not cache['ctime']
+      cache['cdays'] = -1
+      cache['ctime'] = Time.now
+    end
+
+    # more patchwork for inaccessible stuff
+    if not cache['difficulty']
+      cache['difficulty'] = 1
+    end
+    if not cache['terrain']
+      cache['terrain'] = 1
+    end
+    if not cache['size']
+      cache['size'] = "not chosen"
+    end
+
 
     comment_text = comments.collect{ |x| x['text'] }
     # may return NaN when comment_text is empty
