@@ -545,11 +545,10 @@ class GeoToad
 
     # if we have selected the name of the output file, use it.
     # otherwise, take our invented name, sanitize it, and slap a file extension on it.
-    filename = @option['output'].dup
-    displayInfo "Output filename: #{filename}"
     outputFile = nil
-
-    if filename
+    if @option['output']
+      filename = @option['output'].dup
+      displayInfo "Output filename: #{filename}"
       filename.gsub!('\\', '/')
       if filename and filename !~ /\/$/
         outputFile = File.basename(filename)
