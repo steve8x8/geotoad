@@ -402,6 +402,33 @@ class CacheDetails
       cache['longdesc'] = longdesc
     end
 
+    # <h2>\n   Trackable Items</h2>\n   </div>\n   <div class="item-content">\n   (empty)\n   </div>
+    # ... <img src="http://www.geocaching.com/images/wpttypes/sm/21.gif" alt="" /> SCOUBIDOU, <img src="http://www.geocaching.com/images/wpttypes/sm/3916.gif" alt="" /> colorful kite ...
+    if data =~ /\<h.\>\s*Trackable Items\s*\<\/h.\>\s*\<\/div\>\s*\<div [^\>]*\>\s*(.*?)\s*\<\/div\>/
+      # travel bug data, all in a single line
+      line = $1
+      debug "List of trackables: #{line}"
+      trackables = ''
+      # split at icon tag, drop everything before
+      line.gsub(/^.*?\</, '').split(/\</).each { |item|
+        debug "trackable item #{item}"
+        item.gsub!(/[^\>]*\>\s*/, '')
+        item.gsub!(/[,\s]*$/, '')
+        # shorten the name a bit
+        item.gsub!(/^Geocoins:\s+/, '')
+        item.gsub!(/Travel Bug( Dog Tag)?/, 'TB')
+        item.gsub!(/Geocoin/, 'GC')
+        item.gsub!(/^The /, '')
+        debug "trackable in list #{item}"
+        trackables << item + ', '
+      }
+      if trackables.length > 0
+        trackables.gsub!(/, $/, '')
+        debug "Trackables Found: #{trackables}"
+        cache['travelbug'] = trackables
+      end
+    end
+
     # Parse the additional waypoints table. Needs additional work for non-HTML templates.
     comments, last_find_date, fun_factor, visitors = parseComments(data, cache['creator'])
     cache['visitors'] = cache['visitors'] + visitors
