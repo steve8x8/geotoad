@@ -100,7 +100,7 @@ class SearchCache
     # Both coordinates must have same format. Count number of fields.
     case key.split("\s").length #may be 2, 4, 6
     when 2 # Deg
-      if key =~ /(-?)([\d\.]+)\W+(-?)([\d\.]+)/
+      if key =~ /(-?)([\d\.]+)\W\W*?(-?)([\d\.]+)/
         lat = $2.to_f
         if $1 == '-'
           lat = -lat
@@ -113,7 +113,7 @@ class SearchCache
         displayError "Cannot parse #{input} as two degree values!"
       end
     when 4 # Deg Min
-      if key =~ /(-?)([\d\.]+)\W+([\d\.]+)\W+(-?)([\d\.]+)\W+([\d\.]+)/
+      if key =~ /(-?)([\d\.]+)\W+([\d\.]+)\W\W*?(-?)([\d\.]+)\W+([\d\.]+)/
         lat = $2.to_f + $3.to_f/60.0
         if $1 == '-'
           lat = -lat
@@ -126,7 +126,7 @@ class SearchCache
         displayError "Cannot parse #{input} as two degree/minute values!"
       end
     when 6 # Deg Min Sec
-      if key =~ /(-?)([\d\.]+)\W+([\d\.]+)\W+([\d\.]+)\W+(-?)([\d\.]+)\W+([\d\.]+)\W+([\d\.]+)/
+      if key =~ /(-?)([\d\.]+)\W+([\d\.]+)\W+([\d\.]+)\W\W*?(-?)([\d\.]+)\W+([\d\.]+)\W+([\d\.]+)/
         lat = $2.to_f + $3.to_f/60.0 + $4.to_f/3600.0
         if $1 == '-'
           lat = -lat
