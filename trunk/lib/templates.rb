@@ -14,6 +14,7 @@ $Format = {
       "name=\"<%out.id%>\" comment=\"<%wp.name%>\" " +
       "symbol=\"flag\"  display_option=\"symbol+name\"\n",
   },
+
   'easygps' => {
     'ext'        => 'loc',
     'mime'    => 'application/easygps',
@@ -24,7 +25,6 @@ $Format = {
       "<type>geocache</type><link text=\"Cache Details\"><%wp.url%></link></waypoint>",
     'templatePost'    => '</loc>',
   },
-
 
   # ** The gpx.hints be removed for GeoToad 4.0, when we use a real templating engine that can do loops **
   # GPX with GroundSpeak extended attributes, modified headers
@@ -42,7 +42,6 @@ $Format = {
       "<email>geotoad@googlegroups.com</email>\r\n" +
       "<time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S")  + ".000Z</time>\r\n" +
       "<keywords>cache, geocache, groundspeak, geotoad</keywords>\r\n",
-
     'templateWP'    => "<wpt lat=\"<%wp.latdata%>\" lon=\"<%wp.londata%>\">\r\n" +
       "  <time><%out.XMLDate%></time>\r\n" +
       "  <name><%outEntity.id%></name>\r\n" +
@@ -77,6 +76,7 @@ $Format = {
     'templatePost'    => "</gpx>\r\n"
   },
 
+  # Two templates for separate output of caches and add.wpts for GSAK use
   'gpx-gsak'    => {
     'ext'        => 'gpx',
     'mime'    => 'text/ascii',
@@ -89,7 +89,6 @@ $Format = {
       "<email>geotoad@googlegroups.com</email>\r\n" +
       "<time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S")  + ".000Z</time>\r\n" +
       "<keywords>cache, geocache, groundspeak, geotoad</keywords>\r\n",
-
     'templateWP'    => "<wpt lat=\"<%wp.latdata%>\" lon=\"<%wp.londata%>\">\r\n" +
       "  <time><%out.XMLDate%></time>\r\n" +
       "  <name><%outEntity.id%></name>\r\n" +
@@ -135,7 +134,6 @@ $Format = {
       "<email>geotoad@googlegroups.com</email>\r\n" +
       "<time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S")  + ".000Z</time>\r\n" +
       "<keywords>cache, geocache, groundspeak, geotoad</keywords>\r\n",
-
     'templateWP'    => "<%out.xmlWpts%>",
     'templatePost'    => "</gpx>\r\n"
   },
@@ -191,7 +189,6 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
       "\r\n<%wpText.longdesc%>\r\n" +
       "\r\n<%out.hint%>\r\n\r\n\r\n\r\n"
   },
-
 
   'tab'    => {
     'ext'        => 'txt',
@@ -299,6 +296,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
     'filter_src'    => 'gpx',
     'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o cetus -F OUTFILE'
   },
+
   'gpspilot' => {
     'ext'        => 'gps',
     'mime'    => 'application/gpspilot',
@@ -307,6 +305,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
     'filter_src'    => 'gpx',
     'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o dna -F OUTFILE'
   },
+
   'magnav' => {
     'ext'        => 'mgv',
     'mime'    => 'application/magnav',
@@ -323,7 +322,6 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
     'templatePre' => '',
     'templateWP' => "<%out.latdatapad5%>, <%out.londatapad5%>, \"<%wp.name%> by <%wp.creator%> (<%wp.type%> - <%wp.difficulty%>/<%wp.terrain%>)\", \"<%out.wid%>\", \"<%wp.name%> by <%wp.creator%> (<%wp.type%> - <%wp.difficulty%>/<%wp.terrain%>)\", ff0000, 47\r\n"
   },
-
 
   'holux' => {
     'ext'        => 'wpo',
@@ -354,6 +352,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
     'filter_src'    => 'gpx',
     'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o tpg -F OUTFILE'
   },
+
   'tmpro' => {
     'ext'        => 'tmp',
     'mime'    => 'application/tmpro',
@@ -399,6 +398,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
       "<%out.id%>,<%wp.type%>\n",
     'templatePost' => "END",
   },
+
   # contributed by regengott.nass
   'sms' => {
     'ext'         => 'sms',
@@ -410,6 +410,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
       "D<%wp.difficulty%>,T<%wp.terrain%>,<%out.relativedistance%>,<%wp.latwritten%>,<%wp.lonwritten%>," +
       "<%wp.type%>,<%wp.size%>\r\n"
   },
+
   # contributed by Steve8x8: table, "tab" extended
   'list'    => {
     'ext'        => 'lst',
@@ -424,6 +425,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
       "<%out.relativedistancekm%>\t" +
       "\"<%wp.name%>\" by <%wp.creator%>\n"
   },
+
   # myfinds (Steve8x8) - use as follows:
   # geotoad -x myfindgpx -o myfinds.gpx -z -q user $USERNAME
   'myfindgpx'    => {
@@ -438,7 +440,6 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
       "<email>geotoad@googlegroups.com</email>\r\n" +
       "<time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S")  + ".000Z</time>\r\n" +
       "<keywords>cache, geocache, groundspeak, geotoad</keywords>\r\n",
-
     'templateWP'    => "<wpt lat=\"<%out.latdatapad5%>\" lon=\"<%out.londatapad5%>\">\r\n" +
       "  <time><%out.cdate%>T08:00:00Z</time>\r\n" +
       "  <name><%outEntity.id%></name>\r\n" +
@@ -476,6 +477,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
       "</wpt>\r\n",
     'templatePost'    => "</gpx>\r\n"
   },
+
   'myfindlist'    => {
     'ext'        => 'lst',
     'mime'    => 'text/plain',
