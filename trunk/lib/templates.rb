@@ -125,10 +125,12 @@ $Format = {
   'gpx-wpts'    => {
     'ext'        => 'wgpx',
     'mime'    => 'text/ascii',
-    'desc'    => 'GPX Geocaching XML, only Additional Waypoints',
+    'desc'    => 'GPX Geocaching XML for GSAK, only Additional Waypoints',
     'templatePre' => "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n" +
       "<gpx xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" version=\"1.0\" creator=\"GeoToad\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd http://www.groundspeak.com/cache/1/0 http://www.groundspeak.com/cache/1/0/cache.xsd\" xmlns=\"http://www.topografix.com/GPX/1/0\">\r\n" +
-      "<name>" + Time.new.gmtime.strftime("%Y%m%dT%H%M%S") + "</name>\r\n" +
+      "<name>" +
+        "Waypoints for Cache Listings Generated from Geocaching.com, geotoad " +
+        Time.new.gmtime.strftime("%Y%m%dT%H%M%S") + "</name>\r\n" +
       "<desc><%outEntity.title%></desc>\r\n" +
       "<author>GeoToad <%outEntity.version%></author>\r\n" +
       "<email>geotoad@googlegroups.com</email>\r\n" +
