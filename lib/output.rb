@@ -760,7 +760,7 @@ class Output
   end
 
   # convert waypoint "table light" into a sequence of <wpt> elements
-  def toWptList(text)
+  def toWptList(text, timestamp)
     if !text
       return nil
     end
@@ -846,6 +846,7 @@ class Output
             # Garmin Oregon shows only <desc>, not <cmt>, and limits to 48 chars
             wptlist = wptlist +
               "<wpt lat=\"#{wplat}\" lon=\"#{wplon}\">\n" +
+              "  <time>"+ timestamp.strftime("%Y-%m-%dT07:00:00.00Z") + "</time>\n" +
               "  <name>#{prefix}XXXWIDXXX</name>\n" +
               "  <cmt>#{desc}</cmt>\n" +
               "  <desc>#{wpname}:#{desc}</desc>\n" +
@@ -912,7 +913,7 @@ class Output
     # (the ones with real coordinates)
     xmlWpts = nil
     if shortWpts.to_s.length > 0
-      xmlWpts = toWptList(shortWpts)
+      xmlWpts = toWptList(shortWpts, cache['ctime'])
       # add separator lines
       shortWpts = "<hr />" + shortWpts + "<hr />"
     end
