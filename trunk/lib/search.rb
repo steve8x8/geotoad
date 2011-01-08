@@ -343,6 +343,7 @@ class SearchCache
             cache['type'] = 'lost+found'
           end
           if full_type =~ /Event/
+            debug "Setting event flag for #{full_type}"
             cache['event'] = true
           end
           debug "short type=#{cache['type']} for #{full_type}"
@@ -481,6 +482,10 @@ class SearchCache
             cache['type'] = 'cito'
           when /Lost [Aa]nd Found/
             cache['type'] = 'lost+found'
+          end
+          if full_type =~ /Event/
+            debug "Setting event flag for #{full_type}"
+            cache['event'] = true
           end
           debug "short type=#{cache['type']} for #{full_type}"
         end
