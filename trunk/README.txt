@@ -93,9 +93,9 @@ syntax: geotoad [options] <search:search2:search3>
  -o [filename]          output file name (automatic otherwise)
  -x [format]            output format type, see list below
  -q [location|user|wid]   query type (location by default)
- -d/-D [0.0-5.0]        difficulty minimum/maximum
- -t/-T [0.0-5.0]        terrain minimum/maximum
- -f/-F [0.0-5.0]        fun factor minimum/maximum
+ -d/-D [1.0-5.0]        difficulty minimum/maximum
+ -t/-T [1.0-5.0]        terrain minimum/maximum
+ -f/-F [1.0-5.0]        fun factor minimum/maximum
  -y    [1-500]          distance maximum in miles (10)
  -k    [keyword]        title keyword search. Use | to delimit multiple
  -K    [keyword]        desc keyword search (slow). Use | again...
