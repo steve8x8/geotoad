@@ -296,8 +296,8 @@ class Input
         (@@optHash['usemetric'] && "km" || "mi"), (@@optHash['distanceMax'] || 10))
       puts   "                                      |"
       printf("(5)  difficulty           [%-2.1f - %-1.1f] | (6)  terrain               [%-1.1f - %-1.1f]\n",
-        (@@optHash['difficultyMin'] || 0.0), (@@optHash['difficultyMax'] || 5.0),
-        (@@optHash['terrainMin'] || 0.0), (@@optHash['terrainMax'] || 5.0))
+        (@@optHash['difficultyMin'] || 1.0), (@@optHash['difficultyMax'] || 5.0),
+        (@@optHash['terrainMin'] || 1.0), (@@optHash['terrainMax'] || 5.0))
       printf("(7)  fun factor           [%-1.1f - %-1.1f] | (8)  cache size            [%3.3s - %3.3s]\n", (@@optHash['funFactorMin'] || 0.0),
         (@@optHash['funFactorMax'] || 5.0), @@optHash['sizeMin'] || 'any', @@optHash['sizeMax'] || 'any')
       printf("(9)  cache type           [%9.9s] |\n", (@@optHash['cacheType'] || 'any'))
