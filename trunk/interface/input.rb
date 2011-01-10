@@ -63,53 +63,53 @@ class Input
     opts = GetoptLong.new(
       [ "--travelBug",                "-b",    GetoptLong::NO_ARGUMENT ],
       [ "--cacheType",                "-c",    GetoptLong::REQUIRED_ARGUMENT ],
-      [ "--clearCache",                "-C",    GetoptLong::NO_ARGUMENT ],
+      [ "--clearCache",               "-C",    GetoptLong::NO_ARGUMENT ],
 
-      [ "--difficultyMax",            "-D",        GetoptLong::OPTIONAL_ARGUMENT ],
-      [ "--difficultyMin",            "-d",        GetoptLong::OPTIONAL_ARGUMENT ],
+      [ "--difficultyMin",            "-d",    GetoptLong::OPTIONAL_ARGUMENT ],
+      [ "--difficultyMax",            "-D",    GetoptLong::OPTIONAL_ARGUMENT ],
 
-      [ "--userExclude",                "-E",    GetoptLong::OPTIONAL_ARGUMENT ],
-      [ "--userInclude",                "-e",    GetoptLong::OPTIONAL_ARGUMENT ],
+      [ "--userInclude",              "-e",    GetoptLong::OPTIONAL_ARGUMENT ],
+      [ "--userExclude",              "-E",    GetoptLong::OPTIONAL_ARGUMENT ],
 
-      [ "--funFactorMax",                "-F",        GetoptLong::OPTIONAL_ARGUMENT ],
-      [ "--funFactorMin",                "-f",        GetoptLong::OPTIONAL_ARGUMENT ],
+      [ "--funFactorMin",             "-f",    GetoptLong::OPTIONAL_ARGUMENT ],
+      [ "--funFactorMax",             "-F",    GetoptLong::OPTIONAL_ARGUMENT ],
 
       [ "--help",                     "-h",    GetoptLong::NO_ARGUMENT ],
 
-      [ "--ownerInclude",                "-i",    GetoptLong::OPTIONAL_ARGUMENT ],
-      [ "--ownerExclude",                "-I",    GetoptLong::OPTIONAL_ARGUMENT ],
+      [ "--ownerInclude",             "-i",    GetoptLong::OPTIONAL_ARGUMENT ],
+      [ "--ownerExclude",             "-I",    GetoptLong::OPTIONAL_ARGUMENT ],
 
-      [ "--placeDateInclude",                "-j",    GetoptLong::OPTIONAL_ARGUMENT ],
-      [ "--placeDateExclude",                "-J",    GetoptLong::OPTIONAL_ARGUMENT ],
+      [ "--placeDateInclude",         "-j",    GetoptLong::OPTIONAL_ARGUMENT ],
+      [ "--placeDateExclude",         "-J",    GetoptLong::OPTIONAL_ARGUMENT ],
 
-      [ "--titleKeyword",               "-k",    GetoptLong::OPTIONAL_ARGUMENT ],
-      [ "--descKeyword",                "-K",    GetoptLong::OPTIONAL_ARGUMENT ],
+      [ "--titleKeyword",             "-k",    GetoptLong::OPTIONAL_ARGUMENT ],
+      [ "--descKeyword",              "-K",    GetoptLong::OPTIONAL_ARGUMENT ],
 
-      [ "--waypointLength",            "-l",    GetoptLong::OPTIONAL_ARGUMENT ],
+      [ "--waypointLength",           "-l",    GetoptLong::OPTIONAL_ARGUMENT ],
       [ "--notFound",                 "-n",    GetoptLong::NO_ARGUMENT ],
-      [ "--output",                    "-o",        GetoptLong::OPTIONAL_ARGUMENT ],
+      [ "--output",                   "-o",    GetoptLong::OPTIONAL_ARGUMENT ],
 
-      [ "--password",                     "-p",          GetoptLong::REQUIRED_ARGUMENT ],         # * REQ
-      [ "--proxy",                        "-P",          GetoptLong::REQUIRED_ARGUMENT ],
-      [ "--queryType",                    "-q",        GetoptLong::OPTIONAL_ARGUMENT ],
+      [ "--password",                 "-p",    GetoptLong::REQUIRED_ARGUMENT ],         # * REQ
+      [ "--proxy",                    "-P",    GetoptLong::REQUIRED_ARGUMENT ],
+      [ "--queryType",                "-q",    GetoptLong::OPTIONAL_ARGUMENT ],
 
 
-      [ "--foundDateExclude",                "-R",    GetoptLong::OPTIONAL_ARGUMENT ],
-      [ "--foundDateInclude",                "-r",    GetoptLong::OPTIONAL_ARGUMENT ],
+      [ "--foundDateInclude",         "-r",    GetoptLong::OPTIONAL_ARGUMENT ],
+      [ "--foundDateExclude",         "-R",    GetoptLong::OPTIONAL_ARGUMENT ],
 
-      [ "--sizeMin",                     "-s",          GetoptLong::REQUIRED_ARGUMENT ],
-      [ "--sizeMax",                     "-S",          GetoptLong::REQUIRED_ARGUMENT ],
+      [ "--sizeMin",                  "-s",    GetoptLong::REQUIRED_ARGUMENT ],
+      [ "--sizeMax",                  "-S",    GetoptLong::REQUIRED_ARGUMENT ],
 
-      [ "--terrainMax",                "-T",        GetoptLong::OPTIONAL_ARGUMENT ],
-      [ "--terrainMin",                "-t",        GetoptLong::OPTIONAL_ARGUMENT ],
+      [ "--terrainMin",               "-t",    GetoptLong::OPTIONAL_ARGUMENT ],
+      [ "--terrainMax",               "-T",    GetoptLong::OPTIONAL_ARGUMENT ],
 
-      [ "--user",                     "-u",          GetoptLong::REQUIRED_ARGUMENT ],         # * REQ
+      [ "--user",                     "-u",    GetoptLong::REQUIRED_ARGUMENT ],         # * REQ
 
-      [ "--verbose",                    "-v",    GetoptLong::NO_ARGUMENT ],
-      [ "--format",                    "-x",        GetoptLong::OPTIONAL_ARGUMENT ],
+      [ "--verbose",                  "-v",    GetoptLong::NO_ARGUMENT ],
+      [ "--format",                   "-x",    GetoptLong::OPTIONAL_ARGUMENT ],
 
-      [ "--distanceMax",                "-y",        GetoptLong::OPTIONAL_ARGUMENT ],
-      [ "--includeDisabled",          "-z",    GetoptLong::NO_ARGUMENT ]
+      [ "--distanceMax",              "-y",    GetoptLong::OPTIONAL_ARGUMENT ],
+      [ "--includeDisabled",          "-z",    GetoptLong::NO_ARGUMENT ],
     ) || usage
 
     # put the stupid crap in a hash. Much nicer to deal with.
@@ -218,18 +218,21 @@ class Input
 
     puts " -o [filename]          output file name (automatic otherwise)"
     puts " -x [format]            output format type, see list below"
-    puts " -q [location|user|wid]   query type (location by default)"
+    puts " -q [location|coord|user|wid]"
+    puts "                        query type (location by default)"
 
-    puts " -d/-D [0.0-5.0]        difficulty minimum/maximum"
-    puts " -t/-T [0.0-5.0]        terrain minimum/maximum"
+    puts " -d/-D [1.0-5.0]        difficulty minimum/maximum"
+    puts " -t/-T [1.0-5.0]        terrain minimum/maximum"
     puts " -f/-F [0.0-5.0]        fun factor minimum/maximum"
-    puts " -y    [1-500]          distance maximum in miles (10)"
+    puts " -y    [1-500]          distance maximum, in miles, or suffixed \"km\" (10)"
     puts " -k    [keyword]        title keyword search. Use | to delimit multiple"
     puts " -K    [keyword]        desc keyword search (slow). Use | again..."
     puts " -i/-I [username]       include/exclude caches owned by this person"
     puts " -e/-E [username]       include/exclude caches found by this person"
-    puts " -s/-S [virtual|small|regular|large]   min/max size of the cache"
-    puts " -c    [regular|virtual|event|unknown] type of cache (| separated)"
+    puts " -s/-S [virtual|micro|small|regular|large|...]"
+    puts "                        min/max size of the cache"
+    puts " -c    [traditional|multicache|unknown|virtual|event|...]"
+    puts "                        type of cache (| separated)"
     puts " -j/-J [# days]         include/exclude caches placed in the last X days"
     puts " -r/-R [# days]         include/exclude caches found in the last X days"
     puts " -z                     include disabled caches"
