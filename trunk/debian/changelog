@@ -1,3 +1,9 @@
+geotoad (3.14.1-1) unstable; urgency=low
+
+  * New release 3.14.1
+
+ -- Steffen Grunewald <steve8x8@gmail.com>  Sat, 04 Dec 2010 11:21:34 +0100
+
 geotoad (3.13.0-1) unstable; urgency=low
 
   * After about 4 years without geotoad packaging, try to start again.
