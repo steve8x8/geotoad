@@ -100,7 +100,7 @@ class SearchCache
     # Both coordinates must have same format. Count number of fields.
     case key.split("\s").length #may be 2, 4, 6
     when 2 # Deg
-      if key =~ /(-?)([\d\.]+)\W+(-?)([\d\.]+)/
+      if key =~ /(-?)([\d\.]+)\W\W*?(-?)([\d\.]+)/
         lat = $2.to_f
         if $1 == '-'
           lat = -lat
@@ -113,7 +113,7 @@ class SearchCache
         displayError "Cannot parse #{input} as two degree values!"
       end
     when 4 # Deg Min
-      if key =~ /(-?)([\d\.]+)\W+([\d\.]+)\W+(-?)([\d\.]+)\W+([\d\.]+)/
+      if key =~ /(-?)([\d\.]+)\W+([\d\.]+)\W\W*?(-?)([\d\.]+)\W+([\d\.]+)/
         lat = $2.to_f + $3.to_f/60.0
         if $1 == '-'
           lat = -lat
@@ -126,7 +126,7 @@ class SearchCache
         displayError "Cannot parse #{input} as two degree/minute values!"
       end
     when 6 # Deg Min Sec
-      if key =~ /(-?)([\d\.]+)\W+([\d\.]+)\W+([\d\.]+)\W+(-?)([\d\.]+)\W+([\d\.]+)\W+([\d\.]+)/
+      if key =~ /(-?)([\d\.]+)\W+([\d\.]+)\W+([\d\.]+)\W\W*?(-?)([\d\.]+)\W+([\d\.]+)\W+([\d\.]+)/
         lat = $2.to_f + $3.to_f/60.0 + $4.to_f/3600.0
         if $1 == '-'
           lat = -lat
@@ -342,6 +342,10 @@ class SearchCache
           when /Lost [Aa]nd Found/
             cache['type'] = 'lost+found'
           end
+          if full_type =~ /Event/
+            debug "Setting event flag for #{full_type}"
+            cache['event'] = true
+          end
           debug "short type=#{cache['type']} for #{full_type}"
         end
         cache['mdays'] = -1
@@ -383,6 +387,17 @@ class SearchCache
           cache['travelbug'] = trackables
         end
 
+      # new travelbug list 2010-12-22
+      # single:
+      # <a id="ctl00_ContentBody_dlResults_ctl01_uxTravelBugList" class="tblist" data-tbcount="1" data-id="1763522" data-guid="ecfd0038-8e51-4ac8-a073-1aebe7c10cbc" href="javascript:void();"><img src="http://www.geocaching.com/images/wpttypes/sm/21.gif" alt="Travel Bug Dog Tag" title="Travel Bug Dog Tag" /></a>
+      # multiple:
+      # <a id="ctl00_ContentBody_dlResults_ctl06_uxTravelBugList" class="tblist" data-tbcount="3" data-id="1622703" data-guid="8fc9f301-99fe-4933-90f7-48617e446058" href="javascript:void();"><img src="/images/WptTypes/sm/tb_coin.gif" /></a>
+      # this is better handled in cdpf parsing (details.rb)
+      # but we need an entry for filtering!
+      when /uxTravelBugList/
+        debug "trackables flagged: #{line}"
+        cache['travelbug'] = "Unspecified Trackable"
+
       # (2/1)<br />
       # (1/1.5)<br />
       when /\(([-\d\.]+)\/([-\d\.]+)\)\<br/
@@ -415,7 +430,9 @@ class SearchCache
 
       # creation date: date alone on line
       #  9 Sep 06
-      when /^ +(\d+ \w{3} \d+)\s?$/
+      # may have a "New!" flag next to it
+      #  6 Dec 10 <img src="/images/new3.gif" alt="New!" title="New!" />
+      when /^ +(\d+ \w{3} \d+)(\s+\<img [^\>]* title="New!" \/\>)?\s?$/
         debug "create date: #{$1} at line: #{line}"
         cache['ctime'] = parseDate($1)
         cache['cdays'] = daysAgo(cache['ctime'])
@@ -441,9 +458,37 @@ class SearchCache
         debug "cacheDistance=#{cache['distance']}mi dir=#{cache['direction']}"
 
       # <a href="/seek/cache_details.aspx?guid=c9f28e67-5f18-45c0-90ee-76ec8c57452f">Yasaka-Shrine@Zerosen</a>
-      when /cache_details.aspx\?guid=(.*?)\">(.*?)\<\/a\>/
-        cache['guid']=$1
-        name = $2
+      # now (2010-12-22, one line!):
+      # <a href="/seek/cache_details.aspx?guid=ecfd0038-8e51-4ac8-a073-1aebe7c10cbc" class="lnk">
+      # ...<img src="http://www.geocaching.com/images/wpttypes/sm/3.gif" alt="Multi-cache" title="Multi-cache" /></a> 
+      # ... <a href="/seek/cache_details.aspx?guid=ecfd0038-8e51-4ac8-a073-1aebe7c10cbc" class="lnk  Strike"><span>Besinnungsweg</span></a>
+      #when /cache_details.aspx\?guid=([0-9a-f-]*)[^\>]*>(.*?)\<\/a\>/
+      when /(<img[^\>]*alt=\"(.*?)\".*)?cache_details.aspx\?guid=([0-9a-f-]*)([^\>]*)>\<span\>(.*?)\<\/span\>\<\/a\>/
+        debug "found type=#{$2} guid=#{$3} name=#{$5}"
+        cache['guid'] = $3
+        strike = $4
+        name = $5
+      # type is also in here!
+        full_type = $2
+        # there may be more than 1 match, don't overwrite
+        if cache['fulltype']
+          debug "Not overwriting \"#{cache['fulltype']}\"(#{cache['type']} with \"#{full_type}\""
+        else
+          cache['fulltype'] = full_type
+          cache['type'] = full_type.split(' ')[0].downcase.gsub(/\-/, '')
+          # two special cases: "Cache In Trash Out" and "Lost and Found"
+          case full_type
+          when /Cache In Trash Out/
+            cache['type'] = 'cito'
+          when /Lost [Aa]nd Found/
+            cache['type'] = 'lost+found'
+          end
+          if full_type =~ /Event/
+            debug "Setting event flag for #{full_type}"
+            cache['event'] = true
+          end
+          debug "short type=#{cache['type']} for #{full_type}"
+        end
         debug "Found cache details link for #{name}"
 
         if name =~ /class=\"Warning/ or name =~ /class=\"OldWarning/
@@ -453,10 +498,9 @@ class SearchCache
           cache['archived'] = false
         end
 
-        if name =~ /Strike"\>(.*?)\<\//
+        if strike =~ /Strike/
           cache['disabled'] = true
           debug "#{name} appears to be disabled"
-          name=$1
         else
           cache['disabled'] = false
         end

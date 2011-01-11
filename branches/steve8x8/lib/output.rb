@@ -760,7 +760,7 @@ class Output
   end
 
   # convert waypoint "table light" into a sequence of <wpt> elements
-  def toWptList(text)
+  def toWptList(text, timestamp)
     if !text
       return nil
     end
@@ -846,6 +846,7 @@ class Output
             # Garmin Oregon shows only <desc>, not <cmt>, and limits to 48 chars
             wptlist = wptlist +
               "<wpt lat=\"#{wplat}\" lon=\"#{wplon}\">\n" +
+              "  <time>"+ timestamp.strftime("%Y-%m-%dT07:00:00.00Z") + "</time>\n" +
               "  <name>#{prefix}XXXWIDXXX</name>\n" +
               "  <cmt>#{desc}</cmt>\n" +
               "  <desc>#{wpname}:#{desc}</desc>\n" +
@@ -912,7 +913,7 @@ class Output
     # (the ones with real coordinates)
     xmlWpts = nil
     if shortWpts.to_s.length > 0
-      xmlWpts = toWptList(shortWpts)
+      xmlWpts = toWptList(shortWpts, cache['ctime'])
       # add separator lines
       shortWpts = "<hr />" + shortWpts + "<hr />"
     end
@@ -965,7 +966,7 @@ class Output
       'id' => cache['sname'],
       'mdate' => cache['mtime'].strftime("%Y-%m-%d"),
       'cdate' => cache['ctime'].strftime("%Y-%m-%d"),
-      'XMLDate' => cache['ctime'].strftime("%Y-%m-%dT%H:00:00.0000000-07:00"),
+      'XMLDate' => cache['ctime'].strftime("%Y-%m-%dT07:00:00.000Z"),
       'latdatapad5' => sprintf("%2.5f", cache['latdata']),
       'londatapad5' => sprintf("%2.5f", cache['londata']),
       'latdatapad6' => sprintf("%2.6f", cache['latdata']),
@@ -986,8 +987,8 @@ class Output
       'xmlWpts' => xmlWpts.to_s.gsub(/XXXWIDXXX/, wid[2 .. -1]),
       'xmlAttrs' => xmlAttrs.to_s,
       'txtAttrs' => (cache['attributeText'].to_s.empty?)?'':'[' + cache['attributeText'].to_s.capitalize + ']',
-      'warnAvail' => (available)?'':'(*UNAVAIL*)',
-      'warnArchiv' => (cache['archived'])?'(*ARCHIVED*)':'',
+      'warnAvail' => (available)?'':'[?] ',
+      'warnArchiv' => (cache['archived'])?'[%] ':'',
     }
   end
 
@@ -1011,7 +1012,12 @@ class Output
     # restore [backwards] search order from cache counter
     wpSearchOrder = Array.new
     @wpHash.keys.each { |wid|
-      wpSearchOrder[@wpHash[wid]['index']] = wid
+      index = @wpHash[wid]['index']
+      # in "-q wid" mode, there's no index
+      if not index
+        index = 1
+      end
+      wpSearchOrder[index] = wid
     }
     # remove unset elements ([0])
     wpSearchOrder.compact!

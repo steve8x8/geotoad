@@ -260,51 +260,13 @@ class GeoToad
     puts ""
     @filtered = Filter.new(@combinedWaypoints)
     debug "Filter running cycle 1, #{@filtered.totalWaypoints} caches left"
-
-    if @option['difficultyMin']
-      @queryTitle = @queryTitle + ", difficulty #{@option['difficultyMin']}+"
-      @defaultOutputFile = @defaultOutputFile + "-d" + @option['difficultyMin'].to_s
-      @filtered.difficultyMin(@option['difficultyMin'].to_f)
-    end
-
-    if @option['difficultyMax']
-      @queryTitle = @queryTitle + ", difficulty #{@option['difficultyMax']} or lower"
-      @defaultOutputFile = @defaultOutputFile + "-D" + @option['difficultyMax'].to_s
-      @filtered.difficultyMax(@option['difficultyMax'].to_f)
-    end
-
-    if @option['terrainMin']
-      @queryTitle = @queryTitle + ", terrain #{@option['terrainMin']}+"
-      @defaultOutputFile = @defaultOutputFile + "-t" + @option['terrainMin'].to_s
-      @filtered.terrainMin(@option['terrainMin'].to_f)
-    end
-
-    if @option['terrainMax']
-      @queryTitle = @queryTitle + ", terrain #{@option['terrainMax']} or lower"
-      @defaultOutputFile = @defaultOutputFile + "-T" + @option['terrainMax'].to_s
-      @filtered.terrainMax(@option['terrainMax'].to_f)
-    end
-
-    debug "Filter running cycle 2, #{@filtered.totalWaypoints} caches left"
     if @option['cacheType']
       @queryTitle = @queryTitle + ", type #{@option['cacheType']}"
       @defaultOutputFile = @defaultOutputFile + "-c" + @option['cacheType']
       @filtered.cacheType(@option['cacheType'])
     end
 
-    if @option['sizeMin']
-      @queryTitle = @queryTitle + ", size #{@option['sizeMin']}+"
-      @defaultOutputFile = @defaultOutputFile + "-s" + @option['sizeMin'].to_s
-      @filtered.sizeMin(@option['sizeMin'])
-    end
-
-    if @option['sizeMax']
-      @queryTitle = @queryTitle + ", size #{@option['sizeMax']} or lower"
-      @defaultOutputFile = @defaultOutputFile + "-S" + @option['sizeMax'].to_s
-      @filtered.sizeMax(@option['sizeMax'])
-    end
-
-    debug "Filter running cycle 3, #{@filtered.totalWaypoints} caches left"
+    debug "Filter running cycle 2, #{@filtered.totalWaypoints} caches left"
     if @option['foundDateInclude']
       @queryTitle = @queryTitle + ", found in the last  #{@option['foundDateInclude']} days"
       @defaultOutputFile = @defaultOutputFile + "-r=" + @option['foundDateInclude'].to_s
@@ -328,7 +290,7 @@ class GeoToad
       @defaultOutputFile = @defaultOutputFile + "-J=" + @option['placeDateExclude'].to_s
       @filtered.placeDateExclude(@option['placeDateExclude'].to_f)
     end
-    debug "Filter running cycle 4, #{@filtered.totalWaypoints} caches left"
+    debug "Filter running cycle 3, #{@filtered.totalWaypoints} caches left"
 
     if @option['notFound']
       @queryTitle = @queryTitle + ", virgins only"
@@ -493,6 +455,30 @@ class GeoToad
       @filtered.descKeyword(@option['descKeyword'])
     end
 
+    if @option['difficultyMin']
+      @queryTitle = @queryTitle + ", difficulty #{@option['difficultyMin']}+"
+      @defaultOutputFile = @defaultOutputFile + "-d" + @option['difficultyMin'].to_s
+      @filtered.difficultyMin(@option['difficultyMin'].to_f)
+    end
+
+    if @option['difficultyMax']
+      @queryTitle = @queryTitle + ", difficulty #{@option['difficultyMax']} or lower"
+      @defaultOutputFile = @defaultOutputFile + "-D" + @option['difficultyMax'].to_s
+      @filtered.difficultyMax(@option['difficultyMax'].to_f)
+    end
+
+    if @option['terrainMin']
+      @queryTitle = @queryTitle + ", terrain #{@option['terrainMin']}+"
+      @defaultOutputFile = @defaultOutputFile + "-t" + @option['terrainMin'].to_s
+      @filtered.terrainMin(@option['terrainMin'].to_f)
+    end
+
+    if @option['terrainMax']
+      @queryTitle = @queryTitle + ", terrain #{@option['terrainMax']} or lower"
+      @defaultOutputFile = @defaultOutputFile + "-T" + @option['terrainMax'].to_s
+      @filtered.terrainMax(@option['terrainMax'].to_f)
+    end
+
     if @option['funFactorMin']
       @queryTitle = @queryTitle + ", funFactor #{@option['funFactorMin']}+"
       @defaultOutputFile = @defaultOutputFile + "-f" + @option['funFactorMin'].to_s
@@ -503,6 +489,18 @@ class GeoToad
       @queryTitle = @queryTitle + ", funFactor #{@option['funFactorMax']} or lower"
       @defaultOutputFile = @defaultOutputFile + '-F' + @option['funFactorMax'].to_s
       @filtered.funFactorMax(@option['funFactorMax'].to_f)
+    end
+
+    if @option['sizeMin']
+      @queryTitle = @queryTitle + ", size #{@option['sizeMin']}+"
+      @defaultOutputFile = @defaultOutputFile + "-s" + @option['sizeMin'].to_s
+      @filtered.sizeMin(@option['sizeMin'])
+    end
+
+    if @option['sizeMax']
+      @queryTitle = @queryTitle + ", size #{@option['sizeMax']} or lower"
+      @defaultOutputFile = @defaultOutputFile + "-S" + @option['sizeMax'].to_s
+      @filtered.sizeMax(@option['sizeMax'])
     end
 
 
@@ -547,11 +545,10 @@ class GeoToad
 
     # if we have selected the name of the output file, use it.
     # otherwise, take our invented name, sanitize it, and slap a file extension on it.
-    filename = @option['output'].dup
-    displayInfo "Output filename: #{filename}"
     outputFile = nil
-
-    if filename
+    if @option['output']
+      filename = @option['output'].dup
+      displayInfo "Output filename: #{filename}"
       filename.gsub!('\\', '/')
       if filename and filename !~ /\/$/
         outputFile = File.basename(filename)

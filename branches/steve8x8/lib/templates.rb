@@ -14,6 +14,7 @@ $Format = {
       "name=\"<%out.id%>\" comment=\"<%wp.name%>\" " +
       "symbol=\"flag\"  display_option=\"symbol+name\"\n",
   },
+
   'easygps' => {
     'ext'        => 'loc',
     'mime'    => 'application/easygps',
@@ -24,7 +25,6 @@ $Format = {
       "<type>geocache</type><link text=\"Cache Details\"><%wp.url%></link></waypoint>",
     'templatePost'    => '</loc>',
   },
-
 
   # ** The gpx.hints be removed for GeoToad 4.0, when we use a real templating engine that can do loops **
   # GPX with GroundSpeak extended attributes, modified headers
@@ -42,7 +42,6 @@ $Format = {
       "<email>geotoad@googlegroups.com</email>\r\n" +
       "<time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S")  + ".000Z</time>\r\n" +
       "<keywords>cache, geocache, groundspeak, geotoad</keywords>\r\n",
-
     'templateWP'    => "<wpt lat=\"<%wp.latdata%>\" lon=\"<%wp.londata%>\">\r\n" +
       "  <time><%out.XMLDate%></time>\r\n" +
       "  <name><%outEntity.id%></name>\r\n" +
@@ -64,7 +63,7 @@ $Format = {
       "  <groundspeak:attributes>\r\n" +
       "<%out.xmlAttrs%>" +
       "  </groundspeak:attributes>\r\n" +
-      "  <groundspeak:short_description html=\"True\"><%outEntity.warnArchiv%><%outEntity.warnAvail%><%outEntity.txtAttrs%><%wpEntity.shortdesc%></groundspeak:short_description>\r\n" +
+      "  <groundspeak:short_description html=\"True\"><%outEntity.warnArchiv%><%outEntity.warnAvail%>&lt;br /&gt;<%outEntity.txtAttrs%>&lt;br /&gt;<%wpEntity.shortdesc%></groundspeak:short_description>\r\n" +
       "  <groundspeak:long_description html=\"True\"><%outEntity.shortWpts%><%wpEntity.longdesc%></groundspeak:long_description>\r\n" +
       "  <groundspeak:encoded_hints><%outEntity.hintdecrypt%></groundspeak:encoded_hints>\r\n" +
       "  <groundspeak:logs>\r\n" +
@@ -74,6 +73,70 @@ $Format = {
       "  </groundspeak:cache>\r\n" +
       "</wpt>\r\n" +
       "<%out.xmlWpts%>",
+    'templatePost'    => "</gpx>\r\n"
+  },
+
+  # Two templates for separate output of caches and add.wpts for GSAK use
+  'gpx-gsak'    => {
+    'ext'        => 'gpx',
+    'mime'    => 'text/ascii',
+    'desc'    => 'GPX Geocaching XML for GSAK, without Additional Waypoints',
+    'templatePre' => "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n" +
+      "<gpx xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" version=\"1.0\" creator=\"GeoToad\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd http://www.groundspeak.com/cache/1/0/1 http://www.groundspeak.com/cache/1/0/1/cache.xsd\" xmlns=\"http://www.topografix.com/GPX/1/0\">\r\n" +
+      "<name>" + Time.new.gmtime.strftime("%Y%m%dT%H%M%S") + "</name>\r\n" +
+      "<desc><%outEntity.title%></desc>\r\n" +
+      "<author>GeoToad <%outEntity.version%></author>\r\n" +
+      "<email>geotoad@googlegroups.com</email>\r\n" +
+      "<time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S")  + ".000Z</time>\r\n" +
+      "<keywords>cache, geocache, groundspeak, geotoad</keywords>\r\n",
+    'templateWP'    => "<wpt lat=\"<%wp.latdata%>\" lon=\"<%wp.londata%>\">\r\n" +
+      "  <time><%out.XMLDate%></time>\r\n" +
+      "  <name><%outEntity.id%></name>\r\n" +
+      "  <desc><%wpEntity.name%> by <%wpEntity.creator%>, <%wp.type%> (<%wp.difficulty%>/<%wp.terrain%>)</desc>\r\n" +
+      "  <url><%wp.url%></url>\r\n" +
+      "  <urlname><%wpEntity.name%></urlname>\r\n" +
+      "  <sym><%outEntity.cacheSymbol%></sym>\r\n" +
+      "  <type>Geocache|<%wp.fulltype%></type>\r\n" +
+      "  <groundspeak:cache id=\"<%out.cacheID%>\" available=\"<%out.IsAvailable%>\" archived=\"<%out.IsArchived%>\" xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0/1\">\r\n" +
+      "  <groundspeak:name><%wpEntity.name%></groundspeak:name>\r\n" +
+      "  <groundspeak:placed_by><%wpEntity.creator%></groundspeak:placed_by>\r\n" +
+      "  <groundspeak:owner id=\"<%wpEntity.creator_id%>\"><%wpEntity.creator%></groundspeak:owner>\r\n" +
+      "  <groundspeak:type><%wp.fulltype%></groundspeak:type>\r\n" +
+      "  <groundspeak:container><%wp.size%></groundspeak:container>\r\n" +
+      "  <groundspeak:difficulty><%wp.difficulty%></groundspeak:difficulty>\r\n" +
+      "  <groundspeak:terrain><%wp.terrain%></groundspeak:terrain>\r\n" +
+      "  <groundspeak:country><%wpEntity.country%></groundspeak:country>\r\n" +
+      "  <groundspeak:state><%wpEntity.state%></groundspeak:state>\r\n" +
+      "  <groundspeak:attributes>\r\n" +
+      "<%out.xmlAttrs%>" +
+      "  </groundspeak:attributes>\r\n" +
+      "  <groundspeak:short_description html=\"True\"><%outEntity.warnArchiv%><%outEntity.warnAvail%>&lt;br /&gt;<%outEntity.txtAttrs%>&lt;br /&gt;<%wpEntity.shortdesc%></groundspeak:short_description>\r\n" +
+      "  <groundspeak:long_description html=\"True\"><%outEntity.shortWpts%><%wpEntity.longdesc%></groundspeak:long_description>\r\n" +
+      "  <groundspeak:encoded_hints><%outEntity.hintdecrypt%></groundspeak:encoded_hints>\r\n" +
+      "  <groundspeak:logs>\r\n" +
+      "<%out.gpxlogs%>" +
+      "  </groundspeak:logs>\r\n" +
+      "  <groundspeak:travelbugs><%out.xmlTrackables%></groundspeak:travelbugs>\r\n" +
+      "  </groundspeak:cache>\r\n" +
+      "</wpt>\r\n",
+    'templatePost'    => "</gpx>\r\n"
+  },
+
+  'gpx-wpts'    => {
+    'ext'        => 'wgpx',
+    'mime'    => 'text/ascii',
+    'desc'    => 'GPX Geocaching XML for GSAK, only Additional Waypoints',
+    'templatePre' => "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n" +
+      "<gpx xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" version=\"1.0\" creator=\"GeoToad\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd http://www.groundspeak.com/cache/1/0 http://www.groundspeak.com/cache/1/0/cache.xsd\" xmlns=\"http://www.topografix.com/GPX/1/0\">\r\n" +
+      "<name>" +
+        "Waypoints for Cache Listings Generated from Geocaching.com, geotoad " +
+        Time.new.gmtime.strftime("%Y%m%dT%H%M%S") + "</name>\r\n" +
+      "<desc><%outEntity.title%></desc>\r\n" +
+      "<author>GeoToad <%outEntity.version%></author>\r\n" +
+      "<email>geotoad@googlegroups.com</email>\r\n" +
+      "<time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S")  + ".000Z</time>\r\n" +
+      "<keywords>cache, geocache, groundspeak, geotoad</keywords>\r\n",
+    'templateWP'    => "<%out.xmlWpts%>",
     'templatePost'    => "</gpx>\r\n"
   },
 
@@ -128,7 +191,6 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
       "\r\n<%wpText.longdesc%>\r\n" +
       "\r\n<%out.hint%>\r\n\r\n\r\n\r\n"
   },
-
 
   'tab'    => {
     'ext'        => 'txt',
@@ -236,6 +298,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
     'filter_src'    => 'gpx',
     'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o cetus -F OUTFILE'
   },
+
   'gpspilot' => {
     'ext'        => 'gps',
     'mime'    => 'application/gpspilot',
@@ -244,6 +307,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
     'filter_src'    => 'gpx',
     'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o dna -F OUTFILE'
   },
+
   'magnav' => {
     'ext'        => 'mgv',
     'mime'    => 'application/magnav',
@@ -260,7 +324,6 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
     'templatePre' => '',
     'templateWP' => "<%out.latdatapad5%>, <%out.londatapad5%>, \"<%wp.name%> by <%wp.creator%> (<%wp.type%> - <%wp.difficulty%>/<%wp.terrain%>)\", \"<%out.wid%>\", \"<%wp.name%> by <%wp.creator%> (<%wp.type%> - <%wp.difficulty%>/<%wp.terrain%>)\", ff0000, 47\r\n"
   },
-
 
   'holux' => {
     'ext'        => 'wpo',
@@ -291,6 +354,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
     'filter_src'    => 'gpx',
     'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o tpg -F OUTFILE'
   },
+
   'tmpro' => {
     'ext'        => 'tmp',
     'mime'    => 'application/tmpro',
@@ -336,6 +400,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
       "<%out.id%>,<%wp.type%>\n",
     'templatePost' => "END",
   },
+
   # contributed by regengott.nass
   'sms' => {
     'ext'         => 'sms',
@@ -347,6 +412,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
       "D<%wp.difficulty%>,T<%wp.terrain%>,<%out.relativedistance%>,<%wp.latwritten%>,<%wp.lonwritten%>," +
       "<%wp.type%>,<%wp.size%>\r\n"
   },
+
   # contributed by Steve8x8: table, "tab" extended
   'list'    => {
     'ext'        => 'lst',
@@ -361,6 +427,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
       "<%out.relativedistancekm%>\t" +
       "\"<%wp.name%>\" by <%wp.creator%>\n"
   },
+
   # myfinds (Steve8x8) - use as follows:
   # geotoad -x myfindgpx -o myfinds.gpx -z -q user $USERNAME
   'myfindgpx'    => {
@@ -375,7 +442,6 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
       "<email>geotoad@googlegroups.com</email>\r\n" +
       "<time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S")  + ".000Z</time>\r\n" +
       "<keywords>cache, geocache, groundspeak, geotoad</keywords>\r\n",
-
     'templateWP'    => "<wpt lat=\"<%out.latdatapad5%>\" lon=\"<%out.londatapad5%>\">\r\n" +
       "  <time><%out.cdate%>T08:00:00Z</time>\r\n" +
       "  <name><%outEntity.id%></name>\r\n" +
@@ -413,6 +479,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
       "</wpt>\r\n",
     'templatePost'    => "</gpx>\r\n"
   },
+
   'myfindlist'    => {
     'ext'        => 'lst',
     'mime'    => 'text/plain',
@@ -424,4 +491,26 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
       "<%out.mdate%> " +
       "\n"
   },
+
+  # mygeocachelist (law.skynet) - use as follows:
+  # geotoad -x gclist -o geocache_list.txt -z -q user $USERNAME
+  'gclist'    => {
+    'ext'     => 'txt',
+    'mime'    => 'text/plain',
+    'desc'    =>     'Geocache visits text file for Garmin devices',
+    'templatePre' => "",
+    'templateWP'  => "<%out.wid%>,<%out.mdate%>T08:00Z,Found it,\"\"\r\n"
+  },
+
+  # mygeocachevisits (law.skynet) - use as follows:
+  # geotoad -x gcvisits -o geocache_visits.txt -z -q user $USERNAME
+  'gcvisits' => {
+    'ext'        => 'txt',
+    'mime'    => 'text/plain',
+    'required' => 'iconv',
+    'desc'    => 'Geocache visits Unicode file for Garmin devices',
+    'filter_src'    => 'gclist',
+    'filter_exec'    => 'iconv -f US-ASCII -t UCS-2LE INFILE > OUTFILE'
+  },
+
 }

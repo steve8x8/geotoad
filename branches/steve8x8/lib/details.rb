@@ -65,23 +65,7 @@ class CacheDetails
       page.cookie=@cookie
     end
 
-    # Tune expiration for young caches:
-    # Caches which are only a few days old should be updated more often
-    # to get hold of recent logs (criticism, hints, coord updates)
-    ttl = nil
-    if (id =~ /^GC/)
-      if @waypointHash[id]['guid']
-        if @waypointHash[id]['cdays'] <= 10
-          ttl = @waypointHash[id]['cdays'] * 86400 / 2
-        end
-      end
-    end
-
-    if ttl
-      page.fetch(ttl)
-    else # use default
-      page.fetch
-    end
+    page.fetch
     if page.data
       success = parseCache(page.data)
     else
@@ -267,6 +251,9 @@ class CacheDetails
             # spelling to be confirmed!
             cache['type'] = 'lost+found'
           end
+          if full_type =~ /Event/
+            cache['event'] = true
+          end
           debug "stype=#{cache['type']} full_type=#{cache['fulltype']}"
         end
       end
@@ -278,6 +265,9 @@ class CacheDetails
         if $1 != 'N/A'
           cache['ctime'] = parseDate($1)
           cache['cdays'] = daysAgo(cache['ctime'])
+          if line =~ /Event Date:/
+            cache['event'] = true
+          end
           debug "ctime=#{cache['ctime']} cdays=#{cache['cdays']}"
         end
       end
@@ -412,6 +402,33 @@ class CacheDetails
       cache['longdesc'] = longdesc
     end
 
+    # <h2>\n   Trackable Items</h2>\n   </div>\n   <div class="item-content">\n   (empty)\n   </div>
+    # ... <img src="http://www.geocaching.com/images/wpttypes/sm/21.gif" alt="" /> SCOUBIDOU, <img src="http://www.geocaching.com/images/wpttypes/sm/3916.gif" alt="" /> colorful kite ...
+    if data =~ /\<h.\>\s*Trackable Items\s*\<\/h.\>\s*\<\/div\>\s*\<div [^\>]*\>\s*(.*?)\s*\<\/div\>/
+      # travel bug data, all in a single line
+      line = $1
+      debug "List of trackables: #{line}"
+      trackables = ''
+      # split at icon tag, drop everything before
+      line.gsub(/^.*?\</, '').split(/\</).each { |item|
+        debug "trackable item #{item}"
+        item.gsub!(/[^\>]*\>\s*/, '')
+        item.gsub!(/[,\s]*$/, '')
+        # shorten the name a bit
+        item.gsub!(/^Geocoins:\s+/, '')
+        item.gsub!(/Travel Bug( Dog Tag)?/, 'TB')
+        item.gsub!(/Geocoin/, 'GC')
+        item.gsub!(/^The /, '')
+        debug "trackable in list #{item}"
+        trackables << item + ', '
+      }
+      if trackables.length > 0
+        trackables.gsub!(/, $/, '')
+        debug "Trackables Found: #{trackables}"
+        cache['travelbug'] = trackables
+      end
+    end
+
     # Parse the additional waypoints table. Needs additional work for non-HTML templates.
     comments, last_find_date, fun_factor, visitors = parseComments(data, cache['creator'])
     cache['visitors'] = cache['visitors'] + visitors
@@ -431,8 +448,25 @@ class CacheDetails
       cache['ctime'] = Time.now
     end
 
+    # more patchwork for inaccessible stuff
+    if not cache['difficulty']
+      cache['difficulty'] = 1
+    end
+    if not cache['terrain']
+      cache['terrain'] = 1
+    end
+    if not cache['size']
+      cache['size'] = "not chosen"
+    end
+
+
     comment_text = comments.collect{ |x| x['text'] }
+    # may return NaN when comment_text is empty
     ff_score = @funfactor.calculate_score_from_list(comment_text)
+    # replace NaN by zero
+    if ff_score.nan?
+      ff_score = 0.0
+    end
     # A primitive form of approximate rounding
     cache['funfactor'] = (ff_score * 20).round / 20.0
     debug "Funfactor score: #{cache['funfactor']}"

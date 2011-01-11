@@ -16,7 +16,7 @@ end
 
 class FunFactor
   include Common
-  
+
   def initialize()
     @data_dir = findDataDir()
     @bishop = Bishop::Bayes.new
@@ -54,8 +54,12 @@ class FunFactor
       rescue
       end
     }
-    avg_score = average(scores)
-    return avg_score
+    if scores
+      avg_score = average(scores)
+      return avg_score
+    else
+      return 0.0
+    end
   end
 
   def calculate_score(str)

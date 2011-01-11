@@ -80,7 +80,8 @@ class Filter
     }
   end
   
-  def cacheType(typestr)
+  def cacheType(typestr0)
+    typestr = typestr0.dup
     typestr.gsub!('regular', 'traditional')
     typestr.gsub!('puzzle', 'unknown')
     typestr.gsub!('mystery', 'unknown')
