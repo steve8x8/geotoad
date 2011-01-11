@@ -110,6 +110,7 @@ class Input
 
       [ "--distanceMax",              "-y",    GetoptLong::OPTIONAL_ARGUMENT ],
       [ "--includeDisabled",          "-z",    GetoptLong::NO_ARGUMENT ],
+      [ "--preserveCache",            "-Z",    GetoptLong::NO_ARGUMENT ],
     ) || usage
 
     # put the stupid crap in a hash. Much nicer to deal with.
@@ -239,6 +240,7 @@ class Input
     puts " -n                     only include not found caches (virgins)"
     puts " -b                     only include caches with travelbugs"
     puts " -l                     set EasyName waypoint id length. (16)"
+    puts " -Z                     preserve cached description files"
     puts " -P                     HTTP proxy server, http://username:pass@host:port/"
     puts " -C                     Clear local browser cache"
     puts ""

@@ -21,7 +21,7 @@ class ShadowFetch
   def initialize (url)
     @url = url
     @remote = 0
-    @localExpiry=518400    		# 6 days
+    @localExpiry = 518400		# 6 days
     @maxFailures = 2
     @httpHeaders = {
       'User-Agent'      => "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_2; en-US) AppleWebKit/532.9 (KHTML, like Gecko) Chrome/5.0.307.11 Safari/532.9",

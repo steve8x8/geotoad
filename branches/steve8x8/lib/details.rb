@@ -5,6 +5,7 @@ require 'zlib'
 
 class CacheDetails
   attr_writer :useShadow, :cookie
+  attr_accessor :preserve
 
   include Common
   include Messages
@@ -14,7 +15,8 @@ class CacheDetails
 
   def initialize(data)
     @waypointHash = data
-    @useShadow=1
+    @useShadow = 1
+    @preserve = nil
 
     debug "Loading funfactor"
     @funfactor = FunFactor.new()
@@ -90,6 +92,10 @@ class CacheDetails
       end
     end
 
+    # overwrite TTL if "preserveCache" option was set
+    if @preserve
+      ttl = 333000000		# > 10 years
+    end
     if ttl
       page.fetch(ttl)
     else # use default

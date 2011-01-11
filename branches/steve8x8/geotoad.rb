@@ -102,6 +102,8 @@ class GeoToad
     @queryTitle        = "GeoToad: #{@queryArg}"
     @defaultOutputFile = "gt_" + @queryArg.to_s
 
+    @preserveCache = @option['preserveCache']
+
     if (@option['verbose'])
       enableDebug
     else
@@ -373,6 +375,7 @@ class GeoToad
     progress = ProgressBar.new(0, @filtered.totalWaypoints, "Reading")
     @detail = CacheDetails.new(wpFiltered)
     @detail.cookie = get_login_cookie()
+    @detail.preserve = @preserveCache
     token = 0
     downloads = 0
 
