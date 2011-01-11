@@ -124,7 +124,12 @@ class Input
           debug "queryType is now #{arg}"
         end
 
-        @@optHash[opt.gsub(/-/,'')]=arg
+        # verbose: allow for multiple -v
+        if (opt == '--verbose')
+          @@optHash['verbose'] = @@optHash['verbose'].to_i + 1
+        else
+          @@optHash[opt.gsub(/-/,'')]=arg
+        end
       end
     rescue
       usage
@@ -318,12 +323,13 @@ class Input
       printf("(24) output directory    [%-51.51s]\n", (@@optHash['outDir'] || findOutputDir))
       puts "=============================================================================="
       if @@optHash['verbose']
-        enableDebug
-        puts "VERBOSE MODE ENABLED"
+        enableDebug(@@optHash['verbose'])
+        print "** Verbose mode enabled, level #{@@optHash['verbose']}"
       else
         disableDebug
-        puts ""
+        print "** Verbose mode disabled"
       end
+      puts " - (v) to change"
       print "-- Enter menu number, (s) to start, (r) to reset, or (x) to exit --> "
       answer = $stdin.gets.chop
       puts ""
@@ -547,10 +553,9 @@ class Input
       when 'r'
         resetOptions
       when 'v'
-        if  @@optHash['verbose']
-          @@optHash['verbose']=nil
-        else
-          @@optHash['verbose'] = 'X'
+        @@optHash['verbose'] = @@optHash['verbose'].to_i + 1
+        if  @@optHash['verbose'] > 4
+          @@optHash['verbose'] = nil
         end
       when 'x'
         puts "Cya!"

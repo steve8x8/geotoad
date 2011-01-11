@@ -105,7 +105,7 @@ class GeoToad
     @preserveCache = @option['preserveCache']
 
     if (@option['verbose'])
-      enableDebug
+      enableDebug(@option['verbose'])
     else
       disableDebug
     end

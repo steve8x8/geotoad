@@ -4,17 +4,24 @@
 # $Id$
 
 module Messages
-  def enableDebug
-    $debugMode = 1
+
+  def enableDebug(level = 1)
+    $debugMode = level
   end
 
   def disableDebug
     $debugMode = 0
   end
 
+  def ndebug(level, text)
+      if $debugMode >= level
+        puts "[D-#{level}] #{text}"
+      end
+  end
+
   def debug(text)
-    if $debugMode == 1
-      puts "D: #{text}"
+    if $debugMode >= 1
+      puts "[-D-] #{text}"
     end
   end
 
