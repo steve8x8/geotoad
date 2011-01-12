@@ -1,10 +1,11 @@
 #labels Deprecated
-version=3.14.1
+version=3.14.3
 {{{
-- Support for distances in km
-- Support for travelbug details in GPX
-- New output formats for statistics: myfindgpx and myfindlist
-- Improved EasyName generation
-- Improved coordinate parsing
+- Fixes for geocaching.com's 2010-12-22 changes:
+- difficulty/terrain/size parsing
+- Ruby 1.8/1.9 compatibility fixes
+- Coordinate parsing fixed (affected W longitude only)
+- New output formats for feeding Garmins: gclist and gcvisits
+- Separate output of caches and additional waypoints for GSAK: gpx-gsak, gpx-wpts
 - Other minor bugfixes and enhancements
 }}}
