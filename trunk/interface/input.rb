@@ -109,7 +109,7 @@ class Input
       [ "--format",                   "-x",    GetoptLong::OPTIONAL_ARGUMENT ],
 
       [ "--distanceMax",              "-y",    GetoptLong::OPTIONAL_ARGUMENT ],
-      [ "--includeDisabled",          "-z",    GetoptLong::NO_ARGUMENT ],
+      [ "--includeDisabled",          "-z",    GetoptLong::NO_ARGUMENT ]
     ) || usage
 
     # put the stupid crap in a hash. Much nicer to deal with.
