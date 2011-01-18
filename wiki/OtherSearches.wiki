@@ -1,0 +1,31 @@
+#summary Other searches with GeoToad
+#labels Featured
+
+=Using GeoToad for searches which are not built in=
+
+=="Proximity" search around an existing geocache==
+
+There has been a request for "proximity" searches:
+Sometimes, you plan to attend an event, or want to visit one of the
+"geocaching legends" as "${my_country}'s First", and you don't want 
+to miss the little traditional around the corner.
+
+Here's a suggestion how to accomplish this (you will have to
+add your credentials, and modify some other search parameters,
+but you'll get the idea):
+
+{{{
+#!/bin/bash
+
+CENTER=GC77       # or whatever should be the center of your search
+DISTANCE=2km      # radius around $CENTER
+
+# extract coordinates for $CENTER cache
+geotoad -q wid -x list -o `pwd`/$CENTER.list $CENTER
+
+# get coordinates from list
+COORDS=`awk '{printf("%s,%s\n",$2,$3)}' $CENTER.list`
+
+# now run the real query
+geotoad -q coord -x gpx -o `pwd`/$CENTER-prox.gpx "$COORDS"
+}}}
