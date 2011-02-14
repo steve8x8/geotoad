@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Builds a new release of geotoad
 # $Id: makedist.se,v 1.3 2002/04/23 04:05:41 helix Exp $
 
@@ -12,6 +12,7 @@ if [ ! -f VERSION ];  then
 fi
 base_dir=`pwd`
 src_dir="/tmp/namebench-$$"
+trap "/bin/rm -Rf $src_dir/ $base_dir/dist/*/; exit 0" 0 1 2 3 6 9 15
 svn checkout http://geotoad.googlecode.com/svn/trunk/ $src_dir
 cd $src_dir
 svn log >ChangeLog.txt
@@ -84,10 +85,12 @@ if [ ! -x "/usr/local/bin/flip" -o ! -x "/usr/bin/flip" ]; then
 
   echo "In Windows, run:"
   echo ""
+  echo "Z:"
   echo "cd Z:\\dist\\${DISTNAME}_for_Windows\\compile"
   echo "ruby C:\\ruby\\bin\\rubyscript2exe.rb init.rb"
   echo "move init.exe ..\\geotoad.exe"
-  read ENTER
+  echo ""
+  read -p "Then press ENTER: " ENTER
   cd $WIN_DIR
   ls
   if [ -f "geotoad.exe" ]; then
