@@ -1027,9 +1027,9 @@ class Output
     counter = 0
     #@wpHash.keys.sort.each { |wid|
     (
-     # special case: myfind* requires reverse search order
+     # arrange "-q user" queries in reverse search order
      # otherwise, sort GC1 < GCZZZZ < GC10000 < GCZZZZZ < GC100000
-     (@outputType =~ /^myfind/) ? (wpSearchOrder.reverse) : (@wpHash.keys.sort{|a,b| a[2..-1].rjust(6)<=>b[2..-1].rjust(6)})
+     (@title =~ /^GeoToad: user =/) ? (wpSearchOrder.reverse) : (@wpHash.keys.sort{|a,b| a[2..-1].rjust(6)<=>b[2..-1].rjust(6)})
     ).each { |wid|
       cache = @wpHash[wid]
       debug "--- Output loop: #{wid} - #{cache['name']} by #{cache['creator']}"
