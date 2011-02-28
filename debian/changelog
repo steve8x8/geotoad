@@ -1,3 +1,9 @@
+geotoad (3.14.3-2) unstable; urgency=low
+
+  * Fix Debian/Ubuntu build: set $LOAD_PATH (issue 199)
+
+ -- Steffen Grunewald <steve8x8@gmail.com>  Mon, 28 Feb 2011 10:40:00 +0100
+
 geotoad (3.14.3-1) unstable; urgency=low
 
   * New release 3.14.3
