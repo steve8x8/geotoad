@@ -966,6 +966,7 @@ class Output
       'id' => cache['sname'],
       'mdate' => cache['mtime'].strftime("%Y-%m-%d"),
       'cdate' => cache['ctime'].strftime("%Y-%m-%d"),
+      'size' => cache['size'].gsub(/ /, '_'),
       'XMLDate' => cache['ctime'].strftime("%Y-%m-%dT07:00:00.000Z"),
       'latdatapad5' => sprintf("%2.5f", cache['latdata']),
       'londatapad5' => sprintf("%2.5f", cache['londata']),
