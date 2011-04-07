@@ -218,7 +218,7 @@ class Input
 
     puts " -o [filename]          output file name (automatic otherwise)"
     puts " -x [format]            output format type, see list below"
-    puts " -q [location|coord|user|wid]"
+    puts " -q [location|coord|user|keyword|wid]"
     puts "                        query type (location by default)"
 
     puts " -d/-D [1.0-5.0]        difficulty minimum/maximum"
@@ -229,7 +229,7 @@ class Input
     puts " -K    [keyword]        desc keyword search (slow). Use | again..."
     puts " -i/-I [username]       include/exclude caches owned by this person"
     puts " -e/-E [username]       include/exclude caches found by this person"
-    puts " -s/-S [virtual|micro|small|regular|large|...]"
+    puts " -s/-S [virtual|not_chosen|other|micro|small|regular|large]"
     puts "                        min/max size of the cache"
     puts " -c    [traditional|multicache|unknown|virtual|event|...]"
     puts "                        type of cache (| separated)"
