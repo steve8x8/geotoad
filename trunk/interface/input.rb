@@ -431,9 +431,11 @@ class Input
         @@optHash['funFactorMax'] = askNumber('What is the maximum fun factor you would like? (5.0)', nil)
 
       when '8'
-        sizes = ['virtual', 'micro', 'small', 'regular', 'large']
+        # 'virtual' and 'not chosen' are equivalent
+        sizes = ['virtual', 'not_chosen', 'other', 'micro', 'small', 'regular', 'large']
         @@optHash['sizeMin'] = askFromList("What is the smallest cache you seek (#{sizes.join(', ')})?", sizes, nil)
         @@optHash['sizeMax'] = askFromList("Great! What is the largest cache you seek (#{sizes.join(', ')})?", sizes, nil)
+
       when '9'
         kinds = ['traditional', 'multicache', 'event', 'unknown', 'letterbox', 'virtual', 'earthcache']
         @@optHash['cacheType'] = askFromList("Valid types: #{kinds.join(', ')}\nWhat do you seek (separate with commas)?", kinds, nil)
