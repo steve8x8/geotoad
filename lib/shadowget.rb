@@ -21,8 +21,8 @@ class ShadowFetch
   def initialize (url)
     @url = url
     @remote = 0
-    @localExpiry=518400    		# 6 days
-    @maxFailures = 2
+    @localExpiry = 518400		# 6 days
+    @maxFailures = 3			#was 2
     @httpHeaders = {
       'User-Agent'      => "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_2; en-US) AppleWebKit/532.9 (KHTML, like Gecko) Chrome/5.0.307.11 Safari/532.9",
       'Accept'          => 'text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5',
@@ -217,15 +217,16 @@ class ShadowFetch
     debug "Fetching [#{url_str}]"
     uri = URI.parse(url_str)
 
-    if @@downloadErrors == @maxFailures
-      sleep(10)
-      debug "#{@@downloadErrors} download errors so far, no more retries will be attempted."
+    if @@downloadErrors > 0 && @@downloadErrors < @maxFailures
+      debug "#{@@downloadErrors} download errors so far, will try until #{@maxFailures}"
+      # progressive sleep time: 5, 20, 45 sec.
+      sleep( 5*@@downloadErrors**2)
+    elsif @@downloadErrors == @maxFailures
+      debug "#{@@downloadErrors} download errors so far, maximum count reached"
+      sleep(10*@@downloadErrors**2)
     elsif @@downloadErrors > @maxFailures
       displayInfo "Offline mode: not fetching #{url_str}"
       return nil
-    elsif @@downloadErrors > 0 && @@downloadErrors < @maxFailures
-      debug "Only #{@@downloadErrors} download errors so far, will try until #{@maxFailures}"
-      sleep(5)
     end
 
     if ENV['HTTP_PROXY']
