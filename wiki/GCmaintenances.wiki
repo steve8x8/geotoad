@@ -11,19 +11,27 @@ I will try to collect announced gc.com maintenances (via their web page, or mail
 _(new entries will be added on top)_
 
 ----
-
 2011-04-28:
   * _"4-6 hours [...] site update on Wednesday, May 04, 2011 [...] 9am PDT (GMT -7)"_
   * that's 1600-2000(-2200) UTC
   * *no effect known yet*
   * _no action taken yet_
-
 ----
-
+2011-03-24:
+  * *new server build: S21_HF_20110324.4*
+  * _did not harm GeoToad_
+----
+(probably in late Jan/early Feb?):
+  * *new server build: S20_HF_xxxxxxxx.x*
+  * _no effect seen in GeoToad_
+----
 2010-12-22 (approx.):
+  * *new server build: S19_HF_20101222.1*
+  * started "Maps Beta"
   * *update replaced text for difficulty, terrain, and cache size by image*
   * *image code is valid for a few minutes only*
   * *also distance and direction texts are replaced by image*
   * _partially handled in GeoToad by re-ordering filters (issue 183)_
   * _experimental code to decrypt image codes_
   * _no decryption of distances available yet_
+----
