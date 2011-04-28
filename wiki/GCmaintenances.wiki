@@ -1,0 +1,29 @@
+#summary Collected gc.com maint dates, issues, and actions taken
+#labels Featured
+
+= Introduction =
+
+I will try to collect announced gc.com maintenances (via their web page, or mailed), and resulting problems here.
+
+
+= Details =
+
+_(new entries will be added on top)_
+
+----
+
+2011-04-28:
+  * _"4-6 hours [...] site update on Wednesday, May 04, 2011 [...] 9am PDT (GMT -7)"_
+  * that's 1600-2000(-2200) UTC
+  * *no effect known yet*
+  * _no action taken yet_
+
+----
+
+2010-12-22 (approx.):
+  * *update replaced text for difficulty, terrain, and cache size by image*
+  * *image code is valid for a few minutes only*
+  * *also distance and direction texts are replaced by image*
+  * _partially handled in GeoToad by re-ordering filters (issue 183)_
+  * _experimental code to decrypt image codes_
+  * _no decryption of distances available yet_
