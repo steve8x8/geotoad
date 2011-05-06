@@ -10,7 +10,7 @@ class CacheDetails
   include Messages
 
   # Use a printable template that shows the last 10 logs.
-  @@baseURL="http://www.geocaching.com/seek/cdpf.aspx?lc=10"
+  @@baseURL="http://www.geocaching.com/seek/cdpf.aspx"
 
   def initialize(data)
     @waypointHash = data
@@ -49,7 +49,7 @@ class CacheDetails
       suffix = 'guid=' + id.to_s
     end
 
-    url = @@baseURL + "&" + suffix
+    url = @@baseURL + "?" + suffix + "&lc=10"
   end
 
   # fetches by geocaching.com sid
