@@ -12,10 +12,12 @@ _(new entries will be added on top)_
 
 ----
 2011-04-28:
-  * _"4-6 hours [...] site update on Wednesday, May 04, 2011 [...] 9am PDT (GMT -7)"_
-  * that's 1600-2000(-2200) UTC
-  * *no effect known yet*
-  * _no action taken yet_
+  * _"site update on Wednesday, May 04, 2011 [...] 9am PDT (GMT -7)"_
+  * *new server build: S22_HF_20110504.2*
+  * *search pages slightly changed, login now uses https*
+  * _GeoToad: issue 201_
+  * _made changes to lib/{search.rb,auth.rb,shadowget.rb} (SVN rev 841)_
+  * _probably new release 3.14.4_
 ----
 2011-03-24:
   * *new server build: S21_HF_20110324.4*
