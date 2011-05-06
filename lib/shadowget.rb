@@ -1,7 +1,7 @@
 # $Id$
 
 require 'digest/md5'
-require 'net/http'
+require 'net/https'
 require 'fileutils'
 require 'uri'
 require 'cgi'
@@ -216,6 +216,7 @@ class ShadowFetch
     raise ArgumentError, 'HTTP redirect too deep' if redirects == 0
     debug "Fetching [#{url_str}]"
     uri = URI.parse(url_str)
+    debug "URL parsed #{uri.host}:#{uri.port}"
 
     if @@downloadErrors > 0 && @@downloadErrors < @maxFailures
       debug "#{@@downloadErrors} download errors so far, will try until #{@maxFailures}"
@@ -233,10 +234,13 @@ class ShadowFetch
       proxy = URI.parse(ENV['HTTP_PROXY'])
       proxy_user, proxy_pass = uri.userinfo.split(/:/) if uri.userinfo
       debug "Using proxy from environment: " + ENV['HTTP_PROXY']
-      http = Net::HTTP::Proxy(proxy.host, proxy.port, proxy_user, proxy_pass).new(uri.host, 80)
+      http = Net::HTTP::Proxy(proxy.host, proxy.port, proxy_user, proxy_pass).new(uri.host, uri.port)
     else
       debug "No proxy found in environment, using standard HTTP connection."
-      http = Net::HTTP.new(uri.host, 80)
+      http = Net::HTTP.new(uri.host, uri.port)
+      if uri.port != 80
+	http.use_ssl = true
+      end
     end
 
     if uri.query
