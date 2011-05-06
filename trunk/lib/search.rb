@@ -533,7 +533,7 @@ class SearchCache
 
 # 2011-05-04: new pattern (try to improve!)
       # | GCabcde | (over multiple lines!)
-      when /^ +(GC[0-9A-HJKMNPQRTV-Z]{4,})\s?$/
+      when /^ +(GC[0-9A-HJKMNPQRTV-Z]+)\s?$/
 	wid = $1
 	debug "wid=#{wid}"
 
