@@ -1,11 +1,11 @@
 #labels Deprecated
-version=3.14.3
+version=3.14.4
 {{{
-- Fixes for geocaching.com's 2010-12-22 changes:
-- difficulty/terrain/size parsing
-- Ruby 1.8/1.9 compatibility fixes
-- Coordinate parsing fixed (affected W longitude only)
-- New output formats for feeding Garmins: gclist and gcvisits
-- Separate output of caches and additional waypoints for GSAK: gpx-gsak, gpx-wpts
-- Other minor bugfixes and enhancements
+- Fixes for geocaching.com's 2011-05-04 changes:
+- search parsing
+- login using https
+- cache description URL
+- Small improvements:
+- cache size sorting (virtual, not chosen < other < micro)
+- "not_chosen" for list output (allows consistent parsing)
 }}}

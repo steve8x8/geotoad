@@ -16,8 +16,8 @@ _(new entries will be added on top)_
   * *new server build: S22_HF_20110504.2*
   * *search pages slightly changed, login now uses https*
   * _GeoToad: issue 201_
-  * _made changes to lib/{search.rb,auth.rb,shadowget.rb} (SVN rev 841)_
-  * _probably new release 3.14.4_
+  * _made changes to lib/{search.rb,auth.rb,shadowget.rb}_
+  * _fixed in 3.14.4 (released 2011-05-07)_
 ----
 2011-03-24:
   * *new server build: S21_HF_20110324.4*
@@ -36,4 +36,5 @@ _(new entries will be added on top)_
   * _partially handled in GeoToad by re-ordering filters (issue 183)_
   * _experimental code to decrypt image codes_
   * _no decryption of distances available yet_
+  * _fixed in 3.14.3 (released 2011-01-12)_
 ----

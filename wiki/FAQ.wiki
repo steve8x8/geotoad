@@ -12,6 +12,7 @@ Table of Contents:
 4. Why is there no GUI for GeoToad?
 5. What are the "Fun Factor" ratings?        
 6. geotoad.exe gets relative paths wrong in Windows
+7. How to contact developers?
 
 Questions and Answers:
 ----------------------
@@ -108,5 +109,11 @@ Questions and Answers:
   that GeoToad is installed to, rather than the working directory it
   was launched from.
 
+7. How to contact developers?
+
+  If you think you found a bug, please check the ReportingBugs wiki page
+  for some instructions.
+  You may now reach us via Twitter: @GeoToad_ (note the underscore at
+  the end of the twitter name!)
 
 }}}

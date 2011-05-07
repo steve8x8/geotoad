@@ -2,7 +2,7 @@
 #labels Featured
 
 {{{
-GeoToad 3.12.1 by Thomas Stromberg (c) 2002 - 2010
+GeoToad 3.13.4 by Thomas Stromberg (c) 2002 - 2011
 ==========================================================================
 
 Table of Contents:
@@ -46,12 +46,12 @@ a command prompt run "geotoad" or if you are on UNIX, run "./geotoad.rb".
 You will then see a screen that looks similar to this:
 
 ==============================================================================
-:::                // GeoToad 3.12.1 Text User Interface //                :::
+:::                // GeoToad 3.14.4 Text User Interface //                :::
 ==============================================================================
-(1)  GC.com login [REQUIRED         ] | (2)  search type          [location  ]
-(3)  location     [roswell, ga      ] | (4)  distance maximum            [10 ]
+(1)  GC.com login [REQUIRED         ] | (2)  search type          [coord     ]
+(3)  location     [N52 23.0 E13 03.0] | (4)  distance maximum (km)     [10   ]
                                       |
-(5)  difficulty           [2.0 - 5.0] | (6)  terrain               [0.0 - 5.0]
+(5)  difficulty           [2.0 - 5.0] | (6)  terrain               [0.0 - 3.5]
 (7)  fun factor           [1.5 - 5.0] | (8)  cache size            [any - any]
 (9)  cache type           [      any] |
 (10) virgin caches only           [ ] | (11) travel bug caches only        [ ]
@@ -60,12 +60,12 @@ You will then see a screen that looks similar to this:
 (14) title keyword       [          ] | (15) descr. keyword    [             ]
 (16) cache not found by  [          ] | (17) cache owner isn't [             ]
 (18) cache found by      [          ] | (19) cache owner is    [             ]
-(20) EasyName WP length         [  0] | (21) include disabled caches       [ ] 
+(20) EasyName WP length         [  0] | (21) include disabled caches       [X] 
 - - - - - - - - - - - - - - - - - - - + - - - - - - - - - - - - - - - - - - -
-(22) output format       [kml       ]   (23) filename   [automatic           ]
-(24) output directory    [/home/tstromberg/Skrivbord                         ]
+(22) output format       [list      ]   (23) filename   [automatic           ]
+(24) output directory    [/home/user/geocaching/geotoad                      ]
 ==============================================================================
-
+** Verbose mode disabled - (v) to change
 -- Enter menu number, (s) to start, (r) to reset, or (x) to exit --> 
 
 
@@ -96,17 +96,20 @@ syntax: geotoad [options] <search:search2:search3>
  -p <password>          Geocaching.com password, required for coordinates
  -o [filename]          output file name (automatic otherwise)
  -x [format]            output format type, see list below
- -q [location|user|wid]   query type (location by default)
- -d/-D [0.0-5.0]        difficulty minimum/maximum
- -t/-T [0.0-5.0]        terrain minimum/maximum
+ -q [location|coord|user|keyword|wid]
+                        query type (location by default)
+ -d/-D [1.0-5.0]        difficulty minimum/maximum
+ -t/-T [1.0-5.0]        terrain minimum/maximum
  -f/-F [0.0-5.0]        fun factor minimum/maximum
- -y    [1-500]          distance maximum in miles (10)
+ -y    [1-500]          distance maximum, in miles, or suffixed "km" (10)
  -k    [keyword]        title keyword search. Use | to delimit multiple
  -K    [keyword]        desc keyword search (slow). Use | again...
  -i/-I [username]       include/exclude caches owned by this person
  -e/-E [username]       include/exclude caches found by this person
- -s/-S [virtual|small|regular|large]   min/max size of the cache
- -c    [regular|virtual|event|unknown] type of cache (| seperated)
+ -s/-S [virtual|not_chosen|other|micro|small|regular|large]
+                        min/max size of the cache
+ -c    [traditional|multicache|unknown|virtual|event|...]
+                        type of cache (| separated)
  -j/-J [# days]         include/exclude caches placed in the last X days
  -r/-R [# days]         include/exclude caches found in the last X days
  -z                     include disabled caches
@@ -118,11 +121,16 @@ syntax: geotoad [options] <search:search2:search3>
 
 ::: OUTPUT FORMATS:
  cachemate=   cetus+       csv          delorme      delorme-nour dna+        
- easygps      gpsdrive     gpsman       gpspilot+    gpspoint     gpsutil+    
- gpx          holux+       html         kml+         magnav+      mapsend+    
- mxf          ozi          pcx+         psp+         sms          tab         
- text         tiger        tmpro+       tpg+         xmap+       
+ easygps      gclist       gcvisits     gpsdrive     gpsman       gpspilot+   
+ gpspoint     gpsutil+     gpx          gpx-gsak     gpx-wpts     holux+      
+ html         kml+         list         magnav+      mapsend+     mxf         
+ myfindgpx    myfindlist   ozi          pcx+         psp+         sms         
+ tab          text         tiger        tmpro+       tpg+         xmap+       
     + requires gpsbabel in PATH           = requires cmconvert in PATH
+
+::: EXAMPLES:
+  geotoad.rb -u helixblue -p password 27502
+  geotoad.rb -u john -p password -d 3 -s helixblue -f vcf -o NC.vcf 'North Carolina'
 
 
 ---------------------
