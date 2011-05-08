@@ -240,6 +240,7 @@ class ShadowFetch
       http = Net::HTTP.new(uri.host, uri.port)
       if uri.port != 80
 	http.use_ssl = true
+	http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       end
     end
 
