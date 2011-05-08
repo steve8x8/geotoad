@@ -99,7 +99,8 @@ class GeoToad
       @distanceMax     = sprintf("%.3f", @distanceMax).to_f
     end
     debug "Internally using distance #{@distanceMax} miles."
-    @queryTitle        = "GeoToad: #{@queryArg}"
+    # include query type, will be parsed by output.rb
+    @queryTitle        = "GeoToad: #{@queryType} = #{@queryArg}"
     @defaultOutputFile = "gt_" + @queryArg.to_s
 
     if (@option['verbose'])
