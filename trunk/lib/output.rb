@@ -982,6 +982,7 @@ class Output
       'hint' => cache['hint'],
       'cacheSymbol' => symbol,
       'cacheID' => cacheID(wid),
+      'logID' => (1001111111-cache['index'].to_i),
       'trackables' => cache['travelbug'].to_s,
       'xmlTrackables' => xmlTrackables,
       'shortWpts' => shortWpts.to_s,
