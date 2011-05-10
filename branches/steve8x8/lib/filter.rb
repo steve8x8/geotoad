@@ -6,13 +6,28 @@ class Filter
   include Messages
     
   @@sizes = {
+    # order by cache sizes
+    # 'other' usually is nano/nacro/bison
+    # how to handle 'unspecified/not applicable'?
     'virtual' => 0,
-    'micro'   => 1,
-    'small' => 2,
-    'other' => 2,
-    'not chosen' => 2,
-    'regular' => 3,
-    'large' => 4
+    # events, earthcaches, citos are kind of virtual too
+    'not chosen' => 0,
+    'not_chosen' => 0,
+    # 'other' here means 'nano' (nacro, bison, ...)
+    'other' => 1,
+    'micro'   => 2,
+    'small' => 3,
+    'regular' => 4,
+    'large' => 5
+    # don't confuse with GC's internal mapping (modulo offset 1):
+    #'not chosen' => 0,
+    #'not_chosen' => 0,
+    #'micro'      => 1,
+    #'regular'    => 2,
+    #'large'      => 3,
+    #'virtual'    => 4,
+    #'other'      => 5,
+    #'small'      => 7
   }
     
   def initialize(data)

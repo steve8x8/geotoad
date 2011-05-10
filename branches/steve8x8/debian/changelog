@@ -1,3 +1,28 @@
+geotoad (3.14.4-1) unstable; urgency=low
+
+  * New release 3.14.4
+  * Fixes issues caused by gc.com 2011-05-04 changes
+
+ -- Steffen Grunewald <steve8x8@gmail.com>  Fri,  6 May 2011 18:00:00 +0200
+
+geotoad (3.14.3-2) unstable; urgency=low
+
+  * Fix Debian/Ubuntu build: set $LOAD_PATH (issue 199)
+
+ -- Steffen Grunewald <steve8x8@gmail.com>  Mon, 28 Feb 2011 10:40:00 +0100
+
+geotoad (3.14.3-1) unstable; urgency=low
+
+  * New release 3.14.3
+
+ -- Steffen Grunewald <steve8x8@gmail.com>  Wed, 12 Jan 2011 15:10:00 +0100
+
+geotoad (3.14.2-1) unstable; urgency=low
+
+  * New release 3.14.2
+
+ -- Steffen Grunewald <steve8x8@gmail.com>  Wed, 12 Jan 2011 14:37:00 +0100
+
 geotoad (3.14.1-1) unstable; urgency=low
 
   * New release 3.14.1

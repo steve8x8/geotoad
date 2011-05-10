@@ -1,7 +1,7 @@
 # $Id$
 
 require 'digest/md5'
-require 'net/http'
+require 'net/https'
 require 'fileutils'
 require 'uri'
 require 'cgi'
@@ -22,7 +22,7 @@ class ShadowFetch
     @url = url
     @remote = 0
     @localExpiry = 518400		# 6 days
-    @maxFailures = 2
+    @maxFailures = 3			#was 2
     @httpHeaders = {
       'User-Agent'      => "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_2; en-US) AppleWebKit/532.9 (KHTML, like Gecko) Chrome/5.0.307.11 Safari/532.9",
       'Accept'          => 'text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5',
@@ -128,7 +128,7 @@ class ShadowFetch
 
 
   # gets the file
-  def fetch(ttl = @localExpiry)
+  def fetch
     @@src = nil
     time = Time.now
     localfile = cacheFile(@url)
@@ -140,13 +140,13 @@ class ShadowFetch
     # expiry?
     if (File.exists?(localfile))
       age = time.to_i - File.mtime(localfile).to_i
-      if (age > ttl)
-        debug "local cache is #{age} old, older than #{ttl}"
+      if (age > @localExpiry)
+        debug "local cache is #{age} old, older than #{@localExpiry}"
       elsif (File.size(localfile) < 6)
         debug "local cache appears corrupt. removing.."
         File.unlink(localfile)
       else
-        debug "local cache is only #{age} old (#{ttl}), using local file."
+        debug "local cache is only #{age} old (#{@localExpiry}), using local file."
         @data = fetchLocal(localfile)
         @@src='local'
         # short-circuit out of here!
@@ -216,26 +216,32 @@ class ShadowFetch
     raise ArgumentError, 'HTTP redirect too deep' if redirects == 0
     debug "Fetching [#{url_str}]"
     uri = URI.parse(url_str)
+    debug "URL parsed #{uri.host}:#{uri.port}"
 
-    if @@downloadErrors == @maxFailures
-      sleep(10)
-      debug "#{@@downloadErrors} download errors so far, no more retries will be attempted."
+    if @@downloadErrors > 0 && @@downloadErrors < @maxFailures
+      debug "#{@@downloadErrors} download errors so far, will try until #{@maxFailures}"
+      # progressive sleep time: 5, 20, 45 sec.
+      sleep( 5*@@downloadErrors**2)
+    elsif @@downloadErrors == @maxFailures
+      debug "#{@@downloadErrors} download errors so far, maximum count reached"
+      sleep(10*@@downloadErrors**2)
     elsif @@downloadErrors > @maxFailures
       displayInfo "Offline mode: not fetching #{url_str}"
       return nil
-    elsif @@downloadErrors > 0 && @@downloadErrors < @maxFailures
-      debug "Only #{@@downloadErrors} download errors so far, will try until #{@maxFailures}"
-      sleep(5)
     end
 
     if ENV['HTTP_PROXY']
       proxy = URI.parse(ENV['HTTP_PROXY'])
       proxy_user, proxy_pass = uri.userinfo.split(/:/) if uri.userinfo
       debug "Using proxy from environment: " + ENV['HTTP_PROXY']
-      http = Net::HTTP::Proxy(proxy.host, proxy.port, proxy_user, proxy_pass).new(uri.host, 80)
+      http = Net::HTTP::Proxy(proxy.host, proxy.port, proxy_user, proxy_pass).new(uri.host, uri.port)
     else
       debug "No proxy found in environment, using standard HTTP connection."
-      http = Net::HTTP.new(uri.host, 80)
+      http = Net::HTTP.new(uri.host, uri.port)
+      if uri.port != 80
+	http.use_ssl = true
+	http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      end
     end
 
     if uri.query

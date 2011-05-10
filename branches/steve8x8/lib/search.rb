@@ -326,8 +326,10 @@ class SearchCache
           post_vars['__EVENTTARGET'] = $1
         end
 
+# 2011-05-04: obsolete (match below!)
       #<IMG src="./gc_files/8.gif" alt="Unknown Cache" width="32" height="32"></A>
-      when /WptTypes\/[\w].*?alt=\"(.*?)\"/
+      #<img src="http://[...]/wpttypes/sm/8.gif" alt="Unknown Cache"[...]>
+      when /cache_details.*\/WptTypes\/[\w].*?alt=\"(.*?)\"/
         full_type = $1
         # there may be more than 1 match, don't overwrite
         if cache['fulltype']
@@ -350,6 +352,7 @@ class SearchCache
         end
         cache['mdays'] = -1
 
+# 2011-05-04: obsolete
       # trackables: all in one separate line, usually after the cache type line
       # <img src="http://www.geocaching.com/images/wpttypes/21.gif" alt="Travel Bug Dog Tag (1 item)" title="Travel Bug Dog Tag (1 item)" /> \
       # ... <img src="/images/WptTypes/coins.gif" alt="Geocoins:  Happy Caching - Black Cat Geocoin (1), Geocaching meets Geodäsie Geocoin (1)" title="Geocoins:  Happy Caching - Black Cat Geocoin (1), Geocaching meets Geodäsie Geocoin (1)" />
@@ -398,6 +401,7 @@ class SearchCache
         debug "trackables flagged: #{line}"
         cache['travelbug'] = "Unspecified Trackable"
 
+# 2011-05-04: obsolete
       # (2/1)<br />
       # (1/1.5)<br />
       when /\(([-\d\.]+)\/([-\d\.]+)\)\<br/
@@ -415,11 +419,13 @@ class SearchCache
         end
         debug "difficulty=#{cache['difficulty']} terr=#{cache['terrain']}"
 
+# 2011-05-04: obsolete
       # <img src="/images/icons/container/micro.gif" alt="Size: Micro" />
       when /\<img src=\"\/images\/icons\/container\/.*\" alt=\"Size: (.*?)\"/
         cache['size'] = $1.downcase
         debug "size=#{cache['size']}"
 
+# 2011-05-04: unchanged
       #                             11 Jul 10<br />
       # Yesterday<strong>*</strong><br />
       when /^ +(\w+[ \w]+)(\<strong\>)?\*?(\<\/strong\>)?\<br/
@@ -428,16 +434,18 @@ class SearchCache
         cache['mdays'] = daysAgo(cache['mtime'])
         debug "mtime=#{cache['mtime']} mdays=#{cache['mdays']}"
 
+# 2011-05-04: appended </span>
       # creation date: date alone on line
-      #  9 Sep 06
+      #  9 Sep 06</span>
       # may have a "New!" flag next to it
-      #  6 Dec 10 <img src="/images/new3.gif" alt="New!" title="New!" />
-      when /^ +(\d+ \w{3} \d+)(\s+\<img [^\>]* title="New!" \/\>)?\s?$/
+      #  6 Dec 10 <img src="[...]" alt="New!" title="New!" /></span>
+      when /^ +(\d+ \w{3} \d+)(\s+\<img [^\>]* title="New!" \/\>)?<\/span>\s?$/
         debug "create date: #{$1} at line: #{line}"
         cache['ctime'] = parseDate($1)
         cache['cdays'] = daysAgo(cache['ctime'])
         debug "ctime=#{cache['ctime']} cdays=#{cache['cdays']}"
 
+# 2011-05-04: obsolete
       #     <img src="/images/icons/compass/NW.gif" alt="NW" title="NW" />NW<br />0.1mi
       # GC user prefs set to imperial units
       when /\>([NWSE]+)\<br \/\>([\d\.]+)mi/
@@ -450,6 +458,7 @@ class SearchCache
         cache['distance'] = $2.to_f / 1.609344
         cache['direction'] = $1
         debug "cacheDistance=#{cache['distance']}mi dir=#{cache['direction']}"
+
       # or just              <br />Here
       when /^\s+\<br \/\>Here\s?$/
         # less than 0.01 miles
@@ -457,6 +466,7 @@ class SearchCache
         cache['direction'] = "N"
         debug "cacheDistance=#{cache['distance']}mi dir=#{cache['direction']}"
 
+# 2011-05-04: unchanged
       # <a href="/seek/cache_details.aspx?guid=c9f28e67-5f18-45c0-90ee-76ec8c57452f">Yasaka-Shrine@Zerosen</a>
       # now (2010-12-22, one line!):
       # <a href="/seek/cache_details.aspx?guid=ecfd0038-8e51-4ac8-a073-1aebe7c10cbc" class="lnk">
@@ -508,17 +518,26 @@ class SearchCache
         cache['name']=name.gsub(/ +$/, '')
         debug "guid=#{cache['guid']} name=#{cache['name']} (disabled=#{cache['disabled']}, archived=#{cache['archived']})"
 
+# 2011-05-04: unchanged
       # by gonsuke@Zerosen and Bakatono@Zerosen
       when /^ +by (.*?)$/
         creator = $1
         cache['creator'] = creator.gsub(/\s+$/, '')
         debug "creator=#{cache['creator']}"
 
+# 2011-05-04: obsolete
       # (GC1Z0RT)<br />
       when /^ +\((GC.*?)\)\<br \/\>/
         wid = $1
         debug "wid=#{wid}"
 
+# 2011-05-04: new pattern (try to improve!)
+      # | GCabcde | (over multiple lines!)
+      when /^ +(GC[0-9A-HJKMNPQRTV-Z]+)\s?$/
+	wid = $1
+	debug "wid=#{wid}"
+
+# 2011-05-04: appended </span>
       # country/state: prefixed by 28 blanks
       # Mecklenburg-Vorpommern, Germany
       # East Midlands, United Kingdom
@@ -528,7 +547,7 @@ class SearchCache
       # Croatia; Isle of Man; Bosnia and Herzegovina, St. Martin, Guinea-Bissau; Cocos (Keeling) Islands
       # country names: English spelling; state names: local spelling
       #             |>$2|    |->$3 -------------------------------|
-      when /^\s{28}((.*?), )?([A-Z][a-z]+\.?([ -]\(?[A-Za-z]+\)?)*)\s?$/
+      when /^\s{28}((.*?), )?([A-Z][a-z]+\.?([ -]\(?[A-Za-z]+\)?)*)<\/span>\s?$/
         debug "Country/state found #{$2}/#{$3}"
         if ($3 != "Icons" && $3 != "Placed" && $3 != "Description" && $3 != "Last Found")
           # special case US states:

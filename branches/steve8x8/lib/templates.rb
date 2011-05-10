@@ -425,6 +425,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
       "<%wp.difficulty%>/<%wp.terrain%>\t" +
       "<%wp.type%>\t" +
       "<%out.relativedistancekm%>\t" +
+      "<%wp.dts%>\t<%wp.dtsv%>\t<%out.size%>\t" + # testing only
       "\"<%wp.name%>\" by <%wp.creator%>\n"
   },
 
@@ -467,7 +468,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
       "  <groundspeak:long_description html=\"True\">long</groundspeak:long_description>\r\n" +
       "  <groundspeak:encoded_hints>hint</groundspeak:encoded_hints>\r\n" +
       "  <groundspeak:logs>\r\n" +
-      "    <groundspeak:log id=\"1\">\r\n" +
+      "    <groundspeak:log id=\"<%out.logID%>\">\r\n" +
       "      <groundspeak:date><%out.mdate%>T08:00:00Z</groundspeak:date>\r\n" +
       "      <groundspeak:type>Found it</groundspeak:type>\r\n" +
       "      <groundspeak:finder id=\"666\"><%outEntity.username%></groundspeak:finder>\r\n" +

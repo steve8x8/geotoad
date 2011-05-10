@@ -99,13 +99,12 @@ class GeoToad
       @distanceMax     = sprintf("%.3f", @distanceMax).to_f
     end
     debug "Internally using distance #{@distanceMax} miles."
+    # include query type, will be parsed by output.rb
     @queryTitle        = "GeoToad: #{@queryType} = #{@queryArg}"
     @defaultOutputFile = "gt_" + @queryArg.to_s
 
-    @preserveCache = @option['preserveCache']
-
     if (@option['verbose'])
-      enableDebug(@option['verbose'])
+      enableDebug
     else
       disableDebug
     end
@@ -375,7 +374,6 @@ class GeoToad
     progress = ProgressBar.new(0, @filtered.totalWaypoints, "Reading")
     @detail = CacheDetails.new(wpFiltered)
     @detail.cookie = get_login_cookie()
-    @detail.preserve = @preserveCache
     token = 0
     downloads = 0
 

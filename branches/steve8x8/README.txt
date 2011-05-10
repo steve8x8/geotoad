@@ -109,7 +109,6 @@ syntax: geotoad [options] <search:search2:search3>
  -n                     only include not found caches (virgins)
  -b                     only include caches with travelbugs
  -l                     set EasyName waypoint id length. (16)
- -Z                     don't overwrite existing cache descriptions
  -P                     HTTP proxy server, http://username:pass@host:port/
  -C                     Clear local browser cache
 ::: OUTPUT FORMATS:

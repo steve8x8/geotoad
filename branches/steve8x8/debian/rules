@@ -1,6 +1,10 @@
 #!/usr/bin/make -f
 
-build:
+include /usr/share/quilt/quilt.make
+
+build: patch build-noarch
+
+build-noarch:
 	dh_testdir
 
 clean:

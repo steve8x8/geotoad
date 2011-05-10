@@ -44,16 +44,16 @@ output file name (automatic otherwise)
 .B -x format
 output format type (see list below)
 .TP
-.B -q [location|user|keyword|coord|wid]
+.B -q [location|coord|user|keyword|wid]
 query type (location by default)
 .TP
-.B -s [virtual|micro|small|regular|large]
-set minimum cache size
+.B -s [virtual|not_chosen|other|micro|small|regular|large]
+set minimum cache size - 'not_chosen' is equivalent to 'virtual'
 .TP
-.B -S [virtual|micro|small|regular|large]
+.B -S [virtual|not_chosen|other|micro|small|regular|large]
 set maximum cache size
 .TP
-.B -c [traditional|multicache|event|unknown|letterbox|virtual|earthcache|...]
+.B -c [traditional|multicache|letterbox|event|unknown|cito|virtual|webcam|earthcache|wherigo|...]
 set cache type (separated by '|')
 .TP
 .B -d 1.0-5.0
@@ -118,9 +118,6 @@ only include caches with travelbugs
 .TP
 .B -l
 set EasyName waypoint id length. (16)
-.TP
-.B -Z
-do not overwrite existing cache description files in file cache
 .TP
 .B -P proxy
 HTTP proxy server, http://username@password@host:port/

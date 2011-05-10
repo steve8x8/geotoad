@@ -109,8 +109,7 @@ class Input
       [ "--format",                   "-x",    GetoptLong::OPTIONAL_ARGUMENT ],
 
       [ "--distanceMax",              "-y",    GetoptLong::OPTIONAL_ARGUMENT ],
-      [ "--includeDisabled",          "-z",    GetoptLong::NO_ARGUMENT ],
-      [ "--preserveCache",            "-Z",    GetoptLong::NO_ARGUMENT ],
+      [ "--includeDisabled",          "-z",    GetoptLong::NO_ARGUMENT ]
     ) || usage
 
     # put the stupid crap in a hash. Much nicer to deal with.
@@ -124,12 +123,7 @@ class Input
           debug "queryType is now #{arg}"
         end
 
-        # verbose: allow for multiple -v
-        if (opt == '--verbose')
-          @@optHash['verbose'] = @@optHash['verbose'].to_i + 1
-        else
-          @@optHash[opt.gsub(/-/,'')]=arg
-        end
+        @@optHash[opt.gsub(/-/,'')]=arg
       end
     rescue
       usage
@@ -224,7 +218,7 @@ class Input
 
     puts " -o [filename]          output file name (automatic otherwise)"
     puts " -x [format]            output format type, see list below"
-    puts " -q [location|coord|user|wid]"
+    puts " -q [location|coord|user|keyword|wid]"
     puts "                        query type (location by default)"
 
     puts " -d/-D [1.0-5.0]        difficulty minimum/maximum"
@@ -235,7 +229,7 @@ class Input
     puts " -K    [keyword]        desc keyword search (slow). Use | again..."
     puts " -i/-I [username]       include/exclude caches owned by this person"
     puts " -e/-E [username]       include/exclude caches found by this person"
-    puts " -s/-S [virtual|micro|small|regular|large|...]"
+    puts " -s/-S [virtual|not_chosen|other|micro|small|regular|large]"
     puts "                        min/max size of the cache"
     puts " -c    [traditional|multicache|unknown|virtual|event|...]"
     puts "                        type of cache (| separated)"
@@ -245,7 +239,6 @@ class Input
     puts " -n                     only include not found caches (virgins)"
     puts " -b                     only include caches with travelbugs"
     puts " -l                     set EasyName waypoint id length. (16)"
-    puts " -Z                     preserve cached description files"
     puts " -P                     HTTP proxy server, http://username:pass@host:port/"
     puts " -C                     Clear local browser cache"
     puts ""
@@ -323,13 +316,12 @@ class Input
       printf("(24) output directory    [%-51.51s]\n", (@@optHash['outDir'] || findOutputDir))
       puts "=============================================================================="
       if @@optHash['verbose']
-        enableDebug(@@optHash['verbose'])
-        print "** Verbose mode enabled, level #{@@optHash['verbose']}"
+        enableDebug
+        puts "VERBOSE MODE ENABLED"
       else
         disableDebug
-        print "** Verbose mode disabled"
+        puts ""
       end
-      puts " - (v) to change"
       print "-- Enter menu number, (s) to start, (r) to reset, or (x) to exit --> "
       answer = $stdin.gets.chop
       puts ""
@@ -439,9 +431,11 @@ class Input
         @@optHash['funFactorMax'] = askNumber('What is the maximum fun factor you would like? (5.0)', nil)
 
       when '8'
-        sizes = ['virtual', 'micro', 'small', 'regular', 'large']
+        # 'virtual' and 'not chosen' are equivalent
+        sizes = ['virtual', 'not_chosen', 'other', 'micro', 'small', 'regular', 'large']
         @@optHash['sizeMin'] = askFromList("What is the smallest cache you seek (#{sizes.join(', ')})?", sizes, nil)
         @@optHash['sizeMax'] = askFromList("Great! What is the largest cache you seek (#{sizes.join(', ')})?", sizes, nil)
+
       when '9'
         kinds = ['traditional', 'multicache', 'event', 'unknown', 'letterbox', 'virtual', 'earthcache']
         @@optHash['cacheType'] = askFromList("Valid types: #{kinds.join(', ')}\nWhat do you seek (separate with commas)?", kinds, nil)
@@ -553,9 +547,10 @@ class Input
       when 'r'
         resetOptions
       when 'v'
-        @@optHash['verbose'] = @@optHash['verbose'].to_i + 1
-        if  @@optHash['verbose'] > 4
-          @@optHash['verbose'] = nil
+        if  @@optHash['verbose']
+          @@optHash['verbose']=nil
+        else
+          @@optHash['verbose'] = 'X'
         end
       when 'x'
         puts "Cya!"

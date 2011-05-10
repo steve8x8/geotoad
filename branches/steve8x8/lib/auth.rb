@@ -4,7 +4,7 @@
 module Auth
   include Common
   include Messages
-  @@login_url = 'http://www.geocaching.com/login/'
+  @@login_url = 'https://www.geocaching.com/login/'
 
   def login(user, password)
     debug "login called for user=#{user} pass=#{password}"
@@ -62,7 +62,7 @@ module Auth
         debug "found hidden post variable: #{$1}"
         @postVars[$1]=$2
       when /\<form name=\"aspnetForm\" method=\"post\" action=\"(.*?)\"/
-        @postURL='http://www.geocaching.com/login/' + $1
+        @postURL = @@login_url + $1
         @postURL.gsub!('&amp;', '&')
         debug "post URL is #{@postURL}"
       end
@@ -74,10 +74,10 @@ module Auth
   def getLoginCookie(user, password)
     page = ShadowFetch.new(@postURL)
     page.localExpiry=1
-    @postVars['ctl00$ContentBody$myUsername']=user
-    @postVars['ctl00$ContentBody$myPassword']=password
-    @postVars['ctl00$ContentBody$cookie']='on'
-    @postVars['ctl00$ContentBody$Button1']='Login'
+    @postVars['ctl00$SiteContent$tbUsername']=user
+    @postVars['ctl00$SiteContent$tbPassword']=password
+    @postVars['ctl00$SiteContent$cbRememberMe']='on'
+    @postVars['ctl00$SiteContent$btnSignIn']='Login'
     page.postVars=@postVars
     data = page.fetch
     cookie = page.cookie
