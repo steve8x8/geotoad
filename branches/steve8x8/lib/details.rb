@@ -65,7 +65,36 @@ class CacheDetails
       page.cookie=@cookie
     end
 
-    page.fetch
+    # Tune expiration for young caches:
+    # Caches which are only a few days old should be updated more often
+    # to get hold of recent logs (criticism, hints, coord updates)
+    ttl = nil
+    if (id =~ /^GC/)
+      if @waypointHash[id]['guid']
+        age = @waypointHash[id]['cdays']
+        # past events
+        #if @waypointHash[id]['event']
+        #  if age.to_i > 0
+        #    age = nil
+        #  end
+        #end
+        if age
+          # favour caches with small "absolute age"
+          if age.abs <= 10
+            ttl = age.abs * 86400 / 2
+            debug "age: #{id} (#{age}, event #{@waypointHash[id]['event'].inspect}) ttl=#{ttl}"
+          end
+        else
+          debug "no creation date found for #{id}"
+        end
+      end
+    end
+
+    if ttl
+      page.fetch(ttl)
+    else # use default
+      page.fetch
+    end
     if page.data
       success = parseCache(page.data)
     else
