@@ -10,12 +10,13 @@ class SearchCache
   include Common
   include Messages
 
-  attr_accessor :distance
+  attr_accessor :distance, :max_pages
 
   @@base_url = 'http://www.geocaching.com/seek/nearest.aspx'
 
   def initialize
     @distance = 15
+    @max_pages = 0	# unlimited
     @ttl = 72000
     @waypoints = Hash.new
   end
@@ -200,10 +201,17 @@ class SearchCache
       return @waypoints
     end
 
-    while(page_number < pages_total)
+    # special case: only first page
+    if @max_pages == 1
+      debug "Limiting to first search page"
+      return @waypoints
+    end
+
+    while (page_number < pages_total)
       debug "*** On page #{page_number} of #{pages_total}"
       last_page_number = page_number
       page_number, total_pages, total_waypoints, post_vars, src = processPage(post_vars)
+      debug "processPage returns #{page_number}/#{total_pages}"
       progress.updateText(page_number, "from #{src}")
       if (src == "remote")
         debug "sleeping"
@@ -214,6 +222,11 @@ class SearchCache
         displayError "Stuck on page number #{page_number} of #{total_pages}"
       elsif page_number < last_page_number
         displayError "We were on page #{last_page_number}, but just read #{page_number}. Parsing error?"
+      end
+      # limit search page count
+      if not ((@max_pages == 0) or (page_number < @max_pages))
+        debug "Reached page count limit #{page_number}/#{@max_pages}"
+        page_number = pages_total
       end
     end
     return @waypoints

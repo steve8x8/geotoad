@@ -114,6 +114,10 @@ class GeoToad
       @uin.usage
       exit
     end
+
+    @limitPages = @option['limitSearchPages'].to_i
+    debug "Limiting search to #{@limitPages.inspect} pages"
+
     return @option
   end
 
@@ -190,6 +194,9 @@ class GeoToad
       else
         puts
       end
+
+      # limit search page count
+      search.max_pages = @limitPages
 
       if (! search.setType(@queryType, queryArg))
         displayError "(could not determine search type for #{@queryType}, exiting)"

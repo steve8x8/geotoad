@@ -86,6 +86,7 @@ class Input
       [ "--descKeyword",              "-K",    GetoptLong::OPTIONAL_ARGUMENT ],
 
       [ "--waypointLength",           "-l",    GetoptLong::OPTIONAL_ARGUMENT ],
+      [ "--limitSearchPages",         "-L",    GetoptLong::OPTIONAL_ARGUMENT ],
       [ "--notFound",                 "-n",    GetoptLong::NO_ARGUMENT ],
       [ "--output",                   "-o",    GetoptLong::OPTIONAL_ARGUMENT ],
 
@@ -172,6 +173,10 @@ class Input
     # demonstrate a sample command line
     cmdline = "geotoad.rb"
     hidden_opts = ['queryArg', 'outDir', 'outFile', 'user', 'password', 'usemetric']
+    # hide unlimited search
+    if @@optHash['limitSearchPages'] == 0
+      hidden_opts.push('limitSearchPages')
+    end
 
     @@optHash.keys.sort.each { |option|
       if ! @@optHash[option].to_s.empty? and ! hidden_opts.include?(option)
@@ -239,6 +244,7 @@ class Input
     puts " -n                     only include not found caches (virgins)"
     puts " -b                     only include caches with travelbugs"
     puts " -l                     set EasyName waypoint id length. (16)"
+    puts " -L                     limit number of search pages (0=unlimited)"
     puts " -P                     HTTP proxy server, http://username:pass@host:port/"
     puts " -C                     Clear local browser cache"
     puts ""
