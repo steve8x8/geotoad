@@ -8,7 +8,7 @@ Standards-Version: 3.6.1
 
 Package: geotoad
 Architecture: all
-Depends: ruby (>= 1.8), ${shlibs:Depends}, ${misc:Depends}
+Depends: ruby (>= 1.8), libopenssl-ruby, ${shlibs:Depends}, ${misc:Depends}
 Recommends: gpsbabel
 Description: geocaching query tool
  GeoToad is software to help speed up the boring part of geocaching:
