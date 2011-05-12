@@ -419,11 +419,11 @@ class Input
         @@optHash['usemetric'] = (unit=="km" || nil)
 
       when '5'
-        @@optHash['difficultyMin'] = askNumber('What is the minimum difficulty you would like? (0.0)', nil)
+        @@optHash['difficultyMin'] = askNumber('What is the minimum difficulty you would like? (1.0)', nil)
         @@optHash['difficultyMax'] = askNumber('What is the maximum difficulty you would like? (5.0)', nil)
 
       when '6'
-        @@optHash['terrainMin'] = askNumber('What is the minimum terrain you would like? (0.0)', nil)
+        @@optHash['terrainMin'] = askNumber('What is the minimum terrain you would like? (1.0)', nil)
         @@optHash['terrainMax'] = askNumber('What is the maximum terrain you would like? (5.0)', nil)
 
       when '7'
