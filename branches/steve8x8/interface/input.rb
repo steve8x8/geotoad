@@ -224,7 +224,7 @@ class Input
 
     puts " -o [filename]          output file name (automatic otherwise)"
     puts " -x [format]            output format type, see list below"
-    puts " -q [location|coord|user|keyword|wid]"
+    puts " -q [location|coord|user|country|state|keyword|wid]"
     puts "                        query type (location by default)"
 
     puts " -d/-D [1.0-5.0]        difficulty minimum/maximum"
@@ -344,12 +344,14 @@ class Input
         chosen = askFromList("What type of search would you like to perform:
 
   1. Within distance of a location (landmark, city, postal code, coordinates) - DEFAULT
-  2. All caches found by a user
-  3. By title keyword
-  4. By coordinates
-  5. By waypoint ID
+  2. By coordinates
+  3. All caches found by a user
+  4. All caches within a country
+  5. All caches within a state
+  6. By title keyword
+  7. By waypoint ID
 
-", ['location', 'user', 'keyword', 'coord', 'wid'], 'location')
+", ['location', 'coord', 'user', 'country', 'state', 'keyword', 'wid'], 'location')
 
         # Clear the query argument if the type has changed.
         if @@optHash['queryType'] != chosen
@@ -427,11 +429,11 @@ class Input
         @@optHash['usemetric'] = (unit=="km" || nil)
 
       when '5'
-        @@optHash['difficultyMin'] = askNumber('What is the minimum difficulty you would like? (0.0)', nil)
+        @@optHash['difficultyMin'] = askNumber('What is the minimum difficulty you would like? (1.0)', nil)
         @@optHash['difficultyMax'] = askNumber('What is the maximum difficulty you would like? (5.0)', nil)
 
       when '6'
-        @@optHash['terrainMin'] = askNumber('What is the minimum terrain you would like? (0.0)', nil)
+        @@optHash['terrainMin'] = askNumber('What is the minimum terrain you would like? (1.0)', nil)
         @@optHash['terrainMax'] = askNumber('What is the maximum terrain you would like? (5.0)', nil)
 
       when '7'
@@ -552,6 +554,10 @@ class Input
           puts "(press enter to continue)"
           answer=$stdin.gets
         end
+        # in case of country or state query, return numeric id only
+        #if (@@optHash['queryType'] == 'country' || @@optHash['queryType'] == 'state')
+        #  @@optHash['queryArg'] = @@optHash['queryArg'].split(/=/)[0]
+        #end
       when 'r'
         resetOptions
       when 'v'
@@ -655,25 +661,79 @@ class Input
     c = CountryState.new()
     while not country
       try_country = ask("What country would you like to search for?", nil)
-      countries = c.findMatchingCountry(try_country)
-      if countries.length == 1
-        country = countries[0]
-      elsif countries.length > 1
-        i = 0
-        countries.each do |country|
-          i += 1
-          puts "  #{i}. #{country}"
-        end
-        country = askFromList("", countries, nil)
+      # numerical value?
+      if try_country.to_i.nonzero?
+        country = try_country.to_i
       else
-        puts "No matches found. Try something else!"
+        # match from country list
+        countries = c.findMatchingCountry(try_country)
+        if countries.length == 1
+          country = countries[0]
+        elsif countries.length > 1
+          i = 0
+          countries.each do |country|
+            i += 1
+            puts "  #{i}. #{country}"
+          end
+          country = askFromList("Enter index (not id)", countries, nil)
+        else
+          puts "No country matches found. Try something else!"
+        end
       end
     end
     return country
   end
 
   def askState()
-    puts "NOT YET IMPLEMENTED"
+    state = nil
+    c = CountryState.new()
+    while not state
+      try_state = ask("Which state do you want to search for?", nil)
+      # numerical value?
+      if try_state.to_i.nonzero?
+        state = try_state.to_i
+      else
+        # get from country's list
+        try_country = try_state.split(/\//)[0]
+        try_state = try_state.split(/\//)[1]
+        if try_state.empty?
+          puts "Use \"Country/State\" style"
+        else
+          # match country from list
+          countries = c.findMatchingCountry(try_country)
+          if countries.length == 1
+            country = countries[0]
+          elsif countries.length > 1
+            i = 0
+            countries.each do |country|
+              i += 1
+              puts "  #{i}. #{country}"
+            end
+            country = askFromList("Enter index (not id)", countries, nil)
+          else
+            puts "No country matches found. Try something else!"
+          end
+          if country
+            puts "Searching in country #{country}"
+            country = country.split(/=/)[0]
+            states = c.findMatchingState(try_state, country)
+            if states.length == 1
+              state = states[0]
+            elsif states.length > 1
+              i = 0
+              states.each do |state|
+                i += 1
+                puts "  #{i}. #{state}"
+              end
+              state = askFromList("Enter index (not id)", states, nil)
+            else
+              puts "No state matches found. Try something else!"
+            end
+          end
+        end
+      end
+    end
+    return state
   end
 
   def askFromList(string, choices, default)

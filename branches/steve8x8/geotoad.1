@@ -44,8 +44,9 @@ output file name (automatic otherwise)
 .B -x format
 output format type (see list below)
 .TP
-.B -q [location|coord|user|keyword|wid]
-query type (location by default)
+.B -q [location|coord|user|country|state|keyword|wid]
+query type (location by default).
+"country" and "state" queries require a numerical id which the TUI may tell you.
 .TP
 .B -s [virtual|not_chosen|other|micro|small|regular|large]
 set minimum cache size - 'not_chosen' is equivalent to 'virtual'
@@ -165,11 +166,14 @@ Search for caches within 5 miles of the above coordinates
 You can combine searches with the : delimiter. This works for all types,
 though it's most often used with coordinate searches.
 .TP
-.B  geotoad -u user -p password -x text -o nc.txt -n -q state "North Carolina"
-Outputs a text file with all of the caches in North Carolina that are
+.B  geotoad -u user -p password -x text -o nc.txt -n -q state "United States/North Carolina"
+Outputs a text file with all of the caches in US state North Carolina that are
 virgins (have never been found).
 Please note the quotes around "North Carolina". Any parameters with spaces in
 them must have quotes around them.
+.TP
+.B  geotoad -u user -p password -x text -o brb.txt -n -q state 138
+Same as above, but for state Brandenburg (in Germany).
 .TP
 .B  geotoad -u user -p password -t 2.5 -x vcf -E "helixblue:Sallad" -o charlotte.vcf 28272
 Gets every cache in the 100 mile radius of zipcode 28272, with a terrain
