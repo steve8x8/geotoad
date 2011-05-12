@@ -7,7 +7,7 @@ require 'geocode'
 require 'shadowget'
 require 'time'
 
-# $debugMode = 1
+$debugMode = 0
 
 class CountryState
   include Common
