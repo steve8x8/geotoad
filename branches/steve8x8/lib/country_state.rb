@@ -7,7 +7,7 @@ require 'geocode'
 require 'shadowget'
 require 'time'
 
-$debugMode = 1
+# $debugMode = 1
 
 class CountryState
   include Common
@@ -53,7 +53,7 @@ class CountryState
   end
 
   def getCountryList()
-    return getCountryValues.map { |y| y[1] if y[0] != '-1'}
+    return getCountryValues.map { |y| "#{y[0]}=#{y[1]}" if y[0] != '-1'}
   end
 
   def findMatchingCountry(try_country)
@@ -92,13 +92,28 @@ class CountryState
     return [post_vars, options]
   end
 
-  def getStatesList(country)
+  def getStatesValues(country)
     post_vars, options = getStatesPage(country)
     options.each_key do |option|
       if option =~ /selectState/
         return options[option]
       end
     end
+  end
+
+  def getStatesList(country)
+    return getStatesValues(country).map { |y| "#{y[0]}=#{y[1]}" if y[0] != '-1'}
+  end
+
+  def findMatchingState(try_state, country)
+    states = getStatesList(country)
+    found = []
+    states.each do |state|
+      if state =~ /#{try_state}/i
+        found << state
+      end
+    end
+    return found
   end
 
   # Find the country option, return it's value
