@@ -11,7 +11,17 @@ I will try to collect announced gc.com maintenances (via their web page, or mail
 _(new entries will be added on top)_
 
 ----
-2011-04-28:
+2011-05-13:
+  * *new server build: Release_20110513.4*
+  * *nearest.aspx?ul=ABC returns daily found caches in lexicographic order, not
+     in reverse log id sorting*
+  * _GeoToad: myfindgpx doesn't obey find order anymore; gets milestones wrong_
+----
+2011-05-06:
+  * *build S22_HF_20110506.3*
+  * *no effect seen?*
+----
+2011-05-04:
   * _"site update on Wednesday, May 04, 2011 [...] 9am PDT (GMT -7)"_
   * *new server build: S22_HF_20110504.2*
   * *search pages slightly changed, login now uses https*
