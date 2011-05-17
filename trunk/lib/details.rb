@@ -179,6 +179,7 @@ class CacheDetails
       "fuel"             => 58,
       "food"             => 59,
       "wirelessbeacon"   => 60,
+      "sponsored"        => 61,
       # obsolete?, but image still exists
       "snakes"           => 18,
     }
