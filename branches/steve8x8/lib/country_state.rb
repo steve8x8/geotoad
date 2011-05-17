@@ -53,7 +53,7 @@ class CountryState
   end
 
   def getCountryList()
-    return getCountryValues.map { |y| "#{y[0]}=#{y[1]}" if y[0] != '-1'}
+    return getCountryValues.map{ |y| "#{y[0]}=#{y[1]}" if y[0].to_i > 1 }.compact.sort.uniq
   end
 
   def findMatchingCountry(try_country)
@@ -102,7 +102,7 @@ class CountryState
   end
 
   def getStatesList(country)
-    return getStatesValues(country).map { |y| "#{y[0]}=#{y[1]}" if y[0] != '-1'}
+    return getStatesValues(country).map{ |y| "#{y[0]}=#{y[1]}" if y[0].to_i > 1 }.compact.sort.uniq
   end
 
   def findMatchingState(try_state, country)
