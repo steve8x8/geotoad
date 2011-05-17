@@ -681,6 +681,10 @@ class Input
         end
       end
     end
+    if country
+      puts "Using #{country}"
+      sleep(3)
+    end
     return country
   end
 
@@ -732,6 +736,10 @@ class Input
           end
         end
       end
+    end
+    if state
+      puts "Using #{state}"
+      sleep(3)
     end
     return state
   end
