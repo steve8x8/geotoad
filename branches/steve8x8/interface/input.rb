@@ -660,7 +660,7 @@ class Input
     country = nil
     c = CountryState.new()
     while not country
-      try_country = ask("What country would you like to search for?", nil)
+      try_country = ask("What country would you like to search for (id, or name pattern)?", nil)
       # numerical value?
       if try_country.to_i.nonzero?
         country = try_country.to_i
@@ -675,7 +675,7 @@ class Input
             i += 1
             puts "  #{i}. #{country}"
           end
-          country = askFromList("Enter index (not id)", countries, nil)
+          country = askFromList("Enter index (not id!)", countries, nil)
         else
           puts "No country matches found. Try something else!"
         end
@@ -688,7 +688,7 @@ class Input
     state = nil
     c = CountryState.new()
     while not state
-      try_state = ask("Which state do you want to search for?", nil)
+      try_state = ask("Which state do you want to search for (id, or country/state pattern)?", nil)
       # numerical value?
       if try_state.to_i.nonzero?
         state = try_state.to_i
@@ -709,7 +709,7 @@ class Input
               i += 1
               puts "  #{i}. #{country}"
             end
-            country = askFromList("Enter index (not id)", countries, nil)
+            country = askFromList("Enter index (not id!)", countries, nil)
           else
             puts "No country matches found. Try something else!"
           end
@@ -725,7 +725,7 @@ class Input
                 i += 1
                 puts "  #{i}. #{state}"
               end
-              state = askFromList("Enter index (not id)", states, nil)
+              state = askFromList("Enter index (not id!)", states, nil)
             else
               puts "No state matches found. Try something else!"
             end
