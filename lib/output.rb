@@ -821,6 +821,11 @@ class Output
             if coord =~ /([NS]) (\d+).*? ([\d\.]+) ([WE]) (\d+).*? ([\d\.]+)/
               wplat = ($2.to_f + $3.to_f / 60) * ($1 == 'S' ? -1:1)
               wplon = ($5.to_f + $6.to_f / 60) * ($4 == 'W' ? -1:1)
+              #hidden = false
+            else # no coordinates ("???")
+              wplat = 0
+              wplon = 0
+              hidden = true
             end
           end
         else
