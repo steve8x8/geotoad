@@ -12,10 +12,12 @@ _(new entries will be added on top)_
 
 2011-06-09:
   * _"site update on Thursday, June 09, 2011 [...] 11am PDT (GMT -7)"_
+  * *new server build: SC_HF_20110608.2*
+  * *main GeoToad functionality seems to be unaffected*
+  * *user found order seems to be restored!*
 ----
 2011-05-24:
   * *new server build: SC_HF_20110524.3*
-  * *no visible effects yet*
 ----
 2011-05-13:
   * *new server build: Release_20110513.4*
@@ -25,7 +27,6 @@ _(new entries will be added on top)_
 ----
 2011-05-06:
   * *build S22_HF_20110506.3*
-  * *no effect seen?*
 ----
 2011-05-04:
   * _"site update on Wednesday, May 04, 2011 [...] 9am PDT (GMT -7)"_
