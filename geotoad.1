@@ -4,9 +4,9 @@ geotoad \- geocaching query tool
 .SH SYNOPSIS
 .TP
 .B geotoad
- (will invoke text user interface (TUI)
+ will invoke text user interface (TUI)
 .TP
-.B geotoad [options] <search>
+.B geotoad [options] [--] <search>
  (command-line version)
 .SH NOTE
 If GeoToad was not installed from a (distribution-specific) package
@@ -28,7 +28,7 @@ to numerous devices and over 20 file formats.
 .P
 If run without any parameters,
 .B geotoad
-will launch the interactive mode.
+will launch the interactive mode ("text user interface", "TUI").
 It can also be used in command-line mode for specific queries.
 .SH OPTIONS
 .TP
@@ -124,21 +124,49 @@ HTTP proxy server, http://username@password@host:port/
 .TP
 .B -C
 clear browser cache
+.SH SPECIAL CASES
+If your
+.B search
+item(s) start with a dash (or minus sign), it has to be
+"hidden" from the option parser. This, in Unix tradition, is done by
+inserting a "double dash"
+.B --
+between the last option and the search argument(s).
 .SH ENVIRONMENT
 .TP
 .B GEO_DIR
 If set, geotoad will put its cache in this directory. If not the cache is
 placed in ~/.geotoad/ . Note that it is not secure to set GEO_DIR to point
 to a world-writable directory such as /tmp.
+.TP
+.B LANG
+To properly handle special characters (which are not in the ASCII character
+set, such as umlauts, etc.) we recommend to set
+.B LANG
+to
+.B en_US.UTF-8
+or similar. The syntax depends on the shell you're using:
+ 
+.B setenv LANG en_US.UTF-8
+for C-shell derivatives (csh, tcsh)
+ 
+.B LANG=en_US.UTF-8; export LANG
+for Bourne and Korn shell (sh, ksh)
+ 
+.B export LANG=en_US.UTF-8
+for Bourne Again shell and derivatives (bash, dash)
 .SH OUTPUT FORMATS
-.TP
- cachemate=   cetus+       csv          delorme      delorme-nour dna+
- easygps      gpsdrive     gpsman       gpspilot+    gpspoint     gpsutil+
- gpx          holux+       html         kml+         list         magnav+
- mapsend+     mxf          ozi          pcx+         psp+         sms
- tab          text         tiger        tmpro+       tpg+         xmap+
-.TP
+.TP 0
+ cachemate=   cetus+       csv          delorme      delorme-nour
+ dna+         easygps      gclist       gcvisits     gpsdrive
+ gpsman       gpspilot+    gpspoint     gpsutil+     gpx
+ gpx-gsak     gpx-wpts     holux+       html         kml+
+ list         magnav+      mapsend+     mxf          myfindgpx
+ myfindlist   ozi          pcx+         psp+         sms
+ tab          text         tiger        tmpro+       tpg+
+ xmap+
     + requires gpsbabel in PATH           = requires cmconvert in PATH
+
 .SH EXAMPLES
 .TP
 .B  geotoad

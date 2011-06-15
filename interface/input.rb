@@ -248,7 +248,7 @@ class Input
     print ""
     $validFormats.each { |type|
       desc = outputDetails.formatDesc(type)
-      if (i>5)
+      if (i>4)
         puts ""
         print ""
         i=0
