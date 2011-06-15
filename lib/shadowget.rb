@@ -238,10 +238,10 @@ class ShadowFetch
     else
       debug "No proxy found in environment, using standard HTTP connection."
       http = Net::HTTP.new(uri.host, uri.port)
-      if uri.port != 80
-	http.use_ssl = true
-	http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      end
+    end
+    if uri.port != 80
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
     end
 
     if uri.query
