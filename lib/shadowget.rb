@@ -268,18 +268,18 @@ class ShadowFetch
       end
     rescue Timeout::Error => e
       @@downloadErrors = @@downloadErrors + 1
-      displayWarning "Timed out trying to access #{uri.host}:80 (try #{@@downloadErrors})"
+      displayWarning "Timed out trying to access #{uri.host}:#{uri.port} (try #{@@downloadErrors})"
 
       return fetchURL(url_str, redirects)
 
     rescue Errno::ECONNREFUSED => e
       @@downloadErrors = @@downloadErrors + 1
-      displayWarning "Connection refused accessing #{uri.host}:80 (try #{@@downloadErrors})"
+      displayWarning "Connection refused accessing #{uri.host}:#{uri.port} (try #{@@downloadErrors})"
       return fetchURL(url_str, redirects)
 
     rescue => e
       @@downloadErrors = @@downloadErrors + 1
-      displayWarning "Unable to connect to #{uri.host}:80: #{e} (try #{@@downloadErrors})"
+      displayWarning "Unable to connect to #{uri.host}:#{uri.port}: #{e} (try #{@@downloadErrors})"
       return fetchURL(url_str, redirects)
     end
 
@@ -295,7 +295,7 @@ class ShadowFetch
         if uri.port == 80
           location = "#{uri.scheme}://#{uri.host}#{location}"
         else
-          location = "#{uri.scheme}:#{uri.port}//#{uri.host}#{location}"
+          location = "#{uri.scheme}://#{uri.host}:#{uri.port}#{location}"
         end
       end
       return fetchURL(location, redirects - 1)
