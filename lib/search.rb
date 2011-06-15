@@ -428,18 +428,27 @@ class SearchCache
 # 2011-05-04: unchanged
       #                             11 Jul 10<br />
       # Yesterday<strong>*</strong><br />
-      when /^ +(\w+[ \w]+)(\<strong\>)?\*?(\<\/strong\>)?\<br/
+      when /^ +((\w+[ \w]+)|([0-9\/]+))(\<strong\>)?\*?(\<\/strong\>)?\<br/
         debug "last found date: #{$1} at line: #{line}"
         cache['mtime'] = parseDate($1)
         cache['mdays'] = daysAgo(cache['mtime'])
         debug "mtime=#{cache['mtime']} mdays=#{cache['mdays']}"
+
+# 2011-06-15: found date (only when logged in)
+      # found date:
+      # <span id="ctl00_ContentBody_dlResults_ctl??_uxUserLogDate" class="Success">5 days ago</span></span>
+      when /^ +\<span [^\>]*UserLogDate[^\>]*\>((\w+[ \w]+)|([0-9\/]+))\*?\<\/span\>\<\/span\>/
+        debug "user found date: #{$1} at line: #{line}"
+        cache['atime'] = parseDate($1)
+        cache['adays'] = daysAgo(cache['atime'])
+        debug "atime=#{cache['atime']} adays=#{cache['adays']}"
 
 # 2011-05-04: appended </span>
       # creation date: date alone on line
       #  9 Sep 06</span>
       # may have a "New!" flag next to it
       #  6 Dec 10 <img src="[...]" alt="New!" title="New!" /></span>
-      when /^ +(\d+ \w{3} \d+)(\s+\<img [^\>]* title="New!" \/\>)?<\/span>\s?$/
+      when /^ +((\d+ \w{3} \d+)|([0-9\/]+))(\s+\<img [^\>]* title="New!" \/\>)?<\/span>\s?$/
         debug "create date: #{$1} at line: #{line}"
         cache['ctime'] = parseDate($1)
         cache['cdays'] = daysAgo(cache['ctime'])
@@ -574,6 +583,10 @@ class SearchCache
           if not cache['mtime']
             cache['mdays'] = -1
             cache['mtime'] = Time.at(0)
+          end
+          if not cache['atime']
+            cache['adays'] = -1
+            cache['atime'] = Time.at(0)
           end
 
           @waypoints[wid] = cache.dup
