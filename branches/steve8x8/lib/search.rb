@@ -51,6 +51,15 @@ class SearchCache
       @query_type = 'ul'
       @ttl = 43200
 
+    when 'country'
+      @query_type = 'country'
+      @search_url = @@base_url + "?country_id=#{key}"
+
+    when 'state'
+      @query_type = 'state'
+      @search_url = @@base_url + "?state_id=#{key}"
+      debug "State query: #{@search_url}"
+
     when 'keyword'
       @query_type = 'key'
 
