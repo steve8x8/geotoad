@@ -4,9 +4,9 @@ geotoad \- geocaching query tool
 .SH SYNOPSIS
 .TP
 .B geotoad
- (will invoke text user interface (TUI)
+ will invoke text user interface (TUI)
 .TP
-.B geotoad [options] <search>
+.B geotoad [options] [--] <search>
  (command-line version)
 .SH NOTE
 If GeoToad was not installed from a (distribution-specific) package
@@ -28,7 +28,7 @@ to numerous devices and over 20 file formats.
 .P
 If run without any parameters,
 .B geotoad
-will launch the interactive mode.
+will launch the interactive mode ("text user interface", "TUI").
 It can also be used in command-line mode for specific queries.
 .SH OPTIONS
 .TP
@@ -44,9 +44,8 @@ output file name (automatic otherwise)
 .B -x format
 output format type (see list below)
 .TP
-.B -q [location|coord|user|country|state|keyword|wid]
-query type (location by default).
-"country" and "state" queries require a numerical id which the TUI may tell you.
+.B -q [location|coord|user|keyword|wid]
+query type (location by default)
 .TP
 .B -s [virtual|not_chosen|other|micro|small|regular|large]
 set minimum cache size - 'not_chosen' is equivalent to 'virtual'
@@ -120,32 +119,54 @@ only include caches with travelbugs
 .B -l
 set EasyName waypoint id length. (16)
 .TP
-.B -L
-limit number of search pages (0=unlimited)
-.TP
-.B -Z
-do not overwrite existing cache description files in file cache
-.TP
 .B -P proxy
 HTTP proxy server, http://username@password@host:port/
 .TP
 .B -C
 clear browser cache
+.SH SPECIAL CASES
+If your
+.B search
+item(s) start with a dash (or minus sign), it has to be
+"hidden" from the option parser. This, in Unix tradition, is done by
+inserting a "double dash"
+.B --
+between the last option and the search argument(s).
 .SH ENVIRONMENT
 .TP
 .B GEO_DIR
 If set, geotoad will put its cache in this directory. If not the cache is
 placed in ~/.geotoad/ . Note that it is not secure to set GEO_DIR to point
 to a world-writable directory such as /tmp.
+.TP
+.B LANG
+To properly handle special characters (which are not in the ASCII character
+set, such as umlauts, etc.) we recommend to set
+.B LANG
+to
+.B en_US.UTF-8
+or similar. The syntax depends on the shell you're using:
+ 
+.B setenv LANG en_US.UTF-8
+for C-shell derivatives (csh, tcsh)
+ 
+.B LANG=en_US.UTF-8; export LANG
+for Bourne and Korn shell (sh, ksh)
+ 
+.B export LANG=en_US.UTF-8
+for Bourne Again shell and derivatives (bash, dash)
 .SH OUTPUT FORMATS
-.TP
- cachemate=   cetus+       csv          delorme      delorme-nour dna+
- easygps      gpsdrive     gpsman       gpspilot+    gpspoint     gpsutil+
- gpx          holux+       html         kml+         list         magnav+
- mapsend+     mxf          ozi          pcx+         psp+         sms
- tab          text         tiger        tmpro+       tpg+         xmap+
-.TP
+.TP 0
+ cachemate=   cetus+       csv          delorme      delorme-nour
+ dna+         easygps      gclist       gcvisits     gpsdrive
+ gpsman       gpspilot+    gpspoint     gpsutil+     gpx
+ gpx-gsak     gpx-wpts     holux+       html         kml+
+ list         magnav+      mapsend+     mxf          myfindgpx
+ myfindlist   ozi          pcx+         psp+         sms
+ tab          text         tiger        tmpro+       tpg+
+ xmap+
     + requires gpsbabel in PATH           = requires cmconvert in PATH
+
 .SH EXAMPLES
 .TP
 .B  geotoad
@@ -166,21 +187,18 @@ Search for caches within 5 miles of the above coordinates
 You can combine searches with the : delimiter. This works for all types,
 though it's most often used with coordinate searches.
 .TP
-.B  geotoad -u user -p password -x text -o nc.txt -n -q state 34
-Outputs a text file with all of the caches in US state North Carolina that are
+.B  geotoad -u user -p password -x text -o nc.txt -n -q state "North Carolina"
+Outputs a text file with all of the caches in North Carolina that are
 virgins (have never been found).
-Please note that for state and country queries, the numerical id has to be used.
-You may use the TUI to search for the country or state number.
-.TP
-.B  geotoad -u user -p password -x text -o palestine.txt -n -q country 276
-Same as above, but for Palestine.
+Please note the quotes around "North Carolina". Any parameters with spaces in
+them must have quotes around them.
 .TP
 .B  geotoad -u user -p password -t 2.5 -x vcf -E "helixblue:Sallad" -o charlotte.vcf 28272
 Gets every cache in the 100 mile radius of zipcode 28272, with a terrain
 score of 2.5 or higher, and that helixblue and Sallad have not visited.
 Outputs a VCF format file, which is usable by iPod's and other devices.
 .TP
-.B  geotoad -u user -p password -x html -b -K 'stream|creek|lake|river|ocean' -o watery.html -q state 15
+.B  geotoad -u user -p password -x html -b -K 'stream|creek|lake|river|ocean' -o watery.html -q state Indiana
 Gets every cache in the state with travel bugs that matches those water keywords.
 Makes a pretty HTML file out of it.
 .TP

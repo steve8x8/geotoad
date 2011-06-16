@@ -86,7 +86,6 @@ class Input
       [ "--descKeyword",              "-K",    GetoptLong::OPTIONAL_ARGUMENT ],
 
       [ "--waypointLength",           "-l",    GetoptLong::OPTIONAL_ARGUMENT ],
-      [ "--limitSearchPages",         "-L",    GetoptLong::OPTIONAL_ARGUMENT ],
       [ "--notFound",                 "-n",    GetoptLong::NO_ARGUMENT ],
       [ "--output",                   "-o",    GetoptLong::OPTIONAL_ARGUMENT ],
 
@@ -110,8 +109,7 @@ class Input
       [ "--format",                   "-x",    GetoptLong::OPTIONAL_ARGUMENT ],
 
       [ "--distanceMax",              "-y",    GetoptLong::OPTIONAL_ARGUMENT ],
-      [ "--includeDisabled",          "-z",    GetoptLong::NO_ARGUMENT ],
-      [ "--preserveCache",            "-Z",    GetoptLong::NO_ARGUMENT ]
+      [ "--includeDisabled",          "-z",    GetoptLong::NO_ARGUMENT ]
     ) || usage
 
     # put the stupid crap in a hash. Much nicer to deal with.
@@ -174,10 +172,6 @@ class Input
     # demonstrate a sample command line
     cmdline = "geotoad.rb"
     hidden_opts = ['queryArg', 'outDir', 'outFile', 'user', 'password', 'usemetric']
-    # hide unlimited search
-    if @@optHash['limitSearchPages'] == 0
-      hidden_opts.push('limitSearchPages')
-    end
 
     @@optHash.keys.sort.each { |option|
       if ! @@optHash[option].to_s.empty? and ! hidden_opts.include?(option)
@@ -224,7 +218,7 @@ class Input
 
     puts " -o [filename]          output file name (automatic otherwise)"
     puts " -x [format]            output format type, see list below"
-    puts " -q [location|coord|user|country|state|keyword|wid]"
+    puts " -q [location|coord|user|keyword|wid]"
     puts "                        query type (location by default)"
 
     puts " -d/-D [1.0-5.0]        difficulty minimum/maximum"
@@ -245,8 +239,6 @@ class Input
     puts " -n                     only include not found caches (virgins)"
     puts " -b                     only include caches with travelbugs"
     puts " -l                     set EasyName waypoint id length. (16)"
-    puts " -L                     limit number of search pages (0=unlimited)"
-    puts " -Z                     preserve cached description files"
     puts " -P                     HTTP proxy server, http://username:pass@host:port/"
     puts " -C                     Clear local browser cache"
     puts ""
@@ -256,7 +248,7 @@ class Input
     print ""
     $validFormats.each { |type|
       desc = outputDetails.formatDesc(type)
-      if (i>5)
+      if (i>4)
         puts ""
         print ""
         i=0
@@ -344,14 +336,12 @@ class Input
         chosen = askFromList("What type of search would you like to perform:
 
   1. Within distance of a location (landmark, city, postal code, coordinates) - DEFAULT
-  2. By coordinates
-  3. All caches found by a user
-  4. All caches within a country
-  5. All caches within a state
-  6. By title keyword
-  7. By waypoint ID
+  2. All caches found by a user
+  3. By title keyword
+  4. By coordinates
+  5. By waypoint ID
 
-", ['location', 'coord', 'user', 'country', 'state', 'keyword', 'wid'], 'location')
+", ['location', 'user', 'keyword', 'coord', 'wid'], 'location')
 
         # Clear the query argument if the type has changed.
         if @@optHash['queryType'] != chosen
@@ -554,10 +544,6 @@ class Input
           puts "(press enter to continue)"
           answer=$stdin.gets
         end
-        # in case of country or state query, return numeric id only
-        if (@@optHash['queryType'] == 'country' || @@optHash['queryType'] == 'state')
-          @@optHash['queryArg'] = @@optHash['queryArg'].split(/=/)[0]
-        end
       when 'r'
         resetOptions
       when 'v'
@@ -660,88 +646,26 @@ class Input
     country = nil
     c = CountryState.new()
     while not country
-      try_country = ask("What country would you like to search for (id, or name pattern)?", nil)
-      # numerical value?
-      if try_country.to_i.nonzero?
-        country = try_country.to_i
-      else
-        # match from country list
-        countries = c.findMatchingCountry(try_country)
-        if countries.length == 1
-          country = countries[0]
-        elsif countries.length > 1
-          i = 0
-          countries.each do |country|
-            i += 1
-            puts "  #{i}. #{country}"
-          end
-          country = askFromList("Enter index (not id!)", countries, nil)
-        else
-          puts "No country matches found. Try something else!"
+      try_country = ask("What country would you like to search for?", nil)
+      countries = c.findMatchingCountry(try_country)
+      if countries.length == 1
+        country = countries[0]
+      elsif countries.length > 1
+        i = 0
+        countries.each do |country|
+          i += 1
+          puts "  #{i}. #{country}"
         end
+        country = askFromList("", countries, nil)
+      else
+        puts "No matches found. Try something else!"
       end
-    end
-    if country
-      puts "Using #{country}"
-      sleep(3)
     end
     return country
   end
 
   def askState()
-    state = nil
-    c = CountryState.new()
-    while not state
-      try_state = ask("Which state do you want to search for (id, or country/state pattern)?", nil)
-      # numerical value?
-      if try_state.to_i.nonzero?
-        state = try_state.to_i
-      else
-        # get from country's list
-        try_country = try_state.split(/\//)[0]
-        try_state = try_state.split(/\//)[1]
-        if try_state.empty?
-          puts "Use \"Country/State\" style"
-        else
-          # match country from list
-          countries = c.findMatchingCountry(try_country)
-          if countries.length == 1
-            country = countries[0]
-          elsif countries.length > 1
-            i = 0
-            countries.each do |country|
-              i += 1
-              puts "  #{i}. #{country}"
-            end
-            country = askFromList("Enter index (not id!)", countries, nil)
-          else
-            puts "No country matches found. Try something else!"
-          end
-          if country
-            puts "Searching in country #{country}"
-            country = country.split(/=/)[0]
-            states = c.findMatchingState(try_state, country)
-            if states.length == 1
-              state = states[0]
-            elsif states.length > 1
-              i = 0
-              states.each do |state|
-                i += 1
-                puts "  #{i}. #{state}"
-              end
-              state = askFromList("Enter index (not id!)", states, nil)
-            else
-              puts "No state matches found. Try something else!"
-            end
-          end
-        end
-      end
-    end
-    if state
-      puts "Using #{state}"
-      sleep(3)
-    end
-    return state
+    puts "NOT YET IMPLEMENTED"
   end
 
   def askFromList(string, choices, default)

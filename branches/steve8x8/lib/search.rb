@@ -10,13 +10,12 @@ class SearchCache
   include Common
   include Messages
 
-  attr_accessor :distance, :max_pages
+  attr_accessor :distance
 
   @@base_url = 'http://www.geocaching.com/seek/nearest.aspx'
 
   def initialize
     @distance = 15
-    @max_pages = 0	# unlimited
     @ttl = 72000
     @waypoints = Hash.new
   end
@@ -50,15 +49,6 @@ class SearchCache
     when 'user'
       @query_type = 'ul'
       @ttl = 43200
-
-    when 'country'
-      @query_type = 'country'
-      @search_url = @@base_url + "?country_id=#{key}"
-
-    when 'state'
-      @query_type = 'state'
-      @search_url = @@base_url + "?state_id=#{key}"
-      debug "State query: #{@search_url}"
 
     when 'keyword'
       @query_type = 'key'
@@ -210,17 +200,10 @@ class SearchCache
       return @waypoints
     end
 
-    # special case: only first page
-    if @max_pages == 1
-      debug "Limiting to first search page"
-      return @waypoints
-    end
-
-    while (page_number < pages_total)
+    while(page_number < pages_total)
       debug "*** On page #{page_number} of #{pages_total}"
       last_page_number = page_number
       page_number, total_pages, total_waypoints, post_vars, src = processPage(post_vars)
-      debug "processPage returns #{page_number}/#{total_pages}"
       progress.updateText(page_number, "from #{src}")
       if (src == "remote")
         debug "sleeping"
@@ -231,11 +214,6 @@ class SearchCache
         displayError "Stuck on page number #{page_number} of #{total_pages}"
       elsif page_number < last_page_number
         displayError "We were on page #{last_page_number}, but just read #{page_number}. Parsing error?"
-      end
-      # limit search page count
-      if not ((@max_pages == 0) or (page_number < @max_pages))
-        debug "Reached page count limit #{page_number}/#{@max_pages}"
-        page_number = pages_total
       end
     end
     return @waypoints
@@ -450,18 +428,27 @@ class SearchCache
 # 2011-05-04: unchanged
       #                             11 Jul 10<br />
       # Yesterday<strong>*</strong><br />
-      when /^ +(\w+[ \w]+)(\<strong\>)?\*?(\<\/strong\>)?\<br/
+      when /^ +((\w+[ \w]+)|([0-9\/]+))(\<strong\>)?\*?(\<\/strong\>)?\<br/
         debug "last found date: #{$1} at line: #{line}"
         cache['mtime'] = parseDate($1)
         cache['mdays'] = daysAgo(cache['mtime'])
         debug "mtime=#{cache['mtime']} mdays=#{cache['mdays']}"
+
+# 2011-06-15: found date (only when logged in)
+      # found date:
+      # <span id="ctl00_ContentBody_dlResults_ctl??_uxUserLogDate" class="Success">5 days ago</span></span>
+      when /^ +\<span [^\>]*UserLogDate[^\>]*\>((\w+[ \w]+)|([0-9\/]+))\*?\<\/span\>\<\/span\>/
+        debug "user found date: #{$1} at line: #{line}"
+        cache['atime'] = parseDate($1)
+        cache['adays'] = daysAgo(cache['atime'])
+        debug "atime=#{cache['atime']} adays=#{cache['adays']}"
 
 # 2011-05-04: appended </span>
       # creation date: date alone on line
       #  9 Sep 06</span>
       # may have a "New!" flag next to it
       #  6 Dec 10 <img src="[...]" alt="New!" title="New!" /></span>
-      when /^ +(\d+ \w{3} \d+)(\s+\<img [^\>]* title="New!" \/\>)?<\/span>\s?$/
+      when /^ +((\d+ \w{3} \d+)|([0-9\/]+))(\s+\<img [^\>]* title="New!" \/\>)?<\/span>\s?$/
         debug "create date: #{$1} at line: #{line}"
         cache['ctime'] = parseDate($1)
         cache['cdays'] = daysAgo(cache['ctime'])
@@ -596,6 +583,10 @@ class SearchCache
           if not cache['mtime']
             cache['mdays'] = -1
             cache['mtime'] = Time.at(0)
+          end
+          if not cache['atime']
+            cache['adays'] = -1
+            cache['atime'] = Time.at(0)
           end
 
           @waypoints[wid] = cache.dup

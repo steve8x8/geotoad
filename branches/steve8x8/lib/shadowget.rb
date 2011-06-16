@@ -128,7 +128,7 @@ class ShadowFetch
 
 
   # gets the file
-  def fetch(ttl = @localExpiry)
+  def fetch
     @@src = nil
     time = Time.now
     localfile = cacheFile(@url)
@@ -140,13 +140,13 @@ class ShadowFetch
     # expiry?
     if (File.exists?(localfile))
       age = time.to_i - File.mtime(localfile).to_i
-      if (age > ttl)
-        debug "local cache is #{age} old, older than #{ttl}"
+      if (age > @localExpiry)
+        debug "local cache is #{age} old, older than #{@localExpiry}"
       elsif (File.size(localfile) < 6)
         debug "local cache appears corrupt. removing.."
         File.unlink(localfile)
       else
-        debug "local cache is only #{age} old (#{ttl}), using local file."
+        debug "local cache is only #{age} old (#{@localExpiry}), using local file."
         @data = fetchLocal(localfile)
         @@src='local'
         # short-circuit out of here!
@@ -238,10 +238,10 @@ class ShadowFetch
     else
       debug "No proxy found in environment, using standard HTTP connection."
       http = Net::HTTP.new(uri.host, uri.port)
-      if uri.port != 80
-	http.use_ssl = true
-	http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      end
+    end
+    if uri.port != 80
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
     end
 
     if uri.query
@@ -268,18 +268,18 @@ class ShadowFetch
       end
     rescue Timeout::Error => e
       @@downloadErrors = @@downloadErrors + 1
-      displayWarning "Timed out trying to access #{uri.host}:80 (try #{@@downloadErrors})"
+      displayWarning "Timed out trying to access #{uri.host}:#{uri.port} (try #{@@downloadErrors})"
 
       return fetchURL(url_str, redirects)
 
     rescue Errno::ECONNREFUSED => e
       @@downloadErrors = @@downloadErrors + 1
-      displayWarning "Connection refused accessing #{uri.host}:80 (try #{@@downloadErrors})"
+      displayWarning "Connection refused accessing #{uri.host}:#{uri.port} (try #{@@downloadErrors})"
       return fetchURL(url_str, redirects)
 
     rescue => e
       @@downloadErrors = @@downloadErrors + 1
-      displayWarning "Unable to connect to #{uri.host}:80: #{e} (try #{@@downloadErrors})"
+      displayWarning "Unable to connect to #{uri.host}:#{uri.port}: #{e} (try #{@@downloadErrors})"
       return fetchURL(url_str, redirects)
     end
 
@@ -295,7 +295,7 @@ class ShadowFetch
         if uri.port == 80
           location = "#{uri.scheme}://#{uri.host}#{location}"
         else
-          location = "#{uri.scheme}:#{uri.port}//#{uri.host}#{location}"
+          location = "#{uri.scheme}://#{uri.host}:#{uri.port}#{location}"
         end
       end
       return fetchURL(location, redirects - 1)

@@ -7,7 +7,8 @@ module Auth
   @@login_url = 'https://www.geocaching.com/login/'
 
   def login(user, password)
-    debug "login called for user=#{user} pass=#{password}"
+    password2 = password.to_s.gsub(/./, '*')
+    debug "login called for user=#{user} pass=#{password2}"
     cookie = loadCookie()
     logged_in = checkLoginScreen(cookie)
     if ! logged_in
@@ -87,7 +88,8 @@ module Auth
       cookie=$1
       return cookie
     else
-      displayWarning "Login failed for #{user}:#{password}"
+      password2 = password.to_s.gsub(/./, '*')
+      displayWarning "Login failed for #{user}:#{password2}"
       return nil
     end
   end

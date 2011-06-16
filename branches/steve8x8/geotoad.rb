@@ -83,8 +83,6 @@ class GeoToad
       end
     end
 
-    @preserveCache     = @option['preserveCache']
-
     @formatType        = @option['format'] || 'gpx'
     @cacheExpiry       = @option['cacheExpiry'].to_i || 3
     # there is no "usemetric" cmdline option but the TUI may set it
@@ -116,10 +114,6 @@ class GeoToad
       @uin.usage
       exit
     end
-
-    @limitPages = @option['limitSearchPages'].to_i
-    debug "Limiting search to #{@limitPages.inspect} pages"
-
     return @option
   end
 
@@ -196,9 +190,6 @@ class GeoToad
       else
         puts
       end
-
-      # limit search page count
-      search.max_pages = @limitPages
 
       if (! search.setType(@queryType, queryArg))
         displayError "(could not determine search type for #{@queryType}, exiting)"
@@ -383,7 +374,6 @@ class GeoToad
     progress = ProgressBar.new(0, @filtered.totalWaypoints, "Reading")
     @detail = CacheDetails.new(wpFiltered)
     @detail.cookie = get_login_cookie()
-    @detail.preserve = @preserveCache
     token = 0
     downloads = 0
 

@@ -42,7 +42,7 @@ a command prompt run "geotoad". On UNIX, you may have to run "./geotoad.rb".
 You will then see a screen that looks similar to this:
 
 ==============================================================================
-:::                // GeoToad 3.13.0 Text User Interface //                :::
+:::                // GeoToad 3.14.4 Text User Interface //                :::
 ==============================================================================
 (1)  GC.com login [REQUIRED         ] | (2)  search type          [location  ]
 (3)  location     [roswell, ga      ] | (4)  distance maximum (mi)     [10   ]
@@ -109,17 +109,18 @@ syntax: geotoad [options] <search:search2:search3>
  -n                     only include not found caches (virgins)
  -b                     only include caches with travelbugs
  -l                     set EasyName waypoint id length. (16)
- -L                     limit number of search pages (0=unlimited)
- -Z                     don't overwrite existing cache descriptions
  -P                     HTTP proxy server, http://username:pass@host:port/
  -C                     Clear local browser cache
 ::: OUTPUT FORMATS:
- cachemate=   cetus+       csv          delorme      delorme-nour dna+        
- easygps      gpsdrive     gpsman       gpspilot+    gpspoint     gpsutil+    
- gpx          holux+       html         kml+         list         magnav+     
- mapsend+     mxf          ozi          pcx+         psp+         sms         
- tab          text         tiger        tmpro+       tpg+         xmap+       
- + requires gpsbabel in PATH           = requires cmconvert in PATH
+ cachemate=   cetus+       csv          delorme      delorme-nour
+ dna+         easygps      gclist       gcvisits     gpsdrive    
+ gpsman       gpspilot+    gpspoint     gpsutil+     gpx         
+ gpx-gsak     gpx-wpts     holux+       html         kml+        
+ list         magnav+      mapsend+     mxf          myfindgpx   
+ myfindlist   ozi          pcx+         psp+         sms         
+ tab          text         tiger        tmpro+       tpg+        
+ xmap+       
+    + requires gpsbabel in PATH           = requires cmconvert in PATH
 
 ---------------------
 Command-Line Examples
@@ -151,21 +152,13 @@ You can combine searches with the : delimiter. This works for all types,
 though it's most often used with coordinate searches.
 
 
-3) geotoad -u user -p password -x text -o nc.txt -n -q state 34
+3) geotoad -u user -p password -x text -o nc.txt -n -q state "North Carolina"
 Outputs a text file with all of the caches in North Carolina that are
 virgins (have never been found).
 
-Please note that the numerical "state_id" assigned by gc.com has to be used.
+Please note the quotes around "North Carolina". Any parameters with spaces in
+them must have quotes around them.
 
-You can use the TUI to search for a state/province:
-When asked for the state, enter a string of the form "united/caro" which will be 
-parsed for the country (first part, before the slash) and state (second part, 
-after the slash) patterns.
-If the given pattern is ambiguous, you will be presented with a list to choose from.
-The state_id will be shown in the corresponding field of the input mask.
-
-Queries for country ("-q country 276" will return caches in Palestine, for example)
-use the same mechanism.
 
 4) geotoad -u user -p password -t 2.5 -x vcf -E "helixblue:Sallad" -o charlotte.vcf 28272
 Gets every cache in the 100 mile radius of zipcode 28272, with a terrain
@@ -175,7 +168,7 @@ Outputs a VCF format file, which is usable by iPod's and other devices.
 Please note: Put quotes around your username if it has any spaces in it.
 
 
-5) geotoad -u user -p password -x html -b -K 'stream|creek|lake|river|ocean' -o watery.html -q state 15
+5) geotoad -u user -p password -x html -b -K 'stream|creek|lake|river|ocean' -o watery.html -q state Indiana
 Gets every cache in Indiana with travel bugs that matches those water keywords.
 Makes a pretty HTML file out of it.
 
