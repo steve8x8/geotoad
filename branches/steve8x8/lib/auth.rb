@@ -5,60 +5,45 @@ module Auth
   include Common
   include Messages
   @@login_url = 'https://www.geocaching.com/login/'
+  @@cookie = nil
 
   def login(user, password)
     password2 = password.to_s.gsub(/./, '*')
     debug "login called for user=#{user} pass=#{password2}"
-    cookie = loadCookie()
-    logged_in = checkLoginScreen(cookie)
-    if ! logged_in
-      cookie = getLoginCookie(user, password)
-      if cookie
-        saveCookie(cookie)
-      end
+    cookie = loginGetCookie(user, password)
+    if cookie
+      saveCookie(cookie)
     end
     return cookie
   end
 
-  def cookieFile()
-    return findConfigDir() + '/cookie'
+  def getCookie(user, password)
+    cookie = loadCookie()
+    if not cookie
+      cookie = login(user, password)
+    end
+    return cookie
   end
 
   def loadCookie()
-    cookie_file = cookieFile()
-    if File.exist?(cookie_file)
-      cookie = File.new(cookie_file).readline.chomp!
-      debug "Read cookie from #{cookie_file}: [#{cookie}]"
-      return cookie
-    else
-      return nil
-    end
+    cookie = @@cookie
+    #debug "loadCookie #{cookie.inspect}"
+    return cookie
   end
 
   def saveCookie(cookie)
-    cookie_file = cookieFile()
-    debug "Saving cookie in #{cookie_file}: [#{cookie}]"
-    f = File.new(cookie_file, 'w')
-    f.puts cookie
-    f.close
+    debug "saveCookie #{cookie.inspect}"
+    @@cookie = cookie
   end
 
-  def checkLoginScreen(cookie)
+  def loginGetCookie(user, password)
     @postVars = Hash.new
+    # get login form
     page = ShadowFetch.new(@@login_url)
     page.localExpiry=0
-
-    if cookie
-      debug "Checking to see if my previous cookie is valid (#{cookie})"
-      page.cookie = cookie
-    end
     data = page.fetch
-
     data.each_line do |line|
       case line
-      when /You are logged in as/
-        debug "Found login confirmation!"
-        return true
       when /^\<input type=\"hidden\" name=\"(.*?)\".*value=\"(.*?)\"/
         debug "found hidden post variable: #{$1}"
         @postVars[$1]=$2
@@ -68,11 +53,7 @@ module Auth
         debug "post URL is #{@postURL}"
       end
     end
-    debug "Looks like we are not logged in."
-    return nil
-  end
-
-  def getLoginCookie(user, password)
+    # fill in form, and submit
     page = ShadowFetch.new(@postURL)
     page.localExpiry=1
     @postVars['ctl00$SiteContent$tbUsername']=user
@@ -81,10 +62,11 @@ module Auth
     @postVars['ctl00$SiteContent$btnSignIn']='Login'
     page.postVars=@postVars
     data = page.fetch
+    # extract cookie
     cookie = page.cookie
-    debug "getLoginCookie got cookie: [#{cookie}]"
+    debug "loginGetCookie got cookie: [#{cookie}]"
     if (cookie =~ /userid/) && (cookie =~ /(ASP.NET_SessionId=\w+)/)
-      debug "userid found in cookie, rock on. Setting session to #{$1}"
+      debug "userid found, rock on. Setting cookie to #{$1}"
       cookie=$1
       return cookie
     else

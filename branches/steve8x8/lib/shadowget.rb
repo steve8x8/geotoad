@@ -7,6 +7,7 @@ require 'uri'
 require 'cgi'
 require 'common'
 require 'messages'
+require 'lib/auth'
 
 # Does a webget, but stores a local directory with cached results ###################
 class ShadowFetch
@@ -15,6 +16,7 @@ class ShadowFetch
 
   include Common
   include Messages
+  include Auth
   @@downloadErrors = 0
 
   # gets a URL, but stores it in a nice webcache
@@ -60,11 +62,6 @@ class ShadowFetch
   def src
     debug "src of last get was #{@@src}"
     @@src
-  end
-
-  def cookie=(cookie)
-    debug "set cookie to #{cookie}"
-    @cookie=cookie
   end
 
   # returns the cache filename that the URL will be stored as
@@ -250,6 +247,7 @@ class ShadowFetch
       query=uri.path
     end
 
+    @cookie = loadCookie()
     if @cookie
       debug "Added Cookie to #{url_str}: #{@cookie}"
       @httpHeaders['Cookie']=@cookie
@@ -305,10 +303,9 @@ class ShadowFetch
       return fetchURL(url_str, redirects)
     end
 
-
     if resp.response && resp.response['set-cookie']
       @cookie = resp.response['set-cookie']
-      debug "received cookie: #{@cookie}"
+      #debug "received cookie: #{@cookie}"
     end
 
     return resp.body

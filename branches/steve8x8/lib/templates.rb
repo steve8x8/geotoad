@@ -469,7 +469,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
       "  <groundspeak:encoded_hints>hint</groundspeak:encoded_hints>\r\n" +
       "  <groundspeak:logs>\r\n" +
       "    <groundspeak:log id=\"<%out.logID%>\">\r\n" +
-      "      <groundspeak:date><%out.mdate%>T08:00:00Z</groundspeak:date>\r\n" +
+      "      <groundspeak:date><%out.adate%>T08:00:00Z</groundspeak:date>\r\n" +
       "      <groundspeak:type>Found it</groundspeak:type>\r\n" +
       "      <groundspeak:finder id=\"666\"><%outEntity.username%></groundspeak:finder>\r\n" +
       "      <groundspeak:text encoded=\"False\"></groundspeak:text>\r\n" +
@@ -489,7 +489,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
     'templateWP'    => "<%out.wid%>\t" +
       "<%out.latdatapad5%> <%out.londatapad5%> " +
       "<%wp.type%>\t" +
-      "<%out.mdate%> " +
+      "<%out.adate%> " +
       "\n"
   },
 

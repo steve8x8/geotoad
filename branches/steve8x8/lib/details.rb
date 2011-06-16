@@ -63,9 +63,6 @@ class CacheDetails
 
     url = fullURL(id)
     page = ShadowFetch.new(url)
-    if (@cookie)
-      page.cookie=@cookie
-    end
 
     # Tune expiration for young caches:
     # Caches which are only a few days old should be updated more often

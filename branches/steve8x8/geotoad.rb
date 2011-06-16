@@ -182,6 +182,15 @@ class GeoToad
     # mix multiple @queryType's anyways
     @combinedWaypoints = Hash.new
 
+    displayMessage "Logging in as #{@option['user']}"
+    @cookie = getCookie(@option['user'], @option['password'])
+    debug "Login returned cookie #{@cookie.inspect}"
+    if (@cookie)
+	displayMessage "Login successful"
+    else
+	displayError "Login failed! Check username and password!"
+    end
+
     @queryArg.to_s.split(/[:\|]/).each { |queryArg|
       print "\n( o ) Performing #{@queryType} search for #{queryArg} "
       search = SearchCache.new
@@ -382,7 +391,6 @@ class GeoToad
     wpFiltered = @filtered.waypoints
     progress = ProgressBar.new(0, @filtered.totalWaypoints, "Reading")
     @detail = CacheDetails.new(wpFiltered)
-    @detail.cookie = get_login_cookie()
     @detail.preserve = @preserveCache
     token = 0
     downloads = 0
@@ -435,17 +443,6 @@ class GeoToad
         page.invalidate()
       end
     }
-  end
-
-  def get_login_cookie
-    cookie = loadCookie()
-    if cookie
-      displayMessage "Using stored login cookie for #{@option['user']}"
-    else
-      displayMessage "Logging in as #{@option['user']}"
-      cookie = login(@option['user'], @option['password'])
-    end
-    return cookie
   end
 
   ## step #2 in filtering! ############################
