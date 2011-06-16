@@ -1,4 +1,4 @@
-GeoToad %VERSION% by Thomas Stromberg (c) 2002 - 2010
+GeoToad %VERSION% by Thomas Stromberg (c) 2002 - 2011
 ==========================================================================
 
 Table of Contents:
@@ -42,7 +42,7 @@ a command prompt run "geotoad". On UNIX, you may have to run "./geotoad.rb".
 You will then see a screen that looks similar to this:
 
 ==============================================================================
-:::                // GeoToad 3.13.0 Text User Interface //                :::
+:::                // GeoToad 3.14.4 Text User Interface //                :::
 ==============================================================================
 (1)  GC.com login [REQUIRED         ] | (2)  search type          [location  ]
 (3)  location     [roswell, ga      ] | (4)  distance maximum (mi)     [10   ]
@@ -112,12 +112,15 @@ syntax: geotoad [options] <search:search2:search3>
  -P                     HTTP proxy server, http://username:pass@host:port/
  -C                     Clear local browser cache
 ::: OUTPUT FORMATS:
- cachemate=   cetus+       csv          delorme      delorme-nour dna+        
- easygps      gpsdrive     gpsman       gpspilot+    gpspoint     gpsutil+    
- gpx          holux+       html         kml+         list         magnav+     
- mapsend+     mxf          ozi          pcx+         psp+         sms         
- tab          text         tiger        tmpro+       tpg+         xmap+       
- + requires gpsbabel in PATH           = requires cmconvert in PATH
+ cachemate=   cetus+       csv          delorme      delorme-nour
+ dna+         easygps      gclist       gcvisits     gpsdrive    
+ gpsman       gpspilot+    gpspoint     gpsutil+     gpx         
+ gpx-gsak     gpx-wpts     holux+       html         kml+        
+ list         magnav+      mapsend+     mxf          myfindgpx   
+ myfindlist   ozi          pcx+         psp+         sms         
+ tab          text         tiger        tmpro+       tpg+        
+ xmap+       
+    + requires gpsbabel in PATH           = requires cmconvert in PATH
 
 ---------------------
 Command-Line Examples
