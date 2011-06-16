@@ -19,6 +19,56 @@ class SearchCache
     @max_pages = 0	# unlimited
     @ttl = 72000
     @waypoints = Hash.new
+
+    # Original base-42 code taken from Rick Richardson's geo-* utilities
+    # @ http://geo.rkkda.com/ (patch of 2011-01-04 19:25 local time),
+    # but those only worked until 2011-01-06 (kept here for reference).
+    #@base = 42
+    # 2011-01-05/06:
+    #@code = "hbM9fjmrxy7z42LFD58BkKgPGdHscvCqNnw3ptO6lJ"
+
+    # On 2011-01-07, Steve8x8 found that now a base-57 alphabet was being used
+    # with a similar algorithm. The encoding key changes each midnight UTC.
+    # To make things worse, any encoding is only valid for a few minutes.
+    @base = 57
+    # all base-57 alphabets consist of ([0-9a-zA-Z] - [1iIuU])!
+    # codes repeat themselves after one month
+    @codetable = {
+	 1 => "PDMTRXBJjZNH9fKW8vetlCgbos24mydknahrcOxYqLwGSE370z65ApVFQ",
+	 2 => "6JKt4b70rHoeTLqQB2jANwcYSMW9xPk3aplE5hGvyfsZDgFmndOVRC8zX",
+	 3 => "Rl2QaDdTsnK7rOZoywzx0H58NLCAGqgtp43mvYJVkFEejMWB69cXhfSbP",
+	 4 => "jShz6gF3OvonKEWkJCbZf4GeDX25VcyPsqwRYpLM8BtATm0x7l9aHQdNr",
+	 5 => "aJs2OWpoYfN9zvDHCwZrm83b4SKkFhXcAL0QPgBy7tMdRGlqxjEVn65Te",
+	 6 => "g6aXp7rqvkEl5JLnRDhfWGHTeA9OMQYdwS2BcbK0jCyFx4sPo83tmzZVN",
+	 7 => "MlocEO5eAgTFfLXzyPDk2qJhjBn98QSdNHR47mGWtY3ZvVxCpr0Ks6abw",
+	 8 => "p7SPbvzM4VkQ8f25cJL0gBlWjYmFoKhArXRHZntTGe6CNsyE3a9qOdwDx",
+	 9 => "znlBb8GHNdhCKyOpo53ePX9xfkvjD0aTEAVZ72qSQwrmMYct6JgRFWLs4",
+	10 => "KXztRHdrkBwSWEn3AN2Fh8vOL5QMjx6oTgyCD7JYpaGmVcf9Pelb4q0Zs",
+	11 => "M3odkDCgQa7GWK9pYh8tLAl6xFecRwPZNbTz0s42rqfOnSmvEjVyB5JXH",
+	12 => "gweGxNAYCKfLdrb68X93ahjHMDtTWRFJVZvl0po5ySmOQnscPz4Ekq2B7",
+	13 => "p2zelnEox9HqkGF4V5AZ6LbMBsy0dQc8J3fDXvON7jWgrKYCSTaPtRhmw",
+	14 => "cy2gjCAJt3KmMxbr5OzQeYsvHpLF8fRVaoNXdGBW0l7ESZDP9qkw4Th6n",
+	15 => "9KQZlwfBsCqN6oWkYhrSpDAEP48c5m3eJn2jVHLdybMx0gaOGRXzvFTt7",
+	16 => "7j6CJPfqbMygan42HwxFBcrK3RYLstmOXWGeSQZ9kzl0VE8oDTpAhd5Nv",
+	17 => "YScWw7gsx49ebLAqMGotHRX3fnCv6FBOkzVE5jdlmPTarDKQJyp8Z0hN2",
+	18 => "BgwR6oskAcVPqeYdLKr3ONvflXz2nDSbxMQJEhyZC0pWHm759GFa4tT8j",
+	19 => "9QyolrBq37he4nbCTcXEkmGHjYS02RDgMZLfOtavVzKNFxPs58p6JwWAd",
+	20 => "8OwsHykXLJ3tqWZmR2pbVagMcTdnSC9FveN5z0xYjGK6frh7Q4EPDBAlo",
+	21 => "RVBh8qEaN4Aw2Ob5egSytWjQD6oFmKvXfYnCzcx73kJsHrd9TLPZM0Glp",
+	22 => "7MqQGJkKzZvdgmRXBH8CYeAVf3cy29LOW4PNaD0rsnowEpTbF5Sxhtl6j",
+	23 => "8C26QBoWjEPcJ3Sf7TYtexXlMNyqArm0KD9HOLvZakGwnVbFsdp45Rzhg",
+	24 => "6e5fC2S4Bwcm9pVKyqdFE3WlRDroTLJgGtN8ZQsAabMzHYO0Xvj7Pnxhk",
+	25 => "JXHgMGcAVNpDEwWYvyBl025m89dOoTSKPxhstjq6e4QrCk3aZFbzfn7RL",
+	26 => "Yp3ARoesjKXB2cadmkHvFQM7SEJtqf0l9TwzbPLrZDxO8h5C6NnGWyVg4",
+	27 => "9kJaM4HonPWtcQvsYSEK3Vy5pjCRFqNO6lgr0x7mh2b8wdTGDzfLXeABZ",
+	28 => "4n2gSwqzGB7C0MpV3yDY9FTtol8XjkJNcEPr6LxhZQKdRvHOfsA5eWmab",
+	29 => "P6G8jsOxBCqf3k74DnXtAvl2ThabeEHJVgZp5wSzF9NWRcYMyL0dromKQ",
+	30 => "WVwgM93zjmNcLpHvoSK2Q5bCxaATGsryXn6Bhfd0Z8qtERk7PYOJD4Fle",
+	31 => "PZqTVol4HOXz0GWt38Qec59rKMyabfhE2DdsNxpF7RASkBjnYwvCgmJ6L"
+    }
+
+    # server uses UTC!
+    @code = @codetable[Time.now.utc.day]
   end
 
   def setType(mode, key)
@@ -157,6 +207,76 @@ class SearchCache
     lon = sprintf("%.7f", lon)
     displayMessage "Coordinates \"#{input}\" parsed as latitude #{lat}, longitude #{lon}"
     return lat, lon
+  end
+
+  def decodeDTS(v)
+    debug "Invoking decodeDTS with \"#{v}\""
+
+    # get current decoding alphabet from list
+    base = @base
+    code = @code
+
+    text = v
+    # base(base) to numeric
+    value = 0
+    (0...text.length).each { |index|
+      digit =  (code =~ /#{text[index,1]}/)
+      if not digit
+        # serious error: we're pretty sure to know the character set
+        debug "Cannot interpret \"#{text[index,1]}\", setting to 0"
+        digit = 0
+      end
+      value = base * value + digit
+      #debug "#{index} #{digit} -> #{value}\n"
+    }
+    debug "Converted #{text}(#{base}) to #{value}"
+
+    if base == 42
+      # old code that worked only two days, kept here for reference
+      mod = (value - 131586) % 16777216
+      # cache size
+      s0 = (mod / (base * base * base)).to_i
+      s = ["not chosen", "micro", nil, "regular", nil, "large", nil, "virtual",
+           "unknown", nil, nil, nil, "small"][s0]
+      diff = [0, 1, nil, 2, nil, 3, nil, 4,
+              5, nil, nil, nil, 7][s0]
+      if diff
+        diff *= 131072
+      else
+        diff = -1
+      end
+      # terrain, difficulty
+      t0 = ((mod - diff) / (6 * 42)).to_i
+      d0 = (((mod - diff) % 42) - (t0 * 4)).to_i
+      t = [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5][t0]
+      d = [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5][d0]
+      # s, d, t may be nil
+    elsif base == 57
+      #
+      # value = 2^24*M + 2^17*S + 2^8*T + 2^0*D + (2^17 + 2^9 + 2^1)
+      # M = 60 - minute
+      # S = encoded container size (as in cache edit, but +1)
+      # T = (terrain-1)*2
+      # D = (difficulty-1)*2
+      #
+      # example: GC11Z19, D/T 2.5/2.5 small, full hour, 2011-01-14:
+      # -> M=60, S=7, T=3, D=3 -> 1007682821(10) -> 01,38,26,14,38,56(57)
+      # -> "yBLbBn"
+      #
+      mod = (value - 131586) % 16777216
+      s0 = (mod / 131072).to_i
+      s = ["not chosen", "micro", "regular", "large",
+           "virtual", "other", nil, "small"][s0]
+      t0 = ((mod % 131072) / 256).to_i
+      d0 = ((mod % 131072) % 256).to_i
+      # terrain rating, may return nil
+      t = [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5][t0]
+      d = [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5][d0]
+      # deliberately not setting defaults if nil
+    end
+    debug "Using preD/T/S=#{d0}/#{t0}/#{s0}, return D/T/S=#{d}/#{t}/#{s}"
+    return d, t, s, "#{value}=#{d}/#{t}/#{s}"
+    #return d, t, s, value
   end
 
   def getResults()
@@ -497,6 +617,29 @@ class SearchCache
         cache['direction'] = "N"
         debug "cacheDistance=#{cache['distance']}mi dir=#{cache['direction']}"
 
+# 2011-05-04: unchanged? (cannot find anymore)
+      # 2010-12-22:
+      # <img id="ctl00_ContentBody_dlResults_ctl??_uxDistanceAndHeading" ... \
+      #  <src="../ImgGen/seek/CacheDir.ashx?k=..." ...>
+      # FIXME: no decoding available yet
+      when /CacheDir.ashx\?k=([^\"]*)/
+        code = $1
+        # translate %xy into single bytes
+        #code.gsub!(/%([0-9a-fA-F][0-9a-fA-F])/) { $1.to_i(16).chr }
+        # and all back?
+        #code.gsub!(/(.)/) { "%#{$1.ord.to_s(16)}" }
+        debug "found CacheDir=#{code.inspect}"
+        cache['distance'] = 0
+        cache['direction'] = code
+
+# 2011-05-04: unchanged
+      # 2010-12-22:
+      # <span id="ctl00_ContentBody_dlResults_ctl01_uxFavoritesValue" title="0" class="favorite-rank">0</span>
+      when /_uxFavoritesValue[^\>]*\>([0-9]+)\</
+        favs = $1
+        debug "found Favourites=#{favs}"
+        cache['favourites'] = favs
+
 # 2011-05-04: unchanged
       # <a href="/seek/cache_details.aspx?guid=c9f28e67-5f18-45c0-90ee-76ec8c57452f">Yasaka-Shrine@Zerosen</a>
       # now (2010-12-22, one line!):
@@ -596,6 +739,20 @@ class SearchCache
       when /Premium Member Only Cache/
         debug "#{wid} is a members only cache. Marking"
         cache['membersonly'] = true
+
+# 2011-05-04: unchanged
+      # 2010-12-22:
+      # <img id="ctl00_ContentBody_dlResults_ctl??_uxDTCacheTypeImage" src="../ImgGen/seek/CacheInfo.ashx?v=MwlMg9" border="0">
+      when /CacheInfo.ashx\?v=([a-zA-Z0-9]*)/
+        code = $1
+        debug "found DTCacheTypeImage #{code}"
+        # decode into 'difficulty', 'terrain', 'size'
+        cache['dts'] = code # testing only
+        d, t, s, v = decodeDTS(code)
+        cache['difficulty'] = d
+        cache['terrain'] = t
+        cache['size'] = s
+        cache['dtsv'] = v
 
       when /^\s+<\/tr\>/
         debug "--- end of row ---"

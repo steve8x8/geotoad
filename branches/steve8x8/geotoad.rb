@@ -35,6 +35,10 @@ class GeoToad
   $SLEEP = 1.5
   $SLOWMODE = 350
 
+  # *if* cache D/T/S extraction works, early filtering is possible
+  #$DTSFILTER = false
+  $DTSFILTER = true
+
   def initialize
     output        = Output.new
     $validFormats = output.formatList.sort
@@ -285,7 +289,47 @@ class GeoToad
       @filtered.cacheType(@option['cacheType'])
     end
 
+    if $DTSFILTER
+    #-------------------
+    if @option['difficultyMin']
+      @queryTitle = @queryTitle + ", difficulty #{@option['difficultyMin']}+"
+      @defaultOutputFile = @defaultOutputFile + "-d" + @option['difficultyMin'].to_s
+      @filtered.difficultyMin(@option['difficultyMin'].to_f)
+    end
+
+    if @option['difficultyMax']
+      @queryTitle = @queryTitle + ", difficulty #{@option['difficultyMax']} or lower"
+      @defaultOutputFile = @defaultOutputFile + "-D" + @option['difficultyMax'].to_s
+      @filtered.difficultyMax(@option['difficultyMax'].to_f)
+    end
+
+    if @option['terrainMin']
+      @queryTitle = @queryTitle + ", terrain #{@option['terrainMin']}+"
+      @defaultOutputFile = @defaultOutputFile + "-t" + @option['terrainMin'].to_s
+      @filtered.terrainMin(@option['terrainMin'].to_f)
+    end
+
+    if @option['terrainMax']
+      @queryTitle = @queryTitle + ", terrain #{@option['terrainMax']} or lower"
+      @defaultOutputFile = @defaultOutputFile + "-T" + @option['terrainMax'].to_s
+      @filtered.terrainMax(@option['terrainMax'].to_f)
+    end
+
+    if @option['sizeMin']
+      @queryTitle = @queryTitle + ", size #{@option['sizeMin']}+"
+      @defaultOutputFile = @defaultOutputFile + "-s" + @option['sizeMin'].to_s
+      @filtered.sizeMin(@option['sizeMin'])
+    end
+
+    if @option['sizeMax']
+      @queryTitle = @queryTitle + ", size #{@option['sizeMax']} or lower"
+      @defaultOutputFile = @defaultOutputFile + "-S" + @option['sizeMax'].to_s
+      @filtered.sizeMax(@option['sizeMax'])
+    end
+    #-------------------
+    end # not $DTSFILTER
     debug "Filter running cycle 2, #{@filtered.totalWaypoints} caches left"
+
     if @option['foundDateInclude']
       @queryTitle = @queryTitle + ", found in the last  #{@option['foundDateInclude']} days"
       @defaultOutputFile = @defaultOutputFile + "-r=" + @option['foundDateInclude'].to_s
@@ -463,6 +507,8 @@ class GeoToad
       @filtered.descKeyword(@option['descKeyword'])
     end
 
+    if not $DTSFILTER
+    #-------------------
     if @option['difficultyMin']
       @queryTitle = @queryTitle + ", difficulty #{@option['difficultyMin']}+"
       @defaultOutputFile = @defaultOutputFile + "-d" + @option['difficultyMin'].to_s
@@ -487,18 +533,6 @@ class GeoToad
       @filtered.terrainMax(@option['terrainMax'].to_f)
     end
 
-    if @option['funFactorMin']
-      @queryTitle = @queryTitle + ", funFactor #{@option['funFactorMin']}+"
-      @defaultOutputFile = @defaultOutputFile + "-f" + @option['funFactorMin'].to_s
-      @filtered.funFactorMin(@option['funFactorMin'].to_f)
-    end
-
-    if @option['funFactorMax']
-      @queryTitle = @queryTitle + ", funFactor #{@option['funFactorMax']} or lower"
-      @defaultOutputFile = @defaultOutputFile + '-F' + @option['funFactorMax'].to_s
-      @filtered.funFactorMax(@option['funFactorMax'].to_f)
-    end
-
     if @option['sizeMin']
       @queryTitle = @queryTitle + ", size #{@option['sizeMin']}+"
       @defaultOutputFile = @defaultOutputFile + "-s" + @option['sizeMin'].to_s
@@ -510,7 +544,20 @@ class GeoToad
       @defaultOutputFile = @defaultOutputFile + "-S" + @option['sizeMax'].to_s
       @filtered.sizeMax(@option['sizeMax'])
     end
+    #-------------------
+    end # not $DTSFILTER
 
+    if @option['funFactorMin']
+      @queryTitle = @queryTitle + ", funFactor #{@option['funFactorMin']}+"
+      @defaultOutputFile = @defaultOutputFile + "-f" + @option['funFactorMin'].to_s
+      @filtered.funFactorMin(@option['funFactorMin'].to_f)
+    end
+
+    if @option['funFactorMax']
+      @queryTitle = @queryTitle + ", funFactor #{@option['funFactorMax']} or lower"
+      @defaultOutputFile = @defaultOutputFile + '-F' + @option['funFactorMax'].to_s
+      @filtered.funFactorMax(@option['funFactorMax'].to_f)
+    end
 
     # We filter for users again. While this may be a bit obsessive, this is in case
     # our local cache is not valid.
