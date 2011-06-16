@@ -425,7 +425,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
       "<%wp.difficulty%>/<%wp.terrain%>\t" +
       "<%wp.type%>\t" +
       "<%out.relativedistancekm%>\t" +
-      "<%wp.dts%>\t<%wp.dtsv%>\t<%out.size%>\t" + # testing only
+      "<%out.size%>\t" + # testing only
       "\"<%wp.name%>\" by <%wp.creator%>\n"
   },
 
