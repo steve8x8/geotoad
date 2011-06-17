@@ -282,7 +282,13 @@ class SearchCache
   def getResults()
     debug "Getting results: #{@query_type} at #{@search_url}"
     if @query_type == 'wid'
-      @waypoints[@query_arg] = getWidSearchResult(@search_url)
+      waypoint = getWidSearchResult(@search_url)
+      wid = waypoint['wid']
+      if wid and (wid != @query_arg)
+        displayWarning "Replacing WID #{@query_arg} with #{wid}"
+        @query_arg = wid
+      end
+      @waypoints[@query_arg] = waypoint
       return @waypoints
     else
       return searchResults(@search_url)
@@ -296,8 +302,14 @@ class SearchCache
       guid = $1
       debug "Found GUID: #{guid}"
     end
+    wid = nil
+    if data =~ /class=.GCCode.\>(GC\w+)\</m
+      wid = $1
+      debug "Found WID: #{wid}"
+    end
     cache_data = {
       'guid' => guid,
+      'wid' => wid,
       'disabled' => false,
       'archived' => false,
       'membersonly' => false

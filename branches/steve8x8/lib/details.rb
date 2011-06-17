@@ -261,6 +261,10 @@ class CacheDetails
           cache['mdays'] = -1
           cache['mtime'] = Time.at(0)
         end
+        if not cache['atime']
+          cache['adays'] = -1
+          cache['atime'] = Time.at(0)
+        end
       end
 
       # <h2><img src="../images/WptTypes/2.gif" alt="Traditional Cache" width="32" height="32" />&nbsp;Lake Crabtree computer software store</h2>
