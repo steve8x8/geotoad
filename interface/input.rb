@@ -197,6 +197,9 @@ class Input
       end
 
     }
+    if @@optHash['queryArg'].to_s[0] == "-"
+      cmdline << "--"
+    end
     if @@optHash['queryArg'].to_s =~ /^[\w\.:]+$/
       cmdline = cmdline + " " + @@optHash['queryArg'].to_s
     else
