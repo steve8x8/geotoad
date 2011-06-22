@@ -2,29 +2,88 @@
 require 'fileutils'
 
 module Common
+  @@prefs_url = 'http://www.geocaching.com/account/ManagePreferences.aspx'
+  @@dateFormat = 'dd MMM yy'
+
+  def getPreferences()
+    page = ShadowFetch.new(@@prefs_url)
+    page.localExpiry = 0
+    data = page.fetch
+    prefs = Hash.new
+    current_select_name = nil
+    data.each_line {|line|
+      if line =~ /\<select name=\"([^\"]*?)\"/
+        current_select_name = $1
+        debug "found select #{current_select_name}"
+        prefs[current_select_name] = []
+      elsif line =~ /\<option selected=\"selected\" value=\"([^\"]*?)\".*?\>(.*?)\</
+          debug "found selected option #{$1}=#{$2}"
+        if current_select_name
+          debug "setting selected option #{current_select_name}=#{$1}"
+          prefs[current_select_name] = $1
+        end
+      end
+    }
+    dateFormat = prefs['ctl00$ContentBody$uxDateTimeFormat']
+    if ! dateFormat.to_s.empty?
+      @@dateFormat = dateFormat
+    end
+    return @@dateFormat
+  end
+
+  def setDateFormat(dateFormat)
+    @@dateFormat = dateFormat
+  end
 
   def parseDate(date)
     debug "parsing date: [#{date}]"
     timestamp = nil
     case date
-    when /Today/
+    # relative dates end in a "*"
+    # en|de|fr|pt|cs|sv/nb|nl|ca|pl|et|es, no Korean for now
+    when /^(Today|Heute|Hier|Hoje|Dnes|I ?dag|Vandaag|Avui|Dzisiaj|T.na|Hoy)\*/
+      debug "date: Today"
       days_ago=0
-    when /Yesterday/
+    when /^(Yesterday|Gestern|Aujourd.hui|Ontem|V.era|I ?g.r|Gisteren|Ahir|Wczoraj|Eile|Ayer)\*/
+      debug "date: Yesterday"
       days_ago=1
-    when /(\d)+ days ago/
+    # any string ending with a * and a number in it
+    when /(\d)+ [ \w]+\*/
+      debug "date: #{$1} days ago"
       days_ago=$1.to_i
+    # yyyy-MM-dd, yyyy/MM/dd (ISO style)
+    when /^(\d{4})[\/-](\d+)[\/-](\d+)$/
+      year = $1
+      month = $2
+      day = $3
+      debug "ISO-coded date: year=#{year} month=#{month} day=#{day}"
+      timestamp = Time.local(year, month, day)
+    # MM/dd/yyyy, dd/MM/yyyy (need to distinguish!)
     when /^(\d+)\/(\d+)\/(\d{4})$/
-      debug "Looks like a date: year=#{$3} month=#{$1}, date=#{$2}"
-      if $3.to_i < 1970
-        debug "The year appears to be earlier than 1970. Patching to 1970."
-        year = 1970
+      year = $3
+      month = $1
+      day = $2
+      # interpretation depends on dateFormat
+      if @@dateFormat =~ /^MM/
+        debug "MM/dd/yyyy date: year=#{year} month=#{month}, day=#{day}"
       else
-        year = $3
+        temp = month
+        month = day
+        day = temp
+        debug "dd/MM/yyyy date: year=#{year} month=#{month}, day=#{day}"
       end
-      timestamp = Time.local(year, $1, $2)
-    when /^\d+[ \/]\w+[ \/]\d+/
+      timestamp = Time.local(year, month, day)
+    when /^(\w{3})\/(\d+)\/(\d+)/
+      year = $3
+      month = $1
+      day = $2
+      debug "MMM/dd/yyyy date: year=#{year} month=#{month} day=#{day}"
+      timestamp = Time.parse("#{day} #{month} #{year}")
+    when /^(\d+[ \/]\w+[ \/]\d+)/
+      debug "dd MMM yy[yy] date: #{$1}"
       timestamp = Time.parse(date)
     when 'N/A'
+      debug "no date: N/A"
       return nil
     else
       displayWarning "Could not parse date: #{date}"
@@ -41,7 +100,7 @@ module Common
     begin
       return (Time.now - timestamp).to_i / 86400
     rescue TypeError
-      warn "Could not convert timestamp '#{timestamp}' to Time object."
+      displayWarning "Could not convert timestamp '#{timestamp}' to Time object."
       return nil
     end
   end

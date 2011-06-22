@@ -468,14 +468,14 @@ class SearchCache
       line.gsub!(/&#39;/, '\'')
       case line
       # <TD class="PageBuilderWidget"><SPAN>Total Records: <B>2938</B> - Page: <B>147</B> of <B>147</B>
-      when /Total Records: \<b\>(\d+)\<\/b\> - Page: \<b\>(\d+)\<\/b\> of \<b\>(\d+)\<\/b\>/
+      when /PageBuilderWidget[^:]+: \<b\>(\d+)\<\/b\> [^:]+: \<b\>(\d+)\<\/b\> \w* \<b\>(\d+)\<\/b\>/
         if not waypoints_total
           waypoints_total = $1.to_i
           page_number = $2.to_i
           pages_total = $3.to_i
         end
         # href="javascript:__doPostBack('ctl00$ContentBody$pgrTop$ctl08','')"><b>Next &gt;</b></a></td>
-        if line =~ /doPostBack\(\'([\w\$_]+)\',\'\'\)\"\>\<b\>Next/
+    if line =~ /doPostBack\(\'([\w\$_]+)\',\'\'\)\"\>\<b\>[^\>]+ \&gt;\<\/b\>/ #Next
           debug "Found next target: #{$1}"
           post_vars['__EVENTTARGET'] = $1
         end
@@ -582,18 +582,18 @@ class SearchCache
 # 2011-05-04: unchanged
       #                             11 Jul 10<br />
       # Yesterday<strong>*</strong><br />
-      when /^ +((\w+[ \w]+)|([0-9\/]+))(\<strong\>)?\*?(\<\/strong\>)?\<br/
-        debug "last found date: #{$1} at line: #{line}"
-        cache['mtime'] = parseDate($1)
+      when /^ +((\w+[ \w]+)|([0-9\/]+))(\<strong\>)?(\*)?(\<\/strong\>)?\<br/
+        debug "last found date: #{$1}#{$5} at line: #{line}"
+        cache['mtime'] = parseDate($1+$5.to_s)
         cache['mdays'] = daysAgo(cache['mtime'])
         debug "mtime=#{cache['mtime']} mdays=#{cache['mdays']}"
 
 # 2011-06-15: found date (only when logged in)
       # found date:
       # <span id="ctl00_ContentBody_dlResults_ctl??_uxUserLogDate" class="Success">5 days ago</span></span>
-      when /^ +\<span [^\>]*UserLogDate[^\>]*\>((\w+[ \w]+)|([0-9\/]+))\*?\<\/span\>\<\/span\>/
-        debug "user found date: #{$1} at line: #{line}"
-        cache['atime'] = parseDate($1)
+      when /^ +\<span [^\>]*UserLogDate[^\>]*\>((\w+[ \w]+)|([0-9\/]+))(\*?)\<\/span\>\<\/span\>/
+        debug "user found date: #{$1}#{$4} at line: #{line}"
+        cache['atime'] = parseDate($1+$4.to_s)
         cache['adays'] = daysAgo(cache['atime'])
         debug "atime=#{cache['atime']} adays=#{cache['adays']}"
 

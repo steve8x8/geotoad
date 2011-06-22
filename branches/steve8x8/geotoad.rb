@@ -192,8 +192,12 @@ class GeoToad
     if (@cookie)
 	displayMessage "Login successful"
     else
-	displayError "Login failed! Check username and password!"
+	displayWarning "Login failed! Check network connection, username and password!"
+	displayWarning "Note: Subsequent operations may fail. You've been warned."
     end
+    displayMessage "Querying user preferences"
+    @dateFormat = getPreferences()
+    displayMessage "Using date format #{@dateFormat}"
 
     @queryArg.to_s.split(/[:\|]/).each { |queryArg|
       print "\n( o ) Performing #{@queryType} search for #{queryArg} "
