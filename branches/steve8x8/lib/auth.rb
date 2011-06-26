@@ -27,20 +27,29 @@ module Auth
 
   def loadCookie()
     cookie = @@cookie
-    #debug "loadCookie #{cookie.inspect}"
+    #debug "loadCookie #{hideCookie(cookie)}"
     return cookie
   end
 
   def saveCookie(cookie)
-    debug "saveCookie #{cookie.inspect}"
+    debug "saveCookie #{hideCookie(cookie)}"
     @@cookie = cookie
+  end
+
+  # obfuscate cookie so nobody can use it
+  def hideCookie(cookie)
+    hcookie = cookie.to_s
+    if cookie =~ /([^=]+=)?(\w{5})(\w+)(\w{5})(;.*)?/
+      hcookie = $1.to_s + $2 + "*" * $3.length + $4 + $5.to_s
+    end
+    return hcookie
   end
 
   def loginGetCookie(user, password)
     @postVars = Hash.new
     # get login form
     page = ShadowFetch.new(@@login_url)
-    page.localExpiry=0
+    page.localExpiry = 0
     data = page.fetch
     data.each_line do |line|
       case line
@@ -55,7 +64,7 @@ module Auth
     end
     # fill in form, and submit
     page = ShadowFetch.new(@postURL)
-    page.localExpiry=1
+    page.localExpiry = 0
     @postVars['ctl00$SiteContent$tbUsername']=user
     @postVars['ctl00$SiteContent$tbPassword']=password
     @postVars['ctl00$SiteContent$cbRememberMe']='on'
@@ -64,10 +73,10 @@ module Auth
     data = page.fetch
     # extract cookie
     cookie = page.cookie
-    debug "loginGetCookie got cookie: [#{cookie}]"
+    debug "loginGetCookie got cookie: [#{hideCookie(cookie)}]"
     if (cookie =~ /userid/) && (cookie =~ /(ASP.NET_SessionId=\w+)/)
-      debug "userid found, rock on. Setting cookie to #{$1}"
-      cookie=$1
+      cookie = $1
+      debug "userid found, rock on. Setting cookie to #{hideCookie(cookie)}"
       return cookie
     else
       password2 = password.to_s.gsub(/./, '*')

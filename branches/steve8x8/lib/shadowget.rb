@@ -249,7 +249,7 @@ class ShadowFetch
 
     @cookie = loadCookie()
     if @cookie
-      debug "Added Cookie to #{url_str}: #{@cookie}"
+      debug "Added Cookie to #{url_str}: #{hideCookie(@cookie)}"
       @httpHeaders['Cookie']=@cookie
     else
       debug "No cookie to add to #{url_str}"
@@ -305,7 +305,7 @@ class ShadowFetch
 
     if resp.response && resp.response['set-cookie']
       @cookie = resp.response['set-cookie']
-      #debug "received cookie: #{@cookie}"
+      #debug "received cookie: #{hideCookie(@cookie)}"
     end
 
     return resp.body

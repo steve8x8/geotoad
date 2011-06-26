@@ -188,7 +188,7 @@ class GeoToad
 
     displayMessage "Logging in as #{@option['user']}"
     @cookie = getCookie(@option['user'], @option['password'])
-    debug "Login returned cookie #{@cookie.inspect}"
+    debug "Login returned cookie #{hideCookie(@cookie).inspect}"
     if (@cookie)
 	displayMessage "Login successful"
     else
