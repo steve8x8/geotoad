@@ -28,7 +28,7 @@ module Auth
     cookie_file = cookieFile()
     if File.exist?(cookie_file)
       cookie = File.new(cookie_file).readline.chomp!
-      debug "Read cookie from #{cookie_file}: [#{cookie}]"
+      debug "Read cookie from #{cookie_file}: [#{cookie[0..4]+'...'+cookie[-5..-1]}]"
       return cookie
     else
       return nil
@@ -37,7 +37,7 @@ module Auth
 
   def saveCookie(cookie)
     cookie_file = cookieFile()
-    debug "Saving cookie in #{cookie_file}: [#{cookie}]"
+    debug "Saving cookie in #{cookie_file}: [#{cookie[0..4]+'...'+cookie[-5..-1]}]"
     f = File.new(cookie_file, 'w')
     f.puts cookie
     f.close
@@ -49,7 +49,7 @@ module Auth
     page.localExpiry=0
 
     if cookie
-      debug "Checking to see if my previous cookie is valid (#{cookie})"
+      debug "Checking to see if my previous cookie is valid (#{cookie[0..4]+'...'+cookie[-5..-1]})"
       page.cookie = cookie
     end
     data = page.fetch
@@ -82,9 +82,9 @@ module Auth
     page.postVars=@postVars
     data = page.fetch
     cookie = page.cookie
-    debug "getLoginCookie got cookie: [#{cookie}]"
+    debug "getLoginCookie got cookie: [#{cookie[0..4]+'...'+cookie[-5..-1]}]"
     if (cookie =~ /userid/) && (cookie =~ /(ASP.NET_SessionId=\w+)/)
-      debug "userid found in cookie, rock on. Setting session to #{$1}"
+      debug "userid found in cookie, rock on. Setting session to #{$1[0..4]+'...'+$1[-5..-1]}"
       cookie=$1
       return cookie
     else
