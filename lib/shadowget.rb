@@ -63,7 +63,7 @@ class ShadowFetch
   end
 
   def cookie=(cookie)
-    debug "set cookie to #{cookie}"
+    debug "set cookie to #{cookie[0..4]+'...'+cookie[-5..-1]}"
     @cookie=cookie
   end
 
@@ -251,7 +251,7 @@ class ShadowFetch
     end
 
     if @cookie
-      debug "Added Cookie to #{url_str}: #{@cookie}"
+      debug "Added Cookie to #{url_str}: #{@cookie[0..4]+'...'+cookie[-5..-1]}"
       @httpHeaders['Cookie']=@cookie
     else
       debug "No cookie to add to #{url_str}"
@@ -308,7 +308,7 @@ class ShadowFetch
 
     if resp.response && resp.response['set-cookie']
       @cookie = resp.response['set-cookie']
-      debug "received cookie: #{@cookie}"
+      debug "received cookie: #{@cookie[0..4]+'...'+cookie[-5..-1]}"
     end
 
     return resp.body
