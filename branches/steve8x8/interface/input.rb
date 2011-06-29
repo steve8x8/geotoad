@@ -445,7 +445,7 @@ class Input
 
       when '8'
         # 'virtual' and 'not chosen' are equivalent
-        sizes = ['virtual', 'not_chosen', 'other', 'micro', 'small', 'regular', 'large']
+        sizes = ['virtual', 'not_chosen', 'not chosen', 'other', 'micro', 'small', 'regular', 'large']
         @@optHash['sizeMin'] = askFromList("What is the smallest cache you seek (#{sizes.join(', ')})?", sizes, nil)
         @@optHash['sizeMax'] = askFromList("Great! What is the largest cache you seek (#{sizes.join(', ')})?", sizes, nil)
 

@@ -320,7 +320,7 @@ class SearchCache
   def searchResults(url)
     debug "searchResults: #{url}"
     if not url
-      warn "searchResults has no URL?"
+      displayWarning "searchResults has no URL?"
     end
     post_vars = Hash.new
 
@@ -553,7 +553,11 @@ class SearchCache
       # but we need an entry for filtering!
       when /uxTravelBugList/
         debug "trackables flagged: #{line}"
-        cache['travelbug'] = "Unspecified Trackable"
+        if line =~ /data-tbcount=\"(\d+)\"/
+          cache['travelbug'] = "#{$1} Trackables"
+        else
+          cache['travelbug'] = "Unspecified Trackable"
+        end
 
 # 2011-05-04: obsolete
       # (2/1)<br />
