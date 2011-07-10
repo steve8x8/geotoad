@@ -69,6 +69,7 @@ class SearchCache
 
     # server uses UTC!
     @code = @codetable[Time.now.utc.day]
+    debug "D/T/S decoding uses code #{@code}"
   end
 
   def setType(mode, key)
@@ -375,6 +376,11 @@ class SearchCache
 
   def getPage(url, post_vars)
     page = ShadowFetch.new(url)
+    # DTS decoding: drop search pages from yesterday UTC
+    sincemidnight = 60*( 60*Time.now.utc.hour + Time.now.utc.min )
+    if sincemidnight < @ttl
+      @ttl = sincemidnight
+    end
     page.localExpiry = @ttl
     if (post_vars.length > 0)
       page.postVars=post_vars.dup
