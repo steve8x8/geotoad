@@ -64,7 +64,7 @@ module Common
       month = $1
       day = $2
       # interpretation depends on dateFormat
-      if @@dateFormat =~ /^MM/
+      if @@dateFormat !~ /^dd/
         debug "MM/dd/yyyy date: year=#{year} month=#{month}, day=#{day}"
       else
         temp = month

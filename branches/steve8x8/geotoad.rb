@@ -94,7 +94,10 @@ class GeoToad
     # there is no "usemetric" cmdline option but the TUI may set it
     @useMetric         = @option['usemetric']
     # distanceMax from command line can contain the unit
-    @distanceMax       = @option['distanceMax'].to_f || 10
+    @distanceMax       = @option['distanceMax'].to_f
+    if @distanceMax == 0.0
+      @distanceMax = 10
+    end
     if @option['distanceMax'] =~ /(mi|km)/
       @useMetric     = ($1 == "km" || nil)
       # else leave usemetric unchanged
