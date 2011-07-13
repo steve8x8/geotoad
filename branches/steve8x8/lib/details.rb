@@ -93,11 +93,11 @@ class CacheDetails
     if @preserve
       ttl = 333000000		# > 10 years
     end
+
     if ttl
-      page.fetch(ttl)
-    else # use default
-      page.fetch
+      page.localExpiry = ttl
     end
+    page.fetch
     if page.data
       success = parseCache(page.data)
     else
@@ -211,9 +211,10 @@ class CacheDetails
       "fuel"             => 58,
       "food"             => 59,
       "wirelessbeacon"   => 60,
-      "sponsored"        => 61,
+      "partnership"      => 61,
       # obsolete?, but image still exists
       "snakes"           => 18,
+      "sponsored"        => 61,
     }
     if text == "attribute-blank"
       return 0, 0
