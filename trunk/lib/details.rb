@@ -179,9 +179,10 @@ class CacheDetails
       "fuel"             => 58,
       "food"             => 59,
       "wirelessbeacon"   => 60,
-      "sponsored"        => 61,
+      "partnership"      => 61,
       # obsolete?, but image still exists
       "snakes"           => 18,
+      "sponsored"        => 61,
     }
     if text == "attribute-blank"
       return 0, 0
