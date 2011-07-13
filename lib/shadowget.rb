@@ -218,18 +218,6 @@ class ShadowFetch
     uri = URI.parse(url_str)
     debug "URL parsed #{uri.host}:#{uri.port}"
 
-    if @@downloadErrors > 0 && @@downloadErrors < @maxFailures
-      debug "#{@@downloadErrors} download errors so far, will try until #{@maxFailures}"
-      # progressive sleep time: 5, 20, 45 sec.
-      sleep( 5*@@downloadErrors**2)
-    elsif @@downloadErrors == @maxFailures
-      debug "#{@@downloadErrors} download errors so far, maximum count reached"
-      sleep(10*@@downloadErrors**2)
-    elsif @@downloadErrors > @maxFailures
-      displayInfo "Offline mode: not fetching #{url_str}"
-      return nil
-    end
-
     if ENV['HTTP_PROXY']
       proxy = URI.parse(ENV['HTTP_PROXY'])
       proxy_user, proxy_pass = uri.userinfo.split(/:/) if uri.userinfo
@@ -239,15 +227,14 @@ class ShadowFetch
       debug "No proxy found in environment, using standard HTTP connection."
       http = Net::HTTP.new(uri.host, uri.port)
     end
-    if uri.port != 80
+    if uri.scheme == 'https'
       http.use_ssl = true
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE
     end
 
+    query = uri.path
     if uri.query
-      query=uri.path + "?" + uri.query
-    else
-      query=uri.path
+      query += "?" + uri.query
     end
 
     if @cookie
@@ -257,6 +244,7 @@ class ShadowFetch
       debug "No cookie to add to #{url_str}"
     end
 
+    success = true
     begin
       if (@postVars)
         @httpHeaders['Content-Type'] =  "application/x-www-form-urlencoded";
@@ -267,44 +255,60 @@ class ShadowFetch
         resp = http.get(query, @httpHeaders)
       end
     rescue Timeout::Error => e
-      @@downloadErrors = @@downloadErrors + 1
-      displayWarning "Timed out trying to access #{uri.host}:#{uri.port} (try #{@@downloadErrors})"
-
-      return fetchURL(url_str, redirects)
-
+      success = false
+      displayWarning "Timeout #{uri.host}:#{uri.port}"
     rescue Errno::ECONNREFUSED => e
-      @@downloadErrors = @@downloadErrors + 1
-      displayWarning "Connection refused accessing #{uri.host}:#{uri.port} (try #{@@downloadErrors})"
-      return fetchURL(url_str, redirects)
-
+      success = false
+      displayWarning "Connection refused #{uri.host}:#{uri.port}"
     rescue => e
-      @@downloadErrors = @@downloadErrors + 1
-      displayWarning "Unable to connect to #{uri.host}:#{uri.port}: #{e} (try #{@@downloadErrors})"
-      return fetchURL(url_str, redirects)
+      success = false
+      displayWarning "Cannot connect to #{uri.host}:#{uri.port}: #{e}"
     end
 
     case resp
-    when Net::HTTPSuccess
-      debug "#{url_str} successfully downloaded."
-
+    # these are "combined" return codes ("if" doesn't work)
     when Net::HTTPRedirection
       location = resp['location']
       debug "REDIRECT: [#{location}]"
       # relative redirects are against RFC, but we may encounter them.
       if location =~ /^\//
-        if uri.port == 80
-          location = "#{uri.scheme}://#{uri.host}#{location}"
-        else
-          location = "#{uri.scheme}://#{uri.host}:#{uri.port}#{location}"
-        end
+        prefix = "#{uri.scheme}://#{uri.host}"
+        #if (uri.scheme == 'http' && uri.port != 80) || (uri.scheme == 'https' && uri.port != 443)
+          prefix = ":#{uri.port}"
+        #end
+        location = prefix + location
+      else
+        displayWarning "Relative redirect to \"#{location}\" violates RFC"
       end
       return fetchURL(location, redirects - 1)
+    when Net::HTTPSuccess
+      # do nothing
     else
-      @@downloadErrors = @@downloadErrors + 1
-      displayWarning "unknown response #{resp} downloading #{url_str} (try #{@@downloadErrors})"
+      success = false
+      displayWarning "Unknown response #{resp} downloading #{url_str}"
+    end
+
+    if not success
+      @@downloadErrors += 1
+      if @@downloadErrors < @maxFailures
+        debug "#{@@downloadErrors} download errors so far, will try until #{@maxFailures}"
+        # progressive sleep time: 5, 20, 45 sec.
+        sleep( 5*@@downloadErrors**2)
+      elsif @@downloadErrors == @maxFailures
+        debug "#{@@downloadErrors} download errors so far, maximum reached"
+        sleep(10*@@downloadErrors**2)
+      else #elsif @@downloadErrors > @maxFailures
+        displayInfo "Offline mode: not fetching #{url_str}"
+        return nil
+      end
       return fetchURL(url_str, redirects)
     end
 
+    debug "#{url_str} successfully downloaded."
+    # clear/decrement error counter
+    if @@downloadErrors > 0
+      @@downloadErrors -= 1
+    end
 
     if resp.response && resp.response['set-cookie']
       @cookie = resp.response['set-cookie']
