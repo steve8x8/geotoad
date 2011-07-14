@@ -453,7 +453,8 @@ class SearchCache
 # 2011-06-15: found date (only when logged in)
       # found date:
       # <span id="ctl00_ContentBody_dlResults_ctl??_uxUserLogDate" class="Success">5 days ago</span></span>
-      when /^ +\<span [^\>]*UserLogDate[^\>]*\>((\w+[ \w]+)|([0-9\/-]+))\*?\<\/span\>\<\/span\>/
+      # <span id="ctl00_ContentBody_dlResults_ctl01_uxUserLogDate" class="Success">Today<strong>*</strong></span></span>
+      when /^ +\<span [^\>]*UserLogDate[^\>]*\>((\w+[ \w]+)|([0-9\/-]+))(\<strong\>)?\*?(\<\/strong\>)?\<\/span\>\<\/span\>/
         debug "user found date: #{$1} at line: #{line}"
         cache['atime'] = parseDate($1)
         cache['adays'] = daysAgo(cache['atime'])
