@@ -898,7 +898,7 @@ class Output
       location = 'Undetermined'
     end
     coord_query = URI.escape("#{cache['latdata']},#{cache['londata']}")
-    available = (not cache['disabled'])
+    available = (not cache['disabled'] and not cache['archived'])
 
     if @username and cache['visitors'].include?(@username)
       symbol = 'Geocache Found'
