@@ -43,6 +43,7 @@ class CacheDetails
       if @waypointHash[id]['guid']
         suffix = 'guid=' + @waypointHash[id]['guid'].to_s
       else
+        # parseCache() returns "unpublished" for pm-only w/o premium membership
         suffix = 'wp=' + id.to_s
       end
     else
