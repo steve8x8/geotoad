@@ -7,7 +7,7 @@ module Common
 
   def getPreferences()
     page = ShadowFetch.new(@@prefs_url)
-    page.localExpiry = 0
+    page.localExpiry = 1
     data = page.fetch
     prefs = Hash.new
     current_select_name = nil

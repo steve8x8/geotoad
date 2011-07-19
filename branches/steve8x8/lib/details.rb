@@ -45,6 +45,7 @@ class CacheDetails
       if @waypointHash[id]['guid']
         suffix = 'guid=' + @waypointHash[id]['guid'].to_s
       else
+        # parseCache() returns "unpublished" for pm-only w/o premium membership
         suffix = 'wp=' + id.to_s
       end
     else
@@ -342,7 +343,22 @@ class CacheDetails
         warning.gsub!(/\<.*?\>/, '')
         debug "got a warning: #{warning}"
         if (wid)
-          cache['archived'] = true
+          if warning =~ /has been archived/
+            if cache['archived'].nil?
+              debug "last resort setting cache to archived"
+              cache['archived'] = true
+            else
+              debug "outdated information: archived"
+            end
+          end
+          if warning =~ /is temporarily unavailable/
+            if cache['disabled'].nil?
+              debug "last resort setting cache to disabled"
+              cache['disabled'] = true
+            else
+              debug "outdated information: disabled"
+            end
+          end
           cache['warning'] = warning.dup
         end
         if warning =~ /be a Premium Member to view/

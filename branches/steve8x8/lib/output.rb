@@ -898,7 +898,8 @@ class Output
       location = 'Undetermined'
     end
     coord_query = URI.escape("#{cache['latdata']},#{cache['londata']}")
-    available = (not cache['disabled'])
+    available = (not cache['disabled'] and not cache['archived'])
+    archived = cache['archived']
 
     if @username and cache['visitors'].include?(@username)
       symbol = 'Geocache Found'
@@ -979,8 +980,8 @@ class Output
       'latdatapad6' => sprintf("%2.6f", cache['latdata']),
       'londatapad6' => sprintf("%2.6f", cache['londata']),
       'maps_url' => "#{GOOGLE_MAPS_URL}?q=#{coord_query}",
-      'IsAvailable' => available.to_s.capitalize,
-      'IsArchived' => cache['archived'].to_s.capitalize,
+      'IsAvailable' => (available==true).to_s.capitalize,
+      'IsArchived' => (archived==true).to_s.capitalize,
       'location' => location,
       'relativedistance' => relative_distance,
       'relativedistancekm' => relative_distance_km,
@@ -996,7 +997,7 @@ class Output
       'xmlAttrs' => xmlAttrs.to_s,
       'txtAttrs' => (cache['attributeText'].to_s.empty?)?'':'[' + cache['attributeText'].to_s.capitalize + ']',
       'warnAvail' => (available)?'':'[?] ',
-      'warnArchiv' => (cache['archived'])?'[%] ':'',
+      'warnArchiv' => (archived)?'[%] ':'',
     }
   end
 

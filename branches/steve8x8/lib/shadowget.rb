@@ -183,7 +183,7 @@ class ShadowFetch
     cache = File.open(localfile, File::WRONLY|File::TRUNC|File::CREAT, 0666)
     cache.puts @data
     cache.close
-    debug "Returning #{@data.length} bytes: #{@data[0..512]}"
+    debug "Returning #{@data.length} bytes: #{@data[0..512]}(...)"
     return @data
   end
 

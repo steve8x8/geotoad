@@ -463,7 +463,7 @@ class GeoToad
         message = '(subscriber-only)'
       elsif status == 'unpublished'
         wpFiltered.delete(wid)
-        displayMessage "#{wid} is unpublished, skipping."
+        displayMessage "#{wid} is either unpublished or hidden subscriber-only, skipping."
         next
       elsif ! status or status == 'login-required'
         if (wpFiltered[wid]['warning'])
