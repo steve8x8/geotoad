@@ -177,11 +177,22 @@ class SearchCache
       wid = $1
       debug "Found WID: #{wid}"
     end
+    disabled = false
+    if data =~ /Cache Issues:.*class=.OldWarning..*This cache is temporarily unavailable/
+      disabled = true
+      debug "Cache appears to be disabled"
+    end
+    archived = false
+    if data =~ /Cache Issues:.*class=.OldWarning..*This cache has been archived/
+      archived = true
+      debug "Cache appears to be archived"
+    end
+
     cache_data = {
       'guid' => guid,
       'wid' => wid,
-      'disabled' => false,
-      'archived' => false,
+      'disabled' => disabled,
+      'archived' => archived,
       'membersonly' => false
     }
     return cache_data
@@ -262,9 +273,9 @@ class SearchCache
     waypoints_total = nil
     post_vars = Hash.new
     cache = {
-      'disabled' => false,
-      'archived' => false,
-      'membersonly' => true
+      'disabled' => nil,
+      'archived' => nil,
+      'membersonly' => false
     }
     # list of US states, generated from seek page
     usstates = {
@@ -527,14 +538,17 @@ class SearchCache
         end
         debug "Found cache details link for #{name}"
 
-        if name =~ /class=\"Warning/ or name =~ /class=\"OldWarning/
+        # AFAIK only "user" queries actually return archived caches
+        # class="lnk OldWarning Strike Strike"><span>Lars vom Mars</span></a>
+        # class="lnk  Strike"><span>Rund um den See, # 04</span></a>
+        if strike =~ /class=\"[^\"]*Warning/
           cache['archived'] = true
           debug "#{name} appears to be archived"
         else
           cache['archived'] = false
         end
 
-        if strike =~ /Strike/
+        if strike =~ /class=\"[^\"]*Strike/
           cache['disabled'] = true
           debug "#{name} appears to be disabled"
         else
