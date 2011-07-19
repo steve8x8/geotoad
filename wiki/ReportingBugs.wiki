@@ -1,4 +1,5 @@
 #summary Hints for bug reports
+#labels Featured
 
 = Introduction =
 

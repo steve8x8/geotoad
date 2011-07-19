@@ -12,6 +12,10 @@ See also [http://forums.groundspeak.com/GC/index.php?showforum=89 Release Notes 
 
 _(new entries will be added on top)_
 
+2011-07-08:
+  * *new server build: S23_HF_20110707.2*
+  * (no release notes yet)
+----
 2011-06-28:
   * _"site update on Tuesday, June 28, 2011 [...] 11am PDT (GMT -7)"_
   * [http://forums.groundspeak.com/GC/index.php?showtopic=276982 release notes]
