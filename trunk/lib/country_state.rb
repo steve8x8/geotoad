@@ -16,7 +16,7 @@ class CountryState
   @@base_url = 'http://www.geocaching.com/seek/nearest.aspx'
 
   def initialize
-    @ttl = 86400 * 180
+    @ttl = 60 * 86400		# 2 months (was 6)
   end
 
   def getPage(url, post_vars)
