@@ -514,4 +514,13 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
     'filter_exec'    => 'iconv -f US-ASCII -t UCS-2LE INFILE > OUTFILE'
   },
 
+  # map wp to guid
+  'wp2guid' => {
+    'ext'     => 'w2g',
+    'mime'    => 'text/plain',
+    'desc'    => 'map wp to guid',
+    'templatePre' => "",
+    'templateWP'  => "<%out.wid%>\t<%out.guid%>\r\n"
+  },
+
 }

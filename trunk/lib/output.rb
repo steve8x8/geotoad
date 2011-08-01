@@ -968,6 +968,7 @@ class Output
     variables = {
       'username' => @username,
       'wid' => wid,
+      'guid' => cache['guid'].to_s,
       'symbols' => symbols,
       'id' => cache['sname'],
       'mdate' => cache['mtime'].strftime("%Y-%m-%d"),
