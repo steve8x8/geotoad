@@ -90,7 +90,8 @@ class GeoToad
     @preserveCache     = @option['preserveCache']
 
     @formatType        = @option['format'] || 'gpx'
-    @cacheExpiry       = @option['cacheExpiry'].to_i || 3
+    # back in 3.7.5 there was such an option (-c), already gone in 3.9.0
+    #@cacheExpiry       = @option['cacheExpiry'].to_i || 3
     # there is no "usemetric" cmdline option but the TUI may set it
     @useMetric         = @option['usemetric']
     # distanceMax from command line can contain the unit
@@ -148,7 +149,7 @@ class GeoToad
 
     debug "Checking for latest version of GeoToad from #{url}"
     version = ShadowFetch.new(url)
-    version.localExpiry=43200
+    version.localExpiry = 3 * 86400	# 3 days
     version.maxFailures = 0
     version.fetch
 

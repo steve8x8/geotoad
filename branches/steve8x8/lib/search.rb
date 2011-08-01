@@ -16,8 +16,8 @@ class SearchCache
 
   def initialize
     @distance = 15
-    @max_pages = 0	# unlimited
-    @ttl = 72000
+    @max_pages = 0		# unlimited
+    @ttl = 12 * 3600		# 12 hours (was 20)
     @waypoints = Hash.new
 
     # Original base-42 code taken from Rick Richardson's geo-* utilities
@@ -100,7 +100,7 @@ class SearchCache
 
     when 'user'
       @query_type = 'ul'
-      @ttl = 43200
+      @ttl = 12 * 3600		# 12 hours
 
     when 'country'
       @query_type = 'country'
