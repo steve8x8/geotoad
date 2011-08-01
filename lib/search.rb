@@ -16,7 +16,7 @@ class SearchCache
 
   def initialize
     @distance = 15
-    @ttl = 72000
+    @ttl = 12 * 3600		# 12 hours (was 20)
     @waypoints = Hash.new
   end
 
@@ -48,7 +48,7 @@ class SearchCache
 
     when 'user'
       @query_type = 'ul'
-      @ttl = 43200
+      @ttl = 12 * 3600		# 12 hours
 
     when 'keyword'
       @query_type = 'key'
