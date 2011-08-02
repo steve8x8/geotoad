@@ -12,6 +12,14 @@ See also [http://forums.groundspeak.com/GC/index.php?showforum=89 Release Notes 
 
 _(new entries will be added on top)_
 
+2011-08-02:
+  * "site update on Tuesday, August 02, 2011 ... 11am PDT" (1800 UTC)
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=279237 release notes]
+  * *new server build: S24_HF_20110802.1*
+  * _GeoToad doesn't seem affected_
+  * <img> tags are now followed by </img>
+  * GPX additions (image URLs, etc.) delayed "until late September at the earliest"
+----
 2011-07-08:
   * *new server build: S23_HF_20110707.2*
   * (no release notes yet)
