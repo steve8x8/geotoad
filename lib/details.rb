@@ -181,6 +181,11 @@ class CacheDetails
       "food"             => 59,
       "wirelessbeacon"   => 60,
       "partnership"      => 61,
+      "seasonal"         => 62,
+      "touristok"        => 63,
+      "treeclimbing"     => 64,
+      "frontyard"        => 65,
+      "teamwork"         => 66,
       # obsolete?, but image still exists
       "snakes"           => 18,
       "sponsored"        => 61,
