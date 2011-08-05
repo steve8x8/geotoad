@@ -255,13 +255,20 @@ class CacheDetails
         else
           cache['fulltype'] = full_type
           cache['type'] = full_type.split(' ')[0].downcase.gsub(/\-/, '')
-          # two special cases: "Cache In Trash Out" and "Lost and Found"
+          # special cases
           case full_type
           when /Cache In Trash Out/
             cache['type'] = 'cito'
-          when /Lost [Aa]nd Found/
-            # spelling to be confirmed!
+          when /Lost and Found Celebration/
+            cache['type'] = 'lfceleb'
+          when /Lost and Found/
             cache['type'] = 'lost+found'
+          when /Project APE Cache/
+            cache['type'] = 'ape'
+          when /Groundspeak HQ/
+            cache['type'] = 'gshq'
+          when /Locationless/
+            cache['type'] = 'reverse'
           end
           if full_type =~ /Event/
             cache['event'] = true
