@@ -374,6 +374,8 @@ class SearchCache
             cache['type'] = 'gshq'
           when /Locationless/
             cache['type'] = 'reverse'
+          when /Block Party/
+            cache['type'] = 'block'
           end
           if full_type =~ /Event/
             debug "Setting event flag for #{full_type}"
@@ -545,6 +547,8 @@ class SearchCache
             cache['type'] = 'gshq'
           when /Locationless/
             cache['type'] = 'reverse'
+          when /Block Party/
+            cache['type'] = 'block'
           end
           if full_type =~ /Event/
             debug "Setting event flag for #{full_type}"
