@@ -232,7 +232,7 @@ class CacheDetails
     attrval = (how.downcase=="yes")?1:0
     if not attrid
       # we may have missed an addition or change to the list
-      debug "Unknown attribute #{text}, please report!"
+      displayWarning "Unknown attribute #{text}, please report!"
       return 0, 0
     end
     return attrid, attrval
@@ -301,6 +301,8 @@ class CacheDetails
             cache['type'] = 'gshq'
           when /Locationless/
             cache['type'] = 'reverse'
+          when /Block Party/
+            cache['type'] = 'block'
           end
           if full_type =~ /Event/
             cache['event'] = true

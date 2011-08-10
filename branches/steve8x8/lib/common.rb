@@ -72,7 +72,13 @@ module Common
         day = temp
         debug "dd/MM/yyyy date: year=#{year} month=#{month}, day=#{day}"
       end
-      timestamp = Time.local(year, month, day)
+      # catch errors
+      begin
+        timestamp = Time.local(year, month, day)
+      rescue ArgumentError
+        displayWarning "Trying to swap month and day in #{year}/#{month}/#{day}"
+        timestamp = Time.local(year, day, month)
+      end
     when /^(\w{3})\/(\d+)\/(\d+)/
       year = $3
       month = $1
