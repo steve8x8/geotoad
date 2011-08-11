@@ -105,7 +105,7 @@ syntax: geotoad [options] <search:search2:search3>
  -s/-S [virtual|not_chosen|other|micro|small|regular|large]
                         min/max size of the cache
  -c    [traditional|multicache|unknown|virtual|event|...]
-                        type of cache (| seperated)
+                        type of cache (| separated)
  -j/-J [# days]         include/exclude caches placed in the last X days
  -r/-R [# days]         include/exclude caches found in the last X days
  -z                     include disabled caches
