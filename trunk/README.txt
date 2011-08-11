@@ -42,12 +42,12 @@ a command prompt run "geotoad". On UNIX, you may have to run "./geotoad.rb".
 You will then see a screen that looks similar to this:
 
 ==============================================================================
-:::                // GeoToad 3.14.4 Text User Interface //                :::
+:::                // GeoToad 3.14.5 Text User Interface //                :::
 ==============================================================================
 (1)  GC.com login [REQUIRED         ] | (2)  search type          [location  ]
 (3)  location     [roswell, ga      ] | (4)  distance maximum (mi)     [10   ]
                                       |
-(5)  difficulty           [2.0 - 5.0] | (6)  terrain               [0.0 - 5.0]
+(5)  difficulty           [2.0 - 5.0] | (6)  terrain               [1.0 - 5.0]
 (7)  fun factor           [1.5 - 5.0] | (8)  cache size            [any - any]
 (9)  cache type           [      any] |
 (10) virgin caches only           [ ] | (11) travel bug caches only        [ ]
@@ -92,17 +92,20 @@ syntax: geotoad [options] <search:search2:search3>
  -p <password>          Geocaching.com password, required for coordinates
  -o [filename]          output file name (automatic otherwise)
  -x [format]            output format type, see list below
- -q [location|user|wid]   query type (location by default)
+ -q [location|coord|user|keyword|wid]
+                        query type (location by default)
  -d/-D [1.0-5.0]        difficulty minimum/maximum
  -t/-T [1.0-5.0]        terrain minimum/maximum
- -f/-F [1.0-5.0]        fun factor minimum/maximum
- -y    [1-500]          distance maximum in miles (10)
+ -f/-F [0.0-5.0]        fun factor minimum/maximum
+ -y    [1-500]          distance maximum, in miles, or suffixed "km" (10)
  -k    [keyword]        title keyword search. Use | to delimit multiple
  -K    [keyword]        desc keyword search (slow). Use | again...
  -i/-I [username]       include/exclude caches owned by this person
  -e/-E [username]       include/exclude caches found by this person
- -s/-S [virtual|small|regular|large]   min/max size of the cache
- -c    [regular|virtual|event|unknown] type of cache (| seperated)
+ -s/-S [virtual|not_chosen|other|micro|small|regular|large]
+                        min/max size of the cache
+ -c    [traditional|multicache|unknown|virtual|event|...]
+                        type of cache (| separated)
  -j/-J [# days]         include/exclude caches placed in the last X days
  -r/-R [# days]         include/exclude caches found in the last X days
  -z                     include disabled caches
@@ -119,7 +122,7 @@ syntax: geotoad [options] <search:search2:search3>
  list         magnav+      mapsend+     mxf          myfindgpx   
  myfindlist   ozi          pcx+         psp+         sms         
  tab          text         tiger        tmpro+       tpg+        
- xmap+       
+ wp2guid      xmap+       
     + requires gpsbabel in PATH           = requires cmconvert in PATH
 
 ---------------------
