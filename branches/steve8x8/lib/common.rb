@@ -61,16 +61,16 @@ module Common
     # MM/dd/yyyy, dd/MM/yyyy (need to distinguish!)
     when /^(\d+)\/(\d+)\/(\d{4})$/
       year = $3
-      month = $1
-      day = $2
+      month = $2
+      day = $1
       # interpretation depends on dateFormat
-      if @@dateFormat !~ /^dd/
-        debug "MM/dd/yyyy date: year=#{year} month=#{month}, day=#{day}"
-      else
+      if @@dateFormat !~ /^MM/
         temp = month
         month = day
         day = temp
         debug "dd/MM/yyyy date: year=#{year} month=#{month}, day=#{day}"
+      else
+        debug "MM/dd/yyyy date: year=#{year} month=#{month}, day=#{day}"
       end
       # catch errors
       begin
