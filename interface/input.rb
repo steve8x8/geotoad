@@ -221,7 +221,7 @@ class Input
 
     puts " -o [filename]          output file name (automatic otherwise)"
     puts " -x [format]            output format type, see list below"
-    puts " -q [location|coord|user|keyword|wid]"
+    puts " -q [location|coord|user|owner|keyword|wid]"
     puts "                        query type (location by default)"
 
     puts " -d/-D [1.0-5.0]        difficulty minimum/maximum"
@@ -340,11 +340,12 @@ class Input
 
   1. Within distance of a location (landmark, city, postal code, coordinates) - DEFAULT
   2. All caches found by a user
-  3. By title keyword
-  4. By coordinates
-  5. By waypoint ID
+  3. All caches created by an owner
+  4. By title keyword
+  5. By coordinates
+  6. By waypoint ID
 
-", ['location', 'user', 'keyword', 'coord', 'wid'], 'location')
+", ['location', 'user', 'owner', 'keyword', 'coord', 'wid'], 'location')
 
         # Clear the query argument if the type has changed.
         if @@optHash['queryType'] != chosen
@@ -369,6 +370,9 @@ class Input
 
         when 'user'
           @@optHash['queryArg'] = ask('Enter a list of users (separated by commas)', 'NO_DEFAULT').gsub(/, */, ':')
+
+        when 'owner'
+          @@optHash['queryArg'] = ask('Enter a list of owners (separated by commas)', 'NO_DEFAULT').gsub(/, */, ':')
 
         when 'coord'
           puts "You will be asked to enter in a list of coordinates in the following format:"
@@ -717,16 +721,14 @@ class Input
       return 'state'
     when /coo/
       return 'coord'
-    when /stat/
-      return 'location'
-    when /country/
-      return 'location'
     when /wid/
       return 'wid'
     when /waypoint/
       return 'wid'
     when /user/
       return 'user'
+    when /own/
+      return 'owner'
     when /key/
       return 'keyword'
     end
