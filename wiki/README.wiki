@@ -2,7 +2,7 @@
 #labels Featured
 
 {{{
-GeoToad 3.13.4 by Thomas Stromberg (c) 2002 - 2011
+GeoToad 3.14.5 by Thomas Stromberg (c) 2002 - 2011
 ==========================================================================
 
 Table of Contents:
@@ -46,13 +46,13 @@ a command prompt run "geotoad" or if you are on UNIX, run "./geotoad.rb".
 You will then see a screen that looks similar to this:
 
 ==============================================================================
-:::                // GeoToad 3.14.4 Text User Interface //                :::
+:::                // GeoToad 3.14.5 Text User Interface //                :::
 ==============================================================================
 (1)  GC.com login [REQUIRED         ] | (2)  search type          [coord     ]
 (3)  location     [N52 23.0 E13 03.0] | (4)  distance maximum (km)     [10   ]
                                       |
-(5)  difficulty           [2.0 - 5.0] | (6)  terrain               [0.0 - 3.5]
-(7)  fun factor           [1.5 - 5.0] | (8)  cache size            [any - any]
+(5)  difficulty           [2.0 - 5.0] | (6)  terrain               [1.0 - 3.5]
+(7)  fun factor           [0.0 - 5.0] | (8)  cache size            [any - any]
 (9)  cache type           [      any] |
 (10) virgin caches only           [ ] | (11) travel bug caches only        [ ]
 (12) cache age (days)       [  0-any] | (13) last found (days)       [  0-any] 
@@ -96,7 +96,7 @@ syntax: geotoad [options] <search:search2:search3>
  -p <password>          Geocaching.com password, required for coordinates
  -o [filename]          output file name (automatic otherwise)
  -x [format]            output format type, see list below
- -q [location|coord|user|keyword|wid]
+ -q [location|coord|user|owner|keyword|wid]
                         query type (location by default)
  -d/-D [1.0-5.0]        difficulty minimum/maximum
  -t/-T [1.0-5.0]        terrain minimum/maximum
@@ -120,12 +120,14 @@ syntax: geotoad [options] <search:search2:search3>
  -C                     Clear local browser cache
 
 ::: OUTPUT FORMATS:
- cachemate=   cetus+       csv          delorme      delorme-nour dna+        
- easygps      gclist       gcvisits     gpsdrive     gpsman       gpspilot+   
- gpspoint     gpsutil+     gpx          gpx-gsak     gpx-wpts     holux+      
- html         kml+         list         magnav+      mapsend+     mxf         
- myfindgpx    myfindlist   ozi          pcx+         psp+         sms         
- tab          text         tiger        tmpro+       tpg+         xmap+       
+ cachemate=   cetus+       csv          delorme      delorme-nour 
+ dna+         easygps      gclist       gcvisits     gpsdrive     
+ gpsman       gpspilot+    gpspoint     gpsutil+     gpx          
+ gpx-gsak     gpx-wpts     holux+       html         kml+         
+ list         magnav+      mapsend+     mxf          myfindgpx    
+ myfindlist   ozi          pcx+         psp+         sms          
+ tab          text         tiger        tmpro+       tpg+         
+ wp2guid      xmap+       
     + requires gpsbabel in PATH           = requires cmconvert in PATH
 
 ::: EXAMPLES:
@@ -163,7 +165,7 @@ You can combine searches with the : delimiter. This works for all types,
 though it's most often used with coordinate searches.
 
 
-3) geotoad.rb -u user -p password -x text -o nc.txt -n -q state "North Carolina"
+3) geotoad.rb -u user -p password -x text -o nc.txt -n "North Carolina"
 Outputs a text file with all of the caches in North Carolina that are
 virgins (have never been found).
 
@@ -171,7 +173,7 @@ Please note the quotes around North Carolina. Any parameters with spaces in
 them must have quotes around them.
 
 
-4) geotoad.rb -u user -p password -t 2.5 -x vcf -S "helixblue:Sallad" -o charlotte.vcf 28272
+4) geotoad.rb -u user -p password -t 2.5 -x vcf -E "helixblue:Sallad" -o charlotte.vcf 28272
 Gets every cache in the 100 mile radius of zipcode 28272, with a terrain
 score of 2.5 or higher, and that helixblue and Sallad have not visited.
 Outputs a VCF format file, which is usable by iPod's and other devices.
@@ -179,7 +181,7 @@ Outputs a VCF format file, which is usable by iPod's and other devices.
 Please note: Put quotes around your username if it has any spaces in it.
 
 
-5) geotoad.rb -u user -p password -x html -b -K 'stream|creek|lake|river|ocean' -o watery.html -q state Indiana
+5) geotoad.rb -u user -p password -x html -b -K 'stream|creek|lake|river|ocean' -o watery.html "Sweden"
 Gets every cache in Sweden with travel bugs that matches those water keywords.
 Makes a pretty HTML file out of it.
 
