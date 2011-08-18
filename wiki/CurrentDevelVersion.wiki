@@ -1,0 +1,18 @@
+#summary Features of current development version
+#labels Featured,Experimental
+#old-labels Deprecated
+version=3.15.0
+{{{
+- Fixes (after 3.14.5):
+- 138: obsoleted by fixes for 198/205
+- 154: limit search page count (recently found, recently placed)
+- 162: more frequent refreshes for "young" caches
+- 191: freeze file cache: don't unnecessarily overwrite cache descriptions
+- 198: early login
+- 204: reactivate country/state query (caveat: changed syntax!)
+- 205: extract own found date from user search page
+- 210: support for all date formats, and languages other than English (no Korean and Hungarian though)
+}}}
+
+= Get it: =
+*{{{svn checkout http://geotoad.googlecode.com/svn/branches/steve8x8/ geotoad-devel}}}*
