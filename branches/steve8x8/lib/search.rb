@@ -100,7 +100,11 @@ class SearchCache
 
     when 'user'
       @query_type = 'ul'
-      @ttl = 12 * 3600		# 12 hours
+      @ttl = 24 * 3600		# 1 day
+
+    when 'owner'
+      @query_type = 'u'
+      @ttl = 3 * 24 * 3600	# 3 days
 
     when 'country'
       @query_type = 'country'

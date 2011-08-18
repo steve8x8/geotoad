@@ -92,7 +92,7 @@ syntax: geotoad [options] <search:search2:search3>
  -p <password>          Geocaching.com password, required for coordinates
  -o [filename]          output file name (automatic otherwise)
  -x [format]            output format type, see list below
- -q [location|coord|user|country|state|keyword|wid]
+ -q [location|coord|user|owner|country|state|keyword|wid]
                         query type (location by default)
  -d/-D [1.0-5.0]        difficulty minimum/maximum
  -t/-T [1.0-5.0]        terrain minimum/maximum
