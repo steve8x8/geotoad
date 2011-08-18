@@ -30,7 +30,10 @@ Windows                 - Windows 98 or Higher
 Mac OS                  - Mac OS X 10.4 or Higher
 Other Operating Systems -  You may need to install Ruby before running GeoToad.
                           * RedHat/Fedora Linux: built-in
-                          * Debian Linux: apt-get install ruby
+                          * Debian/Ubuntu Linux: 
+                                apt-get install ruby libopenssl-ruby
+                                (resolved automatically when installing using
+                                 dpkg -i geotoad_*.deb)
                           * FreeBSD: pkg_add -r ruby
 
 Optionally, if you have gpsbabel - http://gpsbabel.sourceforge.net/
@@ -132,7 +135,7 @@ syntax: geotoad [options] <search:search2:search3>
 
 ::: EXAMPLES:
   geotoad.rb -u helixblue -p password 27502
-  geotoad.rb -u john -p password -d 3 -s helixblue -f vcf -o NC.vcf 'North Carolina'
+  geotoad.rb -u john -p password -d 3 -I helixblue -f vcf -o NC.vcf 'North Carolina'
 
 
 ---------------------
@@ -156,24 +159,25 @@ You've just made a file named geotoad-output.loc containing all the
 geocaches nearby the zipcode 27513 suitable to be read by EasyGPS. Here are
 some more complex examples that you can work with:
 
-1) geotoad.rb -u user -p password "N56 44.392, E015 52.780"  -y 5
+
+* geotoad.rb -u user -p password "N56 44.392, E015 52.780"  -y 5
 Search for caches within 5 miles of the above coordinates
 
+* geotoad.rb -u user -p password "56 44.392 15 52.780"  -y 5km
+Search for caches within 5 kilometres.
 
-2) geotoad.rb -u user -p password 27513:27502:33434
+
+* geotoad.rb -u user -p password 27513:27502:33434
 You can combine searches with the : delimiter. This works for all types,
 though it's most often used with coordinate searches.
 
 
-3) geotoad.rb -u user -p password -x text -o nc.txt -n "North Carolina"
-Outputs a text file with all of the caches in North Carolina that are
-virgins (have never been found).
-
-Please note the quotes around North Carolina. Any parameters with spaces in
-them must have quotes around them.
+* geotoad.rb -u user -p password -x text -o nc.txt -n "North Carolina"
+Outputs a text file with all of the caches in North Carolina
+that are virgins (have never been found).
 
 
-4) geotoad.rb -u user -p password -t 2.5 -x vcf -E "helixblue:Sallad" -o charlotte.vcf 28272
+* geotoad.rb -u user -p password -t 2.5 -x vcf -E "helixblue:Sallad" -o charlotte.vcf 28272
 Gets every cache in the 100 mile radius of zipcode 28272, with a terrain
 score of 2.5 or higher, and that helixblue and Sallad have not visited.
 Outputs a VCF format file, which is usable by iPod's and other devices.
@@ -181,8 +185,14 @@ Outputs a VCF format file, which is usable by iPod's and other devices.
 Please note: Put quotes around your username if it has any spaces in it.
 
 
-5) geotoad.rb -u user -p password -x html -b -K 'stream|creek|lake|river|ocean' -o watery.html "Sweden"
-Gets every cache in Sweden with travel bugs that matches those water keywords.
+* geotoad.rb -u user -p password -x html -b -K 'stream|creek|lake|river|ocean' -o watery.html "Finland"
+Gets every cache in Finland with travel bugs that matches those water keywords.
 Makes a pretty HTML file out of it.
+
+
+* geotoad.rb -u user -p password -q user -x myfindgpx -o myfinds.gpx -- -aBcDe-
+If your search item starts with a dash, not to confuse the command line parser
+you will have to insert a '--' (double dash) into the command line right at the
+end of all options.
 
 }}}
