@@ -12,65 +12,69 @@ See also [http://forums.groundspeak.com/GC/index.php?showforum=89 Release Notes 
 
 _(new entries will be added on top)_
 
+2011-08-18:
+  * _"site update on Thursday, August 18, 2011 [...] 2pm PDT"_ (2100 UTC)
+  * we hope this is only for introducing "challenges"
+----
 2011-08-02:
-  * "site update on Tuesday, August 02, 2011 ... 11am PDT" (1800 UTC)
+  * _"site update on Tuesday, August 02, 2011 [...] 11am PDT"_ (1800 UTC)
   * [http://forums.groundspeak.com/GC/index.php?showtopic=279237 release notes]
-  * *new server build: S24_HF_20110802.1*
-  * _GeoToad doesn't seem affected_
+  * *new server build: {{{S24_HF_20110803.1}}}*
+  * _GeoToad doesn't seem affected_ (with the exception of a few new attributes)
   * <img> tags are now followed by </img>
   * GPX additions (image URLs, etc.) delayed "until late September at the earliest"
 ----
 2011-07-08:
-  * *new server build: S23_HF_20110707.2*
+  * *new server build: {{{S23_HF_20110707.2}}}*
   * (no release notes yet)
 ----
 2011-06-28:
   * _"site update on Tuesday, June 28, 2011 [...] 11am PDT (GMT -7)"_
   * [http://forums.groundspeak.com/GC/index.php?showtopic=276982 release notes]
-  * *new server build: S23_HF_20110627.4*
+  * *new server build: {{{S23_HF_20110627.4}}}*
   * summary of changes also [http://www.geolemminge.de/2011/06/gc-com-siteupdate-vom-28-6-erste-cgeo-probleme/ here]
-  * _while c:geo has suffered a bit (Nearby Caches don't show names and correct types), we're still investigating effects on GeoToad_
+  * _while c:geo has suffered a bit (Nearby Caches don't show names and correct types), we couldn't find effects on GeoToad_
 ----
 2011-06-09:
   * _"site update on Thursday, June 09, 2011 [...] 11am PDT (GMT -7)"_
   * [http://forums.groundspeak.com/GC/index.php?showtopic=275795 release notes]
-  * *new server build: SC_HF_20110608.2*
+  * *new server build: {{{SC_HF_20110608.2}}}*
   * *main GeoToad functionality seems to be unaffected*
   * *user found order seems to be restored!*
 ----
 2011-05-24:
   * [http://forums.groundspeak.com/GC/index.php?showtopic=274780 release notes]
-  * *new server build: SC_HF_20110524.3*
+  * *new server build: {{{SC_HF_20110524.3}}}*
 ----
 2011-05-13:
-  * *new server build: Release_20110513.4*
+  * *new server build: {{{Release_20110513.4}}}*
   * *nearest.aspx?ul=ABC returns daily found caches in lexicographic order, not in reverse log id sorting*
   * _issue 205_
 ----
 2011-05-06:
-  * *build S22_HF_20110506.3*
+  * *build {{{S22_HF_20110506.3}}}*
 ----
 2011-05-04:
   * _"site update on Wednesday, May 04, 2011 [...] 9am PDT (GMT -7)"_
   * [http://forums.groundspeak.com/GC/index.php?showtopic=273473 release notes]
-  * *new server build: S22_HF_20110504.2*
+  * *new server build: {{{S22_HF_20110504.2}}}*
   * *search pages slightly changed, login now uses https*
   * _issue 201_
   * _made changes to lib/{search.rb,auth.rb,shadowget.rb}_
   * _fixed in 3.14.4 (released 2011-05-07)_
 ----
 2011-03-24:
-  * *new server build: S21_HF_20110324.4*
+  * *new server build: {{{S21_HF_20110324.4}}}*
   * _did not harm GeoToad_
 ----
 (probably in late Jan/early Feb?):
   * [http://forums.groundspeak.com/GC/index.php?showtopic=268051 release notes]
-  * *new server build: S20_HF_xxxxxxxx.x*
+  * *new server build: {{{S20_HF_xxxxxxxx.x}}}* (details unknown)
   * _no effect seen in GeoToad_
 ----
 2010-12-22 (approx.):
   * [http://forums.groundspeak.com/GC/index.php?showtopic=265627 release notes]
-  * *new server build: S19_HF_20101222.1*
+  * *new server build: {{{S19_HF_20101222.1}}}*
   * started "Maps Beta"
   * _issue 183_
   * *update replaced text for difficulty, terrain, and cache size by image*
