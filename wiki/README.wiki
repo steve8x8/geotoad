@@ -32,7 +32,7 @@ interface" (TUI). Simply double click on the GeoToad program icon, or from
 a command prompt run "{{{geotoad}}}" or if you are on UNIX, run "{{{./geotoad.rb}}}".
 You will then see a screen that looks similar to this:
 
-<pre>
+{{{
 ==============================================================================
 :::                // GeoToad 3.14.5 Text User Interface //                :::
 ==============================================================================
@@ -55,7 +55,7 @@ You will then see a screen that looks similar to this:
 ==============================================================================
 ** Verbose mode disabled - (v) to change
 -- Enter menu number, (s) to start, (r) to reset, or (x) to exit --> 
-</pre>
+}}}
 
 At this point, follow the prompt and begin typing the number of the item
 you wish to change, pressing enter afterwards. You will need to enter your
@@ -75,7 +75,7 @@ geocaches that have not been found in your area.
 If you go to the command line, and run {{{geotoad -h}}}, you will get a screen
 with a list of of options such as the following:
 
-<pre>
+{{{
 syntax: geotoad [options] <search:search2:search3>
 
  -u <username>          Geocaching.com username, required for coordinates
@@ -119,7 +119,7 @@ syntax: geotoad [options] <search:search2:search3>
 ::: EXAMPLES:
   geotoad.rb -u helixblue -p password 27502
   geotoad.rb -u john -p password -d 3 -I helixblue -f vcf -o NC.vcf 'North Carolina'
-</pre>
+}}}
 
 
 == Command-Line Examples ==
