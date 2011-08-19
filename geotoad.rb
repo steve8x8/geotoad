@@ -180,16 +180,18 @@ class GeoToad
     # mix multiple @queryType's anyways
     @combinedWaypoints = Hash.new
 
+    if @queryType == "zipcode" || @queryType == "coord" || @queryType == 'location'
+      @queryTitle = @queryTitle + " (#{@distanceMax}mi. radius)"
+      @defaultOutputFile = @defaultOutputFile + "-y" + @distanceMax.to_s
+    end
+
     @queryArg.to_s.split(/[:\|]/).each { |queryArg|
       print "\n( o ) Performing #{@queryType} search for #{queryArg} "
       search = SearchCache.new
 
       # only valid for zip or coordinate searches
-
       if @queryType == "zipcode" || @queryType == "coord" || @queryType == 'location'
         puts "(constraining to #{@distanceMax} miles)"
-        @queryTitle = @queryTitle + " (#{@distanceMax}mi. radius)"
-        @defaultOutputFile = @defaultOutputFile + "-y" + @distanceMax.to_s
         search.distance = @distanceMax
       else
         puts
