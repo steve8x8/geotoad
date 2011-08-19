@@ -146,28 +146,29 @@ You need to get to a command-line (DOS, cmd.exe, UNIX shell), and go into
 the directory you extracted geotoad into. Then you should be able to type
 something simple like:
 
-geotoad.rb -u user -p password 27513
+geotoad.rb -u user -p password 35466
 
 Why do we need a username and password? In October of 2004, Geocaching.com
 began to require a login in order to see the coordinates of a geocache.
 
 If that does not work, try:
 
-ruby geotoad.rb -u user -p password 27513
+ruby geotoad.rb -u user -p password 35466
 
-You've just made a file named geotoad-output.loc containing all the
-geocaches nearby the zipcode 27513 suitable to be read by EasyGPS. Here are
-some more complex examples that you can work with:
+You've just made a file named gt_35466-y10.gpx containing all the geocaches 
+nearby the zipcode 35466 (Gordo, Alabama) suitable to be read by a Garmin device. 
+
+Here are some more complex examples that you can work with:
 
 
-* geotoad.rb -u user -p password "N56 44.392, E015 52.780"  -y 5
-Search for caches within 5 miles of the above coordinates
+* geotoad.rb -u user -p password -q coord "N56 44.392, E015 52.780"  -y 3
+Search for caches within 3 miles of the above coordinates
 
-* geotoad.rb -u user -p password "56 44.392 15 52.780"  -y 5km
+* geotoad.rb -u user -p password -q coord "56 44.392 15 52.780"  -y 5km
 Search for caches within 5 kilometres.
 
 
-* geotoad.rb -u user -p password 27513:27502:33434
+* geotoad.rb -u user -p password -x gpx -o threezipcodes.gpx 35466:99722:99788
 You can combine searches with the : delimiter. This works for all types,
 though it's most often used with coordinate searches.
 
@@ -184,6 +185,8 @@ Outputs a VCF format file, which is usable by iPod's and other devices.
 
 Please note: Put quotes around your username if it has any spaces in it.
 
+Another note: This kind of query will put a high load on GroundSpeak's servers 
+and *may change your account status to "banned"*. Be careful.
 
 * geotoad.rb -u user -p password -x html -b -K 'stream|creek|lake|river|ocean' -o watery.html "Finland"
 Gets every cache in Finland with travel bugs that matches those water keywords.
