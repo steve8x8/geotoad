@@ -1,53 +1,38 @@
 #summary GeoToad README.txt
 #labels Featured
 
-{{{
-GeoToad 3.14.5 by Thomas Stromberg (c) 2002 - 2011
-==========================================================================
+<wiki:toc max_depth="2" />
 
-Table of Contents:
-------------------
-* About
-* Requirements
-* Getting Started
-* Command-Line Syntax
-* Command-Line examples
+= GeoToad 3.14.5 by Thomas Stromberg (c) 2002 - 2011 =
+
+== About GeoToad ==
+GeoToad is an open-source query tool to query the geocaching.com website.
+It supports exporting your results into a dozen or more formats such as 
+GPX, HTML, or VCF for your iPod.
 
 
+== System Requirements ==
+  * Windows
+    * Windows 98 or Higher
+  * Mac OS
+    * Mac OS X 10.4 or Higher
+  * Other Operating Systems
+    * You may need to install Ruby before running GeoToad.
+      * RedHat/Fedora Linux: built-in
+      * Debian/Ubuntu Linux: *{{{apt-get install ruby libopenssl-ruby}}}*, then *{{{dpkg -i geotoad_*.deb}}}*
+      * FreeBSD: *{{{pkg_add -r ruby}}}*
 
------
-About
------
-It's an open-source query tool to query the geocaching.com website. It
-supports exporting your results into a dozen or more formats such as GPX,
-HTML, or VCF for your iPod.
-
-
-------------
-Requirements
-------------
-Windows                 - Windows 98 or Higher
-Mac OS                  - Mac OS X 10.4 or Higher
-Other Operating Systems -  You may need to install Ruby before running GeoToad.
-                          * RedHat/Fedora Linux: built-in
-                          * Debian/Ubuntu Linux: 
-                                apt-get install ruby libopenssl-ruby
-                                (resolved automatically when installing using
-                                 dpkg -i geotoad_*.deb)
-                          * FreeBSD: pkg_add -r ruby
-
-Optionally, if you have gpsbabel - http://gpsbabel.sourceforge.net/
-geotoad can output to over a dozen additional GPS formats.
+Optionally, if you have [http://gpsbabel.sourceforge.net gpsbabel]
+GeoToad can output to over a dozen additional GPS formats.
 
 
----------------
-Getting Started
----------------
+== Getting Started ==
 The easiest way to get started with GeoToad is to use the "text user
 interface" (TUI). Simply double click on the GeoToad program icon, or from
-a command prompt run "geotoad" or if you are on UNIX, run "./geotoad.rb".
+a command prompt run "{{{geotoad}}}" or if you are on UNIX, run "{{{./geotoad.rb}}}".
 You will then see a screen that looks similar to this:
 
+<pre>
 ==============================================================================
 :::                // GeoToad 3.14.5 Text User Interface //                :::
 ==============================================================================
@@ -70,7 +55,7 @@ You will then see a screen that looks similar to this:
 ==============================================================================
 ** Verbose mode disabled - (v) to change
 -- Enter menu number, (s) to start, (r) to reset, or (x) to exit --> 
-
+</pre>
 
 At this point, follow the prompt and begin typing the number of the item
 you wish to change, pressing enter afterwards. You will need to enter your
@@ -81,18 +66,16 @@ Once you have entered in all of your information, press "s" and then
 entered for future runs.
 
 
--------------------
-Command Line Syntax
--------------------
-
+== Command Line Syntax ==
 Sometimes people prefer to use the command-line switches instead of the
 text user interface. This comes especially in handy when you wish to
 automate it so that every morning your iPod or GPS has the freshest list of
 geocaches that have not been found in your area.
 
-If you go to the command line, and run geotoad -h, you will get a screen
+If you go to the command line, and run {{{geotoad -h}}}, you will get a screen
 with a list of of options such as the following:
 
+<pre>
 syntax: geotoad [options] <search:search2:search3>
 
  -u <username>          Geocaching.com username, required for coordinates
@@ -136,66 +119,57 @@ syntax: geotoad [options] <search:search2:search3>
 ::: EXAMPLES:
   geotoad.rb -u helixblue -p password 27502
   geotoad.rb -u john -p password -d 3 -I helixblue -f vcf -o NC.vcf 'North Carolina'
+</pre>
 
 
----------------------
-Command-Line Examples
----------------------
-
+== Command-Line Examples ==
 You need to get to a command-line (DOS, cmd.exe, UNIX shell), and go into
 the directory you extracted geotoad into. Then you should be able to type
 something simple like:
 
-geotoad.rb -u user -p password 35466
+  * {{{geotoad.rb -u user -p password 35466}}}
 
 Why do we need a username and password? In October of 2004, Geocaching.com
 began to require a login in order to see the coordinates of a geocache.
 
 If that does not work, try:
 
-ruby geotoad.rb -u user -p password 35466
+  * {{{ruby geotoad.rb -u user -p password 35466}}}
 
-You've just made a file named gt_35466-y10.gpx containing all the geocaches 
-nearby the zipcode 35466 (Gordo, Alabama) suitable to be read by a Garmin device. 
+You've just made a file named {{{gt_35466-y10.gpx}}} containing all the geocaches
+nearby the zipcode 35466 (Gordo, Alabama) suitable to be read by a Garmin device.
 
 Here are some more complex examples that you can work with:
 
-
-* geotoad.rb -u user -p password -q coord "N56 44.392, E015 52.780"  -y 3
+  * {{{geotoad.rb -u user -p password -q coord "N56 44.392, E015 52.780"  -y 3}}}
 Search for caches within 3 miles of the above coordinates
 
-* geotoad.rb -u user -p password -q coord "56 44.392 15 52.780"  -y 5km
+  * {{{geotoad.rb -u user -p password -q coord "56 44.392 15 52.780"  -y 5km}}}
 Search for caches within 5 kilometres.
 
-
-* geotoad.rb -u user -p password -x gpx -o threezipcodes.gpx 35466:99722:99788
+  * {{{geotoad.rb -u user -p password -x gpx -o threezipcodes.gpx 35466:99722:99788}}}
 You can combine searches with the : delimiter. This works for all types,
 though it's most often used with coordinate searches.
 
-
-* geotoad.rb -u user -p password -x text -o nc.txt -n "North Carolina"
+  * {{{geotoad.rb -u user -p password -x text -o nc.txt -n "North Carolina"}}}
 Outputs a text file with all of the caches in North Carolina
 that are virgins (have never been found).
 
-
-* geotoad.rb -u user -p password -t 2.5 -x vcf -E "helixblue:Sallad" -o charlotte.vcf 28272
+  * {{{geotoad.rb -u user -p password -t 2.5 -x vcf -E "helixblue:Sallad" -o charlotte.vcf 28272}}}
 Gets every cache in the 100 mile radius of zipcode 28272, with a terrain
 score of 2.5 or higher, and that helixblue and Sallad have not visited.
 Outputs a VCF format file, which is usable by iPod's and other devices.
 
 Please note: Put quotes around your username if it has any spaces in it.
 
-Another note: This kind of query will put a high load on GroundSpeak's servers 
+Another note: This kind of query will put a high load on GroundSpeak's servers
 and *may change your account status to "banned"*. Be careful.
 
-* geotoad.rb -u user -p password -x html -b -K 'stream|creek|lake|river|ocean' -o watery.html "Finland"
+  * {{{geotoad.rb -u user -p password -x html -b -K 'stream|creek|lake|river|ocean' -o watery.html "Finland"}}}
 Gets every cache in Finland with travel bugs that matches those water keywords.
 Makes a pretty HTML file out of it.
 
-
-* geotoad.rb -u user -p password -q user -x myfindgpx -o myfinds.gpx -- -aBcDe-
+  * {{{geotoad.rb -u user -p password -q user -x myfindgpx -o myfinds.gpx -- -aBcDe-}}}
 If your search item starts with a dash, not to confuse the command line parser
 you will have to insert a '--' (double dash) into the command line right at the
 end of all options.
-
-}}}
