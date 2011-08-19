@@ -13,13 +13,13 @@ See also [http://forums.groundspeak.com/GC/index.php?showforum=89 Release Notes 
 _*(new entries will be added on top)*_
 
 2011-08-18:
-  * _"site update on Thursday, August 18, 2011 [...] 2pm PDT"_ (2100 UTC)
+  * _"site update on Thursday, August 18, 2011 ... 2pm PDT"_ (2100 UTC)
   * [http://forums.groundspeak.com/GC/index.php?showtopic=280337 release notes]
   * new server build: *{{{S25_HF_20110817.8}}}*
   * we hope this is only for introducing "challenges"
 ----
 2011-08-02:
-  * _"site update on Tuesday, August 02, 2011 [...] 11am PDT"_ (1800 UTC)
+  * _"site update on Tuesday, August 02, 2011 ... 11am PDT"_ (1800 UTC)
   * [http://forums.groundspeak.com/GC/index.php?showtopic=279237 release notes]
   * new server build: *{{{S24_HF_20110803.1}}}*
   * <img> tags are now followed by </img>
@@ -31,14 +31,14 @@ _*(new entries will be added on top)*_
   * (no release notes yet)
 ----
 2011-06-28:
-  * _"site update on Tuesday, June 28, 2011 [...] 11am PDT (GMT -7)"_
+  * _"site update on Tuesday, June 28, 2011 ... 11am PDT (GMT -7)"_
   * [http://forums.groundspeak.com/GC/index.php?showtopic=276982 release notes]
   * new server build: *{{{S23_HF_20110627.4}}}*
   * summary of changes also [http://www.geolemminge.de/2011/06/gc-com-siteupdate-vom-28-6-erste-cgeo-probleme/ here]
   * _while c:geo has suffered a bit (Nearby Caches don't show names and correct types), we couldn't find effects on GeoToad_
 ----
 2011-06-09:
-  * _"site update on Thursday, June 09, 2011 [...] 11am PDT (GMT -7)"_
+  * _"site update on Thursday, June 09, 2011 ... 11am PDT (GMT -7)"_
   * [http://forums.groundspeak.com/GC/index.php?showtopic=275795 release notes]
   * new server build: *{{{SC_HF_20110608.2}}}*
   * *user found order seems to be restored!*
@@ -56,7 +56,7 @@ _*(new entries will be added on top)*_
   * new server build *{{{S22_HF_20110506.3}}}*
 ----
 2011-05-04:
-  * _"site update on Wednesday, May 04, 2011 [...] 9am PDT (GMT -7)"_
+  * _"site update on Wednesday, May 04, 2011 ... 9am PDT (GMT -7)"_
   * [http://forums.groundspeak.com/GC/index.php?showtopic=273473 release notes]
   * new server build: *{{{S22_HF_20110504.2}}}*
   * *search pages slightly changed, login now uses https* _(issue 201)_
@@ -83,9 +83,9 @@ _*(new entries will be added on top)*_
 ----
 2010-11-09 (?):
   * [http://forums.groundspeak.com/GC/index.php?showtopic=263469 release notes]
-  * _issue 161, issue 171, and more_
+  * _(issue 161, issue 171, and more)_
 ----
 2010-10-05 (?):
   * [http://forums.groundspeak.com/GC/index.php?showtopic=261247 release notes]
-  * _issue 152, and more_
+  * _(issue 152, and more)_
 ----
