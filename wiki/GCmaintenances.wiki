@@ -12,11 +12,17 @@ See also [http://forums.groundspeak.com/GC/index.php?showforum=89 Release Notes 
 
 _*(new entries will be added on top)*_
 
+----
+2011-08-20:
+  * new server build: *{{{S25_HF_20110819.4}}}*
+  * revert changes to log format
+----
 2011-08-18:
   * _"site update on Thursday, August 18, 2011 ... 2pm PDT"_ (2100 UTC)
   * [http://forums.groundspeak.com/GC/index.php?showtopic=280337 release notes]
   * new server build: *{{{S25_HF_20110817.8}}}*
-  * we hope this is only for introducing "challenges"
+  * introducing "challenges", changed log date format ("about 11 months ago")
+  * _since cdpf.aspx unchanged, no effect on GeoToad(?)_
 ----
 2011-08-02:
   * _"site update on Tuesday, August 02, 2011 ... 11am PDT"_ (1800 UTC)
