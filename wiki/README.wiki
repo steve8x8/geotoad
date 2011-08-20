@@ -22,7 +22,7 @@ GPX, HTML, or VCF for your iPod.
       * Debian/Ubuntu Linux: *{{{apt-get install ruby libopenssl-ruby}}}*, then *{{{dpkg -i geotoad_*.deb}}}*
       * FreeBSD: *{{{pkg_add -r ruby}}}*
 
-Optionally, if you have [http://gpsbabel.sourceforge.net gpsbabel]
+Optionally, if you have [http://www.gpsbabel.org/ gpsbabel]
 GeoToad can output to over a dozen additional GPS formats.
 
 
@@ -162,7 +162,7 @@ Outputs a VCF format file, which is usable by iPod's and other devices.
 
 Please note: Put quotes around your username if it has any spaces in it.
 
-Another note: This kind of query will put a high load on GroundSpeak's servers
+Another note: This kind of quey will put a high load on GroundSpeak's servers
 and *may change your account status to "banned"*. Be careful.
 
   * {{{geotoad.rb -u user -p password -x html -b -K 'stream|creek|lake|river|ocean' -o watery.html "Finland"}}}

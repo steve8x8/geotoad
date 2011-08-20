@@ -25,26 +25,28 @@ Windows:
   *    EasyGPS         (Free)    http://www.easygps.com/
   *    Utopia          (Free)    http://home.earthlink.net/~msargent2/ch/
   *    G7ToWin         (Free)    http://www.gpsinformation.org/ronh/
-  *    GPSbabel        (Free)    http://gpsbabel.sourceforge.net/
+  *    GPSbabel        (Free)    http://www.gpsbabel.org/
 
 Mac OS X:
-  *    Mac SimpleGPS   (Free)    http://www.macsimplegps.com/
+  *    ~~Mac SimpleGPS   (Free)    http://www.macsimplegps.com/~~
   *    GPS Connect     (Free)    http://www.chimoosoft.com/gpsconnect.html
   *    FlightTrack     (Free)    http://flighttrack.sourceforge.net/
-  *    GPSbabel        (Free)    http://gpsbabel.sourceforge.net/
+  *    GPSbabel        (Free)    http://www.gpsbabel.org/
 
 Linux/UNIX:
-  *    GPSbabel        (Free)    http://gpsbabel.sourceforge.net/
+  *    GPSbabel        (Free)    http://www.gpsbabel.org/
   *    GPSMan          (Free)    http://www.ncc.up.pt/gpsman/
 
 Android:
-  *    CacheMate       ($10)      http://www.smittyware.com/droid/cachemate/
+  *    CacheMate       ($8)      http://www.smittyware.com/droid/cachemate/
+  *    c:geo           (Free)    http://www.cgeo.org/
+  *    DroidCachebox   (Free)    http://getcachebox.net
 
 PalmOS:
-  *    CacheMate       ($10)      http://www.smittyware.com/palm/cachemate/
+  *    CacheMate       ($8)      http://www.smittyware.com/palm/cachemate/
 
 Symbian UIQ (Sony Ericsson, Motorola):
-  *    GPS-Navigator   ($16)     http://www.wohlfahrt-edv.de/
+  *    GPS-Navigator   (€16)     http://www.wohlfahrt-edv.de/
   *    PowerNavigation ($20)     http://www.symbianware.com/product.php?id=powernavigation_uiq
   *    SmartGPX        (free)    http://www.smartcaching.de/smartgpx.html
 
@@ -54,9 +56,10 @@ Symbian Series 60 & 80 (Nokia):
   *    SmartGPX        (Free)    http://www.smartcaching.de/smartgpx.html
 
 Windows Mobile/CE/Pocket PC:
-  *    CacheMate       ($10)      http://www.smittyware.com/palm/cachemate/
-  *    GPXView         (Free)     http://strandberg.org/gpxview/
-  *    cachebox        (Free)     http://getcachebox.net
+  *    CacheMate       ($8)      http://www.smittyware.com/intro/cachemate/
+  *    GPXView         (Free)    http://strandberg.org/gpxview/
+  *    cachebox        (Free)    http://getcachebox.net
+  *    G7ToCE          (Free)    http://www.gpsinformation.org/ronh/
 
 
 == Why is there no GUI for GeoToad? ==
