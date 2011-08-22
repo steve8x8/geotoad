@@ -617,7 +617,7 @@ class SearchCache
 # 2011-05-04: unchanged
       #                             11 Jul 10<br />
       # Yesterday<strong>*</strong><br />
-      when /^ +((\w+[ \w]+)|([0-9\/-]+))(\<strong\>)?(\*)?(\<\/strong\>)?\<br/
+      when /^ +((\w+[ \w]+)|([0-9\/\.-]+))(\<strong\>)?(\*)?(\<\/strong\>)?\<br/
         debug "last found date: #{$1}#{$5} at line: #{line}"
         cache['mtime'] = parseDate($1+$5.to_s)
         cache['mdays'] = daysAgo(cache['mtime'])
@@ -627,7 +627,7 @@ class SearchCache
       # found date:
       # <span id="ctl00_ContentBody_dlResults_ctl??_uxUserLogDate" class="Success">5 days ago</span></span>
       # <span id="ctl00_ContentBody_dlResults_ctl01_uxUserLogDate" class="Success">Today<strong>*</strong></span></span>
-      when /^ +\<span [^\>]*UserLogDate[^\>]*\>((\w+[ \w]+)|([0-9\/-]+))(\<strong\>)?(\*?)(\<\/strong\>)?\<\/span\>\<\/span\>/
+      when /^ +\<span [^\>]*UserLogDate[^\>]*\>((\w+[ \w]+)|([0-9\/\.-]+))(\<strong\>)?(\*?)(\<\/strong\>)?\<\/span\>\<\/span\>/
         debug "user found date: #{$1}#{$4} at line: #{line}"
         cache['atime'] = parseDate($1+$5.to_s)
         cache['adays'] = daysAgo(cache['atime'])
@@ -638,7 +638,7 @@ class SearchCache
       #  9 Sep 06</span>
       # may have a "New!" flag next to it
       #  6 Dec 10 <img src="[...]" alt="New!" title="New!" /></span>
-      when /^ +((\d+ \w{3} \d+)|([0-9\/-]+))(\s+\<img [^\>]* title="New!" \/\>)?<\/span>\s?$/
+      when /^ +((\d+ \w{3} \d+)|([0-9\/\.-]+))(\s+\<img [^\>]* title="New!" \/\>)?<\/span>\s?$/
         debug "create date: #{$1} at line: #{line}"
         cache['ctime'] = parseDate($1)
         cache['cdays'] = daysAgo(cache['ctime'])

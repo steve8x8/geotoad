@@ -58,6 +58,12 @@ module Common
       day = $3
       debug "ISO-coded date: year=#{year} month=#{month} day=#{day}"
       timestamp = Time.local(year, month, day)
+    when /^(\d+)\.(\d+)\.(\d{4})$/
+      year = $3
+      month = $2
+      day = $1
+      debug "dotted date: year=#{year} month=#{month} day=#{day}"
+      timestamp = Time.local(year, month, day)
     # MM/dd/yyyy, dd/MM/yyyy (need to distinguish!)
     when /^(\d+)\/(\d+)\/(\d{4})$/
       year = $3
