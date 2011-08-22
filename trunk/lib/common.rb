@@ -22,6 +22,15 @@ module Common
         year = $3
       end
       timestamp = Time.local(year, $1, $2)
+    when /^(\d+)\.(\d+)\.(\d{4})$/
+      debug "Looks like a date: year=#{$3} date=#{$1}, month=#{$2}"
+      if $3.to_i < 1970
+        debug "The year appears to be earlier than 1970. Patching to 1970."
+        year = 1970
+      else
+        year = $3
+      end
+      timestamp = Time.local(year, $2, $1)
     when /^\d+[ \/]\w+[ \/]\d+/
       timestamp = Time.parse(date)
     when 'N/A'
