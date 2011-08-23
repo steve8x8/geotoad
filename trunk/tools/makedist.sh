@@ -2,9 +2,7 @@
 # Builds a new release of geotoad
 # $Id: makedist.se,v 1.3 2002/04/23 04:05:41 helix Exp $
 
-# this must be run from the geotoad directory.
-
-# For Windows build, we require: http://github.com/ryanbooker/rubyscript2exe
+# For Windows build, we require a Ruby installation including the "Ocra" gem
 
 if [ ! -f VERSION ];  then
   echo "VERSION not found"
@@ -78,23 +76,32 @@ if [ ! -x "/usr/local/bin/flip" -o ! -x "/usr/bin/flip" ]; then
   rm -Rf "$WIN_DIR/debian"
   cd "$WIN_DIR"
   mkdir compile
-  mv *.rb lib interface data compile
-  mv compile/geotoad.rb compile/init.rb
-  flip -m *.txt
+  mv *.rb lib interface data compile/
+  flip -mv *.txt
   perl -pi -e 's/([\s])geotoad\.rb/$1geotoad/g' README.txt
 
-  echo "In Windows, run:"
+  cat <<EOF >ocrabuild.bat
+@echo off
+z:
+cd compile
+ocra --console geotoad.rb
+rem for some yet unknown reason, this part isn't reached
+dir
+cd ..
+pause
+EOF
+
+  /bin/echo "In Windows Z:\\dist\\${DISTNAME}_for_Windows, run:"
   echo ""
-  echo "Z:"
-  echo "cd Z:\\dist\\${DISTNAME}_for_Windows\\compile"
-  echo "ruby C:\\ruby\\bin\\rubyscript2exe.rb init.rb"
-  echo "move init.exe ..\\geotoad.exe"
+  echo "ocrabuild.bat"
   echo ""
   read -p "Then press ENTER: " ENTER
   cd $WIN_DIR
+  rm -f ocrabuild.bat
+  mv compile/geotoad.exe compile/data ./
   ls
-  if [ -f "geotoad.exe" ]; then
-    mv compile/data .
+
+  if [ -f geotoad.exe ]; then
     rm -Rf "$WIN_DIR/compile"
     zip -r "$WIN_PKG" *
   else
@@ -103,4 +110,3 @@ if [ ! -x "/usr/local/bin/flip" -o ! -x "/usr/bin/flip" ]; then
 else
   echo "Skipping Windows Release (no flip found)"
 fi
-

@@ -615,6 +615,8 @@ class GeoToad
 
 end
 
+# for Ocra build
+exit if Object.const_defined?(:Ocra)
 
 ###### MAIN ACTIVITY ###############################################################
 puts "GeoToad #{$VERSION} (#{RUBY_PLATFORM}-#{RUBY_VERSION})"
