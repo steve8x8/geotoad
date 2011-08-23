@@ -101,11 +101,49 @@ EOF
   mv compile/geotoad.exe compile/data ./
   ls
 
-  if [ -f geotoad.exe ]; then
+  if [ ! -f geotoad.exe ]; then
+    echo "geotoad.exe not found"
+  else
     rm -Rf "$WIN_DIR/compile"
     zip -r "$WIN_PKG" *
-  else
-    echo "geotoad.exe not found"
+    cat <<EOF >geotoad.iss
+; SEE THE DOCUMENTATION FOR DETAILS ON CREATING .ISS SCRIPT FILES!
+
+[Setup]
+AppName=GeoToad
+AppVersion=${VERSION}
+DefaultDirName={pf}\GeoToad
+DefaultGroupName=GeoToad
+UninstallDisplayIcon={app}\geotoad.exe
+
+[Files]
+Source: "geotoad.exe";               DestDir: "{app}"
+Source: "contrib\Delorme_Icons\*.*"; DestDir: "{app}\contrib\Delorme_Icons"
+Source: "data\*.*";                  DestDir: "{app}\data"
+Source: "tools\*.*";                 DestDir: "{app}\tools"
+Source: "ChangeLog.txt";             DestDir: "{app}"
+Source: "COPYRIGHT.txt";             DestDir: "{app}"
+Source: "FAQ.txt";                   DestDir: "{app}"
+Source: "TODO.txt";                  DestDir: "{app}"
+Source: "README.txt";                DestDir: "{app}"; Flags: isreadme
+
+[Icons]
+Name: "{group}\GeoToad"; Filename: "{app}\geotoad.exe"
+EOF
+  cat <<EOF >innobuild.bat
+@echo off
+z:
+cd .
+c:\\Programme\\"Inno Setup 5"\\iscc /o.. /f${DISTNAME}_Windows_Installer geotoad.iss
+cd ..
+dir
+pause
+EOF
+    /bin/echo "In Windows Z:\\dist\\${DISTNAME}_for_Windows, run:"
+    echo ""
+    echo "innobuild.bat"
+    echo ""
+    read -p "Then press ENTER: " ENTER
   fi
 else
   echo "Skipping Windows Release (no flip found)"
