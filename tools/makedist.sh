@@ -124,7 +124,7 @@ Source: "tools\*.*";                 DestDir: "{app}\tools"
 Source: "ChangeLog.txt";             DestDir: "{app}"
 Source: "COPYRIGHT.txt";             DestDir: "{app}"
 Source: "FAQ.txt";                   DestDir: "{app}"
-Source: "TODO.txt";                  DestDir: "{app}"
+;Source: "TODO.txt";                  DestDir: "{app}"
 Source: "README.txt";                DestDir: "{app}"; Flags: isreadme
 
 [Icons]
