@@ -711,8 +711,11 @@ class Input
   end
 
   def convertEscapedHex(string)
-    text = string.dup
-    text.gsub!(/(\\x|%)([0-9a-fA-F][0-9a-fA-F])/) { $2.to_i(16).chr }
+    text = nil
+    if string
+      text = string.dup
+      text.gsub!(/(\\x|%)([0-9a-fA-F][0-9a-fA-F])/) { $2.to_i(16).chr }
+    end
     return text
   end
 
