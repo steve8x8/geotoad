@@ -7,8 +7,9 @@
 = Questions and Answers: =
 
 == How do you enable friendly waypoint id names? ==
-These synthesized names are a feature named EasyName. Set your maximum
-EasyName waypoint length (16 for Garmin), and they will be enabled.
+These synthesized names are a feature named EasyName. 
+Set your maximum EasyName length ({{{--waypointLength}}} or {{{-l}}}, 
+for Garmin we recommend 16), and they will be enabled.
 
 
 == Geocaching Swiss Army Knife complains about the GPX format. How do I make them compatible? ==
@@ -91,6 +92,27 @@ which seems to forget the current working directory. Because of this,
 if you are using a relative path, it will default to the directory
 that GeoToad is installed to, rather than the working directory it
 was launched from.
+
+
+== I cannot login with a name containing an umlaut ("ÜbercacherXY") ==
+You're probably using Windows. 
+(For unixoid systems, check your _locale_ setting {{{$LANG}}} for *{{{*.UTF-8}}}*.)
+
+It seems to be impossible to use UTF-8 in a Windows cmd.exe environment;
+there is a "Unicode" codepage (65001) which apparently uses UTF-16
+(encoding each character into two bytes) which isn't suited for our purposes.
+
+To enter non-ASCII characters *within user/owner names*,
+you will have to look them up in 
+[http://www.utf8-chartable.de/unicode-utf8-table.pl?number=1024 this table] 
+(you may have to scroll further) and prefix *each two-digit hex number* from 
+the third column with a *percent sign*, as in *{{{%c3%9cbercacherXY}}}*. 
+_(If you use the search page to list caches found by "ÜbercacherXY", 
+geocaching.com will use the same encoding.)_
+
+To enter a *percent sign* in the name, please use *{{{%25}}}*.
+
+Don't be worried if you see strange characters in the TUI.
 
 
 == What about country and state searches? ==
