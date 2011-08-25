@@ -36,6 +36,7 @@ class GeoToad
   $SLOWMODE = 350
 
   def initialize
+    $debugMode    = 0
     output        = Output.new
     $validFormats = output.formatList.sort
     @uin          = Input.new
@@ -633,7 +634,7 @@ while(1)
 
   count = cli.downloadGeocacheList()
   if count < 1
-    cli.displayError "No caches found in search, exiting early."
+    cli.displayWarning "No caches found in search, exiting early."
   else
     cli.displayMessage "#{count} geocaches found in defined area."
     cli.prepareFilter
