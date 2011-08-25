@@ -505,37 +505,7 @@ class SearchCache
       #<IMG src="./gc_files/8.gif" alt="Unknown Cache" width="32" height="32"></A>
       #<img src="http://[...]/wpttypes/sm/8.gif" alt="Unknown Cache"[...]>
       when /cache_details.*\/WptTypes\/[\w].*?alt=\"(.*?)\"/
-        full_type = $1
-        # there may be more than 1 match, don't overwrite
-        if cache['fulltype']
-          debug "Not overwriting \"#{cache['fulltype']}\"(#{cache['type']} with \"#{full_type}\""
-        else
-          cache['fulltype'] = full_type
-          cache['type'] = full_type.split(' ')[0].downcase.gsub(/\-/, '')
-          # special cases
-          case full_type
-          when /Cache In Trash Out/
-            cache['type'] = 'cito'
-          when /Lost and Found Celebration/
-            cache['type'] = 'lfceleb'
-          when /Lost and Found/
-            cache['type'] = 'lost+found'
-          when /Project APE Cache/
-            cache['type'] = 'ape'
-          when /Groundspeak HQ/
-            cache['type'] = 'gshq'
-          when /Locationless/
-            cache['type'] = 'reverse'
-          when /Block Party/
-            cache['type'] = 'block'
-          end
-          if full_type =~ /Event/
-            debug "Setting event flag for #{full_type}"
-            cache['event'] = true
-          end
-          debug "short type=#{cache['type']} for #{full_type}"
-        end
-        cache['mdays'] = -1
+        displayError "obsolete when line 514"
 
 # 2011-05-04: obsolete
       # trackables: all in one separate line, usually after the cache type line
@@ -546,34 +516,7 @@ class SearchCache
       # ... <img src="http://www.geocaching.com/images/wpttypes/2934.gif" alt="Africa Geocoin (1 item(s))" title="Africa Geocoin (1 item(s))" />
       # only count for TBs, coins by name - single-coin and multi-coin cases!
       when /\/wpttypes\/\d+\.gif\".*?alt=\".*? \((.*?) item(\(s\))?\)\"/
-        # This line has travel bug data
-        debug "List of trackables: #{line}"
-        trackables = ''
-        # split at alt tag, drop everything before
-        line.gsub(/^.*?alt=\"/, '').split(" alt=\"").each { |item|
-          debug "trackable item #{item}"
-          # "Travel Bug Dog Tag (1 item)" ...
-          # "Travel Bug Dog Tag (2 items)" ...
-          # "Africa Geocoin (1 item(s))" ...
-          # "Geocoins:  Happy Caching - Black Cat Geocoin (1), Geocaching meets Geodäsie Geocoin (1)" ...
-          # "Cachekinz (1 item(s))" ...
-          # "Unite for Diabetes Travel Bug (1 item(s))" ...
-          item.gsub!(/\".*/, '')
-          # shorten the name a bit
-          item.gsub!(/^Geocoins:\s+/, '')
-          item.gsub!(/Travel Bug( Dog Tag)?/, 'TB')
-          item.gsub!(/Geocoin/, 'GC')
-          item.gsub!(/^The /, '')
-          # drop counter if 1
-          item.gsub!(/ \((.*?) item\(?s?\)?\)/) {"(#{$1})"}
-          item.gsub!(/\(1\)/, '')
-          trackables << item + ', '
-        }
-        if trackables.length > 0
-          trackables.gsub!(/, $/, '')
-          debug "Trackables Found: #{trackables}"
-          cache['travelbug'] = trackables
-        end
+        displayError "obsolete when line 525"
 
       # new travelbug list 2010-12-22
       # single:
@@ -594,25 +537,12 @@ class SearchCache
       # (2/1)<br />
       # (1/1.5)<br />
       when /\(([-\d\.]+)\/([-\d\.]+)\)\<br/
-        # Use integers when we can
-        if $1.to_f == $1.to_i
-          cache['difficulty']=$1.to_i
-        else
-          cache['difficulty']=$1.to_f
-        end
-
-        if $1.to_f == $1.to_i
-          cache['terrain']=$2.to_i
-        else
-          cache['terrain']=$2.to_f
-        end
-        debug "difficulty=#{cache['difficulty']} terr=#{cache['terrain']}"
+        displayError "obsolete when line 546"
 
 # 2011-05-04: obsolete
       # <img src="/images/icons/container/micro.gif" alt="Size: Micro" />
       when /\<img src=\"\/images\/icons\/container\/.*\" alt=\"Size: (.*?)\"/
-        cache['size'] = $1.downcase
-        debug "size=#{cache['size']}"
+        displayError "obsolete when line 551"
 
 # 2011-05-04: unchanged
       #                             11 Jul 10<br />
@@ -648,22 +578,15 @@ class SearchCache
       #     <img src="/images/icons/compass/NW.gif" alt="NW" title="NW" />NW<br />0.1mi
       # GC user prefs set to imperial units
       when /\>([NWSE]+)\<br \/\>([\d\.]+)mi/
-        cache['distance'] = $2.to_f
-        cache['direction'] = $1
-        debug "cacheDistance=#{cache['distance']}mi dir=#{cache['direction']}"
+        displayError "obsolete when line 587"
       # or  <img src="/images/icons/compass/SE.gif" alt="SE" title="SE" />SE<br />6.7km
       # GC user prefs set to metric units
       when /\>([NWSE]+)\<br \/\>([\d\.]+)km/
-        cache['distance'] = $2.to_f / 1.609344
-        cache['direction'] = $1
-        debug "cacheDistance=#{cache['distance']}mi dir=#{cache['direction']}"
-
+        displayError "obsolete when line 591"
       # or just              <br />Here
       when /^\s+\<br \/\>Here\s?$/
         # less than 0.01 miles
-        cache['distance'] = 0.0
-        cache['direction'] = "N"
-        debug "cacheDistance=#{cache['distance']}mi dir=#{cache['direction']}"
+        displayError "obsolete when line 595"
 
 # 2011-05-04: unchanged? (cannot find anymore)
       # 2010-12-22:
@@ -763,8 +686,7 @@ class SearchCache
 # 2011-05-04: obsolete
       # (GC1Z0RT)<br />
       when /^ +\((GC.*?)\)\<br \/\>/
-        wid = $1
-        debug "wid=#{wid}"
+        displayError "obsolete when line 699"
 
 # 2011-05-04: new pattern (try to improve!)
       # | GCabcde | (over multiple lines!)

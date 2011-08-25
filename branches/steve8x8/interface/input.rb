@@ -340,6 +340,7 @@ class Input
       case answer
       when '1'
         @@optHash['user'] = ask("What is your Geocaching.com username?", 'NO_DEFAULT')
+          @@optHash['user'] = convertEscapedHex(@@optHash['user'])
         @@optHash['password'] = ask("What is your Geocaching.com password?", 'NO_DEFAULT')
 
       when '2'
@@ -380,9 +381,11 @@ class Input
 
         when 'user'
           @@optHash['queryArg'] = ask('Enter a list of users (separated by commas)', 'NO_DEFAULT').gsub(/, */, ':')
+            @@optHash['queryArg'] = convertEscapedHex(@@optHash['queryArg'])
 
         when 'owner'
           @@optHash['queryArg'] = ask('Enter a list of owners (separated by commas)', 'NO_DEFAULT').gsub(/, */, ':')
+            @@optHash['queryArg'] = convertEscapedHex(@@optHash['queryArg'])
 
         when 'coord'
           puts "You will be asked to enter in a list of coordinates in the following format:"
@@ -777,6 +780,12 @@ class Input
       end
     end
     return answer
+  end
+
+  def convertEscapedHex(string)
+    text = string.dup
+    text.gsub!(/(\\x|%)([0-9a-fA-F][0-9a-fA-F])/) { $2.to_i(16).chr }
+    return text
   end
 
 
