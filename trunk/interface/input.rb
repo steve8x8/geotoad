@@ -141,6 +141,10 @@ class Input
       exit
     end
 
+    @@optHash['user'] = convertEscapedHex(@@optHash['user'])
+    if (@@optHash['queryType'] == 'user') or (@@optHash['queryType'] == 'owner')
+      @@optHash['queryArg'] = convertEscapedHex(@@optHash['queryArg'])
+    end
 
     return @@optHash
   end
