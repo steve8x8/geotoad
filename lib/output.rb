@@ -230,35 +230,17 @@ class Output
       tempname.gsub!(/\. /, '')
     end
 
+    # remove long stuff in parentheses
+    if tempname =~ /^(.*?)( *\(.{7,}\))(.*)/
+      tempname = $1+$3.to_s
+    end
+
     # Umlauts and other special characters: mark for later removal
     tempname.gsub!(/\&[^;]*;/, '~')
 
     tempwords = tempname.split(' ')
     wordcount = tempwords.length
     #debug "shortname: split \"#{tempname}\" into #{wordcount} words"
-
-    # this part of code has been disabled: 1 word is no longer a special case!
-    if false and wordcount == 1
-      # if there is only one word, use it!
-      #debug "shortname: single word \"#{tempname}\""
-      # if it's already short enough: return it
-      if tempname.length <= maxlength
-        debug "shortname: returning \"#{tempname}\" (#{tempname.length})"
-        return tempname
-      end
-      # strip extra characters
-      tempname.gsub!(/[^\w~+]/, '')
-      if tempname.length <= maxlength
-        debug "shortname: returning \"#{tempname}\" (#{tempname.length})"
-        return tempname
-      end
-      # strip vowels
-      #result = tempname[0..0] + tempname[1..-1].gsub(/[AEIOUaeiou~]/, '')
-      result = tempname[0..0] + tempname[1..-1].gsub(/[aeiou~]/, '')
-      debug "shortname: last exit, returning \"#{result}\" (#{result.length})"
-      return result
-    end
-    # ---- end of disabled code
 
     # multiple words
     newwords = Array.new
