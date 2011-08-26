@@ -12,6 +12,8 @@ See also [http://forums.groundspeak.com/GC/index.php?showforum=89 Release Notes 
 
 _*(new entries will be added on top)*_
 
+2011-08-22/24:
+  * hotfixes for "site speed and functionality" (no new build?)
 ----
 2011-08-20:
   * new server build: *{{{S25_HF_20110819.4}}}*
