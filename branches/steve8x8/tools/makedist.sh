@@ -84,7 +84,7 @@ if [ ! -x "/usr/local/bin/flip" -o ! -x "/usr/bin/flip" ]; then
 @echo off
 z:
 cd compile
-ocra --console geotoad.rb
+call ocra --console geotoad.rb
 rem for some yet unknown reason, this part isn't reached
 dir
 cd ..

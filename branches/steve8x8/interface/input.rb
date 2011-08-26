@@ -143,6 +143,10 @@ class Input
       exit
     end
 
+    @@optHash['user'] = convertEscapedHex(@@optHash['user'])
+    if (@@optHash['queryType'] == 'user') or (@@optHash['queryType'] == 'owner')
+      @@optHash['queryArg'] = convertEscapedHex(@@optHash['queryArg'])
+    end
 
     return @@optHash
   end
@@ -783,8 +787,11 @@ class Input
   end
 
   def convertEscapedHex(string)
-    text = string.dup
-    text.gsub!(/(\\x|%)([0-9a-fA-F][0-9a-fA-F])/) { $2.to_i(16).chr }
+    text = nil
+    if string
+      text = string.dup
+      text.gsub!(/(\\x|%)([0-9a-fA-F][0-9a-fA-F])/) { $2.to_i(16).chr }
+    end
     return text
   end
 

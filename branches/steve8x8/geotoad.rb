@@ -137,7 +137,7 @@ class GeoToad
     # Make a calculatable/comparable version number
     parts = text.split('.')
     version = (parts[0].to_i * 10000) + (parts[1].to_i * 100) + parts[2].to_i
-    puts version
+    #puts version
     return version
   end
 

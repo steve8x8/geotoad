@@ -139,6 +139,21 @@ item(s) start with a dash (or minus sign), it has to be
 inserting a "double dash"
 .B --
 between the last option and the search argument(s).
+
+If
+.B user
+or
+.B owner
+names contain special (non-ASCII) characters, and you are using Windows,
+you may not be able to login or run a "user" query.
+In those cases, you'll have to pre-encode those characters.
+.B http://www.utf8-chartable.de/unicode-utf8-table.pl?number=1024
+will help you to look up the proper UTF-8 codes.
+Prefix each two-digit hex value with a percent sign, for example:
+.B (capital_letter_O_with_diaeresis)lscheich
+will become
+.B %c3%96lscheich
+(the TUI will may show strange characters, don't worry about them).
 .SH ENVIRONMENT
 .TP
 .B GEO_DIR
