@@ -12,6 +12,10 @@ See also [http://forums.groundspeak.com/GC/index.php?showforum=89 Release Notes 
 
 _*(new entries will be added on top)*_
 
+----
+2011-09-01:
+  * _"site update on Thursday, September 01, 2011 ... 11am PDT"_ (1800 UTC)
+----
 2011-08-22/24:
   * hotfixes for "site speed and functionality" (no new build?)
 ----

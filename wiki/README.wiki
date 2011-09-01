@@ -31,8 +31,8 @@ The easiest way to get started with GeoToad is to use the "text user
 interface" (TUI). Simply double click on the GeoToad program icon, or from
 a command prompt run "{{{geotoad}}}" or if you are on UNIX, run "{{{./geotoad.rb}}}".
 You will then see a screen that looks similar to this:
-
 {{{
+
 ==============================================================================
 :::                // GeoToad 3.14.5 Text User Interface //                :::
 ==============================================================================
@@ -55,6 +55,7 @@ You will then see a screen that looks similar to this:
 ==============================================================================
 ** Verbose mode disabled - (v) to change
 -- Enter menu number, (s) to start, (r) to reset, or (x) to exit --> 
+
 }}}
 
 At this point, follow the prompt and begin typing the number of the item
@@ -74,8 +75,8 @@ geocaches that have not been found in your area.
 
 If you go to the command line, and run {{{geotoad -h}}}, you will get a screen
 with a list of of options such as the following:
-
 {{{
+
 syntax: geotoad [options] <search:search2:search3>
 
  -u <username>          Geocaching.com username, required for coordinates
@@ -119,6 +120,7 @@ syntax: geotoad [options] <search:search2:search3>
 ::: EXAMPLES:
   geotoad.rb -u helixblue -p password 27502
   geotoad.rb -u john -p password -d 3 -I helixblue -f vcf -o NC.vcf 'North Carolina'
+
 }}}
 
 
@@ -162,7 +164,7 @@ Outputs a VCF format file, which is usable by iPod's and other devices.
 
 Please note: Put quotes around your username if it has any spaces in it.
 
-Another note: This kind of quey will put a high load on GroundSpeak's servers
+Another note: This kind of query will put a high load on GroundSpeak's servers
 and *may change your account status to "banned"*. Be careful.
 
   * {{{geotoad.rb -u user -p password -x html -b -K 'stream|creek|lake|river|ocean' -o watery.html "Finland"}}}
