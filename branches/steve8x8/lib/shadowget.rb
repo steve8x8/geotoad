@@ -7,7 +7,7 @@ require 'uri'
 require 'cgi'
 require 'common'
 require 'messages'
-require 'lib/auth'
+require 'auth'
 
 # Does a webget, but stores a local directory with cached results ###################
 class ShadowFetch
@@ -213,7 +213,7 @@ class ShadowFetch
     raise ArgumentError, 'HTTP redirect too deep' if redirects == 0
     debug "Fetching [#{url_str}]"
     uri = URI.parse(url_str)
-    debug "URL parsed #{uri.host}:#{uri.port}"
+    debug "URL parsed #{uri.scheme}://#{uri.host}:#{uri.port}"
 
     if ENV['HTTP_PROXY']
       proxy = URI.parse(ENV['HTTP_PROXY'])
@@ -272,7 +272,7 @@ class ShadowFetch
       if location =~ /^\//
         prefix = "#{uri.scheme}://#{uri.host}"
         #if (uri.scheme == 'http' && uri.port != 80) || (uri.scheme == 'https' && uri.port != 443)
-          prefix = ":#{uri.port}"
+          prefix = "#{prefix}:#{uri.port}"
         #end
         location = prefix + location
       else

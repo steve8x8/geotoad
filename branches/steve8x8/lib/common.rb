@@ -185,6 +185,8 @@ module Common
         return dir
       end
     }
+    puts " ***  Could not identify data directory."
+    puts " ***  If GeoToad crashes, you may want to run from the install directory."
     return "../data"
   end
 

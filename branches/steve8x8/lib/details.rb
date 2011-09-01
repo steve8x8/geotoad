@@ -441,6 +441,12 @@ class CacheDetails
       debug "terrain: #{cache['terrain']}"
     end
 
+    # to compute a fav rate we need the total found count
+    if data =~ /alt="Found it" \/\>&nbsp;(\d+)&nbsp;Found it/
+      cache['foundcount'] = $1.to_i
+      debug "foundcount: #{cache['foundcount']}"
+    end
+
     if data =~ /id="uxDecryptedHint".*?\>(.*?)\s*\<\/div/m
       hint = $1.strip
       if hint =~ /[\<\>]/

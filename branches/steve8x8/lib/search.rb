@@ -608,8 +608,8 @@ class SearchCache
       # <span id="ctl00_ContentBody_dlResults_ctl01_uxFavoritesValue" title="0" class="favorite-rank">0</span>
       when /_uxFavoritesValue[^\>]*\>([0-9]+)\</
         favs = $1
-        debug "found Favourites=#{favs}"
-        cache['favourites'] = favs
+        debug "found Favorites=#{favs}"
+        cache['favorites'] = favs
 
 # 2011-05-04: unchanged
       # <a href="/seek/cache_details.aspx?guid=c9f28e67-5f18-45c0-90ee-76ec8c57452f">Yasaka-Shrine@Zerosen</a>
