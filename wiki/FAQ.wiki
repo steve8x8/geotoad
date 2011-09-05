@@ -2,9 +2,9 @@
 #labels Featured
 
 
-<wiki:toc max_depth="2">
-
 = Questions and Answers: =
+
+<wiki:toc max_depth="2">
 
 == How do you enable friendly waypoint id names? ==
 These synthesized names are a feature named EasyName. 

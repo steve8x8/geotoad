@@ -1,9 +1,9 @@
 #summary GeoToad README.txt
 #labels Featured
 
-<wiki:toc max_depth="2" />
-
 = GeoToad 3.14.5 by Thomas Stromberg (c) 2002 - 2011 =
+
+<wiki:toc max_depth="2" />
 
 == About GeoToad ==
 GeoToad is an open-source query tool to query the geocaching.com website.
@@ -29,7 +29,7 @@ GeoToad can output to over a dozen additional GPS formats.
 == Getting Started ==
 The easiest way to get started with GeoToad is to use the "text user
 interface" (TUI). Simply double click on the GeoToad program icon, or from
-a command prompt run "{{{geotoad}}}" or if you are on UNIX, run "{{{./geotoad.rb}}}".
+a command prompt run "{{{geotoad}}}". On UNIX, you may have to run "{{{./geotoad.rb}}}".
 You will then see a screen that looks similar to this:
 {{{
 
@@ -53,7 +53,7 @@ You will then see a screen that looks similar to this:
 (22) output format       [list      ]   (23) filename   [automatic           ]
 (24) output directory    [/home/user/geocaching/geotoad                      ]
 ==============================================================================
-** Verbose mode disabled - (v) to change
+** Verbose (debug) mode disabled, (v) to change
 -- Enter menu number, (s) to start, (r) to reset, or (x) to exit --> 
 
 }}}
@@ -67,7 +67,7 @@ Once you have entered in all of your information, press "s" and then
 entered for future runs.
 
 
-== Command Line Syntax ==
+== Command-Line Syntax ==
 Sometimes people prefer to use the command-line switches instead of the
 text user interface. This comes especially in handy when you wish to
 automate it so that every morning your iPod or GPS has the freshest list of
