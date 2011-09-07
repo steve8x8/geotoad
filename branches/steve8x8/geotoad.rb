@@ -59,6 +59,12 @@ class GeoToad
       $mode = 'TUI'
     end
 
+    if (@option['verbose'])
+      enableDebug
+    else
+      disableDebug
+    end
+
     if @option['proxy']
       ENV['HTTP_PROXY'] = @option['proxy']
     end
@@ -90,9 +96,7 @@ class GeoToad
 
     @preserveCache     = @option['preserveCache']
 
-    @formatType        = @option['format'] || 'gpx'
-    # back in 3.7.5 there was such an option (-c), already gone in 3.9.0
-    #@cacheExpiry       = @option['cacheExpiry'].to_i || 3
+    @formatTypes       = @option['format'] || 'gpx'
     # there is no "usemetric" cmdline option but the TUI may set it
     @useMetric         = @option['usemetric']
     # distanceMax from command line can contain the unit
@@ -114,17 +118,13 @@ class GeoToad
     @queryTitle        = "GeoToad: #{@queryType} = #{@queryArg}"
     @defaultOutputFile = "gt_" + @queryArg.to_s
 
-    if (@option['verbose'])
-      enableDebug
-    else
-      disableDebug
-    end
-
-    if ! $validFormats.include?(@formatType)
-      displayError "#{@formatType} is not a valid supported format."
+   @formatTypes.split(/[:\|]/).each { |formatType|
+    if ! $validFormats.include?(formatType)
+      displayError "#{formatType} is not a valid supported format."
       @uin.usage
       exit
     end
+   }
 
     @limitPages = @option['limitSearchPages'].to_i
     debug "Limiting search to #{@limitPages.inspect} pages"
@@ -600,16 +600,19 @@ class GeoToad
   ## save the file #############################################
   def saveFile
     puts ""
+    formatTypeCounter = 0
+   @formatTypes.split(/[:\|]/).each { |formatType|
     output = Output.new
-    displayInfo "Output format selected is #{output.formatDesc(@formatType)} format"
+    displayInfo "Output format selected is #{output.formatDesc(formatType)} format"
     output.input(@filtered.waypoints)
-    output.formatType = @formatType
+    output.formatType = formatType
     if (@option['waypointLength'])
       output.waypointLength=@option['waypointLength'].to_i
     end
 
 
-    # if we have selected the name of the output file, use it.
+    # if we have selected the name of the output file, use it for first run
+    # for subsequent runs, drop the extension and append default one
     # otherwise, take our invented name, sanitize it, and slap a file extension on it.
     outputFile = nil
     if @option['output']
@@ -618,6 +621,11 @@ class GeoToad
       filename.gsub!('\\', '/')
       if filename and filename !~ /\/$/
         outputFile = File.basename(filename)
+      end
+      if (formatTypeCounter > 0)
+        # replace/add extension
+        outputFile.gsub!(/\.[^\.]*$/, '')
+        outputFile = outputFile + "." + output.formatExtension(formatType)
       end
     end
 
@@ -628,7 +636,7 @@ class GeoToad
         outputFile = outputFile[0..215] + "_etc"
       end
 
-      outputFile = outputFile + "." + output.formatExtension(@formatType)
+      outputFile = outputFile + "." + output.formatExtension(formatType)
     end
     debug "Base output path: #{outputFile}"
 
@@ -665,6 +673,9 @@ class GeoToad
     outputData = output.prepare(@queryTitle, @option['user']);
     output.commit(outputFile)
     displayMessage "Saved to #{outputFile}"
+
+    formatTypeCounter += 1
+   }
   end
 
 

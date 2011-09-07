@@ -177,6 +177,8 @@ module Common
       "data",
       "../data",
       File.dirname(__FILE__) + "/../data",
+      "#{ENV['COMMONPROGRAMFILES']}/GeoToad/data",
+      "#{ENV['PROGRAMFILES']}/GeoToad/data",
       "/usr/share/geotoad",
       "/usr/local/share/geotoad"
     ]

@@ -322,13 +322,28 @@ class SearchCache
       archived = true
       debug "Cache appears to be archived"
     end
+    membersonly = false
+    country = nil
+    state = nil
+    data.split("\n").each { |line|
+      line.gsub!(/&#39;/, '\'')
+      case line
+      when /Premium Member Only Cache/
+        membersonly = true
+      when /\s+GC.*\(.*\) in ((.*), )?(.*) created by (.*)/
+        country = $3
+        state = $2
+      end
+    }
 
     cache_data = {
       'guid' => guid,
       'wid' => wid,
       'disabled' => disabled,
       'archived' => archived,
-      'membersonly' => false
+      'membersonly' => membersonly,
+      'country' => country,
+      'state' => state
     }
     return cache_data
   end

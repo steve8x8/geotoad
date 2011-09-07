@@ -332,10 +332,10 @@ class Input
       puts "=============================================================================="
       if @@optHash['verbose']
         enableDebug
-        puts "VERBOSE MODE ENABLED"
+        puts "** VERBOSE MODE ENABLED"
       else
         disableDebug
-        puts ""
+        puts "** Verbose (debug) mode disabled, (v) to change"
       end
       print "-- Enter menu number, (s) to start, (r) to reset, or (x) to exit --> "
       answer = $stdin.gets.chop
