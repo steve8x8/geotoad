@@ -55,6 +55,12 @@ class GeoToad
       $mode = 'TUI'
     end
 
+    if (@option['verbose'])
+      enableDebug
+    else
+      disableDebug
+    end
+
     if @option['proxy']
       ENV['HTTP_PROXY'] = @option['proxy']
     end
@@ -85,8 +91,6 @@ class GeoToad
     end
 
     @formatType        = @option['format'] || 'gpx'
-    # back in 3.7.5 there was such an option (-c), already gone in 3.9.0
-    #@cacheExpiry       = @option['cacheExpiry'].to_i || 3
     # there is no "usemetric" cmdline option but the TUI may set it
     @useMetric         = @option['usemetric']
     # distanceMax from command line can contain the unit
@@ -107,12 +111,6 @@ class GeoToad
     # include query type, will be parsed by output.rb
     @queryTitle        = "GeoToad: #{@queryType} = #{@queryArg}"
     @defaultOutputFile = "gt_" + @queryArg.to_s
-
-    if (@option['verbose'])
-      enableDebug
-    else
-      disableDebug
-    end
 
     if ! $validFormats.include?(@formatType)
       displayError "#{@formatType} is not a valid supported format."
