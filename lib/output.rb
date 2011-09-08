@@ -865,8 +865,8 @@ class Output
       symbols = ''
     end
 
-    if cache['distance']
-      relative_distance = cache['distance'].to_s + 'mi@' + cache['direction']
+    if cache['distance'] and cache['direction']
+      relative_distance = sprintf("%.1f",cache['distance']) + 'mi@' + cache['direction']
       relative_distance_km = sprintf("%.1f",(cache['distance'] * 1.609344)) + 'km@' + cache['direction']
     else
       relative_distance = 'N/A'
