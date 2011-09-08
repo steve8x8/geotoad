@@ -1,11 +1,11 @@
 #summary Other searches with GeoToad
 #labels Featured
 
-<wiki:toc max_depth="2">
-
 = Using GeoToad for searches which are not built in =
 
-_*Note:* Tested with Debian Linux and bash._
+_*Note:* Tested with Debian Linux and bash. Adaptions may be necessary._
+
+<wiki:toc max_depth="2">
 
 == "Proximity" search around an existing geocache ==
 
@@ -18,7 +18,7 @@ Here's a suggestion how to accomplish this (you will have to
 add your credentials, and modify some other search parameters,
 but you'll get the idea):
 
-{{{
+{{{----
 #!/bin/bash
 
 CENTER=GC77       # or whatever should be the center of your search
@@ -32,11 +32,11 @@ COORDS=`awk '{printf("%s,%s\n",$2,$3)}' $CENTER.list`
 
 # now run the real query
 geotoad -q coord -x gpx -o `pwd`/$CENTER-prox.gpx "$COORDS"
-}}}
+----}}}
 
 == Searches along a given track/route (issue 103) ==
 
-{{{
+{{{----
 #!/bin/bash
 
 input=input.gpx # some file you picked up at e.g. openrouteservice.org
@@ -71,7 +71,7 @@ awk '{printf("%.3f,%.3f|",$1,$2)}'
 )
 
 echo geotoad ... -y$circle -q coord \"$searchargs\"
-}}}
+----}}}
 
 Note the number of decimals in the "printf" command -
 it will limit center point precision to about 100 metres

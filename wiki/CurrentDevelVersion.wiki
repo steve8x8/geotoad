@@ -14,6 +14,7 @@ version=3.15.0
   * issue 204: reactivate country/state query (caveat: changed syntax!)
   * issue 205: extract own found date from user search page
   * issue 210: support for all date formats, and languages other than English (no Korean and Hungarian though)
+  * issue 216: support for multiple output formats in one go
 
 == Get it: ==
 *{{{svn checkout http://geotoad.googlecode.com/svn/branches/steve8x8/ geotoad-devel}}}*
