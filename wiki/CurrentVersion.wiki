@@ -1,11 +1,35 @@
-#labels Deprecated
-version=3.14.4
-{{{
-- Fixes for geocaching.com's 2011-05-04 changes:
-- search parsing
-- login using https
-- cache description URL
-- Small improvements:
-- cache size sorting (virtual, not chosen < other < micro)
-- "not_chosen" for list output (allows consistent parsing)
-}}}
+#summary Features of current version
+#labels Featured
+
+version=3.14.5
+
+= What's new in 3.14.5? =
+
+== Fixes for issues: ==
+  * 103: added script suggestion (search along route) to Wiki
+  * 183: (partially) extract distance and direction from image code
+  * 195/203: chronological order for user queries (myfind*, gc* formats)
+  * 201: https login working with proxy
+  * 206: corrected parsing of additional waypoints
+  * 207: handle "fuzzy" WID queries (e.g. "O" instead of "0", additional leading "0")
+  * 208: if search arg starts with '-', insert '--' in cmdline suggested by TUI
+  * 212: "archived" and "available" states from search not to be overwritten by cache details
+  * 215: enter "special" characters using "percent-hex" (URL-type) encoding
+
+== Feature additions: ==
+  * more (grandfathered, and rare) cache types detected
+  * additional attributes 61-66 introduced with server updates
+  * added wp2guid output template (for GCvote, spoiler gallery)
+  * added "owner" query type (similar to "user" but selecting cache creator)
+  * WID mode: country/state information extracted
+  * build for Windows now uses "Ocra" ruby gem and InnoSetup installer
+
+== Minor (non-issue) fixes: ==
+  * no certificate complaint with ruby 1.8
+  * Debian/Ubuntu dependency on libopenssl-ruby
+  * debug output: hide password and cookie
+  * fixed default filename when run with multiple search arguments
+  * other minor additions and fixes (limits, manual page, README file, ...)
+
+== See also: ==
+  * [CurrentDevelVersion Current development version]
