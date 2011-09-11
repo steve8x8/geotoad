@@ -3,7 +3,7 @@
 # quick and dirty hack to rebuild txt files from wiki pages
 # to be run inside a wiki svn working copy
 
-for page in FAQ README README-new
+for page in README FAQ OtherSearches README-new
 do
     [ -f $page.wiki ] || continue
     (
@@ -38,7 +38,7 @@ do
     cat $page.wiki \
     | awk '{
 # comment lines
-	if (/^#/) next
+	if (/^#/ && NR<5) next
 	if (/^<wiki/) next
 # skip blank
 	if (/.../)p=1
@@ -63,6 +63,12 @@ do
 	    print ""
 	    print h
 	    for(i=0;i<length(h);i++)printf "-"
+	    print ""
+	    next
+	}
+# separations
+	if (/^----$/){
+	    for(i=0;i<50;i++)printf "~"
 	    print ""
 	    next
 	}
@@ -109,5 +115,8 @@ do
 # everything else
 	print $0
 	}'
-    ) > $page.txt
+    ) > $page.txt.new
+    diff 2>/dev/null -q $page.txt $page.txt.new || \
+	mv $page.txt.new $page.txt
+    rm -f 2>/dev/null $page.txt.new
 done

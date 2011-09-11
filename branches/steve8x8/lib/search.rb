@@ -284,6 +284,39 @@ class SearchCache
     #return d, t, s, value
   end
 
+  def decodeDD(v)
+    debug "Invoking decodeDD with \"#{v}\""
+    # the xor pattern is "signalthefrog"
+    xorpattern = ["73", "69", "67", "6e", "61", "6c", "74", "68",
+                  "65", "66", "72", "6f", "67", "73", "69", "67"]
+    directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW", "N"]
+    text = v.dup
+    # replace %xy codes with their "real" values
+    text.gsub!(/%([0-9a-fA-F][0-9a-fA-F])/) { $1.to_i(16).chr }
+    textlen = text.length
+    if textlen > 16
+      textlen = 16
+    end
+    # unfortunately there's no native xor for strings
+    encoded = text.unpack("c" * textlen)
+    decoded = []
+    textlen.times { |index|
+      decoded[index] = (encoded[index] ^ xorpattern[index].hex).chr
+    }
+    dd = decoded.join.split("|")
+    distance = dd[0]
+    # special case: we hit a cache location
+    if distance =~ /^Here/
+      distance = "0.0"
+    end
+    # direction "rounding"
+    direction = directions[((dd[1].to_f+22.5)/45.0).to_i]
+    # anyone interested in precise azimuth?
+    #direction << "(#{dd[1]})"
+    debug "Returning from decodeDD: \"#{distance}@#{direction}\""
+    return [distance, direction]
+  end
+
   def getResults()
     debug "Getting results: #{@query_type} at #{@search_url}"
     if @query_type == 'wid'
@@ -603,20 +636,17 @@ class SearchCache
         # less than 0.01 miles
         displayError "obsolete when line 595"
 
-# 2011-05-04: unchanged? (cannot find anymore)
+# 2011-05-04: unchanged
       # 2010-12-22:
       # <img id="ctl00_ContentBody_dlResults_ctl??_uxDistanceAndHeading" ... \
       #  <src="../ImgGen/seek/CacheDir.ashx?k=..." ...>
-      # FIXME: no decoding available yet
       when /CacheDir.ashx\?k=([^\"]*)/
         code = $1
-        # translate %xy into single bytes
-        #code.gsub!(/%([0-9a-fA-F][0-9a-fA-F])/) { $1.to_i(16).chr }
-        # and all back?
-        #code.gsub!(/(.)/) { "%#{$1.ord.to_s(16)}" }
         debug "found CacheDir=#{code.inspect}"
-        cache['distance'] = 0
-        cache['direction'] = code
+        dist, dir = decodeDD(code)
+        # distance is in miles, traditionally
+        cache['distance'] = dist.to_f/((dist =~ /km/) ? 1.609344 : 1)
+        cache['direction'] = dir
 
 # 2011-05-04: unchanged
       # 2010-12-22:
