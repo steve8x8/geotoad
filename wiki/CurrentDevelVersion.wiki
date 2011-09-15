@@ -18,7 +18,9 @@ version=3.15.0
   * issue 216: support for multiple output formats in one go
 
 == Get it: ==
-*{{{svn checkout http://geotoad.googlecode.com/svn/branches/steve8x8/ geotoad-devel}}}*
+  * _Since this is no regular release, the built-in version check won't show it._
+  * *{{{svn checkout http://geotoad.googlecode.com/svn/branches/steve8x8/ geotoad-devel}}}*
+  * packages available from download area (tagged "Development" and "Deprecated" - select "All downloads")
 
 == See also: ==
   * [CurrentVersion Current stable version]
