@@ -151,8 +151,17 @@ class GeoToad
         puts "* NOTE: GeoToad #{latestVersion} is now available!"
         puts "* Download from http://code.google.com/p/geotoad/downloads/list"
         puts "------------------------------------------------------------------------"
-        version.data.scan(/\<pre class="prettyprint"\>(.*?)\<\/pre\>/m) do |notes|
-          puts notes
+        version.data.scan(/\<div .*? id="wikimaincol"\>\s*(.*?)\s*\<\/div\>/m) do |notes|
+          text = CGI::unescapeHTML(notes[0])
+          text.gsub!(/\<\/?tt\>/i, '')
+          #text.gsub!(/\<p\>/i, "\n")
+          text.gsub!(/\<h[0-9]\>/i, "\n")
+          text.gsub!(/\<li\>/i, "\n * ")
+          text.gsub!(/\<a href=\"\#.*?\>/i, '')
+          text.gsub!(/\<a href=\"\/p\/.*\/(.*?)\"\>/i) { "[#{$1}] " }
+          text.gsub!(/\<.*?\>/, '')
+          text.gsub!(/\n\n*/, "\n")
+          puts text
         end
         puts "------------------------------------------------------------------------"
         puts "(sleeping for 5 seconds)"
