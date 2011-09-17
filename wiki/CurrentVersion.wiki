@@ -8,7 +8,7 @@ version=3.14.5
 == Fixes for issues: ==
   * 103: added script suggestion (search along route) to Wiki
   * 183: (partially) extract distance and direction from image code
-  * 195/203: chronological order for user queries (myfind*, gc* formats)
+  * 195/203: chronological order for user queries ({{{myfind*}}}, {{{gc*}}} formats)
   * 201: https login working with proxy
   * 206: corrected parsing of additional waypoints
   * 207: handle "fuzzy" WID queries (e.g. "O" instead of "0", additional leading "0")
