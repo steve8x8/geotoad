@@ -585,17 +585,7 @@ class GeoToad
     # users who just double click to launch GeoToad, and wonder where their output file went.
 
     if (! @option['output']) || (@option['output'] !~ /\//)
-      # rubyscript2exe is self extracting and overwrites the Pwd.
-      # rather than dumping files in a temp dir, lets put it where geotoad is installed
-      if defined?(RUBYSCRIPT2EXE_APPEXE)
-        if ENV["OLDDIR"]
-          outputDir=ENV["OLDDIR"]
-        else
-          outputDir=File.dirname(RUBYSCRIPT2EXE_APPEXE)
-        end
-      else
-        outputDir = Dir.pwd
-      end
+      outputDir = Dir.pwd
     else
       # fool it so that trailing slashes work.
       outputDir = File.dirname(@option['output'] + "x")
