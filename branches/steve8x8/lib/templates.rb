@@ -154,25 +154,27 @@ $Format = {
       "<b><font color=\"#999922\">&sect;</font></b> terrain rating of 3.5+&nbsp;&nbsp;&nbsp;" +
       "<b><font color=\"#440000\">&uarr;</font></b> difficulty rating of 3.5+&nbsp;&nbsp;&nbsp;" +
       "<b><font color=\"#BB6666\">&hearts;</font></b> fun factor of 3.5+<br>" +
+      "<i><font color=\"#222222\">[%] archived [?] unavailable</font<</i><br>" +
       # Not yet ready for consumption
     #"<b><font color=\"#333333\">--</font></b> comments seem negative&nbsp;&nbsp;&nbsp;" +
     #"<b><font color=\"#000000\">++</font></b> comments seem very positive" +
-
-    "<font color=\"#555555\" size=\"1\"><pre>Decryption Key (letter above equals below, and vice versa)
-
-A|B|C|D|E|F|G|H|I|J|K|L|M
--------------------------
-N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
+      "<br>\n",
     'templateIndex' => "* <a href=\"#<%out.wid%>\"><%wpEntity.name%></a><br>",
     'usesLocation' => true,
     'templateWP'    =>
-      "\n\n<hr noshade size=\"1\">\n<a name=\"<%out.wid%>\"></a><font color=\"#000099\"><big><b><%out.symbols%><a href=\"<%wp.url%>\"><%wp.name%></a></b></big></font> by <font color=\"#555555\"><b><%wpEntity.creator%></b></font> <font color=\"#444444\">(<%out.id%>)</font><br>\n" +
-      "<a href=\"<%out.maps_url%>\"><%wp.latwritten%> <%wp.lonwritten%></a> near <%out.location%><br>" +
-      "<font color=\"#339933\"><%wp.type%> (<%wp.size%>) D<%wp.difficulty%>/T<%wp.terrain%> F:<%wp.funfactor%> &rarr; <%out.relativedistance%><br>" +
-      "placed: <%out.cdate%> last comment: <%wp.last_find_days%> days ago (<%wp.last_find_type%>)</font><br>" +
+      "\n\n<hr noshade size=\"1\">\n" +
+      "<h3><a name=\"<%out.wid%>\"></a><font color=\"#000099\"><%out.symbols%><a href=\"<%wp.url%>\"><%wp.name%></a></font> by <font color=\"#555555\"><%wpEntity.creator%></font> <font color=\"#444444\">(<%out.id%>)</font></h3>\n" +
+      "<a href=\"<%out.maps_url%>\"><%wp.latwritten%> <%wp.lonwritten%></a> <i>near <%out.location%></i><br>" +
+      "<font color=\"#339933\"><%wp.type%> (<%wp.size%>) D<%wp.difficulty%>/T<%wp.terrain%> (F<%wp.funfactor%>) &rarr;<%out.relativedistance%><br>" +
+      "Placed: <%out.cdate%> Last comment: <%wp.last_find_days%> days ago (<%wp.last_find_type%>)</font><br>\n" +
+      "Attributes: <%out.txtAttrs%><br>\n" +
+      "State: <%out.warnArchiv%><%out.warnAvail%><br>\n" +
+      "<div>" + # catch runaway stuff like <center>
       "<p><%wp.additional_raw%><%wp.shortdesc%></p>\n" +
       "<p><%wp.longdesc%></p>\n" +
-      "<p><font color=\"#555555\"><%out.hint%></font></p>\n",
+      "</div>\n" +
+      "<p><font color=\"#555555\"><i><%outEntity.hintdecrypt%></i></font></p>\n" +
+      "<p><font color=\"#330000\" size=\"-1\"><%out.htmllogs%></font></p>\n",
     'templatePost'    => "</body></html>"
   },
 
@@ -180,16 +182,21 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
     'ext'        => 'txt',
     'mime'    => 'text/plain',
     'desc'    =>     'Plain ASCII',
-    'templatePre' =>  "== <%out.title%>\r\n\r\nDecryption Key (letter above equals below, and vice versa)\r\n\r\nA|B|C|D|E|F|G|H|I|J|K|L|M\r\n-------------------------\r\nN|O|P|Q|R|S|T|U|V|W|X|Y|Z\r\n\r\n\r\n",
-    'templateWP'    => "----------------------------------------------------------------\r\n" +
-      "* <%wpText.name%> (<%out.wid%>) by <%wpText.creator%>\r\n" +
-      "Difficulty: <%wp.difficulty%>, Terrain: <%wp.terrain%>, FunFactor: <%wp.funfactor%>\r\n" +
+    'templatePre' =>  "== <%out.title%>\r\n\r\n",
+    'templateWP'    => "\r\n" +
+      "----------------------------------------------------------------\r\n" +
+      "=> <%wpText.name%> (<%out.wid%>) by <%wpText.creator%> <=\r\n" +
+      "----------------------------------------------------------------\r\n\r\n" +
       "Lat: <%wp.latwritten%> Lon: <%wp.lonwritten%>\r\n" +
-      "Type: <%wp.type%> (<%wp.size%>) <%out.relativedistance%>\r\n" +
-      "Creation: <%out.cdate%>, Last comment: <%wp.mdays%> days ago (<%wp.comment0Type%>)\r\n" +
-      "\r\n<%wpText.shortdesc%>\r\n" +
-      "\r\n<%wpText.longdesc%>\r\n" +
-      "\r\n<%out.hint%>\r\n\r\n\r\n\r\n"
+      "Difficulty: <%wp.difficulty%>, Terrain: <%wp.terrain%>, FunFactor: <%wp.funfactor%>\r\n" +
+      "Type/Size: <%wp.type%> (<%wp.size%>) <%out.relativedistance%>\r\n" +
+      "Creation: <%out.cdate%>, Last comment: <%wp.last_find_days%> days ago (<%wp.last_find_type%>)\r\n\r\n" +
+      "Attributes: <%out.txtAttrs%>\r\n" +
+      "State: <%out.warnArchiv%><%out.warnAvail%>\r\n" +
+      "Short: <%wpText.shortdesc%>\r\n" +
+      "Long:\r\n<%wpText.longdesc%>\r\n\r\n" +
+      "Hint: <%outEntity.hintdecrypt%>\r\n\r\n" +
+      "Logs:\r\n<%out.textlogs%>\r\n"
   },
 
   'tab'    => {
@@ -422,7 +429,7 @@ N|O|P|Q|R|S|T|U|V|W|X|Y|Z</pre></font><br>",
     'templateWP'    => "<%out.id%>\t" +
       "<%out.latdatapad5%> <%out.londatapad5%> " +
       "<%out.cdate%> " +
-      "<%wp.difficulty%>/<%wp.terrain%>\t" +
+      "<%wp.difficulty%>/<%wp.terrain%><%out.warnArchiv%><%out.warnAvail%>\t" +
       "<%wp.type%>\t" +
       "<%out.relativedistancekm%>\t" +
       "<%out.size%>\t" + # testing only

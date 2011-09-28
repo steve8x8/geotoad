@@ -264,14 +264,6 @@ class CacheDetails
         cache['funfactor'] = 0
         cache['url'] = "http://www.geocaching.com/seek/cache_details.aspx?wp=" + wid
 
-        if not cache['mtime']
-          cache['mdays'] = -1
-          cache['mtime'] = Time.at(0)
-        end
-        if not cache['atime']
-          cache['adays'] = -1
-          cache['atime'] = Time.at(0)
-        end
       end
 
       # <h2><img src="../images/WptTypes/2.gif" alt="Traditional Cache" width="32" height="32" />&nbsp;Lake Crabtree computer software store</h2>
@@ -503,6 +495,15 @@ class CacheDetails
       end
     end
 
+    if not cache['mtime']
+      cache['mdays'] = -1
+      cache['mtime'] = Time.at(0)
+    end
+    if not cache['atime']
+      cache['adays'] = -1
+      cache['atime'] = Time.at(0)
+    end
+
     # Parse the additional waypoints table. Needs additional work for non-HTML templates.
     comments, last_find_date, fun_factor, visitors = parseComments(data, cache['creator'])
     cache['visitors'] = cache['visitors'] + visitors
@@ -512,7 +513,7 @@ class CacheDetails
       cache['last_find_days'] = daysAgo(comments[0]['date'])
     end
 
-    if cache['mdays'] == -1 and last_find_date
+    if (not cache['mdays'] or cache['mdays'] == -1) and last_find_date
       cache['mtime'] = last_find_date
       cache['mdays'] = daysAgo(cache['mtime'])
     end
@@ -533,6 +534,10 @@ class CacheDetails
       cache['size'] = "not chosen"
     end
 
+    if not cache['last_find_days']
+      cache['last_find_days'] = -1
+      cache['last_find_type'] = 'none'
+    end
 
     comment_text = comments.collect{ |x| x['text'] }
     # may return NaN when comment_text is empty

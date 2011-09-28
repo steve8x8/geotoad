@@ -510,24 +510,34 @@ class Output
     # Take HTML-like input, no matter how hacked up, and turn it into text
     text = CGI.unescapeHTML(str)
 
+    # compactify whitespace
+    text.gsub!(/[\r\n]+/m, ' ') #
+
     # rip some tags out.
     text.gsub!(/\<\/li\>/i, '')
     text.gsub!(/\<\/p\>/i, '')
-    text.gsub!(/<\/*i\>/i, '')
-    text.gsub!(/<\/*body\>/i, '')
-    text.gsub!(/<\/*option.*?\>/i, '')
-    text.gsub!(/<\/*select.*?\>/i, '')
-    text.gsub!(/<\/*span.*?\>/i, '')
-    text.gsub!(/<\/*font.*?\>/i, '')
-    text.gsub!(/<\/*ul\>/i, '')
-    text.gsub!(/style=\".*?\"/i, '')
+    text.gsub!(/\<\/?i\>/i, '')
+    text.gsub!(/\<\/?b\>/i, '')
+    text.gsub!(/\<\/?body\>/i, '')
+    text.gsub!(/\<\/?option.*?\>/i, '')
+    text.gsub!(/\<\/?select.*?\>/i, '')
+    text.gsub!(/\<\/?span.*?\>/i, '')
+    text.gsub!(/\<\/?div.*?\>/i, "\n")
+    text.gsub!(/\<\/?font.*?\>/i, '')
+    text.gsub!(/\<\/?[uo]l\>/i, "\n")
+    text.gsub!(/\s*style=\".*?\"/i, '')
 
     # substitute
     text.gsub!(/\<p\>/i, "\n\n")
+    text.gsub!(/\<\/?tr\>/i, "\n")
+    text.gsub!(/\<\/*br(\s*\/)?\>/i, "\n") #
     text.gsub!(/\<li\>/i, "\n * (o) ")
-    text.gsub!(/<\/*b>/i, '')
     text.gsub!(/\<img.*?\>/i, '[img]')
-    text.gsub!(/\<.*?\>/m, ' *')
+    text.gsub!(/\<a.*?\>/i, '[link]')
+    text.gsub!(/\<a.*?\>/i, '[/link]')
+    text.gsub!(/\<table.*?\>/i, "\n[table]\n")
+    text.gsub!(/\<table.*?\>/i, "\n[/table]\n")
+    text.gsub!(/\<.*?\>/m, '')
     text.gsub!(/\&nbsp\;/, ' ')
     text.gsub!(/\&quot\;/, '"')
     text.gsub!(/\&apos\;/, "'")
@@ -535,14 +545,13 @@ class Output
     text.gsub!(/\&ndash;/, " - ")
     text.gsub!(/\&deg;/, "'")
 
-    # combine all the tags we nuked. These regexps
-    # could probably be cleaned up pretty well.
-    text.gsub!(/\*[\s\*]+/m, "* ")
-    text.gsub!(/\*/, "\n* ")
-    text.gsub!(/[\x01-\x1F]/, '')      # low ascii
+    text.gsub!(/\n\n\n+/, "\n\n")
+    # unprintable characters
+    text.gsub!(/[\x01-\x09\x0B-\x1F\x7F]/, '')
 
-    # kill the last space, which makes the CSV output nicer.
-    text.gsub!(/ $/, '')
+    # kill trailing space, which makes the CSV output nicer.
+    text.gsub!(/\s+$/, '')
+    text.gsub!(/^\s+/m, '')
     return text
   end
 
@@ -597,38 +606,34 @@ class Output
     @wpHash.keys.sort{|a,b| a[2..-1].rjust(6)<=>b[2..-1].rjust(6)}.each { |wid|
       cache = @wpHash[wid]
       symbolHash[wid] = ''
-      if (@wpHash[wid]['travelbug'])
+      if (cache['travelbug'])
         symbolHash[wid] = "<b><font color=\"#11CC11\">&euro;</font></b>"
       end
 
-      if (@wpHash[wid]['terrain'] >= 3.5)
-        symbolHash[wid] << "<b><font color=\"#999922\">&sect;</font></b>"
-      end
-
-      if @wpHash[wid]['funfactor']
-        if @wpHash[wid]['funfactor'] >= 3.5
-          symbolHash[wid] << "<b><font color=\"#BB6666\">&hearts;</font></b>"
-        end
-      end
-
-      if (@wpHash[wid]['difficulty'] >= 3)
-        symbolHash[wid] << "<b><font color=\"#440000\">&uarr;</font></b>"
-      end
-
-      if (@wpHash[wid]['mdays'] < 0)
+      if (cache['mdays'].to_i < 0)
         symbolHash[wid] << "<b><font color=\"#9900CC\">&infin;</font></b>"
       end
 
+      if (cache['terrain'] >= 3.5)
+        symbolHash[wid] << "<b><font color=\"#999922\">&sect;</font></b>"
+      end
+
+      if (cache['difficulty'] >= 3.5)
+        symbolHash[wid] << "<b><font color=\"#440000\">&uarr;</font></b>"
+      end
+
+      if (cache['funfactor'] >= 3.5)
+        symbolHash[wid] << "<b><font color=\"#BB6666\">&hearts;</font></b>"
+      end
+
       index_item = "<li>#{symbolHash[wid]}"
-      if @wpHash[wid]['mdays'] < 0
+      if (cache['mdays'].to_i < 0)
         index_item << '<strong>'
       end
-
       index_item << "<a href=\"\##{wid}\">#{cache['name']}</a>"
-      if @wpHash[wid]['mdays'] < 0
+      if (cache['mdays'].to_i < 0)
         index_item << '</strong>'
       end
-
       index_item << " <font color=\"#444444\">(#{cache['sname']})</font></li>\n"
       index << index_item
     }
@@ -658,6 +663,53 @@ class Output
       entries << entry
     }
     debug "Finished generating comment XML for #{cache['name']}"
+    debug "Comment Data: #{entries}"
+    debug "Comment Data Length: #{entries.length}"
+    return entries.join('')
+  end
+
+  def createTextCommentLogs(cache)
+    if not cache['comments']
+      debug "No comments found for #{cache['name']}"
+      return nil
+    end
+
+    entries = []
+    debug "Generating comment text for #{cache['name']}"
+    cache['comments'].each { |comment|
+      formatted_date = comment['date'].strftime("%Y-%m-%d")
+      entry = ''
+      entry << "----------\r\n"
+      entry << "*#{comment['type']}* by #{comment['user']} on #{formatted_date}:\r\n"
+      entry << makeText(comment['text']) + "\r\n"
+      entries << entry
+    }
+    debug "Finished generating comment text for #{cache['name']}"
+    debug "Comment Data: #{entries}"
+    debug "Comment Data Length: #{entries.length}"
+    return entries.join('')
+  end
+
+  def createHTMLCommentLogs(cache)
+    if not cache['comments']
+      debug "No comments found for #{cache['name']}"
+      return nil
+    end
+
+    entries = []
+    debug "Generating comment HTML for #{cache['name']}"
+    cache['comments'].each { |comment|
+      formatted_date = comment['date'].strftime("%Y-%m-%d")
+      entry = ''
+      entry << "<hr noshade size=\"1\" width=\"150\" align=\"left\"/>\r\n"
+      entry << "<h4><em>#{comment['type']}</em> by #{comment['user']} on #{formatted_date}</h4>\r\n"
+#      entry << makeXML(comment['text']) + "<br />\r\n\r\n"
+      # strip images and links
+      entry << comment['text'].gsub(/\<\/?img.*?\>/, '').gsub(/\<\/?a.*?\>/, '')
+      entry << "<br />\r\n\r\n"
+      entries << entry
+    }
+    debug "Finished generating comment HTML for #{cache['name']}"
     debug "Comment Data: #{entries}"
     debug "Comment Data Length: #{entries.length}"
     return entries.join('')
@@ -979,8 +1031,8 @@ class Output
       'xmlWpts' => xmlWpts.to_s.gsub(/XXXWIDXXX/, wid[2 .. -1]),
       'xmlAttrs' => xmlAttrs.to_s,
       'txtAttrs' => (cache['attributeText'].to_s.empty?)?'':'[' + cache['attributeText'].to_s.capitalize + ']',
-      'warnAvail' => (available)?'':'[?] ',
-      'warnArchiv' => (archived)?'[%] ':'',
+      'warnAvail' => (available)?'':'[?]',
+      'warnArchiv' => (archived)?'[%]':'',
     }
   end
 
@@ -1030,6 +1082,12 @@ class Output
       @outVars['counter'] = counter
       if @outputType =~ /gpx/
         @outVars['gpxlogs'] = createGpxCommentLogs(cache)
+      end
+      if @outputType =~ /text/
+        @outVars['textlogs'] = createTextCommentLogs(cache)
+      end
+      if @outputType =~ /html/
+        @outVars['htmllogs'] = createHTMLCommentLogs(cache)
       end
       output << replaceVariables(@outputFormat['templateWP'], wid)
     }
