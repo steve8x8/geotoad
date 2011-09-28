@@ -7,7 +7,7 @@ build: patch build-noarch
 build-noarch:
 	dh_testdir
 
-clean:
+clean: unpatch
 	dh_testdir
 	dh_testroot
 	dh_clean
