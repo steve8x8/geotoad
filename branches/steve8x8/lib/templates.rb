@@ -149,12 +149,13 @@ $Format = {
       "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n" + "</head>\n" +
       "<body link=\"#000099\" vlink=\"#000044\" alink=\"#000099\">\n" +
       "<h3><%out.title%></h3>" +
+      "<b><font color=\"#111111\">&Oslash;</font></b> archived&nbsp;&nbsp;&nbsp;" +
+      "<b><font color=\"#CC1111\">&#x229e;</font></b> marked as \"temporarily unavailable\"<br>" +
       "<b><font color=\"#11CC11\">&euro;</font></b> have travelbugs&nbsp;&nbsp;&nbsp;" +
       "<b><font color=\"#9900CC\">&infin;</font></b> never been found&nbsp;&nbsp;&nbsp;" +
       "<b><font color=\"#999922\">&sect;</font></b> terrain rating of 3.5+&nbsp;&nbsp;&nbsp;" +
       "<b><font color=\"#440000\">&uarr;</font></b> difficulty rating of 3.5+&nbsp;&nbsp;&nbsp;" +
       "<b><font color=\"#BB6666\">&hearts;</font></b> fun factor of 3.5+<br>" +
-      "<i><font color=\"#222222\">[%] archived [?] unavailable</font<</i><br>" +
       # Not yet ready for consumption
     #"<b><font color=\"#333333\">--</font></b> comments seem negative&nbsp;&nbsp;&nbsp;" +
     #"<b><font color=\"#000000\">++</font></b> comments seem very positive" +
@@ -168,13 +169,14 @@ $Format = {
       "<font color=\"#339933\"><%wp.type%> (<%wp.size%>) D<%wp.difficulty%>/T<%wp.terrain%> (F<%wp.funfactor%>) &rarr;<%out.relativedistance%><br>" +
       "Placed: <%out.cdate%> Last comment: <%wp.last_find_days%> days ago (<%wp.last_find_type%>)</font><br>\n" +
       "Attributes: <%out.txtAttrs%><br>\n" +
-      "State: <%out.warnArchiv%><%out.warnAvail%><br>\n" +
       "<div>" + # catch runaway stuff like <center>
-      "<p><%wp.additional_raw%><%wp.shortdesc%></p>\n" +
+      "<p><%wp.additional_raw%><%wp.shortdesc%></p>\n" + # font size inside tables?
       "<p><%wp.longdesc%></p>\n" +
       "</div>\n" +
       "<p><font color=\"#555555\"><i><%outEntity.hintdecrypt%></i></font></p>\n" +
-      "<p><font color=\"#330000\" size=\"-1\"><%out.htmllogs%></font></p>\n",
+      "<div>" + # catch runaway stuff like <center>
+      "<p><font color=\"#330000\" size=\"-1\"><%out.htmllogs%></font></p>\n" +
+      "</div>\n",
     'templatePost'    => "</body></html>"
   },
 

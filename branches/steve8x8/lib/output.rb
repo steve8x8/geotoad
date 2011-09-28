@@ -606,8 +606,21 @@ class Output
     @wpHash.keys.sort{|a,b| a[2..-1].rjust(6)<=>b[2..-1].rjust(6)}.each { |wid|
       cache = @wpHash[wid]
       symbolHash[wid] = ''
+
+      if (cache['premium-only'])
+        symbolHash[wid] << "<b><font color=\"#11CC11\">&#x24; </font></b>"
+      end
+
+      if (cache['archived'])
+        symbolHash[wid] << "<b><font color=\"#111111\">&Oslash; </font></b>"
+      end
+
+      if (cache['disabled'] and not cache['archived'])
+        symbolHash[wid] << "<b><font color=\"#CC1111\">&#x229e; </font></b>"
+      end
+
       if (cache['travelbug'])
-        symbolHash[wid] = "<b><font color=\"#11CC11\">&euro;</font></b>"
+        symbolHash[wid] << "<b><font color=\"#11CC11\">&euro;</font></b>"
       end
 
       if (cache['mdays'].to_i < 0)
@@ -626,7 +639,7 @@ class Output
         symbolHash[wid] << "<b><font color=\"#BB6666\">&hearts;</font></b>"
       end
 
-      index_item = "<li>#{symbolHash[wid]}"
+      index_item = "<li> #{symbolHash[wid]} "
       if (cache['mdays'].to_i < 0)
         index_item << '<strong>'
       end
@@ -705,7 +718,7 @@ class Output
       entry << "<h4><em>#{comment['type']}</em> by #{comment['user']} on #{formatted_date}</h4>\r\n"
 #      entry << makeXML(comment['text']) + "<br />\r\n\r\n"
       # strip images and links
-      entry << comment['text'].gsub(/\<\/?img.*?\>/, '').gsub(/\<\/?a.*?\>/, '')
+      entry << comment['text'].gsub(/\<\/?img.*?\>/, '').gsub(/\<\/?a.*?\>/, '').gsub(/\<\/?font.*?\>/, '')
       entry << "<br />\r\n\r\n"
       entries << entry
     }
