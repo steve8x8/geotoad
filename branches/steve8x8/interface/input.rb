@@ -253,7 +253,7 @@ class Input
     puts " -b                     only include caches with travelbugs"
     puts " -l                     set EasyName waypoint id length. (16)"
     puts " -L                     limit number of search pages (0=unlimited)"
-    puts " -Z                     preserve cached description files"
+    puts " -Z                     don't overwrite existing cache descriptions"
     puts " -P                     HTTP proxy server, http://username:pass@host:port/"
     puts " -C                     Clear local browser cache"
     puts ""

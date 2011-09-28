@@ -100,7 +100,7 @@ class SearchCache
 
     when 'user'
       @query_type = 'ul'
-      @ttl = 24 * 3600		# 1 day
+      @ttl = 24 * 3600		# 1 day (was 12 hours)
 
     when 'owner'
       @query_type = 'u'
@@ -109,11 +109,12 @@ class SearchCache
     when 'country'
       @query_type = 'country'
       @search_url = @@base_url + "?country_id=#{key}"
+      @ttl = 14 * 24 * 3600	# 2 weeks
 
     when 'state'
       @query_type = 'state'
       @search_url = @@base_url + "?state_id=#{key}"
-      debug "State query: #{@search_url}"
+      @ttl = 14 * 24 * 3600	# 2 weeks
 
     when 'keyword'
       @query_type = 'key'
@@ -441,7 +442,8 @@ class SearchCache
     page = ShadowFetch.new(url)
     # DTS decoding: drop search pages from yesterday UTC
     sincemidnight = 60*( 60*Time.now.utc.hour + Time.now.utc.min )
-    if (sincemidnight < @ttl) and (url !~ /cache_details/)
+    # correct TTL only if no user search!
+    if (sincemidnight < @ttl) and (url !~ /nearest.aspx.ul=/)
       @ttl = sincemidnight
     end
     page.localExpiry = @ttl

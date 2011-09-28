@@ -314,7 +314,7 @@ class CacheDetails
 
       # <p class="Meta">Placed Date: 7/17/2001</p>
       # also, event dates.
-      if line =~ /[lE][av][ce][ne][dt] Date: ([\w\/]+)\</
+      if line =~ /[lE][av][ce][ne][dt] Date: ([\w\/-]+)\</
         if $1 != 'N/A'
           cache['ctime'] = parseDate($1)
           cache['cdays'] = daysAgo(cache['ctime'])
@@ -601,7 +601,7 @@ class CacheDetails
       if icon == 'smile'
         visitors << user.downcase
         if not last_find
-          last_find = Time.parse(datestr)
+          last_find = date.dup
         end
       elsif icon == 'remove' or icon == 'disabled' or icon == 'greenlight' or icon == 'maint'
         should_grade = false
