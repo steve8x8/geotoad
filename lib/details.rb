@@ -569,7 +569,7 @@ class CacheDetails
       if icon == 'smile'
         visitors << user.downcase
         if not last_find
-          last_find = Time.parse(datestr)
+          last_find = date.dup
         end
       elsif icon == 'remove' or icon == 'disabled' or icon == 'greenlight' or icon == 'maint'
         should_grade = false
