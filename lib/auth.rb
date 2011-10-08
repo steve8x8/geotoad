@@ -74,12 +74,12 @@ module Auth
 
   def getLoginCookie(user, password)
     page = ShadowFetch.new(@postURL)
-    page.localExpiry=1
-    @postVars['ctl00$SiteContent$tbUsername']=user
-    @postVars['ctl00$SiteContent$tbPassword']=password
-    @postVars['ctl00$SiteContent$cbRememberMe']='on'
-    @postVars['ctl00$SiteContent$btnSignIn']='Login'
-    page.postVars=@postVars
+    page.localExpiry = 1
+    @postVars['ctl00$ContentBody$tbUsername'] = user
+    @postVars['ctl00$ContentBody$tbPassword'] = password
+    @postVars['ctl00$ContentBody$cbRememberMe'] = 'on'
+    @postVars['ctl00$ContentBody$btnSignIn'] = 'Login'
+    page.postVars = @postVars
     data = page.fetch
     cookie = page.cookie
     debug "getLoginCookie got cookie: [#{cookie[0..4]+'...'+cookie[-5..-1]}]"
