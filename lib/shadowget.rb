@@ -45,7 +45,7 @@ class ShadowFetch
 
   def postVars=(vars)
     vars.each_key {|key|
-      debug "SET #{key}: #{vars[key]}"
+      debug "SET #{key}: #{(key =~ /[Pp]assword/)?'(hidden)':vars[key]}"
       if (@postString)
         @postString = @postString + "&"
       else
@@ -54,7 +54,7 @@ class ShadowFetch
       @postString = @postString + key + "=" + CGI.escape(vars[key])
     }
     @postVars=vars
-    debug "Set POST string to: #{@postString}"
+    #debug "Set POST string to: #{@postString}"
   end
 
   def src
@@ -63,7 +63,7 @@ class ShadowFetch
   end
 
   def cookie=(cookie)
-    debug "set cookie to #{cookie[0..4]+'...'+cookie[-5..-1]}"
+    debug "set cookie to #{cookie[0..22]+'...'+cookie[-5..-1]}"
     @cookie=cookie
   end
 
@@ -238,7 +238,7 @@ class ShadowFetch
     end
 
     if @cookie
-      debug "Added Cookie to #{url_str}: #{@cookie[0..4]+'...'+cookie[-5..-1]}"
+      debug "Added Cookie to #{url_str}: #{@cookie[0..22]+'...'+cookie[-5..-1]}"
       @httpHeaders['Cookie']=@cookie
     else
       debug "No cookie to add to #{url_str}"
@@ -266,6 +266,16 @@ class ShadowFetch
     end
 
     case resp
+    # POSTing login data returns a GET redirect but we can stop here
+    when Net::HTTPFound
+      # we should have received a cookie
+      if resp.response && resp.response['set-cookie']
+        @cookie = resp.response['set-cookie']
+        if @cookie =~ /(ASP.NET_SessionId=\w+);/
+          debug "received cookie: #{@cookie[0..22]+'...'+@cookie[-5..-1]}"
+        end
+      end
+      return resp.body
     # these are "combined" return codes ("if" doesn't work)
     when Net::HTTPRedirection
       location = resp['location']
@@ -312,7 +322,9 @@ class ShadowFetch
 
     if resp.response && resp.response['set-cookie']
       @cookie = resp.response['set-cookie']
-      debug "received cookie: #{@cookie[0..4]+'...'+cookie[-5..-1]}"
+      if @cookie =~ /(ASP.NET_SessionId=\w+);/
+        debug "received cookie: #{@cookie[0..22]+'...'+@cookie[-5..-1]}"
+      end
     end
 
     return resp.body
