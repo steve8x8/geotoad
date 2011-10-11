@@ -68,7 +68,8 @@ class ShadowFetch
   end
 
   # returns the cache filename that the URL will be stored as
-  def cacheFile(url)
+  def cacheFile(url0)
+    url = url0.dup
     if (@postVars)
       postdata=''
       @postVars.each_key { |key|
@@ -248,7 +249,9 @@ class ShadowFetch
     begin
       if (@postVars)
         @httpHeaders['Content-Type'] =  "application/x-www-form-urlencoded";
-        debug "POST to #{query}, headers are #{@httpHeaders.keys.join(" ")}"
+        #debug "POST to #{query}, headers are #{@httpHeaders.keys.join(" ")}"
+        debug "POST to #{http.address}:#{http.port}#{query}"
+        debug "POST using #{@postVars.keys.sort.join(" ")}"
         resp = http.post(query, @postString, @httpHeaders)
       else
         debug "GET to #{query}, headers are #{@httpHeaders.keys.join(" ")}"
