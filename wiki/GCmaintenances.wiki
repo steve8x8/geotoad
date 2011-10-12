@@ -13,6 +13,13 @@ See also [http://forums.groundspeak.com/GC/index.php?showforum=89 Release Notes 
 _*(new entries will be added on top)*_
 
 ----
+2011-10-06:
+  * _"site update on Thursday, October 6, 2011 ..."_ (1800 UTC)
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=283162 release notes]
+  * _GeoToad: login/cookies no longer work resulting in endless redirects (issue 219)_
+  * _*fixed in 3.14.6* (released 2011-10-12)_
+  * new server build: *{{{HotFix_20111006.1}}}*
+----
 2011-09-15:
   * _"site update on Thursday, September 15, 2011 ... 11am PDT"_ (1800 UTC)
   * [http://forums.groundspeak.com/GC/index.php?showtopic=282129 release notes]

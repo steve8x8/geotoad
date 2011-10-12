@@ -1,7 +1,26 @@
 #summary Features of current version
 #labels Featured
 
-version=3.14.5
+version=3.14.6
+
+{{{
+Please see the "CurrentVersion" wiki page for recent changes if "What's new" isn't shown.
+}}}
+
+= What's new in 3.14.6? =
+
+== Hotfix release ==
+  * make GeoToad work again after 2011-10-06 site update
+
+== Fixes for issues: ==
+  * 219: login fails
+  * 180: text and HTML output
+
+== Minor stuff: ==
+  * debug output no longer contains passwords
+  * parse distances in ft, dates containing dashes
+  * current version parser
+  * removed rubyscript2exe stuff
 
 = What's new in 3.14.5? =
 
