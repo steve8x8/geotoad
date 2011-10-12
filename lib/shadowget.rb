@@ -44,17 +44,21 @@ class ShadowFetch
   end
 
   def postVars=(vars)
-    vars.each_key {|key|
-      debug "SET #{key}: #{(key =~ /[Pp]assword/)?'(hidden)':vars[key]}"
-      if (@postString)
-        @postString = @postString + "&"
-      else
-        @postString = ''
-      end
-      @postString = @postString + key + "=" + CGI.escape(vars[key])
-    }
-    @postVars=vars
-    #debug "Set POST string to: #{@postString}"
+    if vars
+      vars.each_key {|key|
+        debug "SET #{key}: #{(key =~ /[Pp]assword/)?'(hidden)':vars[key]}"
+        if (@postString)
+          @postString = @postString + "&"
+        else
+          @postString = ''
+        end
+        @postString = @postString + key + "=" + CGI.escape(vars[key])
+      }
+      #debug "Set POST string to: #{@postString}"
+    else
+      @postString = nil
+    end
+    @postVars = vars
   end
 
   def src
@@ -187,6 +191,12 @@ class ShadowFetch
     cache.puts @data
     cache.close
     debug "Returning #{@data.length} bytes: #{@data[0..512]}(...)"
+    if $isRuby19
+    # we hope that this is the only place where encodings can enter
+    # UTF-8: &#xFC; gets properly translated
+    # BINARY: no translation at all
+      @data.force_encoding("UTF-8")
+    end
     return @data
   end
 
@@ -250,6 +260,9 @@ class ShadowFetch
         @httpHeaders['Content-Type'] =  "application/x-www-form-urlencoded";
         debug "POST to #{query}, headers are #{@httpHeaders.keys.join(" ")}"
         resp = http.post(query, @postString, @httpHeaders)
+        # reset POST variables
+        @postVars = nil
+        @postString = nil
       else
         debug "GET to #{query}, headers are #{@httpHeaders.keys.join(" ")}"
         resp = http.get(query, @httpHeaders)
@@ -266,18 +279,13 @@ class ShadowFetch
     end
 
     case resp
-    # POSTing login data returns a GET redirect but we can stop here
-    when Net::HTTPFound
-      # we should have received a cookie
-      if resp.response && resp.response['set-cookie']
-        @cookie = resp.response['set-cookie']
-        if @cookie =~ /(ASP.NET_SessionId=\w+);/
-          debug "received cookie: #{@cookie[0..22]+'...'+@cookie[-5..-1]}"
-        end
-      end
-      return resp.body
     # these are "combined" return codes ("if" doesn't work)
     when Net::HTTPRedirection
+      # we may have received a cookie
+      if resp.response && resp.response['set-cookie']
+        @cookie = resp.response['set-cookie']
+        debug "received cookie: #{@cookie[0..22]+'...'+@cookie[-5..-1]}"
+      end
       location = resp['location']
       debug "REDIRECT: [#{location}]"
       # relative redirects are against RFC, but we may encounter them.
@@ -322,9 +330,7 @@ class ShadowFetch
 
     if resp.response && resp.response['set-cookie']
       @cookie = resp.response['set-cookie']
-      if @cookie =~ /(ASP.NET_SessionId=\w+);/
-        debug "received cookie: #{@cookie[0..22]+'...'+@cookie[-5..-1]}"
-      end
+      debug "received cookie: #{@cookie[0..22]+'...'+@cookie[-5..-1]}"
     end
 
     return resp.body
