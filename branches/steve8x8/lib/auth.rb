@@ -48,15 +48,16 @@ module Auth
   def loginGetCookie(user, password)
     @postVars = Hash.new
     # get login form
-    page = ShadowFetch.new(@@login_url)
+    page = ShadowFetch.new(@@login_url + 'default.aspx')
     page.localExpiry = 0
     data = page.fetch
     data.each_line do |line|
       case line
       when /^\<input type=\"hidden\" name=\"(.*?)\".*value=\"(.*?)\"/
         debug "found hidden post variable: #{$1}"
-        @postVars[$1]=$2
+        @postVars[$1] = $2
       when /\<form name=\"aspnetForm\" method=\"post\" action=\"(.*?)\"/
+        debug "found post action: #{$1.inspect}"
         @postURL = @@login_url + $1
         @postURL.gsub!('&amp;', '&')
         debug "post URL is #{@postURL}"
@@ -65,11 +66,11 @@ module Auth
     # fill in form, and submit
     page = ShadowFetch.new(@postURL)
     page.localExpiry = 0
-    @postVars['ctl00$SiteContent$tbUsername']=user
-    @postVars['ctl00$SiteContent$tbPassword']=password
-    @postVars['ctl00$SiteContent$cbRememberMe']='on'
-    @postVars['ctl00$SiteContent$btnSignIn']='Login'
-    page.postVars=@postVars
+    @postVars['ctl00$ContentBody$tbUsername'] = user
+    @postVars['ctl00$ContentBody$tbPassword'] = password
+    @postVars['ctl00$ContentBody$cbRememberMe'] = 'on'
+    @postVars['ctl00$ContentBody$btnSignIn'] = 'Login'
+    page.postVars = @postVars
     data = page.fetch
     # extract cookie
     cookie = page.cookie

@@ -6,10 +6,15 @@ $LOAD_PATH << File.dirname(__FILE__.gsub(/\\/, '/'))
 $LOAD_PATH << File.dirname(__FILE__.gsub(/\\/, '/')) + '/lib'
 $LOAD_PATH << (File.dirname(__FILE__.gsub(/\\/, '/')) + '/' + '..')
 
+$isRuby19 = false
+
 if RUBY_VERSION.gsub('.', '').to_i < 180
   puts "ERROR: The version of Ruby your system has installed is #{RUBY_VERSION}, but we now require 1.8.0 or higher"
   sleep(5)
   exit(99)
+end
+if RUBY_VERSION.gsub('.', '').to_i >= 190
+  $isRuby19 = true
 end
 
 # toss in our own libraries.
@@ -146,7 +151,7 @@ class GeoToad
       return nil
     end
 
-    url = "http://code.google.com/p/geotoad/wiki/CurrentVersion";
+    url = "http://code.google.com/p/geotoad/wiki/CurrentDevelVersion";
 
     debug "Checking for latest version of GeoToad from #{url}"
     version = ShadowFetch.new(url)
@@ -160,8 +165,8 @@ class GeoToad
 
       if comparableVersion(latestVersion) > comparableVersion($VERSION)
         puts "------------------------------------------------------------------------"
-        puts "* NOTE: GeoToad #{latestVersion} is now available!"
-        puts "* Download from http://code.google.com/p/geotoad/downloads/list"
+        puts "* NOTE: GeoToad development version #{latestVersion} is now available!"
+        puts "* Download from http://code.google.com/p/geotoad/downloads/list?can=1"
         puts "------------------------------------------------------------------------"
         version.data.scan(/\<div .*? id="wikimaincol"\>\s*(.*?)\s*\<\/div\>/m) do |notes|
           text = CGI::unescapeHTML(notes[0])
@@ -204,10 +209,10 @@ class GeoToad
     @cookie = getCookie(@option['user'], @option['password'])
     debug "Login returned cookie #{hideCookie(@cookie).inspect}"
     if (@cookie)
-	displayMessage "Login successful"
+      displayMessage "Login successful"
     else
-	displayWarning "Login failed! Check network connection, username and password!"
-	displayWarning "Note: Subsequent operations may fail. You've been warned."
+      displayWarning "Login failed! Check network connection, username and password!"
+      displayWarning "Note: Subsequent operations may fail. You've been warned."
     end
     displayMessage "Querying user preferences"
     @dateFormat = getPreferences()
@@ -610,6 +615,7 @@ class GeoToad
   def saveFile
     puts ""
     formatTypeCounter = 0
+   # loop over all chosen formats
    @formatTypes.split(/[:\|]/).each { |formatType|
     output = Output.new
     displayInfo "Output format selected is #{output.formatDesc(formatType)} format"
@@ -618,7 +624,6 @@ class GeoToad
     if (@option['waypointLength'])
       output.waypointLength=@option['waypointLength'].to_i
     end
-
 
     # if we have selected the name of the output file, use it for first run
     # for subsequent runs, drop the extension and append default one
@@ -675,6 +680,7 @@ class GeoToad
 
     formatTypeCounter += 1
    }
+   # end format loop
   end
 
 

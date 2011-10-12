@@ -647,7 +647,14 @@ class SearchCache
         debug "found CacheDir=#{code.inspect}"
         dist, dir = decodeDD(code)
         # distance is in miles, traditionally
-        cache['distance'] = dist.to_f/((dist =~ /km/) ? 1.609344 : 1)
+        if (dist =~ /km/)
+          dist = dist.to_f / 1.609344
+        elsif (dist =~ /ft/)
+          dist = dist.to_f / 5280
+        else
+          dist = dist.to_f
+        end
+        cache['distance'] = dist
         cache['direction'] = dir
 
 # 2011-05-04: unchanged
