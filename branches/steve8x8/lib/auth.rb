@@ -2,38 +2,96 @@
 
 
 module Auth
+
+  require 'yaml'
+
   include Common
   include Messages
   @@login_url = 'https://www.geocaching.com/login/'
+  @@user = nil
   @@cookie = nil
 
+  # called by main program at the beginning
   def login(user, password)
+    @@user = user
     password2 = password.to_s.gsub(/./, '*')
     debug "login called for user=#{user} pass=#{password2}"
-    cookie = loginGetCookie(user, password)
+    cookie = loadCookie()
+    logged_in = checkLoginScreen(cookie)
+    if ! logged_in
+      # remove invalid cookie, and recreate
+      saveCookie(nil)
+      cookie = getLoginCookie(user, password)
+    end
     if cookie
-      saveCookie(cookie)
+        saveCookie(cookie)
+    end
+    logged_in = checkLoginScreen(cookie)
+    if logged_in and (cookie !~ /userid/)
+      # successful login can happen without returning userid?
+      cookie = cookie.to_s + ' userid=known;'
     end
     return cookie
   end
 
-  def getCookie(user, password)
-    cookie = loadCookie()
-    if not cookie
-      cookie = login(user, password)
-    end
-    return cookie
+  def cookieFile()
+    return findConfigDir() + '/cookies.yaml'
   end
 
   def loadCookie()
-    cookie = @@cookie
-    #debug "loadCookie #{hideCookie(cookie)}"
-    return cookie
+  # return cookie from variable if set, read from file otherwise
+    if ! @@cookie and @@user
+      cookie_file = cookieFile()
+      cookies = nil
+      if File.exists?(cookie_file)
+        debug "Loading cookies from #{cookie_file}"
+        cookies = YAML::load(File.open(cookie_file))
+      end
+      if cookies && cookies[@@user]
+        #@@cookie = cookies[@@user]
+        if (cookies[@@user] =~ /(ASP.NET_SessionId=\w+)/)
+          @@cookie = $1
+        end
+      end
+    end
+    debug "using cookie [#{@@user}] #{hideCookie(@@cookie)}"
+    return @@cookie
   end
 
   def saveCookie(cookie)
-    debug "saveCookie #{hideCookie(cookie)}"
-    @@cookie = cookie
+  # if cookie == nil, remove user entry from yaml
+    if ! @@user
+      debug "saveCookie: cannot save cookie, user undefined"
+      return
+    end
+    if cookie
+      if (cookie !~ /(ASP.NET_SessionId=\w+)/)
+        debug "saveCookie: invalid cookie"
+        return
+      else
+        cookie = $1
+      end
+    end
+    debug "saveCookie: [#{@@user}] #{hideCookie(cookie)}"
+    if @@cookie != cookie
+      # cookie has changed: write to file
+      @@cookie = cookie
+      cookie_file = cookieFile()
+      if File.exists?(cookie_file)
+        cookies = YAML::load(File.open(cookieFile))
+      else
+        cookies = Hash.new
+      end
+      # add/replace/remove cookie for user
+      if @@cookie
+        cookies[@@user] = @@cookie
+      else
+        cookies.delete(@@user)
+      end
+      File.open(cookie_file, 'w') { |f| f.puts(YAML::dump(cookies)) }
+      # nil cookie to force reloading
+      @@cookie = nil
+    end
   end
 
   # obfuscate cookie so nobody can use it
@@ -45,11 +103,39 @@ module Auth
     return hcookie
   end
 
-  def loginGetCookie(user, password)
+  def checkLoginScreen(cookie)
+    @postVars = Hash.new
+    page = ShadowFetch.new(@@login_url + 'default.aspx')
+    page.localExpiry = 1
+
+    if cookie
+      debug "Checking validity of cookie (#{cookie[0..22]+'...'+cookie[-5..-1]})"
+    end
+    data = page.fetch
+    data.each_line do |line|
+      case line
+      when /You are logged in as/
+        debug "Found login confirmation!"
+        return true
+      when /^\<input type=\"hidden\" name=\"(.*?)\".*value=\"(.*?)\"/
+        debug "found hidden post variable: #{$1}"
+        @postVars[$1]=$2
+      when /\<form name=\"aspnetForm\" method=\"post\" action=\"(.*?)\"/
+        @postURL = @@login_url + $1
+        @postURL.gsub!('&amp;', '&')
+        debug "post URL is #{@postURL}"
+      end
+    end
+    debug "Looks like we don't have a valid cookie. Must login."
+    return nil
+  end
+
+  def getLoginCookie(user, password)
+    @@user = user
     @postVars = Hash.new
     # get login form
     page = ShadowFetch.new(@@login_url + 'default.aspx')
-    page.localExpiry = 0
+    page.localExpiry = 1
     data = page.fetch
     data.each_line do |line|
       case line
@@ -74,14 +160,14 @@ module Auth
     data = page.fetch
     # extract cookie
     cookie = page.cookie
-    debug "loginGetCookie got cookie: [#{hideCookie(cookie)}]"
+    debug "getLoginCookie got cookie: [#{hideCookie(cookie)}]"
     if (cookie =~ /userid/) && (cookie =~ /(ASP.NET_SessionId=\w+)/)
       cookie = $1
       debug "userid found, rock on. Setting cookie to #{hideCookie(cookie)}"
       return cookie
     else
       password2 = password.to_s.gsub(/./, '*')
-      displayWarning "Login failed for #{user}:#{password2}"
+      #displayWarning "Login failed for #{user}:#{password2}, must retry."
       return nil
     end
   end

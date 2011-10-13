@@ -206,7 +206,8 @@ class GeoToad
     @combinedWaypoints = Hash.new
 
     displayMessage "Logging in as #{@option['user']}"
-    @cookie = getCookie(@option['user'], @option['password'])
+    #@cookie = getCookie(@option['user'], @option['password'])
+    @cookie = login(@option['user'], @option['password'])
     debug "Login returned cookie #{hideCookie(@cookie).inspect}"
     if (@cookie)
       displayMessage "Login successful"
