@@ -7,10 +7,11 @@ version=3.15.1
 Please see the "CurrentDevelVersion" wiki page for recent changes if "What's new" isn't shown.
 }}}
 
-= New development version 3.15.0 =
+= New development version 3.15.1 =
 
 == Changes since last version ==
   * merge changes 3.14.5 to 3.14.6 (hotfix)
+  * cookies are now stored on disk again, in YAML format
 
 = New development version 3.15.0 =
 
