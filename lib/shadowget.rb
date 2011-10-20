@@ -160,7 +160,6 @@ class ShadowFetch
       debug "no local cache file found for #{localfile}"
     end
 
-
     @data = fetchRemote
     size = nil
     if (@data)
@@ -185,12 +184,11 @@ class ShadowFetch
       FileUtils::mkdir_p(localdir)
     end
 
-
     debug "outputting #{localfile}"
     cache = File.open(localfile, File::WRONLY|File::TRUNC|File::CREAT, 0666)
     cache.puts @data
     cache.close
-    debug "Returning #{@data.length} bytes: #{@data[0..512]}(...)"
+    debug "Returning #{@data.length} bytes: #{@data[0..20]}(...)#{data[-21..-1]}"
     if $isRuby19
     # we hope that this is the only place where encodings can enter
     # UTF-8: &#xFC; gets properly translated
@@ -217,16 +215,17 @@ class ShadowFetch
 
 
   def fetchRemote
-    debug "fetching remote data from #{@url}"
+    #debug "fetching remote data from #{@url}"
     @httpHeaders['Referer'] = @url
     data = fetchURL(@url)
   end
 
+
   def fetchURL (url_str, redirects=2)  # full http:// string!
     raise ArgumentError, 'HTTP redirect too deep' if redirects == 0
-    debug "Fetching [#{url_str}]"
+    debug "Fetching URL [#{url_str}]"
     uri = URI.parse(url_str)
-    debug "URL parsed #{uri.scheme}://#{uri.host}:#{uri.port}"
+    #debug "URL parsed #{uri.scheme}://#{uri.host}:#{uri.port}"
 
     if ENV['HTTP_PROXY']
       proxy = URI.parse(ENV['HTTP_PROXY'])
@@ -234,7 +233,7 @@ class ShadowFetch
       debug "Using proxy from environment: " + ENV['HTTP_PROXY']
       http = Net::HTTP::Proxy(proxy.host, proxy.port, proxy_user, proxy_pass).new(uri.host, uri.port)
     else
-      debug "No proxy found in environment, using standard HTTP connection."
+      #debug "No proxy found in environment, using standard HTTP connection."
       http = Net::HTTP.new(uri.host, uri.port)
     end
     if uri.scheme == 'https'
