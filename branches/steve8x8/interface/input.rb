@@ -570,7 +570,7 @@ class Input
         end
         # in case of country or state query, return numeric id only
         if (@@optHash['queryType'] == 'country' || @@optHash['queryType'] == 'state')
-          @@optHash['queryArg'] = @@optHash['queryArg'].split(/=/)[0]
+          @@optHash['queryArg'] = @@optHash['queryArg'].to_s.split(/=/)[0]
         end
       when 'r'
         resetOptions
