@@ -108,6 +108,7 @@ class Input
 
       [ "--verbose",                  "-v",    GetoptLong::NO_ARGUMENT ],
       [ "--format",                   "-x",    GetoptLong::OPTIONAL_ARGUMENT ],
+      [ "--disableEarlyFilter",       "-X",    GetoptLong::NO_ARGUMENT ],
 
       [ "--distanceMax",              "-y",    GetoptLong::OPTIONAL_ARGUMENT ],
       [ "--includeDisabled",          "-z",    GetoptLong::NO_ARGUMENT ],

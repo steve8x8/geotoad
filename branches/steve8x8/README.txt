@@ -46,7 +46,7 @@ You will then see a screen that looks similar to this:
 
 
 ==============================================================================
-:::                // GeoToad 3.15.0 Text User Interface //                :::
+:::                // GeoToad 3.15.1 Text User Interface //                :::
 ==============================================================================
 (1)  GC.com login [REQUIRED         ] | (2)  search type          [coord     ]
 (3)  location     [N52 23.0 E13 03.0] | (4)  distance maximum (km)     [10   ]

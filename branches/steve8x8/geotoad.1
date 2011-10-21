@@ -6,7 +6,7 @@ geotoad \- geocaching query tool
 .B geotoad
  will invoke text user interface (TUI)
 .TP
-.B geotoad [options] [--] <search>
+.B geotoad \fI[options]\fR \fI[--]\fR \fI<search>\fR
  (command-line version)
 .SH NOTE
 If GeoToad was not installed from a (distribution-specific) package
@@ -30,110 +30,134 @@ If run without any parameters,
 .B geotoad
 will launch the interactive mode ("text user interface", "TUI").
 It can also be used in command-line mode for specific queries.
+.PP
+Where multiple entries are possible (e.g. for cache sizes, owners, etc.,
+marked by \fB(MULTI)\fR below),
+they can be delimited by a pipe symbol (\fB|\fR) or a colon (\fB:\fR).
+Make sure the pipe symbols are properly escaped from the command shell!
 .SH OPTIONS
 .TP
-.B -u username
+\fB-h\fR, \fB--help\fR\fR
+get a short command-line option summary
+.TP
+\fB-v\fR, \fB--verbose\fR\fR
+enable debugging output - very copious!
+.TP
+\fB-u \fR\fIusername\fR, \fB--user=\fR\fIusername\fR\fR
 geocaching.com username (required for coordinates)
 .TP
-.B -p password
+\fB-p \fR\fIpassword\fR, \fB--password=\fR\fIpassword\fR
 geocaching.com password (required for coordinates)
 .TP
-.B -o filename
+\fB-o \fR\fIfilename\fR, \fB--output=\fR\fIfilename\fR
 output file name (automatic otherwise)
 .TP
-.B -x format
-output format type (use : to separate multiple formats; see list below)
+\fB-x \fR\fIformat\fR, \fB--format=\fR\fIformat\fR
+\fB(MULTI)\fR
+output format type(s)
 .TP
-.B -q [location|coord|user|owner|country|state|keyword|wid]
+\fB-q \fR\fI[location|coord|user|owner|country|state|keyword|wid]\fR, \fB--query=\fR\fI...\fR
 query type (location by default).
 "country" and "state" queries require a numerical id which the TUI may tell you.
 .TP
-.B -s [virtual|not_chosen|other|micro|small|regular|large]
+\fB-s \fR\fI[virtual|not_chosen|other|micro|small|regular|large]\fR, \fB--sizeMin=\fR\fI...\fR
 set minimum cache size - 'not_chosen' is equivalent to 'virtual'
 .TP
-.B -S [virtual|not_chosen|other|micro|small|regular|large]
+\fB-S \fR\fI[virtual|not_chosen|other|micro|small|regular|large]\fR, \fB--sizeMax=\fR\fI...\fR
 set maximum cache size
 .TP
-.B -c [traditional|multicache|letterbox|event|unknown|cito|virtual|webcam|earthcache|wherigo|...]
-set cache type (separated by '|')
+\fB-c \fR\fI[traditional|multicache|letterbox|event|unknown|cito|virtual|webcam|earthcache|wherigo|...]\fR, \fB--cacheType=\fR\fI...\fR
+\fB(MULTI)\fR
+set cache type(s)
 .TP
-.B -d 1.0-5.0
+\fB-d \fR\fI1.0-5.0\fR, \fB--difficultyMin=\fR\fI...\fR
 set minimum difficulty
 .TP
-.B -D 1.0-5.0
+\fB-D \fR\fI1.0-5.0\fR, \fB--difficultyMax=\fR\fI...\fR
 set maximum difficulty
 .TP
-.B -t 1.0-5.0
+\fB-t \fR\fI1.0-5.0\fR, \fB--terrainMin=\fR\fI...\fR
 set minimum terrain
 .TP
-.B -T 1.0-5.0
+\fB-T \fR\fI1.0-5.0\fR, \fB--terrainMax=\fR\fI...\fR
 set maximum terrain
 .TP
-.B -f 0.0-5.0
+\fB-f \fR\fI0.0-5.0\fR, \fB--funFactorMin=\fR\fI...\fR
 set minimum fun factor
 .TP
-.B -F 0.0-5.0
+\fB-F \fR\fI0.0-5.0\fR, \fB--funFactorMax=\fR\fI...\fR
 set maximum fun factor
 .TP
-.B -y 1-500[km]
+\fB-y \fR\fI1-500[km]\fR, \fB--distanceMax=\fR\fI...\fR
 distance maximum in miles or km (10mi)
 .TP
-.B -k keyword
-title keyword search. Use | to delimit multiple
+\fB-k \fR\fIkeyword\fR, \fB--titleKeyword=\fR\fIkeyword\fR
+\fB(MULTI)\fR
+title keyword search
 .TP
-.B -K keyword
-description keyword search (slow). Use | to delimit
+\fB-K \fR\fIkeyword\fR, \fB--descKeyword=\fR\fIkeyword\fR
+\fB(MULTI)\fR
+description keyword search (slow)
 .TP
-.B -i username
-include caches owned by this person (use : to delimit multiple users)
+\fB-i \fR\fIusername\fR, \fB--ownerInclude=\fR\fIusername\fR
+\fB(MULTI)\fR
+include caches owned by this person
 .TP
-.B -I username
-exclude caches owned by this person (use : to delimit multiple users)
+\fB-I \fR\fIusername\fR, \fB--ownerExclude=\fR\fIusername\fR
+\fB(MULTI)\fR
+exclude caches owned by this person
 .TP
-.B -e username
-include caches found by this person (use : to delimit multiple users)
+\fB-e \fR\fIusername\fR, \fB--userInclude=\fR\fIusername\fR
+\fB(MULTI)\fR
+include caches found by this person
 .TP
-.B -E username
-exclude caches found by this person (use : to delimit multiple users)
+\fB-E \fR\fIusername\fR, \fB--userExclude=\fR\fIusername\fR
+\fB(MULTI)\fR
+exclude caches found by this person
 .TP
-.B -j X
+\fB-j \fR\fIX\fR, \fB--placeDateInclude=\fR\fIX\fR
 include caches placed in the last X days
 .TP
-.B -J X
+\fB-J \fR\fIX\fR, \fB--placeDateExclude=\fR\fIX\fR
 exclude caches placed in the last X days
 .TP
-.B -r X
+\fB-r \fR\fIX\fR, \fB--foundDateInclude=\fR\fIX\fR
 include caches found in the last X days
 .TP
-.B -R X
+\fB-R \fR\fIX\fR, \fB--foundDateExclude=\fR\fIX\fR
 exclude caches found in the last X days
 .TP
-.B -z
+\fB-z\fR, \fB--includeDisabled\fR
 include disabled caches
 .TP
-.B -n
+\fB-n\fR, \fB--notFound\fR
 only include not found caches
 .TP
-.B -b
+\fB-b\fR, \fB--travelBug\fR
 only include caches with travelbugs
 .TP
-.B -l
+\fB-l \fR\fIlength\fR, \fB--waypointLength=\fR\fIlength\fR
 set EasyName waypoint id length. (16)
 .TP
-.B -L
+\fB-L \fR\fIpages\fR, \fB--limitSearchPages=\fR\fIpages\fR
 limit number of search pages (0=unlimited)
 .TP
-.B -Z
+\fB-Z\fR, \fB--preserveCache\fR
 do not overwrite existing cache description files in file cache
 .TP
-.B -P proxy
+\fB-P \fR\fIproxy\fR, \fB--proxy=\fR\fIproxy\fR
 HTTP proxy server, http://username@password@host:port/
 .TP
-.B -C
+\fB-C\fR, \fB--clearCache\fR
 clear browser cache
+.TP
+\fB-X\fR, \fB--disableEarlyFilter\fR
+emergency switch to disable early filtering by difficulty/terrain/size
+should the encoding of those values into images change again - normally
+you don't want to use this!
 .SH SPECIAL CASES
 If your
-.B search
+\fIsearch\fR
 item(s) start with a dash (or minus sign), it has to be
 "hidden" from the option parser. This, in Unix tradition, is done by
 inserting a "double dash"

@@ -99,6 +99,11 @@ class GeoToad
       end
     end
 
+    # switch -X to disable early DTS filtering
+    if (@option['disableEarlyFilter'])
+      $DTSFILTER = false
+    end
+
     @preserveCache     = @option['preserveCache']
 
     @formatTypes       = @option['format'] || 'gpx'
