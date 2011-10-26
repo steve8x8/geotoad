@@ -39,7 +39,7 @@ sed s/"%VERSION%"/"$VERSION"/g lib/version.rb > $GENERIC_DIR/lib/version.rb
 sed s/"%VERSION%"/"$VERSION"/g README.txt > $GENERIC_DIR/README.txt
 sed s/"%VERSION%"/"$VERSION"/g FAQ.txt > $GENERIC_DIR/FAQ.txt
 chmod 755 $GENERIC_DIR/*.rb
-rm $GENERIC_DIR/VERSION $GENERIC_DIR/tools/countryrip.rb $GENERIC_DIR/tools/*.sh
+rm $GENERIC_DIR/VERSION $GENERIC_DIR/tools/countryrip.rb $GENERIC_DIR/tools/*.sh $GENERIC_DIR/data/*.gz
 
 # Make a duplicate of it for Macs before we nuke the .command file
 cp -Rp $GENERIC_DIR "$MAC_DIR"
