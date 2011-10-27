@@ -1,0 +1,62 @@
+#summary How to set up a Debian (Ubuntu) repository on Google Code
+
+= How to set up a Debian (Ubuntu) repository on Google Code =
+
+_Last change: 2011-10-27 Steve8x8_
+
+== Goal ==
+
+  * Instead of manually downloading deb packages, and taking care of their 
+    dependencies by hand, let APT do the work, by including a single line
+    into {{{/etc/apt/sources.list}}}.
+
+== What we need ==
+
+  * A full-fledged "standard structured" repository would be overkill for
+    a single package.
+  * Use the existing Downloads space of GoogleCode together with a specially
+    crafted {{{Packages.gz}}} file.
+  * {{{Packages.gz}}} describes the recent version deb package and has to be
+    replaced at release time.
+
+== What doesn't work ==
+
+  * GoogleCode makes files in the Downloads area *permanent* after
+    2 days or 50 downloads.
+  * A {{{Packages.gz}}} file there could *not* be maintained.
+  * A "simple" *HTML redirect* doesn't work since APT doesn't follow it.
+
+== What I have found ==
+
+  * The *monkey-tools* project maintains a {{{Packages.gz}}} file within their
+    {{{hg}}} tree.
+  * It contains {{{Filename:}}} entries relative to the root of the project,
+    i.e. starting with {{{files/}}}
+  * Fortunately, APT sources lines (at least the non-standard ones) may
+    have a somewhat strange semantics:
+    {{{deb http://server/base/ relative/path/to/Packages}}}
+    results in the {{{Packages.gz}}} file being downloaded from 
+    {{{http://server/base/relative/path/to/Packages/}}}
+    while the packages themselves are retrieved from
+    {{{http://server/base/_filename-entry_}}}
+
+== What GeoToad does now ==
+
+  * Build script ({{{makedist.sh) drops (outdated) {{{*.gz}}} files from {{{data/}}}
+  * In the build directory, after building the package, run
+    {{{dpkg-scanpackages . | sed 's~./~files/~' | gzip -9 >Packages.gz}}}
+  * Place {{{Packages.gz}}} in the {{{data/}}} subtree.
+  * _(Same could be done for {{{Sources.gz}}})_
+  * SVN-commit the change.
+  * Users will have to put a single line into their {{{sources.list}}}:
+    {{{deb http://geotoad.googlecode.com/ svn/trunk/data/}}}
+  * For development version, instead of {{{/trunk/}}} use {{{/branches/steve8x8/}}}
+
+== Is it clean? ==
+
+  * It might be cleaner if Google allowed replacing files even after some time.
+  * It might be cleaner if APT would follow a HTML redirect.
+  * Under the given circumstances, it's perhaps the best we can do...
+  * There might be a separate directory ({{{apt/}}}?) for the lists...
+    but does it make a difference?
+
