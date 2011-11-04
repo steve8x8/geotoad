@@ -637,7 +637,7 @@ class GeoToad
     outputFile = nil
     if @option['output']
       filename = @option['output'].dup
-      displayInfo "Output filename: #{filename}"
+      #displayInfo "Output filename: #{filename}"
       filename.gsub!('\\', '/')
       if filename and filename !~ /\/$/
         outputFile = File.basename(filename)
@@ -675,6 +675,7 @@ class GeoToad
 
     # Lets not mix and match DOS and UNIX /'s, we'll just make everyone like us!
     outputFile.gsub!(/\\/, '/')
+    displayInfo "Output filename: #{outputFile}"
 
     # append time to our title
     queryTitle = @queryTitle + " (" + Time.now.strftime("%d%b%y %H:%M") + ")"
