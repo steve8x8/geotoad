@@ -164,7 +164,7 @@ class GeoToad
     version.maxFailures = 0
     version.fetch
 
-    if (($VERSION =~ /^(\d\.\d+\.\d+)$/) && (version.data =~ /version=(\d\.\d+[\.\d]+)/))
+    if (($VERSION =~ /^(\d\.\d+\.\d+)/) && (version.data =~ /version=(\d\.\d+[\.\d]+)/))
       latestVersion = $1
       releaseNotes = $2;
 
