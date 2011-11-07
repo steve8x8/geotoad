@@ -597,9 +597,10 @@ class SearchCache
 # 2011-05-04: unchanged
       #                             11 Jul 10<br />
       # Yesterday<strong>*</strong><br />
-      when /^ +((\w+[ \w]+)|([0-9\/\.-]+))(\<strong\>)?(\*)?(\<\/strong\>)?\<br/
-        debug "last found date: #{$1}#{$5} at line: #{line}"
-        cache['mtime'] = parseDate($1+$5.to_s)
+      #when /^ +((\w+[ \w]+)|([0-9\/\.-]+))(\<strong\>)?(\*)?(\<\/strong\>)?\<br/
+      when /^ +(\w.*?)(\<strong\>)?(\*)?(\<\/strong\>)?\<br/
+        debug "last found date: #{$1}#{$3} at line: #{line}"
+        cache['mtime'] = parseDate($1+$3.to_s)
         cache['mdays'] = daysAgo(cache['mtime'])
         debug "mtime=#{cache['mtime']} mdays=#{cache['mdays']}"
 
@@ -607,9 +608,10 @@ class SearchCache
       # found date:
       # <span id="ctl00_ContentBody_dlResults_ctl??_uxUserLogDate" class="Success">5 days ago</span></span>
       # <span id="ctl00_ContentBody_dlResults_ctl01_uxUserLogDate" class="Success">Today<strong>*</strong></span></span>
-      when /^ +\<span [^\>]*UserLogDate[^\>]*\>((\w+[ \w]+)|([0-9\/\.-]+))(\<strong\>)?(\*?)(\<\/strong\>)?\<\/span\>\<\/span\>/
-        debug "user found date: #{$1}#{$4} at line: #{line}"
-        cache['atime'] = parseDate($1+$5.to_s)
+      #when /^ +\<span [^\>]*UserLogDate[^\>]*\>((\w+[ \w]+)|([0-9\/\.-]+))(\<strong\>)?(\*?)(\<\/strong\>)?\<\/span\>\<\/span\>/
+      when /^ +\<span [^\>]*UserLogDate[^\>]*\>(.*?)(\<strong\>)?(\*?)(\<\/strong\>)?\<\/span\>\<\/span\>/
+        debug "user found date: #{$1}#{$3} at line: #{line}"
+        cache['atime'] = parseDate($1+$3.to_s)
         cache['adays'] = daysAgo(cache['atime'])
         debug "atime=#{cache['atime']} adays=#{cache['adays']}"
 
@@ -803,6 +805,11 @@ class SearchCache
           if not cache['atime']
             cache['adays'] = -1
             cache['atime'] = Time.at(0)
+            # this will allow to output "myfind*" for others
+            # but if I found it too, my own find will show up
+            # FIXME!
+            #cache['adays'] = cache['mdays']
+            #cache['atime'] = cache['mtime']
           end
 
           @waypoints[wid] = cache.dup
