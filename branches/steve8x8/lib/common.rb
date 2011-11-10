@@ -42,10 +42,10 @@ module Common
     # relative dates end in a "*"
     # en|de|fr|pt|cs|sv/nb|nl|ca|pl|et|es, no Korean for now
     # ruby 1.8 has no idea of Unicode :(
-    when /^(Today|Heute|Hier|Hoje|Dnes|I ?dag|Vandaag|Avui|Dzisiaj|T.{1,2}na|Hoy)\*/
+    when /^(Today|Heute|Hier|Hoje|Dnes|I ?dag|Vandaag|Avui|Dzisiaj|T.{1,2}na|Hoy|Ma|Azi)\*/
       debug "date: Today"
       days_ago=0
-    when /^(Yesterday|Gestern|Aujourd.{1,2}hui|Ontem|V.{1,2}era|I ?g.{1,2}r|Gisteren|Ahir|Wczoraj|Eile|Ayer)\*/
+    when /^(Yesterday|Gestern|Aujourd.{1,2}hui|Ontem|V.{1,2}era|I ?g.{1,2}r|Gisteren|Ahir|Wczoraj|Eile|Ayer|Tegnap|Ieri)\*/
       debug "date: Yesterday"
       days_ago=1
     # any string ending with a * and a number in it
