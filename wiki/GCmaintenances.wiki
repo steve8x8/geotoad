@@ -13,6 +13,11 @@ See also [http://forums.groundspeak.com/GC/index.php?showforum=89 Release Notes 
 _*(new entries will be added on top)*_
 
 ----
+2011-11-08:
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=285002 release notes]
+  * _GeoToad at first glance unaffected_ (tests proceeding)
+  * new server build: *{{{HotFix_20111108.2}}}*
+----
 2011-10-06:
   * _"site update on Thursday, October 6, 2011 ..."_ (1800 UTC)
   * [http://forums.groundspeak.com/GC/index.php?showtopic=283162 release notes]
