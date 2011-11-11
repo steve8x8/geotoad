@@ -38,14 +38,29 @@ module Common
   def parseDate(date)
     debug "parsing date: [#{date}]"
     timestamp = nil
+    # we have to overcome the ignorance of ruby1.8 wrt Unicode characters
     case date
     # relative dates end in a "*"
-    # en|de|fr|pt|cs|sv/nb|nl|ca|pl|et|es, no Korean for now
-    # ruby 1.8 has no idea of Unicode :(
-    when /^(Today|Heute|Hier|Hoje|Dnes|I ?dag|Vandaag|Avui|Dzisiaj|T.{1,2}na|Hoy|Ma|Azi)\*/
+    # Languages: (no Korean for now, and perhaps never with ruby1.8)
+    # en|de|fr|pt|cs
+    # sv/nb|nl|ca|pl|et
+    # es|hu|ro
+    when /^(Today|Heute|Hier|Hoje|Dnes)\*/
       debug "date: Today"
       days_ago=0
-    when /^(Yesterday|Gestern|Aujourd.{1,2}hui|Ontem|V.{1,2}era|I ?g.{1,2}r|Gisteren|Ahir|Wczoraj|Eile|Ayer|Tegnap|Ieri)\*/
+    when /^(I ?dag|Vandaag|Avui|Dzisiaj|T.{1,2}na)\*/
+      debug "date: Today"
+      days_ago=0
+    when /^(Hoy|Ma|Azi)\*/
+      debug "date: Today"
+      days_ago=0
+    when /^(Yesterday|Gestern|Aujourd.{1,2}hui|Ontem|V.{1,2}era)\*/
+      debug "date: Yesterday"
+      days_ago=1
+    when /^(I ?g.{1,2}r|Gisteren|Ahir|Wczoraj|Eile)\*/
+      debug "date: Yesterday"
+      days_ago=1
+    when /^(Ayer|Tegnap|Ieri)\*/
       debug "date: Yesterday"
       days_ago=1
     # any string ending with a * and a number in it

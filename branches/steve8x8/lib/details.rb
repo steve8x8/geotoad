@@ -295,6 +295,10 @@ class CacheDetails
             cache['type'] = 'reverse'
           when /Block Party/
             cache['type'] = 'block'
+          # planned transition
+          when /Mystery/
+            cache['fulltype'] = 'Unknown Cache'
+            cache['type'] = 'unknown'
           end
           if full_type =~ /Event/
             cache['event'] = true
