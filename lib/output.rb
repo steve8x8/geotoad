@@ -661,7 +661,7 @@ class Output
     cache['comments'].each { |comment|
       comment_id = Zlib.crc32(comment['text'])
       debug "Comment ID: #{comment_id} by #{comment['user']}: #{comment['text']}"
-      formatted_date = comment['date'].strftime("%Y-%m-%dT%H:00:00.0000000-07:00")
+      formatted_date = comment['date'].strftime("%Y-%m-%dT07:00:00.000Z")
       entry = ''
       entry << "    <groundspeak:log id=\"#{comment_id}\">\r\n"
       entry << "      <groundspeak:date>#{formatted_date}</groundspeak:date>\r\n"
