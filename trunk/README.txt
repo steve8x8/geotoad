@@ -97,7 +97,7 @@ syntax: geotoad [options] <search:search2:search3>
  -p <password>          Geocaching.com password, required for coordinates
  -o [filename]          output file name (automatic otherwise)
  -x [format]            output format type, see list below
- -q [location|coord|user|owner|keyword|wid]
+ -q [location|coord|user|owner|country|state|keyword|wid]
                         query type (location by default)
  -d/-D [1.0-5.0]        difficulty minimum/maximum
  -t/-T [1.0-5.0]        terrain minimum/maximum
@@ -169,9 +169,14 @@ Search for caches within 5 kilometres.
 You can combine searches with the : delimiter. This works for all types,
 though it's most often used with coordinate searches.
 
- - geotoad.rb -u user -p password -x text -o nc.txt -n "North Carolina"
-Outputs a text file with all of the caches in North Carolina
+ - geotoad.rb -u user -p password -x text -o nc.txt -n -q state 34
+Outputs a text file with all of the caches in North Carolina (state ID: 34)
 that are virgins (have never been found).
+
+GeoToad's TUI can assist you to find the state ID: select search type
+"state", then enter a pattern for country/state in a form like
+"states/no.*caro". Pick the numeric ID for command line queries.
+(Should your pattern be ambiguous, GeoToad will let you select from a list.)
 
  - geotoad.rb -u user -p password -t 2.5 -x vcf -E "helixblue:Sallad" -o charlotte.vcf 28272
 Gets every cache in the 100 mile radius of zipcode 28272, with a terrain
@@ -183,8 +188,8 @@ Please note: Put quotes around your username if it has any spaces in it.
 Another note: This kind of query will put a high load on GroundSpeak's servers
 and may change your account status to "banned". Be careful.
 
- - geotoad.rb -u user -p password -x html -b -K 'stream|creek|lake|river|ocean' -o watery.html "Finland"
-Gets every cache in Finland with travel bugs that matches those water keywords.
+ - geotoad.rb -u user -p password -x html -b -K 'stream|creek|lake|river|ocean' -o watery.html -q country 72
+Gets every cache in Finland (country ID: 72) with travel bugs that matches those water keywords.
 Makes a pretty HTML file out of it.
 
  - geotoad.rb -u user -p password -q user -x myfindgpx -o myfinds.gpx -- -aBcDe-

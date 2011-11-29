@@ -54,6 +54,16 @@ class SearchCache
       @query_type = 'u'
       @ttl = 3 * 24 * 3600	# 3 days
 
+    when 'country'
+      @query_type = 'country'
+      @search_url = @@base_url + "?country_id=#{key}"
+      @ttl = 14 * 24 * 3600	# 2 weeks
+
+    when 'state'
+      @query_type = 'state'
+      @search_url = @@base_url + "?state_id=#{key}"
+      @ttl = 14 * 24 * 3600	# 2 weeks
+
     when 'keyword'
       @query_type = 'key'
 
