@@ -619,7 +619,7 @@ class SearchCache
       # country names: English spelling; state names: local spelling
       #             |>$2|    |->$3 -------------------------------|
       when /^\s{28}((.*?), )?([A-Z][a-z]+\.?([ -]\(?[A-Za-z]+\)?)*)<\/span>\s?$/
-        debug "Country/state found #{$2}/#{$3}"
+        debug "Country/state found #{$2} #{$3}"
         if ($3 != "Icons" && $3 != "Placed" && $3 != "Description" && $3 != "Last Found")
           # special case US states:
           if (usstates[$3])
