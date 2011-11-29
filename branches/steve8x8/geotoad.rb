@@ -358,7 +358,7 @@ class GeoToad
       @filtered.sizeMax(@option['sizeMax'])
     end
     #-------------------
-    end # not $DTSFILTER
+    end # $DTSFILTER
     debug "Filter running cycle 2, #{@filtered.totalWaypoints} caches left"
 
     if @option['foundDateInclude']

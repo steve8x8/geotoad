@@ -440,11 +440,13 @@ class SearchCache
 
   def getPage(url, post_vars)
     page = ShadowFetch.new(url)
-    # DTS decoding: drop search pages from yesterday UTC
-    sincemidnight = 60*( 60*Time.now.utc.hour + Time.now.utc.min )
-    # correct TTL only if no user search!
-    if (sincemidnight < @ttl) and (url !~ /nearest.aspx.ul=/)
-      @ttl = sincemidnight
+    if $DTSFILTER
+      # DTS decoding: drop search pages from yesterday UTC
+      sincemidnight = 60*( 60*Time.now.utc.hour + Time.now.utc.min )
+      # correct TTL only if no user search!
+      if (sincemidnight < @ttl) and (url !~ /nearest.aspx.ul=/)
+        @ttl = sincemidnight
+      end
     end
     page.localExpiry = @ttl
     if (post_vars.length > 0)
@@ -539,7 +541,7 @@ class SearchCache
       line.gsub!(/&#39;/, '\'')
       case line
       # <TD class="PageBuilderWidget"><SPAN>Total Records: <B>2938</B> - Page: <B>147</B> of <B>147</B>
-      when /PageBuilderWidget[^:]+: \<b\>(\d+)\<\/b\> [^:]+: \<b\>(\d+)\<\/b\> \w* \<b\>(\d+)\<\/b\>/
+      when /PageBuilderWidget[^:]+: +\<b\>(\d+)\<\/b\> [^:]+: +\<b\>(\d+)\<\/b\>.*?\<b\>(\d+)\<\/b\>/
         if not waypoints_total
           waypoints_total = $1.to_i
           page_number = $2.to_i
@@ -765,7 +767,7 @@ class SearchCache
       # country names: English spelling; state names: local spelling
       #             |>$2|    |->$3 -------------------------------|
       when /^\s{28}((.*?), )?([A-Z][a-z]+\.?([ -]\(?[A-Za-z]+\)?)*)<\/span>\s?$/
-        debug "Country/state found #{$2}/#{$3}"
+        debug "Country/state found #{$2} #{$3}"
         if ($3 != "Icons" && $3 != "Placed" && $3 != "Description" && $3 != "Last Found")
           # special case US states:
           if (usstates[$3])

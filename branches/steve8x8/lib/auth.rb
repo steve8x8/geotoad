@@ -47,19 +47,22 @@ module Auth
         debug "Loading cookies from #{cookie_file}"
         cookies = YAML::load(File.open(cookie_file))
       end
-      if cookies && cookies[@@user]
-        #@@cookie = cookies[@@user]
-        if (cookies[@@user] =~ /(ASP.NET_SessionId=\w+)/)
+      if cookies && cookies[@@user.inspect]
+        #@@cookie = cookies[@@user.inspect]
+        if (cookies[@@user.inspect] =~ /(ASP.NET_SessionId=\w+)/)
           @@cookie = $1
+          debug "loadCookie: found #{hideCookie(@@cookie)}"
         end
       end
     end
-    debug "using cookie [#{@@user}] #{hideCookie(@@cookie)}"
+    debug "using cookie [#{@@user.inspect}] #{hideCookie(@@cookie)}"
     return @@cookie
   end
 
   def saveCookie(cookie)
-  # if cookie == nil, remove user entry from yaml
+    if ! cookie
+      debug "saveCookie: no cookie, will delete"
+    end
     if ! @@user
       debug "saveCookie: cannot save cookie, user undefined"
       return
@@ -72,23 +75,26 @@ module Auth
         cookie = $1
       end
     end
-    debug "saveCookie: [#{@@user}] #{hideCookie(cookie)}"
+    debug "saveCookie: [#{@@user.inspect}] #{hideCookie(cookie)}"
     if @@cookie != cookie
       # cookie has changed: write to file
       @@cookie = cookie
       cookie_file = cookieFile()
-      if File.exists?(cookie_file)
+      if File.exists?(cookie_file) && (File.size(cookie_file) > 0)
         cookies = YAML::load(File.open(cookieFile))
       else
         cookies = Hash.new
       end
       # add/replace/remove cookie for user
       if @@cookie
-        cookies[@@user] = @@cookie
+        debug "insert cookie #{@@cookie} for user #{@@user.inspect}"
+        cookies[@@user.inspect] = @@cookie
       else
-        cookies.delete(@@user)
+        cookies.delete(@@user.inspect)
       end
-      File.open(cookie_file, 'w') { |f| f.puts(YAML::dump(cookies)) }
+      if (cookies.length > 0)
+        File.open(cookie_file, 'w') { |f| f.puts(YAML::dump(cookies)) }
+      end
       # nil cookie to force reloading
       @@cookie = nil
     end

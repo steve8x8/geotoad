@@ -226,7 +226,8 @@ class ShadowFetch
 
 
   def fetchURL (url_str, redirects=2)  # full http:// string!
-    raise ArgumentError, 'HTTP redirect too deep' if redirects == 0
+    #raise ArgumentError, 'HTTP redirect too deep' if redirects == 0
+    displayError "HTTP redirect loop. Check your login data." if (redirects == 0)
     debug "Fetching URL [#{url_str}]"
     uri = URI.parse(url_str)
     #debug "URL parsed #{uri.scheme}://#{uri.host}:#{uri.port}"
