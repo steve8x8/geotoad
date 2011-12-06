@@ -13,6 +13,12 @@ See also [http://forums.groundspeak.com/GC/index.php?showforum=89 Release Notes 
 _*(new entries will be added on top)*_
 
 ----
+2011-12-06:
+  * _"site update on Tuesday, December 06, 2011 ... 11am PST"_ (1900 UTC?)
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=286643 release notes]
+  * _effects on GeoToad: not investigated yet_
+  * new server build: *{{{Web.HotFix_20111205.3}}}*
+----
 2011-11-08:
   * [http://forums.groundspeak.com/GC/index.php?showtopic=285002 release notes]
   * _GeoToad at first glance unaffected_ (tests proceeding)
