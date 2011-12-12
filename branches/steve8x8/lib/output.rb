@@ -497,6 +497,8 @@ class Output
     # Strip out control characters
     text.gsub!(/[\x00-\x1f]/, '?')
     text.gsub!(/\x7f/, '?')
+    text.gsub!(/&#x[01].;/, '?')
+    text.gsub!(/&#x7[fF]/, '?')
 
     # Fix apostrophes so that they show up as expected. Fixes issue 26.
     text.gsub!('&#8217;', "'")

@@ -41,7 +41,6 @@ class GeoToad
   $SLOWMODE = 350
 
   # *if* cache D/T/S extraction works, early filtering is possible
-  #$DTSFILTER = false
   $DTSFILTER = true
 
   def initialize

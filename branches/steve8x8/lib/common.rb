@@ -63,8 +63,9 @@ module Common
     when /^(Ayer|Tegnap|Ieri)\*/
       debug "date: Yesterday"
       days_ago=1
-    # any string ending with a * and a number in it
-    when /(\d)+ [ \w]+\*/
+    # Eesti: 6 päeva tagasi*
+    # (any string ending with a * and a number in it)
+    when /(\d)+ .+\*$/
       debug "date: #{$1} days ago"
       days_ago=$1.to_i
     # yyyy-MM-dd, yyyy/MM/dd (ISO style)
