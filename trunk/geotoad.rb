@@ -41,7 +41,7 @@ class GeoToad
   $SLOWMODE = 350
 
   # *if* cache D/T/S extraction works, early filtering is possible
-  $DTSFILTER = false
+  $DTSFILTER = true
 
   def initialize
     $debugMode    = 0
@@ -96,6 +96,11 @@ class GeoToad
         displayError "You must specify a username and password to download coordinates from Geocaching.com"
         exit
       end
+    end
+
+    # switch -X to disable early DTS filtering
+    if (@option['disableEarlyFilter'])
+      $DTSFILTER = false
     end
 
     @formatType        = @option['format'] || 'gpx'
