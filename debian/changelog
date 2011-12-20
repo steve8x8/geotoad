@@ -1,3 +1,13 @@
+geotoad (3.14.7-1) unstable; urgency=low
+
+  * New release 3.14.7
+  * Long options documented in man page
+  * Issue #204: Country/state selection is back
+  * Issue #183: Early selection by Difficulty/Terrain/Size, emergency switch -X
+  * Fixes for time precision (issue #224) and non-printable characters (issue #225)
+
+ -- Steffen Grunewald <steffen.grunewald@googlemail.com>  Thu, 22 Dec 2011 20:00:00 +0100
+
 geotoad (3.14.6-1) unstable; urgency=low
 
   * New release 3.14.6: Hotfix for 2011-10-06 site update

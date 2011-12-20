@@ -9,7 +9,7 @@ there is also a SVN at http://geotoad.googlecode.com/svn/trunk/
 The copyright is (as of 2008, extended to 2011) as follows:
 
 All of the documentation and software included in the GeoToad distribution
-Releases is copyrighted by Thomas Stromberg.
+Releases is copyrighted by Thomas Stromberg and The GeoToad Project.
 
 Copyright 2003-2011, Thomas Stromberg. All rights reserved.
 Copyright 2003-2011, The GeoToad Project. All rights reserved.
@@ -24,8 +24,8 @@ are met:
    documentation and/or other materials provided with the distribution.
 3. All advertising materials mentioning features or use of this software
    must display the following acknowledgment:
-This product includes software developed by Thomas Stromberg and the GeoToad
-project.
+This product includes software developed by Thomas Stromberg and The GeoToad
+Project.
 4. Neither the GeoToad project nor the names of its contributors
    may be used to endorse or promote products derived from this software
    without specific prior written permission.
