@@ -1,7 +1,7 @@
 $Id$
 
 All of the documentation and software included in the GeoToad distribution
-Releases is copyrighted by Thomas Stromberg.
+Releases is copyrighted by Thomas Stromberg and The GeoToad Project.
 
 Copyright 2003-2011, Thomas Stromberg. All rights reserved.
 Copyright 2003-2011, The GeoToad Project. All rights reserved.

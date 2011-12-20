@@ -144,16 +144,16 @@ Don't be worried if you see strange characters in the TUI.
 What about country and state searches?
 --------------------------------------
 Some previous versions of GeoToad already allowed country/state searches.
-The code has been rewritten to some extent, to handle the ambiguity of
-names, and is available in the development series only.
+The code now has been rewritten to some extent, to handle the ambiguity of
+names, and is in advanced testing state.
 
 There's no reasonable way to clarify ambiguities when you're running the
-command line version, instead of giving a _name_ it is now required to
-submit a unique country (or state) _ID_ (a numerical value).
+command line version, and therefore, instead of giving a _name_ it is now
+required to submit a unique country (or state) _ID_ (a numerical value).
 
-Since there are more than 250 countries, and about 400 states in
-the list (and the lists are constantly changed by Groundspeak),
-GeoToad's TUI lets you find out about the ID you are looking for:
+Since there are more than 250 countries and about 400 states in
+the list, and the lists are constantly changed by Groundspeak,
+GeoToad's TUI helps you find out about the ID you are looking for:
 
  - Enter the Text User Interface (by running GeoToad without any parameters)
  - Select the search type ("country" or "state", from the list)
@@ -164,9 +164,10 @@ GeoToad's TUI lets you find out about the ID you are looking for:
  - If in "state" mode, you will have to prefix the state pattern with a country pattern and a slash:
    - "swe/sterb" will return ID 374 for Sweden/Västerbotten; "ger/bra" will, through a country selection from Niger--Nigeria--Algeria--Germany (Germany, of course), lead to to Brandenburg (138).
    - To select from a full list of states (regions, etc.) of a given country, you may use a pattern like "France/.*".
+   - Note that the patterns are "regex" style.
    - Use the numeric ID in your "-q state ID" query.
 
-Note that country and state lists are cached for about 2 months.
+Country and state lists are kept in your file cache for about 2 months.
 
 
 --------------------------
