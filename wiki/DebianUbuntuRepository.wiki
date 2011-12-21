@@ -34,9 +34,14 @@ _Last change: 2011-10-27 Steve8x8_
   * Place {{{Packages.gz}}} in the {{{data/}}} subtree.
   * _(Same could be done for {{{Sources.gz}}})_
   * SVN-commit the change.
-  * Users will have to put a single line into their {{{sources.list}}}:
+
+== How to merge the GeoToad repository into your installation ==
+
+  * Put a single line into your {{{/etc/apt/sources.list}}}:
     {{{deb http://geotoad.googlecode.com/ svn/trunk/data/}}}
-  * For development version, instead of {{{/trunk/}}} use {{{/branches/steve8x8/}}}
+  * For development version, it's:
+    {{{deb http://geotoad.googlecode.com/ svn/branches/steve8x8/data/}}}
+  * Run {{{apt-get update}}} and {{{apt-get upgrade|install}}} (or the {{{aptitude}}} equivalents).
 
 == Is it clean? ==
 
