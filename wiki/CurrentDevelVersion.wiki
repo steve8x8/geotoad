@@ -1,36 +1,42 @@
 #summary Features of current development version
 #labels Featured,Experimental
 
-version=3.15.1
+version=3.15.2
 
 {{{
 Please see the "CurrentDevelVersion" wiki page for recent changes if "What's new" isn't shown.
 }}}
 
-= New development version 3.15.1 =
+= New development version 3.15.2 =
+
+== Changes since last version ==
+  * cookies are now really stored and re-used
+  * better handling of foreign languages, Hungary and Romania added
+
+= New development version 3.15.1 (still operational) =
 
 == Changes since last version ==
   * merge changes 3.14.5 to 3.14.6 (hotfix)
   * cookies are now stored on disk again, in YAML format
 
-= New development version 3.15.0 =
+= Development version 3.15.0 =
 
-== Fixes (after 3.14.5) ==
+Does not work any longer due to 2011-10-06 site update!
+
+= Fixes (after 3.14.7) =
   * issue 138: obsoleted by fixes for issues 198 and 205
-  * issue 154: limit search page count (recently found, recently placed)
   * issue 162: more frequent refreshes for "young" caches
-  * issue 183: extract D/T/size from image codes
   * issue 191: freeze file cache: don't overwrite cache descriptions
   * issue 198: early login
-  * issue 204: reactivate country/state query (caveat: changed syntax!)
   * issue 205: extract own found date from user search page
   * issue 210: support for all date formats, and languages other than English (no Korean and Hungarian though)
   * issue 216: support for multiple output formats in one go
 
-== Get it: ==
-  * _Since this is no regular release, the built-in version check won't show it._
+= Get it: =
+  * _The built-in version check won't show that an update is available._
   * *{{{svn checkout http://geotoad.googlecode.com/svn/branches/steve8x8/ geotoad-devel}}}*
-  * packages available from download area (tagged "Development" and "Deprecated" - select "All downloads")
+  * packages available from download area (tagged "Development" - select "All downloads")
 
-== See also: ==
+= See also: =
   * [CurrentVersion Current stable version]
+  * [DebianUbuntuRepository Debian/Ubuntu repository]

@@ -1,13 +1,30 @@
 #summary Features of current version
 #labels Featured
 
-version=3.14.6
+version=3.14.7
 
 {{{
 Please see the "CurrentVersion" wiki page for recent changes if "What's new" isn't shown.
 }}}
 
+== Important note: ==
+  * Testers needed for the [CurrentDevelVersion development version]!
+
+= What's new in 3.14.7? =
+
+== Fixes for issues: ==
+  * 183: early filtering by d/t/size restored (broken by 2010-12-22 site update)
+  * 183: added -X option to restore "old" behaviour (in case of code changes)
+  * 204: queries by "country" or "state" possible again (syntax changed!)
+  * 224: fixed time format precision (c:geo compatibility)
+  * 225: fixed non-printable characters in GPX
+
+== Minor stuff: ==
+  * long options now documented in man page
+
 = What's new in 3.14.6? =
+
+3.14.6 is still operational, with smaller functionality.
 
 == Hotfix release ==
   * make GeoToad work again after 2011-10-06 site update
@@ -23,6 +40,8 @@ Please see the "CurrentVersion" wiki page for recent changes if "What's new" isn
   * removed rubyscript2exe stuff
 
 = What's new in 3.14.5? =
+
+3.14.5 and previous versions do no longer work due to 2011-10-06 site changes!
 
 == Fixes for issues: ==
   * 103: added script suggestion (search along route) to Wiki
@@ -50,5 +69,11 @@ Please see the "CurrentVersion" wiki page for recent changes if "What's new" isn
   * fixed default filename when run with multiple search arguments
   * other minor additions and fixes (limits, manual page, README file, ...)
 
-== See also: ==
+= Get it: =
+  * _GeoToad will tell you that a new version is available._
+  * *{{{svn checkout http://geotoad.googlecode.com/svn/trunk/ geotoad}}}*
+  * Packages available from download area (tagged "Featured")
+
+= See also: =
   * [CurrentDevelVersion Current development version]
+  * [DebianUbuntuRepository Debian/Ubuntu repository]
