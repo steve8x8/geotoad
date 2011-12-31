@@ -342,7 +342,7 @@ class SearchCache
       debug "Found GUID: #{guid}"
     end
     wid = nil
-    if data =~ /class=.GCCode.\>(GC\w+)\</m
+    if data =~ /\+\((GC\w+)\)\+[^>]+>Google Maps/m
       wid = $1
       debug "Found WID: #{wid}"
     end
