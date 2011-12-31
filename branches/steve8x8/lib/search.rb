@@ -336,6 +336,9 @@ class SearchCache
 
   def getWidSearchResult(url)
     data = getPage(@search_url, {})
+    if not data
+      displayError "No data to be analyzed! Check network connection!"
+    end
     guid = nil
     if data =~ /cdpf\.aspx\?guid=([\w-]+)/m
       guid = $1
@@ -470,6 +473,9 @@ class SearchCache
 
 
   def parseSearchData(data)
+    if not data
+      displayError "No data to be analyzed! Check network connection!"
+    end
     page_number = nil
     pages_total = nil
     parsed_total = 0
