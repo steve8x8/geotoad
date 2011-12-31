@@ -122,6 +122,10 @@ class SearchCache
     when 'wid'
       @query_type = 'wid'
       @search_url = "http://www.geocaching.com/seek/cache_details.aspx?wp=#{key.upcase}"
+
+    when 'guid'
+      @query_type = 'guid'
+      @search_url = "http://www.geocaching.com/seek/cache_details.aspx?guid=#{key.downcase}"
     end
 
     if not @query_type
@@ -328,6 +332,11 @@ class SearchCache
         @query_arg = wid
       end
       @waypoints[@query_arg] = waypoint
+      return @waypoints
+    elsif @query_type == 'guid'
+      waypoint = getWidSearchResult(@search_url)
+      wid = waypoint['wid']
+      @waypoints[wid] = waypoint
       return @waypoints
     else
       return searchResults(@search_url)
