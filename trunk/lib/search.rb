@@ -806,11 +806,11 @@ class SearchCache
           parsed_total += 1
           if not cache['mtime']
             cache['mdays'] = -1
-            cache['mtime'] = Time.at(0)
+            cache['mtime'] = Time.at(315489600)
           end
           if not cache['atime']
             cache['adays'] = -1
-            cache['atime'] = Time.at(0)
+            cache['atime'] = Time.at(315489600)
           end
 
           @waypoints[wid] = cache.dup

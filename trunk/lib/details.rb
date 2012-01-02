@@ -459,11 +459,11 @@ class CacheDetails
 
     if not cache['mtime']
       cache['mdays'] = -1
-      cache['mtime'] = Time.at(0)
+      cache['mtime'] = Time.at(315489600)
     end
     if not cache['atime']
       cache['adays'] = -1
-      cache['atime'] = Time.at(0)
+      cache['atime'] = Time.at(315489600)
     end
 
     # Parse the additional waypoints table. Needs additional work for non-HTML templates.
