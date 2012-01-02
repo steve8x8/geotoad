@@ -336,7 +336,13 @@ class SearchCache
     elsif @query_type == 'guid'
       waypoint = getWidSearchResult(@search_url)
       wid = waypoint['wid']
-      @waypoints[wid] = waypoint
+      # did we find a WID?
+      if wid
+        waypoint['guid'] = @query_arg
+        @waypoints[wid] = waypoint
+      else
+        displayWarning "Could not identify; member-only cache?"
+      end
       return @waypoints
     else
       return searchResults(@search_url)
@@ -349,38 +355,49 @@ class SearchCache
       displayError "No data to be analyzed! Check network connection!"
     end
     guid = nil
-    if data =~ /cdpf\.aspx\?guid=([\w-]+)/m
-      guid = $1
-      debug "Found GUID: #{guid}"
-    end
     wid = nil
-    if data =~ /\+\((GC\w+)\)\+[^>]+>Google Maps/m
-      wid = $1
-      debug "Found WID: #{wid}"
-    end
     disabled = false
-    if data =~ /Cache Issues:.*class=.OldWarning..*This cache is temporarily unavailable/
-      disabled = true
-      debug "Cache appears to be disabled"
-    end
     archived = false
-    if data =~ /Cache Issues:.*class=.OldWarning..*This cache has been archived/
-      archived = true
-      debug "Cache appears to be archived"
-    end
     membersonly = false
     country = nil
     state = nil
+    ctype = 'Unknown Cache'
+    owner = nil
+    csize = nil
+    cdiff = nil
+    cterr = nil
     data.split("\n").each { |line|
       line.gsub!(/&#39;/, '\'')
       case line
       when /Premium Member Only Cache/
         membersonly = true
-      when /\s+GC.*\(.*\) in ((.*), )?(.*) created by (.*)/
-        country = $3
-        state = $2
+      when /\s+GC.*\((.*)\) in ((.*), )?(.*) created by (.*)/
+        ctype = $1
+        state = $3
+        country = $4
+        owner = $5
+        debug "#{ctype} cache by #{owner} in #{country}/#{state}"
+      when /\+\((GC\w+)\)\+[^>]+>Google Maps/
+        wid = $1
+        debug "Found WID: #{wid}"
+      when /alt=.Size: .*\((.*?)\)/
+        csize = $1.downcase
+        debug "Found size: #{csize}"
       end
     }
+    # one match is enough!
+    if data =~ /cdpf\.aspx\?guid=([\w-]+)/m
+      guid = $1
+      debug "Found GUID: #{guid}"
+    end
+    if data =~ /Cache Issues:.*class=.OldWarning..*This cache is temporarily unavailable/
+      disabled = true
+      debug "Cache appears to be disabled"
+    end
+    if data =~ /Cache Issues:.*class=.OldWarning..*This cache has been archived/
+      archived = true
+      debug "Cache appears to be archived"
+    end
 
     cache_data = {
       'guid' => guid,
@@ -389,7 +406,13 @@ class SearchCache
       'archived' => archived,
       'membersonly' => membersonly,
       'country' => country,
-      'state' => state
+      'state' => state,
+      'creator' => owner,
+      'fulltype' => ctype,
+      'type' => ctype.split(' ')[0].downcase.gsub(/\-/, ''),
+      'size' => csize,
+      'difficulty' => cdiff,
+      'terrain' => cterr
     }
     return cache_data
   end

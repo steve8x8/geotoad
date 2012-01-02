@@ -189,9 +189,13 @@ class ShadowFetch
     end
 
     debug "outputting #{localfile}"
-    cache = File.open(localfile, File::WRONLY|File::TRUNC|File::CREAT, 0666)
-    cache.puts @data
-    cache.close
+    begin
+      cache = File.open(localfile, File::WRONLY|File::TRUNC|File::CREAT, 0666)
+      cache.puts @data
+      cache.close
+    rescue
+      displayWarning "Could not overwrite #{localfile}!"
+    end
     debug "Returning #{@data.length} bytes: #{@data[0..20]}(...)#{data[-21..-1]}"
     if $isRuby19
     # we hope that this is the only place where encodings can enter
