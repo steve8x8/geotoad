@@ -386,18 +386,12 @@ class CacheDetails
     end
 
     if data =~ /Difficulty:.*?([\d\.]+) out of 5/m
-      cache['difficulty'] = $1.to_f
-      if $1.to_f == $1.to_i
-        cache['difficulty'] = $1.to_i
-      end
+      cache['difficulty'] = tohalfint($1)
       debug "difficulty: #{cache['difficulty']}"
     end
 
     if data =~ /Terrain:.*?([\d\.]+) out of 5/m
-      cache['terrain'] = $1.to_f
-      if $1.to_f == $1.to_i
-        cache['terrain'] = $1.to_i
-      end
+      cache['terrain'] = tohalfint($1)
       debug "terrain: #{cache['terrain']}"
     end
 
