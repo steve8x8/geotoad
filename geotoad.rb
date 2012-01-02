@@ -43,6 +43,9 @@ class GeoToad
   # *if* cache D/T/S extraction works, early filtering is possible
   $DTSFILTER = true
 
+  # time to use for "unknown" creation dates
+  $ZEROTIME = 315576000
+
   def initialize
     $debugMode    = 0
     output        = Output.new
