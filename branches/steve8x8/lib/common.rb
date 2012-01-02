@@ -99,7 +99,7 @@ module Common
       begin
         timestamp = Time.local(year, month, day)
       rescue ArgumentError
-        displayWarning "Trying to swap month and day in #{year}/#{month}/#{day}"
+        debug "Trying to swap month and day in #{year}/#{month}/#{day}"
         timestamp = Time.local(year, day, month)
       end
     when /^(\w{3})\/(\d+)\/(\d+)/

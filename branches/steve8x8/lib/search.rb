@@ -371,15 +371,21 @@ class SearchCache
       case line
       when /Premium Member Only Cache/
         membersonly = true
-      when /\s+GC.*\((.*)\) in ((.*), )?(.*) created by (.*)/
+      when /^\s+GC.*\((.*)\) in ((.*), )?(.*) created by (.*?)\s*$/
         ctype = $1
         state = $3
         country = $4
         owner = $5
-        debug "#{ctype} cache by #{owner} in #{country}/#{state}"
+        debug "#{ctype} by #{owner} in #{country}/#{state}"
       when /\+\((GC\w+)\)\+[^>]+>Google Maps/
         wid = $1
         debug "Found WID: #{wid}"
+      when /_uxLegendScale.*?(\d(\.\d)?) out of/
+        cdiff = $1.to_f
+        debug "Found D: #{cdiff}"
+      when /_Localize12.*?(\d(\.\d)?) out of/
+        cterr = $1.to_f
+        debug "Found T: #{cterr}"
       when /alt=.Size: .*\((.*?)\)/
         csize = $1.downcase
         debug "Found size: #{csize}"
