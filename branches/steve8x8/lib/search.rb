@@ -380,11 +380,12 @@ class SearchCache
       when /\+\((GC\w+)\)\+[^>]+>Google Maps/
         wid = $1
         debug "Found WID: #{wid}"
+      # for filtering; don't care about ".0" representation
       when /_uxLegendScale.*?(\d(\.\d)?) out of/
-        cdiff = $1.to_f
+        cdiff = tohalfint($1)
         debug "Found D: #{cdiff}"
       when /_Localize12.*?(\d(\.\d)?) out of/
-        cterr = $1.to_f
+        cterr = tohalfint($1)
         debug "Found T: #{cterr}"
       when /alt=.Size: .*\((.*?)\)/
         csize = $1.downcase
@@ -850,11 +851,11 @@ class SearchCache
           parsed_total += 1
           if not cache['mtime']
             cache['mdays'] = -1
-            cache['mtime'] = Time.at(0)
+            cache['mtime'] = Time.at($ZEROTIME)
           end
           if not cache['atime']
             cache['adays'] = -1
-            cache['atime'] = Time.at(0)
+            cache['atime'] = Time.at($ZEROTIME)
             # this will allow to output "myfind*" for others
             # but if I found it too, my own find will show up
             # FIXME!

@@ -224,4 +224,13 @@ module Common
     FileUtils::mkdir_p(outputDir)
     return outputDir
   end
+
+  # convert string "i" or "i.5" to int/float number
+  def tohalfint(value)
+    if value.to_f == value.to_i
+      return value.to_i
+    else
+      return value.to_f
+    end
+  end
 end

@@ -422,18 +422,12 @@ class CacheDetails
     end
 
     if data =~ /Difficulty:.*?([\d\.]+) out of 5/m
-      cache['difficulty'] = $1.to_f
-      if $1.to_f == $1.to_i
-        cache['difficulty'] = $1.to_i
-      end
+      cache['difficulty'] = tohalfint($1)
       debug "difficulty: #{cache['difficulty']}"
     end
 
     if data =~ /Terrain:.*?([\d\.]+) out of 5/m
-      cache['terrain'] = $1.to_f
-      if $1.to_f == $1.to_i
-        cache['terrain'] = $1.to_i
-      end
+      cache['terrain'] = tohalfint($1)
       debug "terrain: #{cache['terrain']}"
     end
 
@@ -501,11 +495,11 @@ class CacheDetails
 
     if not cache['mtime']
       cache['mdays'] = -1
-      cache['mtime'] = Time.at(0)
+      cache['mtime'] = Time.at($ZEROTIME)
     end
     if not cache['atime']
       cache['adays'] = -1
-      cache['atime'] = Time.at(0)
+      cache['atime'] = Time.at($ZEROTIME)
     end
 
     # Parse the additional waypoints table. Needs additional work for non-HTML templates.

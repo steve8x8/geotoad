@@ -43,6 +43,9 @@ class GeoToad
   # *if* cache D/T/S extraction works, early filtering is possible
   $DTSFILTER = true
 
+  # time to use for "unknown" creation dates
+  $ZEROTIME = 315576000
+
   def initialize
     $debugMode    = 0
     output        = Output.new
@@ -127,13 +130,13 @@ class GeoToad
     @queryTitle        = "GeoToad: #{@queryType} = #{@queryArg}"
     @defaultOutputFile = "gt_" + @queryArg.to_s
 
-   @formatTypes.split(/[:\|]/).each { |formatType|
-    if ! $validFormats.include?(formatType)
-      displayError "#{formatType} is not a valid supported format."
-      @uin.usage
-      exit
-    end
-   }
+    @formatTypes.split(/[:\|]/).each { |formatType|
+      if ! $validFormats.include?(formatType)
+        displayError "#{formatType} is not a valid supported format."
+        @uin.usage
+        exit
+      end
+    }
 
     @limitPages = @option['limitSearchPages'].to_i
     debug "Limiting search to #{@limitPages.inspect} pages"
@@ -620,73 +623,72 @@ class GeoToad
   def saveFile
     puts ""
     formatTypeCounter = 0
-   # loop over all chosen formats
-   @formatTypes.split(/[:\|]/).each { |formatType|
-    output = Output.new
-    displayInfo "Output format selected is #{output.formatDesc(formatType)} format"
-    output.input(@filtered.waypoints)
-    output.formatType = formatType
-    if (@option['waypointLength'])
-      output.waypointLength=@option['waypointLength'].to_i
-    end
-
-    # if we have selected the name of the output file, use it for first run
-    # for subsequent runs, drop the extension and append default one
-    # otherwise, take our invented name, sanitize it, and slap a file extension on it.
-    outputFile = nil
-    if @option['output']
-      filename = @option['output'].dup
-      #displayInfo "Output filename: #{filename}"
-      filename.gsub!('\\', '/')
-      if filename and filename !~ /\/$/
-        outputFile = File.basename(filename)
+    # loop over all chosen formats
+    @formatTypes.split(/[:\|]/).each { |formatType|
+      output = Output.new
+      displayInfo "Output format selected is #{output.formatDesc(formatType)} format"
+      output.input(@filtered.waypoints)
+      output.formatType = formatType
+      if (@option['waypointLength'])
+        output.waypointLength=@option['waypointLength'].to_i
       end
-      if (formatTypeCounter > 0)
-        # replace/add extension
-        outputFile.gsub!(/\.[^\.]*$/, '')
+
+      # if we have selected the name of the output file, use it for first run
+      # for subsequent runs, drop the extension and append default one
+      # otherwise, take our invented name, sanitize it, and slap a file extension on it.
+      outputFile = nil
+      if @option['output']
+        filename = @option['output'].dup
+        #displayInfo "Output filename: #{filename}"
+        filename.gsub!('\\', '/')
+        if filename and filename !~ /\/$/
+          outputFile = File.basename(filename)
+        end
+        if (formatTypeCounter > 0)
+          # replace/add extension
+          outputFile.gsub!(/\.[^\.]*$/, '')
+          outputFile = outputFile + "." + output.formatExtension(formatType)
+        end
+      end
+
+      if not outputFile
+        outputFile = @defaultOutputFile.gsub(/[^0-9A-Za-z\.-]/, '_')
+        outputFile.gsub!(/_+/, '_')
+        if outputFile.length > 220
+          outputFile = outputFile[0..215] + "_etc"
+        end
+
         outputFile = outputFile + "." + output.formatExtension(formatType)
       end
-    end
+      debug "Base output path: #{outputFile}"
 
-    if not outputFile
-      outputFile = @defaultOutputFile.gsub(/[^0-9A-Za-z\.-]/, '_')
-      outputFile.gsub!(/_+/, '_')
-      if outputFile.length > 220
-        outputFile = outputFile[0..215] + "_etc"
+      # prepend the current working directory. This is mostly done as a service to
+      # users who just double click to launch GeoToad, and wonder where their output file went.
+
+      if (! @option['output']) || (@option['output'] !~ /\//)
+        outputDir = Dir.pwd
+      else
+        # fool it so that trailing slashes work.
+        outputDir = File.dirname(@option['output'] + "x")
       end
 
-      outputFile = outputFile + "." + output.formatExtension(formatType)
-    end
-    debug "Base output path: #{outputFile}"
-
-    # prepend the current working directory. This is mostly done as a service to
-    # users who just double click to launch GeoToad, and wonder where their output file went.
-
-    if (! @option['output']) || (@option['output'] !~ /\//)
-      outputDir = Dir.pwd
-    else
-      # fool it so that trailing slashes work.
-      outputDir = File.dirname(@option['output'] + "x")
-    end
-
-    outputFile = outputDir + '/' + outputFile
+      outputFile = outputDir + '/' + outputFile
 
 
-    # Lets not mix and match DOS and UNIX /'s, we'll just make everyone like us!
-    outputFile.gsub!(/\\/, '/')
-    displayInfo "Output filename: #{outputFile}"
+      # Lets not mix and match DOS and UNIX /'s, we'll just make everyone like us!
+      outputFile.gsub!(/\\/, '/')
+      displayInfo "Output filename: #{outputFile}"
 
-    # append time to our title
-    queryTitle = @queryTitle + " (" + Time.now.strftime("%d%b%y %H:%M") + ")"
+      # append time to our title
+      queryTitle = @queryTitle + " (" + Time.now.strftime("%d%b%y %H:%M") + ")"
 
-    # and do the dirty.
-    outputData = output.prepare(queryTitle, @option['user']);
-    output.commit(outputFile)
-    displayMessage "Saved to #{outputFile}"
+      # and do the dirty.
+      outputData = output.prepare(queryTitle, @option['user']);
+      output.commit(outputFile)
+      displayMessage "Saved to #{outputFile}"
 
-    formatTypeCounter += 1
-   }
-   # end format loop
+      formatTypeCounter += 1
+    } # end format loop
   end
 
 
