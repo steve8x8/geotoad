@@ -612,6 +612,24 @@ class GeoToad
       displayMessage "User filtering removed #{excludedUsersTotal} caches from your listing."
     end
 
+    beforeAttrsTotal = @filtered.totalWaypoints
+    if (@option['attributeExclude'])
+      @option['attributeExclude'].split(/[:\|]/).each { |attribute|
+        @filtered.attributeExclude(attribute)
+      }
+    end
+
+    if (@option['attributeInclude'])
+      @option['attributeInclude'].split(/[:\|]/).each { |attribute|
+        @filtered.attributeInclude(attribute)
+      }
+    end
+
+    excludedAttrsTotal = beforeAttrsTotal - @filtered.totalWaypoints
+    if (excludedAttrsTotal > 0)
+      displayMessage "Attribute filtering removed #{excludedUsersTotal} caches from your listing."
+    end
+
 
     displayMessage "Filter complete, #{@filtered.totalWaypoints} caches left"
     return @filtered.totalWaypoints

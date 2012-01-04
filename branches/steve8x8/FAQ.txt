@@ -12,6 +12,7 @@ Table of Contents:
 * geotoad.exe gets relative paths wrong in Windows
 * I cannot login with a name containing an umlaut ("ÜbercacherXY")
 * What about country and state searches?
+* Is there a list of attribute IDs somewhere?
 * How to contact developers?
 
 
@@ -168,6 +169,94 @@ GeoToad's TUI helps you find out about the ID you are looking for:
    - Use the numeric ID in your "-q state ID" query.
 
 Country and state lists are kept in your file cache for about 2 months.
+
+-------------------------------------------
+Is there a list of attribute IDs somewhere?
+-------------------------------------------
+
+Here's what I collected from my cache files:
+
+----------------------------------------------------------------------------
+| ID |        no (append "-")           |              yes                 |
+----------------------------------------------------------------------------
+|  1 | No dogs                          | Dogs allowed                     |
+|  2 |                                  | Access/parking fees              |
+|  3 |                                  | Climbing gear                    |
+|  4 |                                  | Boat required                    |
+|  5 |                                  | Scuba diving (?)                 |
+|  6 | No kids                          | Kid friendly                     |
+|  7 | Takes more than 1 hour           | Takes less than 1  hour          |
+|  8 | No view                          | Scenic view                      |
+|  9 | No significant hike              | Significant hike                 |
+| 10 | No difficult climbing            | Difficult climbing               |
+| 11 |                                  | May require wading               |
+| 12 |                                  | May require swimming             |
+| 13 | Not 24-7                         | Available 24-7                   |
+| 14 | Not recommended at night         | Recommended at night             |
+| 15 | Not available for winter         | Available in winter              |
+| 16 |                                  |                                  |
+| 17 | No poison plants                 | Poison plants!                   |
+| 18 |                                  | Dangerous animals!               |
+| 19 |                                  | Ticks!                           |
+| 20 |                                  | Abandoned mine nearby            |
+| 21 |                                  | Cliffs/falling rocks  nearby     |
+| 22 |                                  | Hunting area                     |
+| 23 |                                  | Dangerous area                   |
+| 24 | Not wheelchair accessible        | Wheelchair accessible            |
+| 25 | No parking available             | Parking available                |
+| 26 |                                  | Public transit available         |
+| 27 | No drinking water                | Drinking water nearby            |
+| 28 | No public restrooms              | Restrooms available              |
+| 29 | No telephone                     | Telephone nearby                 |
+| 30 | No picnic tables                 | Picnic tables available          |
+| 31 | No camping                       | Camping available                |
+| 32 | No bikes                         | Bikes allowed                    |
+| 33 | No motorcycles                   | Motorcycles allowed              |
+| 34 | No quads                         | Quads allowed                    |
+| 35 | No off-road vehicles             | Off-road vehicles allowed        |
+| 36 | No snowmobiles                   | Snomobiles allowed               |
+| 37 | No horses                        | Horses allowed                   |
+| 38 | No campfires                     | Campfires allowed                |
+| 39 |                                  | Thorns!                          |
+| 40 | No stealth required              | Stealth required                 |
+| 41 | Not stroller accessible          | Stroller accessible              |
+| 42 |                                  | Needs maintenance                |
+| 43 |                                  | Watch for livestock              |
+| 44 |                                  | Flashlight required              |
+| 45 |                                  | Lost and found (?)               |
+| 46 | Not truck driver/rv accessible   | Truck driver/rv accessible       |
+| 47 | No field puzzle                  | Is field puzzle                  |
+| 48 |                                  | Uv light required                |
+| 49 |                                  | May require snowshoes            |
+| 50 |                                  | Skiis (?)                        |
+| 51 |                                  | Special tool required            |
+| 52 | Not night cache                  | Night cache                      |
+| 53 | Not a park and grab              | Park and grab                    |
+| 54 | Not in abandoned structure       | In abandoned structure           |
+| 55 | Hike greater than 1km            | Hike shorter than 1km            |
+| 56 | Not medium hike                  | Hike between 1km-10km            |
+| 57 |                                  | Hike greater than 10km           |
+| 58 | No fuel nearby                   | Fuel nearby                      |
+| 59 | No food nearby                   | Food nearby                      |
+| 60 |                                  | Wireless beacon required         |
+| 61 |                                  | Is a partnership cache           |
+| 62 |                                  | Seasonal access only             |
+| 63 | Not recommended for tourists     | Recommended for tourists         |
+| 64 | No tree climbing required        | Tree climbing required           |
+| 65 |                                  | In front yard (with permission)  |
+| 66 |                                  | Teamwork required                |
+----------------------------------------------------------------------------
+
+Note the semantics of the -a and -A options:
+-a will select only caches which have the attribute set explicitly.
+-A will drop caches which have the attribute set to the opposite.
+An appended "-" (minus) will check for "crossed-out" attributes.
+
+Example:
+To avoid hikes longer than 1km, and select only caches which are suited for
+wheelchairs, you'd use  -a 24 -A 55-:56:57
+-a 24:55 would select only those caches which are suited for wheelchairs
+and explicitly flagged as "shorter than 1km". Notice the difference!
 
 
 --------------------------

@@ -61,6 +61,8 @@ class Input
 
   def getopt
     opts = GetoptLong.new(
+      [ "--attributeInclude",         "-a",    GetoptLong::OPTIONAL_ARGUMENT ],
+      [ "--attributeExclude",         "-A",    GetoptLong::OPTIONAL_ARGUMENT ],
       [ "--travelBug",                "-b",    GetoptLong::NO_ARGUMENT ],
       [ "--cacheType",                "-c",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--clearCache",               "-C",    GetoptLong::NO_ARGUMENT ],
@@ -249,6 +251,7 @@ class Input
     puts "                        type of cache (| separated)"
     puts " -j/-J [# days]         include/exclude caches placed in the last X days"
     puts " -r/-R [# days]         include/exclude caches found in the last X days"
+    puts " -a/-A [attribute]      include/exclude caches with attributes set"
     puts " -z                     include disabled caches"
     puts " -n                     only include not found caches (virgins)"
     puts " -b                     only include caches with travelbugs"
