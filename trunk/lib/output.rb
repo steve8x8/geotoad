@@ -981,7 +981,7 @@ class Output
         if cache["attribute#{x}id"]
           rawattrib = "      <groundspeak:attribute " +
             sprintf("id=\"%s\" inc=\"%s\">", cache["attribute#{x}id"], cache["attribute#{x}inc"]) +
-            cache["attribute#{x}txt"].to_s.capitalize +
+            cache["attribute#{x}txt"].to_s.capitalize.gsub(/\\/,"/") +
             "</groundspeak:attribute>\r\n"
           debug "Attribute #{x} XML: #{rawattrib}"
           xmlAttrs << rawattrib
@@ -1041,7 +1041,7 @@ class Output
       'shortWpts' => shortWpts.to_s,
       'xmlWpts' => xmlWpts.to_s.gsub(/XXXWIDXXX/, wid[2 .. -1]),
       'xmlAttrs' => xmlAttrs.to_s,
-      'txtAttrs' => (cache['attributeText'].to_s.empty?)?'':'[' + cache['attributeText'].to_s.capitalize + ']',
+      'txtAttrs' => (cache['attributeText'].to_s.empty?)?'':'[' + cache['attributeText'].to_s.capitalize.gsub(/\\/,"/") + ']',
       'warnAvail' => (available)?'':'[?]',
       'warnArchiv' => (archived)?'[%]':'',
     }
