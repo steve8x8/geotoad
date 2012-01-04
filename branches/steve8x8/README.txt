@@ -113,6 +113,7 @@ syntax: geotoad [options] <search:search2:search3>
                         type of cache (| separated)
  -j/-J [# days]         include/exclude caches placed in the last X days
  -r/-R [# days]         include/exclude caches found in the last X days
+ -a/-A [attribute]      include/exclude caches with attributes set
  -z                     include disabled caches
  -n                     only include not found caches (virgins)
  -b                     only include caches with travelbugs
