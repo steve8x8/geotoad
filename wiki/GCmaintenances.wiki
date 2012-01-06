@@ -13,6 +13,14 @@ See also [http://forums.groundspeak.com/GC/index.php?showforum=89 Release Notes 
 _*(new entries will be added on top)*_
 
 ----
+2012-01-04:
+  * _"Geocaching.com ... site update on Wednesday, January 04, 2012 ... 11am PDT"_ (1900 UTC)
+  * (again, no release notes - build still 20111212.1)
+----
+2011-12-27:
+  * _"Forums.groundspeak.com ... site update ... December 27, 2011 ... 5pm PDT"
+  * hopefully this will only be a forums update
+----
 2011-12-16:
   * _"site update on Friday, December 16, 2011 ... 3pm PDT"_ (2300 UTC but: D?)
   * (no release notes to be found)
@@ -36,6 +44,7 @@ _*(new entries will be added on top)*_
   * [http://forums.groundspeak.com/GC/index.php?showtopic=283162 release notes]
   * _GeoToad: login/cookies no longer work, endless redirects (issue 219)_
   * _*fixed in 3.14.6/3.15.1 (released 2011-10-12)_
+  * _GeoToad: WID parsing no longer works (undetected for 3 months...)_
   * new server build: *{{{HotFix_20111006.1}}}*
 ----
 2011-09-15:
