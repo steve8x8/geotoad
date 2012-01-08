@@ -180,31 +180,31 @@ Here's what I collected from my cache files:
 | ID |        no (append "-")           |              yes                 |
 ----------------------------------------------------------------------------
 |  1 | No dogs                          | Dogs allowed                     |
-|  2 |                                  | Access/parking fees              |
-|  3 |                                  | Climbing gear                    |
-|  4 |                                  | Boat required                    |
-|  5 |                                  | Scuba diving (?)                 |
+|  2 | -                                | Access/parking fees              |
+|  3 | -                                | Climbing gear                    |
+|  4 | -                                | Boat required                    |
+|  5 | -                                | Scuba gear required              |
 |  6 | No kids                          | Kid friendly                     |
 |  7 | Takes more than 1 hour           | Takes less than 1  hour          |
 |  8 | No view                          | Scenic view                      |
 |  9 | No significant hike              | Significant hike                 |
 | 10 | No difficult climbing            | Difficult climbing               |
-| 11 |                                  | May require wading               |
-| 12 |                                  | May require swimming             |
+| 11 | -                                | May require wading               |
+| 12 | -                                | May require swimming             |
 | 13 | Not 24-7                         | Available 24-7                   |
 | 14 | Not recommended at night         | Recommended at night             |
 | 15 | Not available for winter         | Available in winter              |
-| 16 |                                  |                                  |
+| 16 | -                                | -                                |
 | 17 | No poison plants                 | Poison plants!                   |
-| 18 |                                  | Dangerous animals!               |
-| 19 |                                  | Ticks!                           |
-| 20 |                                  | Abandoned mine nearby            |
-| 21 |                                  | Cliffs/falling rocks  nearby     |
-| 22 |                                  | Hunting area                     |
-| 23 |                                  | Dangerous area                   |
+| 18 | -                                | Dangerous animals!               |
+| 19 | -                                | Ticks!                           |
+| 20 | -                                | Abandoned mine nearby            |
+| 21 | -                                | Cliffs/falling rocks  nearby     |
+| 22 | -                                | Hunting area                     |
+| 23 | -                                | Dangerous area                   |
 | 24 | Not wheelchair accessible        | Wheelchair accessible            |
 | 25 | No parking available             | Parking available                |
-| 26 |                                  | Public transit available         |
+| 26 | -                                | Public transit available         |
 | 27 | No drinking water                | Drinking water nearby            |
 | 28 | No public restrooms              | Restrooms available              |
 | 29 | No telephone                     | Telephone nearby                 |
@@ -217,19 +217,19 @@ Here's what I collected from my cache files:
 | 36 | No snowmobiles                   | Snomobiles allowed               |
 | 37 | No horses                        | Horses allowed                   |
 | 38 | No campfires                     | Campfires allowed                |
-| 39 |                                  | Thorns!                          |
+| 39 | -                                | Thorns!                          |
 | 40 | No stealth required              | Stealth required                 |
 | 41 | Not stroller accessible          | Stroller accessible              |
-| 42 |                                  | Needs maintenance                |
-| 43 |                                  | Watch for livestock              |
-| 44 |                                  | Flashlight required              |
-| 45 |                                  | Lost and found (?)               |
+| 42 | -                                | Needs maintenance                |
+| 43 | ?                                | Watch for livestock              |
+| 44 | -                                | Flashlight required              |
+| 45 | -                                | Lost and found (?)               |
 | 46 | Not truck driver/rv accessible   | Truck driver/rv accessible       |
 | 47 | No field puzzle                  | Is field puzzle                  |
-| 48 |                                  | Uv light required                |
-| 49 |                                  | May require snowshoes            |
-| 50 |                                  | Skiis (?)                        |
-| 51 |                                  | Special tool required            |
+| 48 | -                                | Uv light required                |
+| 49 | -                                | May require snowshoes            |
+| 50 | -                                | Cross country skis required      |
+| 51 | -                                | Special tool required            |
 | 52 | Not night cache                  | Night cache                      |
 | 53 | Not a park and grab              | Park and grab                    |
 | 54 | Not in abandoned structure       | In abandoned structure           |
@@ -238,13 +238,13 @@ Here's what I collected from my cache files:
 | 57 |                                  | Hike greater than 10km           |
 | 58 | No fuel nearby                   | Fuel nearby                      |
 | 59 | No food nearby                   | Food nearby                      |
-| 60 |                                  | Wireless beacon required         |
-| 61 |                                  | Is a partnership cache           |
+| 60 | -                                | Wireless beacon required         |
+| 61 | -                                | Is a partnership cache           |
 | 62 |                                  | Seasonal access only             |
 | 63 | Not recommended for tourists     | Recommended for tourists         |
 | 64 | No tree climbing required        | Tree climbing required           |
-| 65 |                                  | In front yard (with permission)  |
-| 66 |                                  | Teamwork required                |
+| 65 | Not in front yard                | In front yard (with permission)  |
+| 66 | No teamwork required             | Teamwork required                |
 ----------------------------------------------------------------------------
 
 Note the semantics of the -a and -A options:
