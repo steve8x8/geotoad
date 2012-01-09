@@ -296,7 +296,7 @@ $Format = {
     'mime'    => 'application/x-tiger',
     'desc'    => 'U.S. Census Bureau Tiger Mapping Service Data',
     'templatePre' =>  "#tms-marker\n",
-    'templateWP' => "<%out.londatapadded%>,<%out.latdatapadded%>:redpin:<%wp.name%> by <%wp.creator%>, <%wp.type%> (<%wp.difficulty%>/<%wp.terrain%>)\n"
+    'templateWP' => "<%out.londatapad5%>,<%out.latdatapad5%>:redpin:<%wp.name%> by <%wp.creator%>, <%wp.type%> (<%wp.difficulty%>/<%wp.terrain%>)\n"
   },
 
   'xmap' => {
