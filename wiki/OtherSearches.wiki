@@ -82,4 +82,105 @@ The ratio distance/circle obviously has to be smaller than 2 ;)
 
 ----
 
+<wiki:comment>
+== Parsing bookmark lists (issue 227) ==
+
+{{{----
+#!/bin/bash
+
+# example: Berlin/Brandenburg area night caches
+listguid="cbb21edf-fb9e-45b5-9b27-c51fd6453cbf"
+
+# extract list of guids from KML file
+GUIDS=`
+lynx -source "http://www.geocaching.com/kml/bmkml.aspx?bmguid=$listguid" \
+| perl -ne 'if(/\?guid=([0-9a-f-]+)/){printf("%s:",$1)}'
+`
+
+# now run the real query
+geotoad -q guid -x gpx -o `pwd`/list_$listguid.gpx "$GUIDS"
+----}}}
+
+----
+
+</wiki:comment>
+== Removing mystery caches from GPX ==
+
+Do you use a handheld for actual geocaching, and a navigation system to
+reach your targets? If so, you probably don't want mystery caches to be
+shown on the screen while driving. Running the same search with and
+without cache type "unknown" is time-consuming and error-prone.
+
+The following Ruby scriptlet *gpxdemystify* will strip "Unknown" caches from
+a GPX file produced by GeoToad:
+
+{{{----
+#!/usr/bin/env ruby
+puts $stdin.read.split(/<\/wpt>/).map { |fragment|
+    (fragment !~ /<groundspeak:type>Unknown Cache/m) ? fragment : nil
+}.compact.join("</wpt>")
+----}}}
+
+to be run as follows:   {{{gpxdemystify <input.gpx >output.gpx}}}
+
+----
+
+== Merging riddle solutions into GPX ==
+
+Similarly, it is possible to merge a list of "solved" mysteries into
+an existing GPX, using *gpxsolutions* as follows:
+
+{{{----
+#!/usr/bin/env ruby
+# merge solved mysteries into GPX file
+
+# first read solutions (WPID lat lon) from table
+solutions = Hash.new
+begin
+File.foreach("#{ARGV[0]}") { |line|
+    columns = line.upcase.split(/\s+/)
+    name = columns[0]
+    lat = columns[1]
+    lon = columns[2]
+    gcid = "GC" + name[2..-1]
+    wpnr = name[0..1]
+    case wpnr
+    when /GC/
+	type = 'Traditional Cache'
+    when /\d./
+	type = 'Multi-cache'
+    end
+    solutions[gcid] = {'wpnr'=>wpnr, 'lat'=>lat, 'lon'=>lon, 'type'=>type}
+}
+rescue
+    $stderr.puts "Cannot read #{ARGV[0].inspect}, will not modify anything"
+end
+
+# now merge into GPX (UNIX filter!)
+puts $stdin.read.split(/<\/wpt>/).map { |fragment|
+    # only modify mystery caches!
+    if fragment =~ /<name>(GC.*?)<\/name>.*?<groundspeak:type>Unknown Cache/m
+	gcid = $1
+	if fragment =~ /<groundspeak:name>(.*?)</m
+	    name = $1
+	end
+	solution = solutions[gcid]
+	if solution
+	    wpnr = solution['wpnr']
+	    lat = solution['lat']
+	    lon = solution['lon']
+	    type = solution['type']
+	    fragment.gsub!(/lat="[\d\.-]+"/, "lat=\"#{lat}\"")
+	    fragment.gsub!(/lon="[\d\.-]+"/, "lon=\"#{lon}\"")
+	    fragment.gsub!(/Unknown Cache</, "#{type}<")
+	    fragment.gsub!(/<groundspeak:short_description[^>]*>/) { |s| s.gsub(/>/, ">[+#{wpnr}]=") }
+	    $stderr.printf "Modified %7s: %s = %s %s \"%s\"\n", gcid,wpnr,lat,lon,name
+	end
+    end
+    fragment
+}.join("</wpt>")
+----}}}
+
+----
+
 _(More to be added. Suggestions welcome.)_
