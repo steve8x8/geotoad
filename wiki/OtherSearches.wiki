@@ -80,8 +80,6 @@ which should be sufficient in most cases.
 The values for "error", "distance" and "circle" have to be adjusted by hand.
 The ratio distance/circle obviously has to be smaller than 2 ;)
 
-----
-
 <wiki:comment>
 == Parsing bookmark lists (issue 227) ==
 
@@ -100,8 +98,6 @@ lynx -source "http://www.geocaching.com/kml/bmkml.aspx?bmguid=$listguid" \
 # now run the real query
 geotoad -q guid -x gpx -o `pwd`/list_$listguid.gpx "$GUIDS"
 }}}
-
-----
 
 </wiki:comment>
 == Removing mystery caches from GPX ==
@@ -122,8 +118,6 @@ puts $stdin.read.split(/<\/wpt>/).map { |fragment|
 }}}
 
 to be run as follows:   {{{gpxdemystify <input.gpx >output.gpx}}}
-
-----
 
 == Merging riddle solutions into GPX ==
 

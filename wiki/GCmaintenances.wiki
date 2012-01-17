@@ -13,6 +13,9 @@ See also [http://forums.groundspeak.com/GC/index.php?showforum=89 Release Notes 
 _*(new entries will be added on top)*_
 
 ----
+2012-01-17:
+  * _"Geocaching.com ... site update on Tuesday, January 17th, 2012 ... 11am PDT" (1900 UTC)
+----
 2012-01-04:
   * _"Geocaching.com ... site update on Wednesday, January 04, 2012 ... 11am PDT"_ (1900 UTC)
   * (again, no release notes - build still 20111212.1)
