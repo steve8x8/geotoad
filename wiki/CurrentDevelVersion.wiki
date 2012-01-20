@@ -3,8 +3,10 @@
 
 version=3.15.2
 
+= . =
+
 {{{
-Please see the "CurrentDevelVersion" wiki page for recent changes if "What's new" isn't shown.
+(Please see the "CurrentDevelVersion" wiki page for recent changes if there's no list following.)
 }}}
 
 = New development version 3.15.2 =
@@ -21,7 +23,7 @@ Please see the "CurrentDevelVersion" wiki page for recent changes if "What's new
 
 = Development version 3.15.0 =
 
-Does not work any longer due to 2011-10-06 site update!
+  * Does not work any longer due to 2011-10-06 site update!
 
 = Fixes (after 3.14.7) =
   * issue 138: obsoleted by fixes for issues 198 and 205
