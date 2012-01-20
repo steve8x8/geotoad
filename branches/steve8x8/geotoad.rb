@@ -316,141 +316,164 @@ class GeoToad
     puts ""
     @filtered = Filter.new(@combinedWaypoints)
     debug "Filter running cycle 1, #{@filtered.totalWaypoints} caches left"
+
+    beforeFilterTotal = @filtered.totalWaypoints
     if @option['cacheType']
       @queryTitle = @queryTitle + ", type #{@option['cacheType']}"
       @defaultOutputFile = @defaultOutputFile + "-c" + @option['cacheType']
       @filtered.cacheType(@option['cacheType'])
     end
+    excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
+    if (excludedFilterTotal > 0)
+      displayMessage "cache type filtering removed #{excludedFilterTotal} caches from your listing."
+    end
 
     if $DTSFILTER
     #-------------------
+    beforeFilterTotal = @filtered.totalWaypoints
     if @option['difficultyMin']
       @queryTitle = @queryTitle + ", difficulty #{@option['difficultyMin']}+"
       @defaultOutputFile = @defaultOutputFile + "-d" + @option['difficultyMin'].to_s
       @filtered.difficultyMin(@option['difficultyMin'].to_f)
     end
-
     if @option['difficultyMax']
       @queryTitle = @queryTitle + ", difficulty #{@option['difficultyMax']} or lower"
       @defaultOutputFile = @defaultOutputFile + "-D" + @option['difficultyMax'].to_s
       @filtered.difficultyMax(@option['difficultyMax'].to_f)
     end
-
     if @option['terrainMin']
       @queryTitle = @queryTitle + ", terrain #{@option['terrainMin']}+"
       @defaultOutputFile = @defaultOutputFile + "-t" + @option['terrainMin'].to_s
       @filtered.terrainMin(@option['terrainMin'].to_f)
     end
-
     if @option['terrainMax']
       @queryTitle = @queryTitle + ", terrain #{@option['terrainMax']} or lower"
       @defaultOutputFile = @defaultOutputFile + "-T" + @option['terrainMax'].to_s
       @filtered.terrainMax(@option['terrainMax'].to_f)
     end
-
     if @option['sizeMin']
       @queryTitle = @queryTitle + ", size #{@option['sizeMin']}+"
       @defaultOutputFile = @defaultOutputFile + "-s" + @option['sizeMin'].to_s
       @filtered.sizeMin(@option['sizeMin'])
     end
-
     if @option['sizeMax']
       @queryTitle = @queryTitle + ", size #{@option['sizeMax']} or lower"
       @defaultOutputFile = @defaultOutputFile + "-S" + @option['sizeMax'].to_s
       @filtered.sizeMax(@option['sizeMax'])
     end
+    excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
+    if (excludedFilterTotal > 0)
+      displayMessage "D/T/S filtering removed #{excludedFilterTotal} caches from your listing."
+    end
     #-------------------
     end # $DTSFILTER
+
     debug "Filter running cycle 2, #{@filtered.totalWaypoints} caches left"
 
+    beforeFilterTotal = @filtered.totalWaypoints
     if @option['foundDateInclude']
       @queryTitle = @queryTitle + ", found in the last  #{@option['foundDateInclude']} days"
       @defaultOutputFile = @defaultOutputFile + "-r=" + @option['foundDateInclude'].to_s
       @filtered.foundDateInclude(@option['foundDateInclude'].to_f)
     end
-
     if @option['foundDateExclude']
       @queryTitle = @queryTitle + ", not found in the last #{@option['foundDateExclude']} days"
       @defaultOutputFile = @defaultOutputFile + "-R=" + @option['foundDateExclude'].to_s
       @filtered.foundDateExclude(@option['foundDateExclude'].to_f)
     end
-
     if @option['placeDateInclude']
       @queryTitle = @queryTitle + ", newer than #{@option['placeDateInclude']} days"
       @defaultOutputFile = @defaultOutputFile + "-j=" + @option['placeDateInclude'].to_s
       @filtered.placeDateInclude(@option['placeDateInclude'].to_f)
     end
-
     if @option['placeDateExclude']
       @queryTitle = @queryTitle + ", over #{@option['placeDateExclude']} days old"
       @defaultOutputFile = @defaultOutputFile + "-J=" + @option['placeDateExclude'].to_s
       @filtered.placeDateExclude(@option['placeDateExclude'].to_f)
     end
+    excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
+    if (excludedFilterTotal > 0)
+      displayMessage "Date filtering removed #{excludedFilterTotal} caches from your listing."
+    end
+
     debug "Filter running cycle 3, #{@filtered.totalWaypoints} caches left"
 
+    beforeFilterTotal = @filtered.totalWaypoints
     if @option['notFound']
       @queryTitle = @queryTitle + ", virgins only"
       @defaultOutputFile = @defaultOutputFile + "-n"
       @filtered.notFound
     end
+    excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
+    if (excludedFilterTotal > 0)
+      displayMessage "Unfound filtering removed #{excludedFilterTotal} caches from your listing."
+    end
 
+    beforeFilterTotal = @filtered.totalWaypoints
     if @option['travelBug']
       @queryTitle = @queryTitle + ", only with TB's"
       @defaultOutputFile = @defaultOutputFile + "-b"
       @filtered.travelBug
     end
+    excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
+    if (excludedFilterTotal > 0)
+      displayMessage "Trackable filtering removed #{excludedFilterTotal} caches from your listing."
+    end
 
-
-    beforeOwnersTotal = @filtered.totalWaypoints
+    beforeFilterTotal = @filtered.totalWaypoints
     if (@option['ownerExclude'])
       @queryTitle = @queryTitle + ", excluding caches by #{@option['ownerExclude']}"
       @option['ownerExclude'].split(/[:\|]/).each { |owner|
         @filtered.ownerExclude(owner)
       }
     end
-
     if (@option['ownerInclude'])
       @queryTitle = @queryTitle + ", excluding caches not by #{@option['ownerInclude']}"
       @option['ownerInclude'].split(/[:\|]/).each { |owner|
         @filtered.ownerInclude(owner)
       }
     end
-
-    excludedOwnersTotal = beforeOwnersTotal - @filtered.totalWaypoints
-    if (excludedOwnersTotal > 0)
-      displayMessage "Owner filtering removed #{excludedOwnersTotal} caches from your listing."
+    excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
+    if (excludedFilterTotal > 0)
+      displayMessage "Owner filtering removed #{excludedFilterTotal} caches from your listing."
     end
 
-    beforeUsersTotal = @filtered.totalWaypoints
+    beforeFilterTotal = @filtered.totalWaypoints
     if (@option['userExclude'])
       @option['userExclude'].split(/[:\|]/).each { |user|
         @filtered.userExclude(user)
       }
     end
-
     if (@option['userInclude'])
       @option['userInclude'].split(/[:\|]/).each { |user|
         @filtered.userInclude(user)
       }
     end
+    excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
+    if (excludedFilterTotal > 0)
+      displayMessage "User filtering removed #{excludedFilterTotal} caches from your listing."
+    end
 
+    beforeFilterTotal = @filtered.totalWaypoints
     if @option['titleKeyword']
       @queryTitle = @queryTitle + ", matching title keywords #{@option['titleKeyword']}"
       @defaultOutputFile = @defaultOutputFile + "-k=" + @option['titleKeyword']
       @filtered.titleKeyword(@option['titleKeyword'])
     end
-
-    excludedUsersTotal = beforeUsersTotal - @filtered.totalWaypoints
-    if (excludedUsersTotal > 0)
-      displayMessage "User filtering removed #{excludedUsersTotal} caches from your listing."
+    excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
+    if (excludedFilterTotal > 0)
+      displayMessage "Title keyword filtering removed #{excludedFilterTotal} caches from your listing."
     end
-
 
     displayMessage "First stage filtering complete, #{@filtered.totalWaypoints} caches left"
   end
 
 
-
+  def copyGeocaches
+    # don't load details, just copy from search results
+    wpFiltered = @filtered.waypoints
+    @detail = CacheDetails.new(wpFiltered)
+  end
 
   def fetchGeocaches
     # We should really check our local cache and shadowhosts first before
@@ -529,87 +552,98 @@ class GeoToad
     @filtered= Filter.new(@detail.waypoints)
 
     # caches with warnings we choose not to include.
+    beforeFilterTotal = @filtered.totalWaypoints
     if ! @option['includeDisabled']
-      displayMessage "Filtering out disabled caches"
       @filtered.removeByElement('disabled')
     end
+    excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
+    if (excludedFilterTotal > 0)
+      displayMessage "Disabled filtering removed #{excludedFilterTotal} caches from your listing."
+    end
 
+    beforeFilterTotal = @filtered.totalWaypoints
     if @option['descKeyword']
       @queryTitle = @queryTitle + ", matching desc keywords #{@option['descKeyword']}"
       @defaultOutputFile = @defaultOutputFile + "-K=" + @option['descKeyword']
       @filtered.descKeyword(@option['descKeyword'])
     end
+    excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
+    if (excludedFilterTotal > 0)
+      displayMessage "Keyword filtering removed #{excludedFilterTotal} caches from your listing."
+    end
 
     if not $DTSFILTER
     #-------------------
+    beforeFilterTotal = @filtered.totalWaypoints
     if @option['difficultyMin']
       @queryTitle = @queryTitle + ", difficulty #{@option['difficultyMin']}+"
       @defaultOutputFile = @defaultOutputFile + "-d" + @option['difficultyMin'].to_s
       @filtered.difficultyMin(@option['difficultyMin'].to_f)
     end
-
     if @option['difficultyMax']
       @queryTitle = @queryTitle + ", difficulty #{@option['difficultyMax']} or lower"
       @defaultOutputFile = @defaultOutputFile + "-D" + @option['difficultyMax'].to_s
       @filtered.difficultyMax(@option['difficultyMax'].to_f)
     end
-
     if @option['terrainMin']
       @queryTitle = @queryTitle + ", terrain #{@option['terrainMin']}+"
       @defaultOutputFile = @defaultOutputFile + "-t" + @option['terrainMin'].to_s
       @filtered.terrainMin(@option['terrainMin'].to_f)
     end
-
     if @option['terrainMax']
       @queryTitle = @queryTitle + ", terrain #{@option['terrainMax']} or lower"
       @defaultOutputFile = @defaultOutputFile + "-T" + @option['terrainMax'].to_s
       @filtered.terrainMax(@option['terrainMax'].to_f)
     end
-
     if @option['sizeMin']
       @queryTitle = @queryTitle + ", size #{@option['sizeMin']}+"
       @defaultOutputFile = @defaultOutputFile + "-s" + @option['sizeMin'].to_s
       @filtered.sizeMin(@option['sizeMin'])
     end
-
     if @option['sizeMax']
       @queryTitle = @queryTitle + ", size #{@option['sizeMax']} or lower"
       @defaultOutputFile = @defaultOutputFile + "-S" + @option['sizeMax'].to_s
       @filtered.sizeMax(@option['sizeMax'])
     end
+    excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
+    if (excludedFilterTotal > 0)
+      displayMessage "Diff/Terr/Size filtering removed #{excludedFilterTotal} caches from your listing."
+    end
     #-------------------
     end # not $DTSFILTER
 
+    beforeFilterTotal = @filtered.totalWaypoints
     if @option['funFactorMin']
       @queryTitle = @queryTitle + ", funFactor #{@option['funFactorMin']}+"
       @defaultOutputFile = @defaultOutputFile + "-f" + @option['funFactorMin'].to_s
       @filtered.funFactorMin(@option['funFactorMin'].to_f)
     end
-
     if @option['funFactorMax']
       @queryTitle = @queryTitle + ", funFactor #{@option['funFactorMax']} or lower"
       @defaultOutputFile = @defaultOutputFile + '-F' + @option['funFactorMax'].to_s
       @filtered.funFactorMax(@option['funFactorMax'].to_f)
     end
+    excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
+    if (excludedFilterTotal > 0)
+      displayMessage "FunFactor filtering removed #{excludedFilterTotal} caches from your listing."
+    end
 
     # We filter for users again. While this may be a bit obsessive, this is in case
     # our local cache is not valid.
-    beforeUsersTotal = @filtered.totalWaypoints
+    beforeFilterTotal = @filtered.totalWaypoints
     if (@option['userExclude'])
       @option['userExclude'].split(/[:\|]/).each { |user|
         @filtered.userExclude(user)
       }
     end
-
     if (@option['userInclude'])
       @option['userInclude'].split(/[:\|]/).each { |user|
         @filtered.userInclude(user)
       }
     end
-
-    excludedUsersTotal = beforeUsersTotal - @filtered.totalWaypoints
-    if (excludedUsersTotal > 0)
-      displayMessage "User filtering removed #{excludedUsersTotal} caches from your listing."
+    excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
+    if (excludedFilterTotal > 0)
+      displayMessage "User filtering removed #{excludedFilterTotal} caches from your listing."
     end
 
     beforeFilterTotal = @filtered.totalWaypoints
