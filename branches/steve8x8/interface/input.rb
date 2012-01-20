@@ -363,6 +363,7 @@ class Input
   6. All caches within a state
   7. By title keyword
   8. By waypoint ID
+  9. By waypoint GUID
 
 ", ['location', 'coord', 'user', 'owner', 'country', 'state', 'keyword', 'wid', 'guid'], 'location')
 
