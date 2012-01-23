@@ -211,17 +211,17 @@ class Output
     maxlength = @waypointLength #+ 1
     debug "shortname: \"#{name}\"" #+ " to max. #{maxlength}"
     tempname = name[0..0].upcase + name[1..-1]
-    tempname.gsub!(/[Cc][Aa][Cc][Hh][Ee]/, 'C')
-    tempname.gsub!(/[Ll][Oo][Ss][Tt][\s-]*[Pp][Ll][Aa][Cc][Ee]/, 'LP')
-    tempname.gsub!(/[Bb][Oo][Nn][Uu][Ss]/, 'BO')
-    tempname.gsub!(/[Ll][Ee][Tt][Tt][Ee][Rr][\s-]*[Bb][Oo][Xx]/, 'LBx')
-    tempname.gsub!(/[Dd][Rr][Ii][Vv][Ee][\s-]*[Ii][Nn]/, 'DrIn')
+    tempname.gsub!(/cache/i, 'C')
+    tempname.gsub!(/lost[\s-]*place/i, 'LP')
+    tempname.gsub!(/bonus/i, 'BO')
+    tempname.gsub!(/letter[\s-]*box/i, 'LBx')
+    tempname.gsub!(/drive[\s-]*in/i, 'DrIn')
     tempname.gsub!(/\s+\&amp;\s+/, ' + ')
     # not sure why this isn't being handled by the \W regexps, but
     # I'm taking care of it to fix a bug with caches with _ in their name.
     tempname.gsub!(/_/, '')
     tempname.gsub!(/[~\-\#]/, ' ')
-    tempname.gsub!(/\&quot;/, ' ')
+    tempname.gsub!(/\&quot;/, '"')
 
     # acronym.
     if tempname =~ /(\w)\. (\w)\. (\w)/
@@ -295,6 +295,18 @@ class Output
           newwords[-index] = word
         end
       end
+      # check for short enough
+      result = newwords[0..-1].join
+      if result.length <= maxlength
+        debug "shortname: returning \"#{result}\" (#{result.length})"
+        return result
+      end
+    }
+    # shorten by removing special characters
+    (1 .. wordcount).each { |index|
+      word = newwords[-index]
+      word.gsub!(/[\x21-\x2f\x3a-\x3e\x5b-\x60\x7b-\x7d]/, '')
+      newwords[-index] = word
       # check for short enough
       result = newwords[0..-1].join
       if result.length <= maxlength
