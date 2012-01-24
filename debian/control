@@ -2,7 +2,7 @@ Source: geotoad
 Section: utils
 Priority: optional
 Old-Maintainer: Joey Hess <joeyh@debian.org>
-Maintainer: Steffen Grunewald <steffen.grunewald@googlemail.com>
+Maintainer: Steve Sixty-Four <steve8x8@gmail.com>
 Build-Depends: debhelper (>= 4), quilt
 Standards-Version: 3.6.1
 
