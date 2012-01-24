@@ -1,7 +1,7 @@
 #summary Features of current development version
 #labels Featured,Experimental
 
-version=3.15.2
+version=3.15.3
 
 = . =
 
@@ -9,13 +9,23 @@ version=3.15.2
 (Please see the "CurrentDevelVersion" wiki page for recent changes if there's no list following.)
 }}}
 
+= New development version 3.15.3 =
+
+  * Please test the new features in the development version, making them ready for release!
+  * Note that there is a Debian way to get the latest updates (see Wiki)
+  * Versions 3.15.1 and 3.15.2 are still operational, with less features
+
+== Changes since previous version ==
+  * select/exclude by set/unset attributes (issue 218) - see README!
+  * "guid" query (issue 228) - which allows for bookmark list processing
+
 = New development version 3.15.2 =
 
 == Changes since last version ==
   * cookies are now really stored and re-used
   * better handling of foreign languages, Hungary and Romania added
 
-= New development version 3.15.1 (still operational) =
+= New development version 3.15.1 =
 
 == Changes since last version ==
   * merge changes 3.14.5 to 3.14.6 (hotfix)
