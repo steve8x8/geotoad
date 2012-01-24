@@ -1,3 +1,12 @@
+geotoad (3.15.3-1) unstable; urgency=low
+
+  * New development release 3.15.3
+  * Issue 218: select/exclude by attributes set/unset
+  * Issue 228: --query guid
+  * Use at your own risk!
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Tue, 24 Jan 2012 09:30:00 +0100
+
 geotoad (3.15.2-1) unstable; urgency=low
 
   * New development release 3.15.2
@@ -7,7 +16,7 @@ geotoad (3.15.2-1) unstable; urgency=low
   * Legacy hardware related: "mystery" caches will be translated to "unknown"
   * Use at your own risk!
 
- -- Steffen Grunewald <steffen.grunewald@googlemail.com>  Thu, 22 Dec 2011 20:00:00 +0200
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 22 Dec 2011 20:00:00 +0200
 
 geotoad (3.15.1-1) unstable; urgency=low
 
@@ -18,58 +27,58 @@ geotoad (3.15.1-1) unstable; urgency=low
   * Cookies now stored in YAML
   * Use at your own risk!
 
- -- Steffen Grunewald <steffen.grunewald@googlemail.com>  Thu, 13 Oct 2011 14:45:00 +0200
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 13 Oct 2011 14:45:00 +0200
 
 geotoad (3.15.0-1) unstable; urgency=low
 
   * New development release 3.15.0
   * Use at your own risk!
 
- -- Steffen Grunewald <steffen.grunewald@googlemail.com>  Sun, 11 Sep 2011 21:00:00 +0200
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Sun, 11 Sep 2011 21:00:00 +0200
 
 geotoad (3.14.5-1) unstable; urgency=low
 
   * New release 3.14.5
   * Several fixes and additions
 
- -- Steffen Grunewald <steffen.grunewald@googlemail.com>  Sun, 11 Sep 2011 20:00:00 +0200
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Sun, 11 Sep 2011 20:00:00 +0200
 
 geotoad (3.14.4-1) unstable; urgency=low
 
   * New release 3.14.4
   * Fixes issues caused by gc.com 2011-05-04 changes
 
- -- Steffen Grunewald <steffen.grunewald@googlemail.com>  Fri,  6 May 2011 18:00:00 +0200
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Fri,  6 May 2011 18:00:00 +0200
 
 geotoad (3.14.3-2) unstable; urgency=low
 
   * Fix Debian/Ubuntu build: set $LOAD_PATH (issue 199)
 
- -- Steffen Grunewald <steffen.grunewald@googlemail.com>  Mon, 28 Feb 2011 10:40:00 +0100
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Mon, 28 Feb 2011 10:40:00 +0100
 
 geotoad (3.14.3-1) unstable; urgency=low
 
   * New release 3.14.3
 
- -- Steffen Grunewald <steffen.grunewald@googlemail.com>  Wed, 12 Jan 2011 15:10:00 +0100
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Wed, 12 Jan 2011 15:10:00 +0100
 
 geotoad (3.14.2-1) unstable; urgency=low
 
   * New release 3.14.2
 
- -- Steffen Grunewald <steffen.grunewald@googlemail.com>  Wed, 12 Jan 2011 14:37:00 +0100
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Wed, 12 Jan 2011 14:37:00 +0100
 
 geotoad (3.14.1-1) unstable; urgency=low
 
   * New release 3.14.1
 
- -- Steffen Grunewald <steffen.grunewald@googlemail.com>  Sat, 04 Dec 2010 11:21:34 +0100
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Sat, 04 Dec 2010 11:21:34 +0100
 
 geotoad (3.13.0-1) unstable; urgency=low
 
   * After about 4 years without geotoad packaging, try to start again.
 
- -- Steffen Grunewald <steffen.grunewald@googlemail.com>  Thu, 11 Nov 2010 13:40:00 +0100
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 11 Nov 2010 13:40:00 +0100
 
 geotoad (3.9.0-4) unstable; urgency=low
 
