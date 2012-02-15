@@ -13,6 +13,11 @@ See also [http://forums.groundspeak.com/GC/index.php?showforum=89 Release Notes 
 _*(new entries will be added on top)*_
 
 ----
+2012-02-14:
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=290410 release notes]
+  * new server build: *{{{Web.HotFix_20120214.2}}}*
+  * _GeoToad misinterprets some lines as "last found" dates_*
+----
 2012-01-17:
   * _"Geocaching.com ... site update on Tuesday, January 17th, 2012 ... 11am PDT" (1900 UTC)
   * [http://forums.groundspeak.com/GC/index.php?showtopic=288931 release notes]
