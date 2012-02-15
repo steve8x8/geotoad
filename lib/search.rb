@@ -546,6 +546,11 @@ class SearchCache
       # GC change 2010-11-09
       line.gsub!(/&#39;/, '\'')
       case line
+      # catch 2012-02-14 changes
+      when /Hello, .* Profile for /
+        nil
+      when /All Rights Reserved\./
+        nil
       # <TD class="PageBuilderWidget"><SPAN>Total Records: <B>2938</B> - Page: <B>147</B> of <B>147</B>
       when /Total Records: \<b\>(\d+)\<\/b\> - Page: \<b\>(\d+)\<\/b\> of \<b\>(\d+)\<\/b\>/
         if not waypoints_total
