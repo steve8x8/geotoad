@@ -542,15 +542,13 @@ class SearchCache
       "Wyoming" => 51,
     }
 
+    inresultstable = false
     data.split("\n").each { |line|
       # GC change 2010-11-09
       line.gsub!(/&#39;/, '\'')
+
+      # stuff outside results table
       case line
-      # catch 2012-02-14 changes
-      when /Hello, .* Profile for /
-        nil
-      when /All Rights Reserved\./
-        nil
       # <TD class="PageBuilderWidget"><SPAN>Total Records: <B>2938</B> - Page: <B>147</B> of <B>147</B>
       when /Total Records: \<b\>(\d+)\<\/b\> - Page: \<b\>(\d+)\<\/b\> of \<b\>(\d+)\<\/b\>/
         if not waypoints_total
@@ -563,7 +561,24 @@ class SearchCache
           debug "Found next target: #{$1}"
           post_vars['__EVENTTARGET'] = $1
         end
+      when /^\<input type=\"hidden\" name=\"(.*?)\".*value=\"(.*?)\" \/\>/
+        debug "found hidden post variable: #{$1}"
+        post_vars[$1]=$2
+      # GC change 2012-02-14
+      # <table class="SearchResultsTable Table"> (search results) </table>
+      when /\<table class=.SearchResultsTable/
+        inresultstable = true
+      when /\<\/table\>/
+        inresultstable = false
+      end #case
 
+      # short-cut if not inside results table
+      if not inresultstable
+        next
+      end
+
+      # stuff strictly inside results table
+      case line
 # 2011-05-04: obsolete (match below!)
       #<IMG src="./gc_files/8.gif" alt="Unknown Cache" width="32" height="32"></A>
       #<img src="http://[...]/wpttypes/sm/8.gif" alt="Unknown Cache"[...]>
@@ -831,10 +846,6 @@ class SearchCache
         end
         # clear cache even if there's no wid (yet)
         cache.clear
-
-      when /^\<input type=\"hidden\" name=\"(.*?)\".*value=\"(.*?)\" \/\>/
-        debug "found hidden post variable: #{$1}"
-        post_vars[$1]=$2
 
       end # end case
     } # end loop
