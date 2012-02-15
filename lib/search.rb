@@ -579,23 +579,6 @@ class SearchCache
 
       # stuff strictly inside results table
       case line
-# 2011-05-04: obsolete (match below!)
-      #<IMG src="./gc_files/8.gif" alt="Unknown Cache" width="32" height="32"></A>
-      #<img src="http://[...]/wpttypes/sm/8.gif" alt="Unknown Cache"[...]>
-      when /cache_details.*\/WptTypes\/[\w].*?alt=\"(.*?)\"/
-        displayError "obsolete when line 514"
-
-# 2011-05-04: obsolete
-      # trackables: all in one separate line, usually after the cache type line
-      # <img src="http://www.geocaching.com/images/wpttypes/21.gif" alt="Travel Bug Dog Tag (1 item)" title="Travel Bug Dog Tag (1 item)" /> \
-      # ... <img src="/images/WptTypes/coins.gif" alt="Geocoins:  Happy Caching - Black Cat Geocoin (1), Geocaching meets Geodäsie Geocoin (1)" title="Geocoins:  Happy Caching - Black Cat Geocoin (1), Geocaching meets Geodäsie Geocoin (1)" />
-      # or
-      # <img src="/images/travelbugsicon.gif" alt="Travel Bug Dog Tag (2 items)" title="Travel Bug Dog Tag (2 items)" /> \
-      # ... <img src="http://www.geocaching.com/images/wpttypes/2934.gif" alt="Africa Geocoin (1 item(s))" title="Africa Geocoin (1 item(s))" />
-      # only count for TBs, coins by name - single-coin and multi-coin cases!
-      when /\/wpttypes\/\d+\.gif\".*?alt=\".*? \((.*?) item(\(s\))?\)\"/
-        displayError "obsolete when line 525"
-
       # new travelbug list 2010-12-22
       # single:
       # <a id="ctl00_ContentBody_dlResults_ctl01_uxTravelBugList" class="tblist" data-tbcount="1" data-id="1763522" data-guid="ecfd0038-8e51-4ac8-a073-1aebe7c10cbc" href="javascript:void();"><img src="http://www.geocaching.com/images/wpttypes/sm/21.gif" alt="Travel Bug Dog Tag" title="Travel Bug Dog Tag" /></a>
@@ -610,17 +593,6 @@ class SearchCache
         else
           cache['travelbug'] = "Unspecified Trackable"
         end
-
-# 2011-05-04: obsolete
-      # (2/1)<br />
-      # (1/1.5)<br />
-      when /\(([-\d\.]+)\/([-\d\.]+)\)\<br/
-        displayError "obsolete when line 546"
-
-# 2011-05-04: obsolete
-      # <img src="/images/icons/container/micro.gif" alt="Size: Micro" />
-      when /\<img src=\"\/images\/icons\/container\/.*\" alt=\"Size: (.*?)\"/
-        displayError "obsolete when line 551"
 
 # 2011-05-04: unchanged
       #                             11 Jul 10<br />
@@ -651,20 +623,6 @@ class SearchCache
         cache['ctime'] = parseDate($1)
         cache['cdays'] = daysAgo(cache['ctime'])
         debug "ctime=#{cache['ctime']} cdays=#{cache['cdays']}"
-
-# 2011-05-04: obsolete
-      #     <img src="/images/icons/compass/NW.gif" alt="NW" title="NW" />NW<br />0.1mi
-      # GC user prefs set to imperial units
-      when /\>([NWSE]+)\<br \/\>([\d\.]+)mi/
-        displayError "obsolete when line 587"
-      # or  <img src="/images/icons/compass/SE.gif" alt="SE" title="SE" />SE<br />6.7km
-      # GC user prefs set to metric units
-      when /\>([NWSE]+)\<br \/\>([\d\.]+)km/
-        displayError "obsolete when line 591"
-      # or just              <br />Here
-      when /^\s+\<br \/\>Here\s?$/
-        # less than 0.01 miles
-        displayError "obsolete when line 595"
 
 # 2011-05-04: unchanged
       # 2010-12-22:
@@ -764,11 +722,6 @@ class SearchCache
         creator = $1
         cache['creator'] = creator.gsub(/\s+$/, '')
         debug "creator=#{cache['creator']}"
-
-# 2011-05-04: obsolete
-      # (GC1Z0RT)<br />
-      when /^ +\((GC.*?)\)\<br \/\>/
-        displayError "obsolete when line 699"
 
 # 2011-05-04: new pattern (try to improve!)
       # | GCabcde | (over multiple lines!)
