@@ -1,7 +1,7 @@
 #summary Features of current version
 #labels Featured
 
-version=3.14.7
+version=3.14.8
 
 = . =
 
@@ -11,6 +11,12 @@ version=3.14.7
 
 == Important note: ==
   * Testers needed for the [CurrentDevelVersion development version]!
+
+= What's new in 3.14.8? =
+
+== Fixes for issues: ==
+  * 230: Hotfix: 2012-02-14 site update confused date parser
+  * 216: Multiple output formats (separated by ':' or '|')
 
 = What's new in 3.14.7? =
 
@@ -25,8 +31,6 @@ version=3.14.7
   * long options now documented in man page
 
 = What's new in 3.14.6? =
-
-3.14.6 is still operational, with smaller functionality.
 
 == Hotfix release ==
   * make GeoToad work again after 2011-10-06 site update

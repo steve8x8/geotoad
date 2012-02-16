@@ -1,7 +1,7 @@
 #summary GeoToad README.txt
 #labels Featured
 
-= GeoToad 3.14.7 by Thomas Stromberg and The GeoToad Project (c) 2002 - 2012 =
+= GeoToad 3.14.8 by Thomas Stromberg and The GeoToad Project (c) 2002 - 2012 =
 
 <wiki:toc max_depth="2" />
 
