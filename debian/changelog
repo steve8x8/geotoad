@@ -1,3 +1,12 @@
+geotoad (3.14.8-1) unstable; urgency=low
+
+  * New release 3.14.8
+  * Maintenance release
+  * Issue 230: Fix for 2012-02-14 site update
+  * Issue 216: Multiple output formats
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 16 Feb 2012 14:00:00 +0100
+
 geotoad (3.14.7-1) unstable; urgency=low
 
   * New release 3.14.7
