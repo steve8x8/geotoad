@@ -525,7 +525,7 @@ class Output
     text = CGI.unescapeHTML(str)
 
     # compactify whitespace
-    text.gsub!(/[\r\n]+/m, ' ') #
+    text.gsub!(/[\r\n]+/m, "\n") # was ' '
 
     # rip some tags out.
     text.gsub!(/\<\/li\>/i, '')
@@ -554,15 +554,23 @@ class Output
     text.gsub!(/\<.*?\>/m, '')
     text.gsub!(/\&nbsp\;/, ' ')
     text.gsub!(/\&quot\;/, '"')
+    text.gsub!(/\&bdquo\;/, '"')
+    text.gsub!(/\&ldquo\;/, '"')
+    text.gsub!(/\&rdquo\;/, '"')
     text.gsub!(/\&apos\;/, "'")
+    text.gsub!(/\&sbquo\;/, "'")
+    text.gsub!(/\&lsquo\;/, "'")
     text.gsub!(/\&rsquo\;/, "'")
-    text.gsub!(/\&ndash;/, " - ")
+    text.gsub!(/\&ndash;/, ' - ')
+    text.gsub!(/\&mdash;/, ' -- ')
+    text.gsub!(/\&hellip;/, '...')
     text.gsub!(/\&deg;/, "'")
 
     text.gsub!(/\n\n\n+/, "\n\n")
     # unprintable characters
     text.gsub!(/[\x01-\x09\x0B-\x1F\x7F]/, '')
-
+    # remaining &s
+    text.gsub!(/\&/, '+')
     # kill trailing space, which makes the CSV output nicer.
     text.gsub!(/\s+$/, '')
     text.gsub!(/^\s+/m, '')
@@ -960,6 +968,8 @@ class Output
 
     if @username and cache['visitors'].include?(@username)
       symbol = 'Geocache Found'
+    elsif cache['atime'].to_i > $ZEROTIME
+      symbol = 'Geocache Found'
     else
       symbol = 'Geocache'
     end
@@ -1001,8 +1011,9 @@ class Output
       }
     end
 
-    # trackables in XML
+    # trackables in XML and text
     xmlTrackables = ''
+    txtTrackables = ''
     if cache['travelbug'].to_s.length > 0
       cache['travelbug'].split(', ').each { |tbname|
         # we don't have the real trackable ref or id
@@ -1016,10 +1027,14 @@ class Output
         xmlTrackables << "    <groundspeak:travelbug id=\"#{tbid}\" ref=\"#{tbref}\">\r\n"
         xmlTrackables << "      <groundspeak:name>" + makeXML(tbname) + "</groundspeak:name>\r\n"
         xmlTrackables << "    </groundspeak:travelbug>\r\n"
+        txtTrackables << makeText(tbname) + "\r\n"
       }
     end
     if xmlTrackables.length > 0
       debug "Generated trackables XML: #{xmlTrackables}"
+    end
+    if txtTrackables.length > 0
+      debug "Generated trackables text: #{txtTrackables}"
     end
 
     variables = {
@@ -1103,15 +1118,15 @@ class Output
       counter += 1
       @outVars = createExtraVariablesForWid(wid, symbolHash, @outputFormat.fetch('usesLocation', false))
       @outVars['counter'] = counter
-      if @outputType =~ /gpx/
+      #if @outputType =~ /gpx/
         @outVars['gpxlogs'] = createGpxCommentLogs(cache)
-      end
-      if @outputType =~ /text/
+      #end
+      #if @outputType =~ /text/
         @outVars['textlogs'] = createTextCommentLogs(cache)
-      end
-      if @outputType =~ /html/
+      #end
+      #if @outputType =~ /html/
         @outVars['htmllogs'] = createHTMLCommentLogs(cache)
-      end
+      #end
       output << replaceVariables(@outputFormat['templateWP'], wid)
     }
 

@@ -509,6 +509,10 @@ class CacheDetails
     if comments.length > 0
       cache['last_find_type'] = comments[0]['type']
       cache['last_find_days'] = daysAgo(comments[0]['date'])
+      # Remove possibly unpaired font tags (issue 231)
+      (0...comments.length).each { |c|
+        cache['comments'][c]['text'].gsub!(/\<\/?font[^\>]*\>/, '')
+      }
     end
 
     if (not cache['mdays'] or cache['mdays'] == -1) and last_find_date
@@ -519,6 +523,14 @@ class CacheDetails
     if not cache['ctime']
       cache['cdays'] = -1
       cache['ctime'] = Time.now
+    end
+
+    # if event is in the past (yesterday or before) it's unavailable
+    if cache['event'] and cache['ctime']
+      if cache['cdays'] > 0
+        debug "Disabling past event cache #{wid.inspect} (#{cache['cdays']} days)"
+        cache['disabled'] = true
+      end
     end
 
     # more patchwork for inaccessible stuff

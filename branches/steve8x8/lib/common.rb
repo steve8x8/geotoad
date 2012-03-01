@@ -45,22 +45,22 @@ module Common
     # en|de|fr|pt|cs
     # sv/nb|nl|ca|pl|et
     # es|hu|ro
-    when /^(Today|Heute|Hier|Hoje|Dnes)\*/
+    when /^(Today|Heute|Hier|Hoje|Dnes)\*/i
       debug "date: Today"
       days_ago=0
-    when /^(I ?dag|Vandaag|Avui|Dzisiaj|T.{1,2}na)\*/
+    when /^(I ?dag|Vandaag|Avui|Dzisiaj|T.{1,2}na)\*/i
       debug "date: Today"
       days_ago=0
-    when /^(Hoy|Ma|Azi)\*/
+    when /^(Hoy|Ma|Azi)\*/i
       debug "date: Today"
       days_ago=0
-    when /^(Yesterday|Gestern|Aujourd.{1,2}hui|Ontem|V.{1,2}era)\*/
+    when /^(Yesterday|Gestern|Aujourd.{1,2}hui|Ontem|V.{1,2}era)\*/i
       debug "date: Yesterday"
       days_ago=1
-    when /^(I ?g.{1,2}r|Gisteren|Ahir|Wczoraj|Eile)\*/
+    when /^(I ?g.{1,2}r|Gisteren|Ahir|Wczoraj|Eile)\*/i
       debug "date: Yesterday"
       days_ago=1
-    when /^(Ayer|Tegnap|Ieri)\*/
+    when /^(Ayer|Tegnap|Ieri)\*/i
       debug "date: Yesterday"
       days_ago=1
     # Eesti: 6 päeva tagasi*
