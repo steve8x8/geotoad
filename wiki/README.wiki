@@ -1,7 +1,7 @@
 #summary GeoToad README.txt
 #labels Featured
 
-= GeoToad 3.14.8 by Thomas Stromberg and The GeoToad Project (c) 2002 - 2012 =
+= GeoToad 3.14.9 by Thomas Stromberg and The GeoToad Project (c) 2002 - 2012 =
 
 <wiki:toc max_depth="2" />
 
@@ -34,7 +34,7 @@ You will then see a screen that looks similar to this:
 {{{
 
 ==============================================================================
-:::                // GeoToad 3.14.7 Text User Interface //                :::
+:::                // GeoToad 3.14.9 Text User Interface //                :::
 ==============================================================================
 (1)  GC.com login [REQUIRED         ] | (2)  search type          [coord     ]
 (3)  location     [N52 23.0 E13 03.0] | (4)  distance maximum (km)     [10   ]
@@ -75,15 +75,15 @@ geocaches that have not been found in your area.
 
 If you go to the command line, and run {{{geotoad -h}}}, you will get a screen
 with a list of of options such as the following:
-{{{
 
+{{{
 syntax: geotoad [options] <search:search2:search3>
 
  -u <username>          Geocaching.com username, required for coordinates
  -p <password>          Geocaching.com password, required for coordinates
  -o [filename]          output file name (automatic otherwise)
  -x [format]            output format type, see list below
- -q [location|coord|user|owner|country|state|keyword|wid]
+ -q [location|coord|user|owner|country|state|keyword|wid|guid]
                         query type (location by default)
  -d/-D [1.0-5.0]        difficulty minimum/maximum
  -t/-T [1.0-5.0]        terrain minimum/maximum
@@ -99,6 +99,7 @@ syntax: geotoad [options] <search:search2:search3>
                         type of cache (| separated)
  -j/-J [# days]         include/exclude caches placed in the last X days
  -r/-R [# days]         include/exclude caches found in the last X days
+ -a/-A [attribute]      include/exclude caches with attributes set
  -z                     include disabled caches
  -n                     only include not found caches (virgins)
  -b                     only include caches with travelbugs
@@ -181,3 +182,13 @@ Makes a pretty HTML file out of it.
 If your search item starts with a dash, not to confuse the command line parser
 you will have to insert a '--' (double dash) into the command line right at the
 end of all options.
+
+  * {{{geotoad.rb ... -A 15- ...}}}
+Exclude all caches which are tagged as "Not available for winter".
+(See the FAQ for a list of attributes.)
+
+  * {{{geotoad.rb ... -a 52 ...}}}
+Select only "night cache"s.
+
+  * {{{geotoad.rb ... -a 6 -A 57 ...}}}
+Select caches "recommended for kids" not longer than 10km.
