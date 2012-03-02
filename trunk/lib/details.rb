@@ -473,6 +473,10 @@ class CacheDetails
     if comments.length > 0
       cache['last_find_type'] = comments[0]['type']
       cache['last_find_days'] = daysAgo(comments[0]['date'])
+      # Remove possibly unpaired font tags (issue 231)
+      (0...comments.length).each { |c|
+        cache['comments'][c]['text'].gsub!(/\<\/?font[^\>]*\>/, '')
+      }
     end
 
     if (not cache['mdays'] or cache['mdays'] == -1) and last_find_date
