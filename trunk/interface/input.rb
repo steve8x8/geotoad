@@ -231,7 +231,7 @@ class Input
 
     puts " -o [filename]          output file name (automatic otherwise)"
     puts " -x [format]            output format type, see list below"
-    puts " -q [location|coord|user|owner|country|state|keyword|wid]"
+    puts " -q [location|coord|user|owner|country|state|keyword|wid|guid]"
     puts "                        query type (location by default)"
 
     puts " -d/-D [1.0-5.0]        difficulty minimum/maximum"
@@ -358,8 +358,9 @@ class Input
   6. All caches within a state
   7. By title keyword
   8. By waypoint ID
+  9. By waypoint GUID
 
-", ['location', 'coord', 'user', 'owner', 'country', 'state', 'keyword', 'wid'], 'location')
+", ['location', 'coord', 'user', 'owner', 'country', 'state', 'keyword', 'wid', 'guid'], 'location')
 
         # Clear the query argument if the type has changed.
         if @@optHash['queryType'] != chosen
@@ -381,6 +382,9 @@ class Input
 
         when 'wid'
           @@optHash['queryArg'] = ask('Enter a list of waypoint id\'s (separated by commas)', 'NO_DEFAULT').gsub(/, */, ':')
+
+        when 'guid'
+          @@optHash['queryArg'] = ask('Enter a list of guid\'s (separated by commas)', 'NO_DEFAULT').gsub(/, */, ':')
 
         when 'user'
           @@optHash['queryArg'] = ask('Enter a list of users (separated by commas)', 'NO_DEFAULT').gsub(/, */, ':')
@@ -816,6 +820,8 @@ class Input
       return 'wid'
     when /waypoint/
       return 'wid'
+    when /guid/
+      return 'guid'
     when /user/
       return 'user'
     when /own/
