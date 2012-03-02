@@ -489,6 +489,14 @@ class CacheDetails
       cache['ctime'] = Time.now
     end
 
+    # if event is in the past (yesterday or before) it's unavailable
+    if cache['event'] and cache['ctime']
+      if cache['cdays'] > 0
+        debug "Disabling past event cache #{wid.inspect} (#{cache['cdays']} days)"
+        cache['disabled'] = true
+      end
+    end
+
     # more patchwork for inaccessible stuff
     if not cache['difficulty']
       cache['difficulty'] = 1
