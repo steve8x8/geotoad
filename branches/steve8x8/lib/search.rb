@@ -380,6 +380,9 @@ class SearchCache
       when /\+\((GC\w+)\)\+[^>]+>Google Maps/
         wid = $1
         debug "Found WID: #{wid}"
+      when /\<meta name=.og:url.\s+content=.http:\/\/coord.info\/(GC\w+)./
+        wid = $1
+        debug "Found WID: #{wid}"
       # for filtering; don't care about ".0" representation
       when /_uxLegendScale.*?(\d(\.\d)?) out of/
         cdiff = tohalfint($1)
