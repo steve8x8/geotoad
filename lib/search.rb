@@ -122,6 +122,10 @@ class SearchCache
     when 'wid'
       @query_type = 'wid'
       @search_url = "http://www.geocaching.com/seek/cache_details.aspx?wp=#{key.upcase}"
+
+    when 'guid'
+      @query_type = 'guid'
+      @search_url = "http://www.geocaching.com/seek/cache_details.aspx?guid=#{key.downcase}"
     end
 
     if not @query_type
@@ -329,6 +333,17 @@ class SearchCache
       end
       @waypoints[@query_arg] = waypoint
       return @waypoints
+    elsif @query_type == 'guid'
+      waypoint = getWidSearchResult(@search_url)
+      wid = waypoint['wid']
+      # did we find a WID?
+      if wid
+        waypoint['guid'] = @query_arg
+        @waypoints[wid] = waypoint
+      else
+        displayWarning "Could not identify; member-only cache?"
+      end
+      return @waypoints
     else
       return searchResults(@search_url)
     end
@@ -340,38 +355,59 @@ class SearchCache
       displayError "No data to be analyzed! Check network connection!"
     end
     guid = nil
-    if data =~ /cdpf\.aspx\?guid=([\w-]+)/m
-      guid = $1
-      debug "Found GUID: #{guid}"
-    end
     wid = nil
-    if data =~ /\+\((GC\w+)\)\+[^>]+>Google Maps/m
-      wid = $1
-      debug "Found WID: #{wid}"
-    end
     disabled = false
-    if data =~ /Cache Issues:.*class=.OldWarning..*This cache is temporarily unavailable/
-      disabled = true
-      debug "Cache appears to be disabled"
-    end
     archived = false
-    if data =~ /Cache Issues:.*class=.OldWarning..*This cache has been archived/
-      archived = true
-      debug "Cache appears to be archived"
-    end
     membersonly = false
     country = nil
     state = nil
+    ctype = 'Unknown Cache'
+    owner = nil
+    csize = nil
+    cdiff = nil
+    cterr = nil
     data.split("\n").each { |line|
       line.gsub!(/&#39;/, '\'')
       case line
       when /Premium Member Only Cache/
         membersonly = true
-      when /\s+GC.*\(.*\) in ((.*), )?(.*) created by (.*)/
-        country = $3
-        state = $2
+      when /^\s+GC.*\((.*)\) in ((.*), )?(.*) created by (.*?)\s*$/
+        ctype = $1
+        state = $3
+        country = $4
+        owner = $5
+        debug "#{ctype} by #{owner} in #{country}/#{state}"
+      when /\+\((GC\w+)\)\+[^>]+>Google Maps/
+        wid = $1
+        debug "Found WID: #{wid}"
+      when /\<meta name=.og:url.\s+content=.http:\/\/coord.info\/(GC\w+)./
+        wid = $1
+        debug "Found WID: #{wid}"
+      # for filtering; don't care about ".0" representation
+      when /_uxLegendScale.*?(\d(\.\d)?) out of/
+        cdiff = tohalfint($1)
+        debug "Found D: #{cdiff}"
+      when /_Localize12.*?(\d(\.\d)?) out of/
+        cterr = tohalfint($1)
+        debug "Found T: #{cterr}"
+      when /alt=.Size: .*\((.*?)\)/
+        csize = $1.downcase
+        debug "Found size: #{csize}"
       end
     }
+    # one match is enough!
+    if data =~ /cdpf\.aspx\?guid=([\w-]+)/m
+      guid = $1
+      debug "Found GUID: #{guid}"
+    end
+    if data =~ /Cache Issues:.*class=.OldWarning..*This cache is temporarily unavailable/
+      disabled = true
+      debug "Cache appears to be disabled"
+    end
+    if data =~ /Cache Issues:.*class=.OldWarning..*This cache has been archived/
+      archived = true
+      debug "Cache appears to be archived"
+    end
 
     cache_data = {
       'guid' => guid,
@@ -380,7 +416,13 @@ class SearchCache
       'archived' => archived,
       'membersonly' => membersonly,
       'country' => country,
-      'state' => state
+      'state' => state,
+      'creator' => owner,
+      'fulltype' => ctype,
+      'type' => ctype.split(' ')[0].downcase.gsub(/\-/, ''),
+      'size' => csize,
+      'difficulty' => cdiff,
+      'terrain' => cterr
     }
     return cache_data
   end
