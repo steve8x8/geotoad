@@ -127,6 +127,14 @@ include caches found in the last X days
 \fB-R \fR\fIX\fR, \fB--foundDateExclude=\fR\fIX\fR
 exclude caches found in the last X days
 .TP
+\fB-a \fR\fIid[-]\fR, \fB--attributeInclude=\fR\fIid[-]\fR
+\fB(MULTI)\fR
+select caches with attribute ID id set to "yes", or to "no" if "-" suffix
+.TP
+\fB-A \fR\fIid[-]\fR, \fB--attributeExclude=\fR\fIid[-]\fR
+\fB(MULTI)\fR
+exclude caches with attribute ID id set to "yes", or to "no" if "-" suffix
+.TP
 \fB-z\fR, \fB--includeDisabled\fR
 include disabled caches
 .TP

@@ -113,6 +113,7 @@ syntax: geotoad [options] <search:search2:search3>
                         type of cache (| separated)
  -j/-J [# days]         include/exclude caches placed in the last X days
  -r/-R [# days]         include/exclude caches found in the last X days
+ -a/-A [attribute]      include/exclude caches with attributes set
  -z                     include disabled caches
  -n                     only include not found caches (virgins)
  -b                     only include caches with travelbugs
@@ -197,3 +198,13 @@ Makes a pretty HTML file out of it.
 If your search item starts with a dash, not to confuse the command line parser
 you will have to insert a '--' (double dash) into the command line right at the
 end of all options.
+
+ - geotoad.rb ... -A 15- ...
+Exclude all caches which are tagged as "Not available for winter".
+(See the FAQ for a list of attributes.)
+
+ - geotoad.rb ... -a 52 ...
+Select only "night cache"s.
+
+ - geotoad.rb ... -a 6 -A 57 ...
+Select caches "recommended for kids" not longer than 10km.
