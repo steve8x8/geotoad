@@ -199,7 +199,52 @@ class Filter
       end
     }
   end
-    
+
+  # attributes: cache["attribute#{id}id"] cache["attribute#{id}inc"]
+  def attributeExclude(id)
+    aid = id.to_i
+    # remove only if attribute set to "no"
+    checkfor = ((id =~ /-$/) != nil)?0:1
+    debug "filtering by notAttribute: #{id}"
+    @waypointHash.delete_if { |wid, values|
+      dodelete = false
+      cnt = @waypointHash[wid]['attributeCount']
+      if cnt
+        (0...cnt).each { |attr|
+          if (@waypointHash[wid]["attribute#{attr}id"] == aid)
+            ainc = @waypointHash[wid]["attribute#{attr}inc"]
+            debug "attribute check #{aid} for #{wid}: #{ainc}==#{checkfor}?"
+            dodelete = true if (ainc == checkfor)
+          end
+        }
+      end
+      debug "#{wid} selected for removal" if dodelete
+      dodelete
+    }
+  end
+
+  def attributeInclude(id)
+    aid = id.to_i
+    # always remove unless attribute set to "yes"
+    checkfor = ((id =~ /-$/) != nil)?0:1
+    debug "filtering by Attribute: #{id}"
+    @waypointHash.delete_if { |wid, values|
+      dodelete = true
+      cnt = @waypointHash[wid]['attributeCount']
+      if cnt
+        (0...cnt).each { |attr|
+          if (@waypointHash[wid]["attribute#{attr}id"] == aid)
+            ainc = @waypointHash[wid]["attribute#{attr}inc"]
+            debug "attribute check #{aid} for #{wid}: #{ainc}!=#{checkfor}?"
+            dodelete = false  if (ainc == checkfor)
+          end
+        }
+      end
+      debug "#{wid} selected for removal" if dodelete
+      dodelete
+    }
+  end
+
   def titleKeyword(string)
     debug "filtering by title keyword: #{string}"
     @waypointHash.each_key { |wid|
