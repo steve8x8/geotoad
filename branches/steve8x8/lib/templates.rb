@@ -10,7 +10,7 @@ $Format = {
     'desc'    => 'gpspoint datafile',
     'templatePre'    => "GPSPOINT DATA FILE\ntype=\"fileinfo\"  version=\"1.00\"\n" +
       "type=\"programinfo\" program=\"geotoad\" version=\"0.0\"\n",
-    'templateWP'        => "type=\"waypoint\" latdata=\"<%wp.latdata%>\" londata=\"<%wp.londata%>\" " +
+    'templateWP'        => "type=\"waypoint\" latdata=\"<%out.latdatapad6%>\" londata=\"<%out.londatapad6%>\" " +
       "name=\"<%out.id%>\" comment=\"<%wp.name%>\" " +
       "symbol=\"flag\"  display_option=\"symbol+name\"\n",
   },
@@ -21,7 +21,7 @@ $Format = {
     'desc'    => 'Geocaching.com .loc XML file',
     'templatePre'    => "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><loc version=\"1.0\" src=\"EasyGPS\">",
     'templateWP'    => "<waypoint><name id=\"<%out.id%>\"><![CDATA[<%wp.name%>]]></name>" +
-      "<coord lat=\"<%wp.latdata%>\" lon=\"<%wp.londata%>\"/>" +
+      "<coord lat=\"<%out.latdatapad6%>\" lon=\"<%out.londatapad6%>\"/>" +
       "<type>geocache</type><link text=\"Cache Details\"><%wp.url%></link></waypoint>",
     'templatePost'    => '</loc>',
   },
@@ -42,7 +42,7 @@ $Format = {
       "<email>geotoad@googlegroups.com</email>\r\n" +
       "<time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S")  + ".000Z</time>\r\n" +
       "<keywords>cache, geocache, groundspeak, geotoad</keywords>\r\n",
-    'templateWP'    => "<wpt lat=\"<%wp.latdata%>\" lon=\"<%wp.londata%>\">\r\n" +
+    'templateWP'    => "<wpt lat=\"<%out.latdatapad6%>\" lon=\"<%out.londatapad6%>\">\r\n" +
       "  <time><%out.XMLDate%></time>\r\n" +
       "  <name><%outEntity.id%></name>\r\n" +
       "  <desc><%wpEntity.name%> by <%wpEntity.creator%>, <%wp.type%> (<%wp.difficulty%>/<%wp.terrain%>)</desc>\r\n" +
@@ -89,7 +89,7 @@ $Format = {
       "<email>geotoad@googlegroups.com</email>\r\n" +
       "<time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S")  + ".000Z</time>\r\n" +
       "<keywords>cache, geocache, groundspeak, geotoad</keywords>\r\n",
-    'templateWP'    => "<wpt lat=\"<%wp.latdata%>\" lon=\"<%wp.londata%>\">\r\n" +
+    'templateWP'    => "<wpt lat=\"<%out.latdatapad6%>\" lon=\"<%out.londatapad6%>\">\r\n" +
       "  <time><%out.XMLDate%></time>\r\n" +
       "  <name><%outEntity.id%></name>\r\n" +
       "  <desc><%wpEntity.name%> by <%wpEntity.creator%>, <%wp.type%> (<%wp.difficulty%>/<%wp.terrain%>)</desc>\r\n" +
@@ -153,7 +153,7 @@ $Format = {
       "<desc><%outEntity.title%></desc>\n" +
       "<author>GeoToad <%outEntity.version%></author>\n" +
       "<time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S")  + ".000Z</time>\n",
-    'templateWP'    => "<wpt lat=\"<%wp.latdata%>\" lon=\"<%wp.londata%>\">\n" +
+    'templateWP'    => "<wpt lat=\"<%out.latdatapad6%>\" lon=\"<%out.londatapad6%>\">\n" +
       "  <name>" + '<![CDATA[' + "<%outEntity.id%>" + ']]>' + "</name>\n" +
       "  <desc>" + '<![CDATA[' +
         "<%outEntity.wid%>:<%wpText.name%>\n=== <%wp.type%> (D:<%wp.difficulty%>/T:<%wp.terrain%>/F:<%wp.funfactor%>/S:<%wp.size%>) by <%wpText.creator%>\n" +
@@ -233,7 +233,7 @@ $Format = {
     'mime'    => 'text/plain',
     'desc'    =>     'Tab Delimited (GPS Connect)',
     'templatePre' => "",
-    'templateWP'    => "<%out.id%>\t<%wp.latdata%>\t<%wp.londata%>\t0\r\n"
+    'templateWP'    => "<%out.id%>\t<%out.latdatapad6%>\t<%out.londatapad6%>\t0\r\n"
   },
 
   'csv'    => {
@@ -422,7 +422,7 @@ $Format = {
     'mime'         => 'application/delorme',
     'desc'         => 'DeLorme TXT import datafile',
     'templatePre'  => "BEGIN SYMBOL\n",
-    'templateWP'   => "<%wp.latdata%>,<%wp.londata%>," +
+    'templateWP'   => "<%out.latdatapad6%>,<%out.londatapad6%>," +
       "<%out.id%>\{URL=<%wp.url%>\},<%wp.type%>\n",
     'templatePost' => "END",
   },
@@ -432,7 +432,7 @@ $Format = {
     'mime'         => 'application/delorme',
     'desc'         => 'DeLorme TXT import datafile without URL',
     'templatePre'  => "BEGIN SYMBOL\n",
-    'templateWP'   => "<%wp.latdata%>,<%wp.londata%>," +
+    'templateWP'   => "<%out.latdatapad6%>,<%out.londatapad6%>," +
       "<%out.id%>,<%wp.type%>\n",
     'templatePost' => "END",
   },
