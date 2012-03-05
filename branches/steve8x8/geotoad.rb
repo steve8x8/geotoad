@@ -763,7 +763,11 @@ while(1)
     cli.clearCacheDirectory()
   end
 
-  count = cli.downloadGeocacheList()
+  # avoid login if clearing only
+  count = 0
+  if options['queryArg']
+    count = cli.downloadGeocacheList()
+  end
   if count < 1
     cli.displayWarning "No caches found in search, exiting early."
   else

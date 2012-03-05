@@ -892,6 +892,9 @@ class Output
               wplon = 0
               hidden = true
             end
+            # convert to shortened strings
+            wplat = sprintf("%2.6f", wplat)
+            wplon = sprintf("%2.6f", wplon)
           end
         else
           # second row of two
@@ -949,8 +952,8 @@ class Output
     end
 
     if cache['distance'] and cache['direction']
-      relative_distance = sprintf("%.1f",cache['distance']) + 'mi@' + cache['direction']
-      relative_distance_km = sprintf("%.1f",(cache['distance'] * 1.609344)) + 'km@' + cache['direction']
+      relative_distance = sprintf("%.1f", cache['distance'] || 0.0) + 'mi@' + (cache['direction'] || 'N')
+      relative_distance_km = sprintf("%.1f", (cache['distance'] * 1.609344) || 0.0) + 'km@' + (cache['direction'] || 'N')
     else
       relative_distance = 'N/A'
       relative_distance_km = 'N/A'
@@ -1048,10 +1051,10 @@ class Output
       'adate' => cache['atime'].strftime("%Y-%m-%d"),
       'size' => cache['size'].gsub(/ /, '_'),
       'XMLDate' => cache['ctime'].strftime("%Y-%m-%dT07:00:00.000Z"),
-      'latdatapad5' => sprintf("%2.5f", cache['latdata']),
-      'londatapad5' => sprintf("%2.5f", cache['londata']),
-      'latdatapad6' => sprintf("%2.6f", cache['latdata']),
-      'londatapad6' => sprintf("%2.6f", cache['londata']),
+      'latdatapad5' => sprintf("%2.5f", cache['latdata'] || 0.0),
+      'londatapad5' => sprintf("%2.5f", cache['londata'] || 0.0),
+      'latdatapad6' => sprintf("%2.6f", cache['latdata'] || 0.0),
+      'londatapad6' => sprintf("%2.6f", cache['londata'] || 0.0),
       'maps_url' => "#{GOOGLE_MAPS_URL}?q=#{coord_query}",
       'IsAvailable' => (available==true).to_s.capitalize,
       'IsArchived' => (archived==true).to_s.capitalize,
