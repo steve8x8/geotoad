@@ -1,0 +1,31 @@
+--- a/interface/input.rb	2011-06-29 14:00:27.000000000 +0200
++++ b/interface/input.rb	2011-07-19 12:04:56.000000000 +0200
+@@ -170,7 +170,7 @@
+ 
+ 
+     # demonstrate a sample command line
+-    cmdline = "geotoad.rb"
++    cmdline = "geotoad"
+     hidden_opts = ['queryArg', 'outDir', 'outFile', 'user', 'password', 'usemetric']
+ 
+     @@optHash.keys.sort.each { |option|
+@@ -214,7 +214,7 @@
+ 
+ 
+   def usage
+-    puts "::: SYNTAX: geotoad.rb [options] <search>"
++    puts "::: SYNTAX: geotoad [options] <search>"
+     puts ""
+     puts " -u <username>          Geocaching.com username, required for coordinates"
+     puts " -p <password>          Geocaching.com password, required for coordinates"
+@@ -272,8 +272,8 @@
+     puts "    + requires gpsbabel in PATH           = requires cmconvert in PATH"
+     puts ""
+     puts "::: EXAMPLES:"
+-    puts "  geotoad.rb -u helixblue -p password 27502"
+-    puts "  geotoad.rb -u john -p password -d 3 -s helixblue -f vcf -o NC.vcf \'North Carolina\'"
++    puts "  geotoad -u helixblue -p password 27502"
++    puts "  geotoad -u john -p password -d 3 -s helixblue -f vcf -o NC.vcf \'North Carolina\'"
+   end
+ 
+   def showMenu

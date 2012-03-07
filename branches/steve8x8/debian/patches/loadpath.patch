@@ -1,0 +1,17 @@
+--- geotoad.orig/geotoad.rb	2011-01-22 19:31:03.000000000 +0100
++++ geotoad/geotoad.rb	2011-02-28 10:33:29.000000000 +0100
+@@ -2,9 +2,11 @@
+ #
+ # This is the main geotoad binary.
+ #
+-$LOAD_PATH << File.dirname(__FILE__.gsub(/\\/, '/'))
+-$LOAD_PATH << File.dirname(__FILE__.gsub(/\\/, '/')) + '/lib'
+-$LOAD_PATH << (File.dirname(__FILE__.gsub(/\\/, '/')) + '/' + '..')
++# For Debian/Ubuntu, modules are below /usr/share/geotoad
++#$LOAD_PATH << File.dirname(__FILE__.gsub(/\\/, '/'))
++#$LOAD_PATH << File.dirname(__FILE__.gsub(/\\/, '/')) + '/lib'
++#$LOAD_PATH << (File.dirname(__FILE__.gsub(/\\/, '/')) + '/' + '..')
++$LOAD_PATH << '/usr/share/geotoad'
+ 
+ if RUBY_VERSION.gsub('.', '').to_i < 180
+   puts "ERROR: The version of Ruby your system has installed is #{RUBY_VERSION}, but we now require 1.8.0 or higher"
