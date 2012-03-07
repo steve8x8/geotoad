@@ -196,9 +196,38 @@ class GeoToad
   end
 
   def clearCacheDirectory
-    puts "* Clearing #{$CACHE_DIR}"
-    FileUtils::remove_dir($CACHE_DIR)
-    puts "* Cleared!"
+    displayWarning "Clearing #{$CACHE_DIR} selectively"
+    #FileUtils::remove_dir($CACHE_DIR)
+    # remove more selectively
+    #FileUtils::remove_dir("#{$CACHE_DIR}/www.geocaching.com/account")
+    displayMessage "Clearing account data older than 14 days"
+    command = "find #{$CACHE_DIR}/*/account -mtime +14"
+    command << " -type f"
+    command << " | xargs -r rm"
+    system(command)
+    #FileUtils::remove_dir("#{$CACHE_DIR}/www.geocaching.com/login")
+    displayMessage "Clearing login data older than 14 days"
+    command = "find #{$CACHE_DIR}/*/login -mtime +14"
+    command << " -type f"
+    command << " | xargs -r rm"
+    system(command)
+    #FileUtils::remove_dir("#{$CACHE_DIR}/www.geocaching.com/seek")
+    #displayMessage "NOT clearing cache descriptions older than 31 days"
+    #command = "find #{$CACHE_DIR}/*/seek -mtime +31"
+    #command << " -writable -name 'cdpf.aspx*'"
+    #command << " | xargs -r rm"
+    #system(command)
+    displayMessage "Clearing cache details older than 31 days"
+    command = "find #{$CACHE_DIR}/*/seek -mtime +31"
+    command << " -writable -name 'cache_details.aspx*'"
+    command << " | xargs -r rm"
+    system(command)
+    displayMessage "Clearing query data older than 14 days"
+    command = "find #{$CACHE_DIR}/*/seek -mtime +14"
+    command << " -writable -name 'nearest.aspx*'"
+    command << " | xargs -r rm"
+    system(command)
+    displayWarning "Cleared!"
     $CACHE_DIR = findCacheDir()
   end
 
