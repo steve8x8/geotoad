@@ -1,10 +1,12 @@
 geotoad (3.15.5-1) unstable; urgency=low
 
   * New development version 3.15.5
+  * Issue 175: More selective, non-interfering cleaning
   * Issue 221: Fix documentation of !keyword for -k/-K
   * Issue 226: Past events are unavailable
   * Issue 228: "guid" queries now find WID without Google Maps
   * Issue 231: Remove <font> tags from log comments
+  * Issue 232: Reduce coordinate precision to 6 decimal places
 
  -- Steve Sixty-Four <steve8x8@gmail.com>  Wed, 14 Mar 2012 14:00:00 +0100
 
