@@ -1,13 +1,20 @@
-#summary Other searches with GeoToad
-#labels Featured
+=================================================
+Using GeoToad for searches which are not built in
+=================================================
 
-= Using GeoToad for searches which are not built in =
+Table of Contents:
+------------------
+* "Proximity" search around an existing geocache
+* Searches along a given track/route (issue 103)
+* Removing mystery caches from GPX
+* Merging riddle solutions into GPX
 
-_*Note:* Tested with Debian Linux and bash. Adaptions may be necessary._
+_Note: Tested with Debian Linux and bash. Adaptions may be necessary._
 
-<wiki:toc max_depth="2">
 
-== "Proximity" search around an existing geocache ==
+----------------------------------------------
+"Proximity" search around an existing geocache
+----------------------------------------------
 
 There has been a request for "proximity" searches:
 Sometimes, you plan to attend an event, or want to visit one of the
@@ -18,7 +25,7 @@ Here's a suggestion how to accomplish this (you will have to
 add your credentials, and modify some other search parameters,
 but you'll get the idea):
 
-{{{
+
 #!/bin/bash
 
 CENTER=GC77       # or whatever should be the center of your search
@@ -32,11 +39,13 @@ COORDS=`awk '{printf("%s,%s\n",$2,$3)}' $CENTER.list`
 
 # now run the real query
 geotoad -q coord -x gpx -o `pwd`/$CENTER-prox.gpx "$COORDS"
-}}}
 
-== Searches along a given track/route (issue 103) ==
 
-{{{
+----------------------------------------------
+Searches along a given track/route (issue 103)
+----------------------------------------------
+
+
 #!/bin/bash
 
 input=input.gpx # some file you picked up at e.g. openrouteservice.org
@@ -71,7 +80,7 @@ awk '{printf("%.3f,%.3f|",$1,$2)}'
 )
 
 echo geotoad ... -y$circle -q coord \"$searchargs\"
-}}}
+
 
 Note the number of decimals in the "printf" command -
 it will limit center point precision to about 100 metres
@@ -80,52 +89,36 @@ which should be sufficient in most cases.
 The values for "error", "distance" and "circle" have to be adjusted by hand.
 The ratio distance/circle obviously has to be smaller than 2 ;)
 
-<wiki:comment>
-== Parsing bookmark lists (issue 227) ==
-
-{{{
-#!/bin/bash
-
-# example: Berlin/Brandenburg area night caches
-listguid="cbb21edf-fb9e-45b5-9b27-c51fd6453cbf"
-
-# extract list of guids from KML file
-GUIDS=`
-lynx -source "http://www.geocaching.com/kml/bmkml.aspx?bmguid=$listguid" \
-| perl -ne 'if(/\?guid=([0-9a-f-]+)/){printf("%s:",$1)}'
-`
-
-# now run the real query
-geotoad -q guid -x gpx -o `pwd`/list_$listguid.gpx "$GUIDS"
-}}}
-
-</wiki:comment>
-== Removing mystery caches from GPX ==
+--------------------------------
+Removing mystery caches from GPX
+--------------------------------
 
 Do you use a handheld for actual geocaching, and a navigation system to
 reach your targets? If so, you probably don't want mystery caches to be
 shown on the screen while driving. Running the same search with and
 without cache type "unknown" is time-consuming and error-prone.
 
-The following Ruby scriptlet *gpxdemystify* will strip "Unknown" caches from
+The following Ruby scriptlet gpxdemystify will strip "Unknown" caches from
 a GPX file produced by GeoToad:
 
-{{{
+
 #!/usr/bin/env ruby
 puts $stdin.read.split(/<\/wpt>/).map { |fragment|
     (fragment !~ /<groundspeak:type>Unknown Cache/m) ? fragment : nil
 }.compact.join("</wpt>")
-}}}
 
-to be run as follows:   {{{gpxdemystify <input.gpx >output.gpx}}}
 
-== Merging riddle solutions into GPX ==
+to be run as follows:   gpxdemystify <input.gpx >output.gpx
+
+---------------------------------
+Merging riddle solutions into GPX
+---------------------------------
 
 Similarly, it is possible to merge a list of "solved" mysteries, or
 already reached multi-cache stages, into an existing GPX, using 
-*gpxsolutions* as follows:
+gpxsolutions as follows:
 
-{{{
+
 #!/usr/bin/env ruby
 # merge solved mysteries into GPX file
 
@@ -173,21 +166,21 @@ puts $stdin.read.split(/<\/wpt>/).map { |fragment|
     end
     fragment
 }.join("</wpt>")
-}}}
 
-to be run as follows:   {{{gpxsolutions solved.txt <input.gpx >output.gpx}}}
 
-with a *solved.txt* file listing points by name, lat, lon (where point names are 
+to be run as follows:   gpxsolutions solved.txt <input.gpx >output.gpx
+
+with a solved.txt file listing points by name, lat, lon (where point names are 
 constructed the same way as "normal" waypoints) as in the following fictional list:
 
-{{{
+
 gcqmea  02.012345 53.987654
 gcwpgf  13.543210 41.456789
 0113r5p 22.555555 33.444444
 0116d4t 32.888888 23.555555
 0018k6k 42.010101 13.101010
-}}}
 
-----
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 _(More to be added. Suggestions welcome.)_
