@@ -1,0 +1,75 @@
+============
+Introduction
+============
+
+=======
+Details
+=======
+
+* Are you using the [CurrentDevelVersion development version]?
+* Have you upgraded to the [CurrentVersion latest release]?
+* There is nothing available for my OS.
+* Yes, I've got the latest version. It used to work, but now it's dead, Jim.
+
+Some hints for reporting bugs.
+
+
+
+
+(The stable release of) GeoToad is supposed to work.
+If it doesn't, there's a variety of possible reasons.
+Please check the list below:
+
+------------------------------------------------------------
+Are you using the [CurrentDevelVersion development version]?
+------------------------------------------------------------
+
+ - If so, please do NOT submit an issue report.
+ - Contact Steve8x8 at his GoogleMail account instead.
+ - (See below for details which may help to isolate and reproduce the issue.)
+
+---------------------------------------------------------
+Have you upgraded to the [CurrentVersion latest release]?
+---------------------------------------------------------
+
+ - Check the [CurrentVersion] wiki page.
+ - It may take a few days for it to notice, but GeoToad should tell you about available updates.
+ - Note that "cross-grading" from development to stable versions cannot be done automatically!
+
+-------------------------------------
+There is nothing available for my OS.
+-------------------------------------
+
+ - We're very unhappy with it, but MacOSX (dmg) packages couldn't be built for quite a long time.
+ - Work on stabilizing the build environment is still ongoing.
+ - As a workaround, you may pick up the .tar.gz file - a working ruby installation is still necessary.
+ - There are no plans to support individual OSes in terms of packaging. The tarball should cover most cases.
+
+--------------------------------------------------------------------------
+Yes, I've got the latest version. It used to work, but now it's dead, Jim.
+--------------------------------------------------------------------------
+
+There are more or less frequent [GCmaintenances updates to the web site] it queries (which may cause certain patterns not to match any longer), and there are real bugs.
+
+To make it work for you again, we therefore need some input to be able to identify the problem.
+
+ - Always try to reproduce the problem, and allow us to reproduce it as well - the TUI writes out a _sample command line_ that will be helpful.
+ - Are you using a Ruby environment we haven't tested GeoToad against? 1.8.7, or 1.9.1/2 should be safe.
+ - Toggle _verbose output_ on (using "v" in the TUI, or "-v"/"--verbose" from the command line), and write the (copious!) output to a file.
+ - The last few lines might already give you an idea what could have happened.
+ - Check for the last occurrence of "wid = " in the debugging output. A few lines before, there should be a line "cachefile: ...".
+ - Rename that file in your cache. Do _not remove_ it, we might need it later.
+ - Rename the debug output file too, and run again.
+ - If the problem persists, we need the command line and the last output lines, starting with the "cachefile:" line, including the error thrown by Ruby.
+ - Make sure you remove your credentials (password, perhaps username) and cookies from the command line and debug output.
+ - If you are using _non-standard settings_ with gc.com's web pages (language, measurement units) that may also be important.
+ - If the problem cannot be reproduced, the culprit seems to be the old cache file. Can you compare the two versions?
+
+Before reporting an issue, please check with the [https://code.google.com/p/geotoad/source/list SVN browser] 
+whether there might be a patch addressing your problem. 
+Show-stopper fixes usually are committed directly to the trunk; 
+development work takes also place in branches. 
+Whether a commit went to trunk or branch can be seen by selecting it. 
+You are welcome to review the changes, and leave your comments and suggestions 
+
+(to be extended)
