@@ -222,7 +222,12 @@ class GeoToad
     command << " -writable -name 'cache_details.aspx*'"
     command << " | xargs -r rm"
     system(command)
-    displayMessage "Clearing query data older than 14 days"
+    displayMessage "Clearing lat/lon query data older than 3 days"
+    command = "find #{$CACHE_DIR}/*/seek -mtime +3"
+    command << " -writable -name 'nearest.aspx*_lat_*_lng_*'"
+    command << " | xargs -r rm"
+    system(command)
+    displayMessage "Clearing other query data older than 14 days"
     command = "find #{$CACHE_DIR}/*/seek -mtime +14"
     command << " -writable -name 'nearest.aspx*'"
     command << " | xargs -r rm"
