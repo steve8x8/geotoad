@@ -1,7 +1,7 @@
 #summary Features of current version
 #labels Featured
 
-version=3.14.8
+version=3.14.9
 
 = . =
 
@@ -10,7 +10,22 @@ version=3.14.8
 }}}
 
 == Important note: ==
-  * Testers needed for the [CurrentDevelVersion development version]!
+  * 3.14.9 marks the end of the development cycle for the 3.14 series
+  * Future bug fixes and enhancements will be made to the 3.15 series only!
+  * For details, see [CurrentDevelVersion development version]!
+
+= What's new in 3.14.9? =
+
+== Fixes for issues: ==
+  * 218: select/exclude by attributes set/unset
+  * 221: Fix documentation of !keyword for -k/-K
+  * 226: Past events are unavailable
+  * 228: "guid" queries
+  * 231: Remove <font> tags from log comments
+  * 232: Reduce coordinate precision to 6 decimal places
+
+== Additions: ==
+  * Text versions of ReportingBugs and OtherSearches wiki pages
 
 = What's new in 3.14.8? =
 

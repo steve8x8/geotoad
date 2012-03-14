@@ -1,13 +1,25 @@
 #summary Features of current development version
 #labels Featured,Experimental
 
-version=3.15.4
+version=3.15.5
 
 = . =
 
 {{{
 (Please see the "CurrentDevelVersion" wiki page for recent changes if there's no list following.)
 }}}
+
+= Development will continue in the 3.15 series only! =
+
+= New development version 3.15.5 =
+
+== Fixes for issues: ==
+  * Issue 175: More selective, non-interfering cleaning
+  * Issue 221: Fix documentation of !keyword for -k/-K
+  * Issue 226: Past events are unavailable
+  * Issue 228: "guid" queries now find WID without Google Maps
+  * Issue 231: Remove <font> tags from log comments
+  * Issue 232: Reduce coordinate precision to 6 decimal places
 
 = New development version 3.15.4 =
 
