@@ -6,6 +6,7 @@ geotoad (3.14.9-1) unstable; urgency=low
   * Issue 226: Past events are unavailable
   * Issue 228: "guid" queries
   * Issue 231: Remove <font> tags from log comments
+  * Issue 232: Shorten decimal places to 6 digits
 
  -- Steve Sixty-Four <steve8x8@gmail.com>  Wed, 14 Mar 2012 14:00:00 +0100
 
