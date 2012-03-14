@@ -892,6 +892,9 @@ class Output
               wplon = 0
               hidden = true
             end
+            # convert to shortened strings
+            wplat = sprintf("%2.6f", wplat)
+            wplon = sprintf("%2.6f", wplon)
           end
         else
           # second row of two
