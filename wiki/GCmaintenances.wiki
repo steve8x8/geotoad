@@ -13,8 +13,14 @@ See also [http://forums.groundspeak.com/GC/index.php?showforum=89 Release Notes 
 _*(new entries will be added on top)*_
 
 ----
+2012-03-13:
+  * _"Geocaching.com ... site update on Tuesday, March 13th, 2012 ... 10am PDT"_ (1700 UTC)
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=292150 release notes]
+  * _release notes suggest that GeoToad should be unaffected_
+  * new server build: *{{{Web.HotFix_20120313.1}}}*
+----
 2012-02-28:
-  * _"Geocaching.com ... site update on Tuesday, February 28th, 2012 ... 10am PST"_ (1900 UTC)
+  * _"Geocaching.com ... site update on Tuesday, February 28th, 2012 ... 10am PST"_ (1800 UTC)
   * [http://forums.groundspeak.com/GC/index.php?showtopic=291269 release notes]
   * _release notes suggest that GeoToad should be unaffected_
   * new server build: *{{{Web.HotFix_20120227.2}}}*
