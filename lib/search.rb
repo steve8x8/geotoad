@@ -89,6 +89,8 @@ class SearchCache
       else
         displayMessage "Google Maps found \"#{key}\". Accuracy level: #{accuracy}"
       end
+      lat = sprintf("%2.6f", lat).gsub(/0{1,5}$/, '')
+      lon = sprintf("%2.6f", lon).gsub(/0{1,5}$/, '')
       @search_url = @@base_url + "?lat=#{lat}&lng=#{lon}"
       supports_distance = true
 
@@ -96,6 +98,8 @@ class SearchCache
       @query_type = 'coord'
       supports_distance = true
       lat, lon = parseCoordinates(key)
+      lat = sprintf("%2.6f", lat).gsub(/0{1,5}$/, '')
+      lon = sprintf("%2.6f", lon).gsub(/0{1,5}$/, '')
       @search_url = @@base_url + "?lat=#{lat}&lng=#{lon}"
 
     when 'user'
