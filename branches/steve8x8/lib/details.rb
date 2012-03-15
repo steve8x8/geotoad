@@ -378,7 +378,8 @@ class CacheDetails
       end
 
       # extract attributes assigned, and their value, plus the short text
-      if line =~ /title=\"What are Attributes\?\">/
+      # ...<a href="/about/icons.aspx" title="Wat zijn eigenschappen?">...
+      if line =~ /a href="\/about\/icons.aspx" title=/
         debug "inspecting attributes: #{line}"
         # list of attributes only in cdpf version :(
         # cumulative text
