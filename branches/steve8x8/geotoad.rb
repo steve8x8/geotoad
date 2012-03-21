@@ -280,6 +280,11 @@ class GeoToad
       # limit search page count
       search.max_pages = @limitPages
 
+      # set tx filter if only one cache type
+      if @option['cacheType'] and (@option['cacheType'].split(/[:\|]/).length == 1)
+        search.txfilter = @option['cacheType']
+      end
+
       if (! search.setType(@queryType, queryArg))
         displayError "(could not determine search type for #{@queryType}, exiting)"
         exit

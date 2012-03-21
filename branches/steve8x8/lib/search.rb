@@ -20,6 +20,33 @@ class SearchCache
     @ttl = 12 * 3600		# 12 hours (was 20)
     @waypoints = Hash.new
 
+    # cache types for selected search
+    @cachetypetx = {
+	'traditional'  => '32bc9333-5e52-4957-b0f6-5a2c8fc7b257',
+	'multicache'   => 'a5f6d0ad-d2f2-4011-8c14-940a9ebf3c74',
+	'virtual'      => '294d4360-ac86-4c83-84dd-8113ef678d7e',
+	'letterbox'    => '4bdd8fb2-d7bc-453f-a9c5-968563b15d24',
+	'event'        => '69eb8534-b718-4b35-ae3c-a856a55b0874',
+	'unknown'      => '40861821-1835-4e11-b666-8d41064d03fe',
+    #	'project'      => '2555690d-b2bc-4b55-b5ac-0cb704c0b768',
+	'webcam'       => '31d2ae3c-c358-4b5f-8dcd-2185bf472d3d',
+	'reverse'      => '8f6dd7bc-ff39-4997-bd2e-225a0d2adf9d',
+	'cito'         => '57150806-bc1a-42d6-9cf0-538d171a2d22',
+	'earthcache'   => 'c66f5cf3-9523-4549-b8dd-759cd2f18db8',
+	'megaevent'    => '69eb8535-b718-4b35-ae3c-a856a55b0874',
+	'wherigo'      => '0544fa55-772d-4e5c-96a9-36a51ebcf5c9',
+	'lost+found'   => '3ea6533d-bb52-42fe-b2d2-79a3424d4728',
+	'gshq'         => '416f2494-dc17-4b6a-9bab-1a29dd292d8c',
+	'lfceleb'      => 'af820035-787a-47af-b52b-becc8b0c0c88',
+    #	'exhibit'      => '72e69af2-7986-4990-afd9-bc16cbbb4ce3',
+    # play safe
+	'mystery'      => '40861821-1835-4e11-b666-8d41064d03fe',
+	'puzzle'       => '40861821-1835-4e11-b666-8d41064d03fe',
+    #	'ape'          => '2555690d-b2bc-4b55-b5ac-0cb704c0b768',
+	'locationless' => '8f6dd7bc-ff39-4997-bd2e-225a0d2adf9d'
+    }
+    @txfilter = nil
+
     # Original base-42 code taken from Rick Richardson's geo-* utilities
     # @ http://geo.rkkda.com/ (patch of 2011-01-04 19:25 local time),
     # but those only worked until 2011-01-06 (kept here for reference).
@@ -70,6 +97,12 @@ class SearchCache
     # server uses UTC!
     @code = @codetable[Time.now.utc.day]
     debug "D/T/S decoding uses code #{@code}"
+  end
+
+  def txfilter=(cacheType)
+    # may return nil if not found
+    @txfilter = @cachetypetx[cacheType]
+    debug "Setting txfilter to \"#{cacheType}\", now #{@txfilter.inspect}"
   end
 
   def setType(mode, key)
@@ -139,6 +172,10 @@ class SearchCache
 
     if not @search_url
         @search_url = @@base_url + '?' + @query_type + '=' + CGI.escape(@query_arg.to_s)
+    end
+
+    if @txfilter
+        @search_url = @search_url + '&tx=' + @txfilter
     end
 
     if supports_distance and @distance
