@@ -44,10 +44,10 @@ get a short command-line option summary
 enable debugging output - very copious!
 .TP
 \fB-u \fR\fIusername\fR, \fB--user=\fR\fIusername\fR\fR
-geocaching.com username (required for coordinates)
+geocaching.com username (required)
 .TP
 \fB-p \fR\fIpassword\fR, \fB--password=\fR\fIpassword\fR
-geocaching.com password (required for coordinates)
+geocaching.com password (required)
 .TP
 \fB-o \fR\fIfilename\fR, \fB--output=\fR\fIfilename\fR
 output file name (automatic otherwise)
@@ -68,7 +68,7 @@ set maximum cache size
 .TP
 \fB-c \fR\fI[traditional|multicache|letterbox|event|unknown|cito|virtual|webcam|earthcache|wherigo|...]\fR, \fB--cacheType=\fR\fI...\fR
 \fB(MULTI)\fR
-set cache type(s)
+set cache type(s) - if only one type is selected, search will be sped up
 .TP
 \fB-d \fR\fI1.0-5.0\fR, \fB--difficultyMin=\fR\fI...\fR
 set minimum difficulty
@@ -171,6 +171,8 @@ item(s) start with a dash (or minus sign), it has to be
 inserting a "double dash"
 .B --
 between the last option and the search argument(s).
+
+Characters \fB!\fR and \fB|\fR may have to be "escaped" from the shell.
 
 If
 .B user
