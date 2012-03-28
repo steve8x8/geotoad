@@ -87,6 +87,20 @@ class Filter
     }
   end
 
+  def favFactorMin(num)
+    debug "filtering by favFactorMin: #{num}"
+    @waypointHash.delete_if { |wid, values|
+      @waypointHash[wid]['favfactor'].to_i < num
+    }
+  end
+
+  def favFactorMax(num)
+    debug "filtering by favFactorMax: #{num}"
+    @waypointHash.delete_if { |wid, values|
+      @waypointHash[wid]['favfactor'].to_i > num
+    }
+  end
+
   def sizeMin(size_name)
     debug "filtering by sizeMin: #{size_name} (#{@@sizes[size_name]})"        
     @waypointHash.delete_if { |wid, values|

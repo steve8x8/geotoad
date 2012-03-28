@@ -151,7 +151,7 @@ class CacheDetails
 # best: 10 of 10 -> 5.0
 # avg :  1 of 10 -> ~2.5
 # bad : 1 of 100 -> ~0
-  def favFactor(fav, found)
+  def calculateFav(fav, found)
     scalingfactor = 1.0			# roughly
     favinfavperiod = (fav || 0)		# obviously
     foundinfavperiod = (found || 1)	# unfair to older caches!
@@ -455,8 +455,8 @@ class CacheDetails
     # to compute a fav rate we need the total found count
     if data =~ /alt="Found it" \/\>&nbsp;(\d+)&nbsp;Found it/
       cache['foundcount'] = $1.to_i
-      cache['favfactor'] = favFactor(cache['favorites'], cache['foundcount'])
-      debug "foundcount: #{cache['foundcount']} favcount: #{cache['favorites']} favfactor: #{cache['favfactor']}"
+      cache['favfactor'] = calculateFav(cache['favorites'], cache['foundcount'])
+      debug "found: #{cache['foundcount']} favs: #{cache['favorites']} favfactor: #{cache['favfactor']}"
     end
 
     if data =~ /id="uxDecryptedHint".*?\>(.*?)\s*\<\/div/m

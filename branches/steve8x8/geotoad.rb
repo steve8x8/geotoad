@@ -667,6 +667,22 @@ class GeoToad
       displayMessage "FunFactor filtering removed #{excludedFilterTotal} caches from your listing."
     end
 
+    beforeFilterTotal = @filtered.totalWaypoints
+    if @option['favFactorMin']
+      @queryTitle = @queryTitle + ", favFactor #{@option['favFactorMin']}+"
+      @defaultOutputFile = @defaultOutputFile + "-f" + @option['favFactorMin'].to_s
+      @filtered.favFactorMin(@option['favFactorMin'].to_f)
+    end
+    if @option['favFactorMax']
+      @queryTitle = @queryTitle + ", favFactor #{@option['favFactorMax']} or lower"
+      @defaultOutputFile = @defaultOutputFile + '-F' + @option['favFactorMax'].to_s
+      @filtered.favFactorMax(@option['favFactorMax'].to_f)
+    end
+    excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
+    if (excludedFilterTotal > 0)
+      displayMessage "FavFactor filtering removed #{excludedFilterTotal} caches from your listing."
+    end
+
     # We filter for users again. While this may be a bit obsessive, this is in case
     # our local cache is not valid.
     beforeFilterTotal = @filtered.totalWaypoints
