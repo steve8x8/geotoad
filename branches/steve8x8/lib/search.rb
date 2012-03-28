@@ -731,8 +731,8 @@ class SearchCache
 # 2011-05-04: unchanged
       # 2010-12-22:
       # <span id="ctl00_ContentBody_dlResults_ctl01_uxFavoritesValue" title="0" class="favorite-rank">0</span>
-      when /_uxFavoritesValue[^\>]*\>([0-9]+)\</
-        favs = $1
+      when /_uxFavoritesValue[^\>]*\>(\d+)\</
+        favs = $1.to_i
         debug "found Favorites=#{favs}"
         cache['favorites'] = favs
 

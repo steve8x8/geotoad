@@ -182,6 +182,7 @@ $Format = {
       "<b><font color=\"#9900CC\">&infin;</font></b> never been found&nbsp;&nbsp;&nbsp;" +
       "<b><font color=\"#999922\">&sect;</font></b> terrain rating of 3.5+&nbsp;&nbsp;&nbsp;" +
       "<b><font color=\"#440000\">&uarr;</font></b> difficulty rating of 3.5+&nbsp;&nbsp;&nbsp;" +
+      "<b><font color=\"#66FF66\">+</font></b> fav factor of 3.0+&nbsp;&nbsp;&nbsp;" +
       "<b><font color=\"#BB6666\">&hearts;</font></b> fun factor of 3.5+<br>" +
       # Not yet ready for consumption
     #"<b><font color=\"#333333\">--</font></b> comments seem negative&nbsp;&nbsp;&nbsp;" +
@@ -193,7 +194,7 @@ $Format = {
       "\n\n<hr noshade size=\"1\">\n" +
       "<h3><a name=\"<%out.wid%>\"></a><font color=\"#000099\"><%out.symbols%><a href=\"<%wp.url%>\"><%wp.name%></a></font> by <font color=\"#555555\"><%wpEntity.creator%></font> <font color=\"#444444\">(<%out.id%>)</font></h3>\n" +
       "<a href=\"<%out.maps_url%>\"><%wp.latwritten%> <%wp.lonwritten%></a> <i>near <%out.location%></i><br>" +
-      "<font color=\"#339933\"><%wp.type%> (<%wp.size%>) D<%wp.difficulty%>/T<%wp.terrain%> (F<%wp.funfactor%>) &rarr;<%out.relativedistance%><br>" +
+      "<font color=\"#339933\"><%wp.type%> (<%wp.size%>) D<%wp.difficulty%>/T<%wp.terrain%> (F<%wp.funfactor%>) Fav<%wp.favfactor%>(<%wp.favorites%>/<%wp.foundcount%>) &rarr;<%out.relativedistance%><br>" +
       "Placed: <%out.cdate%> Last comment: <%wp.last_find_days%> days ago (<%wp.last_find_type%>)</font><br>\n" +
       "Attributes: <%out.txtAttrs%><br>\n" +
       "<div>" + # catch runaway stuff like <center>
@@ -217,7 +218,7 @@ $Format = {
       "=> <%wpText.name%> (<%out.wid%>) by <%wpText.creator%> <=\r\n" +
       "----------------------------------------------------------------\r\n\r\n" +
       "Lat: <%wp.latwritten%> Lon: <%wp.lonwritten%>\r\n" +
-      "Difficulty: <%wp.difficulty%>, Terrain: <%wp.terrain%>, FunFactor: <%wp.funfactor%>\r\n" +
+      "Difficulty: <%wp.difficulty%>, Terrain: <%wp.terrain%>, FunFactor: <%wp.funfactor%>, FavFactor: <%wp.favfactor%>\r\n" +
       "Type/Size: <%wp.type%> (<%wp.size%>) <%out.relativedistance%>\r\n" +
       "Creation: <%out.cdate%>, Last comment: <%wp.last_find_days%> days ago (<%wp.last_find_type%>)\r\n\r\n" +
       "Attributes: <%out.txtAttrs%>\r\n" +

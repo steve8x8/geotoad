@@ -653,6 +653,10 @@ class Output
         symbolHash[wid] << "<b><font color=\"#440000\">&uarr;</font></b>"
       end
 
+      if (cache['favfactor'].to_f >= 3.0)
+        symbolHash[wid] << "<b><font color=\"#66BB66\">+</font></b>"
+      end
+
       if (cache['funfactor'] >= 3.5)
         symbolHash[wid] << "<b><font color=\"#BB6666\">&hearts;</font></b>"
       end
@@ -1050,6 +1054,9 @@ class Output
       'cdate' => cache['ctime'].strftime("%Y-%m-%d"),
       'adate' => cache['atime'].strftime("%Y-%m-%d"),
       'size' => cache['size'].gsub(/ /, '_'),
+      'favcount' => (cache['favorites'] || 0).to_s,
+      'foundcount' => (cache['foundcount'] || 1).to_s,
+      'favfactor' => (cache['favfactor'] || 0.0).to_s,
       'XMLDate' => cache['ctime'].strftime("%Y-%m-%dT07:00:00.000Z"),
       'latdatapad5' => sprintf("%2.5f", cache['latdata'] || 0.0),
       'londatapad5' => sprintf("%2.5f", cache['londata'] || 0.0),

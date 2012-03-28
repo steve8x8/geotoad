@@ -146,6 +146,26 @@ class CacheDetails
     return grade
   end
 
+# calculate fav factor
+# 1st approach: ignore pre-fav times (before Feb 1, 2011)
+# best: 10 of 10 -> 5.0
+# avg :  1 of 10 -> ~2.5
+# bad : 1 of 100 -> ~0
+  def favFactor(fav, found)
+    scalingfactor = 1.0			# roughly
+    favinfavperiod = (fav || 0)		# obviously
+    foundinfavperiod = (found || 1)	# unfair to older caches!
+    quot = favinfavperiod.to_f / foundinfavperiod
+    if (quot > 0.0)
+      logquot = 5.0 + scalingfactor * Math.log(quot)
+      logquot = 0.0 if (logquot < 0.0)
+      logquot = 5.0 if (logquot > 5.0)
+    else
+      logquot = 0.0
+    end
+    return (10*logquot).round.to_f / 10.0
+  end
+
   # Parse attributes: convert name of image into index and yes/no value
   def parseAttr(text)
     # "bicycles-yes" -> 32, 1
@@ -435,7 +455,8 @@ class CacheDetails
     # to compute a fav rate we need the total found count
     if data =~ /alt="Found it" \/\>&nbsp;(\d+)&nbsp;Found it/
       cache['foundcount'] = $1.to_i
-      debug "foundcount: #{cache['foundcount']}"
+      cache['favfactor'] = favFactor(cache['favorites'], cache['foundcount'])
+      debug "foundcount: #{cache['foundcount']} favcount: #{cache['favorites']} favfactor: #{cache['favfactor']}"
     end
 
     if data =~ /id="uxDecryptedHint".*?\>(.*?)\s*\<\/div/m
