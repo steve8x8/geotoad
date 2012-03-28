@@ -52,7 +52,7 @@ You will then see a screen that looks similar to this:
 (3)  location     [N52 23.0 E13 03.0] | (4)  distance maximum (km)     [10   ]
                                       |
 (5)  difficulty           [2.0 - 5.0] | (6)  terrain               [1.0 - 3.5]
-(7)  fun factor           [0.0 - 5.0] | (8)  cache size            [any - any]
+(7)  fav factor           [0.0 - 5.0] | (8)  cache size            [any - any]
 (9)  cache type           [      any] |
 (10) virgin caches only           [ ] | (11) travel bug caches only        [ ]
 (12) cache age (days)       [  0-any] | (13) last found (days)       [  0-any] 
@@ -102,6 +102,7 @@ syntax: geotoad [options] <search:search2:search3>
  -d/-D [1.0-5.0]        difficulty minimum/maximum
  -t/-T [1.0-5.0]        terrain minimum/maximum
  -f/-F [0.0-5.0]        fun factor minimum/maximum
+ -g/-G [0.0-5.0]        fav factor minimum/maximum
  -y    [1-500]          distance maximum, in miles, or suffixed "km" (10)
  -k    [keyword]        title keyword search. Use | to delimit multiple
  -K    [keyword]        desc keyword search (slow). Use | again...

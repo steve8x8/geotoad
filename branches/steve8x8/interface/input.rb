@@ -243,6 +243,7 @@ class Input
     puts " -d/-D [1.0-5.0]        difficulty minimum/maximum"
     puts " -t/-T [1.0-5.0]        terrain minimum/maximum"
     puts " -f/-F [0.0-5.0]        fun factor minimum/maximum"
+    puts " -g/-G [0.0-5.0]        fav factor minimum/maximum"
     puts " -y    [1-500]          distance maximum, in miles, or suffixed \"km\" (10)"
     puts " -k    [keyword]        title keyword search. Use | to delimit multiple"
     puts " -K    [keyword]        desc keyword search (slow). Use | again..."
