@@ -338,12 +338,18 @@ class GeoToad
     end
 
     userLookups.each { |user|
-      search = SearchCache.new
-      search.setType('user', user)
-      waypoints = search.getResults()
-      waypoints.keys.each { |wid|
-        @filtered.addVisitor(wid, user)
-      }
+      # issue 236: if "user" is file, read that
+      #if (user[0..0] == '@')
+        # read file (1st column)
+        # @filtered.addVisitor(wid, user)
+      #else
+        search = SearchCache.new
+        search.setType('user', user)
+        waypoints = search.getResults()
+        waypoints.keys.each { |wid|
+          @filtered.addVisitor(wid, user)
+        }
+      #end
     }
   end
 

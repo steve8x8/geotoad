@@ -1,6 +1,6 @@
-geotoad (3.15.6-1) unstable; urgency=low
+geotoad (3.16.0-1) unstable; urgency=low
 
-  * New version 3.15.6
+  * New development version 3.16.0
   * Issue 233: If one cacheType selected, use tx= search parameter
   * Issue 234: Fav points listed in html and text, fav filter in UI
 
