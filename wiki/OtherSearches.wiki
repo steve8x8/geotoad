@@ -80,8 +80,9 @@ which should be sufficient in most cases.
 The values for "error", "distance" and "circle" have to be adjusted by hand.
 The ratio distance/circle obviously has to be smaller than 2 ;)
 
-<wiki:comment>
 == Parsing bookmark lists (issue 227) ==
+
+With issue 228 resolved, this has become easier:
 
 {{{
 #!/bin/bash
@@ -99,7 +100,6 @@ lynx -source "http://www.geocaching.com/kml/bmkml.aspx?bmguid=$listguid" \
 geotoad -q guid -x gpx -o `pwd`/list_$listguid.gpx "$GUIDS"
 }}}
 
-</wiki:comment>
 == Removing mystery caches from GPX ==
 
 Do you use a handheld for actual geocaching, and a navigation system to
@@ -187,6 +187,25 @@ gcwpgf  13.543210 41.456789
 0116d4t 32.888888 23.555555
 0018k6k 42.010101 13.101010
 }}}
+
+----
+
+== Modify GPX files to be accepted by BaseCamp (issue 238) ==
+
+BaseCamp 3.3.1 reportedly doesn't like GroundSpeak's GPX extensions (what they call
+"GPX 1.0.1"), and refuses to show cache details.
+
+Since extensions are essential for attribute support, GeoToad GPX output is (and will
+continue to be) 1.0.1 compatible, but it's rather easy to mangle a GPX file to look 
+like a 1.0 one:
+
+{{{
+cat geotoadoutput.gpx \
+| sed 's~http://www.groundspeak.com/cache/1/0/1~http://www.groundspeak.com/cache/1/0~g' \
+> basecampinput.gpx
+}}}
+
+It's not even necessary to remove the "groundspeak:attributes" section.
 
 ----
 
