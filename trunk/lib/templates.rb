@@ -505,7 +505,7 @@ $Format = {
       "  <groundspeak:encoded_hints>hint</groundspeak:encoded_hints>\r\n" +
       "  <groundspeak:logs>\r\n" +
       "    <groundspeak:log id=\"<%out.logID%>\">\r\n" +
-      "      <groundspeak:date><%out.mdate%>T08:00:00Z</groundspeak:date>\r\n" +
+      "      <groundspeak:date><%out.adate%>T08:00:00Z</groundspeak:date>\r\n" +
       "      <groundspeak:type>Found it</groundspeak:type>\r\n" +
       "      <groundspeak:finder id=\"666\"><%outEntity.username%></groundspeak:finder>\r\n" +
       "      <groundspeak:text encoded=\"False\"></groundspeak:text>\r\n" +
@@ -525,7 +525,7 @@ $Format = {
     'templateWP'    => "<%out.wid%>\t" +
       "<%out.latdatapad5%> <%out.londatapad5%> " +
       "<%wp.type%>\t" +
-      "<%out.mdate%> " +
+      "<%out.adate%> " +
       "\n"
   },
 
@@ -536,7 +536,7 @@ $Format = {
     'mime'    => 'text/plain',
     'desc'    =>     'Geocache visits text file for Garmin devices',
     'templatePre' => "",
-    'templateWP'  => "<%out.wid%>,<%out.mdate%>T08:00Z,Found it,\"\"\r\n"
+    'templateWP'  => "<%out.wid%>,<%out.adate%>T08:00Z,Found it,\"\"\r\n"
   },
 
   # mygeocachevisits (law.skynet) - use as follows:

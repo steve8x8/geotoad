@@ -106,6 +106,8 @@ class GeoToad
       $DTSFILTER = false
     end
 
+    @preserveCache     = @option['preserveCache']
+
     @formatTypes       = @option['format'] || 'gpx'
     # there is no "usemetric" cmdline option but the TUI may set it
     @useMetric         = @option['usemetric']
@@ -156,7 +158,7 @@ class GeoToad
       return nil
     end
 
-    url = "http://code.google.com/p/geotoad/wiki/CurrentVersion";
+    url = "http://code.google.com/p/geotoad/wiki/CurrentDevelVersion";
 
     debug "Checking for latest version of GeoToad from #{url}"
     version = ShadowFetch.new(url)
@@ -164,14 +166,14 @@ class GeoToad
     version.maxFailures = 0
     version.fetch
 
-    if (($VERSION =~ /^(\d\.\d+\.\d+)$/) && (version.data =~ /version=(\d\.\d+[\.\d]+)/))
+    if (($VERSION =~ /^(\d\.\d+\.\d+)/) && (version.data =~ /version=(\d\.\d+[\.\d]+)/))
       latestVersion = $1
       releaseNotes = $2;
 
       if comparableVersion(latestVersion) > comparableVersion($VERSION)
         puts "------------------------------------------------------------------------"
-        puts "* NOTE: GeoToad #{latestVersion} is now available!"
-        puts "* Download from http://code.google.com/p/geotoad/downloads/list"
+        puts "* NOTE: GeoToad development version #{latestVersion} is now available!"
+        puts "* Download from http://code.google.com/p/geotoad/downloads/list?can=1"
         puts "------------------------------------------------------------------------"
         version.data.scan(/\<div .*? id="wikimaincol"\>\s*(.*?)\s*\<\/div\>/m) do |notes|
           text = CGI::unescapeHTML(notes[0])
@@ -194,9 +196,43 @@ class GeoToad
   end
 
   def clearCacheDirectory
-    puts "* Clearing #{$CACHE_DIR}"
-    FileUtils::remove_dir($CACHE_DIR)
-    puts "* Cleared!"
+    displayWarning "Clearing #{$CACHE_DIR} selectively"
+    #FileUtils::remove_dir($CACHE_DIR)
+    # remove more selectively
+    #FileUtils::remove_dir("#{$CACHE_DIR}/www.geocaching.com/account")
+    displayMessage "Clearing account data older than 14 days"
+    command = "find #{$CACHE_DIR}/*/account -mtime +14"
+    command << " -type f"
+    command << " | xargs -r rm"
+    system(command)
+    #FileUtils::remove_dir("#{$CACHE_DIR}/www.geocaching.com/login")
+    displayMessage "Clearing login data older than 14 days"
+    command = "find #{$CACHE_DIR}/*/login -mtime +14"
+    command << " -type f"
+    command << " | xargs -r rm"
+    system(command)
+    #FileUtils::remove_dir("#{$CACHE_DIR}/www.geocaching.com/seek")
+    #displayMessage "NOT clearing cache descriptions older than 31 days"
+    #command = "find #{$CACHE_DIR}/*/seek -mtime +31"
+    #command << " -writable -name 'cdpf.aspx*'"
+    #command << " | xargs -r rm"
+    #system(command)
+    displayMessage "Clearing cache details older than 31 days"
+    command = "find #{$CACHE_DIR}/*/seek -mtime +31"
+    command << " -writable -name 'cache_details.aspx*'"
+    command << " | xargs -r rm"
+    system(command)
+    displayMessage "Clearing lat/lon query data older than 3 days"
+    command = "find #{$CACHE_DIR}/*/seek -mtime +3"
+    command << " -writable -name 'nearest.aspx*_lat_*_lng_*'"
+    command << " | xargs -r rm"
+    system(command)
+    displayMessage "Clearing other query data older than 14 days"
+    command = "find #{$CACHE_DIR}/*/seek -mtime +14"
+    command << " -writable -name 'nearest.aspx*'"
+    command << " | xargs -r rm"
+    system(command)
+    displayWarning "Cleared!"
     $CACHE_DIR = findCacheDir()
   end
 
@@ -209,6 +245,20 @@ class GeoToad
     # and making it as an array because you probably don't want to
     # mix multiple @queryType's anyways
     @combinedWaypoints = Hash.new
+
+    displayMessage "Logging in as #{@option['user']}"
+    #@cookie = getCookie(@option['user'], @option['password'])
+    @cookie = login(@option['user'], @option['password'])
+    debug "Login returned cookie #{hideCookie(@cookie).inspect}"
+    if (@cookie)
+      displayMessage "Login successful"
+    else
+      displayWarning "Login failed! Check network connection, username and password!"
+      displayWarning "Note: Subsequent operations may fail. You've been warned."
+    end
+    displayMessage "Querying user preferences"
+    @dateFormat = getPreferences()
+    displayMessage "Using date format #{@dateFormat}"
 
     if @queryType == "zipcode" || @queryType == "coord" || @queryType == 'location'
       @queryTitle = @queryTitle + " (#{@distanceMax}mi. radius)"
@@ -475,7 +525,7 @@ class GeoToad
     wpFiltered = @filtered.waypoints
     progress = ProgressBar.new(0, @filtered.totalWaypoints, "Reading")
     @detail = CacheDetails.new(wpFiltered)
-    @detail.cookie = get_login_cookie()
+    @detail.preserve = @preserveCache
     token = 0
     downloads = 0
 
@@ -527,17 +577,6 @@ class GeoToad
         page.invalidate()
       end
     }
-  end
-
-  def get_login_cookie
-    cookie = loadCookie()
-    if cookie
-      displayMessage "Using stored login cookie for #{@option['user']}"
-    else
-      displayMessage "Logging in as #{@option['user']}"
-      cookie = login(@option['user'], @option['password'])
-    end
-    return cookie
   end
 
   ## step #2 in filtering! ############################
@@ -758,7 +797,11 @@ while(1)
     cli.clearCacheDirectory()
   end
 
-  count = cli.downloadGeocacheList()
+  # avoid login if clearing only
+  count = 0
+  if options['queryArg']
+    count = cli.downloadGeocacheList()
+  end
   if count < 1
     cli.displayWarning "No caches found in search, exiting early."
   else

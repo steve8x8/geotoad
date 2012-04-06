@@ -7,6 +7,7 @@ require 'uri'
 require 'cgi'
 require 'common'
 require 'messages'
+require 'auth'
 
 # Does a webget, but stores a local directory with cached results ###################
 class ShadowFetch
@@ -15,6 +16,8 @@ class ShadowFetch
 
   include Common
   include Messages
+  include Auth
+
   @@downloadErrors = 0
 
   # gets a URL, but stores it in a nice webcache
@@ -66,10 +69,11 @@ class ShadowFetch
     @@src
   end
 
-  def cookie=(cookie)
-    debug "set cookie to #{cookie[0..22]+'...'+cookie[-5..-1]}"
-    @cookie=cookie
-  end
+# obsolete!
+#  def cookie=(cookie)
+#    debug "set cookie to #{hideCookie(cookie)}"
+#    @cookie = cookie
+#  end
 
   # returns the cache filename that the URL will be stored as
   def cacheFile(url)
@@ -145,12 +149,12 @@ class ShadowFetch
     if (File.exists?(localfile))
       age = time.to_i - File.mtime(localfile).to_i
       if (age > @localExpiry)
-        debug "local cache is #{age} old, older than #{@localExpiry}"
+        debug "local cache is #{age} (> #{@localExpiry}) sec old"
       elsif (File.size(localfile) < 6)
         debug "local cache appears corrupt. removing.."
         File.unlink(localfile)
       else
-        debug "local cache is only #{age} old (#{@localExpiry}), using local file."
+        debug "local cache is only #{age} (<= #{@localExpiry}) sec old, using local file."
         @data = fetchLocal(localfile)
         @@src='local'
         # short-circuit out of here!
@@ -226,7 +230,8 @@ class ShadowFetch
 
 
   def fetchURL (url_str, redirects=2)  # full http:// string!
-    raise ArgumentError, 'HTTP redirect too deep' if redirects == 0
+    #raise ArgumentError, 'HTTP redirect too deep' if redirects == 0
+    displayError "HTTP redirect loop. Check your login data." if (redirects == 0)
     debug "Fetching URL [#{url_str}]"
     uri = URI.parse(url_str)
     #debug "URL parsed #{uri.scheme}://#{uri.host}:#{uri.port}"
@@ -250,9 +255,10 @@ class ShadowFetch
       query += "?" + uri.query
     end
 
+    @cookie = loadCookie()
     if @cookie
-      debug "Added Cookie to #{url_str}: #{@cookie[0..22]+'...'+cookie[-5..-1]}"
-      @httpHeaders['Cookie']=@cookie
+      debug "Added Cookie to #{url_str}: #{hideCookie(@cookie)}"
+      @httpHeaders['Cookie'] = @cookie
     else
       debug "No cookie to add to #{url_str}"
     end
@@ -287,7 +293,8 @@ class ShadowFetch
       # we may have received a cookie
       if resp.response && resp.response['set-cookie']
         @cookie = resp.response['set-cookie']
-        debug "received cookie: #{@cookie[0..22]+'...'+@cookie[-5..-1]}"
+        debug "received cookie: #{hideCookie(@cookie)}"
+        saveCookie(@cookie)
       end
       location = resp['location']
       debug "REDIRECT: [#{location}]"
@@ -333,7 +340,7 @@ class ShadowFetch
 
     if resp.response && resp.response['set-cookie']
       @cookie = resp.response['set-cookie']
-      debug "received cookie: #{@cookie[0..22]+'...'+@cookie[-5..-1]}"
+      debug "received cookie: #{hideCookie(@cookie)}"
     end
 
     return resp.body
