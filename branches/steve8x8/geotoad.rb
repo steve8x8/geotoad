@@ -176,15 +176,17 @@ class GeoToad
         puts "* Download from http://code.google.com/p/geotoad/downloads/list?can=1"
         puts "------------------------------------------------------------------------"
         version.data.scan(/\<div .*? id="wikimaincol"\>\s*(.*?)\s*\<\/div\>/m) do |notes|
-          text = CGI::unescapeHTML(notes[0])
+          text = notes[0].dup
           text.gsub!(/\<\/?tt\>/i, '')
           #text.gsub!(/\<p\>/i, "\n")
-          text.gsub!(/\<h[0-9]\>/i, "\n")
-          text.gsub!(/\<li\>/i, "\n * ")
-          text.gsub!(/\<a href=\"\#.*?\>/i, '')
-          text.gsub!(/\<a href=\"\/p\/.*\/(.*?)\"\>/i) { "[#{$1}] " }
+          text.gsub!(/\<h[0-9]\>/i, "\n\+ ")
+          text.gsub!(/\<li\>/i, "\n  * ")
+          text.gsub!(/\<a[^\>]+href=\"\/p\/geotoad\/wiki\/(.*?)\"\>/i) { "[#{$1}] " }
+          text.gsub!(/\<a[^\>]+href=\"\#.*?\>/i, '')
           text.gsub!(/\<.*?\>/, '')
-          text.gsub!(/\n\n*/, "\n")
+          text.gsub!(/\n\n+/, "\n")
+          text.gsub!(/\&nbsp;/, '-')
+          text = CGI::unescapeHTML(text)
           puts text
         end
         puts "------------------------------------------------------------------------"
