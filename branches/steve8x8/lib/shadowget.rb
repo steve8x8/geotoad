@@ -246,6 +246,9 @@ class ShadowFetch
       http = Net::HTTP.new(uri.host, uri.port)
     end
     if uri.scheme == 'https'
+      # for openssl 1.0.1+: limit to TLS 1.0 since gc doesn't renegotiate
+      # source: http://www.ruby-forum.com/topic/200072
+      http.instance_eval { @ssl_context = OpenSSL::SSL::SSLContext.new(:TLSv1) }
       http.use_ssl = true
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE
     end
