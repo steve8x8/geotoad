@@ -119,8 +119,9 @@ syntax: geotoad [options] <search:search2:search3>
  -b                     only include caches with travelbugs
  -l                     set EasyName waypoint id length. (16)
  -L    [count]          limit number of search pages (0=unlimited)
+ -Z                     don't overwrite existing cache descriptions
  -P                     HTTP proxy server, http://username:pass@host:port/
- -C                     Clear local browser cache
+ -C                     Selectively clear local browser cache
 
 ::: OUTPUT FORMATS:
  cachemate=   cetus+       csv          delorme      delorme-nour 

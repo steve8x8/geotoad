@@ -596,14 +596,14 @@ class SearchCache
       # stuff outside results table
       case line
       # <TD class="PageBuilderWidget"><SPAN>Total Records: <B>2938</B> - Page: <B>147</B> of <B>147</B>
-      when /Total Records: \<b\>(\d+)\<\/b\> - Page: \<b\>(\d+)\<\/b\> of \<b\>(\d+)\<\/b\>/
+      when /PageBuilderWidget[^:]+: +\<b\>(\d+)\<\/b\> [^:]+: +\<b\>(\d+)\<\/b\>.*?\<b\>(\d+)\<\/b\>/
         if not waypoints_total
           waypoints_total = $1.to_i
           page_number = $2.to_i
           pages_total = $3.to_i
         end
         # href="javascript:__doPostBack('ctl00$ContentBody$pgrTop$ctl08','')"><b>Next &gt;</b></a></td>
-        if line =~ /doPostBack\(\'([\w\$_]+)\',\'\'\)\"\>\<b\>Next/
+        if line =~ /doPostBack\(\'([\w\$_]+)\',\'\'\)\"\>\<b\>[^\>]+ \&gt;\<\/b\>/ #Next
           debug "Found next target: #{$1}"
           post_vars['__EVENTTARGET'] = $1
         end
@@ -643,9 +643,10 @@ class SearchCache
 # 2011-05-04: unchanged
       #                             11 Jul 10<br />
       # Yesterday<strong>*</strong><br />
-      when /^ +((\w+[ \w]+)|([0-9\/\.-]+))(\<strong\>)?\*?(\<\/strong\>)?\<br/
-        debug "last found date: #{$1} at line: #{line}"
-        cache['mtime'] = parseDate($1)
+      #when /^ +((\w+[ \w]+)|([0-9\/\.-]+))(\<strong\>)?(\*)?(\<\/strong\>)?\<br/
+      when /^ +(\w.*?)(\<strong\>)?(\*)?(\<\/strong\>)?\<br/
+        debug "last found date: #{$1}#{$3} at line: #{line}"
+        cache['mtime'] = parseDate($1+$3.to_s)
         cache['mdays'] = daysAgo(cache['mtime'])
         debug "mtime=#{cache['mtime']} mdays=#{cache['mdays']}"
 
@@ -653,9 +654,10 @@ class SearchCache
       # found date:
       # <span id="ctl00_ContentBody_dlResults_ctl??_uxUserLogDate" class="Success">5 days ago</span></span>
       # <span id="ctl00_ContentBody_dlResults_ctl01_uxUserLogDate" class="Success">Today<strong>*</strong></span></span>
-      when /^ +\<span [^\>]*UserLogDate[^\>]*\>((\w+[ \w]+)|([0-9\/\.-]+))(\<strong\>)?\*?(\<\/strong\>)?\<\/span\>\<\/span\>/
-        debug "user found date: #{$1} at line: #{line}"
-        cache['atime'] = parseDate($1)
+      #when /^ +\<span [^\>]*UserLogDate[^\>]*\>((\w+[ \w]+)|([0-9\/\.-]+))(\<strong\>)?(\*?)(\<\/strong\>)?\<\/span\>\<\/span\>/
+      when /^ +\<span [^\>]*UserLogDate[^\>]*\>(.*?)(\<strong\>)?(\*?)(\<\/strong\>)?\<\/span\>\<\/span\>/
+        debug "user found date: #{$1}#{$3} at line: #{line}"
+        cache['atime'] = parseDate($1+$3.to_s)
         cache['adays'] = daysAgo(cache['atime'])
         debug "atime=#{cache['atime']} adays=#{cache['adays']}"
 
@@ -733,6 +735,10 @@ class SearchCache
             cache['type'] = 'reverse'
           when /Block Party/
             cache['type'] = 'block'
+          # planned transition
+          when /Mystery/
+            cache['fulltype'] = 'Unknown Cache'
+            cache['type'] = 'unknown'
           end
           if full_type =~ /Event/
             debug "Setting event flag for #{full_type}"
@@ -830,6 +836,11 @@ class SearchCache
           if not cache['atime']
             cache['adays'] = -1
             cache['atime'] = Time.at($ZEROTIME)
+            # this will allow to output "myfind*" for others
+            # but if I found it too, my own find will show up
+            # FIXME!
+            #cache['adays'] = cache['mdays']
+            #cache['atime'] = cache['mtime']
           end
 
           @waypoints[wid] = cache.dup

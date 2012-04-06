@@ -971,6 +971,8 @@ class Output
 
     if @username and cache['visitors'].include?(@username)
       symbol = 'Geocache Found'
+    elsif cache['atime'].to_i > $ZEROTIME
+      symbol = 'Geocache Found'
     else
       symbol = 'Geocache'
     end

@@ -113,7 +113,8 @@ class Input
       [ "--disableEarlyFilter",       "-X",    GetoptLong::NO_ARGUMENT ],
 
       [ "--distanceMax",              "-y",    GetoptLong::OPTIONAL_ARGUMENT ],
-      [ "--includeDisabled",          "-z",    GetoptLong::NO_ARGUMENT ]
+      [ "--includeDisabled",          "-z",    GetoptLong::NO_ARGUMENT ],
+      [ "--preserveCache",            "-Z",    GetoptLong::NO_ARGUMENT ]
     ) || usage
 
     # put the stupid crap in a hash. Much nicer to deal with.
@@ -256,8 +257,9 @@ class Input
     puts " -b                     only include caches with travelbugs"
     puts " -l                     set EasyName waypoint id length. (16)"
     puts " -L                     limit number of search pages (0=unlimited)"
+    puts " -Z                     don't overwrite existing cache descriptions"
     puts " -P                     HTTP proxy server, http://username:pass@host:port/"
-    puts " -C                     Clear local browser cache"
+    puts " -C                     Selectively clear local browser cache"
     puts ""
     puts "::: OUTPUT FORMATS:"
     outputDetails = Output.new
