@@ -1,61 +1,56 @@
-geotoad (3.15.5-1) unstable; urgency=low
+geotoad (3.15.6-1) unstable; urgency=low
 
-  * New development version 3.15.5
+  * New version 3.15.6
+  * Derived from delevopment 3.15.5
+  * Issue 162: Cache aging
   * Issue 175: More selective, non-interfering cleaning
+  * Issue 191: Preserve cached files
+  * Issue 198: Early login to fix authentication problems
+  * Issue 205: Own finds
+  * Issue 210: User preferences (language, date format)
+  * Issue 228: "guid" queries now find WID without Google Maps
+  * Minor other stuff
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Tue, 01 May 2012 14:00:00 +0200
+
+geotoad (3.14.9-1) unstable; urgency=low
+
+  * New release 3.14.9
+  * Issue 218: select/exclude by attributes set/unset
   * Issue 221: Fix documentation of !keyword for -k/-K
   * Issue 226: Past events are unavailable
-  * Issue 228: "guid" queries now find WID without Google Maps
+  * Issue 228: "guid" queries
   * Issue 231: Remove <font> tags from log comments
   * Issue 232: Reduce coordinate precision to 6 decimal places
 
  -- Steve Sixty-Four <steve8x8@gmail.com>  Wed, 14 Mar 2012 14:00:00 +0100
 
-geotoad (3.15.4-1) unstable; urgency=low
+geotoad (3.14.8-1) unstable; urgency=low
 
-  * New development release 3.15.4
+  * New release 3.14.8
   * Maintenance release
-  * Issue 230: 2012-02-14 site update
-  * Use at your own risk!
+  * Issue 230: Fix for 2012-02-14 site update
+  * Issue 216: Multiple output formats
 
  -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 16 Feb 2012 14:00:00 +0100
 
-geotoad (3.15.3-1) unstable; urgency=low
+geotoad (3.14.7-1) unstable; urgency=low
 
-  * New development release 3.15.3
-  * Issue 218: select/exclude by attributes set/unset
-  * Issue 228: --query guid
-  * Use at your own risk!
-
- -- Steve Sixty-Four <steve8x8@gmail.com>  Tue, 24 Jan 2012 09:30:00 +0100
-
-geotoad (3.15.2-1) unstable; urgency=low
-
-  * New development release 3.15.2
+  * New release 3.14.7
   * Long options documented in man page
-  * Login cookies are finally reused
-  * Improved multi-language patterns
-  * Legacy hardware related: "mystery" caches will be translated to "unknown"
-  * Use at your own risk!
+  * Issue #204: Country/state selection is back
+  * Issue #183: Early selection by Difficulty/Terrain/Size, emergency switch -X
+  * Issue #154: Limit number of search pages (-L option)
+  * Fixes for time precision (issue #224) and non-printable characters (issue #225)
 
- -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 22 Dec 2011 20:00:00 +0200
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 22 Dec 2011 20:00:00 +0100
 
-geotoad (3.15.1-1) unstable; urgency=low
+geotoad (3.14.6-1) unstable; urgency=low
 
-  * New development release 3.15.1
-  * Hotfix for 2011-10-06 site update
+  * New release 3.14.6: Hotfix for 2011-10-06 site update
   * Better text and html output
-  * Ruby 1.9 encoding issue addressed
-  * Cookies now stored in YAML
-  * Use at your own risk!
 
- -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 13 Oct 2011 14:45:00 +0200
-
-geotoad (3.15.0-1) unstable; urgency=low
-
-  * New development release 3.15.0
-  * Use at your own risk!
-
- -- Steve Sixty-Four <steve8x8@gmail.com>  Sun, 11 Sep 2011 21:00:00 +0200
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Wed, 12 Oct 2011 20:00:00 +0200
 
 geotoad (3.14.5-1) unstable; urgency=low
 
