@@ -44,7 +44,6 @@ interface" (TUI). Simply double click on the GeoToad program icon, or from
 a command prompt run "geotoad". On UNIX, you may have to run "./geotoad.rb".
 You will then see a screen that looks similar to this:
 
-
 ==============================================================================
 :::                // GeoToad %VERSION% Text User Interface //                :::
 ==============================================================================
@@ -69,7 +68,6 @@ You will then see a screen that looks similar to this:
 -- Enter menu number, (s) to start, (r) to reset, or (x) to exit --> 
 
 
-
 At this point, follow the prompt and begin typing the number of the item
 you wish to change, pressing enter afterwards. You will need to enter your
 login and some basic search criteria first.
@@ -89,7 +87,6 @@ geocaches that have not been found in your area.
 
 If you go to the command line, and run geotoad -h, you will get a screen
 with a list of of options such as the following:
-
 
 syntax: geotoad [options] <search:search2:search3>
 
@@ -138,7 +135,6 @@ syntax: geotoad [options] <search:search2:search3>
 ::: EXAMPLES:
   geotoad.rb -u helixblue -p password 27502
   geotoad.rb -u john -p password -d 3 -I helixblue -f vcf -o NC.vcf 'North Carolina'
-
 
 
 

@@ -6,8 +6,10 @@ Table of Contents:
 ------------------
 * "Proximity" search around an existing geocache
 * Searches along a given track/route (issue 103)
+* Parsing bookmark lists (issue 227)
 * Removing mystery caches from GPX
 * Merging riddle solutions into GPX
+* Modify GPX files to be accepted by BaseCamp (issue 238)
 
 _Note: Tested with Debian Linux and bash. Adaptions may be necessary._
 
@@ -25,7 +27,6 @@ Here's a suggestion how to accomplish this (you will have to
 add your credentials, and modify some other search parameters,
 but you'll get the idea):
 
-
 #!/bin/bash
 
 CENTER=GC77       # or whatever should be the center of your search
@@ -40,11 +41,9 @@ COORDS=`awk '{printf("%s,%s\n",$2,$3)}' $CENTER.list`
 # now run the real query
 geotoad -q coord -x gpx -o `pwd`/$CENTER-prox.gpx "$COORDS"
 
-
 ----------------------------------------------
 Searches along a given track/route (issue 103)
 ----------------------------------------------
-
 
 #!/bin/bash
 
@@ -81,13 +80,32 @@ awk '{printf("%.3f,%.3f|",$1,$2)}'
 
 echo geotoad ... -y$circle -q coord \"$searchargs\"
 
-
 Note the number of decimals in the "printf" command -
 it will limit center point precision to about 100 metres
 which should be sufficient in most cases.
 
 The values for "error", "distance" and "circle" have to be adjusted by hand.
 The ratio distance/circle obviously has to be smaller than 2 ;)
+
+----------------------------------
+Parsing bookmark lists (issue 227)
+----------------------------------
+
+With issue 228 resolved, this has become easier:
+
+#!/bin/bash
+
+# example: Berlin/Brandenburg area night caches
+listguid="cbb21edf-fb9e-45b5-9b27-c51fd6453cbf"
+
+# extract list of guids from KML file
+GUIDS=`
+lynx -source "http://www.geocaching.com/kml/bmkml.aspx?bmguid=$listguid" \
+| perl -ne 'if(/\?guid=([0-9a-f-]+)/){printf("%s:",$1)}'
+`
+
+# now run the real query
+geotoad -q guid -x gpx -o `pwd`/list_$listguid.gpx "$GUIDS"
 
 --------------------------------
 Removing mystery caches from GPX
@@ -101,12 +119,10 @@ without cache type "unknown" is time-consuming and error-prone.
 The following Ruby scriptlet gpxdemystify will strip "Unknown" caches from
 a GPX file produced by GeoToad:
 
-
 #!/usr/bin/env ruby
 puts $stdin.read.split(/<\/wpt>/).map { |fragment|
     (fragment !~ /<groundspeak:type>Unknown Cache/m) ? fragment : nil
 }.compact.join("</wpt>")
-
 
 to be run as follows:   gpxdemystify <input.gpx >output.gpx
 
@@ -117,7 +133,6 @@ Merging riddle solutions into GPX
 Similarly, it is possible to merge a list of "solved" mysteries, or
 already reached multi-cache stages, into an existing GPX, using 
 gpxsolutions as follows:
-
 
 #!/usr/bin/env ruby
 # merge solved mysteries into GPX file
@@ -167,12 +182,10 @@ puts $stdin.read.split(/<\/wpt>/).map { |fragment|
     fragment
 }.join("</wpt>")
 
-
 to be run as follows:   gpxsolutions solved.txt <input.gpx >output.gpx
 
 with a solved.txt file listing points by name, lat, lon (where point names are 
 constructed the same way as "normal" waypoints) as in the following fictional list:
-
 
 gcqmea  02.012345 53.987654
 gcwpgf  13.543210 41.456789
@@ -180,6 +193,24 @@ gcwpgf  13.543210 41.456789
 0116d4t 32.888888 23.555555
 0018k6k 42.010101 13.101010
 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-------------------------------------------------------
+Modify GPX files to be accepted by BaseCamp (issue 238)
+-------------------------------------------------------
+
+BaseCamp 3.3.1 reportedly doesn't like GroundSpeak's GPX extensions (what they call
+"GPX 1.0.1"), and refuses to show cache details.
+
+Since extensions are essential for attribute support, GeoToad GPX output is (and will
+continue to be) 1.0.1 compatible, but it's rather easy to mangle a GPX file to look 
+like a 1.0 one:
+
+cat geotoadoutput.gpx \
+| sed 's~http://www.groundspeak.com/cache/1/0/1~http://www.groundspeak.com/cache/1/0~g' \
+> basecampinput.gpx
+
+It's not even necessary to remove the "groundspeak:attributes" section.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

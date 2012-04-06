@@ -9,6 +9,7 @@ Table of Contents:
 * What software can you use the GPX files in?
 * Why is there no GUI for GeoToad?
 * What are the "Fun Factor" ratings?
+* So what about that new "Fav Factor" in the devel series?
 * geotoad.exe gets relative paths wrong in Windows
 * I cannot login with a name containing an umlaut ("ÜbercacherXY")
 * What about country and state searches?
@@ -101,6 +102,32 @@ at this time.
 Fun factors may be replaced by favorite counts in the future.
 
 
+--------------------------------------------------------
+So what about that new "Fav Factor" in the devel series?
+--------------------------------------------------------
+Fav Factors, like their Fun Factor predecessors, are a "synthetic" rating
+based on the number of favorite points given and the total number of 
+"Found it"s.
+
+Currently, the formula used is "5+ln(favs/total)", the number
+obtained is trimmed to one decimal place, and cut-offs at 0.0 and
+5.0 are applied. This will give the "super duper everyone's darling"
+cache a rating of 5.0, and an "average" cache (which gets its 1 of 10
+share) will end up very close to 2.5.
+
+There are a couple of pitfalls though:
+
+ - Favorite points were introduced around Feb 1, 2011. This means that:
+ - Old (but "gold") caches won't get their corresponding share anymore.
+ - Premium-Member only caches will get some advantage over normal ones.
+ - Only a few output templates support Fav Factor output.
+
+The situation is similar to Fun Factors: you have to believe in the
+algorithm as there (at the moment) are no means to track what's going
+on, except using debug mode. But on the other hand, it doesn't depend
+on "training", and will work everywhere on Earth, independent of language.
+
+
 ------------------------------------------------
 geotoad.exe gets relative paths wrong in Windows
 ------------------------------------------------
@@ -115,7 +142,7 @@ work any longer with recent Ruby versions, we had to change the packaging
 to Ocra (a Ruby gem).
 With the new packaging, unfortunately, we see GeoToad crash if it isn't run 
 in the installation directory.
-This crash is related to funfactors
+This crash (which may have been fixed by now?) is related to funfactors
 which will disappear in the near future, to be replaced by favorite counts.
 As a workaround, we suggest to make sure GeoToad is run from its own directory.
 
