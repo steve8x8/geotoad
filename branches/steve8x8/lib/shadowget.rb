@@ -248,9 +248,12 @@ class ShadowFetch
     if uri.scheme == 'https'
       http.use_ssl = true
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      # openssl 1.0.1 tends to produce long headers which gc doesnt handle
+      # reduce set of ciphers to the one that's known to work with 1.0.0h
+      # http://gursevkalra.blogspot.de/2009/09/ruby-and-openssl-based-ssl-cipher.html
       http.ciphers = 'RC4-SHA'
-      # for openssl 1.0.1+: limit to TLS 1.0 since gc doesn't renegotiate
-      # source: http://www.ruby-forum.com/topic/200072
+      # force ssl context to TLSv1/SSLv3
+      # http://www.ruby-forum.com/topic/200072
       http.instance_eval { @ssl_context = OpenSSL::SSL::SSLContext.new(:TLSv1) }
     end
 
