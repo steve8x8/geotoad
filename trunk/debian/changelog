@@ -9,6 +9,7 @@ geotoad (3.15.6-1) unstable; urgency=low
   * Issue 205: Own finds
   * Issue 210: User preferences (language, date format)
   * Issue 228: "guid" queries now find WID without Google Maps
+  * Issue 237: Shrink cipher list, force TLSv1 to work with newer OpenSSL
   * Issue 239: Ampersands not properly escaped in rare situations
   * Minor other stuff
 
