@@ -13,6 +13,12 @@ See also [http://forums.groundspeak.com/GC/index.php?showforum=89 Release Notes 
 _*(new entries will be added on top)*_
 
 ----
+2012-04-24:
+  * _"Geocaching.com ... site update on Tuesday, April 24, 2012 ... 10am PST"_ (1700 UTC?)
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=294569 release notes]
+  * _cannot find any hint in release notes what might have affected GeoToad_
+  * new server build: *{{{Web.HotFix_20120423.2}}}*
+----
 2012-03-27:
   * _"Geocaching.com ... site update on Tuesday, March 27, 2012 ... 10am PDT"_ (1700 UTC)
   * [http://forums.groundspeak.com/GC/index.php?showtopic=292927 release notes]
