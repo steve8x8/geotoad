@@ -1,6 +1,6 @@
-geotoad (3.15.6-1) unstable; urgency=low
+geotoad (3.16.0-1) unstable; urgency=low
 
-  * New version 3.15.6
+  * New version 3.16.0
   * Derived from delevopment 3.15.5
   * Issue 162: Cache aging
   * Issue 175: More selective, non-interfering cleaning
@@ -13,7 +13,7 @@ geotoad (3.15.6-1) unstable; urgency=low
   * Issue 239: Ampersands not properly escaped in rare situations
   * Minor other stuff
 
- -- Steve Sixty-Four <steve8x8@gmail.com>  Tue, 01 May 2012 14:00:00 +0200
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Sat, 05 May 2012 14:00:00 +0200
 
 geotoad (3.14.9-1) unstable; urgency=low
 

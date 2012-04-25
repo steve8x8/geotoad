@@ -1,12 +1,12 @@
-geotoad (3.16.0-1) unstable; urgency=low
+geotoad (3.17.0-1) unstable; urgency=low
 
-  * New development version 3.16.0
+  * New development version 3.17.0
   * Issue 233: If one cacheType selected, use tx= search parameter
   * Issue 234: Fav points listed in html and text, fav filter in UI
   * Issue 237: Shrink cipher list, force TLSv1 to work with newer OpenSSL
   * Issue 239: Ampersands not properly escaped in rare situations
 
- -- Steve Sixty-Four <steve8x8@gmail.com>  Tue, 01 May 2012 14:00:00 +0200
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Sat, 05 May 2012 14:00:00 +0200
 
 geotoad (3.15.5-1) unstable; urgency=low
 
