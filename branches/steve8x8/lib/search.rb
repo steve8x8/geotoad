@@ -112,7 +112,6 @@ class SearchCache
     case mode
     when 'location'
       @query_type = 'location'
-      @query_arg = key
       geocoder = GeoCode.new()
       accuracy, lat, lon = geocoder.lookup_location(key)
       debug "geocoder returned: a:#{accuracy} x:#{lat} y:#{lon}"
@@ -158,10 +157,12 @@ class SearchCache
 
     when 'wid'
       @query_type = 'wid'
+      @query_arg = key.upcase
       @search_url = "http://www.geocaching.com/seek/cache_details.aspx?wp=#{key.upcase}"
 
     when 'guid'
       @query_type = 'guid'
+      @query_arg = key.downcase
       @search_url = "http://www.geocaching.com/seek/cache_details.aspx?guid=#{key.downcase}"
     end
 
@@ -368,11 +369,13 @@ class SearchCache
     if @query_type == 'wid'
       waypoint = getWidSearchResult(@search_url)
       wid = waypoint['wid']
-      if wid and (wid != @query_arg)
-        displayWarning "Replacing WID #{@query_arg} with #{wid}"
-        @query_arg = wid
+      if wid
+        if (wid != @query_arg)
+          displayWarning "Replacing WID #{@query_arg} with #{wid}"
+          @query_arg = wid
+        end
+        @waypoints[@query_arg] = waypoint
       end
-      @waypoints[@query_arg] = waypoint
       return @waypoints
     elsif @query_type == 'guid'
       waypoint = getWidSearchResult(@search_url)
@@ -382,7 +385,7 @@ class SearchCache
         waypoint['guid'] = @query_arg
         @waypoints[wid] = waypoint
       else
-        displayWarning "Could not identify; member-only cache?"
+        displayWarning "Could not find WID for GUID #{@query_arg}"
       end
       return @waypoints
     else
@@ -410,6 +413,9 @@ class SearchCache
     data.split("\n").each { |line|
       line.gsub!(/&#39;/, '\'')
       case line
+      when /Geocaching . Hide and Seek a Geocache . Unpublished Geocache/
+        debug "Unpublished cache, leaving parser"
+        break
       when /Premium Member Only Cache/
         membersonly = true
       when /^\s+GC.*\((.*)\) in ((.*), )?(.*) created by (.*?)\s*$/
@@ -418,9 +424,16 @@ class SearchCache
         country = $4
         owner = $5
         debug "#{ctype} by #{owner} in #{country}/#{state}"
+      #<span id="ctl00_ContentBody_MapLinks_MapLinks">...
+      #...<li><a href="http://maps.google.com/maps?q=N+12%c2%b0+46.880+E+100%c2%b0+54.304+(GC10011)+" target="_blank">Google Maps</a></li>...
+      #...<li><a href="http://www.bing.com/maps/default.aspx?v=2&lvl=14&sp=point.12.78133_100.90507_GC10011" target="_blank">Bing Maps</a></li>...
+      # not sure whether Google Maps links will disappear completely, let's have Bing in place
       when /\+\((GC\w+)\)\+[^>]+>Google Maps/
         wid = $1
-        debug "Found WID: #{wid}"
+        debug "Found WID: #{wid} (Google)"
+      when /_(GC\w+)[^>]+>Bing Maps/
+        wid = $1
+        debug "Found WID: #{wid} (Bing)"
       when /\<meta name=.og:url.\s+content=.http:\/\/coord.info\/(GC\w+)./
         wid = $1
         debug "Found WID: #{wid}"
