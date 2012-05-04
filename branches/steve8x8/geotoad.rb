@@ -287,6 +287,9 @@ class GeoToad
         search.txfilter = @option['cacheType']
       end
 
+      # exclude own found
+      search.notyetfound = (@option['notFoundByMe'] ? true : false)
+
       if (! search.setType(@queryType, queryArg))
         displayError "(could not determine search type for #{@queryType}, exiting)"
         exit
@@ -320,6 +323,10 @@ class GeoToad
   def prepareFilter
     # Prepare for the manipulation
     @filtered = Filter.new(@combinedWaypoints)
+
+    if @option['notFoundByMe']
+      @queryTitle = @queryTitle + ", not found by " + @option['user']
+    end
 
     # This is where we do a little bit of cheating. In order to avoid downloading the
     # cache details for each cache to see if it's been visited, we do a search for the

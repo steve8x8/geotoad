@@ -47,6 +47,9 @@ class SearchCache
     }
     @txfilter = nil
 
+    # exclude own found
+    @notyetfound = false
+
     # Original base-42 code taken from Rick Richardson's geo-* utilities
     # @ http://geo.rkkda.com/ (patch of 2011-01-04 19:25 local time),
     # but those only worked until 2011-01-06 (kept here for reference).
@@ -103,6 +106,10 @@ class SearchCache
     # may return nil if not found
     @txfilter = @cachetypetx[cacheType]
     debug "Setting txfilter to \"#{cacheType}\", now #{@txfilter.inspect}"
+  end
+
+  def notyetfound=(truefalse)
+    @notyetfound = truefalse
   end
 
   def setType(mode, key)
@@ -177,6 +184,10 @@ class SearchCache
 
     if @txfilter
         @search_url = @search_url + '&tx=' + @txfilter
+    end
+
+    if @notyetfound
+        @search_url = @search_url + '&f=1'
     end
 
     if supports_distance and @distance

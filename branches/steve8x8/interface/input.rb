@@ -93,6 +93,7 @@ class Input
       [ "--waypointLength",           "-l",    GetoptLong::OPTIONAL_ARGUMENT ],
       [ "--limitSearchPages",         "-L",    GetoptLong::OPTIONAL_ARGUMENT ],
       [ "--notFound",                 "-n",    GetoptLong::NO_ARGUMENT ],
+      [ "--notFoundByMe",             "-N",    GetoptLong::NO_ARGUMENT ],
       [ "--output",                   "-o",    GetoptLong::OPTIONAL_ARGUMENT ],
 
       [ "--password",                 "-p",    GetoptLong::REQUIRED_ARGUMENT ],         # * REQ
@@ -258,6 +259,7 @@ class Input
     puts " -a/-A [attribute]      include/exclude caches with attributes set"
     puts " -z                     include disabled caches"
     puts " -n                     only include not found caches (virgins)"
+    puts " -N                     only caches not yet found by login user"
     puts " -b                     only include caches with travelbugs"
     puts " -l                     set EasyName waypoint id length. (16)"
     puts " -L                     limit number of search pages (0=unlimited)"
