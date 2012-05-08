@@ -325,13 +325,13 @@ class GeoToad
     if @option['userExclude'] and not @option['userExclude'].empty?
       @queryTitle = @queryTitle + ", excluding caches done by " + @option['userExclude']
       @defaultOutputFile = @defaultOutputFile + "-E=" + @option['userExclude']
-      userLookups = @option['userExclude'].split(':')
+      userLookups = @option['userExclude'].split(/[:\|]/)
     end
 
     if @option['userInclude'] and not @option['userInclude'].empty?
       @queryTitle = @queryTitle + ", excluding caches not done by " + @option['userInclude']
       @defaultOutputFile = @defaultOutputFile + "-e=" + @option['userInclude']
-      userLookups = userLookups + @option['userInclude'].split(':')
+      userLookups = userLookups + @option['userInclude'].split(/[:\|]/)
     end
 
     userLookups.each { |user|
