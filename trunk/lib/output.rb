@@ -417,7 +417,7 @@ class Output
   end
 
   def writeFile (file)
-    file = open(file, "w");
+    file = open(file, "w")
     file.puts(@output)
     file.close
   end

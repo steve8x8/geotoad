@@ -158,7 +158,7 @@ class GeoToad
       return nil
     end
 
-    url = "http://code.google.com/p/geotoad/wiki/CurrentVersion";
+    url = "http://code.google.com/p/geotoad/wiki/CurrentVersion"
 
     debug "Checking for latest version of GeoToad from #{url}"
     version = ShadowFetch.new(url)
@@ -168,7 +168,7 @@ class GeoToad
 
     if (($VERSION =~ /^(\d\.\d+\.\d+)/) && (version.data =~ /version=(\d\.\d+[\.\d]+)/))
       latestVersion = $1
-      releaseNotes = $2;
+      releaseNotes = $2
 
       if comparableVersion(latestVersion) > comparableVersion($VERSION)
         puts "------------------------------------------------------------------------"
@@ -768,7 +768,7 @@ class GeoToad
       queryTitle = @queryTitle + " (" + Time.now.strftime("%d%b%y %H:%M") + ")"
 
       # and do the dirty.
-      outputData = output.prepare(queryTitle, @option['user']);
+      outputData = output.prepare(queryTitle, @option['user'])
       output.commit(outputFile)
       displayMessage "Saved to #{outputFile}"
 

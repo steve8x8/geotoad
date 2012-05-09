@@ -12,7 +12,7 @@ CACHE_SECONDS = 86400 * 180
 class GeoCode
   include Common
   include Messages
-  
+
   def lookup_location(location)
     data = get_url(create_url(location))
     code, accuracy, lat, lon = parse_data(data)
