@@ -158,7 +158,7 @@ class GeoToad
       return nil
     end
 
-    url = "http://code.google.com/p/geotoad/wiki/CurrentDevelVersion";
+    url = "http://code.google.com/p/geotoad/wiki/CurrentDevelVersion"
 
     debug "Checking for latest version of GeoToad from #{url}"
     version = ShadowFetch.new(url)
@@ -168,7 +168,7 @@ class GeoToad
 
     if (($VERSION =~ /^(\d\.\d+\.\d+)/) && (version.data =~ /version=(\d\.\d+[\.\d]+)/))
       latestVersion = $1
-      releaseNotes = $2;
+      releaseNotes = $2
 
       if comparableVersion(latestVersion) > comparableVersion($VERSION)
         puts "------------------------------------------------------------------------"
@@ -337,13 +337,13 @@ class GeoToad
     if @option['userExclude'] and not @option['userExclude'].empty?
       @queryTitle = @queryTitle + ", excluding caches done by " + @option['userExclude']
       @defaultOutputFile = @defaultOutputFile + "-E=" + @option['userExclude']
-      userLookups = @option['userExclude'].split(':')
+      userLookups = @option['userExclude'].split(/[:\|]/)
     end
 
     if @option['userInclude'] and not @option['userInclude'].empty?
       @queryTitle = @queryTitle + ", excluding caches not done by " + @option['userInclude']
       @defaultOutputFile = @defaultOutputFile + "-e=" + @option['userInclude']
-      userLookups = userLookups + @option['userInclude'].split(':')
+      userLookups = userLookups + @option['userInclude'].split(/[:\|]/)
     end
 
     userLookups.each { |user|
@@ -802,7 +802,7 @@ class GeoToad
       queryTitle = @queryTitle + " (" + Time.now.strftime("%d%b%y %H:%M") + ")"
 
       # and do the dirty.
-      outputData = output.prepare(queryTitle, @option['user']);
+      outputData = output.prepare(queryTitle, @option['user'])
       output.commit(outputFile)
       displayMessage "Saved to #{outputFile}"
 

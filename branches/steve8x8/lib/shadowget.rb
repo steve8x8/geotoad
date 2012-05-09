@@ -107,7 +107,7 @@ class ShadowFetch
     localfile.gsub!(/[^\/\w\.\-]/, "_")
     localfile.gsub!(/_+/, "_")
     if $CACHE_DIR
-      localfile = $CACHE_DIR + localfile;
+      localfile = $CACHE_DIR + localfile
     else
       localfile = '/tmp' + localfile
     end
@@ -275,7 +275,7 @@ class ShadowFetch
     success = true
     begin
       if (@postVars)
-        @httpHeaders['Content-Type'] =  "application/x-www-form-urlencoded";
+        @httpHeaders['Content-Type'] =  "application/x-www-form-urlencoded"
         debug "POST to #{query}, headers are #{@httpHeaders.keys.join(" ")}"
         resp = http.post(query, @postString, @httpHeaders)
         # reset POST variables

@@ -287,7 +287,7 @@ class Input
         type = type + "="
       end
 
-      printf(" %-12.12s", type);
+      printf(" %-12.12s", type)
 
     }
     puts ""
@@ -306,7 +306,7 @@ class Input
 
     while (answer !~ /^[sq]/i)
       if RUBY_PLATFORM =~ /win32/
-        system("cls");
+        system("cls")
       else
         # This could be bad under Ubuntu
         #        system("stty erase ^H >/dev/null 2>/dev/null")
@@ -547,7 +547,7 @@ class Input
           if (req)
             req = "[" + req + " required]"
           end
-          printf("%-12.12s: %-45.45s %s\n", type, desc, req);
+          printf("%-12.12s: %-45.45s %s\n", type, desc, req)
         }
 
         puts ""
