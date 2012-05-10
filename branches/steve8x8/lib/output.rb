@@ -451,7 +451,7 @@ class Output
   def replaceVariables(templateText, wid)
     # okay. I will fully admit this is a *very* unusual way to handle
     # the templates. This all came to be due to a lot of debugging.
-    debug "out.wid for #{wid} is [#{@outVars['wid']}]"
+    debug "out.wid for #{wid.inspect} is [#{@outVars['wid'].inspect}]"
     tags = templateText.scan(/\<%(\w+\.\w+)%\>/)
     text = templateText.dup
     tags.each { |tag|
