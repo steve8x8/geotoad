@@ -219,7 +219,7 @@ $Format = {
       "----------------------------------------------------------------\r\n\r\n" +
       "Lat: <%wp.latwritten%> Lon: <%wp.lonwritten%>\r\n" +
       "Difficulty: <%wp.difficulty%>, Terrain: <%wp.terrain%>, FunFactor: <%wp.funfactor%>, FavFactor: <%wp.favfactor%>\r\n" +
-      "Type/Size: <%wp.type%> (<%wp.size%>) <%out.relativedistance%>\r\n" +
+      "Type/Size: <%wp.type%> (<%wp.size%>), Distance: <%out.relativedistance%>\r\n" +
       "Creation: <%out.cdate%>, Last comment: <%wp.last_find_days%> days ago (<%wp.last_find_type%>)\r\n\r\n" +
       "Attributes: <%out.txtAttrs%>\r\n" +
       "State: <%out.warnArchiv%><%out.warnAvail%>\r\n" +
