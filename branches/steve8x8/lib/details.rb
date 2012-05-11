@@ -348,12 +348,14 @@ class CacheDetails
 
       # <p class="Meta"><strong>Size:</strong> <img src="../images/icons/container/regular.gif" alt="Size: Regular" />&nbsp;<small>(Regular)</small></p>
       if line =~ /\<img src=".*?" alt="Size: (.*?)" \/\>/
-        cache['size'] = $1.downcase
+        if not cache['size']
+          cache['size'] = $1.downcase
+        end
         debug "found size: #{$1}"
       end
 
       # latitude and longitude in the written form. Rewritten by Scott Brynen for Southpole compatibility.
-      if line =~ /=\"LatLong Meta"\>/
+      if line =~ /=\"LatLong Meta\"\>/
         nextline_coords = true
       end
 
@@ -443,12 +445,16 @@ class CacheDetails
     end
 
     if data =~ /Difficulty:.*?([\d\.]+) out of 5/m
-      cache['difficulty'] = tohalfint($1)
+      if not cache['difficulty']
+        cache['difficulty'] = tohalfint($1)
+      end
       debug "difficulty: #{cache['difficulty']}"
     end
 
     if data =~ /Terrain:.*?([\d\.]+) out of 5/m
-      cache['terrain'] = tohalfint($1)
+      if not cache['terrain']
+        cache['terrain'] = tohalfint($1)
+      end
       debug "terrain: #{cache['terrain']}"
     end
 
