@@ -826,7 +826,7 @@ class SearchCache
           cache['disabled'] = false
         end
 
-        cache['name']=name.gsub(/ +$/, '')
+        cache['name'] = name.gsub(/ *$/, '').gsub(/  */, ' ')
         debug "guid=#{cache['guid']} name=#{cache['name']} (disabled=#{cache['disabled']}, archived=#{cache['archived']})"
 
 # 2011-05-04: unchanged
