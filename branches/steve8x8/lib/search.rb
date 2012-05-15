@@ -439,6 +439,7 @@ class SearchCache
       #...<li><a href="http://maps.google.com/maps?q=N+12%c2%b0+46.880+E+100%c2%b0+54.304+(GC10011)+" target="_blank">Google Maps</a></li>...
       #...<li><a href="http://www.bing.com/maps/default.aspx?v=2&lvl=14&sp=point.12.78133_100.90507_GC10011" target="_blank">Bing Maps</a></li>...
       # not sure whether Google Maps links will disappear completely, let's have Bing in place
+      # Caveat: GC wid codes may be absent (for Premium Members?)
       when /\+\((GC\w+)\)\+[^>]+>Google Maps/
         wid = $1
         debug "Found WID: #{wid} (Google)"
@@ -447,7 +448,16 @@ class SearchCache
         debug "Found WID: #{wid} (Bing)"
       when /\<meta name=.og:url.\s+content=.http:\/\/coord.info\/(GC\w+)./
         wid = $1
-        debug "Found WID: #{wid}"
+        debug "Found WID: #{wid} (coord.info)"
+      # added 2012-05-15:
+      #<span id="ctl00_ContentBody_CoordInfoLinkControl1_uxCoordInfoCode" class="CoordInfoCode">GCZFC2</span>
+      when /class=.CoordInfoCode.\>(GC\w+)\<\/span\>/
+        wid = $1
+        debug "Found WID: #{wid} (CoordInfo)"
+      #<input type="submit" name="ctl00$ContentBody$btnSendToPhone" value="Send to My Phone" onclick="s2phone(&#39;GC332MT&#39;);return false;" id="ctl00_ContentBody_btnSendToPhone" />
+      when /onclick=.s2phone\(.*?(GC\w+).*?\);return/
+        wid = $1
+        debug "Found WID: #{wid} (s2phone)"
       # for filtering; don't care about ".0" representation
       when /_uxLegendScale.*?(\d(\.\d)?) out of/
         cdiff = tohalfint($1)
