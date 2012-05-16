@@ -13,11 +13,17 @@ See also [http://forums.groundspeak.com/GC/index.php?showforum=89 Release Notes 
 _*(new entries will be added on top)*_
 
 ----
+2012-05-15:
+  * _"Geocaching.com ...  site update on Tuesday, May 15, 2012 ... 5pm PDT"_ (midnight UTC?)
+  * *no release notes?*
+  * still using:      *{{{Web.HotFix_20120509.1}}}*
+----
 2012-05-08:
   * _(No prior notification?)_
   * [http://forums.groundspeak.com/GC/index.php?showtopic=295312 release notes]
-  * _no effect detected yet_
+  * _wid codes removed from map links for Premium Members only(?)_
   * new server build: *{{{Web.HotFix_20120508.2}}}*
+  * 2012-05-10:       *{{{Web.HotFix_20120509.1}}}*
 ----
 2012-04-24:
   * _"Geocaching.com ... site update on Tuesday, April 24, 2012 ... 10am PST"_ (1700 UTC?)
