@@ -1,6 +1,5 @@
 #!/bin/bash
 # Builds a new release of geotoad
-# $Id: makedist.se,v 1.3 2002/04/23 04:05:41 helix Exp $
 
 # For Windows build, we require a Ruby installation including the "Ocra" gem
 
@@ -124,7 +123,7 @@ Source: "tools\*.*";                 DestDir: "{app}\tools"
 Source: "ChangeLog.txt";             DestDir: "{app}"
 Source: "COPYRIGHT.txt";             DestDir: "{app}"
 Source: "FAQ.txt";                   DestDir: "{app}"
-;Source: "TODO.txt";                  DestDir: "{app}"
+Source: "TODO.txt";                  DestDir: "{app}"; Flags: skipifsourcedoesntexist
 Source: "README.txt";                DestDir: "{app}"; Flags: isreadme
 
 [Icons]
