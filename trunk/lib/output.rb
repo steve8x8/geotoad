@@ -359,7 +359,7 @@ class Output
       @outputType = format
       debug "format switched to #{format}"
     else
-      displayError "[*] Attempted to select invalid format: #{format}"
+      displayWarning "Attempted to select invalid format: #{format}"
       return nil
     end
   end
@@ -439,8 +439,7 @@ class Output
       debug "exec = #{exec}"
       system(exec)
       if (! File.exists?(file))
-        displayError "Output filter did not create file #{file}. exec was:"
-        displayError "#{exec}"
+        displayError "Output filter did not create file #{file}. exec was: #{exec}"
       end
     else
       debug "no exec"
