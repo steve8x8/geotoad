@@ -96,7 +96,7 @@ class GeoToad
       debug "No user/password option given, loading from config."
       (@option['user'], @option['password']) = @uin.loadUserAndPasswordFromConfig()
       if (! @option['user']) || (! @option['password'])
-        displayError "You must specify a username and password to download coordinates from Geocaching.com"
+        displayError "You must specify a username and password!"
         exit
       end
     end
@@ -198,43 +198,43 @@ class GeoToad
   end
 
   def clearCacheDirectory
-    displayWarning "Clearing #{$CACHE_DIR} selectively"
+    displayMessage "Clearing #{$CACHE_DIR} selectively"
     #FileUtils::remove_dir($CACHE_DIR)
     # remove more selectively
     #FileUtils::remove_dir("#{$CACHE_DIR}/www.geocaching.com/account")
-    displayMessage "Clearing account data older than 14 days"
+    displayInfo "Clearing account data older than 14 days"
     command = "find #{$CACHE_DIR}/*/account -mtime +14"
     command << " -type f"
     command << " | xargs -r rm"
     system(command)
     #FileUtils::remove_dir("#{$CACHE_DIR}/www.geocaching.com/login")
-    displayMessage "Clearing login data older than 14 days"
+    displayInfo "Clearing login data older than 14 days"
     command = "find #{$CACHE_DIR}/*/login -mtime +14"
     command << " -type f"
     command << " | xargs -r rm"
     system(command)
     #FileUtils::remove_dir("#{$CACHE_DIR}/www.geocaching.com/seek")
-    #displayMessage "NOT clearing cache descriptions older than 31 days"
+    #displayInfo "NOT clearing cache descriptions older than 31 days"
     #command = "find #{$CACHE_DIR}/*/seek -mtime +31"
     #command << " -writable -name 'cdpf.aspx*'"
     #command << " | xargs -r rm"
     #system(command)
-    displayMessage "Clearing cache details older than 31 days"
+    displayInfo "Clearing cache details older than 31 days"
     command = "find #{$CACHE_DIR}/*/seek -mtime +31"
     command << " -writable -name 'cache_details.aspx*'"
     command << " | xargs -r rm"
     system(command)
-    displayMessage "Clearing lat/lon query data older than 3 days"
+    displayInfo "Clearing lat/lon query data older than 3 days"
     command = "find #{$CACHE_DIR}/*/seek -mtime +3"
     command << " -writable -name 'nearest.aspx*_lat_*_lng_*'"
     command << " | xargs -r rm"
     system(command)
-    displayMessage "Clearing other query data older than 14 days"
+    displayInfo "Clearing other query data older than 14 days"
     command = "find #{$CACHE_DIR}/*/seek -mtime +14"
     command << " -writable -name 'nearest.aspx*'"
     command << " | xargs -r rm"
     system(command)
-    displayWarning "Cleared!"
+    displayMessage "Cleared!"
     $CACHE_DIR = findCacheDir()
   end
 
@@ -260,7 +260,7 @@ class GeoToad
     end
     displayMessage "Querying user preferences"
     @dateFormat = getPreferences()
-    displayMessage "Using date format #{@dateFormat}"
+    displayInfo "Using date format #{@dateFormat}"
 
     if @queryType == "zipcode" || @queryType == "coord" || @queryType == 'location'
       @queryTitle = @queryTitle + " (#{@distanceMax}mi. radius)"
@@ -268,16 +268,16 @@ class GeoToad
     end
 
     @queryArg.to_s.split(/[:\|]/).each { |queryArg|
-      print "\n( o ) Performing #{@queryType} search for #{queryArg} "
+      puts ""
+      message = "Performing #{@queryType} search for #{queryArg} "
       search = SearchCache.new
 
       # only valid for zip or coordinate searches
       if @queryType == "zipcode" || @queryType == "coord" || @queryType == 'location'
-        puts "(constraining to #{@distanceMax} miles)"
+        message << "(constraining to #{@distanceMax} miles)"
         search.distance = @distanceMax
-      else
-        puts
       end
+      displayMessage message
 
       # limit search page count
       search.max_pages = @limitPages
@@ -291,7 +291,7 @@ class GeoToad
       search.notyetfound = (@option['notFoundByMe'] ? true : false)
 
       if (! search.setType(@queryType, queryArg))
-        displayError "(could not determine search type for #{@queryType}, exiting)"
+        displayError "Could not determine search type for #{@queryType}, exiting"
         exit
       end
 
@@ -314,7 +314,7 @@ class GeoToad
     }
 
     if (waypointsExtracted < (@combinedWaypoints.length - 2))
-      displayWarning "downloaded #{@combinedWaypoints.length} waypoints, but I can only parse #{waypointsExtracted} of them!"
+      displayWarning "Downloaded #{@combinedWaypoints.length} waypoints, but only #{waypointsExtracted} parsed!"
     end
     return waypointsExtracted
   end
@@ -351,6 +351,7 @@ class GeoToad
       if (user =~ /(.*)=(.*)/)
         username = $1
         filename = $2
+        puts ""
         displayMessage "Read #{filename} for #{username}"
         counter = 0
         # read file (1st column)
@@ -363,7 +364,7 @@ class GeoToad
             counter = counter + 1
           end
           }
-          displayMessage "Total of #{counter} WIDs read"
+          displayInfo "Total of #{counter} WIDs read"
         rescue
           displayWarning "Problems reading #{filename} for #{username}"
         end
@@ -395,7 +396,7 @@ class GeoToad
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
     if (excludedFilterTotal > 0)
-      displayMessage "cache type filtering removed #{excludedFilterTotal} caches from your listing."
+      displayMessage "Cache type filtering removed #{excludedFilterTotal} caches."
     end
 
     if $DTSFILTER
@@ -433,7 +434,7 @@ class GeoToad
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
     if (excludedFilterTotal > 0)
-      displayMessage "D/T/S filtering removed #{excludedFilterTotal} caches from your listing."
+      displayMessage "Diff/Terr/Size filtering removed #{excludedFilterTotal} caches."
     end
     #-------------------
     end # $DTSFILTER
@@ -463,7 +464,7 @@ class GeoToad
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
     if (excludedFilterTotal > 0)
-      displayMessage "Date filtering removed #{excludedFilterTotal} caches from your listing."
+      displayMessage "Date filtering removed #{excludedFilterTotal} caches."
     end
 
     debug "Filter running cycle 3, #{@filtered.totalWaypoints} caches left"
@@ -476,7 +477,7 @@ class GeoToad
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
     if (excludedFilterTotal > 0)
-      displayMessage "Unfound filtering removed #{excludedFilterTotal} caches from your listing."
+      displayMessage "Unfound filtering removed #{excludedFilterTotal} caches."
     end
 
     beforeFilterTotal = @filtered.totalWaypoints
@@ -487,7 +488,7 @@ class GeoToad
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
     if (excludedFilterTotal > 0)
-      displayMessage "Trackable filtering removed #{excludedFilterTotal} caches from your listing."
+      displayMessage "Trackable filtering removed #{excludedFilterTotal} caches."
     end
 
     beforeFilterTotal = @filtered.totalWaypoints
@@ -505,7 +506,7 @@ class GeoToad
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
     if (excludedFilterTotal > 0)
-      displayMessage "Owner filtering removed #{excludedFilterTotal} caches from your listing."
+      displayMessage "Owner filtering removed #{excludedFilterTotal} caches."
     end
 
     beforeFilterTotal = @filtered.totalWaypoints
@@ -521,7 +522,7 @@ class GeoToad
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
     if (excludedFilterTotal > 0)
-      displayMessage "User filtering removed #{excludedFilterTotal} caches from your listing."
+      displayMessage "User filtering removed #{excludedFilterTotal} caches."
     end
 
     beforeFilterTotal = @filtered.totalWaypoints
@@ -532,10 +533,10 @@ class GeoToad
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
     if (excludedFilterTotal > 0)
-      displayMessage "Title keyword filtering removed #{excludedFilterTotal} caches from your listing."
+      displayMessage "Title keyword filtering removed #{excludedFilterTotal} caches."
     end
 
-    displayMessage "First stage filtering complete, #{@filtered.totalWaypoints} caches left"
+    displayMessage "Filter stage 1 complete, #{@filtered.totalWaypoints} caches left"
   end
 
 
@@ -557,6 +558,7 @@ class GeoToad
       $SLEEP = $SLEEP * 2
     end
 
+    puts ""
     displayMessage "Fetching geocache pages with #{$SLEEP} second rests between remote fetches"
     wpFiltered = @filtered.waypoints
     progress = ProgressBar.new(0, @filtered.totalWaypoints, "Reading")
@@ -582,7 +584,7 @@ class GeoToad
         message = '(subscriber-only)'
       elsif status == 'unpublished'
         wpFiltered.delete(wid)
-        displayMessage "#{wid} is either unpublished or hidden subscriber-only, skipping."
+        displayWarning "#{wid} is either unpublished or hidden subscriber-only, skipping."
         next
       elsif ! status or status == 'login-required'
         if (wpFiltered[wid]['warning'])
@@ -619,6 +621,7 @@ class GeoToad
   # In this stage, we actually have to download all the information on the caches in order to decide
   # whether or not they are keepers.
   def postFetchFilter
+    puts ""
     @filtered= Filter.new(@detail.waypoints)
 
     # caches with warnings we choose not to include.
@@ -628,7 +631,7 @@ class GeoToad
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
     if (excludedFilterTotal > 0)
-      displayMessage "Disabled filtering removed #{excludedFilterTotal} caches from your listing."
+      displayMessage "Disabled filtering removed #{excludedFilterTotal} caches."
     end
 
     beforeFilterTotal = @filtered.totalWaypoints
@@ -639,7 +642,7 @@ class GeoToad
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
     if (excludedFilterTotal > 0)
-      displayMessage "Keyword filtering removed #{excludedFilterTotal} caches from your listing."
+      displayMessage "Keyword filtering removed #{excludedFilterTotal} caches."
     end
 
     if not $DTSFILTER
@@ -677,7 +680,7 @@ class GeoToad
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
     if (excludedFilterTotal > 0)
-      displayMessage "Diff/Terr/Size filtering removed #{excludedFilterTotal} caches from your listing."
+      displayMessage "Diff/Terr/Size filtering removed #{excludedFilterTotal} caches."
     end
     #-------------------
     end # not $DTSFILTER
@@ -695,7 +698,7 @@ class GeoToad
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
     if (excludedFilterTotal > 0)
-      displayMessage "FunFactor filtering removed #{excludedFilterTotal} caches from your listing."
+      displayMessage "FunFactor filtering removed #{excludedFilterTotal} caches."
     end
 
     beforeFilterTotal = @filtered.totalWaypoints
@@ -711,7 +714,7 @@ class GeoToad
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
     if (excludedFilterTotal > 0)
-      displayMessage "FavFactor filtering removed #{excludedFilterTotal} caches from your listing."
+      displayMessage "FavFactor filtering removed #{excludedFilterTotal} caches."
     end
 
     # We filter for users again. While this may be a bit obsessive, this is in case
@@ -729,7 +732,7 @@ class GeoToad
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
     if (excludedFilterTotal > 0)
-      displayMessage "User filtering removed #{excludedFilterTotal} caches from your listing."
+      displayMessage "User filtering removed #{excludedFilterTotal} caches."
     end
 
     beforeFilterTotal = @filtered.totalWaypoints
@@ -745,10 +748,10 @@ class GeoToad
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
     if (excludedFilterTotal > 0)
-      displayMessage "Attribute filtering removed #{excludedFilterTotal} caches from your listing."
+      displayMessage "Attribute filtering removed #{excludedFilterTotal} caches."
     end
 
-    displayMessage "Filter complete, #{@filtered.totalWaypoints} caches left"
+    displayMessage "Filter stage 2 complete, #{@filtered.totalWaypoints} caches left"
     return @filtered.totalWaypoints
   end
 
@@ -761,7 +764,7 @@ class GeoToad
     # loop over all chosen formats
     @formatTypes.split(/[:\|]/).each { |formatType|
       output = Output.new
-      displayInfo "Output format selected is #{output.formatDesc(formatType)} format"
+      displayInfo "Output format: #{output.formatDesc(formatType)} format"
       output.input(@filtered.waypoints)
       output.formatType = formatType
       if (@option['waypointLength'])
@@ -821,6 +824,7 @@ class GeoToad
       outputData = output.prepare(queryTitle, @option['user'])
       output.commit(outputFile)
       displayMessage "Saved to #{outputFile}"
+      puts ""
 
       formatTypeCounter += 1
     } # end format loop
