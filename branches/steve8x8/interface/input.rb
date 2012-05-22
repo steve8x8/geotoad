@@ -144,9 +144,10 @@ class Input
     # We used to make assumptions about this, but it ended up being more confusing when
     # wrong.
     if ARGV[0]
-      displayError "Extra arguments found on command-line: \"#{ARGV.join(" ")}\""
-      displayError "Perhaps you forgot to put quote marks around any arguments that"
-      displayError "contain spaces in them. Example: -q #{@formatType} \"#{@@optHash['queryArg']} #{ARGV.join(" ")}\""
+      displayWarning "Extra arguments found on command-line: \"#{ARGV.join(" ")}\""
+      displayWarning "Perhaps you forgot quote marks around any arguments that contain spaces?"
+      displayWarning "Example: -q #{@@optHash['queryType']} \"#{@@optHash['queryArg']} #{ARGV.join(" ")}\""
+      displayError   "Correct your input and re-run."
       exit
     end
 

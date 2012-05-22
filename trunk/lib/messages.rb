@@ -1,6 +1,5 @@
 # This is where code specific to the user interface display gets put.
 #
-# $HeadURL$
 # $Id$
 
 module Messages

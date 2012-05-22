@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+# $Id$
 #
 # Get a list of countries / states for the geocaching form.
 #
@@ -83,7 +83,7 @@ class CountryState
     end
 
     if not found_country
-      displayError "Could not find country: #{country}"
+      displayWarning "Could not find country: #{country}"
       puts options.inspect
       return nil
     end
@@ -149,7 +149,7 @@ class CountryState
           debug "found selected option for #{current_select_name} #{$1}=#{$2}"
           post_vars[current_select_name] = $1
         else
-          displayError "Found selected <option> #{$1}, but no previous <select> tag."
+          displayWarning "Found selected <option> #{$1}, but no previous <select> tag."
           return nil
         end
       elsif line =~ /\<option.*value=\"([^\"]*?)\".*?\>(.*?)\</
@@ -160,5 +160,3 @@ class CountryState
     return [post_vars, options]
   end
 end
-
-
