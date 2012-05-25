@@ -76,7 +76,7 @@ if [ ! -x "/usr/local/bin/flip" -o ! -x "/usr/bin/flip" ]; then
   cd "$WIN_DIR"
   mkdir compile
   mv *.rb lib interface data compile/
-  flip -mv *.txt
+  flip -mvb *.txt
   perl -pi -e 's/([\s])geotoad\.rb/$1geotoad/g' README.txt
 
   cat <<EOF >ocrabuild.bat
