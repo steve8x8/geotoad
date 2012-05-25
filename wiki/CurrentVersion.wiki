@@ -1,7 +1,7 @@
 #summary Features of current version
 #labels Featured
 
-version=3.14.9
+version=3.16.0
 
 = . =
 
@@ -10,85 +10,32 @@ version=3.14.9
 }}}
 
 == Important note: ==
-  * 3.14.9 marks the end of the development cycle for the 3.14 series
-  * Future bug fixes and enhancements will be made to the 3.15 series only!
-  * For details, see [CurrentDevelVersion development version]!
+  * 3.14.9 marked the end of the development cycle for the 3.14 series.
+  * 3.16.0 is derived from (devel) 3.15.5, with some minor changes.
+  * The 3.16 series will be "stable" in the same sense as 3.14 was.
+  * Further testing and enhancements will go to 3.17, a 3.17.0 release
+    will be available later - for details, follow [CurrentDevelVersion development version]!
 
-= What's new in 3.14.9? =
+= What's new in 3.16.0? =
 
-== Fixes for issues: ==
-  * 218: select/exclude by attributes set/unset
-  * 221: Fix documentation of !keyword for -k/-K
-  * 226: Past events are unavailable
-  * 228: "guid" queries
-  * 231: Remove <font> tags from log comments
-  * 232: Reduce coordinate precision to 6 decimal places
+Version 3.16.0 ("Towel Day") was derived from development version 3.15.5.
 
-== Additions: ==
-  * Text versions of ReportingBugs and OtherSearches wiki pages
+The development series over the past months accumulated quite a lot of
+important fixes and enhancements, has been tested by more than 100 people
+(judging from the package download statistics), and is considered mature
+enough to form the basis for a new stable series.
 
-= What's new in 3.14.8? =
-
-== Fixes for issues: ==
-  * 230: Hotfix: 2012-02-14 site update confused date parser
-  * 216: Multiple output formats (separated by ':' or '|')
-
-= What's new in 3.14.7? =
-
-== Fixes for issues: ==
-  * 183: early filtering by d/t/size restored (broken by 2010-12-22 site update)
-  * 183: added -X option to restore "old" behaviour (in case of code changes)
-  * 204: queries by "country" or "state" possible again (syntax changed!)
-  * 224: fixed time format precision (c:geo compatibility)
-  * 225: fixed non-printable characters in GPX
-
-== Minor stuff: ==
-  * long options now documented in man page
-
-= What's new in 3.14.6? =
-
-== Hotfix release ==
-  * make GeoToad work again after 2011-10-06 site update
-
-== Fixes for issues: ==
-  * 219: login fails
-  * 180: text and HTML output
-
-== Minor stuff: ==
-  * debug output no longer contains passwords
-  * parse distances in ft, dates containing dashes
-  * current version parser
-  * removed rubyscript2exe stuff
-
-= What's new in 3.14.5? =
-
-3.14.5 and previous versions do no longer work due to 2011-10-06 site changes!
-
-== Fixes for issues: ==
-  * 103: added script suggestion (search along route) to Wiki
-  * 183: (partially) extract distance and direction from image code
-  * 195/203: chronological order for user queries ({{{myfind*}}}, {{{gc*}}} formats)
-  * 201: https login working with proxy
-  * 206: corrected parsing of additional waypoints
-  * 207: handle "fuzzy" WID queries (e.g. "O" instead of "0", additional leading "0")
-  * 208: if search arg starts with '-', insert '--' in cmdline suggested by TUI
-  * 212: "archived" and "available" states from search not to be overwritten by cache details
-  * 215: enter "special" characters using "percent-hex" (URL-type) encoding
-
-== Feature additions: ==
-  * more (grandfathered, and rare) cache types detected
-  * additional attributes 61-66 introduced with server updates
-  * added wp2guid output template (for GCvote, spoiler gallery)
-  * added "owner" query type (similar to "user" but selecting cache creator)
-  * WID mode: country/state information extracted
-  * build for Windows now uses "Ocra" ruby gem and InnoSetup installer
-
-== Minor (non-issue) fixes: ==
-  * no certificate complaint with ruby 1.8
-  * Debian/Ubuntu dependency on libopenssl-ruby
-  * debug output: hide password and cookie
-  * fixed default filename when run with multiple search arguments
-  * other minor additions and fixes (limits, manual page, README file, ...)
+== Issues addressed: ==
+  * Issue 162: Cache aging
+  * Issue 175: More selective, non-interfering cleaning
+  * Issue 191: Preserve cached files
+  * Issue 198: Early login to fix authentication problems
+  * Issue 205: Own finds
+  * Issue 210: User preferences (language, date format)
+  * Issue 228: "guid" queries now find WID without Google Maps
+  * Issue 237: Shrink cipher list, force TLSv1 to work with newer OpenSSL
+  * Issue 239: Ampersands not properly escaped in rare situations
+  * Minor other stuff
 
 = Get it: =
   * _GeoToad will tell you that a new version is available._

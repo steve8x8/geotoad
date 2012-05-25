@@ -1,68 +1,47 @@
-#summary Features of current development version
-#labels Featured,Experimental
+#summary Features of current version
+#labels Featured
 
-version=3.15.5
+version=3.16.0
 
 = . =
 
 {{{
-(Please see the "CurrentDevelVersion" wiki page for recent changes if there's no list following.)
+(Please see the "CurrentVersion" wiki page for recent changes if there's no list following.)
 }}}
 
-= Development will continue in the 3.15 series only! =
+== Important note: ==
+  * 3.14.9 marked the end of the development cycle for the 3.14 series.
+  * 3.16.0 is derived from (devel) 3.15.5, with some minor changes.
+  * The 3.16 series will be "stable" in the same sense as 3.14 was.
+  * Further testing and enhancements will go to 3.17, a 3.17.0 release
+    will be available later - for details, follow [CurrentDevelVersion development version]!
 
-= New development version 3.15.5 =
+  * If you used the 3.15 development version before, you have (at least) two options:
+  * (1) Install 3.16.0, and miss the notification for 3.17 (check the download area instead)
+  * (2) Stay with 3.15 until you are notified that 3.17 is officially released
 
-== Fixes for issues: ==
+= What's new in 3.16.0? =
+
+Version 3.16.0 was derived from development version 3.15.5.
+
+The development series over the past months accumulated quite a lot of
+important fixes and enhancements, has been tested by more than 100 people
+(judging from the package download statistics), and is considered mature
+enough to form the basis for a new stable series.
+
+== Issues addressed: ==
+  * Issue 162: Cache aging
   * Issue 175: More selective, non-interfering cleaning
-  * Issue 221: Fix documentation of !keyword for -k/-K
-  * Issue 226: Past events are unavailable
+  * Issue 191: Preserve cached files
+  * Issue 198: Early login to fix authentication problems
+  * Issue 205: Own finds
+  * Issue 210: User preferences (language, date format)
   * Issue 228: "guid" queries now find WID without Google Maps
-  * Issue 231: Remove <font> tags from log comments
-  * Issue 232: Reduce coordinate precision to 6 decimal places
-
-= New development version 3.15.4 =
-
-  * Hotfix after 2012-02-14 site update
-  * No new features!
-
-= New development version 3.15.3 =
-
-  * Please test the new features in the development version, making them ready for release!
-  * Note that there is a Debian way to get the latest updates (see Wiki)
-  * Versions 3.15.1 and 3.15.2 are still operational, with less features
-
-== Changes since previous version ==
-  * select/exclude by set/unset attributes (issue 218) - see README!
-  * "guid" query (issue 228) - which allows for bookmark list processing
-
-= New development version 3.15.2 =
-
-== Changes since last version ==
-  * cookies are now really stored and re-used
-  * better handling of foreign languages, Hungary and Romania added
-
-= New development version 3.15.1 =
-
-== Changes since last version ==
-  * merge changes 3.14.5 to 3.14.6 (hotfix)
-  * cookies are now stored on disk again, in YAML format
-
-= Development version 3.15.0 =
-
-  * Does not work any longer due to 2011-10-06 site update!
-
-= Fixes (after 3.14.7) =
-  * issue 138: obsoleted by fixes for issues 198 and 205
-  * issue 162: more frequent refreshes for "young" caches
-  * issue 191: freeze file cache: don't overwrite cache descriptions
-  * issue 198: early login
-  * issue 205: extract own found date from user search page
-  * issue 210: support for all date formats, and languages other than English (no Korean and Hungarian though)
-  * issue 216: support for multiple output formats in one go
+  * Issue 237: Shrink cipher list, force TLSv1 to work with newer OpenSSL
+  * Issue 239: Ampersands not properly escaped in rare situations
+  * Minor other stuff
 
 = Get it: =
-  * _The built-in version check won't show that an update is available._
   * *{{{svn checkout http://geotoad.googlecode.com/svn/branches/steve8x8/ geotoad-devel}}}*
   * packages available from download area (tagged "Development" - select "All downloads")
 

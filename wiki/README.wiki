@@ -1,7 +1,7 @@
 #summary GeoToad README.txt
 #labels Featured
 
-= GeoToad 3.14.9 by Thomas Stromberg and The GeoToad Project (c) 2002 - 2012 =
+= GeoToad 3.16.0 by Thomas Stromberg and The GeoToad Project (c) 2002 - 2012 =
 
 <wiki:toc max_depth="2" />
 
@@ -34,7 +34,7 @@ You will then see a screen that looks similar to this:
 {{{
 
 ==============================================================================
-:::                // GeoToad 3.14.9 Text User Interface //                :::
+:::                // GeoToad 3.16.0 Text User Interface //                :::
 ==============================================================================
 (1)  GC.com login [REQUIRED         ] | (2)  search type          [coord     ]
 (3)  location     [N52 23.0 E13 03.0] | (4)  distance maximum (km)     [10   ]
@@ -105,8 +105,9 @@ syntax: geotoad [options] <search:search2:search3>
  -b                     only include caches with travelbugs
  -l                     set EasyName waypoint id length. (16)
  -L    [count]          limit number of search pages (0=unlimited)
+ -Z                     don't overwrite existing cache descriptions
  -P                     HTTP proxy server, http://username:pass@host:port/
- -C                     Clear local browser cache
+ -C                     Selectively clear local browser cache
 
 ::: OUTPUT FORMATS:
  cachemate=   cetus+       csv          delorme      delorme-nour 

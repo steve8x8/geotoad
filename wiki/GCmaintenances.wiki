@@ -13,9 +13,16 @@ See also [http://forums.groundspeak.com/GC/index.php?showforum=89 Release Notes 
 _*(new entries will be added on top)*_
 
 ----
+2012-05-22:
+  * (announced on Twitter)
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=296071 release notes]
+  * Google Maps for Premium Members
+  * new server build: *{{{Web.HotFix_20120522.1}}}*
+  * another attempt:  *{{{Web.HotFix_20120523.2}}}*
+----
 2012-05-15:
-  * _"Geocaching.com ...  site update on Tuesday, May 15, 2012 ... 5pm PDT"_ (midnight UTC?)
-  * *no release notes?*
+  * _"Geocaching.com ...  site update on Tuesday, May 15, 2012 ... 5pm PDT"_ (midnight UTC)
+  * *no release notes* (hardware upgrade only)
   * still using:      *{{{Web.HotFix_20120509.1}}}*
 ----
 2012-05-08:
@@ -26,7 +33,7 @@ _*(new entries will be added on top)*_
   * 2012-05-10:       *{{{Web.HotFix_20120509.1}}}*
 ----
 2012-04-24:
-  * _"Geocaching.com ... site update on Tuesday, April 24, 2012 ... 10am PST"_ (1700 UTC?)
+  * _"Geocaching.com ... site update on Tuesday, April 24, 2012 ... 10am PDT"_ (1700 UTC)
   * [http://forums.groundspeak.com/GC/index.php?showtopic=294569 release notes]
   * _cannot find any hint in release notes what might have affected GeoToad_
   * new server build: *{{{Web.HotFix_20120423.2}}}*
