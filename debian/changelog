@@ -1,6 +1,6 @@
 geotoad (3.16.0-1) unstable; urgency=low
 
-  * New version 3.16.0
+  * New version 3.16.0, "Towel Day" release
   * Derived from delevopment 3.15.5
   * Issue 162: Cache aging
   * Issue 175: More selective, non-interfering cleaning
@@ -11,9 +11,10 @@ geotoad (3.16.0-1) unstable; urgency=low
   * Issue 228: "guid" queries now find WID without Google Maps
   * Issue 237: Shrink cipher list, force TLSv1 to work with newer OpenSSL
   * Issue 239: Ampersands not properly escaped in rare situations
+  * Issue 241: WID parser may fail in some circumstances
   * Minor other stuff
 
- -- Steve Sixty-Four <steve8x8@gmail.com>  Sat, 05 May 2012 14:00:00 +0200
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Fri, 25 May 2012 14:00:00 +0200
 
 geotoad (3.14.9-1) unstable; urgency=low
 

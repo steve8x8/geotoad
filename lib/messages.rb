@@ -24,7 +24,7 @@ module Messages
 
   # often worth displaying
   def displayTitleMessage(text)
-    puts "( = ) #{text}"
+    puts "(===) #{text}"
   end
 
   # often worth displaying
