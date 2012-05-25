@@ -30,14 +30,14 @@ class Input
       File.makedirs(@configDir)
     end
 
-    # File contains password, keep it safe..
-    f = File.open(@configFile, 'w', 0600)
     @@optHash.each_key {|key|
       if @@optHash[key].to_s.empty?
         @@optHash.delete(key)
       end
     }
 
+    # File contains password, keep it safe..
+    f = File.open(@configFile, 'w', 0600)
     f.puts @@optHash.to_yaml
     f.close
     debug "Saved configuration"
@@ -64,34 +64,28 @@ class Input
       [ "--attributeInclude",         "-a",    GetoptLong::OPTIONAL_ARGUMENT ],
       [ "--attributeExclude",         "-A",    GetoptLong::OPTIONAL_ARGUMENT ],
       [ "--travelBug",                "-b",    GetoptLong::NO_ARGUMENT ],
+
       [ "--cacheType",                "-c",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--clearCache",               "-C",    GetoptLong::NO_ARGUMENT ],
-
       [ "--difficultyMin",            "-d",    GetoptLong::OPTIONAL_ARGUMENT ],
       [ "--difficultyMax",            "-D",    GetoptLong::OPTIONAL_ARGUMENT ],
-
       [ "--userInclude",              "-e",    GetoptLong::OPTIONAL_ARGUMENT ],
       [ "--userExclude",              "-E",    GetoptLong::OPTIONAL_ARGUMENT ],
-
       [ "--funFactorMin",             "-f",    GetoptLong::OPTIONAL_ARGUMENT ],
       [ "--funFactorMax",             "-F",    GetoptLong::OPTIONAL_ARGUMENT ],
-
       [ "--favFactorMin",             "-g",    GetoptLong::OPTIONAL_ARGUMENT ],
       [ "--favFactorMax",             "-G",    GetoptLong::OPTIONAL_ARGUMENT ],
-
       [ "--help",                     "-h",    GetoptLong::NO_ARGUMENT ],
 
       [ "--ownerInclude",             "-i",    GetoptLong::OPTIONAL_ARGUMENT ],
       [ "--ownerExclude",             "-I",    GetoptLong::OPTIONAL_ARGUMENT ],
-
       [ "--placeDateInclude",         "-j",    GetoptLong::OPTIONAL_ARGUMENT ],
       [ "--placeDateExclude",         "-J",    GetoptLong::OPTIONAL_ARGUMENT ],
-
       [ "--titleKeyword",             "-k",    GetoptLong::OPTIONAL_ARGUMENT ],
       [ "--descKeyword",              "-K",    GetoptLong::OPTIONAL_ARGUMENT ],
-
       [ "--waypointLength",           "-l",    GetoptLong::OPTIONAL_ARGUMENT ],
       [ "--limitSearchPages",         "-L",    GetoptLong::OPTIONAL_ARGUMENT ],
+
       [ "--notFound",                 "-n",    GetoptLong::NO_ARGUMENT ],
       [ "--notFoundByMe",             "-N",    GetoptLong::NO_ARGUMENT ],
       [ "--output",                   "-o",    GetoptLong::OPTIONAL_ARGUMENT ],
@@ -100,23 +94,20 @@ class Input
       [ "--proxy",                    "-P",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--queryType",                "-q",    GetoptLong::OPTIONAL_ARGUMENT ],
 
-
       [ "--foundDateInclude",         "-r",    GetoptLong::OPTIONAL_ARGUMENT ],
       [ "--foundDateExclude",         "-R",    GetoptLong::OPTIONAL_ARGUMENT ],
-
       [ "--sizeMin",                  "-s",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--sizeMax",                  "-S",    GetoptLong::REQUIRED_ARGUMENT ],
-
       [ "--terrainMin",               "-t",    GetoptLong::OPTIONAL_ARGUMENT ],
       [ "--terrainMax",               "-T",    GetoptLong::OPTIONAL_ARGUMENT ],
-
       [ "--user",                     "-u",    GetoptLong::REQUIRED_ARGUMENT ],         # * REQ
 
       [ "--verbose",                  "-v",    GetoptLong::NO_ARGUMENT ],
+
       [ "--format",                   "-x",    GetoptLong::OPTIONAL_ARGUMENT ],
       [ "--disableEarlyFilter",       "-X",    GetoptLong::NO_ARGUMENT ],
-
       [ "--distanceMax",              "-y",    GetoptLong::OPTIONAL_ARGUMENT ],
+
       [ "--includeDisabled",          "-z",    GetoptLong::NO_ARGUMENT ],
       [ "--preserveCache",            "-Z",    GetoptLong::NO_ARGUMENT ]
     ) || usage
@@ -131,8 +122,7 @@ class Input
           arg = guessQueryType(arg)
           debug "queryType is now #{arg}"
         end
-
-        @@optHash[opt.gsub(/-/,'')]=arg
+        @@optHash[opt.gsub(/-/,'')] = arg
       end
     rescue
       usage

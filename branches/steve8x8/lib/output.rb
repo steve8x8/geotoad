@@ -954,7 +954,7 @@ class Output
 
     if cache['distance'] and cache['direction']
       relative_distance = sprintf("%.1f", cache['distance'] || 0.0) + 'mi@' + (cache['direction'] || 'N')
-      relative_distance_km = sprintf("%.1f", (cache['distance'] * 1.609344) || 0.0) + 'km@' + (cache['direction'] || 'N')
+      relative_distance_km = sprintf("%.1f", (cache['distance'] || 0.0) * $MILE2KM + 'km@' + (cache['direction'] || 'N')
     else
       relative_distance = 'N/A'
       relative_distance_km = 'N/A'

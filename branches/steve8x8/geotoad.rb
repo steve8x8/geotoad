@@ -46,6 +46,9 @@ class GeoToad
   # time to use for "unknown" creation dates
   $ZEROTIME = 315576000
 
+  # conversion miles to kilometres
+  $MILE2KM = 1.609344
+
   def initialize
     $debugMode    = 0
     output        = Output.new
@@ -121,7 +124,7 @@ class GeoToad
       # else leave usemetric unchanged
     end
     if @useMetric
-      @distanceMax    /= 1.609344
+      @distanceMax    /= $MILE2KM
       # round to multiple of ~5ft
       @distanceMax     = sprintf("%.3f", @distanceMax).to_f
     end
@@ -190,7 +193,7 @@ class GeoToad
           puts text
         end
         puts "------------------------------------------------------------------------"
-        puts "(sleeping for 5 seconds)"
+        displayInfo "(sleeping for 5 seconds)"
         sleep(5)
       end
     end
@@ -841,11 +844,12 @@ end
 exit if Object.const_defined?(:Ocra)
 
 ###### MAIN ACTIVITY ###############################################################
-puts "GeoToad #{$VERSION} (#{RUBY_PLATFORM}-#{RUBY_VERSION})"
-puts "- Report bugs or suggestions at http://code.google.com/p/geotoad/issues/"
-puts "- Please include verbose output (-v) without passwords in the bug report."
 cli = GeoToad.new
+cli.displayTitleMessage "GeoToad #{$VERSION} (#{RUBY_PLATFORM}-#{RUBY_VERSION})"
+cli.displayInfo "Report bugs or suggestions at http://code.google.com/p/geotoad/issues/"
+cli.displayInfo "Please include verbose output (-v) without passwords in the bug report."
 cli.versionCheck
+puts
 
 while(1)
   options = cli.getoptions

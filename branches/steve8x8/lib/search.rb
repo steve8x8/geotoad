@@ -753,9 +753,10 @@ class SearchCache
         dist, dir = decodeDD(code)
         # distance is in miles, traditionally
         if (dist =~ /km/)
-          dist = dist.to_f / 1.609344
+          dist = dist.to_f / $MILE2KM
         elsif (dist =~ /ft/)
-          dist = dist.to_f / 5280
+          # 1 mile = 1760 yards = 5280 feet
+          dist = dist.to_f / 5280.0
         else
           dist = dist.to_f
         end
