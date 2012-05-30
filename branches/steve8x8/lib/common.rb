@@ -233,4 +233,15 @@ module Common
       return value.to_f
     end
   end
+
+  # compute random sleep time from number of pages remotely fetched
+  def randomizedSleep(counter)
+    # start with 1.5 seconds, add a second for each 100 caches, randomize by factor 0.5 .. 1.5, somewhat rounded
+    sleeptime = ($SLEEP + counter/100.0) * (rand+0.5)
+    sleeptime = (10.0*sleeptime).round/10.0
+    sleeptime = $SLEEP if (sleeptime<$SLEEP)
+    debug "sleep #{sleeptime} seconds"
+    sleep (sleeptime)
+  end
+
 end

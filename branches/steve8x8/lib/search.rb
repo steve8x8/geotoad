@@ -540,8 +540,8 @@ class SearchCache
       debug "processPage returns #{page_number}/#{total_pages}"
       progress.updateText(page_number, "from #{src}")
       if (src == "remote")
-        debug "sleeping"
-        sleep($SLEEP)
+        $REMOTEPAGES = $REMOTEPAGES + 1
+        randomizedSleep($REMOTEPAGES)
       end
 
       if page_number == last_page_number
