@@ -232,6 +232,13 @@ class GeoToad
     command << " -writable -name 'nearest.aspx*_lat_*_lng_*'"
     command << " | xargs -r rm"
     system(command)
+    displayInfo "Clearing state and country query data older than 3 days"
+    command = "find #{$CACHE_DIR}/*/seek -mtime +3"
+    command << " -writable"
+    command << " '(' -name 'nearest.aspx*_state_id_*'"
+    command << " -o -name 'nearest.aspx*_country_id_*' ')'"
+    command << " | xargs -r rm"
+    system(command)
     displayInfo "Clearing other query data older than 14 days"
     command = "find #{$CACHE_DIR}/*/seek -mtime +14"
     command << " -writable -name 'nearest.aspx*'"
