@@ -286,12 +286,15 @@ class CacheDetails
 
       end
 
-      # <h2><img src="../images/WptTypes/2.gif" alt="Traditional Cache" width="32" height="32" />&nbsp;Lake Crabtree computer software store</h2>
-      if line =~ /WptTypes.*? alt="(.*?)"/
+      # <h2>
+      #     <img src="../images/WptTypes/2.gif" alt="Traditional Cache" width="32" height="32" />&nbsp;Lake Crabtree computer software store
+      # </h2>
+      if line =~ /WptTypes.*? alt="(.*?)".*?\/\>(.nbsp;)?(.*?)\s*$/
+        full_type = $1
+        cache['name2'] = $3.gsub(/ *$/, '').gsub(/  */, ' ')
         if ! cache
           displayWarning "Found waypoint type, but never saw cache title. Did geocaching.com change their layout again?"
         end
-        full_type = $1
         # there may be more than 1 match, don't overwrite (see GC1PQKR, GC1PQKT)
         # actually, types have been set by search - is this code obsolete then?
         if cache['fulltype']
@@ -444,6 +447,16 @@ class CacheDetails
       return false
     end
 
+    # Owner:
+    # <div class="HalfLeft">
+    #     <p class="Meta">
+    #         Hosted by:
+    #         Hasemann-Rudow</p>
+    # </div>
+    if data =~ /\<div class=.HalfLeft.\>\s*\<p class=.Meta.\>\s*(Hosted|Placed) by:\s*(.*)\<\/p\>\s*\<\/div\>/
+      cache['creator2'] = $2
+    end
+
     if data =~ /Difficulty:.*?([\d\.]+) out of 5/m
       if not cache['difficulty']
         cache['difficulty'] = tohalfint($1)
@@ -588,6 +601,16 @@ class CacheDetails
     cache['funfactor'] = (ff_score * 20).round / 20.0
     debug "Funfactor score: #{cache['funfactor']}"
     cache['additional_raw'] = parseAdditionalWaypoints(data)
+
+    # Fix cache owner/name
+    if cache['name2'] and cache['creator2']
+      if cache['creator2'] != cache['creator']
+        debug "Fix cache name and owner: \"#{cache['name2']}\" by \"#{cache['creator2']}\" (was \"#{cache['name']}\" by \"#{cache['creator']}\")"
+        cache['creator'] = cache['creator2']
+        cache['name'] = cache['name2']
+      end
+    end
+
     return cache
   end  # end function
 
