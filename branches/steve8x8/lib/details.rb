@@ -266,7 +266,7 @@ class CacheDetails
 
     data.split("\n").each { |line|
       # <title id="pageTitle">(GC1145) Lake Crabtree computer software store by darylb</title>
-      if line =~ /\<title.*\((GC\w+)\) (.*?) by (.*?)\</
+      if line =~ /\<title.*\>\((GC\w+)\) (.*?) by (.*?)\</
         wid = $1
         name = $2
         creator = $3
