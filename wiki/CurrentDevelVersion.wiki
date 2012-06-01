@@ -3,11 +3,7 @@
 
 version=3.16.0
 
-= . =
-
-{{{
-(Please see the "CurrentVersion" wiki page for recent changes if there's no list following.)
-}}}
+= Towel Day Release =
 
 == Important note: ==
   * 3.14.9 marked the end of the development cycle for the 3.14 series.
@@ -22,9 +18,9 @@ version=3.16.0
 
 = What's new in 3.16.0? =
 
-Version 3.16.0 was derived from development version 3.15.5.
+  * Version 3.16.0 was derived from development version 3.15.5.
 
-The development series over the past months accumulated quite a lot of
+  * The development series over the past months accumulated quite a lot of
 important fixes and enhancements, has been tested by more than 100 people
 (judging from the package download statistics), and is considered mature
 enough to form the basis for a new stable series.
