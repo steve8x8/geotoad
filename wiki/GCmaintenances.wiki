@@ -13,6 +13,12 @@ See also [http://forums.groundspeak.com/GC/index.php?showforum=89 Release Notes 
 _*(new entries will be added on top)*_
 
 ----
+2012-06-06:
+  * (announced on Twitter)
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=296863 release notes]
+  * Twitter/Facebook integration
+  * new server build: *{{{Web.HotFix_20120606.3}}}*
+----
 2012-05-22:
   * (announced on Twitter)
   * [http://forums.groundspeak.com/GC/index.php?showtopic=296071 release notes]
