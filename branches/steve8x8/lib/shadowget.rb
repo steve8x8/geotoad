@@ -19,6 +19,7 @@ class ShadowFetch
   include Auth
 
   @@downloadErrors = 0
+  @@remotePages = 0
 
   # gets a URL, but stores it in a nice webcache
   def initialize (url)
@@ -224,6 +225,8 @@ class ShadowFetch
 
   def fetchRemote
     #debug "fetching remote data from #{@url}"
+    @@remotePages = @@remotePages + 1
+    randomizedSleep(@@remotePages)
     @httpHeaders['Referer'] = @url
     data = fetchURL(@url)
   end
@@ -358,4 +361,16 @@ class ShadowFetch
 
     return resp.body
   end
+
+
+  # compute random sleep time from number of pages remotely fetched
+  def randomizedSleep(counter)
+    # start with 1.5 seconds, add a second for each 250 caches, randomize by factor 0.5 .. 1.5, somewhat rounded
+    sleeptime = ($SLEEP + counter/250.0) * (rand+0.5)
+    sleeptime = (10.0*sleeptime).round/10.0
+    sleeptime = $SLEEP if (sleeptime<$SLEEP)
+    debug "sleep #{sleeptime} seconds"
+    sleep (sleeptime)
+  end
+
 end

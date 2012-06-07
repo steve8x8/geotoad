@@ -37,8 +37,8 @@ class GeoToad
   include Messages
   include Auth
   $VERSION = GTVersion.version
-  $REMOTEPAGES = 0
-  $SLEEP = 1.5
+  # with the new progressive slowdown, start with 1 second
+  $SLEEP = 1.0
 
   # *if* cache D/T/S extraction works, early filtering is possible
   $DTSFILTER = true
@@ -557,8 +557,6 @@ class GeoToad
   end
 
   def fetchGeocaches
-    # We will slow down as the number of pages fetched from remote grows.
-
     puts ""
     displayMessage "Fetching geocache pages"
     wpFiltered = @filtered.waypoints
@@ -602,11 +600,6 @@ class GeoToad
 
       if status == 'subscriber-only'
         wpFiltered.delete(wid)
-      else
-        if (page.src == "remote")
-          $REMOTEPAGES = $REMOTEPAGES + 1
-          randomizedSleep($REMOTEPAGES)
-        end
       end
 
       if message == '(error)'

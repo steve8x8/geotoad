@@ -539,10 +539,6 @@ class SearchCache
       page_number, total_pages, total_waypoints, post_vars, src = processPage(post_vars)
       debug "processPage returns #{page_number}/#{total_pages}"
       progress.updateText(page_number, "from #{src}")
-      if (src == "remote")
-        $REMOTEPAGES = $REMOTEPAGES + 1
-        randomizedSleep($REMOTEPAGES)
-      end
 
       if page_number == last_page_number
         displayError "Stuck on page number #{page_number} of #{total_pages}"
