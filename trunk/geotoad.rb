@@ -15,6 +15,7 @@ if RUBY_VERSION.gsub('.', '').to_i < 180
 end
 if RUBY_VERSION.gsub('.', '').to_i >= 190
   $isRuby19 = true
+  Encoding.default_external = Encoding::UTF_8
 end
 
 # toss in our own libraries.
