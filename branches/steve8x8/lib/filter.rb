@@ -18,6 +18,8 @@ class Filter
     'micro'   => 2,
     'small' => 3,
     'regular' => 4,
+    # 2012-06-26
+    'medium' => 4,
     'large' => 5
     # don't confuse with GC's internal mapping (modulo offset 1):
     #'not chosen' => 0,

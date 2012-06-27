@@ -352,7 +352,7 @@ class CacheDetails
       # <p class="Meta"><strong>Size:</strong> <img src="../images/icons/container/regular.gif" alt="Size: Regular" />&nbsp;<small>(Regular)</small></p>
       if line =~ /\<img src=".*?" alt="Size: (.*?)" \/\>/
         if not cache['size']
-          cache['size'] = $1.downcase
+          cache['size'] = $1.downcase.gsub(/medium/, 'regular')
         end
         debug "found size: #{$1}"
       end
