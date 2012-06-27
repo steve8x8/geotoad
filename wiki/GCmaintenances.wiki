@@ -13,11 +13,18 @@ See also [http://forums.groundspeak.com/GC/index.php?showforum=89 Release Notes 
 _*(new entries will be added on top)*_
 
 ----
+2012-06-26:
+  * (announced on Twitter 40 minutes in advance, for 1700UTC)
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=297776 release notes]
+  * different "keywords" for cache sizes? "medium" instead of "small" in cache_details.aspx (issue 249)
+  * new server build: *{{{Web.HotFix_20120626.4}}}*
+----
 2012-06-06:
   * (announced on Twitter)
   * [http://forums.groundspeak.com/GC/index.php?showtopic=296863 release notes]
   * Twitter/Facebook integration
   * new server build: *{{{Web.HotFix_20120606.3}}}*
+  * 2012-06-08 seen:  *{{{Web.HotFix_20120607.1}}}*
 ----
 2012-05-22:
   * (announced on Twitter)
