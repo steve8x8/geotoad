@@ -328,8 +328,11 @@ class ShadowFetch
     when Net::HTTPSuccess
       # do nothing
     else
-      success = false
-      displayWarning "Unknown response #{resp} downloading #{url_str}"
+      # we may have reported a problem before
+      if success
+        success = false
+        displayWarning "Unknown response \"#{resp.inspect}\" downloading #{url_str}"
+      end
     end
 
     if not success
