@@ -1,3 +1,16 @@
+geotoad (3.17.1-1) unstable; urgency=low
+
+  * New version 3.17.1, "Rousseau" release (300th birthday)
+  * Issue 244: Use a better pattern for GC id parsing
+  * Issue 245: Cache "name by owner" - better separation
+  * Issue 247: Attempt to address issue. May break Windows with Ruby 1.9?
+  * Issue 248: "yourfindgpx" template ("myfindgpx" for login!=query user)
+  * Issue 249: Replace "medium" back with "regular"
+  * Remote fetches now progressively delayed, starting with 1 second
+  * Minor other stuff
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 28 Jun 2012 14:00:00 +0200
+
 geotoad (3.17.0-1) unstable; urgency=low
 
   * New development version 3.17.0, "Venus Transit" release
