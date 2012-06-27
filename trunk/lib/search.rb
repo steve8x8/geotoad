@@ -447,7 +447,7 @@ class SearchCache
       'creator' => owner,
       'fulltype' => ctype,
       'type' => ctype.split(' ')[0].downcase.gsub(/\-/, ''),
-      'size' => csize,
+      'size' => csize.gsub(/medium/, 'regular'),
       'difficulty' => cdiff,
       'terrain' => cterr
     }
