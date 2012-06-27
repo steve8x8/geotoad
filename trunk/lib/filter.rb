@@ -172,11 +172,10 @@ class Filter
   end
 
   def userExclude(nick)
-    nick.downcase!
     debug "filtering by notUser: #{nick}"
     @waypointHash.each_key { |wid|
       debug "#{wid} visitors: #{@waypointHash[wid]['visitors']}"
-      if (@waypointHash[wid]['visitors'].include?(nick))
+      if (@waypointHash[wid]['visitors'].include?(nick.downcase))
         debug " - #{nick} has visited #{wid} #{@waypointHash[wid]['name']}, filtering."
         @waypointHash.delete(wid)
       end
@@ -184,11 +183,10 @@ class Filter
   end
 
   def userInclude(nick)
-    nick.downcase!
     debug "filtering by User: #{nick}"
     @waypointHash.each_key { |wid|
       debug "#{wid} visitors: #{@waypointHash[wid]['visitors']}"
-      if (! @waypointHash[wid]['visitors'].include?(nick))
+      if (! @waypointHash[wid]['visitors'].include?(nick.downcase))
         debug " - #{nick} has not visited #{@waypointHash[wid]['name']}, filtering."
         @waypointHash.delete(wid)
       end
