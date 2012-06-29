@@ -1,9 +1,9 @@
 #summary Features of current version
 #labels Featured
 
-version=3.16.0
+version=3.16.1
 
-= Towel Day Release =
+= "Jean-Jacques" Release (June 28, 2012) =
 
 == Important note: ==
   * 3.14.9 marked the end of the development cycle for the 3.14 series.
@@ -11,6 +11,17 @@ version=3.16.0
   * The 3.16 series will be "stable" in the same sense as 3.14 was.
   * Further testing and enhancements will go to 3.17, a 3.17.0 release
     will be available later - for details, follow [CurrentDevelVersion development version]!
+
+= What's new in 3.16.1? =
+
+  * nicknamed "Jean-Jacques" because it was released on Rousseau's 300th birthday
+
+== Issues addressed: ==
+  * Issue 244: Use a better pattern for GC id parsing
+  * Issue 247: Attempt to address issue. May break Windows with Ruby 1.9?
+  * Issue 248: "yourfindgpx" template ("myfindgpx" for login!=query user)
+  * Issue 249: Replace "medium" back with "regular"
+  * Minor other stuff
 
 = What's new in 3.16.0? =
 
