@@ -8,16 +8,34 @@ I will try to collect announced gc.com maintenances (via their web page, or mail
 
 = Details =
 
+Site updates are usually scheduled on Tuesdays around noon Pacific local time.
+There are exceptions to the rule.
+Buggy updates get fixed without additional notice, by new server builds.
+
 See also [http://forums.groundspeak.com/GC/index.php?showforum=89 Release Notes in GroundSpeak Forums]
 
 _*(new entries will be added on top)*_
 
+----
+2012-07-24:
+  * (not even announced on Twitter?)
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=299057 release notes]
+  * "tackling a lot of technical website debt"
+  * new server build: *{{{Web.HotFix_20120723.1}}}*
+----
+2012-07-10:
+  * (announced on Twitter on July 10, therefore perhaps erroneously named "July 7")
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=298460 release notes]
+  * cannot see any effects on GeoToad from the list of changes
+  * new server build: *{{{?}}}*
+  * 2012-07-16 seen:  *{{{Web.HotFix_20120710.2}}}*
 ----
 2012-06-26:
   * (announced on Twitter 40 minutes in advance, for 1700UTC)
   * [http://forums.groundspeak.com/GC/index.php?showtopic=297776 release notes]
   * different "keywords" for cache sizes? "medium" instead of "small" in cache_details.aspx (issue 249)
   * new server build: *{{{Web.HotFix_20120626.4}}}*
+  * 2012-06-29 seen:  *{{{Web.HotFix_20120627.4}}}*
 ----
 2012-06-06:
   * (announced on Twitter)
