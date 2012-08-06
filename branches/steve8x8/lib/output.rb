@@ -794,20 +794,21 @@ class Output
     # un-fix spaces
     new_text = text.gsub(/\s*\&nbsp;/, ' ')
     # remove images
-    new_text.gsub!(/\s*\<img\s+[^\>]*\>/, '')
+    new_text.gsub!(/\s*\<img\s+[^\>]*\>/m, '')
     # remove hyperlinks
     # note: this will drop waypoint URLs!
-    new_text.gsub!(/\s*\<a\s+[^\>]*\>/, '')
-    new_text.gsub!(/\s*\<\/a\>/, '')
+    new_text.gsub!(/\s*\<a\s+[^\>]*\>/m, '')
+    new_text.gsub!(/\s*\<\/a\>/m, '')
     # not yet ready: do not remove but clean up hyperlinks
     # new_text.gsub!(/\&RefID=[0-9a-f-]*\&RefDS=[0-9]/, '')
     # remove form elements
-    new_text.gsub!(/\s*\<input\s+[^\>]*\>/, '')
+    new_text.gsub!(/\s*\<input\s+[^\>]*\>/m, '')
     # remove table head
     new_text.gsub!(/\s*\<thead\>.*\<\/thead\>/m, '')
     # remove spans
-    new_text.gsub!(/\s*\<span\s+[^\>]*\>/, '')
-    new_text.gsub!(/\s*\<\/span\>/, '')
+    #new_text.gsub!(/\s*\<\/span\>/m, '')
+    #new_text.gsub!(/\s*\<span\s+[^\>]*\>/m, '')
+    new_text.gsub!(/\s*\<\/?span[^\>]*\>/m, '')
     # remove leading and trailing blanks
     new_text.gsub!(/^\s+/, '')
     new_text.gsub!(/\s+$/, '')
@@ -816,7 +817,7 @@ class Output
     new_text.gsub!(/\n+\<\/td[^\>]*\>/m, '</td>')
     # ToDo: fuse continuation lines together between <td> .. </td>
     # remove "class" string from <tr>
-    new_text.gsub!(/\s*class=\"[^\"]*\"/, '')
+    new_text.gsub!(/\s*class=\"[^\"]*\"/m, '')
     # we have to keep the "ishidden" information for later
     if text != new_text
       debug "reduced HTML to #{new_text}"

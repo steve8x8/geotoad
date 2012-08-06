@@ -497,13 +497,13 @@ class CacheDetails
     if data =~ /Short Description\<\/h2\>\s*\<\/div\>\s*\<div class="item-content"\>(.*?)\<\/div\>\s*\<\/div\>\s*\<div class="item"\>/m
       shortdesc = $1.gsub(/^\s+/, '').gsub(/\s+$/, '')
       debug "found short desc: [#{shortdesc}]"
-      cache['shortdesc'] = removeAlignments(fixRelativeImageLinks(removeSpam(shortdesc)))
+      cache['shortdesc'] = removeAlignments(fixRelativeImageLinks(removeSpam(removeSpan(shortdesc))))
     end
 
     if data =~ /Long Description\<\/h2\>\s*\<\/div\>\s*\<div class="item-content"\>(.*?)\<\/div\>\s*\<\/div\>\s*\<div class="item"\>/m
       longdesc = $1.gsub(/^\s+/, '').gsub(/\s+$/, '')
       debug "got long desc [#{longdesc}]"
-      longdesc = removeAlignments(fixRelativeImageLinks(removeSpam(longdesc)))
+      longdesc = removeAlignments(fixRelativeImageLinks(removeSpam(removeSpan(longdesc))))
       cache['longdesc'] = longdesc
     end
 
@@ -703,7 +703,17 @@ class CacheDetails
       debug removed
       debug "-----------------------------------------------------"
     end
+    return removed
+  end
 
+  def removeSpan(text)
+    # remove <span> tags from HTML
+    removed = text.gsub(/\<\/?span[^\>]*\>/m, '')
+    if removed != text
+      debug "Removed span tags from: ----------------------------------"
+      debug removed
+      debug "-----------------------------------------------------"
+    end
     return removed
   end
 
