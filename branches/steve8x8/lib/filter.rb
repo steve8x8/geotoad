@@ -300,7 +300,7 @@ class Filter
 
   # add a visitor to a cache. Used by the userlookup feeder.
   def addVisitor(wid, visitor)
-    if (@waypointHash[wid])
+    if (@waypointHash[wid] && visitor)
       debug "Added visitor to #{wid}: #{visitor}"
       # I don't believe we should downcase the visitors at this stage,
       # since we really are losing data for the templates. I need to
