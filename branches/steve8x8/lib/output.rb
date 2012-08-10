@@ -674,13 +674,42 @@ class Output
   end
 
   def createGpxCommentLogs(cache)
-    if not cache['comments']
-      debug "No comments found for #{cache['name']}"
-      return nil
-    end
+    #if not cache['comments']
+    #  debug "No comments found for #{cache['name']}"
+    #  return nil
+    #end
 
     entries = []
     debug "Generating comment XML for #{cache['name']}"
+    brlf = "\&lt;br /\&gt;\r\n"
+
+    # info log entry
+    if (cache['ltime'] and cache['logcounts'])
+      debug "info log entry"
+      entry = ''
+      entry << "    <groundspeak:log id=\"-2\">\r\n"
+      formatted_date = cache['ltime'].strftime("%Y-%m-%dT%H:%M:%SZ")
+      entry << "      <groundspeak:date>#{formatted_date}</groundspeak:date>\r\n"
+      entry << "      <groundspeak:type>Write note</groundspeak:type>\r\n"
+      entry << "      <groundspeak:finder id=\"0\">Info</groundspeak:finder>\r\n"
+      entry << "      <groundspeak:text encoded=\"False\">\r\n"
+      formatted_date = cache['ctime'].strftime("%Y-%m-%d")
+      entry << "Placed: #{formatted_date}" + brlf
+      entry << "D/T/S:  #{cache['difficulty']} / #{cache['terrain']} / #{cache['size']}"
+      if cache['funfactor']
+        entry << ", Fun: #{cache['funfactor']}"
+      end
+      if cache['favfactor']
+        entry << ", Fav: #{cache['favfactor']}"
+      end
+      entry << brlf
+      entry << "Stats: #{cache['logcounts']}" + brlf
+      entry << "Last log: #{cache['last_find_type']} (#{cache['last_find_days']} days ago)" + brlf
+      entry << "      </groundspeak:text>\r\n"
+      entry << "    </groundspeak:log>\r\n"
+      entries << entry
+    end
+
     cache['comments'].each { |comment|
       comment_id = Zlib.crc32(comment['text'])
       debug "Comment ID: #{comment_id} by #{comment['user']}: #{comment['text']}"

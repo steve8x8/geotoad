@@ -196,6 +196,7 @@ $Format = {
       "<a href=\"<%out.maps_url%>\"><%wp.latwritten%> <%wp.lonwritten%></a> <i>near <%out.location%></i><br>" +
       "<font color=\"#339933\"><%wp.type%> (<%wp.size%>) D<%wp.difficulty%>/T<%wp.terrain%> (F<%wp.funfactor%>) Fav<%wp.favfactor%>(<%wp.favorites%>/<%wp.foundcount%>) &rarr;<%out.relativedistance%><br>" +
       "Placed: <%out.cdate%> Last comment: <%wp.last_find_days%> days ago (<%wp.last_find_type%>)</font><br>\n" +
+      "Age of information: <%wp.ldays%> days<br>\n" +
       "Attributes: <%out.txtAttrs%><br>\n" +
       "<div>" + # catch runaway stuff like <center>
       "<p><%wp.additional_raw%><%wp.shortdesc%></p>\n" + # font size inside tables?
@@ -221,6 +222,7 @@ $Format = {
       "Difficulty: <%wp.difficulty%>, Terrain: <%wp.terrain%>, FunFactor: <%wp.funfactor%>, FavFactor: <%wp.favfactor%>\r\n" +
       "Type/Size: <%wp.type%> (<%wp.size%>), Distance: <%out.relativedistance%>\r\n" +
       "Creation: <%out.cdate%>, Last comment: <%wp.last_find_days%> days ago (<%wp.last_find_type%>)\r\n\r\n" +
+      "Age of info: <%wp.ldays%> days\r\n" +
       "Attributes: <%out.txtAttrs%>\r\n" +
       "State: <%out.warnArchiv%><%out.warnAvail%>\r\n" +
       "Short: <%wpText.shortdesc%>\r\n" +
