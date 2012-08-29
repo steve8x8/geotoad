@@ -157,7 +157,7 @@ class ShadowFetch
       else
         debug "local cache is only #{age} (<= #{@localExpiry}) sec old, using local file."
         @data = fetchLocal(localfile)
-        @@src='local'
+        @@src = 'local'
         # short-circuit out of here!
         return @data
       end
@@ -165,20 +165,27 @@ class ShadowFetch
       debug "no local cache file found for #{localfile}"
     end
 
+    # fetch a new version from remote
     @data = fetchRemote
     size = nil
+    # check for valid closed html
+    if not @data
+      debug "we must not have a net connection, uh no"
+    elsif @data !~ /\<\/html\>\s*$/
+      debug "ERROR: no closing HTML tag, remote may be corrupted"
+      @data = nil
+    end
     if (@data)
-      @@src='remote'
+      @@src = 'remote'
       size = @data.length
     else
-      debug "we must not have a net connection, uh no"
       if (File.exists?(localfile))
         debug "using local cache instead"
         @data = fetchLocal(localfile)
         @@src = "local <offline>"
         return @data
       else
-        @@src=nil
+        @@src = nil
         debug "ERROR: #{@url} could not be fetched, even by cache"
         return nil
       end
