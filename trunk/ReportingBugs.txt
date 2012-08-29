@@ -40,10 +40,9 @@ Have you upgraded to the [CurrentVersion latest release]?
 There is nothing available for my OS.
 -------------------------------------
 
- - We're very unhappy with it, but MacOSX (dmg) packages couldn't be built for quite a long time.
- - Work on stabilizing the build environment is still ongoing.
+ - Although Windows, Linux, and MacOSX are covered, we cannot build for each platform.
+ - There are no plans yet to support individual OSes in terms of packaging. Feel free to suggest additions.
  - As a workaround, you may pick up the .tar.gz file - a working ruby installation is still necessary.
- - There are no plans to support individual OSes in terms of packaging. The tarball should cover most cases.
 
 --------------------------------------------------------------------------
 Yes, I've got the latest version. It used to work, but now it's dead, Jim.
@@ -54,7 +53,8 @@ There are more or less frequent [GCmaintenances updates to the web site] it quer
 To make it work for you again, we therefore need some input to be able to identify the problem.
 
  - Always try to reproduce the problem, and allow us to reproduce it as well - the TUI writes out a _sample command line_ that will be helpful.
- - Are you using a Ruby environment we haven't tested GeoToad against? 1.8.7, or 1.9.1/2 should be safe.
+ - Are you using a Ruby environment we haven't tested GeoToad against? 1.8.7, or 1.9.1/2/3 should be safe.
+ - Do you use a somewhat non.standard setup? We'd like to know your language settings, both in the OS and on the GC site.
  - Toggle _verbose output_ on (using "v" in the TUI, or "-v"/"--verbose" from the command line), and write the (copious!) output to a file.
  - The last few lines might already give you an idea what could have happened.
  - Check for the last occurrence of "wid = " in the debugging output. A few lines before, there should be a line "cachefile: ...".
