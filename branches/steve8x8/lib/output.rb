@@ -691,11 +691,11 @@ class Output
       formatted_date = cache['ltime'].strftime("%Y-%m-%dT%H:%M:%SZ")
       entry << "      <groundspeak:date>#{formatted_date}</groundspeak:date>\r\n"
       entry << "      <groundspeak:type>Write note</groundspeak:type>\r\n"
-      entry << "      <groundspeak:finder id=\"0\">Info</groundspeak:finder>\r\n"
+      entry << "      <groundspeak:finder id=\"0\">**Info**</groundspeak:finder>\r\n"
       entry << "      <groundspeak:text encoded=\"False\">\r\n"
       formatted_date = cache['ctime'].strftime("%Y-%m-%d")
       entry << "Placed: #{formatted_date}" + brlf
-      entry << "D/T/S:  #{cache['difficulty']} / #{cache['terrain']} / #{cache['size']}"
+      entry << "D/T/S:  #{cache['difficulty']}/#{cache['terrain']}/#{cache['size']}"
       if cache['funfactor']
         entry << ", Fun: #{cache['funfactor']}"
       end
@@ -1099,7 +1099,7 @@ class Output
       'hint' => cache['hint'],
       'cacheSymbol' => symbol,
       'cacheID' => cacheID(wid),
-      'logID' => (100000999999-cache['index'].to_i),
+      'logID' => (100000000001+@wpHash.length-cache['index'].to_i),
       'trackables' => cache['travelbug'].to_s,
       'xmlTrackables' => xmlTrackables,
       'shortWpts' => shortWpts.to_s,
