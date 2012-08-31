@@ -32,6 +32,7 @@ require 'lib/auth'
 require 'lib/version'
 require 'getoptlong'
 require 'fileutils'
+require 'find' # for cleanup
 
 class GeoToad
   include Common
@@ -201,50 +202,71 @@ class GeoToad
     debug "Check complete."
   end
 
+  def findRemoveFiles(where, age, pattern = ".*\\..*", writable = nil)
+  # inspired by ruby-forum.com/topic/149925
+    regexp = Regexp.compile(pattern)
+    debug "findRemoveFiles() age=#{age}, pattern=#{pattern}, writable=#{writable.inspect}"
+    filelist = Array.new
+    begin # catch filesystem problems
+      Find.find(where) { |file|
+        # never touch directories
+        next if not File.file?(file)
+        next if (age * 86400) > (Time.now - File.mtime(file)).to_i
+        next if not regexp.match(File.basename(file))
+        next if writable and not File.writable?(file)
+        filelist.push file
+      }
+    rescue => error
+      displayWarning "Cannot parse #{where}: #{error}"
+      return
+    end
+    filecount = filelist.length
+    debug "found #{filecount} files to remove: #{filelist.inspect}"
+    if not filelist.empty?
+      displayInfo "... #{filecount} files to remove"
+      filelist.each { |file|
+        begin
+          File.delete(file)
+        rescue => error
+          displayWarning "Cannot delete #{file}: #{error}"
+        end
+      }
+    end
+  end
+
   def clearCacheDirectory
     displayMessage "Clearing #{$CACHE_DIR} selectively"
-    #FileUtils::remove_dir($CACHE_DIR)
-    # remove more selectively
-    #FileUtils::remove_dir("#{$CACHE_DIR}/www.geocaching.com/account")
+
     displayInfo "Clearing account data older than 14 days"
-    command = "find #{$CACHE_DIR}/*/account -mtime +14"
-    command << " -type f"
-    command << " | xargs -r rm"
-    system(command)
-    #FileUtils::remove_dir("#{$CACHE_DIR}/www.geocaching.com/login")
+    #system "find #{$CACHE_DIR}/*/account -mtime +14 -type f | xargs -r rm"
+    findRemoveFiles("#{$CACHE_DIR}/www.geocaching.com/account/", 14)
+
     displayInfo "Clearing login data older than 14 days"
-    command = "find #{$CACHE_DIR}/*/login -mtime +14"
-    command << " -type f"
-    command << " | xargs -r rm"
-    system(command)
-    #FileUtils::remove_dir("#{$CACHE_DIR}/www.geocaching.com/seek")
-    #displayInfo "NOT clearing cache descriptions older than 31 days"
-    #command = "find #{$CACHE_DIR}/*/seek -mtime +31"
-    #command << " -writable -name 'cdpf.aspx*'"
-    #command << " | xargs -r rm"
-    #system(command)
+    #system "find #{$CACHE_DIR}/*/login -mtime +14 -type f | xargs -r rm"
+    findRemoveFiles("#{$CACHE_DIR}/www.geocaching.com/login/", 14)
+
+    # We do NOT clear cdpf files, in NO case. Instead, preserve old descriptions!
+    # If you really want this functionality, uncomment the following displayInfo and findRemoveFiles lines.
+    #displayInfo "Clearing cache descriptions older than 31 days"
+    ##system "find #{$CACHE_DIR}/*/seek -mtime +31 -writable -name 'cdpf.aspx*' | xargs -r rm"
+    #findRemoveFiles("#{$CACHE_DIR}/www.geocaching.com/seek/", 31, "cdpf\\.aspx.*", true)
+
     displayInfo "Clearing cache details older than 31 days"
-    command = "find #{$CACHE_DIR}/*/seek -mtime +31"
-    command << " -writable -name 'cache_details.aspx*'"
-    command << " | xargs -r rm"
-    system(command)
+    #system "find #{$CACHE_DIR}/*/seek -mtime +31 -writable -name 'cache_details.aspx*' | xargs -r rm"
+    findRemoveFiles("#{$CACHE_DIR}/www.geocaching.com/seek/", 31, "cache_details\\.aspx.*", true)
+
     displayInfo "Clearing lat/lon query data older than 3 days"
-    command = "find #{$CACHE_DIR}/*/seek -mtime +3"
-    command << " -writable -name 'nearest.aspx*_lat_*_lng_*'"
-    command << " | xargs -r rm"
-    system(command)
+    #system "find #{$CACHE_DIR}/*/seek -mtime +3 -writable -name 'nearest.aspx*_lat_*_lng_*' | xargs -r rm"
+    findRemoveFiles("#{$CACHE_DIR}/www.geocaching.com/seek/", 3, "nearest\\.aspx.*_lat_.*_lng_.*", true)
+
     displayInfo "Clearing state and country query data older than 3 days"
-    command = "find #{$CACHE_DIR}/*/seek -mtime +3"
-    command << " -writable"
-    command << " '(' -name 'nearest.aspx*_state_id_*'"
-    command << " -o -name 'nearest.aspx*_country_id_*' ')'"
-    command << " | xargs -r rm"
-    system(command)
+    #system "find #{$CACHE_DIR}/*/seek -mtime +3 -writable '(' -name 'nearest.aspx*_state_id_*' -o -name 'nearest.aspx*_country_id_*' ')' | xargs -r rm"
+    findRemoveFiles("#{$CACHE_DIR}/www.geocaching.com/seek/", 3, "nearest\\.aspx.*_(country|state)_id_.*", true)
+
     displayInfo "Clearing other query data older than 14 days"
-    command = "find #{$CACHE_DIR}/*/seek -mtime +14"
-    command << " -writable -name 'nearest.aspx*'"
-    command << " | xargs -r rm"
-    system(command)
+    #system "find #{$CACHE_DIR}/*/seek -mtime +14 -writable -name 'nearest.aspx*' | xargs -r rm"
+    findRemoveFiles("#{$CACHE_DIR}/www.geocaching.com/seek/", 14, "nearest\\.aspx.*", true)
+
     displayMessage "Cleared!"
     $CACHE_DIR = findCacheDir()
   end
