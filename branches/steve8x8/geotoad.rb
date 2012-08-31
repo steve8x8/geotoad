@@ -249,23 +249,23 @@ class GeoToad
     # If you really want this functionality, uncomment the following displayInfo and findRemoveFiles lines.
     #displayInfo "Clearing cache descriptions older than 31 days"
     ##system "find #{$CACHE_DIR}/*/seek -mtime +31 -writable -name 'cdpf.aspx*' | xargs -r rm"
-    #findRemoveFiles("#{$CACHE_DIR}/www.geocaching.com/seek/", 31, "cdpf\\.aspx.*", true)
+    #findRemoveFiles("#{$CACHE_DIR}/www.geocaching.com/seek/", 31, "^cdpf\\.aspx.*", true)
 
     displayInfo "Clearing cache details older than 31 days"
     #system "find #{$CACHE_DIR}/*/seek -mtime +31 -writable -name 'cache_details.aspx*' | xargs -r rm"
-    findRemoveFiles("#{$CACHE_DIR}/www.geocaching.com/seek/", 31, "cache_details\\.aspx.*", true)
+    findRemoveFiles("#{$CACHE_DIR}/www.geocaching.com/seek/", 31, "^cache_details\\.aspx.*", true)
 
     displayInfo "Clearing lat/lon query data older than 3 days"
     #system "find #{$CACHE_DIR}/*/seek -mtime +3 -writable -name 'nearest.aspx*_lat_*_lng_*' | xargs -r rm"
-    findRemoveFiles("#{$CACHE_DIR}/www.geocaching.com/seek/", 3, "nearest\\.aspx.*_lat_.*_lng_.*", true)
+    findRemoveFiles("#{$CACHE_DIR}/www.geocaching.com/seek/", 3, "^nearest\\.aspx.*_lat_.*_lng_.*", true)
 
     displayInfo "Clearing state and country query data older than 3 days"
     #system "find #{$CACHE_DIR}/*/seek -mtime +3 -writable '(' -name 'nearest.aspx*_state_id_*' -o -name 'nearest.aspx*_country_id_*' ')' | xargs -r rm"
-    findRemoveFiles("#{$CACHE_DIR}/www.geocaching.com/seek/", 3, "nearest\\.aspx.*_(country|state)_id_.*", true)
+    findRemoveFiles("#{$CACHE_DIR}/www.geocaching.com/seek/", 3, "^nearest\\.aspx.*_(country|state)_id_.*", true)
 
     displayInfo "Clearing other query data older than 14 days"
     #system "find #{$CACHE_DIR}/*/seek -mtime +14 -writable -name 'nearest.aspx*' | xargs -r rm"
-    findRemoveFiles("#{$CACHE_DIR}/www.geocaching.com/seek/", 14, "nearest\\.aspx.*", true)
+    findRemoveFiles("#{$CACHE_DIR}/www.geocaching.com/seek/", 14, "^nearest\\.aspx.*", true)
 
     displayMessage "Cleared!"
     $CACHE_DIR = findCacheDir()
