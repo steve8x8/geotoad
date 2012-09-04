@@ -264,6 +264,8 @@ class CacheDetails
     cache = nil
     nextline_coords = false
 
+    # catch bad input data
+    begin
     data.split("\n").each { |line|
       # <title id="pageTitle">(GC1145) Lake Crabtree computer software store by darylb</title>
       if line =~ /\<title.*\>\((GC\w+)\) (.*?) by (.*?)\</
@@ -437,6 +439,13 @@ class CacheDetails
         return "unpublished"
       end
     }
+    rescue => error
+      displayWarning "Error in parseCache():data.split"
+      if data =~ /\<title.*\>\((GC\w+)\) (.*?) by (.*?)\</
+        displayWarning "WID affected: #{$1}"
+      end
+      raise error
+    end
 
     # Short-circuit and abort if the data is no good.
     if not cache

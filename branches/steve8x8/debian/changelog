@@ -1,12 +1,15 @@
 geotoad (3.17.2-1) unstable; urgency=low
 
-  * New version 3.17.2, not nicknamed yet
+  * New version 3.17.2, "Leaf Miner" release
   * Issue 174: insert "info" log entry into GPX
+  * Issue 175: attempt to enable selective cleanup for Windows
   * Issue 250: ignore "nil" visitors
   * Issue 252: remove "span" tags from description HTML
-  * Minor other stuff
+  * Issue 253: minimalistic validation of remote files
+  * Issue 254: catch date conversion exception
+  * Some minor other stuff
 
- -- Steve Sixty-Four <steve8x8@gmail.com>  Tue, 28 Aug 2012 14:00:00 +0200
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 13 Sep 2012 14:00:00 +0200
 
 geotoad (3.17.1-1) unstable; urgency=low
 

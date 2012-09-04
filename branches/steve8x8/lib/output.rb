@@ -704,7 +704,7 @@ class Output
       end
       entry << brlf
       entry << "Stats: #{cache['logcounts']}" + brlf
-      entry << "Last log: #{cache['last_find_type']} (#{cache['last_find_days']} days ago)" + brlf
+      entry << "Last log: #{cache['last_find_type']}" + brlf
       entry << "      </groundspeak:text>\r\n"
       entry << "    </groundspeak:log>\r\n"
       entries << entry

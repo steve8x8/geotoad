@@ -38,6 +38,8 @@ module Common
   def parseDate(date)
     debug "parsing date: [#{date}]"
     timestamp = nil
+   # catch exceptions in case there are invalid dates (like GC1C8FF)
+   begin
     # we have to overcome the ignorance of ruby1.8 wrt Unicode characters
     case date
     # relative dates end in a "*"
@@ -118,6 +120,10 @@ module Common
       displayWarning "Could not parse date: #{date}"
       return nil
     end
+   rescue => error
+      displayWarning "Error encountered: #{date} #{error}"
+      return nil
+   end
     if not timestamp and days_ago
       timestamp = Time.now - (days_ago * 3600 * 24)
     end
