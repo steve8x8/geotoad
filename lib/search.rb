@@ -373,6 +373,7 @@ class SearchCache
     csize = nil
     cdiff = nil
     cterr = nil
+    begin
     data.split("\n").each { |line|
       line.gsub!(/&#39;/, '\'')
       case line
@@ -422,6 +423,13 @@ class SearchCache
         debug "Found size: #{csize}"
       end
     }
+    rescue => error
+      displayWarning "Error in getWidSearchResult():data.split"
+      if data =~ /(\+\(|_|CoordInfoCode.\>)(GC\w+)(\)\+[^>]+>Google Maps|[^>]+>Bing Maps|\<\/span\>)/
+        displayWarning "WID affected: #{$2}"
+      end
+      raise error
+    end
     # one match is enough!
     if data =~ /cdpf\.aspx\?guid=([\w-]+)/m
       guid = $1
@@ -612,6 +620,7 @@ class SearchCache
     }
 
     inresultstable = false
+    begin
     data.split("\n").each { |line|
       # GC change 2010-11-09
       line.gsub!(/&#39;/, '\'')
@@ -883,6 +892,10 @@ class SearchCache
 
       end # end case
     } # end loop
+    rescue => error
+      displayWarning "Error in parseSearchData():data.split"
+      raise error
+    end
     debug "processPage done: page:#{page_number} total_pages: #{pages_total} parsed: #{parsed_total}"
     return [page_number, pages_total, parsed_total, post_vars]
   end #end parsecache
