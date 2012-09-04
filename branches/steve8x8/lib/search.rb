@@ -505,7 +505,8 @@ class SearchCache
       'type' => ctype.split(' ')[0].downcase.gsub(/\-/, ''),
       'size' => csize.gsub(/medium/, 'regular'),
       'difficulty' => cdiff,
-      'terrain' => cterr
+      'terrain' => cterr,
+      'visitors' => []
     }
     return cache_data
   end
