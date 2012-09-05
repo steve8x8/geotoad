@@ -684,6 +684,10 @@ class SearchCache
           debug "Found next target: #{$1}"
           post_vars['__EVENTTARGET'] = $1
         end
+      # at least Dutch is different...
+      when /doPostBack\(\'([\w\$_]+)\',\'\'\)\"\>\<b\>[^\>]+ \&gt;\<\/b\>/ #Next
+        debug "Found next target: #{$1}"
+        post_vars['__EVENTTARGET'] = $1
       when /^\<input type=\"hidden\" name=\"(.*?)\".*value=\"(.*?)\" \/\>/
         debug "found hidden post variable: #{$1}"
         post_vars[$1]=$2
