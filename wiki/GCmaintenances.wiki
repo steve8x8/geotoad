@@ -17,16 +17,15 @@ See also [http://forums.groundspeak.com/GC/index.php?showforum=89 Release Notes 
 _*(new entries will be added on top)*_
 
 ----
-2012-08-02:
-  * _"Geocaching.com ... site maintenance on Thursday, August 2, 2012 ... 11am PST"_ (1800 UTC)
-  * maintenance, no upgrade!
-----
 2012-07-24:
   * _(not even announced on Twitter?)_
   * [http://forums.groundspeak.com/GC/index.php?showtopic=299057 release notes]
   * "tackling a lot of technical website debt"
   * new server build: *{{{Web.HotFix_20120723.1}}}*
+  * _"Geocaching.com ... site maintenance on Thursday, August 2, 2012 ... 11am PST"_ (1800 UTC)
   * 2012-08-09 seen:  *{{{Web.HotFix_20120807.1}}}
+  * 2012-08-23 seen:  *{{{Web.HotFix_20120822.2}}}
+  * 2012-09-04 seen:  *{{{Web.HotFix_20120904.3}}}
 ----
 2012-07-10:
   * _(announced on Twitter on July 10, perhaps erroneously named "July 7")_
