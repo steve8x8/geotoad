@@ -5,7 +5,7 @@ geotoad (3.17.2-1) unstable; urgency=low
   * Issue 175: attempt to enable selective cleanup for Windows
   * Issue 250: ignore "nil" visitors
   * Issue 252: remove "span" tags from description HTML
-  * Issue 253: minimalistic validation of remote files
+  * Issue 253: validate remote files; "next page" for other languages
   * Issue 254: catch date conversion exception
   * Some minor other stuff
 
