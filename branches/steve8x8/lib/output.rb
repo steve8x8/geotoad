@@ -654,7 +654,7 @@ class Output
         symbolHash[wid] << "<b><font color=\"#66BB66\">+</font></b>"
       end
 
-      if (cache['funfactor'] >= 3.5)
+      if (cache['funfactor'].to_f >= 3.5)
         symbolHash[wid] << "<b><font color=\"#BB6666\">&hearts;</font></b>"
       end
 

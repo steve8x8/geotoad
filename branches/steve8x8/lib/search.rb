@@ -507,6 +507,10 @@ class SearchCache
       'size' => csize.gsub(/medium/, 'regular'),
       'difficulty' => cdiff,
       'terrain' => cterr,
+      # these are educated guesses only
+      'ctime' => Time.at($ZEROTIME),
+      'atime' => Time.at($ZEROTIME),
+      'mtime' => Time.at($ZEROTIME),
       'visitors' => []
     }
     return cache_data
