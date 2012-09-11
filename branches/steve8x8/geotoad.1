@@ -58,6 +58,10 @@ output format type(s)
 .TP
 \fB-q \fR\fI[location|coord|user|owner|country|state|keyword|wid|guid]\fR, \fB--query=\fR\fI...\fR
 query type (location by default).
+
+"location" will ask Google Maps for a "translation" into coordinates (which may fail).
+Use "coord" if you already have coordinates.
+
 "country" and "state" queries require a numerical id which the TUI may tell you.
 .TP
 \fB-s \fR\fI[virtual|not_chosen|other|micro|small|regular|large]\fR, \fB--sizeMin=\fR\fI...\fR

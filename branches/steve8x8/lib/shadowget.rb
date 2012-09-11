@@ -172,8 +172,8 @@ class ShadowFetch
     if not @data
       debug "we must not have a net connection, uh no"
     elsif @data !~ /\<\/html\>\s*$/
-      debug "ERROR: no closing HTML tag, remote may be corrupted"
-      @data = nil
+      displayWarning "No closing HTML tag found"
+      #@data = nil
     end
     if (@data)
       @@src = 'remote'

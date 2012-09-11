@@ -7,6 +7,7 @@ geotoad (3.17.2-1) unstable; urgency=low
   * Issue 252: remove "span" tags from description HTML
   * Issue 253: validate remote files; "next page" for other languages
   * Issue 254: catch date conversion exception
+  * Issue 255: "location" queries: error handling, info output
   * Some minor other stuff
 
  -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 13 Sep 2012 14:00:00 +0200

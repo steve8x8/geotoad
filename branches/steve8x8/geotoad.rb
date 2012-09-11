@@ -324,7 +324,9 @@ class GeoToad
       search.notyetfound = (@option['notFoundByMe'] ? true : false)
 
       if (! search.setType(@queryType, queryArg))
-        displayError "Could not determine search type for #{@queryType}, exiting"
+        displayWarning "Could not determine search type for #{@queryType} \"#{queryArg}\""
+        displayWarning "You may want to remove special characters or try a \"coord\" search instead"
+        displayError "No valid search type. Exiting."
         exit
       end
 
