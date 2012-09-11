@@ -49,7 +49,7 @@ class GeoCode
     http.localExpiry = CACHE_SECONDS
     http.maxFailures = 5
     results = http.fetch
-    debug "geocode data: #{results}"
+    debug "geocode data: #{results.inspect}"
     return results
   end
 
@@ -68,7 +68,9 @@ class GeoCode
 
   # Parse the CSV returned by http://code.google.com/apis/maps/documentation/geocoding/
   def parse_data(data)
-    return CSV.parse_line(data)
+    # handle nil data
+    return CSV.parse_line(data) if (data)
+    return [ "999", "999", "no data" ]
   end
 
 end
