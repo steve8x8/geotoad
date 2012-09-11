@@ -1,10 +1,9 @@
 Source: geotoad
 Section: utils
 Priority: optional
-Old-Maintainer: Joey Hess <joeyh@debian.org>
 Maintainer: Steve Sixty-Four <steve8x8@gmail.com>
-Build-Depends: debhelper (>= 4), quilt
-Standards-Version: 3.6.1
+Build-Depends: debhelper (>= 7)
+Standards-Version: 3.8.6
 
 Package: geotoad
 Architecture: all
