@@ -40,6 +40,9 @@ sed s/"%VERSION%"/"$VERSION"/g FAQ.txt > $GENERIC_DIR/FAQ.txt
 chmod 755 $GENERIC_DIR/*.rb
 rm $GENERIC_DIR/VERSION $GENERIC_DIR/tools/countryrip.rb $GENERIC_DIR/tools/*.sh $GENERIC_DIR/data/*.gz
 
+# create PDF version of manual page
+groff -Tps -mman $GENERIC_DIR/geotoad.1 | ps2pdf - $GENERIC_DIR/geotoad.pdf
+
 # Make a duplicate of it for Macs before we nuke the .command file
 cp -Rp $GENERIC_DIR "$MAC_DIR"
 rm $GENERIC_DIR/*.command
@@ -125,6 +128,7 @@ Source: "COPYRIGHT.txt";             DestDir: "{app}"
 Source: "FAQ.txt";                   DestDir: "{app}"
 Source: "TODO.txt";                  DestDir: "{app}"; Flags: skipifsourcedoesntexist
 Source: "README.txt";                DestDir: "{app}"; Flags: isreadme
+Source: "geotoad.pdf";               DestDir: "{app}"; Flags: skipifsourcedoesntexist
 
 [Icons]
 Name: "{group}\GeoToad"; Filename: "{app}\geotoad.exe"
