@@ -710,19 +710,21 @@ class Output
       entries << entry
     end
 
-    cache['comments'].each { |comment|
-      comment_id = Zlib.crc32(comment['text'])
-      debug "Comment ID: #{comment_id} by #{comment['user']}: #{comment['text']}"
-      formatted_date = comment['date'].strftime("%Y-%m-%dT07:00:00.000Z")
-      entry = ''
-      entry << "    <groundspeak:log id=\"#{comment_id}\">\r\n"
-      entry << "      <groundspeak:date>#{formatted_date}</groundspeak:date>\r\n"
-      entry << "      <groundspeak:type>#{comment['type']}</groundspeak:type>\r\n"
-      entry << "      <groundspeak:finder id=\"#{comment['user_id']}\">#{comment['user']}</groundspeak:finder>\r\n"
-      entry << "      <groundspeak:text encoded=\"False\">" + makeXML(comment['text']) + "</groundspeak:text>\r\n"
-      entry << "    </groundspeak:log>\r\n"
-      entries << entry
-    }
+    if cache['comments']
+      cache['comments'].each { |comment|
+        comment_id = Zlib.crc32(comment['text'])
+        debug "Comment ID: #{comment_id} by #{comment['user']}: #{comment['text']}"
+        formatted_date = comment['date'].strftime("%Y-%m-%dT07:00:00.000Z")
+        entry = ''
+        entry << "    <groundspeak:log id=\"#{comment_id}\">\r\n"
+        entry << "      <groundspeak:date>#{formatted_date}</groundspeak:date>\r\n"
+        entry << "      <groundspeak:type>#{comment['type']}</groundspeak:type>\r\n"
+        entry << "      <groundspeak:finder id=\"#{comment['user_id']}\">#{comment['user']}</groundspeak:finder>\r\n"
+        entry << "      <groundspeak:text encoded=\"False\">" + makeXML(comment['text']) + "</groundspeak:text>\r\n"
+        entry << "    </groundspeak:log>\r\n"
+        entries << entry
+      }
+    end
     debug "Finished generating comment XML for #{cache['name']}"
     debug "Comment Data: #{entries}"
     debug "Comment Data Length: #{entries.length}"
