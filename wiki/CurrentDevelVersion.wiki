@@ -1,12 +1,35 @@
 #summary Features of current development version
 #labels Featured,Experimental
 
-version=3.17.1
+version=3.17.2
 
-= "Rousseau" Development Release (June 28, 2012) =
+= "Leaf miner" Development Release (Sep 17, 2012) =
 
 = Development will continue in the 3.17 series only! =
   * New features, after some time of testing, may be backported to the stable 3.16 series.
+
+== Caveat emptor: ==
+  * Development releases contain new additions to the code - which may not be thoroughly tested and result in malfunction.
+  * To keep development going, I'd like you to try to break them and give feedback about any misbehaviour you may encounter.
+  * Please report your observations to Steve8x8 at Google Mail *only*.
+  * In your report, please include: command line, information about OS, locale/codepage settings, GC localization, Ruby and GeoToad versions.
+  * See the ReportingBugs wiki page. The "verbose" option is the culprit.
+  * Possible known issues below...:
+  * New strategy of extracting owner and cache names (issue 245) may result in bad output data under Windows. Please e-mail "list" output.
+  * ...
+
+= New development version 3.17.2 =
+  * nicknamed "Leaf miner" after looking out of the window at almost bald chestnut trees
+
+== Issues addressed: ==
+  * Issue 174: insert "info" log entry into GPX
+  * Issue 175: attempt to enable selective cleanup for Windows
+  * Issue 250: ignore "nil" visitors
+  * Issue 252: remove "span" tags from description HTML
+  * Issue 253: validate remote files; "next page" for other languages
+  * Issue 254: catch date conversion exception
+  * Issue 255: "location" queries: error handling, info output
+  * Some minor other stuff
 
 = New development version 3.17.1 =
   * nicknamed "Rousseau" on the occasion of his 300th birthday
@@ -21,15 +44,6 @@ version=3.17.1
   * Minor other stuff
 
 = New development version 3.17.0 =
-
-== Caveat emptor: ==
-  * This development release contains new additions to the code - which may not be thoroughly tested and result in malfunction. Try to break it.
-  * To keep development going, I'd like to get feedback about any misbehaviour you may encounter.
-  * Please report your observations to Steve8x8 at Google Mail *only*.
-  * In your report, please include the command line used, and information about operating system and locale/codepage settings, Ruby and GeoToad versions.
-  * Possible known issues below...
-  * There's a new strategy of extracting owner and cache names (issue 245) which may result in bad output data under Windows. Please e-mail "list" output.
-  * ...
 
 == Addressed issues: ==
   * (everything in 3.16.0, see [CurrentVersion stable version])
