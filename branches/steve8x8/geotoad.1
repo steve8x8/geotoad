@@ -35,6 +35,11 @@ Where multiple entries are possible (e.g. for cache sizes, owners, etc.,
 marked by \fB(MULTI)\fR below),
 they can be delimited by a pipe symbol (\fB|\fR) or a colon (\fB:\fR).
 Make sure the pipe symbols are properly escaped from the command shell!
+.PP
+\fB(USERFILE)\fR - if the user name is followed by an "equal" sign and a filename
+(as in \fIusername\fR\fB=\fR\fIfilename\fR),
+instead of querying the server the first column of the file is interpreted as
+GCxxxxx cache IDs.
 .SH OPTIONS
 .TP
 \fB-h\fR, \fB--help\fR\fR
@@ -122,7 +127,7 @@ exclude caches owned by this person
 include caches found by this person
 .TP
 \fB-E \fR\fIusername\fR, \fB--userExclude=\fR\fIusername\fR
-\fB(MULTI)\fR
+\fB(MULTI) (USERFILE)\fR
 exclude caches found by this person
 .TP
 \fB-j \fR\fIX\fR, \fB--placeDateInclude=\fR\fIX\fR
