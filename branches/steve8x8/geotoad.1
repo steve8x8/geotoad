@@ -283,6 +283,9 @@ Gets every cache in the 100 mile radius of zipcode 28272, with a terrain
 score of 2.5 or higher, and that helixblue and Sallad have not visited.
 Outputs a VCF format file, which is usable by iPod's and other devices.
 .TP
+.B  geotoad -u user -p password -t 2.5 -x vcf -E dummyuser=/path/to/file -o charlotte.vcf 28272
+As before, but read a list of GCxxxx cache IDs from a file instead of querying the server.
+.TP
 .B  geotoad -u user -p password -x html -b -K 'stream|creek|lake|river|ocean' -o watery.html -q state 15
 Gets every cache in the state with travel bugs that matches those water keywords.
 Makes a pretty HTML file out of it.
