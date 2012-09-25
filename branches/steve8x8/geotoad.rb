@@ -18,6 +18,8 @@ if RUBY_VERSION.gsub('.', '').to_i >= 190
   Encoding.default_external = Encoding::UTF_8
 end
 
+$delimiters = /[:\|]/
+
 # toss in our own libraries.
 require 'interface/progressbar'
 require 'lib/common'
@@ -135,7 +137,7 @@ class GeoToad
     @queryTitle        = "GeoToad: #{@queryType} = #{@queryArg}"
     @defaultOutputFile = "gt_" + @queryArg.to_s
 
-    @formatTypes.split(/[:\|]/).each { |formatType|
+    @formatTypes.split($delimiters).each { |formatType|
       if ! $validFormats.include?(formatType)
         displayError "#{formatType} is not a valid supported format."
         @uin.usage
@@ -300,7 +302,7 @@ class GeoToad
       @defaultOutputFile = @defaultOutputFile + "-y" + @distanceMax.to_s
     end
 
-    @queryArg.to_s.split(/[:\|]/).each { |queryArg|
+    @queryArg.to_s.split($delimiters).each { |queryArg|
       puts ""
       message = "Performing #{@queryType} search for #{queryArg} "
       search = SearchCache.new
@@ -316,7 +318,7 @@ class GeoToad
       search.max_pages = @limitPages
 
       # set tx filter if only one cache type
-      if @option['cacheType'] and (@option['cacheType'].split(/[:\|]/).length == 1)
+      if @option['cacheType'] and (@option['cacheType'].split($delimiters).length == 1)
         search.txfilter = @option['cacheType']
       end
 
@@ -372,13 +374,13 @@ class GeoToad
     if @option['userExclude'] and not @option['userExclude'].empty?
       @queryTitle = @queryTitle + ", excluding caches done by " + @option['userExclude']
       @defaultOutputFile = @defaultOutputFile + "-E=" + @option['userExclude']
-      userLookups = @option['userExclude'].split(/[:\|]/)
+      userLookups = @option['userExclude'].split($delimiters)
     end
 
     if @option['userInclude'] and not @option['userInclude'].empty?
       @queryTitle = @queryTitle + ", excluding caches not done by " + @option['userInclude']
       @defaultOutputFile = @defaultOutputFile + "-e=" + @option['userInclude']
-      userLookups = userLookups + @option['userInclude'].split(/[:\|]/)
+      userLookups = userLookups + @option['userInclude'].split($delimiters)
     end
 
     userLookups.each { |user|
@@ -529,13 +531,13 @@ class GeoToad
     beforeFilterTotal = @filtered.totalWaypoints
     if (@option['ownerExclude'])
       @queryTitle = @queryTitle + ", excluding caches by #{@option['ownerExclude']}"
-      @option['ownerExclude'].split(/[:\|]/).each { |owner|
+      @option['ownerExclude'].split($delimiters).each { |owner|
         @filtered.ownerExclude(owner)
       }
     end
     if (@option['ownerInclude'])
       @queryTitle = @queryTitle + ", excluding caches not by #{@option['ownerInclude']}"
-      @option['ownerInclude'].split(/[:\|]/).each { |owner|
+      @option['ownerInclude'].split($delimiters).each { |owner|
         @filtered.ownerInclude(owner)
       }
     end
@@ -546,12 +548,12 @@ class GeoToad
 
     beforeFilterTotal = @filtered.totalWaypoints
     if (@option['userExclude'])
-      @option['userExclude'].split(/[:\|]/).each { |user|
+      @option['userExclude'].split($delimiters).each { |user|
         @filtered.userExclude(user)
       }
     end
     if (@option['userInclude'])
-      @option['userInclude'].split(/[:\|]/).each { |user|
+      @option['userInclude'].split($delimiters).each { |user|
         @filtered.userInclude(user)
       }
     end
@@ -739,12 +741,12 @@ class GeoToad
     # our local cache is not valid.
     beforeFilterTotal = @filtered.totalWaypoints
     if (@option['userExclude'])
-      @option['userExclude'].split(/[:\|]/).each { |user|
+      @option['userExclude'].split($delimiters).each { |user|
         @filtered.userExclude(user)
       }
     end
     if (@option['userInclude'])
-      @option['userInclude'].split(/[:\|]/).each { |user|
+      @option['userInclude'].split($delimiters).each { |user|
         @filtered.userInclude(user)
       }
     end
@@ -755,12 +757,12 @@ class GeoToad
 
     beforeFilterTotal = @filtered.totalWaypoints
     if (@option['attributeExclude'])
-      @option['attributeExclude'].split(/[:\|]/).each { |attribute|
+      @option['attributeExclude'].split($delimiters).each { |attribute|
         @filtered.attributeExclude(attribute)
       }
     end
     if (@option['attributeInclude'])
-      @option['attributeInclude'].split(/[:\|]/).each { |attribute|
+      @option['attributeInclude'].split($delimiters).each { |attribute|
         @filtered.attributeInclude(attribute)
       }
     end
@@ -780,7 +782,7 @@ class GeoToad
     puts ""
     formatTypeCounter = 0
     # loop over all chosen formats
-    @formatTypes.split(/[:\|]/).each { |formatType|
+    @formatTypes.split($delimiters).each { |formatType|
       output = Output.new
       displayInfo "Output format: #{output.formatDesc(formatType)} format"
       output.input(@filtered.waypoints)
