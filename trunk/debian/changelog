@@ -1,7 +1,8 @@
 geotoad (3.16.2-1) unstable; urgency=low
 
-  * New version 3.16.2, "(no name yet)" release
+  * New version 3.16.2, "(E=m*c^2)" release (Einstein's paper in 1905)
   * Issue 175: attempt to enable selective cleanup for Windows
+  * Issue 233: If one cacheType selected, use tx= search parameter
   * Issue 250: ignore "nil" visitors
   * Issue 252: remove "span" tags from description HTML
   * Issue 253: validate remote files; "next page" for other languages
