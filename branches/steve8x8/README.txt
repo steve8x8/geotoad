@@ -92,6 +92,7 @@ syntax: geotoad [options] <search:search2:search3>
 
  -u <username>          Geocaching.com username, required for coordinates
  -p <password>          Geocaching.com password, required for coordinates
+ -m [delimiters]        set delimiter(s) (default ":|") for multiple selections
  -o [filename]          output file name (automatic otherwise)
  -x [format]            output format type, see list below
  -q [location|coord|user|owner|country|state|keyword|wid|guid]
@@ -101,14 +102,14 @@ syntax: geotoad [options] <search:search2:search3>
  -f/-F [0.0-5.0]        fun factor minimum/maximum
  -g/-G [0.0-5.0]        fav factor minimum/maximum
  -y    [1-500]          distance maximum, in miles, or suffixed "km" (10)
- -k    [keyword]        title keyword search. Use | to delimit multiple
- -K    [keyword]        desc keyword search (slow). Use | again...
+ -k    [keyword]        title keyword(s) search
+ -K    [keyword]        desc keyword(s) search (slow)
  -i/-I [username]       include/exclude caches owned by this person
  -e/-E [username]       include/exclude caches found by this person
  -s/-S [virtual|not_chosen|other|micro|small|regular|large]
                         min/max size of the cache
  -c    [traditional|multicache|unknown|virtual|event|...]
-                        type of cache (| separated)
+                        type(s) of cache
  -j/-J [# days]         include/exclude caches placed in the last X days
  -r/-R [# days]         include/exclude caches found in the last X days
  -a/-A [attribute]      include/exclude caches with attributes set
@@ -120,17 +121,18 @@ syntax: geotoad [options] <search:search2:search3>
  -L    [count]          limit number of search pages (0=unlimited)
  -Z                     don't overwrite existing cache descriptions
  -P                     HTTP proxy server, http://username:pass@host:port/
- -C                     Selectively clear local browser cache
+ -X                     emergency switch: disable early filtering
+ -C                     selectively clear local browser cache
 
 ::: OUTPUT FORMATS:
- cachemate=   cetus+       csv          delorme      delorme-nour 
- dna+         easygps      gclist       gcvisits     gpsdrive     
- gpsman       gpspilot+    gpspoint     gpsutil+     gpx          
- gpx-gsak     gpx-wpts     holux+       html         kml+         
- list         magnav+      mapsend+     mxf          myfindgpx    
- myfindlist   ozi          pcx+         psp+         sms          
- tab          text         tiger        tmpro+       tpg+         
- wp2guid      xmap+       
+ cachemate=   cetus+       csv          delorme      delorme-nour
+ dna+         easygps      gclist       gcvisits     gpsdrive    
+ gpsman       gpspilot+    gpspoint     gpsutil+     gpx         
+ gpx-gsak     gpx-pa       gpx-wpts     holux+       html        
+ kml+         list         magnav+      mapsend+     mxf         
+ myfindgpx    myfindlist   ozi          pcx+         psp+        
+ sms          tab          text         tiger        tmpro+      
+ tpg+         wp2guid      xmap+        yourfindgpx 
     + requires gpsbabel in PATH           = requires cmconvert in PATH
 
 ::: EXAMPLES:
@@ -207,3 +209,5 @@ Select only "night cache"s.
 
  - geotoad.rb ... -a 6 -A 57 ...
 Select caches "recommended for kids" not longer than 10km.
+
+See the manual page for more examples.
