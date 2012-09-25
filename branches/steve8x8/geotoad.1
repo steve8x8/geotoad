@@ -178,13 +178,13 @@ do not overwrite existing cache description files in file cache
 \fB-P \fR\fIproxy\fR, \fB--proxy=\fR\fIproxy\fR
 HTTP proxy server, http://username@password@host:port/
 .TP
-\fB-C\fR, \fB--clearCache\fR
-selectively clear browser cache
-.TP
 \fB-X\fR, \fB--disableEarlyFilter\fR
 emergency switch to disable early filtering by difficulty/terrain/size
 should the encoding of those values into images change again - normally
 you don't want to use this!
+.TP
+\fB-C\fR, \fB--clearCache\fR
+selectively clear browser cache
 .SH SPECIAL CASES
 If your
 \fIsearch\fR
@@ -266,8 +266,8 @@ some more complex examples that you can work with:
 Search for caches within 5 miles of the above coordinates
 .TP
 .B  geotoad -u user -p password 27513:27502:33434
-You can combine searches with the : delimiter. This works for all types,
-though it's most often used with coordinate searches.
+You can combine searches with a delimiter (default is ":" or "|").
+This works for all types, though it's most often used with coordinate searches.
 .TP
 .B  geotoad -u user -p password -x text -o nc.txt -n -q state 34
 Outputs a text file with all of the caches in US state North Carolina that are
