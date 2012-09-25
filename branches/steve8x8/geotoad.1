@@ -40,6 +40,10 @@ Make sure the pipe symbols are properly escaped from the command shell!
 (as in \fIusername\fR\fB=\fR\fIfilename\fR),
 instead of querying the server the first column of the file is interpreted as
 GCxxxxx cache IDs.
+\fBWarning:\fR Since colons are used as \fB(MULTI)\fR delimiters throughout GeoToad,
+it is currently not possible to specify a file path containing a colon.
+If your input file is located on another (Windows) drive, or the filename contains
+a colon for another reason, it has to be copied/renamed before.
 .SH OPTIONS
 .TP
 \fB-h\fR, \fB--help\fR\fR
@@ -119,7 +123,7 @@ description keyword search (slow), exclude if prefixed with \fB!\fR
 include caches owned by this person
 .TP
 \fB-I \fR\fIusername\fR, \fB--ownerExclude=\fR\fIusername\fR
-\fB(MULTI)\fR
+\fB(MULTI)\fR \fB(USERFILE)\fR
 exclude caches owned by this person
 .TP
 \fB-e \fR\fIusername\fR, \fB--userInclude=\fR\fIusername\fR
