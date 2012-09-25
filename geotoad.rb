@@ -315,6 +315,11 @@ class GeoToad
       # limit search page count
       search.max_pages = @limitPages
 
+      # set tx filter if only one cache type
+      if @option['cacheType'] and (@option['cacheType'].split(/[:\|]/).length == 1)
+        search.txfilter = @option['cacheType']
+      end
+
       if (! search.setType(@queryType, queryArg))
         displayWarning "Could not determine search type for #{@queryType} \"#{queryArg}\""
         displayWarning "You may want to remove special characters or try a \"coord\" search instead"
