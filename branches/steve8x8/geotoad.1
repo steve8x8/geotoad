@@ -33,7 +33,8 @@ It can also be used in command-line mode for specific queries.
 .PP
 Where multiple entries are possible (e.g. for cache sizes, owners, etc.,
 marked by \fB(MULTI)\fR below),
-they can be delimited by a pipe symbol (\fB|\fR) or a colon (\fB:\fR).
+they can be delimited by a pipe symbol (\fB|\fR) or a colon (\fB:\fR),
+or you can define your own delimiter(s).
 Make sure the pipe symbols are properly escaped from the command shell!
 .PP
 \fB(USERFILE)\fR - if the user name is followed by an "equal" sign and a filename
@@ -57,6 +58,12 @@ geocaching.com username (required)
 .TP
 \fB-p \fR\fIpassword\fR, \fB--password=\fR\fIpassword\fR
 geocaching.com password (required)
+.TP
+\fB-m \fR\fIdelimiter(s)\fR, \fB--delimiter=\fR\fIdelimiter(s)\fR
+delimiter(s) to be used for \fB(MULTI)\fR input, default ":|"
+(without square brackets!).
+The TUI uses "|".
+For Windows command-line queries, you may try "^".
 .TP
 \fB-o \fR\fIfilename\fR, \fB--output=\fR\fIfilename\fR
 output file name (automatic otherwise)
@@ -210,6 +217,10 @@ Prefix each two-digit hex value with a percent sign, for example:
 will become
 .B %c3%96lscheich
 (the TUI will may show strange characters, don't worry about them).
+
+If you're planning to use colons (e.g. for \fB(USERFILE)\fR) on the command line,
+you may have a look at the \fB-m\fR option which allows you to redefine the
+delimiter set.
 .SH ENVIRONMENT
 .TP
 .B GEO_DIR
@@ -293,5 +304,8 @@ Makes a pretty HTML file out of it.
 .B  geotoad -u user -p password -x gpx -o mylocal.gpx -z -y 1.75 -T 4 -q coord "N 51 23.456 E 012 34.567"
 Create a GPX (1.0.1, with attributes) file with all caches around the location above,
 max. 1.75 miles away, terrain value below or equal 4, include disabled ones.
+.TP
+.B  geotoad -u user -p password -m '^+|' -o output.gpx -x "gpx+list|html" -y 3km -q coord "52.0,6.0^53.0,-7.0"
+Create three files output.{gpx,lst,html} with two center points and a 3 kilometre radius.
 .SH AUTHOR
 Thomas Stromberg and The GeoToad Project

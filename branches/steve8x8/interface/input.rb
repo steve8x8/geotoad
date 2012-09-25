@@ -85,6 +85,7 @@ class Input
       [ "--descKeyword",              "-K",    GetoptLong::OPTIONAL_ARGUMENT ],
       [ "--waypointLength",           "-l",    GetoptLong::OPTIONAL_ARGUMENT ],
       [ "--limitSearchPages",         "-L",    GetoptLong::OPTIONAL_ARGUMENT ],
+      [ "--delimiter",                "-m",    GetoptLong::OPTIONAL_ARGUMENT ],
 
       [ "--notFound",                 "-n",    GetoptLong::NO_ARGUMENT ],
       [ "--notFoundByMe",             "-N",    GetoptLong::NO_ARGUMENT ],
@@ -116,8 +117,13 @@ class Input
     begin
       @@optHash = Hash.new
       opts.each do |opt, arg|
-        # queryType gets special treatment. We try and normalize what they mean.
         debug "opt = #{opt} arg=#{arg}"
+        # replace default delimiter(s)
+        if (opt == '--delimiter')
+          $delimiters = Regexp.compile('['+Regexp.escape(arg)+']')
+          displayWarning "Using delimiter pattern #{$delimiters.inspect}"
+        end
+        # queryType gets special treatment. We try and normalize what they mean.
         if (opt == '--queryType')
           arg = guessQueryType(arg)
           debug "queryType is now #{arg}"
@@ -226,6 +232,9 @@ class Input
     puts ""
     puts " -u <username>          Geocaching.com username, required for coordinates"
     puts " -p <password>          Geocaching.com password, required for coordinates"
+
+    #puts " -m [delimiters]        set delimiter(s) (default #{$delimiters.inspect})"
+    puts " -m [delimiters]        set delimiter(s) (default \":|\") for multiple selections"
 
     puts " -o [filename]          output file name (automatic otherwise)"
     puts " -x [format]            output format type, see list below"
