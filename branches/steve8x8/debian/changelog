@@ -1,3 +1,12 @@
+geotoad (3.17.3-1) unstable; urgency=low
+
+  * New version 3.17.3, "" release
+  * Issue 174: Empty logs are no problem anymore
+  * Issue 236: Add -m option to redefine delimiters
+  * Some minor other stuff (manpage and readme)
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Tue, 02 Oct 2012 14:00:00 +0200
+
 geotoad (3.17.2-1) unstable; urgency=low
 
   * New version 3.17.2, "Leaf Miner" release
