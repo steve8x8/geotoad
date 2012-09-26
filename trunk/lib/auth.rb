@@ -120,6 +120,9 @@ module Auth
     data = page.fetch
     data.each_line do |line|
       case line
+      when /ctl00_ContentBody_LoggedInPanel/
+        debug "Found logged-in panel"
+        return true
       when /You are logged in as/
         debug "Found login confirmation!"
         return true
