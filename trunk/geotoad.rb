@@ -39,8 +39,8 @@ class GeoToad
   include Messages
   include Auth
   $VERSION = GTVersion.version
-  $SLEEP = 1.5
-  $SLOWMODE = 350
+  # with the new progressive slowdown, start with 1 second
+  $SLEEP = 1.0
 
   # *if* cache D/T/S extraction works, early filtering is possible
   $DTSFILTER = true
@@ -552,25 +552,13 @@ class GeoToad
   end
 
   def fetchGeocaches
-    # We should really check our local cache and shadowhosts first before
-    # doing this. This is just to be nice.
-    if (@filtered.totalWaypoints > $SLOWMODE)
-      displayMessage "NOTE: Because you may be downloading more than #{$SLOWMODE} waypoints"
-      displayMessage "       We will sleep longer between remote downloads to lessen the load"
-      displayMessage "       on the geocaching.com webservers. You may want to constrain"
-      displayMessage "       the number of waypoints to download by limiting by difficulty,"
-      displayMessage "       terrain, or placement date. Please see README.txt for help."
-      $SLEEP = $SLEEP * 2
-    end
-
     puts ""
-    displayMessage "Fetching geocache pages with #{$SLEEP} second rests between remote fetches"
+    displayMessage "Fetching geocache pages"
     wpFiltered = @filtered.waypoints
     progress = ProgressBar.new(0, @filtered.totalWaypoints, "Reading")
     @detail = CacheDetails.new(wpFiltered)
     @detail.preserve = @preserveCache
     token = 0
-    downloads = 0
 
     wpFiltered.each_key { |wid|
       token = token + 1
@@ -607,11 +595,6 @@ class GeoToad
 
       if status == 'subscriber-only'
         wpFiltered.delete(wid)
-      else
-        if (page.src == "remote")
-          downloads = downloads + 1
-          sleep $SLEEP
-        end
       end
 
       if message == '(error)'
