@@ -1063,7 +1063,7 @@ class Output
       'hint' => cache['hint'],
       'cacheSymbol' => symbol,
       'cacheID' => cacheID(wid),
-      'logID' => (100000999999-cache['index'].to_i),
+      'logID' => (100000000001+@wpHash.length-cache['index'].to_i),
       'trackables' => cache['travelbug'].to_s,
       'xmlTrackables' => xmlTrackables,
       'shortWpts' => shortWpts.to_s,
