@@ -8,6 +8,7 @@ geotoad (3.16.2-1) unstable; urgency=low
   * Issue 253: validate remote files; "next page" for other languages
   * Issue 254: catch date conversion exception
   * Issue 255: "location" queries: error handling, info output
+  * Remote fetches now progressively delayed, starting with 1 second
   * Some minor other stuff
 
  -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 27 Sep 2012 14:00:00 +0200

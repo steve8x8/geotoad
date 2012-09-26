@@ -239,4 +239,5 @@ module Common
       return value.to_f
     end
   end
+
 end
