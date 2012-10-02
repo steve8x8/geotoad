@@ -478,7 +478,8 @@ $Format = {
       "<%out.cdate%> " +
       "<%wp.difficulty%>/<%wp.terrain%><%out.warnArchiv%><%out.warnAvail%>\t" +
       "<%wp.type%>\t" +
-      "<%out.relativedistancekm%>\t" +
+      "<%out.relativedistancekm%>=" +
+      "<%out.relativeazimuth%>\t" +
       "<%out.size%>\t" + # testing only
       "\"<%wp.name%>\" by <%wp.creator%>\n"
   },

@@ -985,11 +985,13 @@ class Output
     end
 
     if cache['distance'] and cache['direction']
-      relative_distance = sprintf("%.1f", cache['distance'] || 0.0) + 'mi@' + (cache['direction'] || 'N')
-      relative_distance_km = sprintf("%.1f", (cache['distance'] || 0.0) * $MILE2KM) + 'km@' + (cache['direction'] || 'N')
+      relative_distance = sprintf("%.2f", cache['distance'] || 0.0) + 'mi@' + (cache['direction'] || 'N')
+      relative_distance_km = sprintf("%.2f", (cache['distance'] || 0.0) * $MILE2KM) + 'km@' + (cache['direction'] || 'N')
+      relative_azimuth = sprintf("%.1f", cache['azimuth'].to_f || 0.0)
     else
       relative_distance = 'N/A'
       relative_distance_km = 'N/A'
+      relative_azimuth = 'N/A'
     end
 
     if get_location
@@ -1097,6 +1099,7 @@ class Output
       'location' => location,
       'relativedistance' => relative_distance,
       'relativedistancekm' => relative_distance_km,
+      'relativeazimuth' => relative_azimuth,
       'hintdecrypt' => decryptHint(cache['hint']),
       'hint' => cache['hint'],
       'cacheSymbol' => symbol,
