@@ -10,6 +10,7 @@ Table of Contents:
 * Removing mystery caches from GPX
 * Merging riddle solutions into GPX
 * Modify GPX files to be accepted by BaseCamp (issue 238)
+* Get an approximate overview map of caches in a whole large area
 
 _Note: Tested with Debian Linux and bash. Adaptions may be necessary._
 
@@ -213,5 +214,44 @@ cat geotoadoutput.gpx \
 It's not even necessary to remove the "groundspeak:attributes" section.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+---------------------------------------------------------------
+Get an approximate overview map of caches in a whole large area
+---------------------------------------------------------------
+
+For obvious reasons, one doesn't want to fetch thousands of caches to get an impression
+what would be possible in the area where you're planning your next holiday trip to.
+Issue 213 tries to address this - by evaluating only search pages, while skipping the
+fetching of the cache details pages. This reduces your access count by a factor of 20!
+
+Here's what I'm using (bash again):
+
+# -Y option skips cdpf fetch
+# qlist template gets distance and azimuth angle
+
+geotoad \
+    -u $USERNAME -p $PASSWORD \
+    -Y \
+    -x qlist -o $(pwd)/all.qlist \
+    -y $DIST \
+    -q coord \
+        "$LAT $LON"
+
+# use geo-project from Rick Richardson's geo-* tools http://geo.rkkda.com/
+# to project from the center of the search, write output in "list" style
+
+cat all.qlist \
+| while read guid d1 d2 cdate dtp type dd other
+do
+    d=${dd%@*}
+    dd0=${dd%=*}
+    a=${dd#*=}
+    latlon=$(
+    geo-project -e $LAT $LON $d $a \
+    | awk '{print $3, $4}'
+    )
+    echo $guid $latlon $cdate $dtp $type $dd0 $other
+done \
+> all.list
 
 _(More to be added. Suggestions welcome.)_
