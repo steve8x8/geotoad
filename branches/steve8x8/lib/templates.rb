@@ -468,6 +468,21 @@ $Format = {
       "\"<%wp.name%>\" by <%wp.creator%>\n"
   },
 
+  'qlist'    => {
+    'ext'        => 'qlst',
+    'mime'    => 'text/plain',
+    'desc'    =>     'search results table',
+    'templatePre' => "",
+    'templateWP'    => "<%out.id%>\t" +
+      "0 0 " +
+      "<%out.cdate%> " +
+      "<%wp.difficulty%>/<%wp.terrain%><%out.warnArchiv%><%out.warnAvail%>\t" +
+      "<%wp.type%>\t" +
+      "<%out.relativedistancekm%>\t" +
+      "<%out.size%>\t" + # testing only
+      "\"<%wp.name%>\" by <%wp.creator%>\n"
+  },
+
   # myfinds (Steve8x8) - use as follows:
   # geotoad -x myfindgpx -o myfinds.gpx -z -q user $USERNAME
   'myfindgpx'    => {

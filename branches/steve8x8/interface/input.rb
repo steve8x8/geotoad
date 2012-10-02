@@ -108,7 +108,7 @@ class Input
       [ "--format",                   "-x",    GetoptLong::OPTIONAL_ARGUMENT ],
       [ "--disableEarlyFilter",       "-X",    GetoptLong::NO_ARGUMENT ],
       [ "--distanceMax",              "-y",    GetoptLong::OPTIONAL_ARGUMENT ],
-
+      [ "--noCacheDescriptions",      "-Y",    GetoptLong::NO_ARGUMENT ],
       [ "--includeDisabled",          "-z",    GetoptLong::NO_ARGUMENT ],
       [ "--preserveCache",            "-Z",    GetoptLong::NO_ARGUMENT ]
     ) || usage
@@ -263,6 +263,7 @@ class Input
     puts " -b                     only include caches with travelbugs"
     puts " -l                     set EasyName waypoint id length. (16)"
     puts " -L                     limit number of search pages (0=unlimited)"
+    puts " -Y                     do not fetch cache descriptions, search only"
     puts " -Z                     don't overwrite existing cache descriptions"
     puts " -P                     HTTP proxy server, http://username:pass@host:port/"
     puts " -X                     emergency switch: disable early filtering"
