@@ -152,7 +152,7 @@ class SearchCache
 
     when 'country'
       @query_type = 'country'
-      @search_url = @@base_url + "?country_id=#{key}"
+      @search_url = @@base_url + "?country_id=#{key}&as=1"
       @ttl = 14 * 24 * 3600	# 2 weeks
 
     when 'state'

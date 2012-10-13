@@ -1,3 +1,10 @@
+geotoad (3.16.3-1) unstable; urgency=low
+
+  * New version 3.16.3, "World's end" release
+  * Issue 257: fix queries for country with states (caution!)
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 20 Dec 2012 14:00:00 +0200
+
 geotoad (3.16.2-1) unstable; urgency=low
 
   * New version 3.16.2, "(E=m*c^2)" release (Einstein's paper in 1905)
