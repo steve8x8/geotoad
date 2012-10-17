@@ -23,10 +23,12 @@ _*(new entries will be added on top)*_
   * "tackling a lot of technical website debt"
   * new server build: *{{{Web.HotFix_20120723.1}}}*
   * _"Geocaching.com ... site maintenance on Thursday, August 2, 2012 ... 11am PST"_ (1800 UTC)
-  * 2012-08-09 seen:  *{{{Web.HotFix_20120807.1}}}
-  * 2012-08-23 seen:  *{{{Web.HotFix_20120822.2}}}
-  * 2012-09-04 seen:  *{{{Web.HotFix_20120904.3}}}
-  * 2012-09-19 seen:  *{{{Web.HotFix_20120918.5}}}
+  * 2012-08-09 seen:  *{{{Web.HotFix_20120807.1}}}*
+  * 2012-08-23 seen:  *{{{Web.HotFix_20120822.2}}}*
+  * 2012-09-04 seen:  *{{{Web.HotFix_20120904.3}}}*
+  * 2012-09-19 seen:  *{{{Web.HotFix_20120918.5}}}*
+  * 2012-10-10 seen:  *{{{Web.HotFix_20121004.4}}}*
+  * 2012-10-17 seen:  *{{{Web.HotFix_20121016.3}}}*
 ----
 2012-07-10:
   * _(announced on Twitter on July 10, perhaps erroneously named "July 7")_

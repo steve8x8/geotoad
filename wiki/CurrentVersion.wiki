@@ -3,7 +3,7 @@
 
 version=3.16.2
 
-= "E=m*c^2" release (Sept 27, 2012)
+= "E=m*c^2" release (Sept 27, 2012) =
 
 == Important note: ==
   * 3.14.9 marked the end of the development cycle for the 3.14 series.
