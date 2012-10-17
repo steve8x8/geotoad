@@ -56,6 +56,7 @@ To make it work for you again, we therefore need some input to be able to identi
  - Are you using a Ruby environment we haven't tested GeoToad against? 1.8.7, or 1.9.1/2/3 should be safe.
  - Do you use a somewhat non.standard setup? We'd like to know your language settings, both in the OS and on the GC site.
  - Toggle _verbose output_ on (using "v" in the TUI, or "-v"/"--verbose" from the command line), and write the (copious!) output to a file.
+ - If GeoToad repeatedly reports it cannot login, make a copy of the cookies.yaml file in the config folder, and remove the corresponding entry, then retry.
  - The last few lines might already give you an idea what could have happened.
  - Check for the last occurrence of "wid = " in the debugging output. A few lines before, there should be a line "cachefile: ...".
  - Rename that file in your cache. Do _not remove_ it, we might need it later.
