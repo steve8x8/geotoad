@@ -412,7 +412,7 @@ class CacheDetails
         debug "Found #{anum} attributes: #{atxt}"
       end
 
-      if line =~ /Cache is Unpublished/
+      if line =~ /^\s*\<[hH]\d\>Cache is Unpublished\<\/[hH]\d\>\s*$/
         return "unpublished"
       end
     }
