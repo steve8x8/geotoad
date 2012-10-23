@@ -61,53 +61,53 @@ class Input
 
   def getopt
     opts = GetoptLong.new(
-      [ "--attributeInclude",         "-a",    GetoptLong::OPTIONAL_ARGUMENT ],
-      [ "--attributeExclude",         "-A",    GetoptLong::OPTIONAL_ARGUMENT ],
+      [ "--attributeInclude",         "-a",    GetoptLong::REQUIRED_ARGUMENT ],
+      [ "--attributeExclude",         "-A",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--travelBug",                "-b",    GetoptLong::NO_ARGUMENT ],
 
       [ "--cacheType",                "-c",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--clearCache",               "-C",    GetoptLong::NO_ARGUMENT ],
-      [ "--difficultyMin",            "-d",    GetoptLong::OPTIONAL_ARGUMENT ],
-      [ "--difficultyMax",            "-D",    GetoptLong::OPTIONAL_ARGUMENT ],
-      [ "--userInclude",              "-e",    GetoptLong::OPTIONAL_ARGUMENT ],
-      [ "--userExclude",              "-E",    GetoptLong::OPTIONAL_ARGUMENT ],
-      [ "--funFactorMin",             "-f",    GetoptLong::OPTIONAL_ARGUMENT ],
-      [ "--funFactorMax",             "-F",    GetoptLong::OPTIONAL_ARGUMENT ],
-      [ "--favFactorMin",             "-g",    GetoptLong::OPTIONAL_ARGUMENT ],
-      [ "--favFactorMax",             "-G",    GetoptLong::OPTIONAL_ARGUMENT ],
+      [ "--difficultyMin",            "-d",    GetoptLong::REQUIRED_ARGUMENT ],
+      [ "--difficultyMax",            "-D",    GetoptLong::REQUIRED_ARGUMENT ],
+      [ "--userInclude",              "-e",    GetoptLong::REQUIRED_ARGUMENT ],
+      [ "--userExclude",              "-E",    GetoptLong::REQUIRED_ARGUMENT ],
+      [ "--funFactorMin",             "-f",    GetoptLong::REQUIRED_ARGUMENT ],
+      [ "--funFactorMax",             "-F",    GetoptLong::REQUIRED_ARGUMENT ],
+      [ "--favFactorMin",             "-g",    GetoptLong::REQUIRED_ARGUMENT ],
+      [ "--favFactorMax",             "-G",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--help",                     "-h",    GetoptLong::NO_ARGUMENT ],
 
-      [ "--ownerInclude",             "-i",    GetoptLong::OPTIONAL_ARGUMENT ],
-      [ "--ownerExclude",             "-I",    GetoptLong::OPTIONAL_ARGUMENT ],
-      [ "--placeDateInclude",         "-j",    GetoptLong::OPTIONAL_ARGUMENT ],
-      [ "--placeDateExclude",         "-J",    GetoptLong::OPTIONAL_ARGUMENT ],
-      [ "--titleKeyword",             "-k",    GetoptLong::OPTIONAL_ARGUMENT ],
-      [ "--descKeyword",              "-K",    GetoptLong::OPTIONAL_ARGUMENT ],
-      [ "--waypointLength",           "-l",    GetoptLong::OPTIONAL_ARGUMENT ],
-      [ "--limitSearchPages",         "-L",    GetoptLong::OPTIONAL_ARGUMENT ],
-      [ "--delimiter",                "-m",    GetoptLong::OPTIONAL_ARGUMENT ],
+      [ "--ownerInclude",             "-i",    GetoptLong::REQUIRED_ARGUMENT ],
+      [ "--ownerExclude",             "-I",    GetoptLong::REQUIRED_ARGUMENT ],
+      [ "--placeDateInclude",         "-j",    GetoptLong::REQUIRED_ARGUMENT ],
+      [ "--placeDateExclude",         "-J",    GetoptLong::REQUIRED_ARGUMENT ],
+      [ "--titleKeyword",             "-k",    GetoptLong::REQUIRED_ARGUMENT ],
+      [ "--descKeyword",              "-K",    GetoptLong::REQUIRED_ARGUMENT ],
+      [ "--waypointLength",           "-l",    GetoptLong::REQUIRED_ARGUMENT ],
+      [ "--limitSearchPages",         "-L",    GetoptLong::REQUIRED_ARGUMENT ],
+      [ "--delimiter",                "-m",    GetoptLong::REQUIRED_ARGUMENT ],
 
       [ "--notFound",                 "-n",    GetoptLong::NO_ARGUMENT ],
       [ "--notFoundByMe",             "-N",    GetoptLong::NO_ARGUMENT ],
-      [ "--output",                   "-o",    GetoptLong::OPTIONAL_ARGUMENT ],
+      [ "--output",                   "-o",    GetoptLong::REQUIRED_ARGUMENT ],
 
       [ "--password",                 "-p",    GetoptLong::REQUIRED_ARGUMENT ],         # * REQ
       [ "--proxy",                    "-P",    GetoptLong::REQUIRED_ARGUMENT ],
-      [ "--queryType",                "-q",    GetoptLong::OPTIONAL_ARGUMENT ],
+      [ "--queryType",                "-q",    GetoptLong::REQUIRED_ARGUMENT ],
 
-      [ "--foundDateInclude",         "-r",    GetoptLong::OPTIONAL_ARGUMENT ],
-      [ "--foundDateExclude",         "-R",    GetoptLong::OPTIONAL_ARGUMENT ],
+      [ "--foundDateInclude",         "-r",    GetoptLong::REQUIRED_ARGUMENT ],
+      [ "--foundDateExclude",         "-R",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--sizeMin",                  "-s",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--sizeMax",                  "-S",    GetoptLong::REQUIRED_ARGUMENT ],
-      [ "--terrainMin",               "-t",    GetoptLong::OPTIONAL_ARGUMENT ],
-      [ "--terrainMax",               "-T",    GetoptLong::OPTIONAL_ARGUMENT ],
+      [ "--terrainMin",               "-t",    GetoptLong::REQUIRED_ARGUMENT ],
+      [ "--terrainMax",               "-T",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--user",                     "-u",    GetoptLong::REQUIRED_ARGUMENT ],         # * REQ
 
-      [ "--verbose",                  "-v",    GetoptLong::NO_ARGUMENT ],
+      [ "--verbose",                  "-v",    GetoptLong::OPTIONAL_ARGUMENT ],
 
-      [ "--format",                   "-x",    GetoptLong::OPTIONAL_ARGUMENT ],
+      [ "--format",                   "-x",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--disableEarlyFilter",       "-X",    GetoptLong::NO_ARGUMENT ],
-      [ "--distanceMax",              "-y",    GetoptLong::OPTIONAL_ARGUMENT ],
+      [ "--distanceMax",              "-y",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--noCacheDescriptions",      "-Y",    GetoptLong::NO_ARGUMENT ],
       [ "--includeDisabled",          "-z",    GetoptLong::NO_ARGUMENT ],
       [ "--preserveCache",            "-Z",    GetoptLong::NO_ARGUMENT ]
@@ -117,7 +117,8 @@ class Input
     begin
       @@optHash = Hash.new
       opts.each do |opt, arg|
-        debug "opt = #{opt} arg=#{arg}"
+        # debug doesn't work here
+        #puts "opt=#{opt.inspect} arg=#{arg.inspect}"
         # replace default delimiter(s)
         if (opt == '--delimiter')
           $delimiters = Regexp.compile('['+Regexp.escape(arg)+']')
