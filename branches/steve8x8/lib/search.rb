@@ -420,6 +420,7 @@ class SearchCache
     state = nil
     ctype = 'Unknown Cache'
     owner = nil
+    cname = nil
     csize = nil
     cdiff = nil
     cterr = nil
@@ -471,6 +472,12 @@ class SearchCache
       when /alt=.Size: .*\((.*?)\)/
         csize = $1.downcase
         debug "Found size: #{csize}"
+      when /_CacheName.\>(.*?)\<\/span\>/
+        cname = $1
+        debug "Found cache name #{cname}"
+      when /\s*A cache by \<a[^\>]*\>(.*?)\<\/a/
+        owner = $1
+        debug "Found owner: #{owner}"
       end
     }
     rescue => error
@@ -502,6 +509,7 @@ class SearchCache
       'membersonly' => membersonly,
       'country' => country,
       'state' => state,
+      'name' => cname,
       'creator' => owner,
       'fulltype' => ctype,
       'type' => ctype.split(' ')[0].downcase.gsub(/\-/, ''),
