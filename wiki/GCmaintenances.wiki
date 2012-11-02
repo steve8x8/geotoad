@@ -17,6 +17,11 @@ See also [http://forums.groundspeak.com/GC/index.php?showforum=89 Release Notes 
 _*(new entries will be added on top)*_
 
 ----
+2012-10-30:
+  * _"Geocaching.com ... site update on Tuesday, October 30, 2012 ... 6pm PDT"_ (0100 next day UTC)
+  * *no release notes*
+  * new server build: *{{{Web.HotFix_20121030.1}}}*
+----
 2012-07-24:
   * _(not even announced on Twitter?)_
   * [http://forums.groundspeak.com/GC/index.php?showtopic=299057 release notes]
@@ -34,8 +39,7 @@ _*(new entries will be added on top)*_
   * _(announced on Twitter on July 10, perhaps erroneously named "July 7")_
   * [http://forums.groundspeak.com/GC/index.php?showtopic=298460 release notes]
   * cannot see any effects on GeoToad from the list of changes
-  * new server build: *{{{?}}}*
-  * 2012-07-16 seen:  *{{{Web.HotFix_20120710.2}}}*
+  * new server build: *{{{Web.HotFix_20120710.2}}}*
 ----
 2012-06-26:
   * [http://forums.groundspeak.com/GC/index.php?showtopic=297776 release notes]
