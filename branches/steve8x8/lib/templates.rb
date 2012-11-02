@@ -502,7 +502,7 @@ $Format = {
       "  <time><%out.cdate%>T08:00:00Z</time>\r\n" +
       "  <name><%outEntity.id%></name>\r\n" +
       "  <desc><%wpEntity.name%> by <%wpEntity.creator%>, <%wp.fulltype%> (<%wp.difficulty%>/<%wp.terrain%>)</desc>\r\n" +
-      "  <url>http://www.geocaching.com/seek/cache_details.aspx?wp=<%outEntity.wid%></url>\r\n" +
+      "  <url>http://www.geocaching.com/seek/cache_details.aspx?guid=<%out.guid%></url>\r\n" +
       "  <urlname><%wpEntity.name%></urlname>\r\n" +
       "  <sym>Geocache Found</sym>\r\n" +
       "  <type>Geocache|<%wp.fulltype%></type>\r\n" +
@@ -552,7 +552,7 @@ $Format = {
       "  <time><%out.cdate%>T08:00:00Z</time>\r\n" +
       "  <name><%outEntity.id%></name>\r\n" +
       "  <desc><%wpEntity.name%> by <%wpEntity.creator%>, <%wp.fulltype%> (<%wp.difficulty%>/<%wp.terrain%>)</desc>\r\n" +
-      "  <url>http://www.geocaching.com/seek/cache_details.aspx?wp=<%outEntity.wid%></url>\r\n" +
+      "  <url>http://www.geocaching.com/seek/cache_details.aspx?guid=<%out.guid%></url>\r\n" +
       "  <urlname><%wpEntity.name%></urlname>\r\n" +
       "  <sym>Geocache Found</sym>\r\n" +
       "  <type>Geocache|<%wp.fulltype%></type>\r\n" +

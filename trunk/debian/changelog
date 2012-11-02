@@ -1,6 +1,7 @@
 geotoad (3.16.3-1) unstable; urgency=low
 
   * New version 3.16.3, "World's end" release
+  * Issue 205: in url tag, use guid instead of wp
   * Issue 257: fix queries for country with states (caution!)
 
  -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 20 Dec 2012 14:00:00 +0200
