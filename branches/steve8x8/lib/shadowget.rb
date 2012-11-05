@@ -321,6 +321,21 @@ class ShadowFetch
       end
       location = resp['location']
       debug "REDIRECT: [#{location}]"
+      # error 500
+      # D: REDIRECT: [/error/error.aspx?aspxerrorpath=/seek/cdpf.aspx]
+      if location =~ /^\/error\/error\.aspx/
+        displayWarning "Error 500: [#{url_str}]"
+        if location =~ /aspxerrorpath=\/seek\/cdpf.aspx/
+          # try to strip off "&lc=10"
+          if url_str =~ /\&lc=\d+/
+            url_str.gsub!(/&lc=\d+/, '')
+            displayInfo "Retry no-log #{url_str}"
+            return fetchURL(url_str, redirects - 1)
+          end
+        end
+        displayInfo "Not following redirect [#{location}]"
+        return "" # nil would cause split()ting to fail
+      end
       # relative redirects are against RFC, but we may encounter them.
       if location =~ /^\//
         prefix = "#{uri.scheme}://#{uri.host}"
