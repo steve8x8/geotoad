@@ -337,14 +337,16 @@ class ShadowFetch
         return "" # nil would cause split()ting to fail
       end
       # relative redirects are against RFC, but we may encounter them.
-      if location =~ /^\//
+      if location =~ /^https?:\/\//
+        # full url given, use this location
+      elsif location =~ /^\//
         prefix = "#{uri.scheme}://#{uri.host}"
         #if (uri.scheme == 'http' && uri.port != 80) || (uri.scheme == 'https' && uri.port != 443)
           prefix = "#{prefix}:#{uri.port}"
         #end
         location = prefix + location
       else
-        displayWarning "Relative redirect to \"#{location}\" violates RFC"
+        displayWarning "RFC violation: rel redirect [#{location}]"
       end
       return fetchURL(location, redirects - 1)
     when Net::HTTPSuccess
@@ -353,7 +355,7 @@ class ShadowFetch
       # we may have reported a problem before
       if success
         success = false
-        displayWarning "Unknown response \"#{resp.inspect}\" downloading #{url_str}"
+        displayWarning "Unknown response \"#{resp.inspect}\" [#{url_str}]"
       end
     end
 
