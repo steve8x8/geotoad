@@ -293,10 +293,11 @@ class CacheDetails
       # </h2>
       if line =~ /WptTypes.*? alt="(.*?)".*?\/\>(.nbsp;)?(.*?)\s*$/
         full_type = $1
-        cache['name2'] = $3.gsub(/ *$/, '').gsub(/  */, ' ')
         if ! cache
           displayWarning "Found waypoint type, but never saw cache title. Did geocaching.com change their layout again?"
         end
+        debug "Found alternative name #{$3.inspect}"
+        cache['name2'] = $3.gsub(/ *$/, '').gsub(/  */, ' ')
         # there may be more than 1 match, don't overwrite (see GC1PQKR, GC1PQKT)
         # actually, types have been set by search - is this code obsolete then?
         if cache['fulltype']
@@ -462,7 +463,10 @@ class CacheDetails
     #         Hosted by:
     #         Hasemann-Rudow</p>
     # </div>
-    if data =~ /\<div class=.HalfLeft.\>\s*\<p class=.Meta.\>\s*(Hosted|Placed) by:\s*(.*)\<\/p\>\s*\<\/div\>/
+    # FIXME: This one may be language-sensitive!
+    # (But if we don't find creator2, a found name2 won't be effective.)
+    if data =~ /\<div class=.HalfLeft.\>\s*\<p class=.Meta.\>\s*(.*?):\s*(.*?)\<\/p\>\s*\<\/div\>/m
+      debug "Found alternative creator #{$2.inspect}"
       cache['creator2'] = $2
     end
 
