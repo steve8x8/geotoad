@@ -321,15 +321,32 @@ class ShadowFetch
       end
       location = resp['location']
       debug "REDIRECT: [#{location}]"
+      # error 500
+      # D: REDIRECT: [/error/error.aspx?aspxerrorpath=/seek/cdpf.aspx]
+      if location =~ /^\/error\/error\.aspx/
+        displayWarning "Error 500: [#{url_str}]"
+        if location =~ /aspxerrorpath=\/seek\/cdpf.aspx/
+          # try to strip off "&lc=10"
+          if url_str =~ /\&lc=\d+/
+            url_str.gsub!(/&lc=\d+/, '')
+            displayInfo "Retry no-log #{url_str}"
+            return fetchURL(url_str, redirects - 1)
+          end
+        end
+        displayInfo "Not following redirect [#{location}]"
+        return "" # nil would cause split()ting to fail
+      end
       # relative redirects are against RFC, but we may encounter them.
-      if location =~ /^\//
+      if location =~ /^https?:\/\//
+        # full url given, use this location
+      elsif location =~ /^\//
         prefix = "#{uri.scheme}://#{uri.host}"
         #if (uri.scheme == 'http' && uri.port != 80) || (uri.scheme == 'https' && uri.port != 443)
           prefix = "#{prefix}:#{uri.port}"
         #end
         location = prefix + location
       else
-        displayWarning "Relative redirect to \"#{location}\" violates RFC"
+        displayWarning "RFC violation: rel redirect [#{location}]"
       end
       return fetchURL(location, redirects - 1)
     when Net::HTTPSuccess
@@ -338,7 +355,7 @@ class ShadowFetch
       # we may have reported a problem before
       if success
         success = false
-        displayWarning "Unknown response \"#{resp.inspect}\" downloading #{url_str}"
+        displayWarning "Unknown response \"#{resp.inspect}\" [#{url_str}]"
       end
     end
 
