@@ -254,7 +254,7 @@ class CacheDetails
         creator = $3
         debug "wid = #{wid} name=#{name} creator=#{creator}"
         cache = @waypointHash[wid]
-        cache['name'] = name.gsub(/ *$/, '').gsub(/  */, ' ')
+        cache['name'] = name.gsub(/^ +/, '').gsub(/ +$/, '').gsub(/  */, ' ')
         if ! cache.key?('visitors')
           cache['visitors'] = []
         end
