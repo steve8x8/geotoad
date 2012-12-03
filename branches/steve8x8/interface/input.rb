@@ -86,7 +86,7 @@ class Input
       [ "--waypointLength",           "-l",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--limitSearchPages",         "-L",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--delimiter",                "-m",    GetoptLong::REQUIRED_ARGUMENT ],
-
+      [ "--mylogs",                   "-M",    GetoptLong::NO_ARGUMENT ],
       [ "--notFound",                 "-n",    GetoptLong::NO_ARGUMENT ],
       [ "--notFoundByMe",             "-N",    GetoptLong::NO_ARGUMENT ],
       [ "--output",                   "-o",    GetoptLong::REQUIRED_ARGUMENT ],
@@ -268,6 +268,7 @@ class Input
     puts " -Z                     don't overwrite existing cache descriptions"
     puts " -P                     HTTP proxy server, http://username:pass@host:port/"
     puts " -X                     emergency switch: disable early filtering"
+    puts " -M                     download my logs (/my/logs.aspx)"
     puts " -C                     selectively clear local browser cache"
     puts ""
     puts "::: OUTPUT FORMATS:"

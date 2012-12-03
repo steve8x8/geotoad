@@ -297,6 +297,12 @@ class GeoToad
     @dateFormat = getPreferences()
     displayInfo "Using date format #{@dateFormat}"
 
+    if @option['mylogs']
+      displayMessage "Retrieving my logs"
+      count = getMyLogs()
+      displayInfo "Found count: #{count}"
+    end
+
     if @queryType == "zipcode" || @queryType == "coord" || @queryType == 'location'
       @queryTitle = @queryTitle + " (#{@distanceMax}mi. radius)"
       @defaultOutputFile = @defaultOutputFile + "-y" + @distanceMax.to_s

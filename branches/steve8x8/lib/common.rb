@@ -3,6 +3,8 @@ require 'fileutils'
 
 module Common
   @@prefs_url = 'http://www.geocaching.com/account/ManagePreferences.aspx'
+  # logs.aspx s=1: geocaches (default); s=2: trackables; s=3: benchmarks
+  @@mylogs_url = 'http://www.geocaching.com/my/logs.aspx?s=1'
   @@dateFormat = 'dd MMM yy'
 
   def getPreferences()
@@ -33,6 +35,19 @@ module Common
 
   def setDateFormat(dateFormat)
     @@dateFormat = dateFormat
+  end
+
+  def getMyLogs()
+    page = ShadowFetch.new(@@mylogs_url)
+    page.localExpiry = 12 * 3600		# 12 hours
+    data = page.fetch
+    counter = ''
+    # <strong style="display:block">
+    #                        <img src="/images/icons/icon_smile.png" title="Caches Found" /> 1,992</strong>
+    if data =~ /title=.Caches Found.*?([\d,\.]+)/
+      counter = $1.gsub(/[,\.]/, '').to_i
+    end
+    return counter
   end
 
   def parseDate(date)
