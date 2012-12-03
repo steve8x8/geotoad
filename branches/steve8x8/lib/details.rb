@@ -274,7 +274,7 @@ class CacheDetails
         creator = $3
         debug "wid = #{wid} name=#{name} creator=#{creator}"
         cache = @waypointHash[wid]
-        cache['name'] = name.gsub(/ *$/, '').gsub(/  */, ' ')
+        cache['name'] = name.gsub(/^ +/, '').gsub(/ +$/, '').gsub(/  */, ' ')
         if ! cache.key?('visitors')
           cache['visitors'] = []
         end
@@ -297,7 +297,7 @@ class CacheDetails
           displayWarning "Found waypoint type, but never saw cache title. Did geocaching.com change their layout again?"
         end
         debug "Found alternative name #{$3.inspect}"
-        cache['name2'] = $3.gsub(/ *$/, '').gsub(/  */, ' ')
+        cache['name2'] = $3.gsub(/^ +/, '').gsub(/ +$/, '').gsub(/  */, ' ')
         # there may be more than 1 match, don't overwrite (see GC1PQKR, GC1PQKT)
         # actually, types have been set by search - is this code obsolete then?
         if cache['fulltype']

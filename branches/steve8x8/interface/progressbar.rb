@@ -58,10 +58,8 @@ class ProgressBar
       meter = meter.ljust(metercols)
     end
 
-    if (@valueText)
-      puts "[#{meter}] (#{@value}/#{@max}) #{@name}: #{@valueText}"
-    else
-      puts "[#{meter}] (#{@value}/#{@max}) #{@name}"
-    end
+    pvalue = "#{@value}".rjust(@max.to_s.length)
+    addtext = (@valueText)? ": #{@valueText}" : ""
+    puts "[#{meter}] (#{pvalue}/#{@max}) #{@name}#{addtext}"
   end
 end

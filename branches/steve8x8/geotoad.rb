@@ -587,7 +587,7 @@ class GeoToad
     puts ""
     displayMessage "Fetching geocache pages"
     wpFiltered = @filtered.waypoints
-    progress = ProgressBar.new(0, @filtered.totalWaypoints, "Reading")
+    progress = ProgressBar.new(0, @filtered.totalWaypoints, "Read")
     @detail = CacheDetails.new(wpFiltered)
     @detail.preserve = @preserveCache
     token = 0
@@ -623,7 +623,7 @@ class GeoToad
           message = "(unavailable)"
         end
       end
-      progress.updateText(token, "[#{wid}] \"#{wpFiltered[wid]['name']}\" from #{page.src} #{message}")
+      progress.updateText(token, "[#{wid}]".ljust(9)+" \"#{wpFiltered[wid]['name']}\" from #{page.src} #{message}")
 
       if status == 'subscriber-only'
         wpFiltered.delete(wid)
