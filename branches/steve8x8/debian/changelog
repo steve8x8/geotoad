@@ -1,11 +1,12 @@
 geotoad (3.17.4-1) unstable; urgency=low
 
-  * New version 3.17.4, "12-11-10" release
+  * New version 3.17.4, "Heisenbug" release (111th birthday)
   * Issue 205: in url tag, use guid instead of wp
   * Issue 257: fix queries for country with states (caution!)
   * Issue 258: better handling for caches without logs (error 500)
+  * Minor other stuff
 
- -- Steve Sixty-Four <steve8x8@gmail.com>  Sat, 10 Nov 2012 14:00:00 +0200
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Wed, 05 Dec 2012 10:30:00 +0100
 
 geotoad (3.17.3-1) unstable; urgency=low
 
