@@ -53,6 +53,7 @@ tar zcf "$GENERIC_TGZ" "$DISTNAME"
 
 # Mac OS X
 if [ -d "/Applications" ]; then
+  export PATH=/Developer/Tools:${PATH}
   echo "Creating $MAC_DIR"
   rm "$MAC_DIR/geotoad"
   rm "$MAC_DIR/geotoad.1"
