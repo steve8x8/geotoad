@@ -18,6 +18,17 @@ version=3.17.3
   * New strategy of extracting owner and cache names (issue 245) may result in bad output data under Windows. Please e-mail "list" output.
   * ...
 
+= New development version 3.17.4 =
+  * nicknamed "Heisenbug": it's Heisenberg's 111th birthday, and there are still some quirks to be found
+  * please help decide which features to backport to 3.16.3 (to be released around X-mas)
+  * Windows version still using ruby 1.8.7 - got to move to 1.9 by June 2013
+
+== Issues addressed: ==
+  * Issue 205: in url tag, use guid instead of wp
+  * Issue 257: fix queries for country with states (caution!)
+  * Issue 258: better handling for caches without logs (error 500)
+  * Minor other stuff
+
 = New development version 3.17.3 =
   * not nicknamed because of lack of time and ideas
 
