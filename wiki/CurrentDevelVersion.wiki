@@ -1,7 +1,7 @@
 #summary Features of current development version
 #labels Featured,Experimental
 
-version=3.17.3
+version=3.17.4
 
 = "no name" Development Release (Oct 02, 2012) =
 
