@@ -3,7 +3,7 @@
 
 version=3.17.4
 
-= "no name" Development Release (Oct 02, 2012) =
+= "Heisenbug" Development Release (Dec 05, 2012) =
 
 = Development will continue in the 3.17 series only! =
   * New features, after some time of testing, may be backported to the stable 3.16 series.
