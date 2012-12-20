@@ -1,19 +1,29 @@
 #summary Features of current version
 #labels Featured
 
-version=3.16.2
+version=3.16.3
 
-= "E=m*c^2" release (Sept 27, 2012) =
+= "World's End" release (Dec 20, 2012) =
 
+----
 == Important note: ==
   * 3.14.9 marked the end of the development cycle for the 3.14 series.
   * 3.16.0 is derived from (devel) 3.15.5, with some minor changes.
   * The 3.16 series will be "stable" in the same sense as 3.14 was.
   * Further testing and enhancements will go to 3.17.x
     - for details, follow [CurrentDevelVersion development version]!
+----
+
+= What's new in 3.16.3? =
+  * nicknamed "World's End" (as it might be the last release ever)
+
+== Issues addressed: ==
+  * Issue 205: in url tag, use guid instead of wp
+  * Issue 257: fix queries for country with states (caution!)
+  * Issue 258: better handling for caches without logs (error 500)
+  * Issue 259: parse logs with old and new GS icons
 
 = What's new in 3.16.2? =
-
   * nicknamed "E=m*c^2" referring to Einstein's paper in 1905
 
 == Issues addressed: ==
@@ -28,7 +38,6 @@ version=3.16.2
   * Some minor other stuff
 
 = What's new in 3.16.1? =
-
   * nicknamed "Jean-Jacques" because it was released on Rousseau's 300th birthday
 
 == Issues addressed: ==
@@ -39,7 +48,6 @@ version=3.16.2
   * Minor other stuff
 
 = What's new in 3.16.0? =
-
   * Version 3.16.0 ("Towel Day") was derived from development version 3.15.5.
   * The development series over the past months accumulated quite a lot of
 important fixes and enhancements, has been tested by more than 100 people
