@@ -185,24 +185,24 @@ class Filter
     }
   end
 
-  def userExclude(nick)
-    nick.gsub!(/=.*/, '')
+  def userExclude(nick0)
+    nick = nick0.gsub(/=.*/, '').downcase
     debug "filtering by notUser: #{nick}"
     @waypointHash.each_key { |wid|
       debug "#{wid} visitors: #{@waypointHash[wid]['visitors']}"
-      if (@waypointHash[wid]['visitors'].include?(nick.downcase))
+      if (@waypointHash[wid]['visitors'].include?(nick))
         debug " - #{nick} has visited #{wid} #{@waypointHash[wid]['name']}, filtering."
         @waypointHash.delete(wid)
       end
     }
   end
 
-  def userInclude(nick)
-    nick.gsub!(/=.*/, '')
+  def userInclude(nick0)
+    nick = nick0.gsub(/=.*/, '').downcase
     debug "filtering by User: #{nick}"
     @waypointHash.each_key { |wid|
       debug "#{wid} visitors: #{@waypointHash[wid]['visitors']}"
-      if (! @waypointHash[wid]['visitors'].include?(nick.downcase))
+      if (! @waypointHash[wid]['visitors'].include?(nick))
         debug " - #{nick} has not visited #{@waypointHash[wid]['name']}, filtering."
         @waypointHash.delete(wid)
       end
@@ -288,12 +288,14 @@ class Filter
     }
   end
 
-  def removeByElement(element)
+  def removeByElement(element, is = true)
     debug "filtering by removeByElement: #{element}"
     @waypointHash.each_key { |wid|
-      if @waypointHash[wid][element]
+      value = @waypointHash[wid][element]
+      # handle nil as false
+      if (value == true) == is
+        debug " - #{wid}: #{element} => #{value.inspect}, filtering."
         @waypointHash.delete(wid)
-        debug " - #{wid} has #{element}, filtering."
       end
     }
   end
@@ -302,10 +304,6 @@ class Filter
   def addVisitor(wid, visitor)
     if (@waypointHash[wid] && visitor)
       debug "Added visitor to #{wid}: #{visitor}"
-      # I don't believe we should downcase the visitors at this stage,
-      # since we really are losing data for the templates. I need to
-      # modify userInclude() and userExclude() to be case insensitive
-      # first.
       @waypointHash[wid]['visitors'] << visitor.downcase
     else
       return 0
