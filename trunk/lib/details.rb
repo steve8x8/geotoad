@@ -346,7 +346,7 @@ class CacheDetails
         cache['lonwritten'] = $4 + $5 + ' ' + $6
         cache['latdata'] = ($2.to_f + $3.to_f / 60) * ($1 == 'S' ? -1:1)
         cache['londata'] = ($5.to_f + $6.to_f / 60) * ($4 == 'W' ? -1:1)
-        debug "got written lat/lon"
+        debug "got written lat/lon #{cache['latdata']}/#{cache['londata']}"
         nextline_coords = false
       end
 
