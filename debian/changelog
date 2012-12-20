@@ -4,8 +4,9 @@ geotoad (3.16.3-1) unstable; urgency=low
   * Issue 205: in url tag, use guid instead of wp
   * Issue 257: fix queries for country with states (caution!)
   * Issue 258: better handling for caches without logs (error 500)
+  * Issue 259: parse logs with old and new GS icons
 
- -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 20 Dec 2012 14:00:00 +0200
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 20 Dec 2012 15:30:00 +0200
 
 geotoad (3.16.2-1) unstable; urgency=low
 

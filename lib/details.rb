@@ -611,11 +611,11 @@ class CacheDetails
     comments = []
     visitors = []
     last_find = nil
-    total_grade = 0
-    graded = 0
 
     # <dt>
     #   [<img src='http://www.geocaching.com/images/icons/icon_smile.gif' alt="Found it" />&nbsp;Found it]
+    # !! new 2012-12-11 !!:
+    #   [<img src='../images/logtypes/2.png' alt="Found it" />&nbsp;Found it]
     #   Sunday, 10 October 2010
     #   by <strong>
     #       silvinator</strong> (52
@@ -623,34 +623,26 @@ class CacheDetails
     # </dt>
     # <dd>
     # Gut gefunden. Man sollte nur auf Muggels achten!  Danke!</dd>
-    data.scan(/<dt.*?icon_(\w+).*?alt=\"(.*?)\".*?, ([\w, ]+)\s+by \<strong\>\s*(.*?)\s*\<\/strong\>.*?\<dd\>\s*(.*?)\s*\<\/dd\>/m) { |icon, type, datestr, user, comment|
-      debug "comment date: #{datestr}"
-      should_grade = true
-      grade = 0
+    #data.scan(/<dt.*?icon_(\w+).*?alt=\"(.*?)\".*?, ([\w, ]+)\s+by \<strong\>\s*(.*?)\s*\<\/strong\>.*?\<dd\>\s*(.*?)\s*\<\/dd\>/m) { |icon, type, datestr, user, comment|
+    data.scan(/<dt.*?\/([\w]+)\.[^\.]+?\salt=\"(.*?)\".*?, ([\w, ]+)\s+by \<strong\>\s*(.*?)\s*\<\/strong\>.*?\<dd\>\s*(.*?)\s*\<\/dd\>/m) { |icon, type, datestr, user, comment|
+      debug "comment date: #{datestr}, icon: #{icon}, type: #{type}"
+      # strip "icon_" from old style image name
+      icon.gsub!(/^icon_/, '')
       date = Time.parse(datestr)
-
-      if icon == 'smile'
+      # "found it" or "attended"
+      if (icon == 'smile' or icon == '2') or (icon == 'attended' or icon == '10')
         visitors << user.downcase
         if not last_find
           last_find = date.dup
         end
-      elsif icon == 'remove' or icon == 'disabled' or icon == 'greenlight' or icon == 'maint'
-        should_grade = false
       end
-
-      if user == creator
-        debug "comment from creator #{creator}, not grading"
-        should_grade = false
-      end
-
+      # we don't need the icon type
       comment = {
         'type' => type,
         'date' => date,
-        'icon' => icon,
         'user' => user,
         'user_id' => Zlib.crc32(user),
-        'text' => comment,
-        'grade' => 0
+        'text' => comment
       }
       debug "COMMENT: #{comment.inspect}"
       comments <<  comment
