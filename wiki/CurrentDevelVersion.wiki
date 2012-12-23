@@ -1,32 +1,15 @@
 #summary Features of current development version
 #labels Featured,Experimental
 
-version=3.17.5.NOTYET
+version=3.17.5.NOTYETREADY
 
 = 3.17.5 is *not* *ready* *yet*! =
-  * The latest development version is 3.17.4 - see below.
+== The latest development version is 3.17.4 - see below. ==
   * The fix for issue 259 (GS icon change broke log parsing) is only available as a patch.
   * 3.17.5 will be released in January 2013 - please use SVN branches/steve8x8 for now!
   * Apologies for the somewhat misleading upgrade notice...
 
-----
-
 = "Heisenbug" Development Release (Dec 05, 2012) =
-
-= Development will continue in the 3.17 series only! =
-  * New features, after some time of testing, may be backported to the stable 3.16 series.
-
-== Caveat emptor: ==
-  * Development releases contain new additions to the code - which may not be thoroughly tested and result in malfunction.
-  * To keep development going, I'd like you to try to break them and give feedback about any misbehaviour you may encounter.
-  * Please report your observations to Steve8x8 at Google Mail *only*.
-  * In your report, please include: command line, information about OS, locale/codepage settings, GC localization, Ruby and GeoToad versions.
-  * See the ReportingBugs wiki page. The "verbose" option is the culprit.
-  * Possible known issues below...:
-  * New strategy of extracting owner and cache names (issue 245) may result in bad output data under Windows. Please e-mail "list" output.
-  * ...
-
-----
 
 = New development version 3.17.4 =
   * nicknamed "Heisenbug": it's Heisenberg's 111th birthday, and there are still some quirks to be found
@@ -93,3 +76,16 @@ version=3.17.5.NOTYET
 = See also: =
   * [CurrentVersion Current stable version]
   * [DebianUbuntuRepository Debian/Ubuntu repository]
+
+= Development will continue in the 3.17 series only! =
+  * New features, after some time of testing, may be backported to the stable 3.16 series.
+
+== Caveat emptor: ==
+  * Development releases contain new additions to the code - which may not be thoroughly tested and result in malfunction.
+  * To keep development going, I'd like you to try to break them and give feedback about any misbehaviour you may encounter.
+  * Please report your observations to Steve8x8 at Google Mail *only*.
+  * In your report, please include: command line, information about OS, locale/codepage settings, GC localization, Ruby and GeoToad versions.
+  * See the ReportingBugs wiki page. The "verbose" option is the culprit.
+  * Possible known issues below...:
+  * New strategy of extracting owner and cache names (issue 245) may result in bad output data under Windows. Please e-mail "list" output.
+  * ...

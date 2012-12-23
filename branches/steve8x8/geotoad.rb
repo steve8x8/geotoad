@@ -188,17 +188,22 @@ class GeoToad
           #text.gsub!(/\<p\>/i, "\n")
           text.gsub!(/\<h[0-9]\>/i, "\n\+ ")
           text.gsub!(/\<li\>/i, "\n  * ")
-          text.gsub!(/\<a[^\>]+href=\"\/p\/geotoad\/wiki\/(.*?)\"\>/i) { "[#{$1}] " }
+          text.gsub!(/\<a[^\>]+href=\"\/p\/geotoad\/wiki\/(.*?)\"\>\1\<\/a\>\s+/i) { "[#{$1}] " }
           text.gsub!(/\<a[^\>]+href=\"\#.*?\>/i, '')
           text.gsub!(/\<.*?\>/, '')
           text.gsub!(/\n\n+/, "\n")
           text.gsub!(/\&nbsp;/, '-')
           text = CGI::unescapeHTML(text)
-          puts text
+          #puts text
+          textlines = text.split("\n")
+          (1..20).each{|line|
+            puts textlines[line] if textlines[line]
+          }
+          puts "  ... see #{url} for more ..." if textlines.length > 20
         end
         puts "------------------------------------------------------------------------"
-        displayInfo "(sleeping for 5 seconds)"
-        sleep(5)
+        displayInfo "(sleeping for 30 seconds)"
+        sleep(30)
       end
     end
     debug "Check complete."
