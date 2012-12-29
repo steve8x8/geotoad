@@ -364,8 +364,8 @@ class SearchCache
     }
     dd = decoded.join.split("|")
     distance = dd[0]
-    # special case: we hit a cache location
-    if distance =~ /^Here/
+    # special case: "Here" in various languages: we hit a cache location
+    if distance !~ /\d ft$/ and distance !~ /\d mi$/ and distance !~ /\d km$/
       distance = "0.0"
     end
     # direction "rounding"
