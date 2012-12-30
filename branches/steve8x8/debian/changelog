@@ -1,11 +1,11 @@
 geotoad (3.17.5-1) unstable; urgency=low
 
-  * New version 3.17.5, "Seven squared" release
+  * New version 3.17.5, "Happy 2013" release
   * Issue 259: parse logs with old and new GS icons
-  * ...
+  * In TUI, allow for (unambiguous) shortening ("tra", "ev", "reg"...)
   * Minor other stuff
 
- -- Steve Sixty-Four <steve8x8@gmail.com>  Wed, 23 Jan 2013 11:00:00 +0100
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Tue, 01 Jan 2013 15:00:00 +0100
 
 geotoad (3.17.4-1) unstable; urgency=low
 

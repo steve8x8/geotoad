@@ -786,26 +786,37 @@ class Input
   def askFromList(string, choices, default)
     # Ask for an item from a list. We accept either a number or word.
 
-    try_again = 1
+    try_again = true
     while try_again
       begin
         answer = ask(string, default)
-        if answer.to_i > 0
-          return choices[answer.to_i - 1]
-        end
+        # empty response returns default
         if not answer
           return default
         end
-        answer.gsub!(/, */, '|')
-        answers = answer.split($delimiters)
-        try_again = nil
-        for try_answer in answers
-
-          if ! choices.include?(try_answer)
-            puts "** #{try_answer} is not valid! Try: #{choices.join(', ')}"
-            try_again = 1
-          end
+        # numerical answer not validated, multiple not allowed
+        if answer.to_i > 0
+          return choices[answer.to_i - 1]
         end
+        # validate text answer(s)
+        answer.gsub!(/, */, '|')
+        try_again = false
+        answer = answer.split($delimiters).map{ |try_answer|
+          # build a list of matches: 0 means invalid, 1 is perfect, 2 ambiguous
+          matches = choices.map{ |e| (e =~ Regexp.compile('^'+try_answer)) ? e : nil }.compact
+          if matches.length == 0
+            puts "** \"#{try_answer}\" is invalid!"
+            #puts "Try: #{choices.join(', ')}"
+            try_again = true
+            nil
+          elsif  matches.length == 1
+            matches[0]
+          else
+            puts "** \"#{try_answer}\" is ambiguous! Matches: #{matches.join(', ')}"
+            try_again = true
+            nil
+          end
+        }.join('|')
       end
     end
     return answer
