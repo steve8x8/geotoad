@@ -1,15 +1,19 @@
 #summary Features of current development version
 #labels Featured,Experimental
 
-version=3.17.5.NOTYETREADY
+version=3.17.5
 
-= 3.17.5 is *not* *ready* *yet*! =
-== The latest development version is 3.17.4 - see below. ==
-  * The fix for issue 259 (GS icon change broke log parsing) is only available as a patch.
-  * 3.17.5 will be released in January 2013 - please use SVN branches/steve8x8 for now!
-  * Apologies for the somewhat misleading upgrade notice...
+= "Happy 2013" Development Release (Jan 02, 2013) =
 
-= "Heisenbug" Development Release (Dec 05, 2012) =
+= New development version 3.17.5 =
+  * sorry for the delay, but getting a fixed 3.16 out had higher priority
+  * please continue testing this, and report back your findings
+  * more features currently only in devel will be backported to stable for 3.16.4
+
+== Issues addressed: ==
+  * Issue 259: parse logs with old and new GS icons
+  * In TUI, abbreviations are allowed if unambiguous ("tra", "ev", "reg" but not "e")
+  * Latest Ruby 1.8.7 build used for Windows installer
 
 = New development version 3.17.4 =
   * nicknamed "Heisenbug": it's Heisenberg's 111th birthday, and there are still some quirks to be found
