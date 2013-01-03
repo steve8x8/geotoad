@@ -684,7 +684,7 @@ class Output
     brlf = "\&lt;br /\&gt;\r\n"
 
     # info log entry
-    if (cache['ltime'] and cache['logcounts'])
+    if cache['ltime']
       debug "info log entry"
       entry = ''
       entry << "    <groundspeak:log id=\"-2\">\r\n"
@@ -703,8 +703,10 @@ class Output
         entry << ", Fav: #{cache['favfactor']}"
       end
       entry << brlf
-      entry << "Stats: #{cache['logcounts']}" + brlf
-      entry << "Last log: #{cache['last_find_type']}" + brlf
+      if cache['logcounts']
+        entry << "Stats: #{cache['logcounts']}" + brlf
+        entry << "Last log: #{cache['last_find_type']}" + brlf
+      end
       entry << "      </groundspeak:text>\r\n"
       entry << "    </groundspeak:log>\r\n"
       entries << entry
