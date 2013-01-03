@@ -681,18 +681,18 @@ class Output
 
     entries = []
     debug "Generating comment XML for #{cache['name']}"
-    brlf = "\&lt;br /\&gt;\r\n"
+    brlf = "\&lt;br /\&gt;\n"
 
     # info log entry
     if cache['ltime']
       debug "info log entry"
       entry = ''
-      entry << "    <groundspeak:log id=\"-2\">\r\n"
+      entry << "    <groundspeak:log id=\"-2\">\n"
       formatted_date = cache['ltime'].strftime("%Y-%m-%dT%H:%M:%SZ")
-      entry << "      <groundspeak:date>#{formatted_date}</groundspeak:date>\r\n"
-      entry << "      <groundspeak:type>Write note</groundspeak:type>\r\n"
-      entry << "      <groundspeak:finder id=\"0\">**Info**</groundspeak:finder>\r\n"
-      entry << "      <groundspeak:text encoded=\"False\">\r\n"
+      entry << "      <groundspeak:date>#{formatted_date}</groundspeak:date>\n"
+      entry << "      <groundspeak:type>Write note</groundspeak:type>\n"
+      entry << "      <groundspeak:finder id=\"0\">**Info**</groundspeak:finder>\n"
+      entry << "      <groundspeak:text encoded=\"False\">\n"
       formatted_date = cache['ctime'].strftime("%Y-%m-%d")
       entry << "Placed: #{formatted_date}" + brlf
       entry << "D/T/S:  #{cache['difficulty']}/#{cache['terrain']}/#{cache['size']}"
@@ -707,8 +707,8 @@ class Output
         entry << "Stats: #{cache['logcounts']}" + brlf
         entry << "Last log: #{cache['last_find_type']}" + brlf
       end
-      entry << "      </groundspeak:text>\r\n"
-      entry << "    </groundspeak:log>\r\n"
+      entry << "      </groundspeak:text>\n"
+      entry << "    </groundspeak:log>\n"
       entries << entry
     end
 
@@ -718,12 +718,12 @@ class Output
         debug "Comment ID: #{comment_id} by #{comment['user']}: #{comment['text']}"
         formatted_date = comment['date'].strftime("%Y-%m-%dT07:00:00.000Z")
         entry = ''
-        entry << "    <groundspeak:log id=\"#{comment_id}\">\r\n"
-        entry << "      <groundspeak:date>#{formatted_date}</groundspeak:date>\r\n"
-        entry << "      <groundspeak:type>#{comment['type']}</groundspeak:type>\r\n"
-        entry << "      <groundspeak:finder id=\"#{comment['user_id']}\">#{comment['user']}</groundspeak:finder>\r\n"
-        entry << "      <groundspeak:text encoded=\"False\">" + makeXML(comment['text']) + "</groundspeak:text>\r\n"
-        entry << "    </groundspeak:log>\r\n"
+        entry << "    <groundspeak:log id=\"#{comment_id}\">\n"
+        entry << "      <groundspeak:date>#{formatted_date}</groundspeak:date>\n"
+        entry << "      <groundspeak:type>#{comment['type']}</groundspeak:type>\n"
+        entry << "      <groundspeak:finder id=\"#{comment['user_id']}\">#{comment['user']}</groundspeak:finder>\n"
+        entry << "      <groundspeak:text encoded=\"False\">" + makeXML(comment['text']) + "</groundspeak:text>\n"
+        entry << "    </groundspeak:log>\n"
         entries << entry
       }
     end
@@ -744,9 +744,9 @@ class Output
     cache['comments'].each { |comment|
       formatted_date = comment['date'].strftime("%Y-%m-%d")
       entry = ''
-      entry << "----------\r\n"
-      entry << "*#{comment['type']}* by #{comment['user']} on #{formatted_date}:\r\n"
-      entry << makeText(comment['text']) + "\r\n"
+      entry << "----------\n"
+      entry << "*#{comment['type']}* by #{comment['user']} on #{formatted_date}:\n"
+      entry << makeText(comment['text']) + "\n"
       entries << entry
     }
     debug "Finished generating comment text for #{cache['name']}"
@@ -766,12 +766,12 @@ class Output
     cache['comments'].each { |comment|
       formatted_date = comment['date'].strftime("%Y-%m-%d")
       entry = ''
-      entry << "<hr noshade size=\"1\" width=\"150\" align=\"left\"/>\r\n"
-      entry << "<h4><em>#{comment['type']}</em> by #{comment['user']} on #{formatted_date}</h4>\r\n"
-#      entry << makeXML(comment['text']) + "<br />\r\n\r\n"
+      entry << "<hr noshade size=\"1\" width=\"150\" align=\"left\"/>\n"
+      entry << "<h4><em>#{comment['type']}</em> by #{comment['user']} on #{formatted_date}</h4>\n"
+#      entry << makeXML(comment['text']) + "<br />\n\n"
       # strip images and links
       entry << comment['text'].gsub(/\<\/?img.*?\>/, '').gsub(/\<\/?a.*?\>/, '').gsub(/\<\/?font.*?\>/, '')
-      entry << "<br />\r\n\r\n"
+      entry << "<br />\n\n"
       entries << entry
     }
     debug "Finished generating comment HTML for #{cache['name']}"
@@ -1044,7 +1044,7 @@ class Output
           rawattrib = "      <groundspeak:attribute " +
             sprintf("id=\"%s\" inc=\"%s\">", cache["attribute#{x}id"], cache["attribute#{x}inc"]) +
             cache["attribute#{x}txt"].to_s.capitalize.gsub(/\\/,"/") +
-            "</groundspeak:attribute>\r\n"
+            "</groundspeak:attribute>\n"
           debug "Attribute #{x} XML: #{rawattrib}"
           xmlAttrs << rawattrib
         end
@@ -1063,11 +1063,11 @@ class Output
         # convert into string
         tbref = 'TB' + (tbid + 411120).to_s(31).upcase.tr('0-9A-U', '0-9A-HJKMNPQRTV-Z')
         debug "Trackables: use fake id #{tbid} = #{tbref} for #{tbname}"
-        xmlTrackables << "\r\n"
-        xmlTrackables << "    <groundspeak:travelbug id=\"#{tbid}\" ref=\"#{tbref}\">\r\n"
-        xmlTrackables << "      <groundspeak:name>" + makeXML(tbname) + "</groundspeak:name>\r\n"
-        xmlTrackables << "    </groundspeak:travelbug>\r\n"
-        txtTrackables << makeText(tbname) + "\r\n"
+        xmlTrackables << "\n"
+        xmlTrackables << "    <groundspeak:travelbug id=\"#{tbid}\" ref=\"#{tbref}\">\n"
+        xmlTrackables << "      <groundspeak:name>" + makeXML(tbname) + "</groundspeak:name>\n"
+        xmlTrackables << "    </groundspeak:travelbug>\n"
+        txtTrackables << makeText(tbname) + "\n"
       }
     end
     if xmlTrackables.length > 0
