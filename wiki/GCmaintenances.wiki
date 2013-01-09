@@ -25,6 +25,7 @@ _*(new entries will be added on top)*_
   * 2012-11-14 seen:  *{{{Web.HotFix_20121113.1}}}*
   * 2012-12-04 seen:  *{{{Web.HotFix_20121204.1}}}*
   * 2012-12-11 seen:  *{{{Web.HotFix_20121211.1}}}* (no more challenges, changed icons -> issue 259)
+  * 2013-01-09 seen:  *{{{Web.HotFix_20130107.1}}}* (parsing placed date fails)
 ----
 2012-07-24:
   * _(not even announced on Twitter?)_
