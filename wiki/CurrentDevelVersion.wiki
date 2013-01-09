@@ -1,11 +1,22 @@
 #summary Features of current development version
 #labels Featured,Experimental
 
-version=3.17.5
+version=3.17.6
 
-= "Happy 2013" Development Release (Jan 02, 2013) =
+= "CRLF" Development Release (Jan 09, 2013) =
+
+= New development version 3.17.6 =
+  * nicknamed "CRLF" because it tries to clean up line feeds (removes "\r")
+  * no change for Linux users, but:
+  * need feedback from MacOSX (new build machine) and Windows (new ruby version)
+  * please suggest features/fixes to go into next stable (3.16.4, due Jan 23)
+
+== Issues addressed: ==
+  * Fix for failed parsing of "placed" dates after 2013-01-07 update
+  * Something I might have forgot already
 
 = New development version 3.17.5 =
+  * nicknamed "Happy 2013"
   * sorry for the delay, but getting a fixed 3.16 out had higher priority
   * please continue testing this, and report back your findings
   * more features currently only in devel will be backported to stable for 3.16.4
