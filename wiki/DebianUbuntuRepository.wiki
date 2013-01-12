@@ -42,6 +42,12 @@ _Last change: 2011-10-27 Steve8x8_
   * For development version, it's:
     {{{deb http://geotoad.googlecode.com/ svn/branches/steve8x8/data/}}}
   * Run {{{apt-get update}}} and {{{apt-get upgrade|install}}} (or the {{{aptitude}}} equivalents).
+    You will have to answer a question with "y" (this is safe):
+{{{
+WARNING: The following packages cannot be authenticated!
+  geotoad
+Install these packages without verification [y/N]? y
+}}}
 
 == Is it clean? ==
 
