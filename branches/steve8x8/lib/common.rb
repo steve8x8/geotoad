@@ -59,16 +59,16 @@ module Common
     case date
     # relative dates end in a "*"
     # Languages: (no Korean for now, and perhaps never with ruby1.8)
-    # en|de|fr|pt|cs
-    # sv/nb|nl|ca|pl|et
-    # es|hu|ro
+    # en|de|fr|pt|cz
+    # se/no|nl|ca|pl|et
+    # es|hu|ro|lt|it
     when /^(Today|Heute|Hier|Hoje|Dnes)\*/i
       debug "date: Today"
       days_ago=0
     when /^(I ?dag|Vandaag|Avui|Dzisiaj|T.{1,2}na)\*/i
       debug "date: Today"
       days_ago=0
-    when /^(Hoy|Ma|Azi)\*/i
+    when /^(Hoy|Ma|Azi|.{1,2}odien|Oggi)\*/i
       debug "date: Today"
       days_ago=0
     when /^(Yesterday|Gestern|Aujourd.{1,2}hui|Ontem|V.{1,2}era)\*/i
@@ -77,10 +77,11 @@ module Common
     when /^(I ?g.{1,2}r|Gisteren|Ahir|Wczoraj|Eile)\*/i
       debug "date: Yesterday"
       days_ago=1
-    when /^(Ayer|Tegnap|Ieri)\*/i
+    when /^(Ayer|Tegnap|Ieri|Vakar|Ieri)\*/i
       debug "date: Yesterday"
       days_ago=1
     # Eesti: 6 päeva tagasi*
+    # Latviešu: pirms 6 dienām*
     # (any string ending with a * and a number in it)
     when /(\d)+ .+\*$/
       debug "date: #{$1} days ago"
