@@ -1,3 +1,10 @@
+geotoad (3.17.7-1) unstable; urgency=low
+
+  * New version 3.17.7, "Women's Day" release
+  * Language support for Latvia and Italia
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Fri, 08 Mar 2013 13:30:00 +0100
+
 geotoad (3.17.6-1) unstable; urgency=low
 
   * New version 3.17.6, "CRLF" release
