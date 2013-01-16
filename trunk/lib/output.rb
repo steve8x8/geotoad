@@ -674,26 +674,59 @@ class Output
   end
 
   def createGpxCommentLogs(cache)
-    if not cache['comments']
-      debug "No comments found for #{cache['name']}"
-      return nil
-    end
+    #if not cache['comments']
+    #  debug "No comments found for #{cache['name']}"
+    #  return nil
+    #end
 
     entries = []
     debug "Generating comment XML for #{cache['name']}"
-    cache['comments'].each { |comment|
-      comment_id = Zlib.crc32(comment['text'])
-      debug "Comment ID: #{comment_id} by #{comment['user']}: #{comment['text']}"
-      formatted_date = comment['date'].strftime("%Y-%m-%dT07:00:00.000Z")
+    brlf = "\&lt;br /\&gt;\n"
+
+    # info log entry
+    if cache['ltime']
+      debug "info log entry"
       entry = ''
-      entry << "    <groundspeak:log id=\"#{comment_id}\">\n"
+      entry << "    <groundspeak:log id=\"-2\">\n"
+      formatted_date = cache['ltime'].strftime("%Y-%m-%dT%H:%M:%SZ")
       entry << "      <groundspeak:date>#{formatted_date}</groundspeak:date>\n"
-      entry << "      <groundspeak:type>#{comment['type']}</groundspeak:type>\n"
-      entry << "      <groundspeak:finder id=\"#{comment['user_id']}\">#{comment['user']}</groundspeak:finder>\n"
-      entry << "      <groundspeak:text encoded=\"False\">" + makeXML(comment['text']) + "</groundspeak:text>\n"
+      entry << "      <groundspeak:type>Write note</groundspeak:type>\n"
+      entry << "      <groundspeak:finder id=\"0\">**Info**</groundspeak:finder>\n"
+      entry << "      <groundspeak:text encoded=\"False\">\n"
+      formatted_date = cache['ctime'].strftime("%Y-%m-%d")
+      entry << "Placed: #{formatted_date}" + brlf
+      entry << "D/T/S:  #{cache['difficulty']}/#{cache['terrain']}/#{cache['size']}"
+      if cache['funfactor']
+        entry << ", Fun: #{cache['funfactor']}"
+      end
+      if cache['favfactor']
+        entry << ", Fav: #{cache['favfactor']}"
+      end
+      entry << brlf
+      if cache['logcounts']
+        entry << "Stats: #{cache['logcounts']}" + brlf
+        entry << "Last log: #{cache['last_find_type']}" + brlf
+      end
+      entry << "      </groundspeak:text>\n"
       entry << "    </groundspeak:log>\n"
       entries << entry
-    }
+    end
+
+    if cache['comments']
+      cache['comments'].each { |comment|
+        comment_id = Zlib.crc32(comment['text'])
+        debug "Comment ID: #{comment_id} by #{comment['user']}: #{comment['text']}"
+        formatted_date = comment['date'].strftime("%Y-%m-%dT07:00:00.000Z")
+        entry = ''
+        entry << "    <groundspeak:log id=\"#{comment_id}\">\n"
+        entry << "      <groundspeak:date>#{formatted_date}</groundspeak:date>\n"
+        entry << "      <groundspeak:type>#{comment['type']}</groundspeak:type>\n"
+        entry << "      <groundspeak:finder id=\"#{comment['user_id']}\">#{comment['user']}</groundspeak:finder>\n"
+        entry << "      <groundspeak:text encoded=\"False\">" + makeXML(comment['text']) + "</groundspeak:text>\n"
+        entry << "    </groundspeak:log>\n"
+        entries << entry
+      }
+    end
     debug "Finished generating comment XML for #{cache['name']}"
     debug "Comment Data: #{entries}"
     debug "Comment Data Length: #{entries.length}"

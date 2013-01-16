@@ -1,6 +1,7 @@
 geotoad (3.16.4-1) unstable; urgency=low
 
   * New version 3.16.4, "Seven Squared" release
+  * Issue 174: Add GSAK-style top "log entry" with summary
   * Issue 234: Extract, and filter by, favorite points
   * CR/LF cleanup
   * Language support for Latvia and Italia
