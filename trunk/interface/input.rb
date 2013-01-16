@@ -73,7 +73,8 @@ class Input
       [ "--userExclude",              "-E",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--funFactorMin",             "-f",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--funFactorMax",             "-F",    GetoptLong::REQUIRED_ARGUMENT ],
-
+      [ "--favFactorMin",             "-g",    GetoptLong::REQUIRED_ARGUMENT ],
+      [ "--favFactorMax",             "-G",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--help",                     "-h",    GetoptLong::NO_ARGUMENT ],
 
       [ "--ownerInclude",             "-i",    GetoptLong::REQUIRED_ARGUMENT ],
@@ -235,6 +236,7 @@ class Input
     puts " -d/-D [1.0-5.0]        difficulty minimum/maximum"
     puts " -t/-T [1.0-5.0]        terrain minimum/maximum"
     puts " -f/-F [0.0-5.0]        fun factor minimum/maximum"
+    puts " -g/-G [0.0-5.0]        fav factor minimum/maximum"
     puts " -y    [1-500]          distance maximum, in miles, or suffixed \"km\" (10)"
     puts " -k    [keyword]        title keyword(s) search"
     puts " -K    [keyword]        desc keyword(s) search (slow)"
