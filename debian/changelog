@@ -1,7 +1,9 @@
 geotoad (3.16.4-1) unstable; urgency=low
 
   * New version 3.16.4, "Seven Squared" release
-  * New features and minor fixes
+  * CR/LF cleanup
+  * Language support for Latvia and Italia
+  * Some minor fixes
 
  -- Steve Sixty-Four <steve8x8@gmail.com>  Wed, 23 Jan 2013 14:00:00 +0100
 
