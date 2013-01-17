@@ -36,6 +36,9 @@ geotoad -q coord -x gpx -o `pwd`/$CENTER-prox.gpx "$COORDS"
 
 == Searches along a given track/route (issue 103) ==
 
+The following script will suggest a geotoad command line,
+not run geotoad itself:
+
 {{{
 #!/bin/bash
 
@@ -70,6 +73,7 @@ awk '{printf("%.3f,%.3f|",$1,$2)}'
 
 )
 
+echo complete \(with your credentials etc.\) and run:
 echo geotoad ... -y$circle -q coord \"$searchargs\"
 }}}
 
