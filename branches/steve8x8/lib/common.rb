@@ -41,7 +41,7 @@ module Common
     page = ShadowFetch.new(@@mylogs_url)
     page.localExpiry = 12 * 3600		# 12 hours
     data = page.fetch
-    counter = ''
+    counter = 0
     # <strong style="display:block">
     #                        <img src="/images/icons/icon_smile.png" title="Caches Found" /> 1,992</strong>
     if data =~ /title=.Caches Found.*?([\d,\.]+)/
