@@ -1,7 +1,7 @@
 #summary GeoToad README.txt
 #labels Featured
 
-= GeoToad 3.16.2 by Thomas Stromberg and The GeoToad Project (c) 2002 - 2012 =
+= GeoToad 3.16.4 by Thomas Stromberg and The GeoToad Project (c) 2002 - 2013 =
 
 <wiki:toc max_depth="2" />
 
@@ -34,7 +34,7 @@ You will then see a screen that looks similar to this:
 {{{
 
 ==============================================================================
-:::                // GeoToad 3.16.2 Text User Interface //                :::
+:::                // GeoToad 3.16.4 Text User Interface //                :::
 ==============================================================================
 (1)  GC.com login [REQUIRED         ] | (2)  search type          [coord     ]
 (3)  location     [N52 23.0 E13 03.0] | (4)  distance maximum (km)     [10   ]
@@ -88,6 +88,7 @@ syntax: geotoad [options] <search:search2:search3>
  -d/-D [1.0-5.0]        difficulty minimum/maximum
  -t/-T [1.0-5.0]        terrain minimum/maximum
  -f/-F [0.0-5.0]        fun factor minimum/maximum
+ -g/-G [0.0-5.0]        fav factor minimum/maximum
  -y    [1-500]          distance maximum, in miles, or suffixed "km" (10)
  -k    [keyword]        title keyword(s) search
  -K    [keyword]        desc keyword(s) search (slow)

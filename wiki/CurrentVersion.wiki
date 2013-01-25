@@ -1,9 +1,19 @@
 #summary Features of current version
 #labels Featured
 
-version=3.16.3
+version=3.16.4
 
-= "World's End" release (Dec 20, 2012) =
+= "Seven Squared" release (Jan 23, 2013) =
+
+= What's new in 3.16.4? =
+  * nicknamed "Seven Squared" (...)
+
+== Issues addressed: ==
+  * Issue 174: Add GSAK-style top "log entry" with summary
+  * Issue 234: Extract, and filter by, favorite points
+  * CR/LF cleanup
+  * Language support for Latvia and Italia
+  * Some minor fixes
 
 = What's new in 3.16.3? =
   * nicknamed "World's End" (as it might be the last release ever)
