@@ -42,9 +42,10 @@ module Common
     page.localExpiry = 12 * 3600		# 12 hours
     data = page.fetch
     counter = 0
-    # <strong style="display:block">
-    #                        <img src="/images/icons/icon_smile.png" title="Caches Found" /> 1,992</strong>
-    if data =~ /title=.Caches Found.*?([\d,\.]+)/
+    # <strong style="display: block">
+    #                         1,992 Caches Found</strong>
+    # (language-dependent)
+    if data =~ /<strong[^>]*>\s*([\d,\.]+)[\s\w]+<\/strong>/
       counter = $1.gsub(/[,\.]/, '').to_i
     end
     return counter
