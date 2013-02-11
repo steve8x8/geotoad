@@ -703,6 +703,9 @@ class Output
         entry << ", Fav: #{cache['favfactor']}"
       end
       entry << brlf
+      if cache['travelbug'].to_s.length > 0
+        entry << "Trackables: #{cache['travelbug']}" + brlf
+      end
       if cache['logcounts']
         entry << "Stats: #{cache['logcounts']}" + brlf
         entry << "Last log: #{cache['last_find_type']}" + brlf
@@ -1067,7 +1070,7 @@ class Output
         xmlTrackables << "    <groundspeak:travelbug id=\"#{tbid}\" ref=\"#{tbref}\">\n"
         xmlTrackables << "      <groundspeak:name>" + makeXML(tbname) + "</groundspeak:name>\n"
         xmlTrackables << "    </groundspeak:travelbug>\n"
-        txtTrackables << makeText(tbname) + "\n"
+        txtTrackables << makeText(tbname)
       }
     end
     if xmlTrackables.length > 0
