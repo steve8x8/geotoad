@@ -176,12 +176,14 @@ class ShadowFetch
       #@data = nil
     end
     if (@data)
+      @data.force_encoding("UTF-8") if $isRuby19
       @@src = 'remote'
       size = @data.length
     else
       if (File.exists?(localfile))
         debug "using local cache instead"
         @data = fetchLocal(localfile)
+        @data.force_encoding("UTF-8") if $isRuby19
         @@src = "local <offline>"
         return @data
       else
@@ -205,12 +207,6 @@ class ShadowFetch
       displayWarning "Could not overwrite #{localfile}!"
     end
     debug "Returning #{@data.length} bytes: #{@data[0..20]}(...)#{data[-21..-1]}"
-    if $isRuby19
-    # we hope that this is the only place where encodings can enter
-    # UTF-8: &#xFC; gets properly translated
-    # BINARY: no translation at all
-      @data.force_encoding("UTF-8")
-    end
     return @data
   end
 
