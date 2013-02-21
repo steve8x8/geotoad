@@ -87,7 +87,7 @@ module Auth
       end
       # add/replace/remove cookie for user
       if @@cookie
-        debug "insert cookie #{@@cookie} for user #{@@user.inspect}"
+        debug "insert cookie #{hideCookie(@@cookie)} for user #{@@user.inspect}"
         cookies[@@user.inspect] = @@cookie
       else
         cookies.delete(@@user.inspect)
