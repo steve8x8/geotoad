@@ -122,8 +122,8 @@ module Auth
       case line
       when /ctl00_ContentBody_LoggedInPanel/
         debug "Found logged-in panel"
-        return true
-      when /You are logged in as/
+        #return true
+      when /You are (logged|signed) in as/
         debug "Found login confirmation!"
         return true
       when /^\<input type=\"hidden\" name=\"(.*?)\".*value=\"(.*?)\"/
