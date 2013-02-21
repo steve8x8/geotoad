@@ -17,13 +17,20 @@ See also [http://forums.groundspeak.com/GC/index.php?showforum=89 Release Notes 
 _*(new entries will be added on top)*_
 
 ----
+2013-02-20:
+  * (notified _after_ update on Twitter, 2027 UTC)
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=307712 release notes]
+  * new server build: *{{{Web.HotFix_20130220.1}}}*
+  * "Some significant polish is applied to your experience logging into your account"
+  * _c:geo reports problems logging in_
+  * _existing cookies seem not to work but are replaced by re-login (?)_
+----
 2013-02-05:
   * (notified _after_ update on Twitter, 2009 UTC)
   * [http://forums.groundspeak.com/GC/index.php?showtopic=307159 release notes]
   * new server build: *{{{Web.HotFix_20130205.1}}}*
   * print page uses new map with additional waypoints
   * _some effect seen on c:geo_
-  * _??? problem with archived cache in WID search ???_
 ----
 2013-01-22:
   * [http://forums.groundspeak.com/GC/index.php?showtopic=306667 release notes]
