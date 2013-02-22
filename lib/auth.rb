@@ -164,7 +164,7 @@ module Auth
     @postVars['ctl00$ContentBody$tbUsername'] = user
     @postVars['ctl00$ContentBody$tbPassword'] = password
     @postVars['ctl00$ContentBody$cbRememberMe'] = 'on'
-    @postVars['ctl00$ContentBody$btnSignIn'] = 'Login'
+    @postVars['ctl00$ContentBody$btnSignIn'] = 'Sign In'
     page.postVars = @postVars
     data = page.fetch
     # extract cookie
