@@ -541,12 +541,14 @@ class SearchCache
     end
 
     if not page_number
-      displayError "Could not determine current page number from #{url}"
+      displayWarning "Could not determine current page number from #{url}"
+      displayError   "Please set language to English on GC.com as a workaround."
       return @waypoints
     end
 
     if not pages_total
-      displayError "Could not determine total pages from #{url}"
+      displayWarning "Could not determine total pages from #{url}"
+      displayError   "Please set language to English on GC.com as a workaround."
       return @waypoints
     end
 
@@ -686,8 +688,9 @@ class SearchCache
 
       # stuff outside results table
       case line
-      # <TD class="PageBuilderWidget"><SPAN>Total Records: <B>2938</B> - Page: <B>147</B> of <B>147</B>
-      when /PageBuilderWidget[^:]+: +\<b\>(\d+)\<\/b\> [^:]+: +\<b\>(\d+)\<\/b\>.*?\<b\>(\d+)\<\/b\>/
+      # <td class="PageBuilderWidget"><span>Total Records: <b>718</b> - Page: <b>23</b> of <b>36</b>&nbsp;-&nbsp;</span>
+      # pt: <td class="PageBuilderWidget"><span>Total de Registos:: <b>7976</b> - Página: <b>1</b> de <b>399</b>&nbsp;-&nbsp;</span>
+      when /PageBuilderWidget[^:]+:+ +\<b\>(\d+)\<\/b\> [^:]+: +\<b\>(\d+)\<\/b\>.*?\<b\>(\d+)\<\/b\>/
         if not waypoints_total
           waypoints_total = $1.to_i
           page_number = $2.to_i
