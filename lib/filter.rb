@@ -175,7 +175,7 @@ class Filter
     @waypointHash.delete_if { |wid, values|
       begin
         creator = CGI.unescapeHTML(@waypointHash[wid]['creator'])
-      rescue -> e
+      rescue => e
         debug "ownerExclude: unescapeHTML problem, using #{@waypointHash[wid]['creator'].inspect}"
         creator = @waypointHash[wid]['creator'].to_s
       end
