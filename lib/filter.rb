@@ -173,7 +173,12 @@ class Filter
   def ownerExclude(nick)
     debug "filtering by ownerExclude: #{nick}"
     @waypointHash.delete_if { |wid, values|
-      creator = CGI.unescapeHTML(@waypointHash[wid]['creator'])
+      begin
+        creator = CGI.unescapeHTML(@waypointHash[wid]['creator'])
+      rescue -> e
+        debug "ownerExclude: unescapeHTML problem, using #{@waypointHash[wid]['creator'].inspect}"
+        creator = @waypointHash[wid]['creator'].to_s
+      end
       creator =~ /#{nick}/i
     }
   end
