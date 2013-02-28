@@ -103,7 +103,7 @@ class Input
       [ "--terrainMax",               "-T",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--user",                     "-u",    GetoptLong::REQUIRED_ARGUMENT ],         # * REQ
 
-      [ "--verbose",                  "-v",    GetoptLong::OPTIONAL_ARGUMENT ],
+      [ "--verbose",                  "-v",    GetoptLong::NO_ARGUMENT ],
 
       [ "--format",                   "-x",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--disableEarlyFilter",       "-X",    GetoptLong::NO_ARGUMENT ],
@@ -182,7 +182,7 @@ class Input
 
     # demonstrate a sample command line
     cmdline = "geotoad.rb"
-    hidden_opts = ['queryArg', 'outDir', 'outFile', 'user', 'password', 'usemetric']
+    hidden_opts = ['queryArg', 'outDir', 'outFile', 'user', 'password', 'usemetric', 'verbose']
     # hide unlimited search
     if @@optHash['limitSearchPages'] == 0
       hidden_opts.push('limitSearchPages')
@@ -190,11 +190,6 @@ class Input
 
     @@optHash.keys.sort.each { |option|
       if ! @@optHash[option].to_s.empty? and ! hidden_opts.include?(option)
-        # This is the default query type
-        if option == 'queryType' and @@optHash[option] == 'location'
-          next
-        end
-
         if @@optHash[option] == 'X'
           cmdline = cmdline + " --#{option}"
         elsif not @@optHash[option].to_s.empty?
