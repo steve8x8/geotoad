@@ -17,6 +17,13 @@ See also [http://forums.groundspeak.com/GC/index.php?showforum=89 Release Notes 
 _*(new entries will be added on top)*_
 
 ----
+2013-03-05:
+  * "Geocaching.com ... site update on Tuesday, March 5th, 2013 ... 8pm PST"
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=308259 release notes]
+  * new server build: *{{{Web.HotFix_20130305.1}}}*
+  * Twitter announcement (0405 UTC) used hash tag #AddingUnicode
+  * _tested with Japanese, looks OK (cannot test with Windows though)_
+----
 2013-02-20:
   * (notified _after_ update on Twitter, 2027 UTC)
   * [http://forums.groundspeak.com/GC/index.php?showtopic=307712 release notes]
