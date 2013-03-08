@@ -1,15 +1,15 @@
 --- geotoad.trunk/interface/input.rb	2012-09-25 13:01:26.000000000 +0200
 +++ geotoad.trunknew/interface/input.rb	2012-09-25 17:01:48.000000000 +0200
-@@ -181,7 +181,7 @@
+@@ -174,7 +174,7 @@
  
  
      # demonstrate a sample command line
 -    cmdline = "geotoad.rb"
 +    cmdline = "geotoad"
-     hidden_opts = ['queryArg', 'outDir', 'outFile', 'user', 'password', 'usemetric']
+     hidden_opts = ['queryArg', 'outDir', 'outFile', 'user', 'password', 'usemetric', 'verbose']
      # hide unlimited search
      if @@optHash['limitSearchPages'] == 0
-@@ -229,7 +229,7 @@
+@@ -222,7 +222,7 @@
  
  
    def usage
@@ -18,7 +18,7 @@
      puts ""
      puts " -u <username>          Geocaching.com username, required for coordinates"
      puts " -p <password>          Geocaching.com password, required for coordinates"
-@@ -297,8 +297,8 @@
+@@ -284,8 +284,8 @@
      puts "    + requires gpsbabel in PATH           = requires cmconvert in PATH"
      puts ""
      puts "::: EXAMPLES:"

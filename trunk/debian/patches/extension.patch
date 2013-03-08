@@ -6,7 +6,7 @@
      # demonstrate a sample command line
 -    cmdline = "geotoad.rb"
 +    cmdline = "geotoad"
-     hidden_opts = ['queryArg', 'outDir', 'outFile', 'user', 'password', 'usemetric']
+     hidden_opts = ['queryArg', 'outDir', 'outFile', 'user', 'password', 'usemetric', 'verbose']
      # hide unlimited search
      if @@optHash['limitSearchPages'] == 0
 @@ -222,7 +222,7 @@
