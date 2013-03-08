@@ -1,12 +1,20 @@
 #summary Features of current version
 #labels Featured
 
-version=3.16.4
+version=3.16.5
 
-= "Seven Squared" release (Jan 23, 2013) =
+= "Women's Day" release (Mar 8, 2013) =
+
+= What's new in 3.16.5? =
+  * nicknamed "Women's Day" (get some flowers for her!)
+
+== Issues addressed: ==
+  * Issue 235: Option "-N" to limit to caches "not found by me" (logged-in user)
+  * Issue 261: Some debugging added to narrow down the problem
+  * Some minor fixes (encoding, cookies, login, Portuguese)
 
 = What's new in 3.16.4? =
-  * nicknamed "Seven Squared" (...)
+  * nicknamed "Seven Squared" (do the math)
 
 == Issues addressed: ==
   * Issue 174: Add GSAK-style top "log entry" with summary
