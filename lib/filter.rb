@@ -176,7 +176,7 @@ class Filter
       begin
         creator = CGI.unescapeHTML(@waypointHash[wid]['creator'])
       rescue => e
-        debug "ownerExclude: unescapeHTML problem, using #{@waypointHash[wid]['creator'].inspect}"
+        displayWarning "ownerExclude: unescapeHTML problem #{e}, using #{@waypointHash[wid]['creator'].inspect}"
         creator = @waypointHash[wid]['creator'].to_s
       end
       creator =~ /#{nick}/i
