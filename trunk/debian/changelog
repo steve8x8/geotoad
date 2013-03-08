@@ -1,10 +1,11 @@
 geotoad (3.16.5-1) unstable; urgency=low
 
-  * New version 3.16.5, "Goodbye Winter" release
+  * New version 3.16.5, "Women's Day" release
   * Issue 235: Option "-N" to limit to caches "not found by me" (logged-in user)
+  * Temporary debugging for issue 261
   * Some minor fixes
 
- -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 28 Feb 2013 14:30:00 +0100
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Fri, 08 Mar 2013 14:30:00 +0100
 
 geotoad (3.16.4-1) unstable; urgency=low
 
