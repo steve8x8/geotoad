@@ -526,10 +526,30 @@ class Output
     return text
   end
 
+  def deemoji(str)
+    text = str
+    # translate some UTF-16 surrogates into UTF-8 code points
+    text.gsub!(/\&#xD83C;\&#xDC(..;)/i) {'&#x01F0'+$1}
+    text.gsub!(/\&#xD83C;\&#xDD(..;)/i) {'&#x01F1'+$1}
+    text.gsub!(/\&#xD83C;\&#xDE(..;)/i) {'&#x01F2'+$1}
+    text.gsub!(/\&#xD83C;\&#xDF(..;)/i) {'&#x01F3'+$1}
+    text.gsub!(/\&#xD83D;\&#xDC(..;)/i) {'&#x01F4'+$1}
+    text.gsub!(/\&#xD83D;\&#xDD(..;)/i) {'&#x01F5'+$1}
+    text.gsub!(/\&#xD83D;\&#xDE(..;)/i) {'&#x01F6'+$1}
+    text.gsub!(/\&#xD83D;\&#xDF(..;)/i) {'&#x01F7'+$1}
+    text.gsub!(/\&#xD[89AB]..;\&#xD[CDEF]..;/, '*')
+    return text
+  end
+
   def makeText(str)
     # Take HTML-like input, no matter how hacked up, and turn it into text
-    text = CGI.unescapeHTML(str)
-
+    # issue 262: may fail with "emoji" entities like &#xD83D;&#xDE03;
+    text = deemoji(str)
+    begin
+        text = CGI.unescapeHTML(text)
+    rescue => e
+        debug "unescapeHTML throws exception #{e} - use original"
+    end
     # compactify whitespace
     text.gsub!(/[\r\n]+/m, "\n") # was ' '
 
