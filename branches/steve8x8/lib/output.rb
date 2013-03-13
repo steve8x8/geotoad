@@ -479,12 +479,34 @@ class Output
     return text
   end
 
+  def deemoji(str, soft=true)
+    text = str
+    # translate some UTF-16 surrogates into UTF-8 code points, remove others
+    if soft
+      text.gsub!(/\&#xD83C;\&#xDC(..;)/i) {'&#x01F0'+$1}
+      text.gsub!(/\&#xD83C;\&#xDD(..;)/i) {'&#x01F1'+$1}
+      text.gsub!(/\&#xD83C;\&#xDE(..;)/i) {'&#x01F2'+$1}
+      text.gsub!(/\&#xD83C;\&#xDF(..;)/i) {'&#x01F3'+$1}
+      text.gsub!(/\&#xD83D;\&#xDC(..;)/i) {'&#x01F4'+$1}
+      text.gsub!(/\&#xD83D;\&#xDD(..;)/i) {'&#x01F5'+$1}
+      text.gsub!(/\&#xD83D;\&#xDE(..;)/i) {'&#x01F6'+$1}
+      text.gsub!(/\&#xD83D;\&#xDF(..;)/i) {'&#x01F7'+$1}
+    end
+    text.gsub!(/\&#xD[89AB]..;\&#xD[CDEF]..;/, '(*)')
+    return text
+  end
+
   def makeXML(str)
     if not str or str.length == 0
         return str
     end
-
-    text = CGI.escapeHTML(str)
+    # issue 262: "emoji" seem to break GPSr devices
+    text = deemoji(str, false)
+    begin
+        text = CGI.escapeHTML(text)
+    rescue => e
+        debug "escapeHTML throws exception #{e} - use original"
+    end
     # CGI.escapeHTML will try to re-escape previously escaped entities.
     # Fix numerical and hex entities such as Pateniemen l&amp;#xE4;mp&amp;#246;keskus
     text.gsub!(/\&amp;(\#[\d]+;)/, "&\\1")
@@ -523,21 +545,6 @@ class Output
     if text != str
       debug "makeXML: %s" % text
     end
-    return text
-  end
-
-  def deemoji(str)
-    text = str
-    # translate some UTF-16 surrogates into UTF-8 code points
-    text.gsub!(/\&#xD83C;\&#xDC(..;)/i) {'&#x01F0'+$1}
-    text.gsub!(/\&#xD83C;\&#xDD(..;)/i) {'&#x01F1'+$1}
-    text.gsub!(/\&#xD83C;\&#xDE(..;)/i) {'&#x01F2'+$1}
-    text.gsub!(/\&#xD83C;\&#xDF(..;)/i) {'&#x01F3'+$1}
-    text.gsub!(/\&#xD83D;\&#xDC(..;)/i) {'&#x01F4'+$1}
-    text.gsub!(/\&#xD83D;\&#xDD(..;)/i) {'&#x01F5'+$1}
-    text.gsub!(/\&#xD83D;\&#xDE(..;)/i) {'&#x01F6'+$1}
-    text.gsub!(/\&#xD83D;\&#xDF(..;)/i) {'&#x01F7'+$1}
-    text.gsub!(/\&#xD[89AB]..;\&#xD[CDEF]..;/, '*')
     return text
   end
 
