@@ -17,12 +17,20 @@ See also [http://forums.groundspeak.com/GC/index.php?showforum=89 Release Notes 
 _*(new entries will be added on top)*_
 
 ----
+----
+2013-03-19:
+  * (notified _after_ update on Twitter, 1948 UTC)
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=308782 release notes]
+  * new server build: *{{{Web.Release_20130319.1}}}*
+  * _no issues seen yet_
+----
 2013-03-05:
   * "Geocaching.com ... site update on Tuesday, March 5th, 2013 ... 8pm PST"
   * [http://forums.groundspeak.com/GC/index.php?showtopic=308259 release notes]
   * new server build: *{{{Web.HotFix_20130305.1}}}*
   * Twitter announcement (0405 UTC) used hash tag #AddingUnicode
-  * _tested with Japanese, looks OK (cannot test with Windows though)_
+  * _now allowed: Emoji (encoded as "Unicode-16 surrogates" - causing issue 262)_
+  * seen 2013-03-13:  *{{{Web.HotFix_20130312.1}}}* (removed 2-million countdown)
 ----
 2013-02-20:
   * (notified _after_ update on Twitter, 2027 UTC)
