@@ -38,8 +38,8 @@ $Format = {
                      "OFIELD  SHORTNAME,      \"\", \"name=\"%s\"\"\n" +
                      "OFIELD  URL_LINK_TEXT,  \"\", \"comment=\"%s\"\n" +
                      "OFIELD  ICON_DESCR,     \"\", \"(%s\"\n" +
-                     "OFIELD GEOCACHE_TYPE,   \"\", \"-%s\", \"no_delim_before,optional\"\n" +
-                     "OFIELD GEOCACHE_CONTAINER, \"\", \"=%s\", \"no_delim_before,optional\"\n" +
+                     "OFIELD GEOCACHE_TYPE,   \"\", \":%-.5s\", \"no_delim_before,optional\"\n" +
+                     "OFIELD GEOCACHE_CONTAINER, \"\", \"/%-.5s\", \"no_delim_before,optional\"\n" +
                      "OFIELD GEOCACHE_DIFF,   \"\", \"/D%3.1f\", \"no_delim_before,optional\"\n" +
                      "OFIELD GEOCACHE_TERR,   \"\", \"/T%3.1f\", \"no_delim_before,optional\"\n" +
                      "OFIELD  CONSTANT,       \")\", \"%s\"\", \"no_delim_before\"\n" +

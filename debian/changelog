@@ -2,6 +2,7 @@ geotoad (3.16.6-1) unstable; urgency=low
 
   * New version 3.16.6, ...
   * Issue 262: translate or remove "emoji" (Unicode-16 "surrogates")
+  * Issue 263: "gpspoint" template
   * Some minor fixes
 
  -- Steve Sixty-Four <steve8x8@gmail.com>  ...
