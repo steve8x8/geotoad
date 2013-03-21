@@ -4,6 +4,8 @@ geotoad (3.17.7-1) unstable; urgency=low
   * Language support for Latvia and Italia
   * Portuguese workaround
   * Convert quotation marks
+  * Issue 262: translate or remove "emoji" (Unicode-16 "surrogates")
+  * Issue 263: "gpspoint" template
   * Minor other stuff
 
  -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 28 Mar 2013 13:30:00 +0100
