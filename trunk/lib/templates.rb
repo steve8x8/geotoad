@@ -4,15 +4,20 @@
 # $Id$
 
 $Format = {
+  # revised using http://mpickering.homeip.net/software/gpspoint_to_gpx.py
+  # see also http://mirror.rosalab.ru/rosa/rosa2012.1/repository/SRPMS/contrib/release/gpspoint-2.030521-7.src.rpm
   'gpspoint'    => {
     'ext'        => 'gpd',
     'mime'    => 'application/gpspoint',
     'desc'    => 'gpspoint datafile',
     'templatePre'    => "GPSPOINT DATA FILE\ntype=\"fileinfo\"  version=\"1.00\"\n" +
-      "type=\"programinfo\" program=\"geotoad\" version=\"0.0\"\n",
-    'templateWP'        => "type=\"waypoint\" latdata=\"<%out.latdatapad6%>\" londata=\"<%out.londatapad6%>\" " +
+      "type=\"programinfo\" program=\"geotoad\" version=\"0.0\"\n" +
+      "type=\"waypointlist\"\n",
+    'templateWP'     => "type=\"waypoint\" " +
+      "latitude=\"<%out.latdatapad5%>\" longitude=\"<%out.londatapad5%>\" " +
       "name=\"<%out.id%>\" comment=\"<%wp.name%>\" " +
       "symbol=\"flag\"  display_option=\"symbol+name\"\n",
+    'templatePost'   => "type=\"waypointlistend\"\n",
   },
 
   'easygps' => {
