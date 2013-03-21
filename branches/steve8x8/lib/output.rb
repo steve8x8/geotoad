@@ -435,6 +435,12 @@ class Output
       if (File.exists?(file))
         File.unlink(file)
       end
+      # if gpsbabel needs a style file, create it
+      if @outputFormat['filter_style']
+        stylefile = $CACHE_DIR + "/" + @outputType + ".s_" + rand(500000).to_s
+        File.open(stylefile, "w") {|f| f.write(@outputFormat['filter_style'])}
+        exec.gsub!('STYLEFILE', "\"#{stylefile}\"")
+      end
 
       debug "exec = #{exec}"
       system(exec)
