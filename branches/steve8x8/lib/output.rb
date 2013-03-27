@@ -432,10 +432,13 @@ class Output
       exec.gsub!('INFILE', "\"#{tmpfile}\"")
       exec.gsub!('OUTFILE', "\"#{file}\"")
       writeFile(tmpfile)
-      if (File.exists?(file))
-        File.unlink(file)
+      begin
+        File.unlink(file) if File.exists?(file)
+      rescue
+        debug "Failed to unlink output file"
       end
       # if gpsbabel needs a style file, create it
+      stylefile = nil
       if @outputFormat['filter_style']
         stylefile = $CACHE_DIR + "/" + @outputType + ".s_" + rand(500000).to_s
         File.open(stylefile, "w") {|f| f.write(@outputFormat['filter_style'])}
@@ -444,6 +447,17 @@ class Output
 
       debug "exec = #{exec}"
       system(exec)
+      # clean up temp files
+      begin
+        File.unlink(tmpfile) if File.exists?(tmpfile)
+      rescue
+        debug "Failed to unlink temp file"
+      end
+      begin
+        File.unlink(stylefile) if stylefile and File.exists?(stylefile)
+      rescue
+        debug "Failed to unlink style file"
+      end
       if (! File.exists?(file))
         displayError "Output filter did not create file #{file}. exec was: #{exec}"
       end

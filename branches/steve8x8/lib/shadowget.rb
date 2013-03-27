@@ -153,7 +153,7 @@ class ShadowFetch
         debug "local cache is #{age} (> #{@localExpiry}) sec old"
       elsif (File.size(localfile) < 6)
         debug "local cache appears corrupt. removing.."
-        File.unlink(localfile)
+        invalidate
       else
         debug "local cache is only #{age} (<= #{@localExpiry}) sec old, using local file."
         @data = fetchLocal(localfile)
