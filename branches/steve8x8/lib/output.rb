@@ -735,7 +735,8 @@ class Output
 
     entries = []
     debug "Generating comment XML for #{cache['name']}"
-    brlf = "\&lt;br /\&gt;\n"
+    #brlf = "\&lt;br /\&gt;\n"
+    brlf = "\n"
 
     # info log entry
     if cache['ltime']
@@ -779,7 +780,7 @@ class Output
         entry << "      <groundspeak:date>#{formatted_date}</groundspeak:date>\n"
         entry << "      <groundspeak:type>#{comment['type']}</groundspeak:type>\n"
         entry << "      <groundspeak:finder id=\"#{comment['user_id']}\">#{comment['user']}</groundspeak:finder>\n"
-        entry << "      <groundspeak:text encoded=\"False\">" + makeXML(comment['text']) + "</groundspeak:text>\n"
+        entry << "      <groundspeak:text encoded=\"True\">" + makeXML(comment['text']) + "</groundspeak:text>\n"
         entry << "    </groundspeak:log>\n"
         entries << entry
       }
