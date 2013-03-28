@@ -6,9 +6,10 @@ geotoad (3.17.7-1) unstable; urgency=low
   * Convert quotation marks
   * Issue 262: translate or remove "emoji" (Unicode-16 "surrogates")
   * Issue 263: "gpspoint" template
+  * Issue 264: first attempt to make GPX more consistent
   * Minor other stuff
 
- -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 28 Mar 2013 13:30:00 +0100
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 28 Mar 2013 10:00:00 +0100
 
 geotoad (3.17.6-1) unstable; urgency=low
 
