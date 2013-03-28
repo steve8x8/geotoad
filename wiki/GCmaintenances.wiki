@@ -17,6 +17,11 @@ See also [http://forums.groundspeak.com/GC/index.php?showforum=89 Release Notes 
 _*(new entries will be added on top)*_
 
 ----
+2013-03-27:
+  * (notification on Twitter, ~0300-0630 UTC)
+  * *no release notes*
+  * new server build: *{{{Web.HotFix_20130327.1}}}*
+  * "boosting site and app stability" (@GoGeocaching)
 ----
 2013-03-19:
   * (notified _after_ update on Twitter, 1948 UTC)

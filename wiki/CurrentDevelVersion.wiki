@@ -1,9 +1,23 @@
 #summary Features of current development version
 #labels Featured,Experimental
 
-version=3.17.6
+version=3.17.7
 
-= "CRLF" Development Release (Jan 09, 2013) =
+= "Spring has sprung" release (Mar 28, 2013) =
+
+= New development version 3.17.7 =
+  * nicknamed "Spring has sprung" (never giving up hope)
+  * summarizing all accumulated "testing" patches
+  * Windows Installer uses Ruby 1.9 (feedback *very* welcome)
+
+== Issues addressed: ==
+  * Language support for Latvia and Italia
+  * Portuguese workaround
+  * Convert quotation marks
+  * Issue 262: translate or remove "emoji" (Unicode-16 "surrogates")
+  * Issue 263: "gpspoint" template
+  * Issue 264: first attempt to make GPX more consistent
+  * Minor other stuff
 
 = New development version 3.17.6 =
   * nicknamed "CRLF" because it tries to clean up line feeds (removes "\r")
