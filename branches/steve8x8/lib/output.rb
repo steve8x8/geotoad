@@ -628,6 +628,36 @@ class Output
     return text
   end
 
+  def icons2Text(str)
+    iconmap = {
+      "" => '[:)]',
+      "_angry" => '[:(!]',
+      "_approve" => '[^]',
+      "_big" => '[:D]',		#big smile
+      "_blackeye" => '[B)]',	#black eye
+      "_blush" => '[:I]',
+      "_clown" => '[:o)]',
+      "_cool" => '[8D]',
+      "_dead" => '[xx(]',
+      "_dissapprove" => '[V]',	#disapprove
+      "_disapprove" => '[V]',
+      "_8ball" => '[8]',	#eightball
+      "_eightball" => '[8]',
+      "_evil" => '[}:)]',
+      "_sad" => '[:(]',		#frown
+      "_frown" => '[:(]',
+      "_kisses" => '[:X]',
+      "_question" => '[?]',
+      "_shocked" => '[:O]',
+      "_shy" => '[8)]',
+      "_sleepy" => '[|)]',
+      "_tongue" => '[:P]',
+      "_wink" => '[;)]',
+    }
+    # translate smileys, remove other HTML img tags
+    return str.gsub(/<img.*?icon_smile(.*?)\.gif[^>]*>/i){ iconmap[$1.downcase].to_s }.gsub(/<(\/?img)[^>]*>/i){ "[#{$1.upcase}]" }
+  end
+
   def generatePreOutput(title)
     output = replaceVariables(@outputFormat['templatePre'], nil)
   end
@@ -771,15 +801,17 @@ class Output
 
     if cache['comments']
       cache['comments'].each { |comment|
-        comment_id = Zlib.crc32(comment['text'])
-        debug "Comment ID: #{comment_id} by #{comment['user']}: #{comment['text']}"
+        # strip images from log entries
+        comment_text = icons2Text(comment['text'].to_s)
+        comment_id = Zlib.crc32(comment_text)
+        debug "Comment ID: #{comment_id} by #{comment['user']}: #{comment_text}"
         formatted_date = comment['date'].strftime("%Y-%m-%dT07:00:00.000Z")
         entry = ''
         entry << "    <groundspeak:log id=\"#{comment_id}\">\n"
         entry << "      <groundspeak:date>#{formatted_date}</groundspeak:date>\n"
         entry << "      <groundspeak:type>#{comment['type']}</groundspeak:type>\n"
         entry << "      <groundspeak:finder id=\"#{comment['user_id']}\">#{comment['user']}</groundspeak:finder>\n"
-        entry << "      <groundspeak:text encoded=\"True\">" + makeXML(comment['text']) + "</groundspeak:text>\n"
+        entry << "      <groundspeak:text encoded=\"True\">" + makeXML(comment_text) + "</groundspeak:text>\n"
         entry << "    </groundspeak:log>\n"
         entries << entry
       }
@@ -799,11 +831,12 @@ class Output
     entries = []
     debug "Generating comment text for #{cache['name']}"
     cache['comments'].each { |comment|
+      comment_text = icons2Text(comment['text'].to_s)
       formatted_date = comment['date'].strftime("%Y-%m-%d")
       entry = ''
       entry << "----------\n"
       entry << "*#{comment['type']}* by #{comment['user']} on #{formatted_date}:\n"
-      entry << makeText(comment['text']) + "\n"
+      entry << makeText(comment_text) + "\n"
       entries << entry
     }
     debug "Finished generating comment text for #{cache['name']}"

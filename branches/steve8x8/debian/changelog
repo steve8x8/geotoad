@@ -1,3 +1,12 @@
+geotoad (3.17.8-1) unstable; urgency=low
+
+  * New version 3.17.8, "..." release
+  * Issue 264: continued work on HTML in GPX
+  * Issue 265: convert smileys in log entries back to BB [...] code
+  * Minor other stuff
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 02 May 2013 14:30:00 +0200
+
 geotoad (3.17.7-1) unstable; urgency=low
 
   * New version 3.17.7, "Spring has sprung" release
