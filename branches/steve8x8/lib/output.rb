@@ -735,8 +735,7 @@ class Output
 
     entries = []
     debug "Generating comment XML for #{cache['name']}"
-    #brlf = "\&lt;br /\&gt;\n"
-    brlf = "\n"
+    brlf = "\&lt;br /\&gt;\n"
 
     # info log entry
     if cache['ltime']
@@ -747,7 +746,11 @@ class Output
       entry << "      <groundspeak:date>#{formatted_date}</groundspeak:date>\n"
       entry << "      <groundspeak:type>Write note</groundspeak:type>\n"
       entry << "      <groundspeak:finder id=\"0\">**Info**</groundspeak:finder>\n"
-      entry << "      <groundspeak:text encoded=\"False\">\n"
+      entry << "      <groundspeak:text encoded=\"True\">\n"
+      if cache['logcounts']
+        entry << "Last log: #{cache['last_find_type']}" + brlf
+        entry << "Stats: #{cache['logcounts']}" + brlf
+      end
       formatted_date = cache['ctime'].strftime("%Y-%m-%d")
       entry << "Placed: #{formatted_date}" + brlf
       entry << "D/T/S:  #{cache['difficulty']}/#{cache['terrain']}/#{cache['size']}"
@@ -760,10 +763,6 @@ class Output
       entry << brlf
       if cache['travelbug'].to_s.length > 0
         entry << "Trackables: #{cache['travelbug']}" + brlf
-      end
-      if cache['logcounts']
-        entry << "Stats: #{cache['logcounts']}" + brlf
-        entry << "Last log: #{cache['last_find_type']}" + brlf
       end
       entry << "      </groundspeak:text>\n"
       entry << "    </groundspeak:log>\n"
