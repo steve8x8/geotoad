@@ -1,6 +1,7 @@
-#summary How to set up a Debian (Ubuntu) repository on Google Code
+#summary How to set up and use a Debian (Ubuntu) repository on Google Code
+#labels Featured
 
-= How to set up a Debian (Ubuntu) repository on Google Code =
+= How to set up and use a Debian (Ubuntu) repository on Google Code =
 
 _Last change: 2011-10-27 Steve8x8_
 
@@ -16,7 +17,7 @@ _Last change: 2011-10-27 Steve8x8_
 
 == What doesn't work ==
 
-  * GoogleCode makes files in the Downloads area *permanent* after 2 days or 50 downloads.
+  * GoogleCode makes files in the Downloads area *permanent* (after 2 days or 50 downloads? source?).
   * A {{{Packages.gz}}} file there could *not* be maintained.
   * A "simple" *HTML redirect* doesn't work since APT doesn't follow it.
 
@@ -24,7 +25,8 @@ _Last change: 2011-10-27 Steve8x8_
 
   * The *monkey-tools* project maintains a {{{Packages.gz}}} file within their {{{hg}}} tree.
   * It contains {{{Filename:}}} entries relative to the root of the project, i.e. starting with {{{files/}}}
-  * Fortunately, APT sources lines (at least the non-standard ones) may have a somewhat strange semantics: {{{deb http://server/base/ relative/path/to/Packages}}} results in the {{{Packages.gz}}} file being downloaded from {{{http://server/base/relative/path/to/Packages/}}} while the packages themselves are retrieved from {{{http://server/base/_filename-entry_}}}
+  * Fortunately, APT sources lines (at least the non-standard ones) may have a somewhat strange semantics:
+    {{{deb http://server/base/ relative/path/to/Packages}}} results in the {{{Packages.gz}}} file being downloaded from {{{http://server/base/relative/path/to/Packages/}}} while the packages themselves are retrieved from {{{http://server/base/_filename-entry_}}}
 
 == What GeoToad does now ==
 
@@ -38,11 +40,15 @@ _Last change: 2011-10-27 Steve8x8_
 == How to merge the GeoToad repository into your installation ==
 
   * Put a single line into your {{{/etc/apt/sources.list}}}:
-    {{{deb http://geotoad.googlecode.com/ svn/trunk/data/}}}
+{{{
+deb http://geotoad.googlecode.com/ svn/trunk/data/
+}}}
   * For development version, it's:
-    {{{deb http://geotoad.googlecode.com/ svn/branches/steve8x8/data/}}}
+{{{
+deb http://geotoad.googlecode.com/ svn/branches/steve8x8/data/
+}}}
   * Run {{{apt-get update}}} and {{{apt-get upgrade|install}}} (or the {{{aptitude}}} equivalents).
-    You will have to answer a question with "y" (this is safe):
+    You will have to answer a question with "y" (this is safe, and unavoidable):
 {{{
 WARNING: The following packages cannot be authenticated!
   geotoad
@@ -55,3 +61,4 @@ Install these packages without verification [y/N]? y
   * It might be cleaner if APT would follow a HTML redirect.
   * Under the given circumstances, it's perhaps the best we can do...
   * There might be a separate directory ({{{apt/}}}?) for the lists... but does it make a difference?
+  * Currently, there is no way to "sign" the repository, and I can't see it'd be worth the trouble.
