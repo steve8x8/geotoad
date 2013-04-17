@@ -10,6 +10,7 @@ Details
 * Have you upgraded to the [CurrentVersion latest release]?
 * There is nothing available for my OS.
 * Yes, I've got the latest version. It used to work, but now it's dead, Jim.
+* GeoToad seems to work, but the GPX file is rejected (by the device, or other software).
 
 Some hints for reporting bugs.
 
@@ -52,15 +53,19 @@ There are more or less frequent [GCmaintenances updates to the web site] it quer
 
 To make it work for you again, we therefore need some input to be able to identify the problem.
 
- - Always try to reproduce the problem, and allow us to reproduce it as well - the TUI writes out a _sample command line_ that will be helpful.
- - Are you using a Ruby environment we haven't tested GeoToad against? 1.8.7, or 1.9.1/2/3 should be safe.
- - Do you use a somewhat non.standard setup? We'd like to know your language settings, both in the OS and on the GC site.
+ - Always try to reproduce the problem, and allow us to reproduce it as well.
+ - As much as possible, isolate the problem, rinse, repeat. Heisenbugs happen.
+ - You're using the command line? Let us know. Using the TUI? It writes out a command line right before running the query.
+ - Are you using a Ruby environment we haven't tested GeoToad against? 1.8.7, or 1.9.1/2/3 should be safe. 2.0 still has to grow.
+ - Do you use a somewhat non-standard setup? We'd like to know your language settings, both in the OS and on the GC site.
  - Toggle _verbose output_ on (using "v" in the TUI, or "-v"/"--verbose" from the command line), and write the (copious!) output to a file.
- - If GeoToad repeatedly reports it cannot login, make a copy of the cookies.yaml file in the config folder, and remove the corresponding entry, then retry.
+ - Do NOT capture your screen on video!
  - The last few lines might already give you an idea what could have happened.
  - Check for the last occurrence of "wid = " in the debugging output. A few lines before, there should be a line "cachefile: ...".
- - Rename that file in your cache. Do _not remove_ it, we might need it later.
+ - Rename that file in your cache as it might be corrupted. Do _not remove_ it, we might need it later.
  - Rename the debug output file too, and run again.
+ - If GeoToad repeatedly reports it cannot login, make a copy of the cookies.yaml file in the config folder, and remove the corresponding entry, then retry.
+ - If GeoToad cannot access individual caches (e.g. error 500), try to run a "-q wid" query for them.
  - If the problem persists, we need the command line and the last output lines, starting with the "cachefile:" line, including the error thrown by Ruby.
  - Make sure you remove your credentials (password, perhaps username) and cookies from the command line and debug output.
  - If you are using _non-standard settings_ with gc.com's web pages (language, measurement units) that may also be important.
@@ -72,5 +77,34 @@ Show-stopper fixes usually are committed directly to the trunk;
 development work takes also place in branches. 
 Whether a commit went to trunk or branch can be seen by selecting it. 
 You are welcome to review the changes, and leave your comments and suggestions 
+
+---------------------------------------------------------------------------------------
+GeoToad seems to work, but the GPX file is rejected (by the device, or other software).
+---------------------------------------------------------------------------------------
+
+This seems to happen every now and then, unfortunately. You have no idea what people are putting into their cache descriptions, and log texts.
+It's good practice to pass every GPX file through gpsbabel:
+
+#!/bin/bash
+# check a GPX file by passing through gpsbabel
+for inputfile in "$@"
+do
+    echo -n "$inputfile: "
+    gpsbabel -i gpx -o gpx -f "$inputfile" -F /dev/null >/tmp/$$.chk 2>&1
+    ret=$?
+    if [ $ret -eq 0 ]
+    then
+        echo " OK"
+    else
+        cat /tmp/$$.chk
+        sed -ne "${line}p" "$inputfile"
+    fi
+    rm -f /tmp/$$.chk
+done
+
+This script (tested under Linux, to be invoked with a list of files) checks for the first error, and shows the corresponding line in the GPX file.
+If you don't understand the output, just make sure it's contained in your bug report.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 (to be extended)
