@@ -17,6 +17,13 @@ See also [http://forums.groundspeak.com/GC/index.php?showforum=89 Release Notes 
 _*(new entries will be added on top)*_
 
 ----
+2013-04-02:
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=309327 release notes]
+  * new server build: *{{{Web.HotFix_20130402.1}}}*
+  * _no issues seen yet_
+  * Japanese now supported, but not by Geotoad (yet), like Korean...
+  * seen 2013-04-10:  *{{{Web.HotFix_20130409.1}}}*
+----
 2013-03-27:
   * (notification on Twitter, ~0300-0630 UTC)
   * *no release notes*
