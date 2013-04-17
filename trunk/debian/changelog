@@ -1,11 +1,12 @@
 geotoad (3.16.6-1) unstable; urgency=low
 
-  * New version 3.16.6, ...
+  * New version 3.16.6, "Tree Blossom Festival" release
   * Issue 262: translate or remove "emoji" (Unicode-16 "surrogates")
   * Issue 263: "gpspoint" template
+  * Issue 264: make GPX more consistent
   * Some minor fixes
 
- -- Steve Sixty-Four <steve8x8@gmail.com>  ...
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, Apr 25 2013 14:30:00 +0200
 
 geotoad (3.16.5-1) unstable; urgency=low
 

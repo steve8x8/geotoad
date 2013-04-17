@@ -725,7 +725,7 @@ class Output
       entry << "      <groundspeak:date>#{formatted_date}</groundspeak:date>\n"
       entry << "      <groundspeak:type>Write note</groundspeak:type>\n"
       entry << "      <groundspeak:finder id=\"0\">**Info**</groundspeak:finder>\n"
-      entry << "      <groundspeak:text encoded=\"False\">\n"
+      entry << "      <groundspeak:text encoded=\"True\">\n"
       formatted_date = cache['ctime'].strftime("%Y-%m-%d")
       entry << "Placed: #{formatted_date}" + brlf
       entry << "D/T/S:  #{cache['difficulty']}/#{cache['terrain']}/#{cache['size']}"
@@ -755,7 +755,7 @@ class Output
         entry << "      <groundspeak:date>#{formatted_date}</groundspeak:date>\n"
         entry << "      <groundspeak:type>#{comment['type']}</groundspeak:type>\n"
         entry << "      <groundspeak:finder id=\"#{comment['user_id']}\">#{comment['user']}</groundspeak:finder>\n"
-        entry << "      <groundspeak:text encoded=\"False\">" + makeXML(comment['text']) + "</groundspeak:text>\n"
+        entry << "      <groundspeak:text encoded=\"True\">" + makeXML(comment['text']) + "</groundspeak:text>\n"
         entry << "    </groundspeak:log>\n"
         entries << entry
       }
