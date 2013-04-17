@@ -13,7 +13,7 @@ $Format = {
       "type=\"waypointlist\"\n",
     'templateWP'     => "type=\"waypoint\" " +
       "latitude=\"<%out.latdatapad5%>\" longitude=\"<%out.londatapad5%>\" " +
-      "name=\"<%out.id%>\" comment=\"<%wp.name%>\" " +
+      "name=\"<%out.id%>\" comment=\"<%wp.name%> (Geocache:<%wp.type%>/<%wp.size%>/D<%wp.difficulty%>/T<%wp.terrain%>)\" " +
       "symbol=\"flag\"  display_option=\"symbol+name\"\n",
     'templatePost'   => "type=\"waypointlistend\"\n",
   },
@@ -31,6 +31,7 @@ $Format = {
                      "FIELD_DELIMITER         SPACE\n" +
                      "RECORD_DELIMITER        NEWLINE\n" +
                      "BADCHARS                ^\n" +
+                     "PROLOGUE GPSPOINT DATA FILE\n" +
                      "PROLOGUE type=\"waypointlist\" comment=\"GeoToad\"\n" +
                      "OFIELD  CONSTANT,       \"type=\"waypoint\"\", \"%s\"\n" +
                      "OFIELD  LAT_DECIMAL,    \"\", \"latitude=\"%.5f\"\"\n" +
