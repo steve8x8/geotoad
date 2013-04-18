@@ -501,16 +501,21 @@ class Output
 
   def deemoji(str, soft=true)
     text = str
+    # pre-translate decimal into hex for large codepoints
+    text.gsub!(/(\&#(\d+);)/) { ($2.to_i < 32768) ? $1 : ('&#x' + $2.to_i.to_s(16).upcase + ';') }
     # translate some UTF-16 surrogates into UTF-8 code points, remove others
     if soft
-      text.gsub!(/\&#xD83C;\&#xDC(..;)/i) {'&#x01F0'+$1}
-      text.gsub!(/\&#xD83C;\&#xDD(..;)/i) {'&#x01F1'+$1}
-      text.gsub!(/\&#xD83C;\&#xDE(..;)/i) {'&#x01F2'+$1}
-      text.gsub!(/\&#xD83C;\&#xDF(..;)/i) {'&#x01F3'+$1}
-      text.gsub!(/\&#xD83D;\&#xDC(..;)/i) {'&#x01F4'+$1}
-      text.gsub!(/\&#xD83D;\&#xDD(..;)/i) {'&#x01F5'+$1}
-      text.gsub!(/\&#xD83D;\&#xDE(..;)/i) {'&#x01F6'+$1}
-      text.gsub!(/\&#xD83D;\&#xDF(..;)/i) {'&#x01F7'+$1}
+      # formula from http://www.unicode.org/faq/utf_bom.html
+      text.gsub!(/\&#x(D8..);\&#x(D[CDEF]..);/) {
+        hi = $1.to_i(16)
+        lo = $2.to_i(16)
+        x = ((hi & 0x3f) << 10) | (lo & 0x3ff)
+        u = ((hi >> 6) & 0x1f) + 1
+        c = (u << 16) | x
+        hex = c.to_s(16).upcase
+        debug "converting surrogate #{$1}/#{$2} to #{hex}"
+        '&#x' + hex + ';'
+      }
     end
     text.gsub!(/\&#xD[89AB]..;\&#xD[CDEF]..;/, '(*)')
     return text
