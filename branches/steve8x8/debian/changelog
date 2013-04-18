@@ -1,6 +1,6 @@
 geotoad (3.17.8-1) unstable; urgency=low
 
-  * New version 3.17.8, "..." release
+  * New version 3.17.8, "MayDay" release
   * Issue 264: continued work on HTML in GPX
   * Issue 265: convert smileys in log entries back to BB [...] code
   * Minor other stuff
