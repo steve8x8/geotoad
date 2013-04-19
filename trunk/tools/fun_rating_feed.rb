@@ -69,7 +69,7 @@ class FunRatingFeed
       end
   	end
 	
-	  if not creator:
+	  if not creator
 	    puts "# UNPARSEABLE: {uri}"
 	  end
 

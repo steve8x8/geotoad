@@ -571,7 +571,7 @@ class SearchCache
         displayError "We were on page #{last_page_number}, but just read #{page_number}. Parsing error?"
       end
       # limit search page count
-      if not ((@max_pages == 0) or (page_number < @max_pages))
+      if ! ((@max_pages == 0) or (page_number < @max_pages))
         debug "Reached page count limit #{page_number}/#{@max_pages}"
         page_number = pages_total
       end
@@ -697,12 +697,12 @@ class SearchCache
           pages_total = $3.to_i
         end
         # href="javascript:__doPostBack('ctl00$ContentBody$pgrTop$ctl08','')"><b>Next &gt;</b></a></td>
-        if line =~ /doPostBack\(\'([\w\$_]+)\',\'\'\)\"\>\<b\>[^\>]+ \&gt;\<\/b\>/ #Next
+        if line =~ /doPostBack\(\'([\w\$]+)\',\'\'\)\"\>\<b\>[^\>]+ \&gt;\<\/b\>/ #Next
           debug "Found next target: #{$1}"
           post_vars['__EVENTTARGET'] = $1
         end
       # at least Dutch is different...
-      when /doPostBack\(\'([\w\$_]+)\',\'\'\)\"\>\<b\>[^\>]+ \&gt;\<\/b\>/ #Next
+      when /doPostBack\(\'([\w\$]+)\',\'\'\)\"\>\<b\>[^\>]+ \&gt;\<\/b\>/ #Next
         debug "Found next target: #{$1}"
         post_vars['__EVENTTARGET'] = $1
       when /^\<input type=\"hidden\" name=\"(.*?)\".*value=\"(.*?)\" \/\>/

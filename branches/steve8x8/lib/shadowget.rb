@@ -393,7 +393,7 @@ class ShadowFetch
     sleeptime = (10.0*sleeptime).round/10.0
     sleeptime = $SLEEP if (sleeptime<$SLEEP)
     debug "sleep #{sleeptime} seconds"
-    sleep (sleeptime)
+    sleep sleeptime
   end
 
 end

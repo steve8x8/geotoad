@@ -879,7 +879,7 @@ cli.displayInfo "Please include verbose output (-v) without passwords in the bug
 cli.versionCheck
 puts
 
-while(1)
+while true
   options = cli.getoptions
   if options['clearCache']
     cli.clearCacheDirectory()

@@ -540,7 +540,7 @@ class CacheDetails
       rescue
         debug "Cannot parse Generated"
       end
-     end
+    end
 
     if not cache['ltime']
       cache['ldays'] = -1

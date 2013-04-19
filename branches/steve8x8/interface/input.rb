@@ -456,7 +456,7 @@ class Input
       when '4'
         unit = (@@optHash['usemetric'] && "km" || "mi")
         # re-use old unit by default
-        value, unit = askNumberandUnit("How far away are you willing to search? (10 " + unit +")", 10, unit)
+        value, unit = askNumberandUnit("How far away are you willing to search? (10 #{unit})", 10, unit)
         @@optHash['distanceMax'] = value
         @@optHash['usemetric'] = (unit=="km" || nil)
 
@@ -634,7 +634,7 @@ class Input
 
   def askNumber(string, default, allowNegative = false)
     # Ask for a floating point number. Only accept non-negative values.
-    while 1
+    while true
       begin
         answer = ask(string, default)
         if not answer
@@ -660,7 +660,7 @@ class Input
 
   def askNumberandUnit(string, default, defaultunit)
     # Ask for a (non-negative) floating point number, optionally followed by a unit.
-    while 1
+    while true
       begin
         answer = ask(string, "#{default} #{defaultunit}")
         if not answer
@@ -705,9 +705,9 @@ class Input
           country = countries[0]
         elsif countries.length > 1
           i = 0
-          countries.each do |country|
+          countries.each do |co|
             i += 1
-            puts "  #{i}. #{country}"
+            puts "  #{i}. #{co}"
           end
           country = askFromList("Enter index (not id!)", countries, nil)
         else
@@ -743,9 +743,9 @@ class Input
             country = countries[0]
           elsif countries.length > 1
             i = 0
-            countries.each do |country|
+            countries.each do |co|
               i += 1
-              puts "  #{i}. #{country}"
+              puts "  #{i}. #{co}"
             end
             country = askFromList("Enter index (not id!)", countries, nil)
           else
@@ -759,9 +759,9 @@ class Input
               state = states[0]
             elsif states.length > 1
               i = 0
-              states.each do |state|
+              states.each do |st|
                 i += 1
-                puts "  #{i}. #{state}"
+                puts "  #{i}. #{st}"
               end
               state = askFromList("Enter index (not id!)", states, nil)
             else
