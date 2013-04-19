@@ -48,20 +48,19 @@ You will then see a screen that looks similar to this:
 :::                // GeoToad %VERSION% Text User Interface //                :::
 ==============================================================================
 (1)  GC.com login [REQUIRED         ] | (2)  search type          [coord     ]
-(3)  location     [N52 23.0 E13 03.0] | (4)  distance maximum (km)     [10   ]
-                                      |
+(3)  location     [N52 23.0 E13 03.0] | (4)  distance maximum (km)  [     2.5]
+- - - - - - - - - - - - - - - - - - - + - - - - - - - - - - - - - - - - - - -
 (5)  difficulty           [2.0 - 5.0] | (6)  terrain               [1.0 - 3.5]
 (7)  fav factor           [0.0 - 5.0] | (8)  cache size            [any - any]
-(9)  cache type           [      any] |
+(9)  cache type   [any                                                       ]
 (10) virgin caches only           [ ] | (11) travel bug caches only        [ ]
-(12) cache age (days)       [  0-any] | (13) last found (days)       [  0-any] 
-                                      |
+(12) cache age (days)     [  0 - any] | (13) last found (days)     [  0 - any] 
 (14) title keyword       [          ] | (15) descr. keyword    [             ]
 (16) cache not found by  [          ] | (17) cache owner isn't [             ]
 (18) cache found by      [          ] | (19) cache owner is    [             ]
 (20) EasyName WP length         [  0] | (21) include disabled caches       [X] 
 - - - - - - - - - - - - - - - - - - - + - - - - - - - - - - - - - - - - - - -
-(22) output format       [list      ]   (23) filename   [automatic           ]
+(22) output format  [gpx|list|text  ] | (23) filename   [automatic           ]
 (24) output directory    [/home/user/geocaching/geotoad                      ]
 ==============================================================================
 ** Verbose (debug) mode disabled, (v) to change
