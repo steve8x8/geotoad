@@ -517,7 +517,9 @@ class Output
         '&#x' + hex + ';'
       }
     end
-    text.gsub!(/\&#xD[89AB]..;\&#xD[CDEF]..;/, '(*)')
+    text.gsub!(/\&#xD[89AB]..;\&#xD[CDEF]..;/i, '(*)')
+    # handle unpaired surrogates
+    text.gsub!(/\&#xD[89ABCDEF]..;/i, '(?)')
     return text
   end
 
