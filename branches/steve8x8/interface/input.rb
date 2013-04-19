@@ -319,9 +319,10 @@ class Input
       printf(":::           %46.46s               :::\n", "// GeoToad #$VERSION Text User Interface //")
       puts "=============================================================================="
       printf("(1)  GC.com login [%-17.17s] | (2)  search type          [%-10.10s]\n", (@@optHash['user'] || 'REQUIRED'), @@optHash['queryType'])
-      printf("(3)  %-12.12s [%-17.17s] | (4)  distance maximum (%-2.2s)     [%-5.5s]\n", @@optHash['queryType'], (@@optHash['queryArg'] || 'REQUIRED'),
+      printf("(3)  %-12.12s [%-17.17s] | (4)  distance maximum (%-2.2s)  [%8.8s]\n", @@optHash['queryType'], (@@optHash['queryArg'] || 'REQUIRED'),
         (@@optHash['usemetric'] && "km" || "mi"), (@@optHash['distanceMax'] || 10))
-      puts   "                                      |"
+      #puts   "                                      |"
+      puts "- - - - - - - - - - - - - - - - - - - + - - - - - - - - - - - - - - - - - - -"
       printf("(5)  difficulty           [%-2.1f - %-1.1f] | (6)  terrain               [%-1.1f - %-1.1f]\n",
         (@@optHash['difficultyMin'] || 1.0), (@@optHash['difficultyMax'] || 5.0),
         (@@optHash['terrainMin'] || 1.0), (@@optHash['terrainMax'] || 5.0))
@@ -329,19 +330,19 @@ class Input
       #  (@@optHash['funFactorMax'] || 5.0), @@optHash['sizeMin'] || 'any', @@optHash['sizeMax'] || 'any')
       printf("(7)  fav factor           [%-1.1f - %-1.1f] | (8)  cache size            [%3.3s - %3.3s]\n", (@@optHash['favFactorMin'] || 0.0),
         (@@optHash['favFactorMax'] || 5.0), @@optHash['sizeMin'] || 'any', @@optHash['sizeMax'] || 'any')
-      printf("(9)  cache type           [%9.9s] |\n", (@@optHash['cacheType'] || 'any'))
+      printf("(9)  cache type   [%-58.58s]\n", (@@optHash['cacheType'] || 'any'))
       printf("(10) virgin caches only           [%1.1s] | (11) travel bug caches only        [%1.1s]\n", @@optHash['notFound'], @@optHash['travelBug'])
-      printf("(12) cache age (days)       [%3.3s-%-3.3s] | (13) last found (days)       [%3.3s-%-3.3s] \n",
+      printf("(12) cache age (days)     [%3.3s - %-3.3s] | (13) last found (days)     [%3.3s - %-3.3s] \n",
         (@@optHash['placeDateExclude'] || 0), (@@optHash['placeDateInclude'] || 'any'),
         (@@optHash['foundDateExclude'] || 0), (@@optHash['foundDateInclude'] || 'any'))
-      puts   "                                      |"
+      #puts   "                                      |"
       printf("(14) title keyword       [%-10.10s] | (15) descr. keyword    [%-13.13s]\n", @@optHash['titleKeyword'], @@optHash['descKeyword'])
       printf("(16) cache not found by  [%-10.10s] | (17) cache owner isn't [%-13.13s]\n", @@optHash['userExclude'], @@optHash['ownerExclude'])
       printf("(18) cache found by      [%-10.10s] | (19) cache owner is    [%-13.13s]\n", @@optHash['userInclude'], @@optHash['ownerInclude'])
 
       printf("(20) EasyName WP length         [%3.3s] | (21) include disabled caches       [%1.1s] \n", @@optHash['waypointLength'] || '0', @@optHash['includeDisabled'])
       puts "- - - - - - - - - - - - - - - - - - - + - - - - - - - - - - - - - - - - - - -"
-      printf("(22) output format       [%-10.10s]   (23) filename   [%-20.20s]\n", (@@optHash['format'] || 'gpx'), (@@optHash['outFile'] || 'automatic'))
+      printf("(22) output format  [%-15.15s] | (23) filename   [%-20.20s]\n", (@@optHash['format'] || 'gpx'), (@@optHash['outFile'] || 'automatic'))
       printf("(24) output directory    [%-51.51s]\n", (@@optHash['outDir'] || findOutputDir))
       puts "=============================================================================="
       if @@optHash['verbose']
