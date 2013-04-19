@@ -502,11 +502,11 @@ class Output
   def deemoji(str, soft=true)
     text = str
     # pre-translate decimal into hex for large codepoints
-    text.gsub!(/(\&#(\d+);)/) { ($2.to_i < 32768) ? $1 : ('&#x' + $2.to_i.to_s(16).upcase + ';') }
+    text.gsub!(/(\&#(\d+);)/) { ($2.to_i < 55296) ? $1 : ('&#x' + $2.to_i.to_s(16).upcase + ';') }
     # translate some UTF-16 surrogates into UTF-8 code points, remove others
     if soft
       # formula from http://www.unicode.org/faq/utf_bom.html
-      text.gsub!(/\&#x(D8..);\&#x(D[CDEF]..);/) {
+      text.gsub!(/\&#x(D8..);\&#x(D[CDEF]..);/i) {
         hi = $1.to_i(16)
         lo = $2.to_i(16)
         x = ((hi & 0x3f) << 10) | (lo & 0x3ff)
