@@ -554,7 +554,7 @@ class Input
         }
 
         puts ""
-        @@optHash['format'] = ask('What format would you like your output in?', 'gpx')
+        @@optHash['format'] = ask('What format would you like your output in?', 'gpx').gsub(/, */, '|')
 
       when '23'
         @@optHash['outFile'] = ask('What filename would you like to output to? (press enter for automatic)', nil)
