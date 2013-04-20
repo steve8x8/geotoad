@@ -792,6 +792,42 @@ class GeoToad
   def saveFile
     puts ""
     formatTypeCounter = 0
+    # if we have selected the name of the output file, use it for first run
+    #   for subsequent runs, drop extension and append default (for type) one
+    # otherwise, take our invented name, sanitize it, and slap a file extension on it.
+    outputFileBase = nil
+    if @option['output']
+      filename = @option['output'].dup
+      #displayInfo "Output filename: #{filename}"
+      filename.gsub!('\\', '/')
+      if filename and filename !~ /\/$/
+        outputFileBase = File.basename(filename)
+      end
+    end
+    # automatic, or bad input
+    if not outputFileBase
+      # flag as automatic for suffixing
+      @option['output'] = nil
+      outputFileBase = @defaultOutputFile.gsub(/[^0-9A-Za-z\.-]/, '_')
+      outputFileBase.gsub!(/_+/, '_')
+      # shorten at a somewhat randomly chosen place to fit in filesystem
+      if outputFileBase.length > 220
+        outputFileBase = outputFileBase[0..215] + "_etc"
+      end
+    end
+    if (! @option['output']) || (@option['output'] !~ /\//)
+      # prepend the current working directory. This is mostly done as a service to
+      # users who just double click to launch GeoToad, and wonder where their output file went.
+      displayInfo "outDir = #{@option['outDir']} outFile = #{@option['outFile']}"
+      outputDir = @option['outDir']
+      if not outputDir
+        outputDir = Dir.pwd
+      end
+    else
+      # fool it so that trailing slashes work.
+      outputDir = File.dirname(@option['output'] + "x")
+    end
+    debug "Using output #{outputDir} / #{outputFileBase}"
     # loop over all chosen formats
     @formatTypes.split($delimiters).each { |formatType|
       output = Output.new
@@ -801,49 +837,16 @@ class GeoToad
       if (@option['waypointLength'])
         output.waypointLength=@option['waypointLength'].to_i
       end
-
-      # if we have selected the name of the output file, use it for first run
-      # for subsequent runs, drop the extension and append default one
-      # otherwise, take our invented name, sanitize it, and slap a file extension on it.
-      outputFile = nil
-      if @option['output']
-        filename = @option['output'].dup
-        #displayInfo "Output filename: #{filename}"
-        filename.gsub!('\\', '/')
-        if filename and filename !~ /\/$/
-          outputFile = File.basename(filename)
-        end
-        if (formatTypeCounter > 0)
-          # replace/add extension
-          outputFile.gsub!(/\.[^\.]*$/, '')
-          outputFile = outputFile + "." + output.formatExtension(formatType)
-        end
+      # keep filename if first run and not automatic
+      # strip suffix only on subsqeuent runs
+      if (formatTypeCounter > 0)
+        outputFileBase.gsub!(/\.[^\.]*$/, '')
       end
-
-      if not outputFile
-        outputFile = @defaultOutputFile.gsub(/[^0-9A-Za-z\.-]/, '_')
-        outputFile.gsub!(/_+/, '_')
-        if outputFile.length > 220
-          outputFile = outputFile[0..215] + "_etc"
-        end
-
-        outputFile = outputFile + "." + output.formatExtension(formatType)
+      # append suffix if automatic or subsequent runs
+      if (not @option['output']) || (formatTypeCounter > 0)
+        outputFileBase = outputFileBase + "." + output.formatExtension(formatType)
       end
-      debug "Base output path: #{outputFile}"
-
-      # prepend the current working directory. This is mostly done as a service to
-      # users who just double click to launch GeoToad, and wonder where their output file went.
-
-      if (! @option['output']) || (@option['output'] !~ /\//)
-        outputDir = Dir.pwd
-      else
-        # fool it so that trailing slashes work.
-        outputDir = File.dirname(@option['output'] + "x")
-      end
-
-      outputFile = outputDir + '/' + outputFile
-
-
+      outputFile = outputDir + '/' + outputFileBase
       # Lets not mix and match DOS and UNIX /'s, we'll just make everyone like us!
       outputFile.gsub!(/\\/, '/')
       displayInfo "Output filename: #{outputFile}"
