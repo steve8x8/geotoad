@@ -818,7 +818,6 @@ class GeoToad
     if (! @option['output']) || (@option['output'] !~ /\//)
       # prepend the current working directory. This is mostly done as a service to
       # users who just double click to launch GeoToad, and wonder where their output file went.
-      displayInfo "outDir = #{@option['outDir']} outFile = #{@option['outFile']}"
       outputDir = @option['outDir']
       if not outputDir
         outputDir = Dir.pwd
