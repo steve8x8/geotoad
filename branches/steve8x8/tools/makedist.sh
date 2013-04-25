@@ -136,6 +136,7 @@ if [ -d "/Applications" ]; then
   hdiutil create -ov -fs "Case-sensitive HFS+" -srcfolder "GeoToad for Mac" "${DISTNAME}_MacOSX.dmg"
   ls -l "${DISTNAME}_MacOSX.dmg"
   echo "Done with MacOSX package"
+fi
 EOF
   cd ..
   chmod +x run_mac.sh
@@ -336,44 +337,44 @@ fi
 read -p "*** OK? " x
 if [ -f $DISTNAME.tar.gz ]; then
   $GCU \
-    -s "geotoad $VERSION source code (requires ruby) - development" \
-    -l "Development,Type-Source,OpSys-All" \
+    -s "geotoad $VERSION source code (requires ruby)" \
+    -l "Featured,Type-Source,OpSys-All" \
       $DISTNAME.tar.gz
 fi
 if [ -n "`ls 2>/dev/null $DEBNAME-${DEBBUILD}_*.deb`" ]; then
   $GCU \
-    -s "geotoad $VERSION package for Debian/Ubuntu - development" \
-    -l "Development,Type-Package,OpSys-Linux" \
+    -s "geotoad $VERSION package for Debian/Ubuntu" \
+    -l "Featured,Type-Package,OpSys-Linux" \
       $DEBNAME-${DEBBUILD}_*.deb
 fi
 if [ -f ${DISTNAME}_Windows_Installer.exe ]; then
   $GCU \
-    -s "geotoad $VERSION installer for Windows - development" \
-    -l "Development,Type-Installer,OpSys-Windows" \
+    -s "geotoad $VERSION installer for Windows" \
+    -l "Featured,Type-Installer,OpSys-Windows" \
       ${DISTNAME}_Windows_Installer.exe
 fi
 if [ -f ${DISTNAME}_Windows_Installer_Ruby18.exe ]; then
   $GCU \
-    -s "geotoad $VERSION installer for Windows using Ruby 1.8 - development" \
-    -l "Development,Type-Installer,OpSys-Windows" \
+    -s "geotoad $VERSION installer for Windows using Ruby 1.8" \
+    -l "Featured,Type-Installer,OpSys-Windows" \
       ${DISTNAME}_Windows_Installer_Ruby18.exe
 fi
 if [ -f ${DISTNAME}_Windows_Installer_Ruby19.exe ]; then
   $GCU \
-    -s "geotoad $VERSION installer for Windows using Ruby 1.9 - development" \
-    -l "Development,Type-Installer,OpSys-Windows" \
+    -s "geotoad $VERSION installer for Windows using Ruby 1.9" \
+    -l "Featured,Type-Installer,OpSys-Windows" \
       ${DISTNAME}_Windows_Installer_Ruby19.exe
 fi
 if [ -f ${DISTNAME}_Windows_Installer_Ruby20.exe ]; then
   $GCU \
-    -s "geotoad $VERSION installer for Windows using Ruby 2.0 - development" \
-    -l "Development,Type-Installer,OpSys-Windows" \
+    -s "geotoad $VERSION installer for Windows using Ruby 2.0" \
+    -l "Featured,Type-Installer,OpSys-Windows" \
       ${DISTNAME}_Windows_Installer_Ruby20.exe
 fi
 if [ -f ${DISTNAME}_MacOSX.dmg ]; then
   $GCU \
-    -s "geotoad $VERSION package for Mac OS X (requires ruby) - development" \
-    -l "Development,Type-Installer,OpSys-OSX" \
+    -s "geotoad $VERSION package for Mac OS X (requires ruby)" \
+    -l "Featured,Type-Installer,OpSys-OSX" \
       ${DISTNAME}_MacOSX.dmg
 fi
 echo "Done."
