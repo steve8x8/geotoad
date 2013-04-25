@@ -17,11 +17,23 @@ See also [http://forums.groundspeak.com/GC/index.php?showforum=89 Release Notes 
 _*(new entries will be added on top)*_
 
 ----
+2013-04-24:
+  * (no notification)
+  * *no release notes*
+  * new server build: *{{{Web.Release_20130424.1}}}*
+  * _what has changed???_
+----
+2013-04-17:
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=309945 release notes]
+  * new server build: *{{{Web.HotFix_20130417.2}}}*
+  * _"Now keyword searches only search the first term in a geocache's name"_
+  * _(fortunately GeoToad uses its own filtering for "title keyword")_
+----
 2013-04-02:
   * [http://forums.groundspeak.com/GC/index.php?showtopic=309327 release notes]
   * new server build: *{{{Web.HotFix_20130402.1}}}*
   * _no issues seen yet_
-  * Japanese now supported, but not by Geotoad (yet), like Korean...
+  * Japanese now supported, but not by GeoToad (yet), like Korean...
   * seen 2013-04-10:  *{{{Web.HotFix_20130409.1}}}*
 ----
 2013-03-27:

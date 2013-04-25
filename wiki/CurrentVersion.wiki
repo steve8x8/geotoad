@@ -1,9 +1,19 @@
 #summary Features of current version
 #labels Featured
 
-version=3.16.5
+version=3.16.6
 
-= "Women's Day" release (Mar 8, 2013) =
+= "Tree Blossom Festival" release (Apr 25, 2013) =
+
+= What's new in 3.16.6? =
+  * nicknamed "Tree Blossom Festival" (just look out of the window!)
+
+== Issues addressed: ==
+  * Issue 262: translate or remove "emoji" (Unicode-16 "surrogates")
+  * Issue 263: "gpspoint" template
+  * Issue 264: make GPX more consistent
+  * Issue 265: convert smileys in log entries back to BB [...] code
+  * Some minor fixes
 
 = What's new in 3.16.5? =
   * nicknamed "Women's Day" (get some flowers for her!)
