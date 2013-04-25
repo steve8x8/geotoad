@@ -7,7 +7,7 @@ geotoad (3.16.6-1) unstable; urgency=low
   * Issue 265: convert smileys in log entries back to BB [...] code
   * Some minor fixes
 
- -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, Apr 25 2013 14:30:00 +0200
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 25 Apr 2013 14:30:00 +0200
 
 geotoad (3.16.5-1) unstable; urgency=low
 
