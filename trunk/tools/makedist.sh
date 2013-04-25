@@ -136,6 +136,7 @@ if [ -d "/Applications" ]; then
   hdiutil create -ov -fs "Case-sensitive HFS+" -srcfolder "GeoToad for Mac" "${DISTNAME}_MacOSX.dmg"
   ls -l "${DISTNAME}_MacOSX.dmg"
   echo "Done with MacOSX package"
+fi
 EOF
   cd ..
   chmod +x run_mac.sh
