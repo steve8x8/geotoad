@@ -2,6 +2,8 @@ geotoad (3.16.7-1) unstable; urgency=low
 
   * New version 3.16.7, "Last Man Standing" release
   * Last stable version supporting Ruby 1.8!
+  * Issue 268: short selections in TUI
+  * Issue 269: remove temporary files used with external filter
   * Some minor fixes
 
  -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 13 Jun 2013 14:30:00 +0200
