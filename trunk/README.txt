@@ -117,6 +117,7 @@ syntax: geotoad [options] <search:search2:search3>
  -b                     only include caches with travelbugs
  -l                     set EasyName waypoint id length. (16)
  -L    [count]          limit number of search pages (0=unlimited)
+ -Y                     do not fetch cache descriptions, search only
  -Z                     don't overwrite existing cache descriptions
  -P                     HTTP proxy server, http://username:pass@host:port/
  -X                     emergency switch: disable early filtering
@@ -129,8 +130,8 @@ syntax: geotoad [options] <search:search2:search3>
  gpx-gsak     gpx-pa       gpx-wpts     holux+       html        
  kml+         list         magnav+      mapsend+     mxf         
  myfindgpx    myfindlist   ozi          pcx+         psp+        
- sms          tab          text         tiger        tmpro+      
- tpg+         wp2guid      xmap+        yourfindgpx 
+ qlist        sms          tab          text         tiger       
+ tmpro+       tpg+         wp2guid      xmap+        yourfindgpx 
     + requires gpsbabel in PATH           = requires cmconvert in PATH
 
 ::: EXAMPLES:

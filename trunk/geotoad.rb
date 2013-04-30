@@ -870,7 +870,12 @@ while true
       cli.preFetchFilter
     end
 
-    cli.fetchGeocaches
+    if options['noCacheDescriptions']
+      cli.displayMessage "Skipping retrieval of cache descriptions"
+      cli.copyGeocaches
+    else
+      cli.fetchGeocaches
+    end
     caches = cli.postFetchFilter
     if caches > 0
       cli.saveFile
