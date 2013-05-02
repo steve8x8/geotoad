@@ -50,7 +50,9 @@ class ShadowFetch
   def postVars=(vars)
     if vars
       vars.each_key {|key|
-        debug "SET #{key}: #{(key =~ /[Pp]assword/)?'(hidden)':vars[key]}"
+        if key !~ /^__/
+          debug "SET #{key}: #{(key =~ /[Pp]assword/)?'(hidden)':vars[key]}"
+        end
         if (@postString)
           @postString = @postString + "&"
         else
@@ -58,7 +60,6 @@ class ShadowFetch
         end
         @postString = @postString + key + "=" + CGI.escape(vars[key])
       }
-      #debug "Set POST string to: #{@postString}"
     else
       @postString = nil
     end
@@ -87,7 +88,7 @@ class ShadowFetch
       # we used to just keep the postdata in the filename, but DOS has
       # a 255 character limit on filenames. Lets hash it instead.
       url = url + "-P=" + Digest::MD5.hexdigest(postdata)
-      debug "added post vars to url: #{url}"
+      nodebug "added post vars to url: #{url}"
     end
 
     fileParts = url.split('/')
@@ -143,8 +144,8 @@ class ShadowFetch
     localfile = cacheFile(@url)
     localparts = localfile.split(/[\\\/]/)
     localdir = localparts[0..-2].join("/")  # basename sucks in Windows.
-    debug "====+ Fetch URL: #{url}"
-    debug "====+ Fetch File: #{localfile}"
+    nodebug "====+ Fetch URL: #{url}"
+    nodebug "====+ Fetch File: #{localfile}"
 
     # expiry?
     if (File.exists?(localfile))
@@ -227,7 +228,6 @@ class ShadowFetch
 
 
   def fetchRemote
-    #debug "fetching remote data from #{@url}"
     @@remotePages = @@remotePages + 1
     randomizedSleep(@@remotePages)
     @httpHeaders['Referer'] = @url
@@ -244,7 +244,6 @@ class ShadowFetch
     end
     debug "Fetching URL [#{url_str}]"
     uri = URI.parse(url_str)
-    #debug "URL parsed #{uri.scheme}://#{uri.host}:#{uri.port}"
 
     if ENV['HTTP_PROXY']
       proxy = URI.parse(ENV['HTTP_PROXY'])
@@ -252,7 +251,7 @@ class ShadowFetch
       debug "Using proxy from environment: " + ENV['HTTP_PROXY']
       http = Net::HTTP::Proxy(proxy.host, proxy.port, proxy_user, proxy_pass).new(uri.host, uri.port)
     else
-      #debug "No proxy found in environment, using standard HTTP connection."
+      nodebug "No proxy found in environment, using standard HTTP connection."
       http = Net::HTTP.new(uri.host, uri.port)
     end
     if uri.scheme == 'https'
@@ -276,7 +275,7 @@ class ShadowFetch
 
     @cookie = loadCookie()
     if @cookie
-      debug "Added Cookie to #{url_str}: #{hideCookie(@cookie)}"
+      nodebug "Added Cookie to #{url_str}: #{hideCookie(@cookie)}"
       @httpHeaders['Cookie'] = @cookie
     else
       debug "No cookie to add to #{url_str}"
@@ -286,13 +285,13 @@ class ShadowFetch
     begin
       if (@postVars)
         @httpHeaders['Content-Type'] =  "application/x-www-form-urlencoded"
-        debug "POST to #{query}, headers are #{@httpHeaders.keys.join(" ")}"
+        nodebug "POST to #{query}, headers are #{@httpHeaders.keys.join(" ")}"
         resp = http.post(query, @postString, @httpHeaders)
         # reset POST variables
         @postVars = nil
         @postString = nil
       else
-        debug "GET to #{query}, headers are #{@httpHeaders.keys.join(" ")}"
+        nodebug "GET to #{query}, headers are #{@httpHeaders.keys.join(" ")}"
         resp = http.get(query, @httpHeaders)
       end
     rescue Timeout::Error => e
@@ -371,7 +370,7 @@ class ShadowFetch
       return fetchURL(url_str, redirects)
     end
 
-    debug "#{url_str} successfully downloaded."
+    nodebug "#{url_str} successfully downloaded."
     # clear/decrement error counter
     if @@downloadErrors > 0
       @@downloadErrors -= 1
@@ -392,7 +391,7 @@ class ShadowFetch
     sleeptime = ($SLEEP + counter/250.0) * (rand+0.5)
     sleeptime = (10.0*sleeptime).round/10.0
     sleeptime = $SLEEP if (sleeptime<$SLEEP)
-    debug "sleep #{sleeptime} seconds"
+    nodebug "sleep #{sleeptime} seconds"
     sleep sleeptime
   end
 
