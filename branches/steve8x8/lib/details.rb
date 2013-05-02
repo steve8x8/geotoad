@@ -18,11 +18,11 @@ class CacheDetails
     @useShadow = 1
     @preserve = nil
 
-    debug "Loading funfactor"
+    nodebug "Loading funfactor"
     @funfactor = FunFactor.new()
     @funfactor.load_scores()
     @funfactor.load_adjustments()
-    debug "Loaded funfactor: #{@funfactor}"
+    nodebug "Loaded funfactor: #{@funfactor}"
   end
 
   def waypoints
@@ -418,7 +418,7 @@ class CacheDetails
       # extract attributes assigned, and their value, plus the short text
       # ...<a href="/about/icons.aspx" title="Wat zijn eigenschappen?">...
       if line =~ /a href="\/about\/icons.aspx" title=/
-        debug "inspecting attributes: #{line}"
+        nodebug "inspecting attributes: #{line}"
         # list of attributes only in cdpf version :(
         # cumulative text
         atxt = ""
@@ -430,7 +430,7 @@ class CacheDetails
         line.scan(/\/images\/attributes\/(.+?)\.gif" alt="(.*?)"[^\>]*\/>/) { |icon, alt|
           # convert each image name into index/value pair, keep related text
           aid, ainc = parseAttr(icon)
-          debug "attribute #{anum}: ic=#{icon} id=#{aid} inc=#{ainc} alt=#{alt} "
+          nodebug "attribute #{anum}: ic=#{icon} id=#{aid} inc=#{ainc} alt=#{alt} "
           if aid > 0
             # make this a 3d array instead? ...['attributes'][aid]=ainc
             cache["attribute#{anum}id"] = aid
@@ -519,13 +519,13 @@ class CacheDetails
 
     if data =~ /Short Description\<\/h2\>\s*\<\/div\>\s*\<div class="item-content"\>(.*?)\<\/div\>\s*\<\/div\>\s*\<div class="item"\>/m
       shortdesc = $1.gsub(/^\s+/, '').gsub(/\s+$/, '')
-      debug "found short desc: [#{shortdesc}]"
+      nodebug "got short desc: [#{shortdesc}]"
       cache['shortdesc'] = removeAlignments(fixRelativeImageLinks(removeSpam(removeSpan(shortdesc))))
     end
 
     if data =~ /Long Description\<\/h2\>\s*\<\/div\>\s*\<div class="item-content"\>(.*?)\<\/div\>\s*\<\/div\>\s*\<div class="item"\>/m
       longdesc = $1.gsub(/^\s+/, '').gsub(/\s+$/, '')
-      debug "got long desc [#{longdesc}]"
+      nodebug "got long desc [#{longdesc}]"
       longdesc = removeAlignments(fixRelativeImageLinks(removeSpam(removeSpan(longdesc))))
       cache['longdesc'] = longdesc
     end
@@ -535,7 +535,7 @@ class CacheDetails
     if data =~ /\<h.\>\s*Trackable Items\s*\<\/h.\>\s*\<\/div\>\s*\<div [^\>]*\>\s*(.*?)\s*\<\/div\>/
       # travel bug data, all in a single line
       line = $1
-      debug "List of trackables: #{line}"
+      nodebug "List of trackables: #{line}"
       trackables = ''
       # split at icon tag, drop everything before
       line.gsub(/^.*?\</, '').split(/\</).each { |item|
@@ -710,7 +710,7 @@ class CacheDetails
     # Gut gefunden. Man sollte nur auf Muggels achten!  Danke!</dd>
     #data.scan(/<dt.*?icon_(\w+).*?alt=\"(.*?)\".*?, ([\w, ]+)\s+by \<strong\>\s*(.*?)\s*\<\/strong\>.*?\<dd\>\s*(.*?)\s*\<\/dd\>/m) { |icon, type, datestr, user, comment|
     data.scan(/<dt.*?\/([\w]+)\.[^\.]+?\salt=\"(.*?)\".*?, ([\w, ]+)\s+by \<strong\>\s*(.*?)\s*\<\/strong\>.*?\<dd\>\s*(.*?)\s*\<\/dd\>/m) { |icon, type, datestr, user, comment|
-      debug "comment date: #{datestr}, icon: #{icon}, type: #{type}"
+      debug "comment date: #{datestr}, icon: #{icon}, type: #{type}, user: #{user}"
       # strip "icon_" from old style image name
       icon.gsub!(/^icon_/, '')
       date = Time.parse(datestr)
@@ -729,7 +729,7 @@ class CacheDetails
         'user_id' => Zlib.crc32(user),
         'text' => comment
       }
-      debug "COMMENT: #{comment.inspect}"
+      nodebug "COMMENT: #{comment.inspect}"
       comments <<  comment
     }
     return [comments, last_find, 0.0, visitors]
@@ -752,9 +752,9 @@ class CacheDetails
     # remove <span> tags from HTML
     removed = text.gsub(/\<\/?span[^\>]*\>/m, '')
     if removed != text
-      debug "Removed span tags from: ----------------------------------"
-      debug removed
-      debug "-----------------------------------------------------"
+      nodebug "Removed span tags from: ----------------------------------"
+      nodebug removed
+      nodebug "-----------------------------------------------------"
     end
     return removed
   end

@@ -17,6 +17,10 @@ module Messages
     end
   end
 
+  def nodebug(text)
+    # do nothing
+  end
+
   # Text that's just fluff that can be ignored.
   def displayInfo(text)
     puts "( - ) #{text}"

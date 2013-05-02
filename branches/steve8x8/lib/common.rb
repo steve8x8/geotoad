@@ -16,12 +16,12 @@ module Common
     data.each_line {|line|
       if line =~ /\<select name=\"([^\"]*?)\"/
         current_select_name = $1
-        debug "found select #{current_select_name}"
+        nodebug "found select #{current_select_name}"
         prefs[current_select_name] = []
       elsif line =~ /\<option selected=\"selected\" value=\"([^\"]*?)\".*?\>(.*?)\</
-          debug "found selected option #{$1}=#{$2}"
+        nodebug "found selected option #{$1}=#{$2}"
         if current_select_name
-          debug "setting selected option #{current_select_name}=#{$1}"
+          debug "setting selected option #{current_select_name}=#{$1} (#{$2})"
           prefs[current_select_name] = $1
         end
       end
@@ -183,7 +183,7 @@ module Common
       cacheDir=cacheDir + "/GeoToad/Cache"
     else
       cacheDir=cacheDir + "/GeoToad"
-      debug "#{cacheDir} is being used for cache"
+      nodebug "#{cacheDir} is being used for cache"
     end
 
     FileUtils::mkdir_p(cacheDir, :mode => 0700)
@@ -207,7 +207,7 @@ module Common
     elsif configDir !~ /geotoad/i
       configDir = configDir + "/GeoToad"
     end
-    debug "#{configDir} is being used for config"
+    nodebug "#{configDir} is being used for config"
     FileUtils::mkdir_p(configDir, :mode => 0700)
     return configDir
   end

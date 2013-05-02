@@ -240,12 +240,10 @@ class Output
 
     tempwords = tempname.split(' ')
     wordcount = tempwords.length
-    #debug "shortname: split \"#{tempname}\" into #{wordcount} words"
 
     # multiple words
     newwords = Array.new
     tempwords.each { |word|
-      #debug "shortname: capitalizing \"#{word}\""
       # word.capitalize! would downcase everything else
       word = word[0..0].upcase + word[1..-1]
       newwords.push(word)
@@ -286,10 +284,8 @@ class Output
       # case insensitive replacement
       word = newwords[-index]
       if word.length > 0
-        #debug "shortname: testing \"#{word}\" (#{index}) for replacements"
         testWord = word.upcase
         if $ReplaceWords[testWord]
-          #debug "shortname: replacing \"#{word}\" (#{index}) with \"#{$ReplaceWords[testWord]}\""
           word = $ReplaceWords[testWord]
           # do not capitalize!
           newwords[-index] = word
@@ -318,7 +314,6 @@ class Output
     (1 .. wordcount).each { |index|
       word = newwords[-index]
       if word.length >= 8
-        #debug "shortname: removing vowels from \"#{word}\""
         #word = word[0..0] + word[1..-1].gsub(/[AEIOUaeiou~]/, '')
         word = word[0..0] + word[1..-1].gsub(/[aeiou~]/, '')
         newwords[-index] = word
@@ -334,7 +329,6 @@ class Output
     (1 .. wordcount).each { |index|
       word = newwords[-index]
       if word.length > 0
-        #debug "shortname: removing vowels from \"#{word}\""
         #word = word[0..0] + word[1..-1].gsub(/[AEIOUaeiou~]/, '')
         word = word[0..0] + word[1..-1].gsub(/[aeiou~]/, '')
         newwords[-index] = word
@@ -401,7 +395,7 @@ class Output
     @username = username
 
     # if we are not actually generating the output, lets do it in a meta-fashion.
-    debug "preparing for #{@outputType}"
+    nodebug "preparing for #{@outputType}"
     if @outputFormat['filter_exec']
       post_format = @outputType
       debug "pre-formatting as #{@outputFormat['filter_src']} (from #{post_format})"
@@ -424,7 +418,7 @@ class Output
 
   # writes the output to a file or to a program #############################
   def commit (file)
-    debug "committing file type #{@outputType} to #{file}"
+    nodebug "committing file type #{@outputType} to #{file}"
     if @outputFormat['filter_exec']
       displayMessage "Executing #{@outputFormat['filter_exec']}"
       exec = @outputFormat['filter_exec'].dup
@@ -462,7 +456,7 @@ class Output
         displayError "Output filter did not create file #{file}. exec was: #{exec}"
       end
     else
-      debug "no exec"
+      nodebug "no exec"
       writeFile(file)
     end
   end
@@ -470,7 +464,7 @@ class Output
   def replaceVariables(templateText, wid)
     # okay. I will fully admit this is a *very* unusual way to handle
     # the templates. This all came to be due to a lot of debugging.
-    debug "out.wid for #{wid.inspect} is [#{@outVars['wid'].inspect}]"
+    nodebug "out.wid for #{wid.inspect} is [#{@outVars['wid'].inspect}]"
     tags = templateText.scan(/\<%(\w+\.\w+)%\>/)
     text = templateText.dup
     tags.each { |tag|
@@ -489,13 +483,14 @@ class Output
       elsif (type == "outText")
         value = makeText(@outVars[var].to_s)
       end
+      # this one produces a lot of noise - FIXME
       debug "TAG <%#{tag}%> for #{wid} -> #{value}"
 
       # This looks very ugly, but it works around backreference issues. Thanks ddollar!
       text.gsub!('<%' + tag[0] + '%>') { value }
     }
 
-    debug "Replaced text: #{text}"
+    nodebug "Replaced text: #{text}"
     return text
   end
 
@@ -569,7 +564,7 @@ class Output
     # Fix apostrophes so that they show up as expected. Fixes issue 26.
     text.gsub!('&#8217;', "'")
     if text != str
-      debug "makeXML: %s" % text
+      nodebug "makeXML: %s" % text
     end
     return text
   end
@@ -775,7 +770,7 @@ class Output
 
     # info log entry
     if cache['ltime']
-      debug "info log entry"
+      nodebug "info log entry"
       entry = ''
       entry << "    <groundspeak:log id=\"-2\">\n"
       formatted_date = cache['ltime'].strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -810,7 +805,7 @@ class Output
         # strip images from log entries
         comment_text = icons2Text(comment['text'].to_s)
         comment_id = Zlib.crc32(comment_text)
-        debug "Comment ID: #{comment_id} by #{comment['user']}: #{comment_text}"
+        nodebug "Comment ID: #{comment_id} by #{comment['user']}: #{comment_text}"
         formatted_date = comment['date'].strftime("%Y-%m-%dT07:00:00.000Z")
         entry = ''
         entry << "    <groundspeak:log id=\"#{comment_id}\">\n"
@@ -823,8 +818,8 @@ class Output
       }
     end
     debug "Finished generating comment XML for #{cache['name']}"
-    debug "Comment Data: #{entries}"
-    debug "Comment Data Length: #{entries.length}"
+    nodebug "Comment Data: #{entries}"
+    nodebug "Comment Data Length: #{entries.length}"
     return entries.join('')
   end
 
@@ -846,8 +841,8 @@ class Output
       entries << entry
     }
     debug "Finished generating comment text for #{cache['name']}"
-    debug "Comment Data: #{entries}"
-    debug "Comment Data Length: #{entries.length}"
+    nodebug "Comment Data: #{entries}"
+    nodebug "Comment Data Length: #{entries.length}"
     return entries.join('')
   end
 
@@ -871,8 +866,8 @@ class Output
       entries << entry
     }
     debug "Finished generating comment HTML for #{cache['name']}"
-    debug "Comment Data: #{entries}"
-    debug "Comment Data Length: #{entries.length}"
+    nodebug "Comment Data: #{entries}"
+    nodebug "Comment Data Length: #{entries.length}"
     return entries.join('')
   end
 
@@ -880,13 +875,13 @@ class Output
     if hint
       # split hint into bracketed and unbracketed fragments
       decrypted = hint.gsub(/\[/, '\n[').gsub(/\]/, ']\n').split('\n').collect { |x|
-        debug "hint fragment #{x}"
+        nodebug "hint fragment #{x}"
         if x[0..0] != '['
           # only decrypt text not within brackets
           x.tr!('A-MN-Za-mn-z', 'N-ZA-Mn-za-m')
           # re-"en"crypt HTML entities
           x.gsub!(/(\&.*?;)/) { $1.tr('A-MN-Za-mn-z', 'N-ZA-Mn-za-m') }
-          debug "decrypted #{x}"
+          nodebug "decrypted #{x}"
         end
         # join decrypted and unchanged fragments
         x }.join
@@ -1035,7 +1030,7 @@ class Output
             desc.gsub!(/\<(br|p|\/p)[^\>]*\>/, "|")
             # remove all other tags
             desc.gsub!(/\<[^\>]*\>/, "")
-            # &euro; confuses gpsbabel, try to avoid - FIXME
+            # &euro; confuses gpsbabel, try to avoid
             desc.gsub!(/\&euro;/, "EURO")
             # escape special characters, just in case
             desc = makeXML(desc)
@@ -1135,13 +1130,12 @@ class Output
     if numattrib
       # use attributes 0 .. (numattrib-1)
       (0 ... numattrib).each { |x|
-        #debug "Looking for attribute #{x}"
         if cache["attribute#{x}id"]
           rawattrib = "      <groundspeak:attribute " +
             sprintf("id=\"%s\" inc=\"%s\">", cache["attribute#{x}id"], cache["attribute#{x}inc"]) +
             cache["attribute#{x}txt"].to_s.capitalize.gsub(/\\/,"/") +
             "</groundspeak:attribute>\n"
-          debug "Attribute #{x} XML: #{rawattrib}"
+          nodebug "Attribute #{x} XML: #{rawattrib}"
           xmlAttrs << rawattrib
         end
       }
@@ -1215,7 +1209,7 @@ class Output
   end
 
   def generateOutput(title)
-    debug "generating output: #{@outputType} - #{$Format[@outputType]['desc']}"
+    nodebug "generating output: #{@outputType} - #{$Format[@outputType]['desc']}"
     @outVars = Hash.new
     @outVars['title'] = title
     @outVars['version'] = GTVersion.version

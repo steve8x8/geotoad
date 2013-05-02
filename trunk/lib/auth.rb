@@ -108,6 +108,9 @@ module Auth
     if cookie =~ /([^=]+=)?(\w{5})(\w+)(\w{5})(;.*)?/
       hcookie = $1.to_s + $2 + "*" * $3.length + $4 + $5.to_s
     end
+    if hcookie.empty?
+      hcookie = '(none)'
+    end
     return hcookie
   end
 
@@ -138,6 +141,7 @@ module Auth
       end
     end
     debug "Looks like we don't have a valid cookie. Must login."
+      debug "#{data.inspect}"
     return nil
   end
 

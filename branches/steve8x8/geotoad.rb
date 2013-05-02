@@ -146,7 +146,7 @@ class GeoToad
     }
 
     @limitPages = @option['limitSearchPages'].to_i
-    debug "Limiting search to #{@limitPages.inspect} pages"
+    debug "Limiting search to #{@limitPages.inspect} pages" if (@limitPages != 0)
 
     return @option
   end

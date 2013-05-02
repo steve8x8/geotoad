@@ -99,7 +99,7 @@ class SearchCache
 
     # server uses UTC!
     @code = @codetable[Time.now.utc.day]
-    debug "D/T/S decoding uses code #{@code}"
+    nodebug "D/T/S decoding uses code #{@code}"
   end
 
   def txfilter=(cacheType)
@@ -291,7 +291,6 @@ class SearchCache
         digit = 0
       end
       value = base * value + digit
-      #debug "#{index} #{digit} -> #{value}\n"
     }
     debug "Converted #{text}(#{base}) to #{value}"
 
@@ -378,7 +377,7 @@ class SearchCache
   end
 
   def getResults()
-    debug "Getting results: #{@query_type} at #{@search_url}"
+    nodebug "Getting results: #{@query_type} at #{@search_url}"
     if @query_type == 'wid'
       waypoint = getWidSearchResult(@search_url)
       wid = waypoint['wid']
@@ -474,10 +473,10 @@ class SearchCache
         debug "Found size: #{csize}"
       when /_CacheName.\>(.*?)\<\/span\>/
         cname = $1
-        debug "Found cache name #{cname}"
+        debug "Found cache name: #{cname.inspect}"
       when /\s*A cache by \<a[^\>]*\>(.*?)\<\/a/
         owner = $1
-        debug "Found owner: #{owner}"
+        debug "Found owner: #{owner.inspect}"
       end
     }
     rescue => error
@@ -938,11 +937,6 @@ class SearchCache
           if not cache['atime']
             cache['adays'] = -1
             cache['atime'] = Time.at($ZEROTIME)
-            # this will allow to output "myfind*" for others
-            # but if I found it too, my own find will show up
-            # FIXME!
-            #cache['adays'] = cache['mdays']
-            #cache['atime'] = cache['mtime']
           end
 
           @waypoints[wid] = cache.dup
