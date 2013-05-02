@@ -765,7 +765,8 @@ class SearchCache
       #  6 Dec 10 <img src="[...]" alt="New!" title="New!" /></span>
 # 2013-01-07: now use
       # <span class="small">02/16/2011</span>
-      when /^\s+(<span[^>]*>\s*)?((\d+ \w{3} \d+)|([0-9\/\.-]+))(\s+\<img [^\>]* title="New!" \/\>)?<\/span>\s?$/
+      # <span class="small">04/26/2013</span> <span class="Recent">New!</span>
+      when /^\s+(<span[^>]*>\s*)?((\d+ \w{3} \d+)|([0-9\/\.-]+))(\s+\<img [^\>]* title="New!" \/\>)?<\/span>\s?(<span[^>]*>New!<\/span>)?\s*$/
         debug "create date: #{$2} at line: #{line}"
         cache['ctime'] = parseDate($2)
         cache['cdays'] = daysAgo(cache['ctime'])
