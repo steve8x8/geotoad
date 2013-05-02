@@ -141,7 +141,7 @@ module Auth
       end
     end
     debug "Looks like we don't have a valid cookie. Must login."
-      debug "#{data.inspect}"
+    nodebug "#{data.inspect}"
     return nil
   end
 
