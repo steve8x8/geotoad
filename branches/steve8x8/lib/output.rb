@@ -1167,6 +1167,7 @@ class Output
       debug "Generated trackables text: #{txtTrackables}"
     end
 
+    begin
     variables = {
       'username' => @username,
       'wid' => wid,
@@ -1206,6 +1207,10 @@ class Output
       'warnAvail' => (available)?'':'[?]',
       'warnArchiv' => (archived)?'[%]':'',
     }
+    rescue => e
+      displayWarning "Problem (#{e}) while converting cache #{wid}:\n#{cache.inspect}"
+      displayError "Backtrace: #{e.backtrace}"
+    end
   end
 
   def generateOutput(title)
