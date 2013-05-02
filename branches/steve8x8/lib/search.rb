@@ -423,6 +423,7 @@ class SearchCache
     csize = nil
     cdiff = nil
     cterr = nil
+    ctime = Time.at($ZEROTIME)
     begin
     data.split("\n").each { |line|
       line.gsub!(/&#39;/, '\'')
@@ -486,6 +487,11 @@ class SearchCache
       end
       raise error
     end
+    # Unfortunately, this only works for English right now...
+    if data =~ /(Hidden|Event Date):\s*((\d+ \w{3} \d+)|([0-9\/\.-]+))/m
+      debug "Found creation date: #{$1}"
+      ctime = parseDate($2)
+    end
     # one match is enough!
     if data =~ /cdpf\.aspx\?guid=([\w-]+)/m
       guid = $1
@@ -516,7 +522,7 @@ class SearchCache
       'difficulty' => cdiff,
       'terrain' => cterr,
       # these are educated guesses only
-      'ctime' => Time.at($ZEROTIME),
+      'ctime' => ctime,
       'atime' => Time.at($ZEROTIME),
       'mtime' => Time.at($ZEROTIME),
       'visitors' => []
