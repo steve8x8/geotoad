@@ -424,6 +424,7 @@ class SearchCache
     cdiff = nil
     cterr = nil
     ctime = Time.at($ZEROTIME)
+    cdays = -1
     begin
     data.split("\n").each { |line|
       line.gsub!(/&#39;/, '\'')
@@ -487,10 +488,14 @@ class SearchCache
       end
       raise error
     end
-    # Unfortunately, this only works for English right now...
-    if data =~ /(Hidden|Event Date):\s*((\d+ \w{3} \d+)|([0-9\/\.-]+))/m
+    # creation/event date
+    #                 <div id="ctl00_ContentBody_mcd2">
+    #                Hidden:
+    #                10/11/2011
+    if data =~ /<div[^>]*mcd2.>\s*[\w ]*:\s*((\d+ \w{3} \d+)|([0-9\/\.-]+))/m
       debug "Found creation date: #{$1}"
-      ctime = parseDate($2)
+      ctime = parseDate($1)
+      cdays = daysAgo(ctime)
     end
     # one match is enough!
     if data =~ /cdpf\.aspx\?guid=([\w-]+)/m
@@ -523,6 +528,7 @@ class SearchCache
       'terrain' => cterr,
       # these are educated guesses only
       'ctime' => ctime,
+      'cdays' => cdays,
       'atime' => Time.at($ZEROTIME),
       'mtime' => Time.at($ZEROTIME),
       'visitors' => []
