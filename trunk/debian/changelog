@@ -1,14 +1,15 @@
 geotoad (3.16.7-1) unstable; urgency=low
 
-  * New version 3.16.7, "Last Man Standing" release
-  * Last stable version supporting Ruby 1.8!
+  * New version 3.16.7, "M'aidez!" release
+  * One of the last stable versions supporting Ruby 1.8!
   * Issue 213: -Y option (don't fetch cdpf), "qlist" template, azimuth
   * Issue 268: short selections in TUI
   * Issue 269: remove temporary files used with external filter
+  * Issue 273: old representations for D/T/size and dist/dir
   * Deliberately reduced amount of debugging information
   * Some minor fixes
 
- -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 13 Jun 2013 14:30:00 +0200
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Mon, 13 May 2013 10:00:00 +0200
 
 geotoad (3.16.6-1) unstable; urgency=low
 
