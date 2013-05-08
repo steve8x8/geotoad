@@ -805,6 +805,31 @@ class SearchCache
         cache['direction'] = dir
         cache['azimuth'] = azi
 
+# 2013-05-07: back to the roots
+      # <span class="small NoWrap"><img src="/images/icons/compass/S.gif" alt="S" title="S" />S<br />0.1mi</span>
+      # <span class="small NoWrap"><br />Here</span>
+      when /<span.*?\/compass\/.*?>([NWSE]+)<br \/>([\d\.]+)(mi|ft|km)</
+        dir = $1
+        dist = $2.to_f
+        unit = $3
+        if (unit =~ /km/)
+          dist = dist / $MILE2KM
+        elsif (unit =~ /ft/)
+          # 1 mile = 1760 yards = 5280 feet
+          dist = dist / 5280.0
+        end
+        cache['distance'] = dist
+        cache['direction'] = dir
+        azimuths = {
+          'N' => 0, 'NE' => 45, 'E' => 90, 'SE' => 135,
+          'S' => 180, 'SW' => 225, 'W' => 270, 'NW' => 315
+        }
+        cache['azimuth'] = azimuths[dir]
+      when /<span[^>]*><br \/>(\w+)<\/span>/
+        cache['distance'] = 0.0
+        cache['direction'] = 'N'
+        cache['azimuth'] = 0
+
 # 2011-05-04: unchanged
       # 2010-12-22:
       # <span id="ctl00_ContentBody_dlResults_ctl01_uxFavoritesValue" title="0" class="favorite-rank">0</span>
@@ -937,6 +962,15 @@ class SearchCache
         cache['terrain'] = t
         cache['size'] = s
         cache['dtsv'] = v
+
+# 2013-05-07: back to the roots
+      # <span class="small">1.5/1.5</span><br /><img src="/images/icons/container/micro.gif" alt="Size: Micro" title="Size: Micro" />
+      when /^\s+<span[^>]*>([\d.]+)\/([\d.]+)<.*?\/container\/(\w+)\./
+        cache['difficulty'] = tohalfint($1)
+        cache['terrain'] = tohalfint($2)
+        cache['size'] = $3.gsub(/_/, ' ') # "not chosen"
+        cache['dtsv'] = 'not_encoded'
+        cache['dts'] = ''
 
       when /^\s+<\/tr\>/
         debug "--- end of row ---"

@@ -1,12 +1,13 @@
 geotoad (3.17.8-1) unstable; urgency=low
 
-  * New version 3.17.8, "MayDay" release
+  * New version 3.17.8, "Another day in May" release
   * Issue 264: continued work on HTML in GPX
   * Issue 265: convert smileys in log entries back to BB [...] code
+  * Issue 273: old representations for D/T/size and dist/dir
   * Deliberately reduced amount of debugging information
   * Minor other stuff
 
- -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 09 May 2013 14:30:00 +0200
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 16 May 2013 14:30:00 +0200
 
 geotoad (3.17.7-1) unstable; urgency=low
 
