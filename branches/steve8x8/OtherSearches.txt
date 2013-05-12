@@ -10,7 +10,7 @@ Table of Contents:
 * Removing mystery caches from GPX
 * Merging riddle solutions into GPX
 * Modify GPX files to be accepted by BaseCamp (issue 238)
-* Get an approximate overview map of caches in a whole large area
+* Get an approximate overview map of caches in a whole large area (now defunct)
 
 _Note: Tested with Debian Linux and bash. Adaptions may be necessary._
 
@@ -219,9 +219,11 @@ It's not even necessary to remove the "groundspeak:attributes" section.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
----------------------------------------------------------------
-Get an approximate overview map of caches in a whole large area
----------------------------------------------------------------
+-----------------------------------------------------------------------------
+Get an approximate overview map of caches in a whole large area (now defunct)
+-----------------------------------------------------------------------------
+
+ Note: This doesn't work anymore since 2013-05-07 and is kept for historical reasons only 
 
 For obvious reasons, one doesn't want to fetch thousands of caches to get an impression
 what would be possible in the area where you're planning your next holiday trip to.

@@ -132,8 +132,8 @@ syntax: geotoad [options] <search:search2:search3>
  gpx-gsak     gpx-pa       gpx-wpts     holux+       html        
  kml+         list         magnav+      mapsend+     mxf         
  myfindgpx    myfindlist   ozi          pcx+         psp+        
- qlist        sms          tab          text         tiger       
- tmpro+       tpg+         wp2guid      xmap+        yourfindgpx 
+ sms          tab          text         tiger        tmpro+      
+ tpg+         wp2guid      xmap+        yourfindgpx 
     + requires gpsbabel in PATH           = requires cmconvert in PATH
 
 ::: EXAMPLES:
