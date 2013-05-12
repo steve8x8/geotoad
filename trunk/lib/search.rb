@@ -371,9 +371,8 @@ class SearchCache
     direction = directions[((dd[1].to_f+22.5)/45.0).to_i]
     # anyone interested in precise azimuth?
     #direction << "(#{dd[1]})"
-    azimuth = dd[1].to_f
-    debug "Returning from decodeDD: \"#{distance}@#{direction}(#{azimuth})\""
-    return [distance, direction, azimuth]
+    debug "Returning from decodeDD: \"#{distance}@#{direction}\""
+    return [distance, direction]
   end
 
   def getResults()
@@ -791,7 +790,7 @@ class SearchCache
       when /CacheDir.ashx\?k=([^\"]*)/
         code = $1
         debug "found CacheDir=#{code.inspect}"
-        dist, dir, azi = decodeDD(code)
+        dist, dir = decodeDD(code)
         # distance is in miles, traditionally
         if (dist =~ /km/)
           dist = dist.to_f / $MILE2KM
@@ -803,7 +802,6 @@ class SearchCache
         end
         cache['distance'] = dist
         cache['direction'] = dir
-        cache['azimuth'] = azi
 
 # 2013-05-07: back to the roots
       # <span class="small NoWrap"><img src="/images/icons/compass/S.gif" alt="S" title="S" />S<br />0.1mi</span>

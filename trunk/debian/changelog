@@ -2,7 +2,7 @@ geotoad (3.16.7-1) unstable; urgency=low
 
   * New version 3.16.7, "M'aidez!" release
   * One of the last stable versions supporting Ruby 1.8!
-  * Issue 213: -Y option (don't fetch cdpf), "qlist" template, azimuth
+  * Issue 213: -Y option (don't fetch cdpf)
   * Issue 268: short selections in TUI
   * Issue 269: remove temporary files used with external filter
   * Issue 273: old representations for D/T/size and dist/dir

@@ -1,6 +1,7 @@
 geotoad (3.17.8-1) unstable; urgency=low
 
   * New version 3.17.8, "Another day in May" release
+  * Issue 213: backing out now useless projection stuff
   * Issue 264: continued work on HTML in GPX
   * Issue 265: convert smileys in log entries back to BB [...] code
   * Issue 273: old representations for D/T/size and dist/dir
