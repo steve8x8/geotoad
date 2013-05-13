@@ -818,15 +818,9 @@ class SearchCache
         end
         cache['distance'] = dist
         cache['direction'] = dir
-        azimuths = {
-          'N' => 0, 'NE' => 45, 'E' => 90, 'SE' => 135,
-          'S' => 180, 'SW' => 225, 'W' => 270, 'NW' => 315
-        }
-        cache['azimuth'] = azimuths[dir]
       when /<span[^>]*><br \/>(\w+)<\/span>/
         cache['distance'] = 0.0
         cache['direction'] = 'N'
-        cache['azimuth'] = 0
 
 # 2011-05-04: unchanged
       # 2010-12-22:
