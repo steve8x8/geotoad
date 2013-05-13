@@ -1,9 +1,21 @@
 #summary Features of current version
 #labels Featured
 
-version=3.16.6
+version=3.16.7
 
-= "Tree Blossom Festival" release (Apr 25, 2013) =
+= "M'aidez!" release (May 13, 2013) =
+
+= What's new in 3.16.7? =
+  * nicknamed "M'aidez!" (clearly an emergency bugfix release)
+
+== Issues addressed: ==
+  * One of the last stable versions supporting Ruby 1.8!
+  * Issue 213: -Y option (don't fetch cdpf)
+  * Issue 268: short selections in TUI
+  * Issue 269: remove temporary files used with external filter
+  * Issue 273: old representations for D/T/size and dist/dir
+  * Deliberately reduced amount of debugging information
+  * Some minor fixes
 
 = What's new in 3.16.6? =
   * nicknamed "Tree Blossom Festival" (just look out of the window!)

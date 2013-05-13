@@ -14,284 +14,273 @@ Buggy updates get fixed without additional notice, by new server builds.
 
 See also [http://forums.groundspeak.com/GC/index.php?showforum=89 Release Notes in GroundSpeak Forums]
 
-_*(new entries will be added on top)*_
+_*(year per year; new entries will be added at bottom)*_
 
+== 2013 ==
 ----
-2013-04-24:
-  * (no notification)
-  * *no release notes*
-  * new server build: *{{{Web.Release_20130424.1}}}*
-  * _what has changed???_
+2013-01-08:
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=306136 release notes]
+  * *{{{Web.HotFix_20130107.1}}}* 
+  * _parsing placed date fails_
 ----
-2013-04-17:
-  * [http://forums.groundspeak.com/GC/index.php?showtopic=309945 release notes]
-  * new server build: *{{{Web.HotFix_20130417.2}}}*
-  * _"Now keyword searches only search the first term in a geocache's name"_
-  * _(fortunately GeoToad uses its own filtering for "title keyword")_
+2013-01-22:
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=306667 release notes]
+  * *{{{Web.HotFix_20130122.1}}}*
 ----
-2013-04-02:
-  * [http://forums.groundspeak.com/GC/index.php?showtopic=309327 release notes]
-  * new server build: *{{{Web.HotFix_20130402.1}}}*
-  * _no issues seen yet_
-  * Japanese now supported, but not by GeoToad (yet), like Korean...
-  * seen 2013-04-10:  *{{{Web.HotFix_20130409.1}}}*
+2013-02-05:
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=307159 release notes]
+  * *{{{Web.HotFix_20130205.1}}}*
+  * _print page uses new map with additional waypoints_
 ----
-2013-03-27:
-  * (notification on Twitter, ~0300-0630 UTC)
-  * *no release notes*
-  * new server build: *{{{Web.HotFix_20130327.1}}}*
-  * "boosting site and app stability" (@GoGeocaching)
-----
-2013-03-19:
-  * (notified _after_ update on Twitter, 1948 UTC)
-  * [http://forums.groundspeak.com/GC/index.php?showtopic=308782 release notes]
-  * new server build: *{{{Web.Release_20130319.1}}}*
-  * _no issues seen yet_
+2013-02-20:
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=307712 release notes]
+  * *{{{Web.HotFix_20130220.1}}}*
+  * _"Some significant polish is applied to your experience logging into your account"_
 ----
 2013-03-05:
   * "Geocaching.com ... site update on Tuesday, March 5th, 2013 ... 8pm PST"
   * [http://forums.groundspeak.com/GC/index.php?showtopic=308259 release notes]
-  * new server build: *{{{Web.HotFix_20130305.1}}}*
-  * Twitter announcement (0405 UTC) used hash tag #AddingUnicode
+  * *{{{Web.HotFix_20130305.1}}}*
+  * *{{{Web.HotFix_20130312.1}}}* (removed 2-million countdown)
   * _now allowed: Emoji (encoded as "Unicode-16 surrogates" - causing issue 262)_
-  * seen 2013-03-13:  *{{{Web.HotFix_20130312.1}}}* (removed 2-million countdown)
 ----
-2013-02-20:
-  * (notified _after_ update on Twitter, 2027 UTC)
-  * [http://forums.groundspeak.com/GC/index.php?showtopic=307712 release notes]
-  * new server build: *{{{Web.HotFix_20130220.1}}}*
-  * "Some significant polish is applied to your experience logging into your account"
-  * _c:geo reports problems logging in_
-  * _existing cookies seem not to work but are replaced by re-login (?)_
+2013-03-19:
+  * (notified _after_ update on Twitter, 1948 UTC)
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=308782 release notes]
+  * *{{{Web.Release_20130319.1}}}*
 ----
-2013-02-05:
-  * (notified _after_ update on Twitter, 2009 UTC)
-  * [http://forums.groundspeak.com/GC/index.php?showtopic=307159 release notes]
-  * new server build: *{{{Web.HotFix_20130205.1}}}*
-  * print page uses new map with additional waypoints
-  * _some effect seen on c:geo_
+2013-03-27:
+  * (notification on Twitter, ~0300-0630 UTC), *no release notes*
+  * *{{{Web.HotFix_20130327.1}}}*
+  * _"boosting site and app stability"_ (@GoGeocaching)
 ----
-2013-01-22:
-  * [http://forums.groundspeak.com/GC/index.php?showtopic=306667 release notes]
-  * new server build: *{{{Web.HotFix_20130122.1}}}*
+2013-04-02:
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=309327 release notes]
+  * *{{{Web.HotFix_20130402.1}}}*
+  * *{{{Web.HotFix_20130409.1}}}*
+  * _Japanese language added_
 ----
-2013-01-08:
-  * [http://forums.groundspeak.com/GC/index.php?showtopic=306136 release notes]
-  * new server build: *{{{Web.HotFix_20130107.1}}}* 
-  * _sing placed date fails_
+2013-04-17:
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=309945 release notes]
+  * *{{{Web.HotFix_20130417.2}}}*
+  * *{{{Web.Release_20130424.1}}}*
+  * _"Now keyword searches only search the first term in a geocache's name"_
 ----
-2012-10-30:
-  * _"Geocaching.com ... site update on Tuesday, October 30, 2012 ... 6pm PDT"_ (0100 next day UTC)
-  * *no release notes*
-  * new server build: *{{{Web.HotFix_20121030.1}}}*
-  * _"Geocaching.com ... maintenance on Tuesday, November 6, 2012 ... 6pm PST"_ (0200 next day UTC)
-  * 2012-11-14 seen:  *{{{Web.HotFix_20121113.1}}}*
-  * 2012-12-04 seen:  *{{{Web.HotFix_20121204.1}}}*
-  * 2012-12-11 seen:  *{{{Web.HotFix_20121211.1}}}* (no more challenges, changed icons -> issue 259)
+2013-04-30:
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=310452 release notes]
+  * *{{{Web.HotFix_20130430.4}}}*
 ----
-2012-07-24:
-  * _(not even announced on Twitter?)_
-  * [http://forums.groundspeak.com/GC/index.php?showtopic=299057 release notes]
-  * "tackling a lot of technical website debt"
-  * new server build: *{{{Web.HotFix_20120723.1}}}*
-  * _"Geocaching.com ... site maintenance on Thursday, August 2, 2012 ... 11am PST"_ (1800 UTC)
-  * 2012-08-09 seen:  *{{{Web.HotFix_20120807.1}}}*
-  * 2012-08-23 seen:  *{{{Web.HotFix_20120822.2}}}*
-  * 2012-09-04 seen:  *{{{Web.HotFix_20120904.3}}}*
-  * 2012-09-19 seen:  *{{{Web.HotFix_20120918.5}}}*
-  * 2012-10-10 seen:  *{{{Web.HotFix_20121004.4}}}*
-  * 2012-10-17 seen:  *{{{Web.HotFix_20121016.3}}}*
+2013-05-07:
+  * *{{{Web.HotFix_20130507.1}}}*
+  * _reverts presentation of D/T/size and dist/dir to old (pre-2011) style_ (issue 273)
 ----
-2012-07-10:
-  * _(announced on Twitter on July 10, perhaps erroneously named "July 7")_
-  * [http://forums.groundspeak.com/GC/index.php?showtopic=298460 release notes]
-  * cannot see any effects on GeoToad from the list of changes
-  * new server build: *{{{Web.HotFix_20120710.2}}}*
+(...)
 ----
-2012-06-26:
-  * [http://forums.groundspeak.com/GC/index.php?showtopic=297776 release notes]
-  * different "keywords" for cache sizes? "medium" instead of "small" in cache_details.aspx (issue 249)
-  * new server build: *{{{Web.HotFix_20120626.4}}}*
-  * 2012-06-29 seen:  *{{{Web.HotFix_20120627.4}}}*
+
+== 2012 ==
 ----
-2012-06-06:
-  * [http://forums.groundspeak.com/GC/index.php?showtopic=296863 release notes]
-  * Twitter/Facebook integration
-  * new server build: *{{{Web.HotFix_20120606.3}}}*
-  * 2012-06-08 seen:  *{{{Web.HotFix_20120607.1}}}*
-----
-2012-05-22:
-  * [http://forums.groundspeak.com/GC/index.php?showtopic=296071 release notes]
-  * Google Maps for Premium Members
-  * new server build: *{{{Web.HotFix_20120522.1}}}*
-  * another attempt:  *{{{Web.HotFix_20120523.2}}}*
-----
-2012-05-15:
-  * _"Geocaching.com ...  site update on Tuesday, May 15, 2012 ... 5pm PDT"_ (midnight UTC)
-  * *no release notes* (hardware upgrade only)
-  * still using:      *{{{Web.HotFix_20120509.1}}}*
-----
-2012-05-08:
-  * _(No prior notification?)_
-  * [http://forums.groundspeak.com/GC/index.php?showtopic=295312 release notes]
-  * wid codes removed from map links for Premium Members only(?)
-  * new server build: *{{{Web.HotFix_20120508.2}}}*
-  * 2012-05-10:       *{{{Web.HotFix_20120509.1}}}*
-----
-2012-04-24:
-  * _"Geocaching.com ... site update on Tuesday, April 24, 2012 ... 10am PDT"_ (1700 UTC)
-  * [http://forums.groundspeak.com/GC/index.php?showtopic=294569 release notes]
-  * cannot find any hint in release notes what might have affected GeoToad
-  * new server build: *{{{Web.HotFix_20120423.2}}}*
-----
-2012-03-27:
-  * _"Geocaching.com ... site update on Tuesday, March 27, 2012 ... 10am PDT"_ (1700 UTC)
-  * [http://forums.groundspeak.com/GC/index.php?showtopic=292927 release notes]
-  * new server build: *{{{Web.HotFix_20120326.1}}}*
-----
-2012-03-13:
-  * _"Geocaching.com ... site update on Tuesday, March 13th, 2012 ... 10am PDT"_ (1700 UTC)
-  * [http://forums.groundspeak.com/GC/index.php?showtopic=292150 release notes]
-  * new server build: *{{{Web.HotFix_20120313.1}}}*
-----
-2012-02-28:
-  * _"Geocaching.com ... site update on Tuesday, February 28th, 2012 ... 10am PST"_ (1800 UTC)
-  * [http://forums.groundspeak.com/GC/index.php?showtopic=291269 release notes]
-  * new server build: *{{{Web.HotFix_20120227.2}}}*
-  * 2012-03-01:       *{{{Web.HotFix_20120301.3}}}*
-----
-2012-02-14:
-  * [http://forums.groundspeak.com/GC/index.php?showtopic=290410 release notes]
-  * new server build: *{{{Web.HotFix_20120214.2}}}*
-  * GeoToad misinterprets some lines as "last found" dates *fixed by 3.14.8/3.15.4*
-  * 2012-02-16:       *{{{Web.HotFix_20120216.2}}}*
-  * 2012-02-17:       *{{{Web.HotFix_20120217.2}}}*
-  * 2012-02-21:       *{{{Web.HotFix_20120221.1}}}*
+2012-01-04:
+  * _"Geocaching.com ... site update on Wednesday, January 04, 2012 ... 11am PDT"_ (1900 UTC)
+  * (no release notes)
 ----
 2012-01-17:
   * _"Geocaching.com ... site update on Tuesday, January 17th, 2012 ... 11am PDT"_ (1900 UTC)
   * [http://forums.groundspeak.com/GC/index.php?showtopic=288931 release notes]
-  * new server build: *{{{Web.HotFix_20120117.2}}}*
+  * *{{{Web.HotFix_20120117.2}}}*
 ----
-2012-01-04:
-  * _"Geocaching.com ... site update on Wednesday, January 04, 2012 ... 11am PDT"_ (1900 UTC)
-  * (again, no release notes - build still 20111212.1)
+2012-02-14:
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=290410 release notes]
+  * *{{{Web.HotFix_20120214.2}}}*
+  * *{{{Web.HotFix_20120216.2}}}*
+  * *{{{Web.HotFix_20120217.2}}}*
+  * *{{{Web.HotFix_20120221.1}}}*
+  * _GeoToad misinterprets some lines as "last found" dates_ *fixed by 3.14.8/3.15.4*
 ----
-2011-12-27:
-  * _"Forums.groundspeak.com ... site update ... December 27, 2011 ... 5pm PDT"_
+2012-02-28:
+  * _"Geocaching.com ... site update on Tuesday, February 28th, 2012 ... 10am PST"_ (1800 UTC)
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=291269 release notes]
+  * *{{{Web.HotFix_20120227.2}}}*
+  * *{{{Web.HotFix_20120301.3}}}*
 ----
-2011-12-16:
-  * _"site update on Friday, December 16, 2011 ... 3pm PDT"_ (2300 UTC but: D?)
-  * (no release notes)
-  * still using build *{{{Web.HotFix_20111212.1}}}*
+2012-03-13:
+  * _"Geocaching.com ... site update on Tuesday, March 13th, 2012 ... 10am PDT"_ (1700 UTC)
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=292150 release notes]
+  * *{{{Web.HotFix_20120313.1}}}*
 ----
-2011-12-06:
-  * _"site update on Tuesday, December 06, 2011 ... 11am PST"_ (1900 UTC)
-  * [http://forums.groundspeak.com/GC/index.php?showtopic=286643 release notes]
-  * new server build: *{{{Web.HotFix_20111205.3}}}*
-  * 2011-12-12      : *{{{Web.HotFix_20111212.1}}}* (minor HTML classes cleanup)
+2012-03-27:
+  * _"Geocaching.com ... site update on Tuesday, March 27, 2012 ... 10am PDT"_ (1700 UTC)
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=292927 release notes]
+  * *{{{Web.HotFix_20120326.1}}}*
 ----
-2011-11-08:
-  * [http://forums.groundspeak.com/GC/index.php?showtopic=285002 release notes]
-  * new server build: *{{{HotFix_20111108.2}}}*
+2012-04-24:
+  * _"Geocaching.com ... site update on Tuesday, April 24, 2012 ... 10am PDT"_ (1700 UTC)
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=294569 release notes]
+  * *{{{Web.HotFix_20120423.2}}}*
 ----
-2011-10-06:
-  * _"site update on Thursday, October 6, 2011 ..."_ (1800 UTC)
-  * [http://forums.groundspeak.com/GC/index.php?showtopic=283162 release notes]
-  * GeoToad: login/cookies no longer work (issue 219) *fixed in 3.14.6/3.15.1* (released 2011-10-12)
-  * GeoToad: WID parsing no longer works (undetected for 3 months...)
-  * new server build: *{{{HotFix_20111006.1}}}*
+2012-05-08:
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=295312 release notes]
+  * wid codes removed from map links for Premium Members only(?)
+  * *{{{Web.HotFix_20120508.2}}}*
+  * *{{{Web.HotFix_20120509.1}}}*
+  * _"Geocaching.com ...  site update on Tuesday, May 15, 2012 ... 5pm PDT"_ (midnight UTC)
 ----
-2011-09-15:
-  * _"site update on Thursday, September 15, 2011 ... 11am PDT"_ (1800 UTC)
-  * [http://forums.groundspeak.com/GC/index.php?showtopic=282129 release notes]
-  * logs now loaded dynamically (cache_details.aspx invokes cache_logbook.aspx)
-  * (unused) JS function pl() refers to cache_details_print.aspx
-  * new server build: *{{{Challenges_HFIII_20110915.1}}}*
-  * 2011-09-17 0900Z: *{{{Challenges_HFIII_20110915.3}}}*
-  * 2011-09-21      : *{{{Challenges_HFIII_20110920.1}}}*
+2012-05-22:
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=296071 release notes]
+  * *{{{Web.HotFix_20120522.1}}}*
+  * *{{{Web.HotFix_20120523.2}}}*
+  * _Google Maps for Premium Members_
 ----
-2011-09-01:
-  * _"site update on Thursday, September 01, 2011 ... 11am PDT"_ (1800 UTC)
-  * [http://forums.groundspeak.com/GC/index.php?showtopic=281358 release notes]
-  * mainly challenges-focused, GeoToad still operational
-  * new server build: *{{{ChallengesV2_HF_20110901.1}}}*
+2012-06-06:
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=296863 release notes]
+  * *{{{Web.HotFix_20120606.3}}}*
+  * *{{{Web.HotFix_20120607.1}}}*
+  * _Twitter/Facebook integration_
 ----
-2011-08-22/24:
-  * hotfixes for "site speed and functionality" (no new build?)
+2012-06-26:
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=297776 release notes]
+  * *{{{Web.HotFix_20120626.4}}}*
+  * *{{{Web.HotFix_20120627.4}}}*
+  * _different "keywords" for cache sizes? "medium" instead of "small" in cache_details.aspx (issue 249)_
 ----
-2011-08-20:
-  * revert changes to log format
-  * new server build: *{{{S25_HF_20110819.4}}}*
+2012-07-10:
+  * _(announced on Twitter on July 10, perhaps erroneously named "July 7")_
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=298460 release notes]
+  * *{{{Web.HotFix_20120710.2}}}*
 ----
-2011-08-18:
-  * _"site update on Thursday, August 18, 2011 ... 2pm PDT"_ (2100 UTC)
-  * [http://forums.groundspeak.com/GC/index.php?showtopic=280337 release notes]
-  * introducing "challenges", changed log date format ("about 11 months ago")
-  * new server build: *{{{S25_HF_20110817.8}}}*
+2012-07-24:
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=299057 release notes]
+  * *{{{Web.HotFix_20120723.1}}}*
+  * _"Geocaching.com ... site maintenance on Thursday, August 2, 2012 ... 11am PST"_ (1800 UTC)
+  * *{{{Web.HotFix_20120807.1}}}*
+  * *{{{Web.HotFix_20120822.2}}}*
+  * *{{{Web.HotFix_20120904.3}}}*
+  * *{{{Web.HotFix_20120918.5}}}*
+  * *{{{Web.HotFix_20121004.4}}}*
+  * *{{{Web.HotFix_20121016.3}}}*
+  * _"tackling a lot of technical website debt"_
 ----
-2011-08-02:
-  * _"site update on Tuesday, August 02, 2011 ... 11am PDT"_ (1800 UTC)
-  * [http://forums.groundspeak.com/GC/index.php?showtopic=279237 release notes]
-  * <img> tags are now followed by </img>
-  * GPX additions (image URLs, etc.) delayed "until late September at the earliest"
-  * GeoToad doesn't seem affected (with the exception of a few new attributes)
-  * new server build: *{{{S24_HF_20110803.1}}}*
+2012-10-30:
+  * _"Geocaching.com ... site update on Tuesday, October 30, 2012 ... 6pm PDT"_ (0100 next day UTC)
+  * *no release notes*
+  * *{{{Web.HotFix_20121030.1}}}*
 ----
-2011-07-08:
-  * (no release notes yet)
-  * new server build: *{{{S23_HF_20110707.2}}}*
+2012-11-06:
+  * _"Geocaching.com ... maintenance on Tuesday, November 6, 2012 ... 6pm PST"_ (0200 next day UTC)
 ----
-2011-06-28:
-  * _"site update on Tuesday, June 28, 2011 ... 11am PDT (GMT -7)"_
-  * [http://forums.groundspeak.com/GC/index.php?showtopic=276982 release notes]
-  * summary of changes also [http://www.geolemminge.de/2011/06/gc-com-siteupdate-vom-28-6-erste-cgeo-probleme/ here]
-  * while c:geo has suffered a bit (Nearby Caches don't show names and correct types), we couldn't find effects on GeoToad
-  * new server build: *{{{S23_HF_20110627.4}}}*
+2012-11-14:
+  * *{{{Web.HotFix_20121113.1}}}*
+  * *{{{Web.HotFix_20121204.1}}}*
+  * *{{{Web.HotFix_20121211.1}}}* (no more challenges, changed icons -> issue 259)
 ----
-2011-06-09:
-  * _"site update on Thursday, June 09, 2011 ... 11am PDT (GMT -7)"_
-  * [http://forums.groundspeak.com/GC/index.php?showtopic=275795 release notes]
-  * user found order seems to be restored!
-  * new server build: *{{{SC_HF_20110608.2}}}*
+
+== 2011 ==
 ----
-2011-05-24:
-  * [http://forums.groundspeak.com/GC/index.php?showtopic=274780 release notes]
-  * new server build: *{{{SC_HF_20110524.3}}}*
+(probably in late Jan/early Feb 2011?):
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=268051 release notes]
+  * *{{{S20_HF_xxxxxxxx.x}}}* (details unknown)
 ----
-2011-05-13:
-  * new server build: *{{{Release_20110513.4}}}*
-  * nearest.aspx?ul=ABC returns daily found caches in lexicographic order, not in reverse log id sorting (issue 205)
-----
-2011-05-06:
-  * new server build *{{{S22_HF_20110506.3}}}*
+2011-03-24:
+  * *{{{S21_HF_20110324.4}}}*
 ----
 2011-05-04:
   * _"site update on Wednesday, May 04, 2011 ... 9am PDT (GMT -7)"_
   * [http://forums.groundspeak.com/GC/index.php?showtopic=273473 release notes]
-  * search pages changed, login uses https (issue 201) *fixed in 3.14.4* (released 2011-05-07)
-  * new server build: *{{{S22_HF_20110504.2}}}*
+  * _search pages changed, login uses https_ (issue 201) *fixed in 3.14.4* (released 2011-05-07)
+  * *{{{S22_HF_20110504.2}}}*
+  * *{{{S22_HF_20110506.3}}}*
 ----
-2011-03-24:
-  * new server build: *{{{S21_HF_20110324.4}}}*
+2011-05-13:
+  * *{{{Release_20110513.4}}}*
+  * _nearest.aspx?ul=ABC returns daily found caches in lexicographic order, not in reverse log id sorting_ (issue 205)
 ----
-(probably in late Jan/early Feb 2011?):
-  * [http://forums.groundspeak.com/GC/index.php?showtopic=268051 release notes]
-  * new server build: *{{{S20_HF_xxxxxxxx.x}}}* (details unknown)
+2011-05-24:
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=274780 release notes]
+  * *{{{SC_HF_20110524.3}}}*
 ----
-2010-12-22 (approx.):
-  * [http://forums.groundspeak.com/GC/index.php?showtopic=265627 release notes]
-  * started "Maps Beta"
-  * update replaced text for difficulty, terrain, and cache size by image (issue 183)
-  * image code is valid for a few minutes only, also distance and direction texts are replaced by image
-  * partially handled in GeoToad by re-ordering filters *fixed in 3.14.3* (released 2011-01-12)
-  * new server build: *{{{S19_HF_20101222.1}}}*
+2011-06-09:
+  * _"site update on Thursday, June 09, 2011 ... 11am PDT (GMT -7)"_
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=275795 release notes]
+  * *{{{SC_HF_20110608.2}}}*
+  * _user found order seems to be restored_
 ----
-2010-11-09 (?):
-  * [http://forums.groundspeak.com/GC/index.php?showtopic=263469 release notes]
-  * (issue 161, issue 171, and more)
+2011-06-28:
+  * _"site update on Tuesday, June 28, 2011 ... 11am PDT (GMT -7)"_
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=276982 release notes]
+  * *{{{S23_HF_20110627.4}}}*
+  * *{{{S23_HF_20110707.2}}}*
+  * summary of changes also [http://www.geolemminge.de/2011/06/gc-com-siteupdate-vom-28-6-erste-cgeo-probleme/ here]
+----
+2011-08-02:
+  * _"site update on Tuesday, August 02, 2011 ... 11am PDT"_ (1800 UTC)
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=279237 release notes]
+  * *{{{S24_HF_20110803.1}}}*
+  * _a few new attributes_
+----
+2011-08-18:
+  * _"site update on Thursday, August 18, 2011 ... 2pm PDT"_ (2100 UTC)
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=280337 release notes]
+  * *{{{S25_HF_20110817.8}}}*
+  * *{{{S25_HF_20110819.4}}}* (revert changes to log format)
+  * _introducing "challenges", changed log date format ("about 11 months ago")_
+----
+2011-08-22/24:
+  * _hotfixes for "site speed and functionality"_ (no new build?)
+----
+2011-09-01:
+  * _"site update on Thursday, September 01, 2011 ... 11am PDT"_ (1800 UTC)
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=281358 release notes]
+  * *{{{ChallengesV2_HF_20110901.1}}}*
+  * _mainly challenges-focused_
+----
+2011-09-15:
+  * _"site update on Thursday, September 15, 2011 ... 11am PDT"_ (1800 UTC)
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=282129 release notes]
+  * *{{{Challenges_HFIII_20110915.1}}}*
+  * *{{{Challenges_HFIII_20110915.3}}}*
+  * *{{{Challenges_HFIII_20110920.1}}}*
+  * _logs now loaded dynamically (cache_details.aspx invokes cache_logbook.aspx)_
+----
+2011-10-06:
+  * _"site update on Thursday, October 6, 2011 ..."_ (1800 UTC)
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=283162 release notes]
+  * *{{{HotFix_20111006.1}}}*
+  * _login/cookies no longer work_ (issue 219) *fixed in 3.14.6/3.15.1* (released 2011-10-12)
+  * _WID parsing no longer works (undetected for 3 months...)_
+----
+2011-11-08:
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=285002 release notes]
+  * *{{{HotFix_20111108.2}}}*
+----
+2011-12-06:
+  * _"site update on Tuesday, December 06, 2011 ... 11am PST"_ (1900 UTC)
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=286643 release notes]
+  * *{{{Web.HotFix_20111205.3}}}*
+  * *{{{Web.HotFix_20111212.1}}}* (minor HTML classes cleanup)
+----
+2011-12-16:
+  * _"site update on Friday, December 16, 2011 ... 3pm PDT"_ (2300 UTC but: D?)
+  * (no release notes)
+----
+2011-12-27:
+  * _"Forums.groundspeak.com ... site update ... December 27, 2011 ... 5pm PDT"_
+----
+
+== 2010 ==
+----
+(no records before Oct 2010)
 ----
 2010-10-05 (?):
   * [http://forums.groundspeak.com/GC/index.php?showtopic=261247 release notes]
-  * (issue 152, and more)
+  * issue 152, and more
+----
+2010-11-09 (?):
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=263469 release notes]
+  * issue 161, issue 171, and more
+----
+2010-12-22 (approx.):
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=265627 release notes]
+  * _update replaced text for difficulty, terrain, and cache size by image_ (issue 183)
+  * _image code is valid for a few minutes only, also distance and direction texts are replaced by image_
+  * _partially handled in GeoToad by re-ordering filters_ *fixed in 3.14.3* (released 2011-01-12)
+  * *{{{S19_HF_20101222.1}}}*
 ----
