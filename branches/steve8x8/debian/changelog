@@ -1,3 +1,10 @@
+geotoad (3.17.9-1) unstable; urgency=low
+
+  * New version 3.17.9, "To 3.18 and beyond" release
+  * Preparation of version 3.18.0
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 27 Jun 2013 14:30:00 +0200
+
 geotoad (3.17.8-1) unstable; urgency=low
 
   * New version 3.17.8, "Another May Day" release

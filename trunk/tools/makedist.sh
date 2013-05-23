@@ -33,7 +33,7 @@ cd $src_dir
 SVNREV=`svn info | sed -n 's~^Revision:\s*~~p'`
 echo "SVN revision $SVNREV"
 echo "Writing ChangeLog.txt"
-svn log > ChangeLog.txt
+svn log -v > ChangeLog.txt
 
 # modify build behaviour
 SVN=""
