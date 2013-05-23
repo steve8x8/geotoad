@@ -1,9 +1,20 @@
 #summary Features of current development version
 #labels Featured,Experimental
 
-version=3.17.7
+version=3.17.8
 
-= "Spring has sprung" release (Mar 28, 2013) =
+= "Another May Day" release (May 23, 2013) =
+
+= New development version 3.17.8 =
+  * nicknamed "Another May Day" (even bleeding edge users need help)
+
+== Issues addressed: ==
+  * Issue 213: backing out now useless projection stuff
+  * Issue 264: continued work on HTML in GPX
+  * Issue 265: convert smileys in log entries back to BB [...] code
+  * Issue 273: old representations for D/T/size and dist/dir
+  * Deliberately reduced amount of debugging information
+  * Minor other stuff
 
 = New development version 3.17.7 =
   * nicknamed "Spring has sprung" (never giving up hope)
