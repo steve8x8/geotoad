@@ -1,12 +1,16 @@
 #summary Collected gc.com maint dates, issues, and actions taken
 #labels Featured
 
-= Introduction =
+= Site maintenance log ==
+
+<wiki:toc max_depth="2">
+
+== Introduction ==
 
 I will try to collect announced gc.com maintenances (via their web page, or mailed), and resulting problems here.
 
 
-= Details =
+== Details ==
 
 Site updates are usually scheduled on Tuesdays around noon Pacific local time.
 There are exceptions to the rule.
@@ -73,6 +77,10 @@ _*(year per year; new entries will be added at bottom)*_
 2013-05-07:
   * *{{{Web.HotFix_20130507.1}}}*
   * _reverts presentation of D/T/size and dist/dir to old (pre-2011) style_ (issue 273)
+----
+2013-05-14:
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=310953 release notes]
+  * *{{{Web.HotFix_20130514.1}}}*
 ----
 (...)
 ----
