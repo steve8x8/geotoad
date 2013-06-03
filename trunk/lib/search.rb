@@ -505,6 +505,10 @@ class SearchCache
       disabled = true
       debug "Cache appears to be disabled"
     end
+    if data =~ /Warning.*This cache listing has been archived/
+      archived = true
+      debug "Cache appears to be archived"
+    end
     if data =~ /Cache Issues:.*class=.OldWarning..*This cache has been archived/
       archived = true
       debug "Cache appears to be archived"
