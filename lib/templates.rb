@@ -486,6 +486,20 @@ $Format = {
       "<%wp.type%>,<%wp.size%>\n"
   },
 
+  # derived from "sms" but reordered and ready for smartphone
+  'sms2' => {
+    'ext'         => 'sms2',
+    'mime'        => 'text/plain',
+    'desc'        => '(SMS) Shorten relevant infos for SMS info',
+    'spacer'      => "",
+    'templatePre' => "",
+    'templateWP'  => "coord.info/<%out.wid%>" +
+      " <%wp.latwritten%> <%wp.lonwritten%>" +
+      " (<%out.relativedistancekm%>)" +
+      " <%wp.type%> D<%wp.difficulty%>/T<%wp.terrain%>/<%wp.size%> -" +
+      " <%wpText.creator%>: <%wpText.name%>\n"
+  },
+
   # contributed by Steve8x8: table, "tab" extended
   'list'    => {
     'ext'        => 'lst',
