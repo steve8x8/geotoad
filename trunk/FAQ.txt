@@ -272,6 +272,7 @@ Here's what I collected from my cache files:
 | 64 | No tree climbing required        | Tree climbing required           |
 | 65 | Not in front yard                | In front yard (with permission)  |
 | 66 | No teamwork required             | Teamwork required                |
+| 67 | -                                | Is part of a GeoTour             |
 ----------------------------------------------------------------------------
 
 Note the semantics of the -a and -A options:
