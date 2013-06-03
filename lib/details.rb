@@ -238,6 +238,7 @@ class CacheDetails
       "treeclimbing"     => 64,
       "frontyard"        => 65,
       "teamwork"         => 66,
+      "geotour"          => 67,
       # obsolete?, but image still exists
       "snakes"           => 18,
       "sponsored"        => 61,
