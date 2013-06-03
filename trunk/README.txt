@@ -51,7 +51,7 @@ You will then see a screen that looks similar to this:
 (3)  location     [N52 23.0 E13 03.0] | (4)  distance maximum (km)  [     2.5]
 - - - - - - - - - - - - - - - - - - - + - - - - - - - - - - - - - - - - - - -
 (5)  difficulty           [2.0 - 5.0] | (6)  terrain               [1.0 - 3.5]
-(7)  fun factor           [0.0 - 5.0] | (8)  cache size            [any - any]
+(7)  fav factor           [0.0 - 5.0] | (8)  cache size            [any - any]
 (9)  cache type   [any                                                       ]
 (10) virgin caches only           [ ] | (11) travel bug caches only        [ ]
 (12) cache age (days)     [  0 - any] | (13) last found (days)     [  0 - any] 
