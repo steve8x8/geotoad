@@ -303,6 +303,7 @@ class Input
 
     # if using TUI, only | is delimiter
     $delimiters = /\|/
+    @@optHash['delimiter'] = '|'
 
     while (answer !~ /^[sq]/i)
       if RUBY_PLATFORM =~ /win32/
@@ -395,17 +396,17 @@ class Input
           @@optHash['queryArg'] = askState()
 
         when 'wid'
-          @@optHash['queryArg'] = ask('Enter a list of waypoint id\'s (separated by commas)', 'NO_DEFAULT').gsub(/, */, ':')
+          @@optHash['queryArg'] = ask('Enter a list of waypoint id\'s (separated by commas)', 'NO_DEFAULT').gsub(/, */, '|')
 
         when 'guid'
-          @@optHash['queryArg'] = ask('Enter a list of guid\'s (separated by commas)', 'NO_DEFAULT').gsub(/, */, ':')
+          @@optHash['queryArg'] = ask('Enter a list of guid\'s (separated by commas)', 'NO_DEFAULT').gsub(/, */, '|')
 
         when 'user'
-          @@optHash['queryArg'] = ask('Enter a list of users (separated by commas)', 'NO_DEFAULT').gsub(/, */, ':')
+          @@optHash['queryArg'] = ask('Enter a list of users (separated by commas)', 'NO_DEFAULT').gsub(/, */, '|')
             @@optHash['queryArg'] = convertEscapedHex(@@optHash['queryArg'])
 
         when 'owner'
-          @@optHash['queryArg'] = ask('Enter a list of owners (separated by commas)', 'NO_DEFAULT').gsub(/, */, ':')
+          @@optHash['queryArg'] = ask('Enter a list of owners (separated by commas)', 'NO_DEFAULT').gsub(/, */, '|')
             @@optHash['queryArg'] = convertEscapedHex(@@optHash['queryArg'])
 
         when 'coord'
@@ -422,12 +423,12 @@ class Input
             print coordset.to_s + ": "
             coord = $stdin.gets.chomp
             if coord != 'q'
-              query = query + coord + ':'
+              query = query + coord + '|'
               coordset = coordset + 1
             end
           end
 
-          query.gsub!(/:$/, '')
+          query.gsub!(/\|$/, '')
           @@optHash['queryArg'] = query
 
         when 'keyword'
@@ -442,12 +443,12 @@ class Input
             print keyset.to_s + ": "
             key = $stdin.gets.chomp
             if key != 'q'
-              query = query + key + ':'
+              query = query + key + '|'
               keyset = keyset + 1
             end
           end
 
-          query.gsub!(/:$/, '')
+          query.gsub!(/\|$/, '')
           @@optHash['queryArg'] = query
         end
 
@@ -515,16 +516,16 @@ class Input
         @@optHash['descKeyword'] = ask('Filter caches by description keywords (negate using !, separate multiple using |): ', nil)
 
       when '16'
-        @@optHash['userExclude'] = ask('Filter out geocaches found by these people (separate by commas)', '').gsub(/, */, ':')
+        @@optHash['userExclude'] = ask('Filter out geocaches found by these people (separate by commas)', '').gsub(/, */, '|')
 
       when '17'
-        @@optHash['ownerExclude'] = ask('Filter out geocaches owned by these people (separate by commas)', '').gsub(/, */, ':')
+        @@optHash['ownerExclude'] = ask('Filter out geocaches owned by these people (separate by commas)', '').gsub(/, */, '|')
 
       when '18'
-        @@optHash['userInclude'] = ask('Only include geocaches that have been found by these people (separate by commas)', '').gsub(/, */, ':')
+        @@optHash['userInclude'] = ask('Only include geocaches that have been found by these people (separate by commas)', '').gsub(/, */, '|')
 
       when '19'
-        @@optHash['ownerInclude'] = ask('Only include geocaches owned by these people (separate by commas)', '').gsub(/, */, ':')
+        @@optHash['ownerInclude'] = ask('Only include geocaches owned by these people (separate by commas)', '').gsub(/, */, '|')
 
       when '20'
         @@optHash['waypointLength'] = askNumber('How long can your EasyName waypoint id\'s be? (8 for Magellan, 16 for Garmin, -1 to use full text, 0 to disable and use waypoint id\'s)?', nil, true)
@@ -793,7 +794,7 @@ class Input
           return choices[answer.to_i - 1]
         end
         # validate text answer(s)
-        answer.gsub!(/, */, ':')
+        answer.gsub!(/, */, '|')
         try_again = false
         answer = answer.split($delimiters).map{ |try_answer|
           # build a list of matches: 0 means invalid, 1 is perfect, 2 ambiguous
@@ -810,7 +811,7 @@ class Input
             try_again = true
             nil
           end
-        }.join(':')
+        }.join('|')
       end
     end
     return answer
