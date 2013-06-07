@@ -186,7 +186,7 @@ class Filter
   end
 
   def userExclude(nick0)
-    nick = nick0.downcase
+    nick = nick0.gsub(/=.*/, '').downcase
     debug "filtering by notUser: #{nick}"
     @waypointHash.each_key { |wid|
       debug "#{wid} visitors: #{@waypointHash[wid]['visitors']}"
@@ -198,7 +198,7 @@ class Filter
   end
 
   def userInclude(nick0)
-    nick = nick0.downcase
+    nick = nick0.gsub(/=.*/, '').downcase
     debug "filtering by User: #{nick}"
     @waypointHash.each_key { |wid|
       debug "#{wid} visitors: #{@waypointHash[wid]['visitors']}"
