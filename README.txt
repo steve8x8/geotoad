@@ -91,6 +91,7 @@ syntax: geotoad [options] <search:search2:search3>
 
  -u <username>          Geocaching.com username, required for coordinates
  -p <password>          Geocaching.com password, required for coordinates
+ -m [delimiters]        set delimiter(s) (default ":|") for multiple selections
  -o [filename]          output file name (automatic otherwise)
  -x [format]            output format type, see list below
  -q [location|coord|user|owner|country|state|keyword|wid|guid]

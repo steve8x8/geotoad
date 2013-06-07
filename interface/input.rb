@@ -85,6 +85,7 @@ class Input
       [ "--descKeyword",              "-K",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--waypointLength",           "-l",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--limitSearchPages",         "-L",    GetoptLong::REQUIRED_ARGUMENT ],
+      [ "--delimiter",                "-m",    GetoptLong::REQUIRED_ARGUMENT ],
 
       [ "--notFound",                 "-n",    GetoptLong::NO_ARGUMENT ],
       [ "--notFoundByMe",             "-N",    GetoptLong::NO_ARGUMENT ],
@@ -118,6 +119,11 @@ class Input
       opts.each do |opt, arg|
         # debug doesn't work here
         #puts "opt=#{opt.inspect} arg=#{arg.inspect}"
+        # replace default delimiter(s)
+        if (opt == '--delimiter')
+          $delimiters = Regexp.compile('['+Regexp.escape(arg)+']')
+          displayWarning "Using delimiter pattern #{$delimiters.inspect}"
+        end
         # queryType gets special treatment. We try and normalize what they mean.
         if (opt == '--queryType')
           arg = guessQueryType(arg)
@@ -222,6 +228,9 @@ class Input
     puts ""
     puts " -u <username>          Geocaching.com username, required for coordinates"
     puts " -p <password>          Geocaching.com password, required for coordinates"
+
+    #puts " -m [delimiters]        set delimiter(s) (default #{$delimiters.inspect})"
+    puts " -m [delimiters]        set delimiter(s) (default \":|\") for multiple selections"
 
     puts " -o [filename]          output file name (automatic otherwise)"
     puts " -x [format]            output format type, see list below"
