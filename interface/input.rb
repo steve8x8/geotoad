@@ -292,6 +292,8 @@ class Input
     # else
     answer = nil
 
+    # if using TUI, only | is delimiter
+    $delimiters = /\|/
 
     while (answer !~ /^[sq]/i)
       if RUBY_PLATFORM =~ /win32/
@@ -784,7 +786,7 @@ class Input
         # validate text answer(s)
         answer.gsub!(/, */, ':')
         try_again = false
-        answer = answer.split(':').map{ |try_answer|
+        answer = answer.split($delimiters).map{ |try_answer|
           # build a list of matches: 0 means invalid, 1 is perfect, 2 ambiguous
           matches = choices.map{ |e| (e =~ Regexp.compile('^'+try_answer)) ? e : nil }.compact
           if matches.length == 0
