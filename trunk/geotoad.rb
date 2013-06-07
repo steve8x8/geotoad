@@ -387,12 +387,35 @@ class GeoToad
     end
 
     userLookups.each { |user|
-      search = SearchCache.new
-      search.setType('user', user)
-      waypoints = search.getResults()
-      waypoints.keys.each { |wid|
-        @filtered.addVisitor(wid, user)
-      }
+      # issue 236: if "user" is file, read that
+      if (user =~ /(.*)=(.*)/)
+        username = $1
+        filename = $2
+        puts ""
+        displayMessage "Read #{filename} for #{username}"
+        counter = 0
+        # read file (1st column)
+        begin
+          File.foreach(filename) { |line|
+          if (line =~ /^(GC\w+)/i)
+            wid = $1
+            debug "Add #{wid} for #{username}"
+            @filtered.addVisitor(wid, username)
+            counter = counter + 1
+          end
+          }
+          displayInfo "Total of #{counter} WIDs read"
+        rescue
+          displayWarning "Problems reading #{filename} for #{username}"
+        end
+      else
+        search = SearchCache.new
+        search.setType('user', user)
+        waypoints = search.getResults()
+        waypoints.keys.each { |wid|
+          @filtered.addVisitor(wid, user)
+        }
+      end
     }
   end
 
