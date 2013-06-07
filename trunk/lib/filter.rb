@@ -113,7 +113,7 @@ class Filter
     typestr.gsub!('regular', 'traditional')
     typestr.gsub!('puzzle', 'unknown')
     typestr.gsub!('mystery', 'unknown')
-    types = typestr.split(/[:\|]/)
+    types = typestr.split($delimiters)
     debug "filtering by types: #{types}"
     @waypointHash.delete_if { |wid, values|
       not types.include?(@waypointHash[wid]['type'])
