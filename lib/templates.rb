@@ -288,6 +288,7 @@ $Format = {
     'ext'        => 'gpm',
     'mime'    => 'application/gpsman',
     'desc'    => 'GPSman datafile',
+    'required'    => 'gpsbabel',
     'filter_src'    => 'gpx',
     'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o gpsman -F OUTFILE'
   },
@@ -448,8 +449,8 @@ $Format = {
   'cachemate' => {
     'ext'        => 'pdb',
     'mime'    => 'application/cachemate',
-    'required' => 'cmconvert',
     'desc'    => 'CacheMate for PalmOS',
+    'required' => 'cmconvert',
     'filter_src'    => 'gpx',
     'filter_exec'    => 'cmconvert -o OUTFILE INFILE'
   },
@@ -479,7 +480,6 @@ $Format = {
     'ext'         => 'sms',
     'mime'        => 'text/plain',
     'desc'        => '(SMS) Shorten relevant infos for SMS info',
-    'spacer'      => "",
     'templatePre' => "",
     'templateWP'  => "<%wpText.name%>,<%out.wid%>,<%wpText.creator%>," +
       "D<%wp.difficulty%>,T<%wp.terrain%>,<%out.relativedistance%>,<%wp.latwritten%>,<%wp.lonwritten%>," +
@@ -491,7 +491,6 @@ $Format = {
     'ext'         => 'sms2',
     'mime'        => 'text/plain',
     'desc'        => '(SMS) Shorten relevant infos for SMS info',
-    'spacer'      => "",
     'templatePre' => "",
     'templateWP'  => "coord.info/<%out.wid%>" +
       " <%wp.latwritten%> <%wp.lonwritten%>" +
@@ -645,8 +644,8 @@ $Format = {
   'gcvisits' => {
     'ext'        => 'txt',
     'mime'    => 'text/plain',
-    'required' => 'iconv',
     'desc'    => 'Geocache visits Unicode file for Garmin devices',
+    'required' => 'iconv',
     'filter_src'    => 'gclist',
     'filter_exec'    => 'iconv -f US-ASCII -t UCS-2LE INFILE > OUTFILE'
   },
