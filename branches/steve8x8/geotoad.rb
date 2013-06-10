@@ -302,7 +302,7 @@ class GeoToad
     @dateFormat = getPreferences()
     displayInfo "Using date format #{@dateFormat}"
 
-    if @option['mylogs']
+    if @option['myLogs']
       displayMessage "Retrieving my logs"
       count = getMyLogs()
       displayInfo "Found count: #{count}"

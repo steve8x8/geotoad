@@ -86,7 +86,7 @@ class Input
       [ "--waypointLength",           "-l",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--limitSearchPages",         "-L",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--delimiter",                "-m",    GetoptLong::REQUIRED_ARGUMENT ],
-      [ "--mylogs",                   "-M",    GetoptLong::NO_ARGUMENT ],
+      [ "--myLogs",                   "-M",    GetoptLong::OPTIONAL_ARGUMENT ],         # empty/0: only cache-logs, +trk-logs else
       [ "--notFound",                 "-n",    GetoptLong::NO_ARGUMENT ],
       [ "--notFoundByMe",             "-N",    GetoptLong::NO_ARGUMENT ],
       [ "--output",                   "-o",    GetoptLong::REQUIRED_ARGUMENT ],
