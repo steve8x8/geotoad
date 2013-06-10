@@ -306,6 +306,10 @@ class GeoToad
       displayMessage "Retrieving my logs"
       count = getMyLogs()
       displayInfo "Found count: #{count}"
+      if @option['myLogs'].to_i != 0
+        count = getMyTrks()
+        displayInfo "Trackable logs: #{count}"
+      end
     end
 
     if @queryType == "zipcode" || @queryType == "coord" || @queryType == 'location'
