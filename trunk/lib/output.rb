@@ -534,11 +534,20 @@ class Output
     text.gsub!(/\&amp;(\#[\d]+;)/, "&\\1")
     text.gsub!(/\&amp;(\#x[0-9a-fA-F]+;)/, "&\\1")
 
-    # XML only pre-defines the following named character entities:
+    # a lot of those entities isn't rendered by GPSr devices - simplify
     text.gsub!(/\&amp;(amp;)/, "&\\1")
     text.gsub!(/\&amp;([lg]t;)/, "&\\1")
     text.gsub!(/\&amp;(quot;)/, "&\\1")
     text.gsub!(/\&amp;(apos;)/, "&\\1")
+    text.gsub!(/\&(amp;)?[rlb]dquo;/, "&quot;")
+    text.gsub!(/\&(amp;)?[lr]aquo;/, "&quot;")
+    text.gsub!(/\&(amp;)?[rl]squo;/, "&apos;")
+    text.gsub!(/\&(amp;)?sbquo;/, "&apos;")
+    #text.gsub!(/\&(amp;)?nbsp;/, ' ')
+    text.gsub!(/\&(amp;)?ndash;/, ' - ')
+    text.gsub!(/\&(amp;)?mdash;/, ' -- ')
+    text.gsub!(/\&(amp;)?hellip;/, '...')
+    #text.gsub!(/\&(amp;)?deg;/, "&#176;")
 
     # From http://snippets.dzone.com/posts/show/1161
     text = text.unpack("U*").collect {|s| (s > 127 ? "&##{s};" : s.chr) }.join("")
@@ -548,10 +557,9 @@ class Output
     text.gsub!(/[\x09\x0a\x0d]/, ' ')
     text.gsub!(/ +/, ' ')
     # Strip out control characters
-    text.gsub!(/[\x00-\x1f]/, '?')
-    text.gsub!(/\x7f/, '?')
-    text.gsub!(/&#x[01].;/, '?')
-    text.gsub!(/&#x7[fF]/, '?')
+    text.gsub!(/[\x00-\x1f\x7f]/, '?')
+    text.gsub!(/\&#x[01].;/, '?')
+    text.gsub!(/\&#x7[fF]/, '?')
 
     # Fix apostrophes so that they show up as expected. Fixes issue 26.
     text.gsub!('&#8217;', "'")
@@ -598,19 +606,17 @@ class Output
     text.gsub!(/\<table.*?\>/i, "\n[table]\n")
     text.gsub!(/\<table.*?\>/i, "\n[/table]\n")
     text.gsub!(/\<.*?\>/m, '')
-    text.gsub!(/\&nbsp\;/, ' ')
-    text.gsub!(/\&quot\;/, '"')
-    text.gsub!(/\&bdquo\;/, '"')
-    text.gsub!(/\&ldquo\;/, '"')
-    text.gsub!(/\&rdquo\;/, '"')
-    text.gsub!(/\&apos\;/, "'")
-    text.gsub!(/\&sbquo\;/, "'")
-    text.gsub!(/\&lsquo\;/, "'")
-    text.gsub!(/\&rsquo\;/, "'")
-    text.gsub!(/\&ndash;/, ' - ')
-    text.gsub!(/\&mdash;/, ' -- ')
-    text.gsub!(/\&hellip;/, '...')
-    text.gsub!(/\&deg;/, "'")
+    text.gsub!(/\&(amp;)?quot;/, '"')
+    text.gsub!(/\&(amp;)?[lrb]dquo;/, '"')
+    text.gsub!(/\&(amp;)?[lr]aquo;/, '"')
+    text.gsub!(/\&(amp;)?apos;/, "'")
+    text.gsub!(/\&(amp;)?[lr]squo;/, "'")
+    text.gsub!(/\&(amp;)?sbquo;/, "'")
+    text.gsub!(/\&(amp;)?nbsp;/, ' ')
+    text.gsub!(/\&(amp;)?ndash;/, ' - ')
+    text.gsub!(/\&(amp;)?mdash;/, ' -- ')
+    text.gsub!(/\&(amp;)?hellip;/, '...')
+    text.gsub!(/\&(amp;)?deg;/, "&#176;")
 
     text.gsub!(/\n\n\n+/, "\n\n")
     # unprintable characters

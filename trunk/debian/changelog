@@ -2,6 +2,9 @@ geotoad (3.16.8-1) unstable; urgency=low
 
   * New version 3.16.8, "Good-bye Ruby 1.8 Tuesday"
   * Last version with ruby 1.8 support. Really.
+  * Issue 234: In TUI, filter by fav factors instead of fun factors
+  * Issue 236: Support for files containing cache lists (-E option)
+  * Issue 270: Convert "better" quotes into "simple" ones
 
  -- Steve Sixty-Four <steve8x8@gmail.com>  Tue, 25 Jun 2013 14:30:00 +0200
 
