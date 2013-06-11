@@ -81,7 +81,7 @@ module Auth
       @@cookie = cookie
       cookie_file = cookieFile()
       if File.exists?(cookie_file) && (File.size(cookie_file) > 0)
-        cookies = YAML::load(File.open(cookieFile))
+        cookies = YAML::load(File.open(cookie_file))
       end
       # cookie file may be empty
       if not cookies
