@@ -167,17 +167,18 @@ class GeoToad
       # "empty" non-nil value = "X" in TUI
       if optHash[option] and ! hidden_opts.include?(option)
         if optHash[option].to_s.empty? or optHash[option] == "X"
-          cmdline = cmdline + " --#{option}"
+          cmdline << " --#{option}"
         elsif not optHash[option].to_s.empty?
+          cmdline << " --#{option}="
           if ! hidden_args.include?(option)
             # Omit the quotes if the argument is 'simple'
             if optHash[option].to_s =~ /^[\w\.:]+$/
-              cmdline = cmdline + " --#{option}=#{optHash[option]}"
+              cmdline << optHash[option]
             else
-              cmdline = cmdline + " --#{option}=\'#{optHash[option]}\'"
+              cmdline << "\'#{optHash[option]}\'"
             end
           else # hide args
-            cmdline = cmdline + " --#{option}=*"
+            cmdline << optHash[option].gsub(/[^=%]/, '*').gsub(/\*\**/, '*')
           end
         end
         # in the metric case, we must append "km" to the distance
@@ -192,25 +193,28 @@ class GeoToad
 
   def loadHistory
     if File.exists?(@historyFile)
-      return YAML::load(File.open(@historyFile))
+      history = YAML::load(File.open(@historyFile))
     else
-      return {}
+      history = Hash.new
     end
+    return history
   end
 
-  def mergeHistory(history, cmdhash, cmdline)
+  def mergeHistory(history, cmdline)
+    cmdhash = Zlib.crc32(cmdline).to_s(16)
     if ! history[cmdhash]
       history[cmdhash] = Hash.new()
       history[cmdhash]['count'] = 0
     end
     history[cmdhash]['count'] = history[cmdhash]['count'].to_i + 1
     history[cmdhash]['cmdline'] = cmdline
-    debug "history: #{history.inspect}"
+    nodebug "history: #{history.inspect}"
   end
 
   def saveHistory(history)
     begin
       File.makedirs(@configDir) if (! File.exists?(@configDir))
+      # do not sort on output!
       File.open(@historyFile, 'w'){ |f| f.puts history.to_yaml }
     rescue
     end
@@ -954,10 +958,9 @@ puts
 while true
   options = cli.getoptions
   cmdline = cli.commandline(options)
-  cmdhash = Zlib.crc32(cmdline)
   #cli.displayInfo "History: #{cmdline}"
   history = cli.loadHistory()
-  cli.mergeHistory(history, cmdhash, cmdline)
+  cli.mergeHistory(history, cmdline)
   cli.saveHistory(history)
   if options['clearCache']
     cli.clearCacheDirectory()
