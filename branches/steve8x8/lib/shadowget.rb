@@ -315,7 +315,7 @@ class ShadowFetch
           expire = $1
           et = Time.gm($4, $3, $2, $5, $6, $7)
           life = sprintf("%.2f", (et.to_i - Time.now.to_i) / 86400.0)
-          displayInfo "cookie expires #{$1} (in #{life} days)"
+          displayInfo "Cookie expires #{$1} (in #{life} days)"
         end
         saveCookie(@cookie)
       end
@@ -389,7 +389,7 @@ class ShadowFetch
           expire = $1
           et = Time.gm($4, $3, $2, $5, $6, $7)
           life = sprintf("%.2f", (et.to_i - Time.now.to_i) / 86400.0)
-          displayInfo "cookie expires #{$1} (in #{life} days)"
+          displayInfo "Cookie expires #{$1} (in #{life} days)"
         end
     end
 
