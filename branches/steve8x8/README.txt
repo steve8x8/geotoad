@@ -121,8 +121,9 @@ syntax: geotoad [options] <search:search2:search3>
  -Y                     do not fetch cache descriptions, search only
  -Z                     don't overwrite existing cache descriptions
  -P                     HTTP proxy server, http://username:pass@host:port/
- -X                     emergency switch: disable early filtering
  -M [number]            download my cache/trackable logs( /my/logs.aspx)
+ -X                     emergency switch: disable early filtering
+ -H                     suppress history collection
  -C                     selectively clear local browser cache
 
 ::: OUTPUT FORMATS:

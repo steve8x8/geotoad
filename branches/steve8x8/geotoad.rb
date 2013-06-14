@@ -957,11 +957,13 @@ puts
 
 while true
   options = cli.getoptions
-  cmdline = cli.commandline(options)
-  #cli.displayInfo "History: #{cmdline}"
-  history = cli.loadHistory()
-  cli.mergeHistory(history, cmdline)
-  cli.saveHistory(history)
+  if ! options['noHistory']
+    cmdline = cli.commandline(options)
+    #cli.displayInfo "History: #{cmdline}"
+    history = cli.loadHistory()
+    cli.mergeHistory(history, cmdline)
+    cli.saveHistory(history)
+  end
   if options['clearCache']
     cli.clearCacheDirectory()
   end
