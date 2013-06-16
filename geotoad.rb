@@ -891,7 +891,7 @@ while true
   else
     cli.displayMessage "#{count} geocaches found in defined area."
     cli.prepareFilter
-    if options['queryType'] != 'wid'
+    if (options['queryType'] != 'wid') and (options['queryType'] != 'guid')
       cli.preFetchFilter
     end
 
@@ -907,8 +907,9 @@ while true
     else
       cli.displayMessage "No caches were found that matched your requirements"
     end
-    cli.close
   end
+  # dummy operation
+  cli.close
 
 
   # Don't loop if you're in automatic mode.
