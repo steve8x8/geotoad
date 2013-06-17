@@ -208,6 +208,7 @@ class GeoToad
     end
     history[cmdhash]['count'] = history[cmdhash]['count'].to_i + 1
     history[cmdhash]['cmdline'] = cmdline
+    history[cmdhash]['date'] = Time.now.strftime("%Y-%m-%d")
     nodebug "history: #{history.inspect}"
   end
 
