@@ -200,8 +200,8 @@ class GeoToad
     return history
   end
 
-  def mergeHistory(history, cmdline)
-    cmdhash = Zlib.crc32(cmdline).to_s(16)
+  def mergeHistory(history, cmdline, cmdhash)
+    # cmdhash is _not_ hash of cmdline but of all options
     if ! history[cmdhash]
       history[cmdhash] = Hash.new()
       history[cmdhash]['count'] = 0
@@ -960,9 +960,12 @@ while true
   options = cli.getoptions
   if ! options['noHistory']
     cmdline = cli.commandline(options)
-    #cli.displayInfo "History: #{cmdline}"
+    # sort array representation of all options but queryArg, hash to hex
+    # this should make entries unique even across multiple users
+    cmdhash = Zlib.crc32(options.dup.merge({'queryArg'=>nil}).to_a.sort.to_s).to_s(16)
+    debug "History #{cmdhash}: #{cmdline}"
     history = cli.loadHistory()
-    cli.mergeHistory(history, cmdline)
+    cli.mergeHistory(history, cmdline, cmdhash)
     cli.saveHistory(history)
   end
   if options['clearCache']
