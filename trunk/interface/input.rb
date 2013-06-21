@@ -76,7 +76,7 @@ class Input
       [ "--favFactorMin",             "-g",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--favFactorMax",             "-G",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--help",                     "-h",    GetoptLong::NO_ARGUMENT ],
-
+      [ "--noHistory",                "-H",    GetoptLong::NO_ARGUMENT ],
       [ "--ownerInclude",             "-i",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--ownerExclude",             "-I",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--placeDateInclude",         "-j",    GetoptLong::REQUIRED_ARGUMENT ],
@@ -264,6 +264,7 @@ class Input
     puts " -P                     HTTP proxy server, http://username:pass@host:port/"
     puts " -M                     download my cache logs (/my/logs.aspx)"
     puts " -X                     emergency switch: disable early filtering"
+    puts " -H                     suppress history collection"
     puts " -C                     selectively clear local browser cache"
     puts ""
     puts "::: OUTPUT FORMATS:"
