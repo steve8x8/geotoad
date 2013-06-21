@@ -129,12 +129,13 @@ syntax: geotoad [options] <search:search2:search3>
 ::: OUTPUT FORMATS:
  cachemate=   cetus+       csv          delorme      delorme-nour
  dna+         easygps      gclist       gcvisits     gpsdrive    
- gpsman       gpspilot+    gpspoint     gpsutil+     gpx         
- gpx-gsak     gpx-pa       gpx-wpts     holux+       html        
- kml+         list         magnav+      mapsend+     mxf         
- myfindgpx    myfindlist   ozi          pcx+         psp+        
- sms          sms2         tab          text         tiger       
- tmpro+       tpg+         wp2guid      xmap+        yourfindgpx 
+ gpsman+      gpspilot+    gpspoint     gpspoint2+   gpsutil+    
+ gpx          gpx-gsak     gpx-pa       gpx-wpts     holux+      
+ html         kml+         list         magnav+      mapsend+    
+ mxf          myfindgpx    myfindlist   ozi          pcx+        
+ psp+         sms          sms2         tab          text        
+ tiger        tmpro+       tpg+         wp2guid      xmap+       
+ yourfindgpx 
     + requires gpsbabel in PATH           = requires cmconvert in PATH
 
 ::: EXAMPLES:
