@@ -6,16 +6,17 @@ $LOAD_PATH << File.dirname(__FILE__.gsub(/\\/, '/'))
 $LOAD_PATH << File.dirname(__FILE__.gsub(/\\/, '/')) + '/lib'
 $LOAD_PATH << (File.dirname(__FILE__.gsub(/\\/, '/')) + '/' + '..')
 
-$isRuby19 = false
+$isRuby19 = true
 
-if RUBY_VERSION.gsub('.', '').to_i < 180
-  puts "ERROR: The version of Ruby your system has installed is #{RUBY_VERSION}, but we now require 1.8.0 or higher"
+if RUBY_VERSION.gsub('.', '').to_i < 190
+  puts "ERROR: The version of Ruby your system has installed is #{RUBY_VERSION}, but we now require 1.9.0 or higher"
   sleep(5)
   exit(99)
 end
-if RUBY_VERSION.gsub('.', '').to_i >= 190
-  $isRuby19 = true
-  Encoding.default_external = Encoding::UTF_8
+Encoding.default_external = Encoding::UTF_8
+if RUBY_VERSION.gsub('.', '').to_i >= 200
+  puts "WARNING: GeoToad has not been thoroughly tested with Ruby versions >= 2.0 yet!"
+  sleep(5)
 end
 
 $delimiters = /[:\|]/
