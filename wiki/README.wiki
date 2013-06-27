@@ -1,7 +1,7 @@
 #summary GeoToad README.txt
 #labels Featured
 
-= GeoToad 3.16.7 by Thomas Stromberg and The GeoToad Project (c) 2002 - 2013 =
+= GeoToad 3.16.8 by Thomas Stromberg and The GeoToad Project (c) 2002 - 2013 =
 
 <wiki:toc max_depth="2" />
 
@@ -34,13 +34,13 @@ You will then see a screen that looks similar to this:
 {{{
 
 ==============================================================================
-:::                // GeoToad 3.16.7 Text User Interface //                :::
+:::                // GeoToad 3.16.8 Text User Interface //                :::
 ==============================================================================
 (1)  GC.com login [REQUIRED         ] | (2)  search type          [coord     ]
 (3)  location     [N52 23.0 E13 03.0] | (4)  distance maximum (km)  [     2.5]
 - - - - - - - - - - - - - - - - - - - + - - - - - - - - - - - - - - - - - - -
 (5)  difficulty           [2.0 - 5.0] | (6)  terrain               [1.0 - 3.5]
-(7)  fun factor           [0.0 - 5.0] | (8)  cache size            [any - any]
+(7)  fav factor           [0.0 - 5.0] | (8)  cache size            [any - any]
 (9)  cache type   [any                                                       ]
 (10) virgin caches only           [ ] | (11) travel bug caches only        [ ]
 (12) cache age (days)     [  0 - any] | (13) last found (days)     [  0 - any] 
@@ -80,6 +80,7 @@ syntax: geotoad [options] <search:search2:search3>
 
  -u <username>          Geocaching.com username, required for coordinates
  -p <password>          Geocaching.com password, required for coordinates
+ -m [delimiters]        set delimiter(s) (default ":|") for multiple selections
  -o [filename]          output file name (automatic otherwise)
  -x [format]            output format type, see list below
  -q [location|coord|user|owner|country|state|keyword|wid|guid]
@@ -109,18 +110,21 @@ syntax: geotoad [options] <search:search2:search3>
  -Y                     do not fetch cache descriptions, search only
  -Z                     don't overwrite existing cache descriptions
  -P                     HTTP proxy server, http://username:pass@host:port/
+ -M                     download my cache logs (/my/logs.aspx)
  -X                     emergency switch: disable early filtering
+ -H                     suppress history collection
  -C                     selectively clear local browser cache
 
 ::: OUTPUT FORMATS:
  cachemate=   cetus+       csv          delorme      delorme-nour
  dna+         easygps      gclist       gcvisits     gpsdrive    
- gpsman       gpspilot+    gpspoint     gpsutil+     gpx         
- gpx-gsak     gpx-pa       gpx-wpts     holux+       html        
- kml+         list         magnav+      mapsend+     mxf         
- myfindgpx    myfindlist   ozi          pcx+         psp+        
- sms          tab          text         tiger        tmpro+      
- tpg+         wp2guid      xmap+        yourfindgpx 
+ gpsman+      gpspilot+    gpspoint     gpspoint2+   gpsutil+    
+ gpx          gpx-gsak     gpx-pa       gpx-wpts     holux+      
+ html         kml+         list         magnav+      mapsend+    
+ mxf          myfindgpx    myfindlist   ozi          pcx+        
+ psp+         sms          sms2         tab          text        
+ tiger        tmpro+       tpg+         wp2guid      xmap+       
+ yourfindgpx 
     + requires gpsbabel in PATH           = requires cmconvert in PATH
 
 ::: EXAMPLES:

@@ -82,6 +82,25 @@ _*(year per year; new entries will be added at bottom)*_
   * [http://forums.groundspeak.com/GC/index.php?showtopic=310953 release notes]
   * *{{{Web.HotFix_20130514.1}}}*
 ----
+2013-05-30:
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=311557 release notes]
+  * *{{{Web.HotFix_20130530.3}}}*
+  * _"new a geocache listing page design" for selected users_
+    (coord.info/GC21WMZ redirects to http://www.geocaching.com/geocache/GC21WMZ_kultur-kultur-kultur)
+  * *{{{Web.HotFix_20130514.1}}}* (for some time in between)
+  * *{{{Web.HotFix_20130531.2}}}* (seen after 2013-06-03)
+  * *{{{Web.HotFix_20130606.1}}}* (seen on 2013-06-07)
+----
+2013-06-11:
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=312017 release notes]
+  * *{{{Web.HotFix_20130611.1}}}*
+  * _GC still working on new cache details page, will affect WID and GUID queries_
+----
+2013-06-25:
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=312550 release notes]
+  * No change to the served pages? Others report changed look of cache pages...
+  * *{{{Web.HotFix_20130625.1}}}*
+----
 (...)
 ----
 

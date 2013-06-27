@@ -1,9 +1,22 @@
 #summary Features of current version
 #labels Featured
 
-version=3.16.7
+version=3.16.8
 
-= "M'aidez!" release (May 13, 2013) =
+= "Good-bye Ruby 1.8 Tuesday" release (Jun 25, 2013) =
+
+= What's new in 3.16.8? =
+  * nicknamed "Good-bye Ruby 1.8 Tuesday" (last version supporting ruby 1.8)
+
+== Issues addressed: ==
+  * New version 3.16.8, "Good-bye Ruby 1.8 Tuesday"
+  * Last version with ruby 1.8 support. Really.
+  * Issue 234: In TUI, filter by fav factors instead of fun factors
+  * Issue 236: Support for files containing cache lists (-E option)
+  * Issue 270: Convert "better" quotes into "simple" ones
+  * Issue 272: Fetch cache log list (option -M)
+  * History logging to local disk (for future survey purposes)
+  * Lots of small fixes and improvements
 
 = What's new in 3.16.7? =
   * nicknamed "M'aidez!" (clearly an emergency bugfix release)
