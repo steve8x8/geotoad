@@ -1,6 +1,12 @@
 # This is our dump templating engine. It only handles really simple text formats at the moment.
 # GeoToad 4.0 will have a plugins architecture that replaces this.
 
+class Templates
+
+  $Format = Hash.new
+
+  def initialize
+
 $Format = {
   # revised using http://mpickering.homeip.net/software/gpspoint_to_gpx.py
   # see also http://mirror.rosalab.ru/rosa/rosa2012.1/repository/SRPMS/contrib/release/gpspoint-2.030521-7.src.rpm
@@ -660,3 +666,6 @@ $Format = {
   },
 
 }
+  end
+
+end

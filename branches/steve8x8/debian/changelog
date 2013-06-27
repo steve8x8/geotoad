@@ -2,6 +2,9 @@ geotoad (3.17.9-1) unstable; urgency=low
 
   * New version 3.17.9, "To 3.18 and beyond" release
   * Preparation of version 3.18.0
+  * Issue 272: Fetch cache and trackable log list (option -M with optional arg)
+  * History logging
+  * Lots of small fixes and improvements
 
  -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 27 Jun 2013 14:30:00 +0200
 
