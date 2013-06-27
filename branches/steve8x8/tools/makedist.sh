@@ -171,7 +171,7 @@ if [ -x "/usr/local/bin/flip" -o -x "/usr/bin/flip" ]; then
     rm -f geotoad.1
     rm -Rf debian
     mkdir compile
-    mv *.rb lib interface data compile/
+    mv *.rb lib interface data templates compile/
     flip -mb *.txt
     perl -pi -e 's/([\s])geotoad\.rb/$1geotoad/g' README.txt
     # input file for Ocra gem
