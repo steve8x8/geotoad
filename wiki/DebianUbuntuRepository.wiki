@@ -1,13 +1,13 @@
 #summary How to set up and use a Debian (Ubuntu) repository on Google Code
-#labels Featured
+#labels Featured, Development
 
 = How to set up and use a Debian (Ubuntu) repository on Google Code =
 
-_Last change: 2011-10-27 Steve8x8_
+_Last change: 2013-06-27 Steve8x8_
 
 == Goal ==
 
-  * Instead of manually downloading deb packages, and taking care of their dependencies by hand, let APT do the work, by including a single line into {{{/etc/apt/sources.list}}}.
+  * Instead of manually downloading deb packages, and taking care of their dependencies by hand, let APT do the work, by including 1-2 line(s) into {{{/etc/apt/sources.list}}}.
 
 == What we need ==
 
@@ -43,8 +43,9 @@ _Last change: 2011-10-27 Steve8x8_
 {{{
 deb http://geotoad.googlecode.com/ svn/trunk/data/
 }}}
-  * For development version, it's:
+  * For development version, it's two lines (use stable if there's no development going on):
 {{{
+deb http://geotoad.googlecode.com/ svn/trunk/data/
 deb http://geotoad.googlecode.com/ svn/branches/steve8x8/data/
 }}}
   * Run {{{apt-get update}}} and {{{apt-get upgrade|install}}} (or the {{{aptitude}}} equivalents).
