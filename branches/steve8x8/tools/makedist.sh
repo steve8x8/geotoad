@@ -196,7 +196,7 @@ EOF
     if [ ! -f compile/geotoad.exe ]; then
       echo "*** Skipping installer build step (geotoad.exe not found)"
     else
-      mv compile/geotoad.exe compile/data ./
+      mv compile/geotoad.exe compile/data compile/templates ./
       rm -Rf "$WIN_DIR"/compile
 #$#      # pack into zip
 #$#      zip -q -r "$WIN_PKG" *
