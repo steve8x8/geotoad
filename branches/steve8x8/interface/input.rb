@@ -86,7 +86,7 @@ class Input
       [ "--waypointLength",           "-l",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--limitSearchPages",         "-L",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--delimiter",                "-m",    GetoptLong::REQUIRED_ARGUMENT ],
-      [ "--myLogs",                   "-M",    GetoptLong::OPTIONAL_ARGUMENT ],         # empty/0: only cache-logs, +trk-logs else
+      [ "--myLogs",                   "-M",    GetoptLong::NO_ARGUMENT ],
       [ "--notFound",                 "-n",    GetoptLong::NO_ARGUMENT ],
       [ "--notFoundByMe",             "-N",    GetoptLong::NO_ARGUMENT ],
       [ "--output",                   "-o",    GetoptLong::REQUIRED_ARGUMENT ],
@@ -262,7 +262,7 @@ class Input
     puts " -Y                     do not fetch cache descriptions, search only"
     puts " -Z                     don't overwrite existing cache descriptions"
     puts " -P                     HTTP proxy server, http://username:pass@host:port/"
-    puts " -M [number]            download my cache/trackable logs (/my/logs.aspx)"
+    puts " -M                     download my cache logs (/my/logs.aspx)"
     puts " -X                     emergency switch: disable early filtering"
     puts " -H                     suppress history collection"
     puts " -C                     selectively clear local browser cache"

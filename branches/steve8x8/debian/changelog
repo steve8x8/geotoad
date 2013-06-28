@@ -2,12 +2,12 @@ geotoad (3.17.9-1) unstable; urgency=low
 
   * New version 3.17.9, "To 3.18 and beyond" release
   * Preparation of version 3.18.0
-  * Issue 272: Fetch cache and trackable log list (option -M with optional arg)
+  * Issue 272: Fetch cache log list (option -M without arg)
   * Issue 275: Move templates to subdirectory, load from there (and user places)
   * History logging
   * Lots of small fixes and improvements
 
- -- Steve Sixty-Four <steve8x8@gmail.com>  Fri, 28 Jun 2013 10:00:00 +0200
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Fri, 28 Jun 2013 10:30:00 +0200
 
 geotoad (3.17.8-1) unstable; urgency=low
 

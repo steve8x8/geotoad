@@ -5,7 +5,6 @@ module Common
   @@prefs_url = 'http://www.geocaching.com/account/ManagePreferences.aspx'
   # logs.aspx s=1: geocaches (default); s=2: trackables; s=3: benchmarks
   @@mylogs_url = 'http://www.geocaching.com/my/logs.aspx?s=1'
-  @@mytrks_url = 'http://www.geocaching.com/my/logs.aspx?s=2'
   @@dateFormat = 'dd MMM yy'
 
   def getPreferences()
@@ -47,20 +46,6 @@ module Common
     #                         1,992 Caches Found</strong>
     # (language-dependent)
     if data =~ /<strong[^>]*>\s*([\d,\.]+)[\s\w]+<\/strong>/
-      counter = $1.gsub(/[,\.]/, '').to_i
-    end
-    return counter
-  end
-
-  def getMyTrks()
-    page = ShadowFetch.new(@@mytrks_url)
-    page.localExpiry = 12 * 3600		# 12 hours
-    data = page.fetch
-    counter = 0
-    #     <p>
-    #   2528 Results</p>
-    # (not language-dependent)
-    if data =~ /^\s+([\d,\.]+) Results<\/p>/
       counter = $1.gsub(/[,\.]/, '').to_i
     end
     return counter
