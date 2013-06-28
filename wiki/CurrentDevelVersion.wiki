@@ -8,6 +8,9 @@ version=3.17.9
 = New development version 3.17.9 =
   * nicknamed "To 3.18 and beyond" (as this will become the basis for 3.18.0)
 
+= WARNING: MAY BE DEFECTIVE FOR YOUR PLATFORM =
+  * 3.17.10 will follow within a few days
+
 == Issues addressed: ==
   * Preparation of version 3.18.0
   * Issue 272: Fetch cache log list (option -M without arg)
