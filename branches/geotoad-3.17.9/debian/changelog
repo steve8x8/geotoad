@@ -1,0 +1,278 @@
+geotoad (3.17.9-1) unstable; urgency=low
+
+  * New version 3.17.9, "To 3.18 and beyond" release
+  * Preparation of version 3.18.0
+  * Issue 272: Fetch cache log list (option -M without arg)
+  * Issue 275: Move templates to subdirectory, load from there (and user places)
+  * History logging
+  * Lots of small fixes and improvements
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Fri, 28 Jun 2013 10:30:00 +0200
+
+geotoad (3.17.8-1) unstable; urgency=low
+
+  * New version 3.17.8, "Another May Day" release
+  * Issue 213: backing out now useless projection stuff
+  * Issue 264: continued work on HTML in GPX
+  * Issue 265: convert smileys in log entries back to BB [...] code
+  * Issue 273: old representations for D/T/size and dist/dir
+  * Deliberately reduced amount of debugging information
+  * Minor other stuff
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 23 May 2013 14:30:00 +0200
+
+geotoad (3.17.7-1) unstable; urgency=low
+
+  * New version 3.17.7, "Spring has sprung" release
+  * Language support for Latvia and Italia
+  * Portuguese workaround
+  * Convert quotation marks
+  * Issue 262: translate or remove "emoji" (Unicode-16 "surrogates")
+  * Issue 263: "gpspoint" template
+  * Issue 264: first attempt to make GPX more consistent
+  * Minor other stuff
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 28 Mar 2013 10:00:00 +0100
+
+geotoad (3.17.6-1) unstable; urgency=low
+
+  * New version 3.17.6, "CRLF" release
+  * Remove unneeded '\r' from output (mostly GPX)
+  * Minor other stuff
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Wed, 09 Jan 2013 15:00:00 +0100
+
+geotoad (3.17.5-1) unstable; urgency=low
+
+  * New version 3.17.5, "Happy 2013" release
+  * Issue 259: parse logs with old and new GS icons
+  * In TUI, allow for (unambiguous) shortening ("tra", "ev", "reg"...)
+  * Minor other stuff
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Tue, 01 Jan 2013 15:00:00 +0100
+
+geotoad (3.17.4-1) unstable; urgency=low
+
+  * New version 3.17.4, "Heisenbug" release (111th birthday)
+  * Issue 205: in url tag, use guid instead of wp
+  * Issue 257: fix queries for country with states (caution!)
+  * Issue 258: better handling for caches without logs (error 500)
+  * Minor other stuff
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Wed, 05 Dec 2012 10:30:00 +0100
+
+geotoad (3.17.3-1) unstable; urgency=low
+
+  * New version 3.17.3, "" release
+  * Issue 174: Empty logs are no problem anymore
+  * Issue 213: -Y option to skip fetching cdpf files; "qlist" projection input
+  * Issue 236: Add -m option to redefine delimiters
+  * Some minor other stuff (manpage and readme)
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Tue, 02 Oct 2012 14:00:00 +0200
+
+geotoad (3.17.2-1) unstable; urgency=low
+
+  * New version 3.17.2, "Leaf Miner" release
+  * Issue 174: insert "info" log entry into GPX
+  * Issue 175: attempt to enable selective cleanup for Windows
+  * Issue 250: ignore "nil" visitors
+  * Issue 252: remove "span" tags from description HTML
+  * Issue 253: validate remote files; "next page" for other languages
+  * Issue 254: catch date conversion exception
+  * Issue 255: "location" queries: error handling, info output
+  * Some minor other stuff
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 13 Sep 2012 14:00:00 +0200
+
+geotoad (3.17.1-1) unstable; urgency=low
+
+  * New version 3.17.1, "Rousseau" release (300th birthday)
+  * Issue 244: Use a better pattern for GC id parsing
+  * Issue 245: Cache "name by owner" - better separation
+  * Issue 247: Attempt to address issue. May break Windows with Ruby 1.9?
+  * Issue 248: "yourfindgpx" template ("myfindgpx" for login!=query user)
+  * Issue 249: Replace "medium" back with "regular"
+  * Remote fetches now progressively delayed, starting with 1 second
+  * Minor other stuff
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 28 Jun 2012 14:00:00 +0200
+
+geotoad (3.17.0-1) unstable; urgency=low
+
+  * New development version 3.17.0, "Venus Transit" release
+  * Issue 233: If one cacheType selected, use tx= search parameter
+  * Issue 234: Fav points listed in html and text, fav filter in UI
+  * Issue 235: -N option: not found by me (saves -E myself)
+  * Issue 236: -E option takes user=filename to avoid query
+  * Issue 237: Shrink cipher list, force TLSv1 to work with newer OpenSSL
+  * Issue 239: Ampersands not properly escaped in rare situations
+  * Issue 241: WID parser may fail in some circumstances
+  * Minor other stuff
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Wed, 06 Jun 2012 14:00:00 +0200
+
+geotoad (3.15.5-1) unstable; urgency=low
+
+  * New development version 3.15.5
+  * Issue 175: More selective, non-interfering cleaning
+  * Issue 221: Fix documentation of !keyword for -k/-K
+  * Issue 226: Past events are unavailable
+  * Issue 228: "guid" queries now find WID without Google Maps
+  * Issue 231: Remove <font> tags from log comments
+  * Issue 232: Reduce coordinate precision to 6 decimal places
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Wed, 14 Mar 2012 14:00:00 +0100
+
+geotoad (3.15.4-1) unstable; urgency=low
+
+  * New development release 3.15.4
+  * Maintenance release
+  * Issue 230: 2012-02-14 site update
+  * Use at your own risk!
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 16 Feb 2012 14:00:00 +0100
+
+geotoad (3.15.3-1) unstable; urgency=low
+
+  * New development release 3.15.3
+  * Issue 218: select/exclude by attributes set/unset
+  * Issue 228: --query guid
+  * Use at your own risk!
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Tue, 24 Jan 2012 09:30:00 +0100
+
+geotoad (3.15.2-1) unstable; urgency=low
+
+  * New development release 3.15.2
+  * Long options documented in man page
+  * Login cookies are finally reused
+  * Improved multi-language patterns
+  * Legacy hardware related: "mystery" caches will be translated to "unknown"
+  * Use at your own risk!
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 22 Dec 2011 20:00:00 +0200
+
+geotoad (3.15.1-1) unstable; urgency=low
+
+  * New development release 3.15.1
+  * Hotfix for 2011-10-06 site update
+  * Better text and html output
+  * Ruby 1.9 encoding issue addressed
+  * Cookies now stored in YAML
+  * Use at your own risk!
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 13 Oct 2011 14:45:00 +0200
+
+geotoad (3.15.0-1) unstable; urgency=low
+
+  * New development release 3.15.0
+  * Use at your own risk!
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Sun, 11 Sep 2011 21:00:00 +0200
+
+geotoad (3.14.5-1) unstable; urgency=low
+
+  * New release 3.14.5
+  * Several fixes and additions
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Sun, 11 Sep 2011 20:00:00 +0200
+
+geotoad (3.14.4-1) unstable; urgency=low
+
+  * New release 3.14.4
+  * Fixes issues caused by gc.com 2011-05-04 changes
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Fri,  6 May 2011 18:00:00 +0200
+
+geotoad (3.14.3-2) unstable; urgency=low
+
+  * Fix Debian/Ubuntu build: set $LOAD_PATH (issue 199)
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Mon, 28 Feb 2011 10:40:00 +0100
+
+geotoad (3.14.3-1) unstable; urgency=low
+
+  * New release 3.14.3
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Wed, 12 Jan 2011 15:10:00 +0100
+
+geotoad (3.14.2-1) unstable; urgency=low
+
+  * New release 3.14.2
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Wed, 12 Jan 2011 14:37:00 +0100
+
+geotoad (3.14.1-1) unstable; urgency=low
+
+  * New release 3.14.1
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Sat, 04 Dec 2010 11:21:34 +0100
+
+geotoad (3.13.0-1) unstable; urgency=low
+
+  * After about 4 years without geotoad packaging, try to start again.
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 11 Nov 2010 13:40:00 +0100
+
+geotoad (3.9.0-4) unstable; urgency=low
+
+  * Fix a bug in xml high character escaping code that caused it to crash
+    generating gpx output.
+
+ -- Joey Hess <joeyh@debian.org>  Mon, 13 Nov 2006 17:57:52 -0500
+
+geotoad (3.9.0-3) unstable; urgency=low
+
+  * Update watch file.
+
+ -- Joey Hess <joeyh@debian.org>  Sun, 11 Jun 2006 16:58:02 -0400
+
+geotoad (3.9.0-2) unstable; urgency=low
+
+  * Needs ruby 1.8, so version dependency.
+
+ -- Joey Hess <joeyh@debian.org>  Sun, 12 Mar 2006 18:54:38 -0500
+
+geotoad (3.9.0-1) unstable; urgency=low
+
+  * New upstream release. Closes: #337729
+  * Modified to create config.yaml mode 600, since it contains a password.
+
+ -- Joey Hess <joeyh@debian.org>  Sun, 12 Mar 2006 09:28:10 -0500
+
+geotoad (3.7.6-1) unstable; urgency=low
+
+  * Add a watch file.
+  * New upstream release with different fix for detail page change.
+    Closes: #319124
+  * Change the user-agent string to let the grocaching.com people know that
+    they have linux users (upstream's user-agent claims to be running under
+    windows).
+
+ -- Joey Hess <joeyh@debian.org>  Tue, 19 Jul 2005 21:45:41 -0400
+
+geotoad (3.7.5-2) unstable; urgency=low
+
+  * Patch from Ken Bowley to fix details page parsing. Closes: #312737
+
+ -- Joey Hess <joeyh@debian.org>  Thu,  9 Jun 2005 20:56:28 -0400
+
+geotoad (3.7.5-1) unstable; urgency=low
+
+  * First release.
+  * Repacked upstream .zip source into tarball.
+  * Commented out stty command in input.rb since it breaks things badly with
+    the default Debian erase character and should not be needed in any
+    configuration.
+  * Wrote a man page.
+  * Basic security audit:
+  	- Found temp race in temporary file code; exploitable if geotoad was
+          run in /tmp or if $TEMP was set to point to a world-writable
+          directory. Fixed by making it always use ~/.geotoad unless GEO_TEMP
+          is set. Setting GEO_TEMP=/tmp is not recommended.
+  * Changed a few of the more obvious places where it calls the program
+    geotoad.rb (it's just "geotoad" in Debian); add README.Debian to document
+    the rest.
+
+ -- Joey Hess <joeyh@debian.org>  Tue,  4 Jan 2005 23:27:07 -0500
