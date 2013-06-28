@@ -1,9 +1,19 @@
 #summary Features of current development version
 #labels Featured,Experimental
 
-version=3.17.8
+version=3.17.9
 
-= "Another May Day" release (May 23, 2013) =
+= "To 3.18 and beyond" release (Jun 28, 2013) =
+
+= New development version 3.17.9 =
+  * nicknamed "To 3.18 and beyond" (as this will become the basis for 3.18.0)
+
+== Issues addressed: ==
+  * Preparation of version 3.18.0
+  * Issue 272: Fetch cache log list (option -M without arg)
+  * Issue 275: Move templates to subdirectory, load from there (and user places)
+  * History logging
+  * Lots of small fixes and improvements
 
 = New development version 3.17.8 =
   * nicknamed "Another May Day" (even bleeding edge users need help)
