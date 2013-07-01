@@ -960,7 +960,7 @@ while true
     # sort array representation of all options but queryArg, hash to hex
     # this should make entries unique even across multiple users
     cmdhash = Zlib.crc32(options.dup.merge({'queryArg'=>nil}).to_a.sort.to_s).to_s(16)
-    debug "History #{cmdhash}: #{cmdline}"
+    cli.debug "History #{cmdhash}: #{cmdline}"
     history = cli.loadHistory()
     cli.mergeHistory(history, cmdline, cmdhash)
     cli.saveHistory(history)
