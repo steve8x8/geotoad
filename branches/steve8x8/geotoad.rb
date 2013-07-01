@@ -173,7 +173,7 @@ class GeoToad
           if ! hidden_args.include?(option)
             # Omit the quotes if the argument is 'simple'
             if optHash[option].to_s =~ /^[\w\.:]+$/
-              cmdline << optHash[option]
+              cmdline << "#{optHash[option]}"
             else
               cmdline << "\'#{optHash[option]}\'"
             end
