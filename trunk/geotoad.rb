@@ -6,17 +6,16 @@ $LOAD_PATH << File.dirname(__FILE__.gsub(/\\/, '/'))
 $LOAD_PATH << File.dirname(__FILE__.gsub(/\\/, '/')) + '/lib'
 $LOAD_PATH << (File.dirname(__FILE__.gsub(/\\/, '/')) + '/' + '..')
 
-$isRuby19 = true
+$isRuby19 = false
 
-if RUBY_VERSION.gsub('.', '').to_i < 190
-  puts "ERROR: The version of Ruby your system has installed is #{RUBY_VERSION}, but we now require 1.9.0 or higher"
+if RUBY_VERSION.gsub('.', '').to_i < 180
+  puts "ERROR: The version of Ruby your system has installed is #{RUBY_VERSION}, but we now require 1.8.0 or higher"
   sleep(5)
   exit(99)
 end
-Encoding.default_external = Encoding::UTF_8
-if RUBY_VERSION.gsub('.', '').to_i >= 200
-  puts "WARNING: GeoToad has not been thoroughly tested with Ruby versions >= 2.0 yet!"
-  sleep(5)
+if RUBY_VERSION.gsub('.', '').to_i >= 190
+  $isRuby19 = true
+  Encoding.default_external = Encoding::UTF_8
 end
 
 $delimiters = /[:\|]/
@@ -958,7 +957,7 @@ while true
     # sort array representation of all options but queryArg, hash to hex
     # this should make entries unique even across multiple users
     cmdhash = Zlib.crc32(options.dup.merge({'queryArg'=>nil}).to_a.sort.to_s).to_s(16)
-    debug "History #{cmdhash}: #{cmdline}"
+    cli.debug "History #{cmdhash}: #{cmdline}"
     history = cli.loadHistory()
     cli.mergeHistory(history, cmdline, cmdhash)
     cli.saveHistory(history)
