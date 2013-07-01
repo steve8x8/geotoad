@@ -1,10 +1,8 @@
-geotoad (3.18.0-1) unstable; urgency=low
+geotoad (3.16.9-1) unstable; urgency=low
 
-  * New version 3.18.0, "Start Over" release
-  * Issue 274: Ruby 1.8 dropped. Really.
-  * Small fixes and improvements
+  * New version 3.16.9, bugfix release
 
- -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 01 Aug 2013 14:30:00 +0200
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Mon, 01 Jul 2013 14:30:00 +0200
 
 geotoad (3.16.8-1) unstable; urgency=low
 
