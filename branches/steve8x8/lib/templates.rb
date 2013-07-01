@@ -12,8 +12,8 @@ class Templates
 
   def initialize
     # default template directory
-    systempdir = File.join(File.dirname(__FILE__.gsub(/\\/, '/')), '..', 'templates')
-    owntempdir = File.join(findConfigDir, 'templates')
+    systempdir = File.join(findDataDir(), '..', 'templates')
+    owntempdir = File.join(findConfigDir(), 'templates')
     [systempdir, owntempdir].each{ |dir|
       begin
         if not (File.directory?(dir) and FileTest.readable?(dir))
