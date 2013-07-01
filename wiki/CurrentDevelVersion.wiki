@@ -1,15 +1,12 @@
 #summary Features of current development version
 #labels Featured,Experimental
 
-version=3.17.9
+version=3.17.10
 
-= "To 3.18 and beyond" release (Jun 28, 2013) =
+= "To 3.18 and even beyond" release (Jul 1, 2013) =
 
-= New development version 3.17.9 =
-  * nicknamed "To 3.18 and beyond" (as this will become the basis for 3.18.0)
-
-= WARNING: MAY BE DEFECTIVE FOR YOUR PLATFORM =
-  * 3.17.10 will follow within a few days
+= New development version 3.17.10 =
+  * nicknamed "To 3.18 and even beyond" (as this will become the basis for 3.18.0)
 
 == Issues addressed: ==
   * Preparation of version 3.18.0
@@ -17,6 +14,8 @@ version=3.17.9
   * Issue 275: Move templates to subdirectory, load from there (and user places)
   * History logging
   * Lots of small fixes and improvements
+
+= 3.17.9 was revoked because of several defects =
 
 = New development version 3.17.8 =
   * nicknamed "Another May Day" (even bleeding edge users need help)
