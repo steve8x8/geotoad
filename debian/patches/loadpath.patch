@@ -13,5 +13,5 @@
 +#$LOAD_PATH << (File.dirname(__FILE__.gsub(/\\/, '/')) + '/' + '..')
 +$LOAD_PATH << '/usr/share/geotoad'
  
- $isRuby19 = false
+ $isRuby19 = true
  
