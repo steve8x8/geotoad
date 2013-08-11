@@ -192,9 +192,11 @@ class GeoToad
   end
 
   def loadHistory
+    history = false
     if File.exists?(@historyFile)
       history = YAML::load(File.open(@historyFile))
-    else
+    end
+    if not history
       history = Hash.new
     end
     return history
