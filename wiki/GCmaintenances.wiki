@@ -101,6 +101,27 @@ _*(year per year; new entries will be added at bottom)*_
   * No change to the served pages? Others report changed look of cache pages...
   * *{{{Web.HotFix_20130625.1}}}*
 ----
+2013-07-09:
+  * "Geocaching.com ... site update on Tuesday, July 9th, 2013 ... 7pm PDT" (0200 next day UTC)
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=313067 release notes]
+  * *{{{Web.HotFix_20130709.1}}}*
+  * _added Danish_
+  * _clicking "View Logbook" returns "No logs found"_ (doesn't harm GeoToad)
+  * *{{{Web.HotFix_20130710.1}}}*
+  * *{{{Web.Release_20130723.6}}}*
+----
+2013-07-24:
+  * "Geocaching.com ... site update on Wednesday, July 24, 2013 ... 3pm PDT" (2200 UTC)
+----
+2013-08-02 (midnight UTC):
+  * Twitter: "Check out the new clean look..."
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=314020 release notes]
+  * *{{{Web.Release_20130801.5}}}*
+----
+2013-08-12/13 (certainly not before):
+  * *{{{Web.Release_20130809.3}}}*
+  * _not sure whether this is a reaction to [http://forums.groundspeak.com/GC/?showtopic=314287 connection issues]_
+----
 (...)
 ----
 
