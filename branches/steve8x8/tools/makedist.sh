@@ -338,7 +338,7 @@ fi
 read -p "*** OK? " x
 if [ -f $DISTNAME.tar.gz ]; then
   $GCU \
-    -s "geotoad $VERSION source code (requires ruby)" \
+    -s "geotoad $VERSION source code (requires ruby 1.9)" \
     -l "Featured,Type-Source,OpSys-All" \
       $DISTNAME.tar.gz
 fi
@@ -354,12 +354,12 @@ if [ -f ${DISTNAME}_Windows_Installer.exe ]; then
     -l "Featured,Type-Installer,OpSys-Windows" \
       ${DISTNAME}_Windows_Installer.exe
 fi
-if [ -f ${DISTNAME}_Windows_Installer_Ruby18.exe ]; then
-  $GCU \
-    -s "geotoad $VERSION installer for Windows using Ruby 1.8" \
-    -l "Featured,Type-Installer,OpSys-Windows" \
-      ${DISTNAME}_Windows_Installer_Ruby18.exe
-fi
+#if [ -f ${DISTNAME}_Windows_Installer_Ruby18.exe ]; then
+#  $GCU \
+#    -s "geotoad $VERSION installer for Windows using Ruby 1.8" \
+#    -l "Featured,Type-Installer,OpSys-Windows" \
+#      ${DISTNAME}_Windows_Installer_Ruby18.exe
+#fi
 if [ -f ${DISTNAME}_Windows_Installer_Ruby19.exe ]; then
   $GCU \
     -s "geotoad $VERSION installer for Windows using Ruby 1.9" \
@@ -374,7 +374,7 @@ if [ -f ${DISTNAME}_Windows_Installer_Ruby20.exe ]; then
 fi
 if [ -f ${DISTNAME}_MacOSX.dmg ]; then
   $GCU \
-    -s "geotoad $VERSION package for Mac OS X (requires ruby)" \
+    -s "geotoad $VERSION package for Mac OS X (requires ruby 1.9)" \
     -l "Featured,Type-Installer,OpSys-OSX" \
       ${DISTNAME}_MacOSX.dmg
 fi
