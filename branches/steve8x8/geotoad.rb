@@ -19,7 +19,8 @@ if RUBY_VERSION.gsub('.', '').to_i >= 200
   sleep(5)
 end
 
-$delimiters = /[:\|]/
+$delimiters = /[\|:]/
+$delimiter = '|'
 
 # toss in our own libraries.
 require 'interface/progressbar'
@@ -419,7 +420,7 @@ class GeoToad
         @combinedWids.rehash
       }
       @queryType = "wid"
-      @queryArg = @combinedWids.keys.join('|')
+      @queryArg = @combinedWids.keys.join($delimiter)
       displayInfo "Now starting WID search"
     end
     @queryArg.to_s.split($delimiters).each { |queryArg|
