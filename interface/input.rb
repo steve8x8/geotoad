@@ -122,6 +122,7 @@ class Input
         # replace default delimiter(s)
         if (opt == '--delimiter')
           $delimiters = Regexp.compile('['+Regexp.escape(arg)+']')
+          $delimiter = arg[0]
           displayWarning "Using delimiter pattern #{$delimiters.inspect}"
         end
         # queryType gets special treatment. We try and normalize what they mean.
@@ -230,7 +231,7 @@ class Input
     puts " -p <password>          Geocaching.com password, required for coordinates"
 
     #puts " -m [delimiters]        set delimiter(s) (default #{$delimiters.inspect})"
-    puts " -m [delimiters]        set delimiter(s) (default \":|\") for multiple selections"
+    puts " -m [delimiters]        set delimiter(s) (default \"|:\") for multiple selections"
 
     puts " -o [filename]          output file name (automatic otherwise)"
     puts " -x [format]            output format type, see list below"
@@ -305,6 +306,7 @@ class Input
 
     # if using TUI, only | is delimiter
     $delimiters = /\|/
+    $delimiter = '|'
     @@optHash['delimiter'] = '|'
 
     while (answer !~ /^[sq]/i)
