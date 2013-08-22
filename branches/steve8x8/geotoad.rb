@@ -385,36 +385,67 @@ class GeoToad
       @defaultOutputFile = @defaultOutputFile + "-y" + @distanceMax.to_s
     end
 
+    # 2013-08-21: for non-wid/guid queries, get list of WIDs first
+    if @queryType != "wid" && @queryType != "guid"
+      @combinedWids = Hash.new
+      @queryArg.to_s.split($delimiters).each { |queryArg|
+        puts ""
+        message = "Performing #{@queryType} search for #{queryArg} "
+        search = SearchCache.new
+        # only valid for zip or coordinate searches
+        if @queryType == "zipcode" || @queryType == "coord" || @queryType == 'location'
+          message << "(constraining to #{@distanceMax} miles)"
+          search.distance = @distanceMax
+        end
+        displayMessage message
+        # limit search page count
+        search.max_pages = @limitPages
+        # set tx filter if only one cache type
+        if @option['cacheType'] and (@option['cacheType'].split($delimiters).length == 1)
+          search.txfilter = @option['cacheType']
+        end
+        # exclude own found
+        search.notyetfound = (@option['notFoundByMe'] ? true : false)
+        if (! search.setType(@queryType, queryArg))
+          displayWarning "Could not determine search type for #{@queryType} \"#{queryArg}\""
+          displayWarning "You may want to remove special characters or try a \"coord\" search instead"
+          displayError "No valid search type. Exiting."
+          exit
+        end
+        wids = search.getWids()
+        # this gives us support for multiple searches. It adds together the search.waypoints hashes
+        # and pops them into the @combinedWids hash.
+        @combinedWids.update(wids)
+        @combinedWids.rehash
+      }
+      @queryType = "wid"
+      @queryArg = @combinedWids.keys.join('|')
+      displayInfo "Now starting WID search"
+    end
     @queryArg.to_s.split($delimiters).each { |queryArg|
-      puts ""
+      #puts ""
       message = "Performing #{@queryType} search for #{queryArg} "
       search = SearchCache.new
-
       # only valid for zip or coordinate searches
       if @queryType == "zipcode" || @queryType == "coord" || @queryType == 'location'
         message << "(constraining to #{@distanceMax} miles)"
         search.distance = @distanceMax
       end
       displayMessage message
-
       # limit search page count
       search.max_pages = @limitPages
-
       # set tx filter if only one cache type
       if @option['cacheType'] and (@option['cacheType'].split($delimiters).length == 1)
         search.txfilter = @option['cacheType']
       end
-
       # exclude own found
       search.notyetfound = (@option['notFoundByMe'] ? true : false)
-
       if (! search.setType(@queryType, queryArg))
         displayWarning "Could not determine search type for #{@queryType} \"#{queryArg}\""
         displayWarning "You may want to remove special characters or try a \"coord\" search instead"
         displayError "No valid search type. Exiting."
         exit
       end
-
       waypoints = search.getResults()
       # this gives us support for multiple searches. It adds together the search.waypoints hashes
       # and pops them into the @combinedWaypoints hash.
@@ -433,6 +464,7 @@ class GeoToad
       waypointsExtracted = waypointsExtracted + 1
     }
 
+    debug "waypoints extracted: #{waypointsExtracted}, combined: #{@combinedWaypoints.length}"
     if (waypointsExtracted < (@combinedWaypoints.length - 2))
       displayWarning "Downloaded #{@combinedWaypoints.length} waypoints, but only #{waypointsExtracted} parsed!"
     end

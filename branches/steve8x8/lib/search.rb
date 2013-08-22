@@ -17,6 +17,7 @@ class SearchCache
   def initialize
     @distance = 15
     @max_pages = 0		# unlimited
+    @widsonly = false		# extract only WIDs from search results
     @ttl = 12 * 3600		# 12 hours (was 20)
     @waypoints = Hash.new
 
@@ -195,7 +196,7 @@ class SearchCache
         @search_url = @search_url + '&dist=' + @distance.to_s
     end
 
-    displayInfo @search_url
+    debug @search_url
     return @query_type
   end
 
@@ -375,8 +376,15 @@ class SearchCache
     return [distance, direction]
   end
 
+  def getWids()
+    debug "Getting WIDs: #{@query_type} at #{@search_url}"
+    @widsonly = true
+    return searchResults(@search_url)
+  end
+
   def getResults()
     nodebug "Getting results: #{@query_type} at #{@search_url}"
+    @widsonly = false
     if @query_type == 'wid'
       waypoint = getWidSearchResult(@search_url)
       wid = waypoint['wid']
@@ -540,7 +548,7 @@ class SearchCache
   end
 
   def searchResults(url)
-    debug "searchResults: #{url}"
+    debug "searchResults: #{url} widsonly=#{@widsonly.inspect}"
     if not url
       displayWarning "searchResults has no URL?"
     end
@@ -968,6 +976,14 @@ class SearchCache
         cache['dtsv'] = 'not_encoded'
         cache['dts'] = ''
 
+# 2013-08-21: /geocache/${wid}[_.*] links to new pages
+      # <a href="http://www.geocaching.com/geocache/GC42CGC_platz-der-einheit" ...
+      when /href=..*\/geocache\/(GC[A-Z0-9]*)_.*/
+        if @widsonly
+          wid = $1
+          debug "found link to WID #{wid}"
+        end
+
       when /^\s+<\/tr\>/
         debug "--- end of row ---"
         if wid and not @waypoints.has_key?(wid)
@@ -982,6 +998,9 @@ class SearchCache
             cache['atime'] = Time.at($ZEROTIME)
           end
 
+        if @widsonly
+          @waypoints[wid] = wid
+        else
           @waypoints[wid] = cache.dup
           @waypoints[wid]['visitors'] = []
 
@@ -992,6 +1011,8 @@ class SearchCache
 
           # cache counter (1..n) - need that to reconstruct search order
           @waypoints[wid]['index'] = @waypoints.length
+        end #widsonly
+
         end
         # clear cache even if there's no wid (yet)
         cache.clear
