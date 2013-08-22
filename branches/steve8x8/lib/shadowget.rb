@@ -25,8 +25,8 @@ class ShadowFetch
   def initialize (url)
     @url = url
     @remote = 0
-    @localExpiry = 5 * 86400		# 5 days
-    @maxFailures = 5			#was 2
+    @localExpiry = 6 * 86400		# 6 days
+    @maxFailures = 3			#was 2
     @httpHeaders = {
       'User-Agent'      => "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_2; en-US) AppleWebKit/532.9 (KHTML, like Gecko) Chrome/5.0.307.11 Safari/532.9",
       'Accept'          => 'text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5',
@@ -370,8 +370,6 @@ class ShadowFetch
         sleep(10*@@downloadErrors**2)
       else #elsif @@downloadErrors > @maxFailures
         displayInfo "Offline mode: not fetching #{url_str}"
-        # one more chance for the next fetch
-        @@downloadErrors -= 2
         return nil
       end
       return fetchURL(url_str, redirects)
@@ -380,7 +378,7 @@ class ShadowFetch
     nodebug "#{url_str} successfully downloaded."
     # clear/decrement error counter
     if @@downloadErrors > 0
-      @@downloadErrors = 0
+      @@downloadErrors -= 1
     end
 
     if resp.response && resp.response['set-cookie']
