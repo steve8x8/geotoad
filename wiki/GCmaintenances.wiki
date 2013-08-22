@@ -122,6 +122,14 @@ _*(year per year; new entries will be added at bottom)*_
   * *{{{Web.Release_20130809.3}}}*
   * _not sure whether this is a reaction to [http://forums.groundspeak.com/GC/?showtopic=314287 connection issues]_
 ----
+2013-08-22:
+  * *{{{Web.HotFix_20130821.1}}}*
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=314787 release notes]
+  * /seek/cache_details.aspx?wp=${wid} page now redirects to /geocache/${wid}[_${titlestring}[?guid=${guid}]]
+  * _GeoToad broken! (see issue 277)_
+  * _due to missing GUID pointers, printable pages are now inaccessible_
+  * _*Project is on Hiatus for an undefined amount of time*_
+----
 (...)
 ----
 

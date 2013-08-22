@@ -729,11 +729,11 @@ class Output
         symbolHash[wid] << "<b><font color=\"#9900CC\">&infin;</font></b>"
       end
 
-      if (cache['terrain'] >= 3.5)
+      if (cache['terrain'].to_f >= 3.5)
         symbolHash[wid] << "<b><font color=\"#999922\">&sect;</font></b>"
       end
 
-      if (cache['difficulty'] >= 3.5)
+      if (cache['difficulty'].to_f >= 3.5)
         symbolHash[wid] << "<b><font color=\"#440000\">&uarr;</font></b>"
       end
 
@@ -1179,7 +1179,7 @@ class Output
       'mdate' => cache['mtime'].strftime("%Y-%m-%d"),
       'cdate' => cache['ctime'].strftime("%Y-%m-%d"),
       'adate' => cache['atime'].strftime("%Y-%m-%d"),
-      'size' => cache['size'].gsub(/ /, '_'),
+      'size' => cache['size'].to_s.gsub(/ /, '_'),
       'favcount' => (cache['favorites'] || 0).to_s,
       'foundcount' => (cache['foundcount'] || 1).to_s,
       'favfactor' => (cache['favfactor'] || 0.0).to_s,
