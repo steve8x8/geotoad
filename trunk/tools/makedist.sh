@@ -171,7 +171,7 @@ if [ -x "/usr/local/bin/flip" -o -x "/usr/bin/flip" ]; then
     rm -f geotoad.1
     rm -Rf debian
     mkdir compile
-    mv *.rb lib interface data compile/
+    mv *.rb lib interface data templates compile/
     flip -mb *.txt
     perl -pi -e 's/([\s])geotoad\.rb/$1geotoad/g' README.txt
     # input file for Ocra gem
@@ -196,7 +196,7 @@ EOF
     if [ ! -f compile/geotoad.exe ]; then
       echo "*** Skipping installer build step (geotoad.exe not found)"
     else
-      mv compile/geotoad.exe compile/data ./
+      mv compile/geotoad.exe compile/data compile/templates ./
       rm -Rf "$WIN_DIR"/compile
 #$#      # pack into zip
 #$#      zip -q -r "$WIN_PKG" *
@@ -216,6 +216,7 @@ UninstallDisplayIcon={app}\geotoad.exe
 Source: "geotoad.exe";               DestDir: "{app}"
 Source: "contrib\Delorme_Icons\*.*"; DestDir: "{app}\contrib\Delorme_Icons"
 Source: "data\*.*";                  DestDir: "{app}\data"
+Source: "templates\*.*";             DestDir: "{app}\templates"
 Source: "tools\*.*";                 DestDir: "{app}\tools"
 Source: "ChangeLog.txt";             DestDir: "{app}"
 Source: "COPYRIGHT.txt";             DestDir: "{app}"

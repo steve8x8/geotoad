@@ -1,3 +1,13 @@
+geotoad (3.18.0-1) unstable; urgency=low
+
+  * New version 3.18.0, "Beyond the horizon" release
+  * Requires Ruby 1.9 (or possibly above, untested)
+  * UTF-8 support
+  * Support for own templates
+  * Issue 277: fix issue with new cache page design, and search result links
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Tue, 10 Sep 2013 10:30:00 +0200
+
 geotoad (3.17.10-1) unstable; urgency=low
 
   * New version 3.17.10, "To 3.18 and even beyond" release

@@ -1,0 +1,7 @@
+Warning:
+Not all templates are equally well-maintained. Some of them may never
+have been used more than twice.
+
+While gpsbabel tries to conform to every format it knows about, it author
+Robert Lipe appreciates hints and corrections (see the gpsbabel-code
+mailinglist) as much as we do for the non-gpsbabel stuff.
