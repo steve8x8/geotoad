@@ -197,6 +197,8 @@ class Output
     @output = Array.new
     @waypointLength = 0
     @username = nil
+    # initialize templates
+    t = Templates.new if $Format.empty?
   end
 
   def input(data)
