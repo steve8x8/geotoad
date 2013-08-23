@@ -269,19 +269,29 @@ class CacheDetails
     begin
     data.split("\n").each { |line|
       # <title id="pageTitle">(GC1145) Lake Crabtree computer software store by darylb</title>
-      if line =~ /\<title.*\>\((GC\w+)\) (.*?) by (.*?)\</
+      if line =~ /\<title.*\>\((GC\w+)\) (.*? by .*?)\</
         wid = $1
-        name = $2
-        creator = $3
+        namecreator = $2
+        name = nil
+        creator = nil
+        # if multiple "by", trust what search told us
+        if namecreator !~ /by .* by/ and namecreator =~ /(.*) by (.*)/
+          name = $1
+          creator = $2
+        else
+          debug "Could not determine unambiguously name and creator"
+        end
         debug "wid = #{wid} name=#{name} creator=#{creator}"
         cache = @waypointHash[wid]
-        cache['name'] = name.gsub(/^ +/, '').gsub(/ +$/, '').gsub(/  */, ' ')
         if ! cache.key?('visitors')
           cache['visitors'] = []
         end
-        cache['creator'] = creator
-        # Calculate a semi-unique integer creator id, since we can no longer get it from this page.
-        cache['creator_id'] = Zlib.crc32(creator)
+        if name and creator
+          cache['name'] = name.gsub(/^ +/, '').gsub(/ +$/, '').gsub(/  */, ' ')
+          cache['creator'] = creator
+          # Calculate a semi-unique integer creator id, since we can no longer get it from this page.
+          cache['creator_id'] = Zlib.crc32(creator)
+        end
         cache['shortdesc'] = ''
         cache['longdesc'] = ''
         cache['funfactor'] = 0
@@ -289,12 +299,16 @@ class CacheDetails
 
       end
 
-      # <h2><img src="../images/WptTypes/2.gif" alt="Traditional Cache" width="32" height="32" />&nbsp;Lake Crabtree computer software store</h2>
-      if line =~ /WptTypes.*? alt="(.*?)"/
+      # <h2>
+      #     <img src="../images/WptTypes/2.gif" alt="Traditional Cache" width="32" height="32" />&nbsp;Lake Crabtree computer software store
+      # </h2>
+      if line =~ /WptTypes.*? alt="(.*?)".*?\/\>(.nbsp;)?(.*?)\s*$/
+        full_type = $1
         if ! cache
           displayWarning "Found waypoint type, but never saw cache title. Did geocaching.com change their layout again?"
         end
-        full_type = $1
+        debug "Found alternative name #{$3.inspect}"
+        cache['name2'] = $3.gsub(/^ +/, '').gsub(/ +$/, '').gsub(/  */, ' ')
         # there may be more than 1 match, don't overwrite (see GC1PQKR, GC1PQKT)
         # actually, types have been set by search - is this code obsolete then?
         if cache['fulltype']
@@ -452,6 +466,19 @@ class CacheDetails
     elsif not cache['latwritten']
       displayWarning "#{cache['wid']} was parsed, but no coordinates found."
       return false
+    end
+
+    # Owner:
+    # <div class="HalfLeft">
+    #     <p class="Meta">
+    #         Hosted by:
+    #         Hasemann-Rudow</p>
+    # </div>
+    # FIXME: This one may be language-sensitive!
+    # (But if we don't find creator2, a found name2 won't be effective.)
+    if data =~ /\<div class=.HalfLeft.\>\s*\<p class=.Meta.\>\s*(.*?):\s*(.*?)\<\/p\>\s*\<\/div\>/m
+      debug "Found alternative creator #{$2.inspect}"
+      cache['creator2'] = $2
     end
 
     if data =~ /Difficulty:.*?([\d\.]+) out of 5/m
@@ -625,6 +652,16 @@ class CacheDetails
     cache['funfactor'] = (ff_score * 20).round / 20.0
     debug "Funfactor score: #{cache['funfactor']}"
     cache['additional_raw'] = parseAdditionalWaypoints(data)
+
+    # Fix cache owner/name
+    if cache['name2'] and cache['creator2']
+      if cache['creator2'] != cache['creator']
+        debug "Fix cache name and owner: \"#{cache['name2']}\" by \"#{cache['creator2']}\" (was \"#{cache['name']}\" by \"#{cache['creator']}\")"
+        cache['creator'] = cache['creator2']
+        cache['name'] = cache['name2']
+      end
+    end
+
     return cache
   end  # end function
 
