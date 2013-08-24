@@ -946,7 +946,7 @@ class Output
     new_text.gsub!(/\s*class=\"[^\"]*\"/m, '')
     # we have to keep the "ishidden" information for later
     if text != new_text
-      debug "reduced HTML to #{new_text}"
+      nodebug "reduced HTML to #{new_text}"
     end
     debug "reduceHTML old: #{text.length} new: #{new_text.length}"
     return new_text
@@ -1064,7 +1064,7 @@ class Output
       end
     }
     if wptlist.length > 0
-      debug "XML waypoints #{wptlist}"
+      nodebug "XML waypoints #{wptlist}"
       return wptlist
     else
       return nil
