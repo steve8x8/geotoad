@@ -419,9 +419,10 @@ class GeoToad
         @combinedWids.update(wids)
         @combinedWids.rehash
       }
+      # FIXME: if there's a user exclude, it should be called here
       @queryType = "wid"
       @queryArg = @combinedWids.keys.join($delimiter)
-      displayInfo "Now starting WID search"
+      displayInfo "Now starting #{@queryType} search"
     end
     @queryArg.to_s.split($delimiters).each { |queryArg|
       #puts ""
@@ -466,7 +467,7 @@ class GeoToad
     }
 
     debug "waypoints extracted: #{waypointsExtracted}, combined: #{@combinedWaypoints.length}"
-    if (waypointsExtracted < (@combinedWaypoints.length - 2))
+    if (waypointsExtracted < @combinedWaypoints.length)
       displayWarning "Downloaded #{@combinedWaypoints.length} waypoints, but only #{waypointsExtracted} parsed!"
     end
     return waypointsExtracted
@@ -931,7 +932,7 @@ class GeoToad
       # fool it so that trailing slashes work.
       outputDir = File.dirname(@option['output'] + "x")
     end
-    debug "Using output #{outputDir} / #{outputFileBase}"
+    debug "Using output #{outputDir}/#{outputFileBase}"
     # loop over all chosen formats
     @formatTypes.split($delimiters).each { |formatType|
       output = Output.new
@@ -1012,8 +1013,9 @@ while true
   if count < 1
     cli.displayWarning "No caches found in search, exiting early."
   else
-    cli.displayMessage "#{count} geocaches found in defined area."
+    cli.displayMessage "#{count} caches matching query argument(s)."
     cli.prepareFilter
+    # FIXME: would this let some caches through unfiltered?
     if (options['queryType'] != 'wid') and (options['queryType'] != 'guid')
       cli.preFetchFilter
     end
@@ -1028,7 +1030,7 @@ while true
     if caches > 0
       cli.saveFile
     else
-      cli.displayMessage "No caches were found that matched your requirements"
+      cli.displayMessage "No caches were found that matched your requirements."
     end
   end
   # dummy operation

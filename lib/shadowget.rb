@@ -207,7 +207,7 @@ class ShadowFetch
     rescue
       displayWarning "Could not overwrite #{localfile}!"
     end
-    debug "Returning #{@data.length} bytes: #{@data[0..20]}(...)#{data[-21..-1]}"
+    nodebug "Returning #{@data.length} bytes: #{@data[0..20]}(...)#{data[-21..-1]}"
     return @data
   end
 
