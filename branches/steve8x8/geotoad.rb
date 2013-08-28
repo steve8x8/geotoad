@@ -386,14 +386,13 @@ class GeoToad
 
     # 2013-08-21: for non-wid/guid queries, get list of WIDs first
     if @queryType != "wid" && @queryType != "guid"
-      @combinedWids = Hash.new
       @queryArg.to_s.split($delimiters).each { |queryArg|
         puts ""
-        message = "Performing #{@queryType} search for #{queryArg} "
+        message = "Performing #{@queryType} search for #{queryArg}"
         search = SearchCache.new
         # only valid for zip or coordinate searches
         if @queryType == "zipcode" || @queryType == "coord" || @queryType == 'location'
-          message << "(constraining to #{@distanceMax} miles)"
+          message << " (constraining to #{@distanceMax} miles)"
           search.distance = @distanceMax
         end
         displayMessage message
@@ -414,21 +413,23 @@ class GeoToad
         wids = search.getWids()
         # this gives us support for multiple searches. It adds together the search.waypoints hashes
         # and pops them into the @combinedWids hash.
-        @combinedWids.update(wids)
-        @combinedWids.rehash
+        @combinedWaypoints.update(wids)
+        @combinedWaypoints.rehash
       }
       # FIXME: if there's a user exclude, it should be called here
+      # otherwise a LOT of cache_details would be loaded unnecessarily
       @queryType = "wid"
-      @queryArg = @combinedWids.keys.join($delimiter)
+      @queryArg = @combinedWaypoints.keys.join($delimiter)
+      @combinedWaypoints = {}
       displayInfo "Now starting #{@queryType} search"
     end
     @queryArg.to_s.split($delimiters).each { |queryArg|
       #puts ""
-      message = "Performing #{@queryType} search for #{queryArg} "
+      message = "Performing #{@queryType} search for #{queryArg}"
       search = SearchCache.new
       # only valid for zip or coordinate searches
       if @queryType == "zipcode" || @queryType == "coord" || @queryType == 'location'
-        message << "(constraining to #{@distanceMax} miles)"
+        message << " (constraining to #{@distanceMax} miles)"
         search.distance = @distanceMax
       end
       displayMessage message
