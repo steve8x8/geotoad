@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 # $Id$
 require 'fileutils'
 
@@ -51,38 +52,42 @@ module Common
     return counter
   end
 
+# date patterns in "last found" column (as of 2013-08-28)
+#en-US	English		Today		Yesterday	(n) days ago
+#de-DE	Deutsch		Heute		Gestern		vor (n) Tagen
+#fr-FR	Français	Hier		Aujourd'hui	Il y a (n) jours
+#pt-PT	Português	Hoje		Ontem		(n) dias atrás
+#cs-CZ	Čeština		Dnes		Včera		před (n) dny
+#da-DK	Dansk		I dag		I går		(n) dage siden
+#sv-SE	Svenska		Idag		Igår		för (n) dagar sedan
+#es-ES	Español		Hoy		Ayer		hace (n) días
+#et-EE	Eesti		Täna		Eile		(n) päeva tagasi
+#it-IT	Italiano	Oggi		Ieri		(n) giorni fa
+#el-GR	Ελληνικά	Σήμερα		Χτές		(n) μέρες πριν
+#lv-LV	Latviešu	Šodien		Vakar		pirms (n) dienām
+#nl-NL	Nederlands	Vandaag		Gisteren	(n) dagen geleden
+#ca-ES	Català		Avui		Ahir		Fa (n) dies
+#pl-PL	Polski		Dzisiaj		Wczoraj		(n) dni temu
+#nb-NO	Norsk, Bokmål	I dag		I går		(n) dager siden
+#ko-KR	한국어		오늘		어제		(n) 일 전
+#hu-HU	Magyar		Ma		Tegnap		(n) napja
+#ro-RO	Română		Azi		Ieri		(n) zile in urmă
+#ja-JP	日本語		今日		昨日		(n)日前
+
   def parseDate(date)
     debug "parsing date: [#{date}]"
     timestamp = nil
    # catch exceptions in case there are invalid dates (like GC1C8FF)
    begin
-    # we have to overcome the ignorance of ruby1.8 wrt Unicode characters
+    # patterns may be duplicated (Dansk/Norsk) intentionally
     case date
     # relative dates end in a "*"
-    # Languages: (no Korean for now, and perhaps never with ruby1.8)
-    # en|de|fr|pt|cz
-    # se/no|nl|ca|pl|et
-    # es|hu|ro|lt|it
-    when /^(Today|Heute|Hier|Hoje|Dnes)\*/i
+    when /^(Today|Heute|Hier|Hoje|Dnes|I dag|Idag|Hoy|Täna|Oggi|Σήμερα|Šodien|Vandaag|Avui|Dzisiaj|I dag|오늘|Ma|Azi|今日)\*/i
       debug "date: Today"
       days_ago=0
-    when /^(I ?dag|Vandaag|Avui|Dzisiaj|T.{1,2}na)\*/i
-      debug "date: Today"
-      days_ago=0
-    when /^(Hoy|Ma|Azi|.{1,2}odien|Oggi)\*/i
-      debug "date: Today"
-      days_ago=0
-    when /^(Yesterday|Gestern|Aujourd.{1,2}hui|Ontem|V.{1,2}era)\*/i
+    when /^(Yesterday|Gestern|Aujourd.hui|Ontem|Včera|I går|Igår|Ayer|Eile|Ieri|Χτές|Vakar|Gisteren|Ahir|Wczoraj|I går|어제|Tegnap|Ieri|昨日)\*/i
       debug "date: Yesterday"
       days_ago=1
-    when /^(I ?g.{1,2}r|Gisteren|Ahir|Wczoraj|Eile)\*/i
-      debug "date: Yesterday"
-      days_ago=1
-    when /^(Ayer|Tegnap|Ieri|Vakar|Ieri)\*/i
-      debug "date: Yesterday"
-      days_ago=1
-    # Eesti: 6 päeva tagasi*
-    # Latviešu: pirms 6 dienām*
     # (any string ending with a * and a number in it)
     when /(\d)+ .+\*$/
       debug "date: #{$1} days ago"
