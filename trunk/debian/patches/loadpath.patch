@@ -1,5 +1,5 @@
---- geotoad.trunk/geotoad.rb	2012-09-25 16:56:07.000000000 +0200
-+++ geotoad.trunknew/geotoad.rb	2012-09-25 17:01:43.000000000 +0200
+--- a/geotoad.rb	2013-08-28 11:37:25.000000000 +0200
++++ b/geotoad.rb	2013-08-28 11:38:43.000000000 +0200
 @@ -2,9 +2,11 @@
  #
  # This is the main geotoad binary.
@@ -13,5 +13,5 @@
 +#$LOAD_PATH << (File.dirname(__FILE__.gsub(/\\/, '/')) + '/' + '..')
 +$LOAD_PATH << '/usr/share/geotoad'
  
- $isRuby19 = true
- 
+ if RUBY_VERSION.gsub('.', '').to_i < 190
+   puts "ERROR: The version of Ruby your system has installed is #{RUBY_VERSION}, but we now require 1.9.0 or higher"

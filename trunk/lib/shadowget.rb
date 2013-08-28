@@ -177,14 +177,14 @@ class ShadowFetch
       #@data = nil
     end
     if (@data)
-      @data.force_encoding("UTF-8") #if $isRuby19
+      @data.force_encoding("UTF-8")
       @@src = 'remote'
       size = @data.length
     else
       if (File.exists?(localfile))
         debug "using local cache instead"
         @data = fetchLocal(localfile)
-        @data.force_encoding("UTF-8") #if $isRuby19
+        @data.force_encoding("UTF-8")
         @@src = "local <offline>"
         return @data
       else
@@ -260,7 +260,7 @@ class ShadowFetch
       # openssl 1.0.1 tends to produce long headers which gc doesnt handle
       # reduce set of ciphers to the one that's known to work with 1.0.0h
       # http://gursevkalra.blogspot.de/2009/09/ruby-and-openssl-based-ssl-cipher.html
-      http.ciphers = [ 'RC4-SHA', 'AES128-SHA', 'AES256-SHA', 'DES-CBC3-SHA' ] #if $isRuby19
+      http.ciphers = [ 'RC4-SHA', 'AES128-SHA', 'AES256-SHA', 'DES-CBC3-SHA' ]
       # force ssl context to TLSv1/SSLv3
       # http://www.ruby-forum.com/topic/200072
       http.instance_eval { @ssl_context = OpenSSL::SSL::SSLContext.new(:TLSv1) }
