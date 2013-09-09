@@ -294,4 +294,26 @@ module Common
     end
   end
 
+  # mapping WID to GUID via dictionary file
+  def loadMapping
+    mapping = false
+    if File.exists?(@mappingFile)
+      mapping = YAML::load(File.open(@mappingFile))
+    end
+    if not mapping
+      mapping = Hash.new
+      File.open(@mappingFile, 'w'){ |f| f.puts "---" }
+    end
+    debug "read #{mapping.length} WID-GUID mappings"
+    return mapping
+  end
+
+  def getMapping(wid)
+    return $mapping[wid]
+  end
+
+  def appendMapping(wid, guid)
+    File.open(@mappingFile, 'a'){ |f| f.puts "${wid}: #{guid}" }
+  end
+
 end

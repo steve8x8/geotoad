@@ -42,15 +42,19 @@ class CacheDetails
     if (id =~ /^GC/)
       # If we can look up the guid, use it. It's not actually required, but
       # it behaves a lot more like a standard web browser on the gc.com website.
-      if @waypointHash[id]['guid']
-        suffix = 'guid=' + @waypointHash[id]['guid'].to_s
-      else
+      if ! @waypointHash[id]['guid']
         # parseCache() returns "unpublished" for pm-only w/o premium membership
-        suffix = 'wp=' + id.to_s
         # there is no cdpf.aspx?wp=...
-        # but there might be a way to map wp to guid using the "unpub" interface
-        return nil
+        guid = getMapping(id.to_s)
+        debug "Mapped #{id.inspect} to #{guid.inspect} via dictionary"
+        if not guid
+          # it's not in the table
+          # but there might be a way to map wp to guid using the "unpub" interface
+          return nil
+        end
+        @waypointHash[id]['guid'] = guid
       end
+      suffix = 'guid=' + @waypointHash[id]['guid'].to_s
     else
       suffix = 'guid=' + id.to_s
     end

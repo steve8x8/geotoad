@@ -62,6 +62,9 @@ class GeoToad
     $CACHE_DIR    = findCacheDir()
     @configDir    = findConfigDir
     @historyFile  = @configDir + '/' + 'history.yaml'
+    @mappingFile  = @configDir + '/' + 'mapping.yaml'
+    $mapping      = loadMapping()
+    puts $mapping.length
   end
 
   def getoptions
