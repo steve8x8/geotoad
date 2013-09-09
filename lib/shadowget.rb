@@ -351,6 +351,10 @@ class ShadowFetch
       return fetchURL(location, redirects - 1)
     when Net::HTTPSuccess
       # do nothing
+    when Net::HTTPNotFound
+      # error 404
+      displayWarning "Not Found #{resp.response.inspect}"
+      displayInfo "#{resp.body.length} bytes in body"
     else
       # we may have reported a problem before
       if success
