@@ -47,6 +47,9 @@ class CacheDetails
       else
         # parseCache() returns "unpublished" for pm-only w/o premium membership
         suffix = 'wp=' + id.to_s
+        # there is no cdpf.aspx?wp=...
+        # but there might be a way to map wp to guid using the "unpub" interface
+        return nil
       end
     else
       suffix = 'guid=' + id.to_s
@@ -63,6 +66,8 @@ class CacheDetails
     end
 
     url = fullURL(id)
+    # no valid url (wid doesn't point to guid)
+    return 'subscriber-only' if url.to_s.empty?
     page = ShadowFetch.new(url)
 
     # Tune expiration for young caches:
