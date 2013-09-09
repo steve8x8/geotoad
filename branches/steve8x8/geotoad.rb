@@ -190,38 +190,6 @@ class GeoToad
     return cmdline
   end
 
-  def loadHistory
-    history = false
-    if File.exists?(@historyFile)
-      history = YAML::load(File.open(@historyFile))
-    end
-    if not history
-      history = Hash.new
-    end
-    return history
-  end
-
-  def mergeHistory(history, cmdline, cmdhash)
-    # cmdhash is _not_ hash of cmdline but of all options
-    if ! history[cmdhash]
-      history[cmdhash] = Hash.new()
-      history[cmdhash]['count'] = 0
-    end
-    history[cmdhash]['count'] = history[cmdhash]['count'].to_i + 1
-    history[cmdhash]['cmdline'] = cmdline
-    nodebug "history: #{history.inspect}"
-  end
-
-  def saveHistory(history)
-    begin
-      File.makedirs(@configDir) if (! File.exists?(@configDir))
-      # do not sort on output!
-      File.open(@historyFile, 'w'){ |f| f.puts history.to_yaml }
-    rescue
-    end
-  end
-
-
   ## Check the version #######################
   def comparableVersion(text)
     # Make a calculatable/comparable version number
