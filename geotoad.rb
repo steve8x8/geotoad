@@ -61,7 +61,6 @@ class GeoToad
     @uin          = Input.new
     $CACHE_DIR    = findCacheDir()
     @configDir    = findConfigDir
-    @historyFile  = @configDir + '/' + 'history.yaml'
   end
 
   def getoptions
