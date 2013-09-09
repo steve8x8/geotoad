@@ -400,6 +400,62 @@ class ShadowFetch
     return resp.body
   end
 
+  def fetchHdr (url_str)  # full http:// string!
+    # only fetch redirect!
+    debug "Fetching Hdr [#{url_str}]"
+    uri = URI.parse(url_str)
+    if ENV['HTTP_PROXY']
+      proxy = URI.parse(ENV['HTTP_PROXY'])
+      proxy_user, proxy_pass = uri.userinfo.split(/:/) if uri.userinfo
+      debug "Using proxy from environment: " + ENV['HTTP_PROXY']
+      http = Net::HTTP::Proxy(proxy.host, proxy.port, proxy_user, proxy_pass).new(uri.host, uri.port)
+    else
+      http = Net::HTTP.new(uri.host, uri.port)
+    end
+    if uri.scheme == 'https'
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      http.ciphers = [ 'RC4-SHA', 'AES128-SHA', 'AES256-SHA', 'DES-CBC3-SHA' ]
+      http.instance_eval { @ssl_context = OpenSSL::SSL::SSLContext.new(:TLSv1) }
+    end
+    query = uri.path
+    if uri.query
+      query += "?" + uri.query
+    end
+    @cookie = loadCookie()
+    if @cookie
+      debug "Added Cookie to #{url_str}: #{hideCookie(@cookie)}"
+      @httpHeaders['Cookie'] = @cookie
+    else
+      debug "No cookie to add to #{url_str}"
+    end
+    success = true
+    begin
+      if (@postVars)
+        @httpHeaders['Content-Type'] =  "application/x-www-form-urlencoded"
+        resp = http.post(query, @postString, @httpHeaders)
+        # reset POST variables
+        @postVars = nil
+        @postString = nil
+      else
+        nodebug "GET to #{query}, headers are #{@httpHeaders.keys.join(" ")}"
+        resp = http.get(query, @httpHeaders)
+      end
+    rescue Timeout::Error => e
+      success = false
+      displayWarning "Timeout #{uri.host}:#{uri.port}"
+    rescue Errno::ECONNREFUSED => e
+      success = false
+      displayWarning "Connection refused #{uri.host}:#{uri.port}"
+    rescue => e
+      success = false
+      displayWarning "Cannot connect to #{uri.host}:#{uri.port}: #{e}"
+    end
+    displayInfo "response:\nL:#{resp['location']}\nR:#{resp.response}\nI:#{resp.inspect}\nB:#{resp.body}"
+    return 'empty'
+    #return resp
+  end
+
 
   # compute random sleep time from number of pages remotely fetched
   def randomizedSleep(counter)
