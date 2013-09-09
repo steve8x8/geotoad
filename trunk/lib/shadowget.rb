@@ -148,7 +148,7 @@ class ShadowFetch
     nodebug "====+ Fetch File: #{localfile}"
 
     # expiry?
-    if (File.exists?(localfile))
+    if (File.readable?(localfile))
       age = time.to_i - File.mtime(localfile).to_i
       if (age > @localExpiry)
         debug "local cache is #{age} (> #{@localExpiry}) sec old"
@@ -181,7 +181,7 @@ class ShadowFetch
       @@src = 'remote'
       size = @data.length
     else
-      if (File.exists?(localfile))
+      if (File.readable?(localfile))
         debug "using local cache instead"
         @data = fetchLocal(localfile)
         @data.force_encoding("UTF-8")

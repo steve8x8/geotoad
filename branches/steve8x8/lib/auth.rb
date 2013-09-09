@@ -43,7 +43,7 @@ module Auth
     if ! @@cookie and @@user
       cookie_file = cookieFile()
       cookies = nil
-      if File.exists?(cookie_file)
+      if File.readable?(cookie_file)
         debug "Loading cookies from #{cookie_file}"
         cookies = YAML::load(File.open(cookie_file))
       end
@@ -80,7 +80,8 @@ module Auth
       # cookie has changed: write to file
       @@cookie = cookie
       cookie_file = cookieFile()
-      if File.exists?(cookie_file) && (File.size(cookie_file) > 0)
+      cookies = false
+      if File.readable?(cookie_file)
         cookies = YAML::load(File.open(cookie_file))
       end
       # cookie file may be empty

@@ -166,7 +166,7 @@ module Common
   def selectDirectory(dirs)
     dirs.compact.each do |dir|
       dir = dir.gsub(/\\/, '/')
-      if File.exists?(dir) && File.stat(dir).directory?
+      if File.readable?(dir) && File.stat(dir).directory?
         # write tests seem to be broken in Windows occassionaly.
         if dir =~ /^\w:/ or File.stat(dir).writable?
           return dir
@@ -265,7 +265,7 @@ module Common
   # history stuff
   def loadHistory
     history = false
-    if File.exists?(@historyFile)
+    if File.readable?(@historyFile)
       history = YAML::load(File.open(@historyFile))
     end
     if not history
@@ -297,12 +297,16 @@ module Common
   # mapping WID to GUID via dictionary file
   def loadMapping
     mapping = false
-    if File.exists?(@mappingFile)
+    if File.readable?(@mappingFile)
       mapping = YAML::load(File.open(@mappingFile))
     end
     if not mapping
       mapping = Hash.new
-      File.open(@mappingFile, 'w'){ |f| f.puts "---" }
+      begin
+        File.open(@mappingFile, 'w'){ |f| f.puts "---" }
+      rescue => error
+        displayWarning "Could not reset dictionary!"
+      end
     end
     debug "read #{mapping.length} WID-GUID mappings"
     return mapping
@@ -313,7 +317,11 @@ module Common
   end
 
   def appendMapping(wid, guid)
-    File.open(@mappingFile, 'a'){ |f| f.puts "${wid}: #{guid}" }
+    begin
+      File.open(@mappingFile, 'a'){ |f| f.puts "${wid}: #{guid}" }
+    rescue => error
+      displayWarning "Could not append mapping for #{wid}!"
+    end
   end
 
 end
