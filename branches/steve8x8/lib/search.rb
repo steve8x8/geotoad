@@ -413,7 +413,7 @@ class SearchCache
   end
 
   def getWidSearchResult(url)
-    data = getPage(@search_url, {})
+    data = getPage(url, {})
     if not data
       displayError "No data to be analyzed! Check network connection!"
     end

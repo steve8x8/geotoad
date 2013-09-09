@@ -11,7 +11,7 @@ class CacheDetails
   include Messages
 
   # Use a printable template that shows the last 10 logs.
-  @@baseURL="http://www.geocaching.com/seek/cdpf.aspx"
+  @@baseURL = "http://www.geocaching.com/seek/cdpf.aspx"
 
   def initialize(data)
     @waypointHash = data
@@ -38,6 +38,10 @@ class CacheDetails
     fetch(id)
   end
 
+  def getRemoteMapping(wid)
+    return nil
+  end
+
   def fullURL(id)
     if (id =~ /^GC/)
       # If we can look up the guid, use it. It's not actually required, but
@@ -46,20 +50,24 @@ class CacheDetails
         # parseCache() returns "unpublished" for pm-only w/o premium membership
         # there is no cdpf.aspx?wp=...
         guid = getMapping(id.to_s)
-        debug "Mapped #{id.inspect} to #{guid.inspect} via dictionary"
+        debug "dictionary maps #{id.inspect} to #{guid.inspect}"
         if not guid
-          # it's not in the table
-          # but there might be a way to map wp to guid using the "unpub" interface
+          # it's not in the dictionary; try to map using the "unpub" interface
+          guid = getRemoteMapping(id.to_s)
+        end
+        if not guid
+          # no way
           return nil
         end
+        debug "mapped #{id.inspect} to #{guid.inspect}"
+        appendMapping(id, guid)
         @waypointHash[id]['guid'] = guid
       end
       suffix = 'guid=' + @waypointHash[id]['guid'].to_s
     else
       suffix = 'guid=' + id.to_s
     end
-
-    url = @@baseURL + "?" + suffix + "&lc=10"
+    return @@baseURL + "?" + suffix + "&lc=10"
   end
 
   # fetches by geocaching.com sid
