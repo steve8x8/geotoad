@@ -264,9 +264,10 @@ module Common
 
   # history stuff
   def loadHistory
+    historyFile  = findConfigDir + '/' + 'history.yaml'
     history = false
-    if File.readable?(@historyFile)
-      history = YAML::load(File.open(@historyFile))
+    if File.readable?(historyFile)
+      history = YAML::load(File.open(historyFile))
     end
     if not history
       history = Hash.new
@@ -286,10 +287,12 @@ module Common
   end
 
   def saveHistory(history)
+    configDir = findConfigDir
+    historyFile  = configDir + '/' + 'history.yaml'
     begin
-      File.makedirs(@configDir) if (! File.exists?(@configDir))
+      File.makedirs(configDir) if (! File.exists?(configDir))
       # do not sort on output!
-      File.open(@historyFile, 'w'){ |f| f.puts history.to_yaml }
+      File.open(historyFile, 'w'){ |f| f.puts history.to_yaml }
     rescue
     end
   end

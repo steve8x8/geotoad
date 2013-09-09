@@ -11,7 +11,7 @@ class CacheDetails
   include Messages
 
   # Use a printable template that shows the last 10 logs.
-  @@baseURL="http://www.geocaching.com/seek/cdpf.aspx"
+  @@baseURL = "http://www.geocaching.com/seek/cdpf.aspx"
 
   def initialize(data)
     @waypointHash = data
