@@ -387,6 +387,10 @@ class SearchCache
     @widsonly = false
     if @query_type == 'wid'
       waypoint = getWidSearchResult(@search_url)
+      if ! waypoint
+        # no valid page found
+        return {}
+      end
       wid = waypoint['wid']
       if wid
         if (wid != @query_arg)
@@ -398,6 +402,10 @@ class SearchCache
       return @waypoints
     elsif @query_type == 'guid'
       waypoint = getWidSearchResult(@search_url)
+      if ! waypoint
+        # no valid page found
+        return {}
+      end
       wid = waypoint['wid']
       # did we find a WID?
       if wid
@@ -433,6 +441,10 @@ class SearchCache
     ctime = Time.at($ZEROTIME)
     cdays = -1
     begin
+    if data =~ /<title>\s*404 - File Not Found\s*<\/title>/m
+      debug "Unknown cache, error 404"
+      return nil
+    end
     data.split("\n").each { |line|
       line.gsub!(/&#39;/, '\'')
       case line
@@ -533,8 +545,8 @@ class SearchCache
       'name' => cname,
       'creator' => owner,
       'fulltype' => ctype,
-      'type' => ctype.split(' ')[0].downcase.gsub(/\-/, ''),
-      'size' => csize.gsub(/medium/, 'regular'),
+      'type' => ctype.to_s.split(' ')[0].downcase.gsub(/\-/, ''),
+      'size' => csize.to_s.gsub(/medium/, 'regular'),
       'difficulty' => cdiff,
       'terrain' => cterr,
       # these are educated guesses only
