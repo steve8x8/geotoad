@@ -166,7 +166,7 @@ module Common
   def selectDirectory(dirs)
     dirs.compact.each do |dir|
       dir = dir.gsub(/\\/, '/')
-      if File.exists?(dir) && File.stat(dir).directory?
+      if File.readable?(dir) && File.stat(dir).directory?
         # write tests seem to be broken in Windows occassionaly.
         if dir =~ /^\w:/ or File.stat(dir).writable?
           return dir
@@ -265,7 +265,7 @@ module Common
   # history stuff
   def loadHistory
     history = false
-    if File.exists?(@historyFile)
+    if File.readable?(@historyFile)
       history = YAML::load(File.open(@historyFile))
     end
     if not history
