@@ -17,7 +17,6 @@ class SearchCache
   def initialize
     @distance = 15
     @max_pages = 0		# unlimited
-    @widsonly = false		# extract only WIDs from search results
     @ttl = 12 * 3600		# 12 hours (was 20)
     @waypoints = Hash.new
 
@@ -376,15 +375,8 @@ class SearchCache
     return [distance, direction]
   end
 
-  def getWids()
-    debug "Getting WIDs: #{@query_type} at #{@search_url}"
-    @widsonly = true
-    return searchResults(@search_url)
-  end
-
   def getResults()
     nodebug "Getting results: #{@query_type} at #{@search_url}"
-    @widsonly = false
     if @query_type == 'wid'
       waypoint = getWidSearchResult(@search_url)
       if ! waypoint
@@ -560,7 +552,7 @@ class SearchCache
   end
 
   def searchResults(url)
-    debug "searchResults: #{url} widsonly=#{@widsonly.inspect}"
+    debug "searchResults: #{url}"
     if not url
       displayWarning "searchResults has no URL?"
     end
@@ -1010,9 +1002,6 @@ class SearchCache
             cache['atime'] = Time.at($ZEROTIME)
           end
 
-        if @widsonly
-          @waypoints[wid] = wid
-        else
           @waypoints[wid] = cache.dup
           @waypoints[wid]['visitors'] = []
 
@@ -1023,8 +1012,6 @@ class SearchCache
 
           # cache counter (1..n) - need that to reconstruct search order
           @waypoints[wid]['index'] = @waypoints.length
-        end #widsonly
-
         end
         # clear cache even if there's no wid (yet)
         cache.clear
