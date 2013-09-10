@@ -56,6 +56,7 @@ class CacheDetails
       debug "Found GUID: #{guid}"
       return guid
     end
+    displayWarning "Could not map #{wid} to GUID"
     return nil
   end
 
@@ -341,11 +342,12 @@ class CacheDetails
         name = nil
         creator = nil
         # if multiple "by", trust what search told us
-        if namecreator !~ /by .* by/ and namecreator =~ /(.*) by (.*)/
+        if namecreator =~ /(.*) by (.*)/
           name = $1
           creator = $2
-        else
-          debug "Could not determine unambiguously name and creator"
+          if namecreator =~ /by .* by/
+            debug "Could not determine unambiguously name and creator"
+          end
         end
         debug "wid = #{wid} name=#{name} creator=#{creator}"
         cache = @waypointHash[wid]
@@ -722,7 +724,7 @@ class CacheDetails
     # Fix cache owner/name
     if cache['name2'] and cache['creator2']
       if cache['creator2'] != cache['creator']
-        debug "Fix cache name and owner: \"#{cache['name2']}\" by \"#{cache['creator2']}\" (was \"#{cache['name']}\" by \"#{cache['creator']}\")"
+        debug "Fix cache name and creator: \"#{cache['name2']}\" by \"#{cache['creator2']}\" (was \"#{cache['name']}\" by \"#{cache['creator']}\")"
         cache['creator'] = cache['creator2']
         cache['name'] = cache['name2']
       end
