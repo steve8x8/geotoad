@@ -846,7 +846,7 @@ class SearchCache
         debug "found Favorites=#{favs}"
         cache['favorites'] = favs
 
-# 2011-05-04: unchanged
+# 2011-05-04: obsoleted by 2013-08-21 changes
       # <a href="/seek/cache_details.aspx?guid=c9f28e67-5f18-45c0-90ee-76ec8c57452f">Yasaka-Shrine@Zerosen</a>
       # now (2010-12-22, one line!):
       # <a href="/seek/cache_details.aspx?guid=ecfd0038-8e51-4ac8-a073-1aebe7c10cbc" class="lnk">
@@ -856,6 +856,69 @@ class SearchCache
       when /(<img[^\>]*alt=\"(.*?)\".*)?cache_details.aspx\?guid=([0-9a-f-]*)([^\>]*)>\<span\>(.*?)\<\/span\>\<\/a\>/
         debug "found type=#{$2} guid=#{$3} name=#{$5}"
         cache['guid'] = $3
+        strike = $4
+        name = $5
+      # type is also in here!
+        full_type = $2
+        # there may be more than 1 match, don't overwrite
+        if cache['fulltype']
+          debug "Not overwriting \"#{cache['fulltype']}\"(#{cache['type']} with \"#{full_type}\""
+        else
+          cache['fulltype'] = full_type
+          cache['type'] = full_type.split(' ')[0].downcase.gsub(/\-/, '')
+          # special cases
+          case full_type
+          when /Cache In Trash Out/
+            cache['type'] = 'cito'
+          when /Lost and Found Celebration/
+            cache['type'] = 'lfceleb'
+          when /Lost and Found/
+            cache['type'] = 'lost+found'
+          when /Project APE Cache/
+            cache['type'] = 'ape'
+          when /Groundspeak HQ/
+            cache['type'] = 'gshq'
+          when /Locationless/
+            cache['type'] = 'reverse'
+          when /Block Party/
+            cache['type'] = 'block'
+          # planned transition
+          when /Mystery/
+            cache['fulltype'] = 'Unknown Cache'
+            cache['type'] = 'unknown'
+          end
+          if full_type =~ /Event/
+            debug "Setting event flag for #{full_type}"
+            cache['event'] = true
+          end
+          debug "short type=#{cache['type']} for #{full_type}"
+        end
+        debug "Found cache details link for #{name}"
+
+        # AFAIK only "user" queries actually return archived caches
+        # class="lnk OldWarning Strike Strike"><span>Lars vom Mars</span></a>
+        # class="lnk  Strike"><span>Rund um den See, # 04</span></a>
+        if strike =~ /class=\"[^\"]*Warning/
+          cache['archived'] = true
+          debug "#{name} appears to be archived"
+        else
+          cache['archived'] = false
+        end
+
+        if strike =~ /class=\"[^\"]*Strike/
+          cache['disabled'] = true
+          debug "#{name} appears to be disabled"
+        else
+          cache['disabled'] = false
+        end
+
+        cache['name'] = name.gsub(/ *$/, '').gsub(/  */, ' ')
+        debug "guid=#{cache['guid']} name=#{cache['name']} (disabled=#{cache['disabled']}, archived=#{cache['archived']})"
+
+      # 2013-08-21:
+      when /(<img[^\>]*alt=\"(.*?)\".*)?\/geocache\/(GC[0-9A-Z]+)_([^\>]*)>\<span\>(.*?)\<\/span\>\<\/a\>/
+        debug "found type=#{$2} wid=#{$3} name=#{$5}"
+        #cache['wid'] = $3
         strike = $4
         name = $5
       # type is also in here!
@@ -957,7 +1020,7 @@ class SearchCache
         debug "#{wid} is a members only cache. Marking"
         cache['membersonly'] = true
 
-# 2011-05-04: unchanged
+# 2011-05-04: unchanged, but obsolete
       # 2010-12-22:
       # <img id="ctl00_ContentBody_dlResults_ctl??_uxDTCacheTypeImage" src="../ImgGen/seek/CacheInfo.ashx?v=MwlMg9" border="0">
       when /CacheInfo.ashx\?v=([a-zA-Z0-9]*)/
@@ -979,6 +1042,14 @@ class SearchCache
         cache['size'] = $3.gsub(/_/, ' ') # "not chosen"
         cache['dtsv'] = 'not_encoded'
         cache['dts'] = ''
+# 2013-08-21: split into multiple lines
+      when /^\s+<span[^>]*>([\d.]+)\/([\d.]+)<\/span>/
+        cache['difficulty'] = tohalfint($1)
+        cache['terrain'] = tohalfint($2)
+        cache['dtsv'] = 'not_encoded'
+        cache['dts'] = ''
+      when /^\s+<img src.*?\/container\/(\w+)\./
+        cache['size'] = $1.gsub(/_/, ' ') # "not chosen"
 
 # 2013-08-21: /geocache/${wid}[_.*] links to new pages
       # <a href="http://www.geocaching.com/geocache/GC42CGC_platz-der-einheit" ...

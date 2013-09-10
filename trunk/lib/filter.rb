@@ -47,42 +47,42 @@ class Filter
   def difficultyMin(num)
     debug "filtering by difficultyMin: #{num}"
     @waypointHash.delete_if { |wid, values|
-      @waypointHash[wid]['difficulty'] < num
+      @waypointHash[wid]['difficulty'].to_f < num
     }
   end
 
   def difficultyMax(num)
     debug "filtering by difficultyMax: #{num}"
     @waypointHash.delete_if { |wid, values|
-      @waypointHash[wid]['difficulty'] > num
+      @waypointHash[wid]['difficulty'].to_f > num
     }
   end
 
   def terrainMin(num)
     debug "filtering by terrainMin: #{num}"
     @waypointHash.delete_if { |wid, values|
-      @waypointHash[wid]['terrain'] < num
+      @waypointHash[wid]['terrain'].to_f < num
     }
   end
 
   def terrainMax(num)
     debug "filtering by terrainMax: #{num}"
     @waypointHash.delete_if { |wid, values|
-      @waypointHash[wid]['terrain'] > num
+      @waypointHash[wid]['terrain'].to_f > num
     }
   end
 
   def funFactorMin(num)
     debug "filtering by funFactorMin: #{num}"
     @waypointHash.delete_if { |wid, values|
-      @waypointHash[wid]['funfactor'] < num
+      @waypointHash[wid]['funfactor'].to_f < num
     }
   end
 
   def funFactorMax(num)
     debug "filtering by funFactorMax: #{num}"
     @waypointHash.delete_if { |wid, values|
-      @waypointHash[wid]['funfactor'] > num
+      @waypointHash[wid]['funfactor'].to_f > num
     }
   end
 
@@ -104,7 +104,7 @@ class Filter
     debug "filtering by sizeMin: #{size_name} (#{@@sizes[size_name]})"
     @waypointHash.delete_if { |wid, values|
       debug "size check for #{wid}: #{@waypointHash[wid]['size']}"
-      @@sizes[@waypointHash[wid]['size']] < @@sizes[size_name]
+      @@sizes[@waypointHash[wid]['size']].to_i < @@sizes[size_name]
     }
   end
 
@@ -124,7 +124,7 @@ class Filter
     debug "filtering by sizeMax: #{size_name} (#{@@sizes[size_name]})"
     @waypointHash.delete_if { |wid, values|
       debug "size check for #{wid}: #{@waypointHash[wid]['size']}"
-      @@sizes[@waypointHash[wid]['size']] > @@sizes[size_name]
+      @@sizes[@waypointHash[wid]['size']].to_i > @@sizes[size_name]
     }
   end
 
@@ -173,7 +173,7 @@ class Filter
   def ownerExclude(nick)
     debug "filtering by ownerExclude: #{nick}"
     @waypointHash.delete_if { |wid, values|
-      creator = CGI.unescapeHTML(@waypointHash[wid]['creator'])
+      creator = CGI.unescapeHTML(@waypointHash[wid]['creator'].to_s)
       creator =~ /#{nick}/i
     }
   end
@@ -181,7 +181,7 @@ class Filter
   def ownerInclude(nick)
     debug "filtering by ownerInclude: #{nick}"
     @waypointHash.delete_if { |wid, values|
-      @waypointHash[wid]['creator'] !~ /#{nick}/i
+      @waypointHash[wid]['creator'].to_s !~ /#{nick}/i
     }
   end
 

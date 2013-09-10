@@ -730,6 +730,14 @@ class CacheDetails
       end
     end
 
+    # should not happen, but we need this field in list output
+    if not cache['fulltype']
+      cache['fulltype'] = 'Cache type unknown'
+    end
+    if not cache['type']
+      cache['type'] = 'empty'
+    end
+
     return cache
   end  # end function
 
