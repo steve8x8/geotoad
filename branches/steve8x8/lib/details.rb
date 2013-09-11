@@ -355,10 +355,15 @@ class CacheDetails
           cache['visitors'] = []
         end
         if name and creator
-          cache['name'] = name.gsub(/^ +/, '').gsub(/ +$/, '').gsub(/  */, ' ')
-          cache['creator'] = creator
+          # do not overwrite what we might have got from search
+          if not cache['name']
+            cache['name'] = name.gsub(/^ +/, '').gsub(/ +$/, '').gsub(/  */, ' ')
+          end
+          if not cache['creator']
+            cache['creator'] = creator
+          end
           # Calculate a semi-unique integer creator id, since we can no longer get it from this page.
-          cache['creator_id'] = Zlib.crc32(creator)
+          cache['creator_id'] = Zlib.crc32(cache['creator'])
         end
         cache['shortdesc'] = ''
         cache['longdesc'] = ''
