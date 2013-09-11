@@ -916,7 +916,7 @@ class SearchCache
         debug "guid=#{cache['guid']} name=#{cache['name']} (disabled=#{cache['disabled']}, archived=#{cache['archived']})"
 
       # 2013-08-21:
-      when /(<img[^\>]*alt=\"(.*?)\".*)?\/geocache\/(GC[0-9A-Z]+)_([^\>]*)>\<span\>(.*?)\<\/span\>\<\/a\>/
+      when /(<img[^\>]*alt=\"(.*?)\".*)?\/geocache\/(GC[0-9A-Z]+)([^\>]*)>\<span\>(.*?)\<\/span\>\<\/a\>/
         debug "found type=#{$2} wid=#{$3} name=#{$5}"
         #cache['wid'] = $3
         strike = $4
