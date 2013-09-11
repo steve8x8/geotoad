@@ -39,19 +39,25 @@ class CacheDetails
   end
 
   def getRemoteMapping(wid)
-    return getRemoteMapping1(wid)	# method 1: via cache_details
-    #return getRemoteMapping2(wid)	# method 2: via error page
+    # get guid via GC code lookup
+    guid = getRemoteMapping1(wid)
+    if guid
+      return guid
+    end
+    # get guid from cache_details page
+    guid = getRemoteMapping2(wid)
+    return guid
   end
 
   def getRemoteMapping1(wid)
-    # extract mapping from cache_details page
-    debug "remotely resolving WID #{wid}"
-    @pageURL = 'http://www.geocaching.com/seek/cache_details.aspx?wp=' + wid
-    # unfortunately we cannot use getWidSearchResult(@pageURL)
+    debug "Get GUID from GCCodeLookup for #{wid}"
+    # get mapping using GC code lookup (found via wireshark)
+    @pageURL = 'http://www.geocaching.com/seek/cache_details.aspx/GCCodeLookup'
     page = ShadowFetch.new(@pageURL)
-    page.localExpiry = 14 * 24 * 3600	# or even longer
-    data = page.fetch
-    if data =~ /cdpf\.aspx\?guid=([\w-]+)/m
+    # no need to set expiry as this bypasses the file cache
+    response = page.fetchGuid(wid)
+    # returns json object {"d":"http://...guid=..."}
+    if response =~ /guid=([\w-]*)/
       guid = $1
       debug "Found GUID: #{guid}"
       return guid
@@ -61,34 +67,19 @@ class CacheDetails
   end
 
   def getRemoteMapping2(wid)
-    # redirect location from error page contains guid
-    # ToDo
-    @pageURL = 'http://www.geocaching.com/error/404.aspx'
+    debug "Get GUID from cache_details for #{wid}"
+    # extract mapping from cache_details page
+    guid = nil
+    @pageURL = 'http://www.geocaching.com/seek/cache_details.aspx?wp=' + wid
     page = ShadowFetch.new(@pageURL)
-    page.localExpiry = 1
+    page.localExpiry = 14 * 24 * 3600	# or even longer
     data = page.fetch
-    @postVars = Hash.new
-    data.each_line { |line|
-      case line
-      when /\<input type=\"hidden\" name=\"(.*?)\".*value0\"(.*?)\"/
-        debug "found hidden post variable: #{$1}"
-        @postVars[$1] = $2
-      when /\<form name=\"aspnetForm\" method=\"post\" action=\"(.*?)\"/
-        debug "found post action: #{$1.inspect}"
-        @postURL = 'http://www.geocaching.com/error/' + $1
-      end
-    }
-    page = ShadowFetch.new(@postURL)
-    page.localExpiry = 0	# always overwrite
-    @postVars['ctl00$ContentBody$tbSearch'] = wid
-    #@postVars['ctl00$ContentBody$ibSearch'] = 'Search'
-    page.postVars = @postVars
-    resp = page.fetchHdr(@postURL)
-    return nil
-    # ...
-    if resp['location'] =~ /guid=([\w-]*)/
-      return $1
+    if data =~ /cdpf\.aspx\?guid=([\w-]+)/m
+      guid = $1
+      debug "Found GUID: #{guid}"
+      return guid
     end
+    displayWarning "Could not map #{wid} to GUID"
     return nil
   end
 

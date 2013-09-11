@@ -400,9 +400,10 @@ class ShadowFetch
     return resp.body
   end
 
-  def fetchHdr (url_str)  # full http:// string!
-    # only fetch redirect!
-    debug "Fetching Hdr [#{url_str}]"
+  def fetchGuid (wid)
+    debug "Running GCCodeLookup for [#{wid}]"
+    # found via wireshark
+    url_str = "http://www.geocaching.com/seek/cache_details.aspx/GCCodeLookup"
     uri = URI.parse(url_str)
     if ENV['HTTP_PROXY']
       proxy = URI.parse(ENV['HTTP_PROXY'])
@@ -412,16 +413,7 @@ class ShadowFetch
     else
       http = Net::HTTP.new(uri.host, uri.port)
     end
-    if uri.scheme == 'https'
-      http.use_ssl = true
-      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      http.ciphers = [ 'RC4-SHA', 'AES128-SHA', 'AES256-SHA', 'DES-CBC3-SHA' ]
-      http.instance_eval { @ssl_context = OpenSSL::SSL::SSLContext.new(:TLSv1) }
-    end
     query = uri.path
-    if uri.query
-      query += "?" + uri.query
-    end
     @cookie = loadCookie()
     if @cookie
       debug "Added Cookie to #{url_str}: #{hideCookie(@cookie)}"
@@ -431,16 +423,10 @@ class ShadowFetch
     end
     success = true
     begin
-      if (@postVars)
-        @httpHeaders['Content-Type'] =  "application/x-www-form-urlencoded"
-        resp = http.post(query, @postString, @httpHeaders)
-        # reset POST variables
-        @postVars = nil
-        @postString = nil
-      else
-        nodebug "GET to #{query}, headers are #{@httpHeaders.keys.join(" ")}"
-        resp = http.get(query, @httpHeaders)
-      end
+        postString = "{\"gcCode\":\"#{wid}\"}"
+        @httpHeaders['Content-Type'] = "application/json; charset=UTF-8"
+        @httpHeaders['Referer'] = "http://www.geocaching.com/seek/cache_details.aspx?wp=GC1"
+        resp = http.post(query, postString, @httpHeaders)
     rescue Timeout::Error => e
       success = false
       displayWarning "Timeout #{uri.host}:#{uri.port}"
@@ -451,9 +437,8 @@ class ShadowFetch
       success = false
       displayWarning "Cannot connect to #{uri.host}:#{uri.port}: #{e}"
     end
-    displayInfo "response:\nL:#{resp['location']}\nR:#{resp.response}\nI:#{resp.inspect}\nB:#{resp.body}"
-    return 'empty'
-    #return resp
+    debug "Response: #{resp.body}"
+    return resp.body
   end
 
 
