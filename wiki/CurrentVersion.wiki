@@ -1,11 +1,27 @@
 #summary Features of current version
 #labels Featured
 
-version=3.16.9
+version=3.17.11
 
-= "Good-bye Ruby 1.8 Tuesday" release (Jun 25, 2013) and bugfix release (Jul 1, 2013) =
+= "Speeding up" release (Sep 12, 2013) =
+
+= What's new in 3.17.11? =
+  * nicknamed "Speeding up" (fix issues towards 3.18.0)
+  * this is a pre-release for 3.18.0, and may still contain bugs
+  * use with caution and at your own risk
+  * *IMPORTANT*: check the "Dictionary" wiki page!
+
+== Issues addressed: ==
+  * UTF-8 support
+  * Issue 176: de-encode HTML entities in cache and owner name (to be extended)
+  * Issue 245: small fix for "... by ... by ..." caches
+  * Issue 274: requires Ruby 1.9 (or possibly above, untested)
+  * Issue 275: support for own templates
+  * Issue 277: issue with new GC design (cache page, search results) partially fixed
+
 
 = What's new in 3.16.9? =
+  * nicknamed "Good-bye Ruby 1.8 Tuesday" as support will be dropped
 
 == Issues addressed: ==
   * New version 3.16.9

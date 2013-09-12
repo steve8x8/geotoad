@@ -1,9 +1,23 @@
 #summary Features of current development version
 #labels Featured,Experimental
 
-version=3.17.10
+version=3.17.11
 
-= "To 3.18 and even beyond" release (Jul 1, 2013) =
+= "Speeding up" release (Sep 12, 2013) =
+
+= New development version 3.17.11 =
+  * nicknamed "Speeding up" (fix issues towards 3.18.0)
+  * this is a pre-release for 3.18.0, and may still contain bugs
+  * use with caution and at your own risk
+  * *IMPORTANT*: check the "Dictionary" wiki page!
+
+== Issues addressed: ==
+  * UTF-8 support
+  * Issue 176: de-encode HTML entities in cache and owner name (to be extended)
+  * Issue 245: small fix for "... by ... by ..." caches
+  * Issue 274: requires Ruby 1.9 (or possibly above, untested)
+  * Issue 275: support for own templates
+  * Issue 277: issue with new GC design (cache page, search results) partially fixed
 
 = New development version 3.17.10 =
   * nicknamed "To 3.18 and even beyond" (as this will become the basis for 3.18.0)
