@@ -503,7 +503,8 @@ class SearchCache
     #                 <div id="ctl00_ContentBody_mcd2">
     #                Hidden:
     #                10/11/2011
-    if data =~ /<div[^>]*mcd2.>\s*[\w ]*:\s*((\d+ \w{3} \d+)|([0-9\/\.-]+))/m
+    # 2013-08-21: "Hidden\n:"
+    if data =~ /<div[^>]*mcd2.>\s*[\w ]*\s*:\s*((\d+ \w{3} \d+)|([0-9\/\.-]+))/m
       debug "Found creation date: #{$1}"
       ctime = parseDate($1)
       cdays = daysAgo(ctime)
