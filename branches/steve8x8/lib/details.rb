@@ -62,7 +62,7 @@ class CacheDetails
       debug "Found GUID: #{guid}"
       return guid
     end
-    displayWarning "Could not map #{wid} to GUID"
+    displayWarning "Could not map(1) #{wid} to GUID"
     return nil
   end
 
@@ -79,7 +79,7 @@ class CacheDetails
       debug "Found GUID: #{guid}"
       return guid
     end
-    displayWarning "Could not map #{wid} to GUID"
+    displayWarning "Could not map(2) #{wid} to GUID"
     return nil
   end
 
