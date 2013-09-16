@@ -38,24 +38,77 @@ class CacheDetails
     fetch(id)
   end
 
+  def getRemoteMapping(wid)
+    # get guid via GC code lookup
+    guid = getRemoteMapping1(wid)
+    if guid
+      return guid
+    end
+    # get guid from cache_details page
+    guid = getRemoteMapping2(wid)
+    return guid
+  end
+
+  def getRemoteMapping1(wid)
+    debug "Get GUID from GCCodeLookup for #{wid}"
+    # get mapping using GC code lookup (found via wireshark)
+    @pageURL = 'http://www.geocaching.com/seek/cache_details.aspx/GCCodeLookup'
+    page = ShadowFetch.new(@pageURL)
+    # no need to set expiry as this bypasses the file cache
+    response = page.fetchGuid(wid)
+    # returns json object {"d":"http://...guid=..."}
+    if response =~ /guid=([\w-]*)/
+      guid = $1
+      debug "Found GUID: #{guid}"
+      return guid
+    end
+    displayWarning "Could not map(1) #{wid} to GUID"
+    return nil
+  end
+
+  def getRemoteMapping2(wid)
+    debug "Get GUID from cache_details for #{wid}"
+    # extract mapping from cache_details page
+    guid = nil
+    @pageURL = 'http://www.geocaching.com/seek/cache_details.aspx?wp=' + wid
+    page = ShadowFetch.new(@pageURL)
+    page.localExpiry = 14 * 24 * 3600	# or even longer
+    data = page.fetch
+    if data =~ /cdpf\.aspx\?guid=([\w-]+)/m
+      guid = $1
+      debug "Found GUID: #{guid}"
+      return guid
+    end
+    displayWarning "Could not map(2) #{wid} to GUID"
+    return nil
+  end
+
   def fullURL(id)
     if (id =~ /^GC/)
       # If we can look up the guid, use it. It's not actually required, but
       # it behaves a lot more like a standard web browser on the gc.com website.
-      if @waypointHash[id]['guid']
-        suffix = 'guid=' + @waypointHash[id]['guid'].to_s
-      else
+      if ! @waypointHash[id]['guid']
         # parseCache() returns "unpublished" for pm-only w/o premium membership
-        suffix = 'wp=' + id.to_s
         # there is no cdpf.aspx?wp=...
-        # but there might be a way to map wp to guid using the "unpub" interface
-        return nil
+        guid = getMapping(id.to_s)
+        debug "dictionary maps #{id.inspect} to #{guid.inspect}"
+        if not guid
+          # it's not in the dictionary; try to map using the "unpub" interface
+          guid = getRemoteMapping(id.to_s)
+        end
+        if not guid
+          # no way
+          return nil
+        end
+        debug "mapped #{id.inspect} to #{guid.inspect}"
+        appendMapping(id, guid)
+        @waypointHash[id]['guid'] = guid
       end
+      suffix = 'guid=' + @waypointHash[id]['guid'].to_s
     else
       suffix = 'guid=' + id.to_s
     end
-
-    url = @@baseURL + "?" + suffix + "&lc=10"
+    return @@baseURL + "?" + suffix + "&lc=10"
   end
 
   # fetches by geocaching.com sid

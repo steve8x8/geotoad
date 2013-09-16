@@ -400,6 +400,47 @@ class ShadowFetch
     return resp.body
   end
 
+  def fetchGuid (wid)
+    debug "Running GCCodeLookup for [#{wid}]"
+    # found via wireshark
+    url_str = "http://www.geocaching.com/seek/cache_details.aspx/GCCodeLookup"
+    uri = URI.parse(url_str)
+    if ENV['HTTP_PROXY']
+      proxy = URI.parse(ENV['HTTP_PROXY'])
+      proxy_user, proxy_pass = uri.userinfo.split(/:/) if uri.userinfo
+      debug "Using proxy from environment: " + ENV['HTTP_PROXY']
+      http = Net::HTTP::Proxy(proxy.host, proxy.port, proxy_user, proxy_pass).new(uri.host, uri.port)
+    else
+      http = Net::HTTP.new(uri.host, uri.port)
+    end
+    query = uri.path
+    @cookie = loadCookie()
+    if @cookie
+      debug "Added Cookie to #{url_str}: #{hideCookie(@cookie)}"
+      @httpHeaders['Cookie'] = @cookie
+    else
+      debug "No cookie to add to #{url_str}"
+    end
+    success = true
+    begin
+        postString = "{\"gcCode\":\"#{wid}\"}"
+        @httpHeaders['Content-Type'] = "application/json; charset=UTF-8"
+        @httpHeaders['Referer'] = "http://www.geocaching.com/seek/cache_details.aspx?wp=GC1"
+        resp = http.post(query, postString, @httpHeaders)
+    rescue Timeout::Error => e
+      success = false
+      displayWarning "Timeout #{uri.host}:#{uri.port}"
+    rescue Errno::ECONNREFUSED => e
+      success = false
+      displayWarning "Connection refused #{uri.host}:#{uri.port}"
+    rescue => e
+      success = false
+      displayWarning "Cannot connect to #{uri.host}:#{uri.port}: #{e}"
+    end
+    debug "Response: #{resp.body}"
+    return resp.body
+  end
+
 
   # compute random sleep time from number of pages remotely fetched
   def randomizedSleep(counter)
