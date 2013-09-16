@@ -297,4 +297,40 @@ module Common
     end
   end
 
+  # mapping WID to GUID via dictionary file
+  def loadMapping
+    mappingFile  = findConfigDir + '/' + 'mapping.yaml'
+    mapping = false
+    if File.readable?(mappingFile)
+      mapping = YAML::load(File.open(mappingFile))
+    end
+    if not mapping
+      mapping = Hash.new
+      begin
+        File.open(mappingFile, 'w'){ |f| f.puts "---" }
+      rescue => error
+        displayWarning "Could not reset dictionary:\n\t#{error}"
+      end
+    end
+    displayInfo "#{mapping.length} mappings WID->GUID read from #{mappingFile}"
+    return mapping
+  end
+
+  def getMapping(wid)
+    return $mapping[wid]
+  end
+
+  def appendMapping(wid, guid)
+    # this is a simple YAML file that can just be appended to
+    return if $mapping[wid]
+    $mapping[wid] = guid
+    mappingFile  = findConfigDir + '/' + 'mapping.yaml'
+    displayInfo "Writing mapping #{wid} -> #{guid}"
+    begin
+      File.open(mappingFile, 'a'){ |f| f.puts "#{wid}: #{guid}" }
+    rescue => error
+      displayWarning "Could not append mapping for #{wid}:\n\t#{error}"
+    end
+  end
+
 end
