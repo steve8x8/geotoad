@@ -648,8 +648,8 @@ class CacheDetails
     #   <p class="Meta">
     #   Log Counts:
     #   <img src="../images/icons/icon_smile.gif" alt="Found it" />&nbsp;71&nbsp;Found it&nbsp;<img src="../images/icons/icon_sad.gif" alt="Didn't find it" />&nbsp;9&nbsp;Didn't find it&nbsp;<img src="../images/icons/icon_note.gif" alt="Write note" />&nbsp;8&nbsp;Write note&nbsp;<img src="../images/icons/traffic_cone.gif" alt="Archive" />&nbsp;1&nbsp;Archive&nbsp;<img src="../images/icons/traffic_cone.gif" alt="Unarchive" />&nbsp;1&nbsp;Unarchive&nbsp;<img src="../images/icons/icon_disabled.gif" alt="Temporarily Disable Listing" />&nbsp;1&nbsp;Temporarily Disable Listing&nbsp;<img src="../images/icons/icon_enabled.gif" alt="Enable Listing" />&nbsp;1&nbsp;Enable Listing&nbsp;<img src="../images/icons/icon_greenlight.gif" alt="Publish Listing" />&nbsp;1&nbsp;Publish Listing&nbsp;<img src="../images/icons/icon_needsmaint.gif" alt="Needs Maintenance" />&nbsp;3&nbsp;Needs Maintenance&nbsp;<img src="../images/icons/icon_maint.gif" alt="Owner Maintenance" />&nbsp;1&nbsp;Owner Maintenance&nbsp;<img src="../images/icons/big_smile.gif" alt="Post Reviewer Note" />&nbsp;1&nbsp;Post Reviewer Note&nbsp;</p>
-    if data =~ /\<p class=.Meta.\>\s*Log Counts:\s*(\<img.*?)\<\/p\>/
-      logcounts = $1.gsub(/\<img[^\>]*\>/, '').gsub(/\&nbsp;/, ' ')
+    if data =~ /\<p class=.Meta.\>\s*(<strong>)?Log Counts:(<\/strong>)?\s*(\<img.*?)\<\/p\>/
+      logcounts = $3.gsub(/\<img[^\>]*\>/, '').gsub(/\&nbsp;/, ' ')
       cache['logcounts'] = logcounts
       debug "Found log counts: #{logcounts}"
     end
