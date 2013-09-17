@@ -1,12 +1,11 @@
-# A library for automatic location searches, using the Google Geocoding API
-require 'csv'
+# A library for automatic location searches, using the Google Geocoding API v3
+# see documentation https://developers.google.com/maps/documentation/geocoding/
 
 require 'common'
 require 'cgi'
 require 'shadowget'
 
-MAPS_URL = 'http://maps.google.com/maps/geo'
-KEY = 'ABQIAAAAfYtme_pyDnFOuJLGZiXvPxRuVmV2GDBxlUzS4Tl93rTyZWZiOBRL-7BgtHIJc12HxIcS5teMAlIPzw'
+MAPS_URL = 'http://maps.googleapis.com/maps/api/geocode/xml?sensor=false'
 CACHE_SECONDS = 86400 * 180
 
 class GeoCode
@@ -14,12 +13,13 @@ class GeoCode
   include Messages
 
   def lookup_location(location)
-    data = get_url(create_url(location))
-    code, accuracy, lat, lon = parse_data(data)
-    if code == "200"
-      return_data = [decode_accuracy(accuracy), lat, lon]
+    debug "geocode looking up address #{location.inspect}"
+    data = get_url(create_url(location, 'address'))
+    status, accuracy, lat, lon, location0, count = parse_data(data)
+    if status == "OK"
+      return_data = [decode_accuracy(accuracy), lat, lon, location0, count]
     else
-      return_data = [nil, nil, nil]
+      return_data = [nil, nil, nil, "", 0]
     end
     debug "returning: #{return_data}"
     return return_data
@@ -27,19 +27,21 @@ class GeoCode
 
   def lookup_coords(lat, lon)
     coords = "#{lat},#{lon}"
-    debug "geocode looking up #{coords}"
-    data = get_url(create_url(coords))
-    code, accuracy, location = parse_data(data)
-    if code == "200"
-      return location
+    debug "geocode looking up coords #{coords.inspect}"
+    data = get_url(create_url(coords, 'latlng'))
+    status, accuracy, lat0, lon0, location, count = parse_data(data)
+    if status == "OK"
+      return_data = location
     else
-      return "Unknown"
+      return_data = "Unknown location"
     end
+    debug "returning: #{return_data}"
+    return return_data
   end
 
-  def create_url(location)
+  def create_url(location, type)
     q = CGI.escape(location)
-    url = "#{MAPS_URL}?q=#{q}&output=csv&oe=utf8&sensor=false&key=#{KEY}"
+    url = "#{MAPS_URL}&#{type}=#{q}"
     debug "geocode url: #{url}"
     return url
   end
@@ -54,23 +56,42 @@ class GeoCode
   end
 
   def decode_accuracy(value)
-    table = ['Continent', 'Country', 'Region (state, province)',
-             'Sub-region (county, municipality)', 'Town', 'Post code', 'Street',
-             'Intersection', 'Address', 'Area']
-    if value
-      desc = table[value.to_i]
-    else
-      desc = nil
-    end
-    debug "accuracy: #{value} maps to #{desc}"
-    return desc
+    # dummy: no need to translate strings
+    return value
   end
 
-  # Parse the CSV returned by http://code.google.com/apis/maps/documentation/geocoding/
+  # Simple XML parser, returns
+  # status, accuracy, lat, lon, location, result count
   def parse_data(data)
+    status = "NO_DATA"
+    accuracy = "UNKNOWN"
+    lat = 0.0
+    lon = 0.0
+    location = "Unknown location"
     # handle nil data
-    return CSV.parse_line(data) if (data)
-    return [ "999", "999", "no data" ]
+    return [ status, accuracy, 0.0, 0.0, "Empty response", 0 ] if not data
+    if data =~ /<status>(.*?)<\/status>/m
+      status = $1
+    else
+      return [ status, accuracy, 0.0, 0.0, "Unknown response", 0 ]
+    end
+    return [ status, accuracy, 0.0, 0.0, "No match", 0 ] if status != 'OK'
+    results = data.split(/<\/result>/)
+    count = results.length - 1
+    debug "Number of results: #{count}"
+    results[0].split("\n").each { |line|
+      case line
+      when /<formatted_address>(.*?)<\/formatted_address>/
+        location = $1
+      when /<location_type>(.*?)<\/location_type>/
+        accuracy = $1
+      end
+    }
+    if data =~ /<location>\s*<lat>(.*?)<\/lat>\s*<lng>(.*?)<\/lng>\s*<\/location>/
+      lat = $1
+      lon = $2
+    end
+    return [ status, accuracy, lat, lon, location, count ]
   end
 
 end

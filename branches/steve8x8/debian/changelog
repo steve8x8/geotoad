@@ -1,3 +1,16 @@
+geotoad (3.18.0-1) unstable; urgency=low
+
+  * New version 3.18.0, "Beyond the horizon" release
+  * UTF-8 support
+  * Issue 176: de-encode HTML entities in cache and owner name (to be extended)
+  * Issue 245: small fix for "... by ... by ..." caches
+  * Issue 274: requires Ruby 1.9 (or possibly above, untested)
+  * Issue 275: support for own templates
+  * Issue 277: issue with new GC design (cache page, search results) partially fixed
+  * Issue 277: fix issue with new cache page design, and search result links
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Tue, 10 Sep 2013 10:30:00 +0200
+
 geotoad (3.17.11-1) unstable; urgency=low
 
   * New version 3.17.11, "Speeding up" release

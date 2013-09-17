@@ -173,7 +173,7 @@ class ShadowFetch
     if not @data
       debug "we must not have a net connection, uh no"
     elsif @data !~ /\<\/html\>\s*$/
-      displayWarning "No closing HTML tag found"
+      displayWarning "No closing HTML tag found (this is OK for Google Maps)"
       #@data = nil
     end
     if (@data)
