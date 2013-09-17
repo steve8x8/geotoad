@@ -50,6 +50,7 @@ class GeoCode
     http = ShadowFetch.new(url)
     http.localExpiry = CACHE_SECONDS
     http.maxFailures = 5
+    http.useCookie = false
     results = http.fetch
     debug "geocode data: #{results.inspect}"
     return results
