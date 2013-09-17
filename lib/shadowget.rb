@@ -27,6 +27,7 @@ class ShadowFetch
     @remote = 0
     @localExpiry = 6 * 86400		# 6 days
     @maxFailures = 3			#was 2
+    @useCookie   = true
     @httpHeaders = {
       'User-Agent'      => "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_2; en-US) AppleWebKit/532.9 (KHTML, like Gecko) Chrome/5.0.307.11 Safari/532.9",
       'Accept'          => 'text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5',
@@ -35,17 +36,21 @@ class ShadowFetch
     }
   end
 
-
   def maxFailures=(maxfail)
     debug "setting max failures to #{maxfail}"
-    @maxFailures=maxfail
+    @maxFailures = maxfail
   end
-
 
   def localExpiry=(expiry)
     debug "setting local expiry to #{expiry}"
-    @localExpiry=expiry
+    @localExpiry = expiry
   end
+
+  def useCookie=(usecookie)
+    debug "use cookie: #{usecookie}"
+    @useCookie = usecookie
+  end
+
 
   def postVars=(vars)
     if vars
@@ -70,12 +75,6 @@ class ShadowFetch
     debug "src of last get was #{@@src}"
     @@src
   end
-
-# obsolete!
-#  def cookie=(cookie)
-#    debug "set cookie to #{hideCookie(cookie)}"
-#    @cookie = cookie
-#  end
 
   # returns the cache filename that the URL will be stored as
   def cacheFile(url)
@@ -271,12 +270,16 @@ class ShadowFetch
       query += "?" + uri.query
     end
 
-    @cookie = loadCookie()
-    if @cookie
-      nodebug "Added Cookie to #{url_str}: #{hideCookie(@cookie)}"
-      @httpHeaders['Cookie'] = @cookie
+    if @useCookie
+      @cookie = loadCookie()
+      if @cookie
+        nodebug "Added Cookie to #{url_str}: #{hideCookie(@cookie)}"
+        @httpHeaders['Cookie'] = @cookie
+      else
+        debug "No cookie to add to #{url_str}"
+      end
     else
-      debug "No cookie to add to #{url_str}"
+      debug "Cookie not added to #{url_str}"
     end
 
     success = true
@@ -307,7 +310,7 @@ class ShadowFetch
     # these are "combined" return codes ("if" doesn't work)
     when Net::HTTPRedirection
       # we may have received a cookie
-      if resp.response && resp.response['set-cookie']
+      if resp.response && resp.response['set-cookie'] && @useCookie
         @cookie = resp.response['set-cookie']
         debug "received cookie: #{hideCookie(@cookie)}"
         # ...expires=Sat, 06-Apr-2013 07:45:26 GMT;...
@@ -385,7 +388,7 @@ class ShadowFetch
       @@downloadErrors -= 1
     end
 
-    if resp.response && resp.response['set-cookie']
+    if resp.response && resp.response['set-cookie'] && @useCookie
       @cookie = resp.response['set-cookie']
       debug "received cookie: #{hideCookie(@cookie)}"
         # ...expires=Sat, 06-Apr-2013 07:45:26 GMT;...
@@ -414,12 +417,16 @@ class ShadowFetch
       http = Net::HTTP.new(uri.host, uri.port)
     end
     query = uri.path
-    @cookie = loadCookie()
-    if @cookie
-      debug "Added Cookie to #{url_str}: #{hideCookie(@cookie)}"
-      @httpHeaders['Cookie'] = @cookie
+    if @useCookie
+      @cookie = loadCookie()
+      if @cookie
+        debug "Added Cookie to #{url_str}: #{hideCookie(@cookie)}"
+        @httpHeaders['Cookie'] = @cookie
+      else
+        debug "No cookie to add to #{url_str}"
+      end
     else
-      debug "No cookie to add to #{url_str}"
+      debug "Cookie not added to #{url_str}"
     end
     success = true
     begin
