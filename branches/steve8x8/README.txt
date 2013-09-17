@@ -120,6 +120,7 @@ syntax: geotoad [options] <search:search2:search3>
  -L    [count]          limit number of search pages (0=unlimited)
  -Y                     do not fetch cache descriptions, search only
  -Z                     don't overwrite existing cache descriptions
+ -O                     exclude Premium Member Only caches
  -P                     HTTP proxy server, http://username:pass@host:port/
  -M                     download my cache logs (/my/logs.aspx)
  -X                     emergency switch: disable early filtering

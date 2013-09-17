@@ -667,10 +667,16 @@ class GeoToad
           debug "Could not parse page, but it had a warning, so I am not invalidating"
           message = "(could not fetch, private cache?)"
         else
-          message = "(error)"
+          # don't throw this out yet, will get null entries in output though
+          #message = "(error)"
+          message = "(PMO? #{status.to_s.inspect})"
         end
       else
-        if (wpFiltered[wid]['warning'])
+        # PMonly caches: write specific message
+        if (wpFiltered[wid]['membersonly'])
+          message = "[PMO]"
+        # unspecific error message
+        elsif (wpFiltered[wid]['warning'])
           message = "(unavailable)"
         end
       end
@@ -703,6 +709,16 @@ class GeoToad
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
     if (excludedFilterTotal > 0)
       displayMessage "Disabled filtering removed #{excludedFilterTotal} caches."
+    end
+
+    # exclude Premium Member Only caches on request
+    beforeFilterTotal = @filtered.totalWaypoints
+    if @option['noPMO']
+      @filtered.removeByElement('membersonly')
+    end
+    excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
+    if (excludedFilterTotal > 0)
+      displayMessage "PMO filtering removed #{excludedFilterTotal} caches."
     end
 
     beforeFilterTotal = @filtered.totalWaypoints

@@ -713,6 +713,10 @@ class Output
       cache = @wpHash[wid]
       symbolHash[wid] = ''
 
+      if (cache['membersonly'])
+        symbolHash[wid] << "<b><font color=\"#11CC11\">&#x24; </font></b>"
+      end
+
       if (cache['archived'])
         symbolHash[wid] << "<b><font color=\"#111111\">&Oslash; </font></b>"
       end
@@ -1207,6 +1211,7 @@ class Output
       'txtAttrs' => (cache['attributeText'].to_s.empty?)?'':'[' + cache['attributeText'].to_s.capitalize.gsub(/\\/,"/") + ']',
       'warnAvail' => (available)?'':'[?]',
       'warnArchiv' => (archived)?'[%]':'',
+      'premiumOnly' => (cache['membersonly']?'[$]':''),
     }
     rescue => e
       displayWarning "Problem (#{e}) while converting cache #{wid}:\n#{cache.inspect}"

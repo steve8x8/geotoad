@@ -8,7 +8,7 @@ template = {
     'templateWP'    => "<%out.id%>\t" +
       "<%out.latdatapad5%> <%out.londatapad5%> " +
       "<%out.cdate%> " +
-      "<%wp.difficulty%>/<%wp.terrain%><%out.warnArchiv%><%out.warnAvail%>\t" +
+      "<%wp.difficulty%>/<%wp.terrain%><%out.premiumOnly%><%out.warnArchiv%><%out.warnAvail%>\t" +
       "<%wp.type%>\t" +
       "<%out.relativedistancekm%>\t" +
       "<%out.size%>\t" + # testing only
