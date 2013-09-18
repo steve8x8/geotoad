@@ -476,14 +476,21 @@ class Output
         value = @wpHash[wid][var].to_s
       elsif (type == "out")
         value = @outVars[var].to_s
-      elsif (type == "wpEntity")
+      # convert to XML
+      elsif (type == "wpEntity" or type == "wpXML")
         value = makeXML(@wpHash[wid][var].to_s)
-      elsif (type == "outEntity")
+      elsif (type == "outEntity" or type == "outXML")
         value = makeXML(@outVars[var].to_s)
+      # convert to text
       elsif (type == "wpText")
         value = makeText(@wpHash[wid][var].to_s)
       elsif (type == "outText")
         value = makeText(@outVars[var].to_s)
+      # convert to text that can be included verbatim into XML/HTML
+      elsif (type == "wpTextEntity")
+        value = CGI.escapeHTML(makeText(@wpHash[wid][var].to_s))
+      elsif (type == "outTextEntity")
+        value = CGI.escapeHTML(makeText(@outVars[var].to_s))
       end
       # this one produces a lot of noise - FIXME
       debug "TAG <%#{tag}%> for #{wid} -> #{value}"
@@ -1196,6 +1203,7 @@ class Output
       'IsAvailable' => (available==true).to_s.capitalize,
       'IsArchived' => (archived==true).to_s.capitalize,
       'location' => location,
+      'type3' => cache['type'][0..2].capitalize,
       'relativedistance' => relative_distance,
       'relativedistancekm' => relative_distance_km,
       'hintdecrypt' => decryptHint(cache['hint']),
