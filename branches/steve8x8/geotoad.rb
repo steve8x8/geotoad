@@ -966,10 +966,9 @@ while true
   else
     cli.displayMessage "#{count} caches matching query argument(s)."
     cli.prepareFilter
-    # FIXME: would this let some caches through unfiltered?
-    if (options['queryType'] != 'wid') and (options['queryType'] != 'guid')
-      cli.preFetchFilter
-    end
+    #if (options['queryType'] != 'wid') and (options['queryType'] != 'guid')
+    cli.preFetchFilter
+    #end
 
     if options['noCacheDescriptions']
       cli.displayMessage "Skipping retrieval of cache descriptions"
