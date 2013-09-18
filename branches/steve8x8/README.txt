@@ -131,12 +131,12 @@ syntax: geotoad [options] <search:search2:search3>
  cachemate=   cetus+       csv          delorme      delorme-nour
  dna+         easygps      gclist       gcvisits     gpsdrive    
  gpsman+      gpspilot+    gpspoint     gpspoint2+   gpsutil+    
- gpx          gpx-gsak     gpx-pa       gpx-wpts     holux+      
- html         kml+         list         magnav+      mapsend+    
- mxf          myfindgpx    myfindlist   ozi          pcx+        
- psp+         sms          sms2         tab          text        
- tiger        tmpro+       tpg+         wp2guid      xmap+       
- yourfindgpx 
+ gpx          gpx-gsak     gpx-nuvi     gpx-pa       gpx-wpts    
+ holux+       html         kml+         list         magnav+     
+ mapsend+     mxf          myfindgpx    myfindlist   ozi         
+ pcx+         poi-nuvi+    psp+         sms          sms2        
+ tab          text         tiger        tmpro+       tpg+        
+ wp2guid      xmap+        yourfindgpx 
     + requires gpsbabel in PATH           = requires cmconvert in PATH
 
 ::: EXAMPLES:
