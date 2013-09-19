@@ -90,7 +90,7 @@ class Input
       [ "--notFound",                 "-n",    GetoptLong::NO_ARGUMENT ],
       [ "--notFoundByMe",             "-N",    GetoptLong::NO_ARGUMENT ],
       [ "--output",                   "-o",    GetoptLong::REQUIRED_ARGUMENT ],
-
+      [ "--noPMO",                    "-O",    GetoptLong::NO_ARGUMENT ],
       [ "--password",                 "-p",    GetoptLong::REQUIRED_ARGUMENT ],         # * REQ
       [ "--proxy",                    "-P",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--queryType",                "-q",    GetoptLong::REQUIRED_ARGUMENT ],
@@ -262,6 +262,7 @@ class Input
     puts " -L                     limit number of search pages (0=unlimited)"
     puts " -Y                     do not fetch cache descriptions, search only"
     puts " -Z                     don't overwrite existing cache descriptions"
+    puts " -O                     exclude Premium Member Only caches"
     puts " -P                     HTTP proxy server, http://username:pass@host:port/"
     puts " -M                     download my cache logs (/my/logs.aspx)"
     puts " -X                     emergency switch: disable early filtering"
