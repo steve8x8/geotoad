@@ -36,7 +36,7 @@ template = {
       "  <groundspeak:attributes>\n" +
       "<%out.xmlAttrs%>" +
       "  </groundspeak:attributes>\n" +
-      "  <groundspeak:short_description html=\"True\"><%outEntity.warnArchiv%><%outEntity.warnAvail%>&lt;br /&gt;<%outEntity.txtAttrs%>&lt;br /&gt;<%wpEntity.shortdesc%></groundspeak:short_description>\n" +
+      "  <groundspeak:short_description html=\"True\"><%out.premiumOnly%><%outEntity.warnArchiv%><%outEntity.warnAvail%>&lt;br /&gt;<%outEntity.txtAttrs%>&lt;br /&gt;<%wpEntity.shortdesc%></groundspeak:short_description>\n" +
       "  <groundspeak:long_description html=\"True\"><%outEntity.shortWpts%><%wpEntity.longdesc%></groundspeak:long_description>\n" +
       "  <groundspeak:encoded_hints><%outEntity.hintdecrypt%></groundspeak:encoded_hints>\n" +
       "  <groundspeak:logs>\n" +

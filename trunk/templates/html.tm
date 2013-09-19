@@ -8,6 +8,7 @@ template = {
       "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n" + "</head>\n" +
       "<body link=\"#000099\" vlink=\"#000044\" alink=\"#000099\">\n" +
       "<h3><%out.title%></h3>" +
+      "<b><font color=\"#11CC11\">&#x24;</font></b> premium-member only&nbsp;&nbsp;&nbsp;" +
       "<b><font color=\"#111111\">&Oslash;</font></b> archived&nbsp;&nbsp;&nbsp;" +
       "<b><font color=\"#CC1111\">&#x229e;</font></b> marked as \"temporarily unavailable\"<br>" +
       "<b><font color=\"#11CC11\">&euro;</font></b> have travelbugs&nbsp;&nbsp;&nbsp;" +
