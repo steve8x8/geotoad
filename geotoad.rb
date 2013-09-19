@@ -712,6 +712,16 @@ class GeoToad
       displayMessage "Disabled filtering removed #{excludedFilterTotal} caches."
     end
 
+    # exclude Premium Member Only caches on request
+    beforeFilterTotal = @filtered.totalWaypoints
+    if @option['noPMO']
+      @filtered.removeByElement('membersonly')
+    end
+    excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
+    if (excludedFilterTotal > 0)
+      displayMessage "PMO filtering removed #{excludedFilterTotal} caches."
+    end
+
     beforeFilterTotal = @filtered.totalWaypoints
     if @option['descKeyword']
       @queryTitle = @queryTitle + ", matching desc keywords #{@option['descKeyword']}"
