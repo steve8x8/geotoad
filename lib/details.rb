@@ -120,7 +120,9 @@ class CacheDetails
 
     url = fullURL(id)
     # no valid url (wid doesn't point to guid)
-    return 'subscriber-only' if url.to_s.empty?
+    #return 'subscriber-only' if url.to_s.empty?
+    # force it even if there's nothing to tell
+    return nil if url.to_s.empty?
     page = ShadowFetch.new(url)
 
     # Tune expiration for young caches:
@@ -475,8 +477,11 @@ class CacheDetails
           cache['warning'] = warning.dup
         end
         if warning =~ /be a Premium Member to view/
+          # 'archived' should have been set by search
           debug "This cache appears to be available to premium members only."
-          return 'subscriber-only'
+          # do not return, take care of missing info later!
+          #return 'subscriber-only'
+          cache['membersonly'] = true
         end
       end
 
