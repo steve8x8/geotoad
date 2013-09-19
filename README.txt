@@ -121,6 +121,7 @@ syntax: geotoad [options] <search:search2:search3>
  -Y                     do not fetch cache descriptions, search only
  -Z                     don't overwrite existing cache descriptions
  -O                     exclude Premium Member Only caches
+ -Q                     select only Premium Member Only caches
  -P                     HTTP proxy server, http://username:pass@host:port/
  -M                     download my cache logs (/my/logs.aspx)
  -X                     emergency switch: disable early filtering

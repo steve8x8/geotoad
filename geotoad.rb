@@ -717,6 +717,9 @@ class GeoToad
     if @option['noPMO']
       @filtered.removeByElement('membersonly')
     end
+    if @option['onlyPMO']
+      @filtered.removeByElement('membersonly', false)
+    end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
     if (excludedFilterTotal > 0)
       displayMessage "PMO filtering removed #{excludedFilterTotal} caches."
