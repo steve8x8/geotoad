@@ -3,7 +3,7 @@
 
 = How to set up and use a Debian (Ubuntu) repository on Google Code =
 
-_Last change: 2013-06-27 Steve8x8_
+_Last change: 2013-09-24 Steve8x8_
 
 == Goal ==
 
@@ -43,11 +43,12 @@ _Last change: 2013-06-27 Steve8x8_
 {{{
 deb http://geotoad.googlecode.com/ svn/trunk/data/
 }}}
-  * For development version, it's two lines (use stable if there's no development going on):
+  * For the development version, it's two lines (use stable if there's no development going on):
 {{{
 deb http://geotoad.googlecode.com/ svn/trunk/data/
 deb http://geotoad.googlecode.com/ svn/branches/steve8x8/data/
 }}}
+  * Note that starting with 3.18.0, the development version (left at 3.17.11) will be _below_ the stable one.
   * Run {{{apt-get update}}} and {{{apt-get upgrade|install}}} (or the {{{aptitude}}} equivalents).
     You will have to answer a question with "y" (this is safe, and unavoidable):
 {{{

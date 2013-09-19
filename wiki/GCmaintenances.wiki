@@ -131,6 +131,10 @@ _*(year per year; new entries will be added at bottom)*_
   * [http://forums.groundspeak.com/GC/index.php?showtopic=315346 release notes]
   * *{{{Web.HotFix_20130904.1}}}*
 ----
+2013-09-18:
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=315801 release notes]
+  * *{{{Web.HotFix_20130917.3}}}*
+----
 (...)
 ----
 

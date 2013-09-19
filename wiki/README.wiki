@@ -1,7 +1,7 @@
 #summary GeoToad README.txt
 #labels Featured
 
-= GeoToad 3.16.8 by Thomas Stromberg and The GeoToad Project (c) 2002 - 2013 =
+= GeoToad 3.18.0 by Thomas Stromberg and The GeoToad Project (c) 2002 - 2013 =
 
 <wiki:toc max_depth="2" />
 
@@ -34,7 +34,7 @@ You will then see a screen that looks similar to this:
 {{{
 
 ==============================================================================
-:::                // GeoToad 3.16.8 Text User Interface //                :::
+:::                // GeoToad 3.18.0 Text User Interface //                :::
 ==============================================================================
 (1)  GC.com login [REQUIRED         ] | (2)  search type          [coord     ]
 (3)  location     [N52 23.0 E13 03.0] | (4)  distance maximum (km)  [     2.5]
@@ -109,6 +109,8 @@ syntax: geotoad [options] <search:search2:search3>
  -L    [count]          limit number of search pages (0=unlimited)
  -Y                     do not fetch cache descriptions, search only
  -Z                     don't overwrite existing cache descriptions
+ -O                     exclude Premium Member Only caches
+ -Q                     select only Premium Member Only caches
  -P                     HTTP proxy server, http://username:pass@host:port/
  -M                     download my cache logs (/my/logs.aspx)
  -X                     emergency switch: disable early filtering
@@ -119,12 +121,12 @@ syntax: geotoad [options] <search:search2:search3>
  cachemate=   cetus+       csv          delorme      delorme-nour
  dna+         easygps      gclist       gcvisits     gpsdrive    
  gpsman+      gpspilot+    gpspoint     gpspoint2+   gpsutil+    
- gpx          gpx-gsak     gpx-pa       gpx-wpts     holux+      
- html         kml+         list         magnav+      mapsend+    
- mxf          myfindgpx    myfindlist   ozi          pcx+        
- psp+         sms          sms2         tab          text        
- tiger        tmpro+       tpg+         wp2guid      xmap+       
- yourfindgpx 
+ gpx          gpx-gsak     gpx-nuvi     gpx-pa       gpx-wpts    
+ holux+       html         kml+         list         magnav+     
+ mapsend+     mxf          myfindgpx    myfindlist   ozi         
+ pcx+         poi-nuvi+    psp+         sms          sms2        
+ tab          text         tiger        tmpro+       tpg+        
+ wp2guid      xmap+        yourfindgpx 
     + requires gpsbabel in PATH           = requires cmconvert in PATH
 
 ::: EXAMPLES:
