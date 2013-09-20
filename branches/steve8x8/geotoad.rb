@@ -666,7 +666,8 @@ class GeoToad
       elsif ! status or status == 'login-required'
         if (wpFiltered[wid]['warning'])
           debug "Could not parse page, but it had a warning, so I am not invalidating"
-          message = "(could not fetch, private cache?)"
+          #message = "(could not fetch, private cache?)"
+          message = "(PMO? #{wpFiltered[wid]['warning'].inspect})"
         else
           # don't throw this out yet, will get null entries in output though
           #message = "(error)"
