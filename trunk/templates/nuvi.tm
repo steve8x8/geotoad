@@ -3,6 +3,11 @@ template = {
   # Thanks to Kevin Bulgrien and the author(s) of the GPX_by_Cache_Type.gsk GSAK macro.
   # Note: points will show up under "Custom POIs"!
   # Tested with Garmin nuvi 255T which doesn't allow multiple entries.
+  # Further improved following
+  # http://home.comcast.net/~ghayman3/garmin.gps/pagepoi.05.htm
+  # http://www.gpsbabel.org/htmldoc-development/fmt_garmin_gpi.html
+  # http://geocachingunterland.wordpress.com/2009/04/20/babylonisches-sprachgenie-teil-2-ersatz-fur-den-garmin-poi-loader/
+  # http://bigfraud.org/mac/MacGarminTools/gpx2gpi.html
 
   'gpx-nuvi'    => {
     'ext'     => 'gpxn',
@@ -35,11 +40,13 @@ template = {
       "  <sym>Geocache</sym>\n" +
       "  <extensions>\n" +
       "    <gpxx:WaypointExtension>\n" +
+      # do NOT set proximity here as it cannot be overwritten by POIloader/gpsbabel!
+      #"      <gpxx:Proximity>200</gpxx:Proximity>\n" +
       "      <gpxx:DisplayMode>SymbolAndName</gpxx:DisplayMode>\n" +
-             # gpsbabel doesn't know (but complains) about categories
-      "      <gpxx:Categories>\n" +
-      "        <gpxx:Category><%wp.fulltype%></gpxx:Category>\n" +
-      "      </gpxx:Categories>\n" +
+      # gpsbabel doesn't know (but complains) about categories
+      #"      <gpxx:Categories>\n" +
+      #"        <gpxx:Category><%wp.fulltype%></gpxx:Category>\n" +
+      #"      </gpxx:Categories>\n" +
       "      <gpxx:Address>\n" +
                # 2nd line in POI list, max 24 chars shown
       "        <gpxx:StreetAddress><%wpEntity.name%></gpxx:StreetAddress>\n" +
@@ -50,6 +57,7 @@ template = {
              # nuvi 255 only accepts a single phone number, doesn't show the category
       "      <gpxx:PhoneNumber Category=\"Details\">\n" +
         # only one line is shown first (press "more"...)
+        # there are rumours that nuvis accept <b>...</b> <u>...</u>
         "**Last: <%wp.last_find_type%>, <%wp.last_find_days%> days ago\n" +
         "**Stat: <%wp.logcounts%>\n" +
         "**Attr: <%out.premiumOnly%><%out.warnArchiv%><%out.warnAvail%> <%out.txtAttrs%>\n" +
@@ -72,8 +80,11 @@ template = {
     'desc'       => 'POI for Nuvi',
     'required'   => 'gpsbabel',
     'filter_src' => 'gpx-nuvi',
-    # hide: don't show a symbol; sleep: make sure no 2 files have same timestamp
-    'filter_exec' => 'gpsbabel -i gpx -o garmin_gpi,category="Geocache",hide,sleep=2 -f INFILE -F OUTFILE'
+    # hide: don't show a symbol
+    # proximity: set alert at given distance (forces alerts=1)
+    # sleep: make sure no 2 files have same timestamp
+    # -bitmap: it's currently impossible to specify a full path name
+    'filter_exec' => 'gpsbabel -i gpx -o garmin_gpi,category="Geocaches",hide,proximity=200m,sleep=2 -f INFILE -F OUTFILE'
   },
 
 }
