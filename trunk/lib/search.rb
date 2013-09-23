@@ -441,6 +441,13 @@ class SearchCache
     data.split("\n").each { |line|
       line.gsub!(/&#39;/, '\'')
       case line
+      # <span id="ctl00_litPMLevel">Basic Member</span>
+      when /id=.ctl00_litPMLevel.>([^>]+)</
+        debug "Membership confirmed as \"#{$1}\""
+        $membership = $1
+      # <a id="hlUpgrade" accesskey="r" title="Upgrade to Premium" class="LinkButton" href="https://payments.geocaching.com">Upgrade to PREMIUM</a>
+      when /id=.hlUpgrade[^>]*Upgrade to Premium/
+        debug "Premium Member upgrade option found"
       when /Geocaching . Hide and Seek a Geocache . Unpublished Geocache/
         debug "Unpublished cache, leaving parser"
         break
@@ -716,6 +723,13 @@ class SearchCache
 
       # stuff outside results table
       case line
+      # <span id="ctl00_litPMLevel">Basic Member</span>
+      when /id=.ctl00_litPMLevel.>([^>]+)</
+        debug "Membership confirmed as \"#{$1}\""
+        $membership = $1
+      # <a id="hlUpgrade" accesskey="r" title="Upgrade to Premium" class="LinkButton" href="https://payments.geocaching.com">Upgrade to PREMIUM</a>
+      when /id=.hlUpgrade[^>]*Upgrade to Premium/
+        debug "Premium Member upgrade option found"
       # <td class="PageBuilderWidget"><span>Total Records: <b>718</b> - Page: <b>23</b> of <b>36</b>&nbsp;-&nbsp;</span>
       # pt: <td class="PageBuilderWidget"><span>Total de Registos:: <b>7976</b> - Página: <b>1</b> de <b>399</b>&nbsp;-&nbsp;</span>
       when /PageBuilderWidget[^:]+:+ +\<b\>(\d+)\<\/b\> [^:]+: +\<b\>(\d+)\<\/b\>.*?\<b\>(\d+)\<\/b\>/

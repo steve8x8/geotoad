@@ -62,6 +62,7 @@ class GeoToad
     $CACHE_DIR    = findCacheDir()
     @configDir    = findConfigDir
     $mapping      = loadMapping()
+    $membership   = nil # unknown before searching
   end
 
   def getoptions
@@ -637,7 +638,11 @@ class GeoToad
 
   def fetchGeocaches
     puts ""
-    displayMessage "Fetching geocache pages"
+    if $membership
+      displayMessage "Fetching geocache pages as \"#{$membership}\""
+    else
+      displayMessage "Fetching geocache pages"
+    end
     wpFiltered = @filtered.waypoints
     progress = ProgressBar.new(0, @filtered.totalWaypoints, "Read")
     @detail = CacheDetails.new(wpFiltered)
