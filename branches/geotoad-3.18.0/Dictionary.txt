@@ -1,0 +1,99 @@
+* Introduction
+* Background
+* The scripts
+------------
+Introduction
+------------
+
+GeoToad 3.17.11 and later versions will use a dictionary to avoid unneccessary lookups of WID->GUID mappings.
+
+If GeoToad doesn't find a file mapping.yaml it will create and fill it. You may take some of this burden off GeoToad (and the servers).
+
+Here's how to initially create one before running GeoToad for the first time.
+As always, instructions have been tested under Debian Linux, and should be easily adapted to MacOSX.
+_Windows users: How did you solve this task? Please give feedback, I'll add your recipe(s)._
+
+----------
+Background
+----------
+
+Starting with the 20130821.1 HotFix, GS no longer provides GUIDs (their internal "database index") as part of the search results.
+A temporary workaround consisted of looking up each and every cache_details page, effectively replacing all searches with "wid" ones.
+This - together with some other incompatibilities - multiplied the number of server accesses by a factor of 2-10!
+
+But the information is almost there: in the file cache, cdpf files have the guid in their names and the wid in the HTML text.
+
+It's just a matter of extracting, and arranging this information suitable for GeoToad.
+
+For easy lookup, the "dictionary" was implemented as a YAML file mapping.yaml representing a hash.
+The file structure of such a file is simple: it consists of an initial line "---", followed by "wid: guid" lines.
+This makes adding entries to the dictionary as simple as appending single lines to a text file.
+
+-----------
+The scripts
+-----------
+
+#!/bin/bash
+
+[ -z "$GEO_DIR" ] && \
+GEO_DIR=~/.geotoad
+
+cd $GEO_DIR
+(
+# first line (YAML header)
+echo '---'
+# find individual files
+find ./cache/ -name 'cdpf.aspx_guid_*' \
+| while read file
+do
+    # extract guid from file name
+    guid=`echo $file | sed 's~^.*guid_\([0-9a-f-]*\).*~\1~'`
+    # extract wid from file contents
+    wid=`cat $file | grep pageTitle | head -n1 | sed 's~^.*(\(GC[0-9A-Z]*\)).*~\1~'`
+    # write hash entry
+    echo $wid: $guid
+done
+) \
+| sort | uniq \
+> mapping.yaml
+
+As always, you're supposed to understand what the script is doing, and take proper precautions (as backing up an existing mapping.yaml)!
+
+If you don't like the order of entries (which usually would be random), you may sort the file, e.g. using:
+
+#!/bin/bash
+
+# sort mapping.yaml
+input=mapping.yaml
+output=mapping.yaml.new
+
+(
+echo ---
+for pattern in \
+    GC. \
+    GC.. \
+    GC... \
+    GC.... \
+    GC..... \
+
+do
+    grep "^$pattern:" $input | sort | uniq
+done
+) > $output
+mv $input $input.SAVE.`date +%Y%m%dT%H%M%S`
+mv $output $input
+
+This would even allow you to _merge_ multiple mapping files, by just concating, then sorting them - duplicates will be removed automatically.
+(By the way, duplicate mappings in a hash wouldn't do any harm.)
+
+You may check your mapping.yaml file within irb:
+
+require 'yaml'
+dict = YAML::load(File.open('mapping.yaml'))
+puts dict.length
+
+The resulting number of entries should be the number of lines in mapping.yaml minus one.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+(to be extended)
