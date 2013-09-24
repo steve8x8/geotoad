@@ -489,6 +489,20 @@ class GeoToad
       displayMessage "Cache type filtering removed #{excludedFilterTotal} caches."
     end
 
+    # exclude Premium Member Only caches on request
+    beforeFilterTotal = @filtered.totalWaypoints
+    if @option['noPMO']
+      @filtered.removeByElement('membersonly')
+    end
+    # may not be accurate before fetching details?
+    if @option['onlyPMO']
+      @filtered.removeByElement('membersonly', false)
+    end
+    excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
+    if (excludedFilterTotal > 0)
+      displayMessage "PMO filtering removed #{excludedFilterTotal} caches."
+    end
+
     if $DTSFILTER
     #-------------------
     beforeFilterTotal = @filtered.totalWaypoints
@@ -742,7 +756,7 @@ class GeoToad
       displayMessage "Keyword filtering removed #{excludedFilterTotal} caches."
     end
 
-    if not $DTSFILTER
+    ##if not $DTSFILTER
     #-------------------
     beforeFilterTotal = @filtered.totalWaypoints
     if @option['difficultyMin']
@@ -780,7 +794,7 @@ class GeoToad
       displayMessage "Diff/Terr/Size filtering removed #{excludedFilterTotal} caches."
     end
     #-------------------
-    end # not $DTSFILTER
+    ##end # not $DTSFILTER
 
     beforeFilterTotal = @filtered.totalWaypoints
     if @option['funFactorMin']
