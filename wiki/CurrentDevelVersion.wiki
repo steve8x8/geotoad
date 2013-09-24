@@ -1,15 +1,33 @@
 #summary Features of current development version
 #labels Featured,Experimental
 
-version=3.17.11
+version=3.18.0
 
-= "Speeding up" release (Sep 12, 2013) =
+= "Beyond the horizon" release (Sep 24, 2013) =
+
+= New version 3.18.0 =
+  * nicknamed "Beyond the horizon" (and still no end)
+
+== Issues addressed: ==
+  * UTF-8 support
+  * Issue 198: include Premium Member Only caches unless excluded using -O option
+  * Issue 245: small fix for "... by ... by ..." caches
+  * Issue 271: initial support for Garmin Nuvi devices (POI)
+  * Issue 274: requires Ruby 1.9 (or possibly above, untested)
+  * Issue 275: support for own templates
+  * Issue 277: issue with new GC design (cache page, search results)
+  * Issue 279: switch to Google Geocode API v3
+
+== IMPORTANT: ==
+  * Development doesn't end, but there will be no more devel releases.
+  * New releases will only be announced on the CurrentVersion page.
+  * Please change your Debian sources line accordingly!
 
 = New development version 3.17.11 =
   * nicknamed "Speeding up" (fix issues towards 3.18.0)
   * this is a pre-release for 3.18.0, and may still contain bugs
   * use with caution and at your own risk
-  * *IMPORTANT*: check the "Dictionary" wiki page!
+  * *IMPORTANT*: check the Dictionary wiki page!
 
 == Issues addressed: ==
   * UTF-8 support
