@@ -158,11 +158,12 @@ class CacheDetails
     if ttl
       page.localExpiry = ttl
     end
-    page.fetch
+    page.fetch()
     if page.data
       success = parseCache(page.data)
     else
       debug "No data found, not attempting to parse the entry at #{url}"
+      success = false
     end
 
     # We try to download the page one more time.
@@ -171,7 +172,9 @@ class CacheDetails
       debug "Trying to download #{url} again."
       page.invalidate()
       page.fetch()
-      success = parseCache(page.data)
+      if page.data
+        success = parseCache(page.data)
+      end
     end
 
     if success
@@ -533,7 +536,7 @@ class CacheDetails
       displayWarning "Unable to parse any cache details from data."
       return false
     elsif not cache['latwritten']
-      displayWarning "#{cache['wid']} was parsed, but no coordinates found."
+      displayWarning "#{wid} was parsed, but no coordinates found."
       return false
     end
 
