@@ -110,4 +110,15 @@ template = {
       "</wpt>\n",
     'templatePost'    => "</gpx>\n"
   },
+  'yourfindlist'    => {
+    'ext'        => 'lst',
+    'mime'    => 'text/plain',
+    'desc'    =>     'whitespace delimited, detailed table (my finds)',
+    'templatePre' => "",
+    'templateWP'    => "<%out.wid%>\t" +
+      "<%out.latdatapad5%> <%out.londatapad5%> " +
+      "<%wp.type%>\t" +
+      "<%out.mdate%> " +
+      "\n"
+  },
 }
