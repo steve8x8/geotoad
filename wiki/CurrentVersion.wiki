@@ -4,6 +4,8 @@
 version=3.18.0
 
 = "Beyond the horizon" release (Sep 24, 2013) =
+  * *ALWAYS download from http://code.google.com/p/geotoad/downloads/list ONLY*
+  * *otherwise you may miss the latest release!*
 
 = What's new in 3.18.0? =
   * nicknamed "Beyond the horizon" (and still no end)
