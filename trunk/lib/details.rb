@@ -364,7 +364,8 @@ class CacheDetails
         cache['shortdesc'] = ''
         cache['longdesc'] = ''
         cache['funfactor'] = 0
-        cache['url'] = "http://www.geocaching.com/seek/cache_details.aspx?wp=" + wid
+        cache['favfactor'] = 0
+        cache['url'] = "http://www.geocaching.com/geocache/" + wid
 
       end
 
@@ -418,7 +419,13 @@ class CacheDetails
       # also, event dates.
       if line =~ /[lE][av][ce][ne][dt] Date: ([\w\/-]+)\</
         if $1 != 'N/A'
-          cache['ctime'] = parseDate($1)
+          # do not overwrite what we got from search
+          ctime = parseDate($1)
+          if not cache['ctime']
+            cache['time'] = ctime
+          elsif (ctime != cache['ctime'])
+            debug "ctime changed: " + cache['ctime'].strftime("%Y-%m-%d") + " -> " + ctime.strftime("%Y-%m-%d")
+          end
           cache['cdays'] = daysAgo(cache['ctime'])
           if line =~ /Event Date:/
             cache['event'] = true
