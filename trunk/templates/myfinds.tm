@@ -58,8 +58,7 @@ template = {
     'templateWP'    => "<%out.wid%>\t" +
       "<%out.latdatapad5%> <%out.londatapad5%> " +
       "<%wp.type%>\t" +
-      "<%out.adate%> " +
-      "\n"
+      "<%out.adate%>\n"
   },
   'yourfindgpx'    => {
     'ext'        => 'gpx',
@@ -113,12 +112,11 @@ template = {
   'yourfindlist'    => {
     'ext'        => 'lst',
     'mime'    => 'text/plain',
-    'desc'    =>     'whitespace delimited, detailed table (my finds)',
+    'desc'    =>     'whitespace delimited, detailed table (user finds)',
     'templatePre' => "",
     'templateWP'    => "<%out.wid%>\t" +
       "<%out.latdatapad5%> <%out.londatapad5%> " +
       "<%wp.type%>\t" +
-      "<%out.mdate%> " +
-      "\n"
+      "<%out.mdate%>\n"
   },
 }
