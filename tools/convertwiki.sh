@@ -5,7 +5,7 @@
 # doesn't work properly with links and some lists!
 
 #for page in `ls *.wiki | sed -e 's~\.wiki~~'`
-pages=${@:-README FAQ README-new OtherSearches ReportingBugs xDebianUbuntuRepository}
+pages=${@:-README FAQ README-devel OtherSearches ReportingBugs xDebianUbuntuRepository GCmaintenances Templates Dictionary}
 for page in $pages
 do
     [ -f $page.wiki ] || continue
