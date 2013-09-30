@@ -1,6 +1,7 @@
-# colection of output templates using a converter
+# collection of output templates using a converter
 #
 template = {
+
   'cachemate' => {
     'ext'        => 'pdb',
     'mime'    => 'application/cachemate',
@@ -9,6 +10,7 @@ template = {
     'filter_src'    => 'gpx',
     'filter_exec'    => 'cmconvert -o OUTFILE INFILE'
   },
+
   'cetus' => {
     'ext'        => 'cet',
     'mime'    => 'application/cetus',
@@ -17,6 +19,7 @@ template = {
     'filter_src'    => 'gpx',
     'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o cetus -F OUTFILE'
   },
+
   'dna' => {
     'ext'        => 'dna',
     'mime'    => 'application/xmap',
@@ -25,6 +28,7 @@ template = {
     'filter_src'    => 'gpx',
     'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o dna -F OUTFILE'
   },
+
   'gpsman' => {
     'ext'        => 'gpm',
     'mime'    => 'application/gpsman',
@@ -33,6 +37,7 @@ template = {
     'filter_src'    => 'gpx',
     'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o gpsman -F OUTFILE'
   },
+
   'gpspilot' => {
     'ext'        => 'gps',
     'mime'    => 'application/gpspilot',
@@ -41,6 +46,7 @@ template = {
     'filter_src'    => 'gpx',
     'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o dna -F OUTFILE'
   },
+
   'gpsutil' => {
     'ext'        => 'gpu',
     'mime'    => 'application/gpsutil',
@@ -49,6 +55,7 @@ template = {
     'filter_src'    => 'gpx',
     'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o gpsutil -F OUTFILE'
   },
+
   'holux' => {
     'ext'        => 'wpo',
     'mime'    => 'application/holux',
@@ -57,6 +64,7 @@ template = {
     'filter_src'    => 'gpx',
     'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o holux -F OUTFILE'
   },
+
   'magnav' => {
     'ext'        => 'mgv',
     'mime'    => 'application/magnav',
@@ -65,6 +73,7 @@ template = {
     'filter_src'    => 'gpx',
     'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o magnav -F OUTFILE'
   },
+
   'mapsend' => {
     'ext'        => 'mps',
     'mime'    => 'application/mapsend',
@@ -73,6 +82,7 @@ template = {
     'filter_src'    => 'gpx',
     'filter_exec'    => 'gpsbabel -i gpx  -f INFILE -o mapsend -F OUTFILE'
   },
+
   'pcx' => {
     'ext'        => 'pcx',
     'mime'    => 'application/pcx',
@@ -81,6 +91,7 @@ template = {
     'filter_src'    => 'gpx',
     'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o pcx -F OUTFILE'
   },
+
   'psp' => {
     'ext'        => 'psp',
     'mime'    => 'application/psp',
@@ -89,6 +100,7 @@ template = {
     'filter_src'    => 'gpx',
     'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o psp -F OUTFILE'
   },
+
   'tmpro' => {
     'ext'        => 'tmp',
     'mime'    => 'application/tmpro',
@@ -97,6 +109,7 @@ template = {
     'filter_src'    => 'gpx',
     'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o tmpro -F OUTFILE'
   },
+
   'tpg' => {
     'ext'        => 'tpg',
     'mime'    => 'application/tpg',
@@ -105,6 +118,7 @@ template = {
     'filter_src'    => 'gpx',
     'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o tpg -F OUTFILE'
   },
+
   'xmap' => {
     'ext'        => 'tgr',
     'mime'    => 'application/xmap',
@@ -113,4 +127,5 @@ template = {
     'filter_src'    => 'gpx',
     'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o xmap -F OUTFILE'
   },
+
 }

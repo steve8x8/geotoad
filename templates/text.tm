@@ -1,4 +1,5 @@
 template = {
+
   'text'    => {
     'ext'        => 'txt',
     'mime'    => 'text/plain',
@@ -20,4 +21,5 @@ template = {
       "Hint: <%outEntity.hintdecrypt%>\n\n" +
       "Logs:\n<%out.textlogs%>\n"
   },
+
 }

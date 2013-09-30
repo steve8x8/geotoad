@@ -1,4 +1,5 @@
 template = {
+
   'easygps' => {
     'ext'        => 'loc',
     'mime'    => 'application/easygps',
@@ -9,4 +10,5 @@ template = {
       "<type>geocache</type><link text=\"Cache Details\"><%wp.url%></link></waypoint>",
     'templatePost'    => '</loc>',
   },
+
 }

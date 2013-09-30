@@ -1,4 +1,5 @@
 template = {
+
   'html'    => {
     'ext'        => 'html',
     'mime'    => 'text/html',
@@ -17,9 +18,6 @@ template = {
       "<b><font color=\"#440000\">&uarr;</font></b> difficulty rating of 3.5+&nbsp;&nbsp;&nbsp;" +
       "<b><font color=\"#66FF66\">+</font></b> fav factor of 3.0+&nbsp;&nbsp;&nbsp;" +
       "<b><font color=\"#BB6666\">&hearts;</font></b> fun factor of 3.5+<br>" +
-      # Not yet ready for consumption
-    #"<b><font color=\"#333333\">--</font></b> comments seem negative&nbsp;&nbsp;&nbsp;" +
-    #"<b><font color=\"#000000\">++</font></b> comments seem very positive" +
       "<br>\n",
     'templateIndex' => "* <a href=\"#<%out.wid%>\"><%wpEntity.name%></a><br>",
     'usesLocation' => true,
@@ -41,4 +39,5 @@ template = {
       "</div>\n",
     'templatePost'    => "</body></html>"
   },
+
 }

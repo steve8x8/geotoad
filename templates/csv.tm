@@ -1,4 +1,5 @@
 template = {
+
   'csv'    => {
     'ext'        => 'txt',
     'mime'    => 'text/plain',
@@ -9,4 +10,5 @@ template = {
       "<%wp.difficulty%>,<%wp.terrain%>,\"<%wp.latwritten%>\",\"<%wp.lonwritten%>\"," +
       "\"<%wp.type%>\",\"<%wp.size%>\",\"<%out.cdate%>\",\"<%outText.short_desc%> <%outText.long_desc%>\"\n"
   },
+
 }

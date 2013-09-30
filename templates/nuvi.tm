@@ -1,4 +1,5 @@
 template = {
+
   # Templates for Garmin nuvi road navigation devices. Use 'gpx-wpts' to add waypoints.
   # Thanks to Kevin Bulgrien and the author(s) of the GPX_by_Cache_Type.gsk GSAK macro.
   # Note: points will show up under "Custom POIs"!
@@ -8,24 +9,14 @@ template = {
   # http://www.gpsbabel.org/htmldoc-development/fmt_garmin_gpi.html
   # http://geocachingunterland.wordpress.com/2009/04/20/babylonisches-sprachgenie-teil-2-ersatz-fur-den-garmin-poi-loader/
   # http://bigfraud.org/mac/MacGarminTools/gpx2gpi.html
+  # Still missing: radial alerts (need TourGuide features? not in gpsbabel)
 
   'gpx-nuvi'    => {
     'ext'     => 'gpxn',
     'mime'    => 'text/ascii',
     'desc'    => 'GPX Geocaching XML for Nuvi, without Additional Waypoints',
     'templatePre' => "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>\n" +
-      "<gpx" +
-        #" xmlns=\"http://www.topografix.com/GPX/1/1\"" +
-        #" xmlns:gpxx = \"http://www.garmin.com/xmlschemas/GpxExtensions/v3\"" +
-        #" creator=\"GeoToad for nuvi thru POIloader or GPSbabel\"" +
-        #" version=\"1.1\"" +
-        #" xmlns:xsi = \"http://www.w3.org/2001/XMLSchema-instance\"" +
-        #" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1" +
-        #  " http://www.topografix.com/GPX/1/1/gpx.xsd" +
-        #  " http://www.garmin.com/xmlschemas/GpxExtensions/v3" +
-        #  " http://www8.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd" +
-        #  "\"" +
-        ">\n" +
+      "<gpx>\n" +
       "<name>" + Time.new.gmtime.strftime("%Y%m%dT%H%M%S") + "</name>\n" +
       "<desc><%outEntity.title%></desc>\n" +
       "<author>GeoToad <%outEntity.version%></author>\n" +

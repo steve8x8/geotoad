@@ -1,4 +1,5 @@
 template = {
+
   'kml' => {
     'ext'        => 'kml',
     'mime'    => 'application/kml',
@@ -7,4 +8,5 @@ template = {
     'filter_src'    => 'gpx',
     'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o kml -F OUTFILE'
   },
+
 }
