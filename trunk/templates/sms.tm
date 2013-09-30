@@ -1,4 +1,5 @@
 template = {
+
   # contributed by regengott.nass
   'sms' => {
     'ext'         => 'sms',
@@ -10,6 +11,7 @@ template = {
       "D<%wp.difficulty%>,T<%wp.terrain%>,<%out.relativedistance%>,<%wp.latwritten%>,<%wp.lonwritten%>," +
       "<%wp.type%>,<%wp.size%>\n"
   },
+
   # derived from "sms" but reordered and ready for smartphone
   'sms2' => {
     'ext'         => 'sms2',
@@ -23,4 +25,5 @@ template = {
       " <%wp.type%> D<%wp.difficulty%>/T<%wp.terrain%>/<%wp.size%> -" +
       " <%wpText.creator%>: <%wpText.name%>\n"
   },
+
 }

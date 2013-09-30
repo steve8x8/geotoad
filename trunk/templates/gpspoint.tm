@@ -1,4 +1,5 @@
 template = {
+
   # revised using http://mpickering.homeip.net/software/gpspoint_to_gpx.py
   # see also http://mirror.rosalab.ru/rosa/rosa2012.1/repository/SRPMS/contrib/release/gpspoint-2.030521-7.src.rpm
   'gpspoint'    => {
@@ -14,6 +15,7 @@ template = {
       "symbol=\"flag\"  display_option=\"symbol+name\"\n",
     'templatePost'   => "type=\"waypointlistend\"\n",
   },
+
   # use gpsbabel to create gpspoint file from gpx
   'gpspoint2' => {
     'ext'         => 'gpd',
@@ -44,4 +46,5 @@ template = {
                      "OFIELD  CONSTANT,       \"display_option=\"symbol+name\"\", \"%s\"\n" +
                      "EPILOGUE type=\"waypointlistend\"\n"
   },
+
 }

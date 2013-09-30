@@ -1,7 +1,7 @@
 template = {
-  # ** The gpx.hints be removed for GeoToad 4.0, when we use a real templating engine that can do loops **
+
   # GPX with GroundSpeak extended attributes, modified headers
-  # Successfully tested with a GArmin Oregon 300, firmware 4.10:
+  # Successfully tested with a Garmin Oregon 300, firmware 4.10:
   # doesn't show any attributes, but doesn't complain either
   'gpx'    => {
     'ext'        => 'gpx',
@@ -48,4 +48,5 @@ template = {
       "<%out.xmlWpts%>",
     'templatePost'    => "</gpx>\n"
   },
+
 }

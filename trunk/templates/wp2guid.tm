@@ -1,4 +1,5 @@
 template = {
+
   # map wp to guid
   'wp2guid' => {
     'ext'     => 'w2g',
@@ -7,4 +8,5 @@ template = {
     'templatePre' => "",
     'templateWP'  => "<%out.wid%>\t<%out.guid%>\n"
   },
+
 }

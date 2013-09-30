@@ -1,4 +1,5 @@
 template = {
+
   # Two templates for separate output of caches and add.wpts for GSAK use
   'gpx-gsak'    => {
     'ext'        => 'gpx',
@@ -44,6 +45,7 @@ template = {
       "</wpt>\n",
     'templatePost'    => "</gpx>\n"
   },
+
   'gpx-wpts'    => {
     'ext'        => 'wgpx',
     'mime'    => 'text/ascii',
@@ -61,4 +63,5 @@ template = {
     'templateWP'    => "<%out.xmlWpts%>",
     'templatePost'    => "</gpx>\n"
   },
+
 }

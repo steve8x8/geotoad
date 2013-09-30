@@ -1,6 +1,7 @@
 template = {
+
   # myfinds (Steve8x8) - use as follows:
-  # geotoad -x myfindgpx -o myfinds.gpx -z -q user $USERNAME
+  # geotoad -u $USERNAME -p ... -x myfindgpx -o myfinds.gpx -z -Z -q user $USERNAME
   'myfindgpx'    => {
     'ext'        => 'gpx',
     'mime'    => 'text/ascii',
@@ -50,6 +51,7 @@ template = {
       "</wpt>\n",
     'templatePost'    => "</gpx>\n"
   },
+
   'myfindlist'    => {
     'ext'        => 'lst',
     'mime'    => 'text/plain',
@@ -60,6 +62,9 @@ template = {
       "<%wp.type%>\t" +
       "<%out.adate%>\n"
   },
+
+  # yourfinds (Steve8x8) - use as follows:
+  # geotoad -u $USERNAME -p ... -x yourfindgpx -o yourfinds.gpx -z -Z -q user $ANOTHERUSERNAME
   'yourfindgpx'    => {
     'ext'        => 'gpx',
     'mime'    => 'text/ascii',
@@ -109,6 +114,7 @@ template = {
       "</wpt>\n",
     'templatePost'    => "</gpx>\n"
   },
+
   'yourfindlist'    => {
     'ext'        => 'lst',
     'mime'    => 'text/plain',
@@ -119,4 +125,5 @@ template = {
       "<%wp.type%>\t" +
       "<%out.mdate%>\n"
   },
+
 }

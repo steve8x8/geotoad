@@ -1,4 +1,5 @@
 template = {
+
   # contributed by Steve8x8: table, "tab" extended
   'list'    => {
     'ext'        => 'lst',
@@ -14,4 +15,5 @@ template = {
       "<%out.size%>\t" + # testing only
       "\"<%wp.name%>\" by <%wp.creator%>\n"
   },
+
 }

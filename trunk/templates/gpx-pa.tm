@@ -1,4 +1,5 @@
 template = {
+
   # Modified GPX XML for PathAway, which doesn't support HTML content in gpx files.
   # Since <groundspeak:...> tags are ignored, so we have to include all the necessary information in the <desc> tag
   # Contributed by Tris Sethur, Sep 2011
@@ -25,4 +26,5 @@ template = {
       "<%out.xmlWpts%>",
     'templatePost'    => "</gpx>\n"
   },
+
 }

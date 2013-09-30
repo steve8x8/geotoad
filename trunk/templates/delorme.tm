@@ -1,4 +1,5 @@
 template = {
+
   'delorme' => {
     'ext'          => 'txt',
     'mime'         => 'application/delorme',
@@ -8,6 +9,7 @@ template = {
       "<%out.id%>\{URL=<%wp.url%>\},<%wp.type%>\n",
     'templatePost' => "END",
   },
+
   'delorme-nourl' => {
     'ext'          => 'txt',
     'mime'         => 'application/delorme',
@@ -17,4 +19,5 @@ template = {
       "<%out.id%>,<%wp.type%>\n",
     'templatePost' => "END",
   },
+
 }
