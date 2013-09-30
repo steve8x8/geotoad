@@ -269,7 +269,7 @@ module Common
     if File.readable?(historyFile)
       history = YAML::load(File.open(historyFile))
     end
-    if not history
+    if not history or (history.class != Hash)
       history = Hash.new
     end
     return history
@@ -300,11 +300,13 @@ module Common
   # mapping WID to GUID via dictionary file
   def loadMapping
     mappingFile  = findConfigDir + '/' + 'mapping.yaml'
+    displayMessage "Reading dictionary from #{mappingFile}"
     mapping = false
     if File.readable?(mappingFile)
       mapping = YAML::load(File.open(mappingFile))
     end
-    if not mapping
+    if not mapping or (mapping.class != Hash)
+      displayInfo "No valid dictionary found, initializing"
       mapping = Hash.new
       begin
         File.open(mappingFile, 'w'){ |f| f.puts "---" }
@@ -312,7 +314,7 @@ module Common
         displayWarning "Could not reset dictionary:\n\t#{error}"
       end
     end
-    displayInfo "#{mapping.length} mappings WID->GUID read from #{mappingFile}"
+    displayInfo "#{mapping.length} WID->GUID mappings read"
     return mapping
   end
 
