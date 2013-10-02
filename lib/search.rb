@@ -17,7 +17,7 @@ class SearchCache
   def initialize
     @distance = 15
     @max_pages = 0		# unlimited
-    @ttl = 12 * 3600		# 12 hours (was 20)
+    @ttl = 20 * 3600		# was 20 hours
     @waypoints = Hash.new
 
     # cache types for selected search
@@ -145,21 +145,21 @@ class SearchCache
 
     when 'user'
       @query_type = 'ul'
-      @ttl = 3 * 24 * 3600	# 3 days (was 12 hours)
+      @ttl = 20 * 3600		# 20 hours, was 3 days
 
     when 'owner'
       @query_type = 'u'
-      @ttl = 3 * 24 * 3600	# 3 days
+      @ttl = 1 * 24 * 3600	# 1 day, was 3 days
 
     when 'country'
       @query_type = 'country'
       @search_url = @@base_url + "?country_id=#{key}&as=1"
-      @ttl = 14 * 24 * 3600	# 2 weeks
+      @ttl = 1 * 24 * 3600	# 1 day, was 2 weeks
 
     when 'state'
       @query_type = 'state'
       @search_url = @@base_url + "?state_id=#{key}"
-      @ttl = 14 * 24 * 3600	# 2 weeks
+      @ttl = 1 * 24 * 3600	# 1 day, was 2 weeks
 
     when 'keyword'
       @query_type = 'key'
