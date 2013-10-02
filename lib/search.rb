@@ -616,14 +616,15 @@ class SearchCache
 
   def getPage(url, post_vars)
     page = ShadowFetch.new(url)
-    if $DTSFILTER
-      # DTS decoding: drop search pages from yesterday UTC
-      sincemidnight = 60*( 60*Time.now.utc.hour + Time.now.utc.min )
-      # correct TTL only if no user search!
-      if (sincemidnight < @ttl) and (url !~ /nearest.aspx.ul=/)
-        @ttl = sincemidnight
-      end
-    end
+    # obsolete as DTS is no longer encoded with a daily changing key:
+    #if $DTSFILTER
+    #  # DTS decoding: drop search pages from yesterday UTC
+    #  sincemidnight = 60*( 60*Time.now.utc.hour + Time.now.utc.min )
+    #  # correct TTL only if no user search!
+    #  if (sincemidnight < @ttl) and (url !~ /nearest.aspx.ul=/)
+    #    @ttl = sincemidnight
+    #  end
+    #end
     page.localExpiry = @ttl
     if (post_vars.length > 0)
       page.postVars=post_vars.dup
