@@ -1,6 +1,7 @@
 # -*- encoding : utf-8 -*-
 # $Id$
 require 'fileutils'
+require 'time'
 
 module Common
   @@prefs_url = 'http://www.geocaching.com/account/ManagePreferences.aspx'
