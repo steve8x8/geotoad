@@ -1,4 +1,5 @@
 # $Id$
+
 require 'cgi'
 require 'lib/templates'
 require 'lib/version'
@@ -7,6 +8,7 @@ require 'zlib'
 GOOGLE_MAPS_URL = 'http://maps.google.com/maps'
 
 class Output
+
   include Common
   include Messages
 

@@ -49,4 +49,5 @@ class Templates
     }
     displayInfo "#{$Format.keys.length} templates total"
   end
+
 end

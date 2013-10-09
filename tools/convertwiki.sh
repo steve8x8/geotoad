@@ -4,7 +4,7 @@
 # to be run inside a wiki svn working copy
 # doesn't work properly with links and some lists!
 
-#for page in `ls *.wiki | sed -e 's~\.wiki~~'`
+#pages=`ls *.wiki | sed -e 's~\.wiki~~'`
 pages=${@:-README FAQ README-devel OtherSearches ReportingBugs xDebianUbuntuRepository GCmaintenances Templates Dictionary}
 for page in $pages
 do

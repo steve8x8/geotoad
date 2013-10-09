@@ -1,4 +1,7 @@
+# $Id$
+
 # The version gets inserted by makedist.sh
+
 module GTVersion
 
   MY_VERSION = '%VERSION%'
@@ -10,4 +13,5 @@ module GTVersion
       return MY_VERSION
     end
   end
+
 end

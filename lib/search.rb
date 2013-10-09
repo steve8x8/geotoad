@@ -7,6 +7,7 @@ require 'time'
 
 
 class SearchCache
+
   include Common
   include Messages
 
@@ -1113,4 +1114,5 @@ class SearchCache
     debug "processPage done: page:#{page_number} total_pages: #{pages_total} parsed: #{parsed_total}"
     return [page_number, pages_total, parsed_total, post_vars]
   end #end parsecache
+
 end
