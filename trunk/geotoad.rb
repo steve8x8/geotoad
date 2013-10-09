@@ -6,8 +6,9 @@ $LOAD_PATH << File.dirname(__FILE__.gsub(/\\/, '/'))
 $LOAD_PATH << File.dirname(__FILE__.gsub(/\\/, '/')) + '/lib'
 $LOAD_PATH << (File.dirname(__FILE__.gsub(/\\/, '/')) + '/' + '..')
 
-if RUBY_VERSION.gsub('.', '').to_i < 190
-  puts "ERROR: The version of Ruby your system has installed is #{RUBY_VERSION}, but we now require 1.9.0 or higher"
+# check ruby version compatibility
+if RUBY_VERSION.gsub('.', '').to_i < 191
+  puts "ERROR: The version of Ruby your system has installed is #{RUBY_VERSION}, but we now require 1.9.1 or higher"
   sleep(5)
   exit(99)
 end
