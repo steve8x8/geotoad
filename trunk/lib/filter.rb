@@ -1,7 +1,9 @@
 # $Id$
+
 require 'cgi'
 
 class Filter
+
   include Common
   include Messages
 
@@ -309,4 +311,5 @@ class Filter
       return 0
     end
   end
+
 end

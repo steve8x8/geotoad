@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
+
+# $Id$
 #
 # This is the main geotoad binary.
 #
@@ -12,11 +14,12 @@ if RUBY_VERSION.gsub('.', '').to_i < 191
   sleep(5)
   exit(99)
 end
-Encoding.default_external = Encoding::UTF_8
 if RUBY_VERSION.gsub('.', '').to_i >= 200
   puts "WARNING: GeoToad has not been thoroughly tested with Ruby versions >= 2.0 yet!"
   sleep(5)
 end
+
+Encoding.default_external = Encoding::UTF_8
 
 $delimiters = /[\|:]/
 $delimiter = '|'
@@ -39,6 +42,7 @@ require 'find' # for cleanup
 require 'zlib'
 
 class GeoToad
+
   include Common
   include Messages
   include Auth
@@ -1014,4 +1018,5 @@ while true
   else
     exit
   end
+
 end

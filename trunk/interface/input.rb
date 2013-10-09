@@ -1,11 +1,12 @@
 # $Id$
+
 $LOAD_PATH << (File.dirname(__FILE__.gsub(/\\/, '/')) + '/' + '..')
 $LOAD_PATH << (File.dirname(__FILE__.gsub(/\\/, '/')) + '/' + '../lib')
 
 require 'country_state'
 
-
 class Input
+
   include Common
   include Messages
 

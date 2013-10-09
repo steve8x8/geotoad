@@ -1,3 +1,5 @@
+# $Id$
+
 # A library for automatic location searches, using the Google Geocoding API v3
 # see documentation https://developers.google.com/maps/documentation/geocoding/
 
@@ -9,6 +11,7 @@ MAPS_URL = 'http://maps.googleapis.com/maps/api/geocode/xml?sensor=false'
 CACHE_SECONDS = 86400 * 180
 
 class GeoCode
+
   include Common
   include Messages
 

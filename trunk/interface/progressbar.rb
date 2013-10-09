@@ -1,6 +1,7 @@
 # $Id$
 
 class ProgressBar
+
   def initialize(start, max, name)
     @value = 0
     @max = max
@@ -62,4 +63,5 @@ class ProgressBar
     addtext = (@valueText)? ": #{@valueText}" : ""
     puts "[#{meter}] (#{pvalue}/#{@max}) #{@name}#{addtext}"
   end
+
 end

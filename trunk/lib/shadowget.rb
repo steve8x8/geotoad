@@ -11,6 +11,7 @@ require 'auth'
 
 # Does a webget, but stores a local directory with cached results ###################
 class ShadowFetch
+
   attr_reader :data, :waypoints, :cookie
   attr_accessor :url
 

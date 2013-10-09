@@ -1,15 +1,14 @@
 # $Id$
-#
+
 # Get a list of countries / states for the geocaching form.
-#
+
 require 'cgi'
 require 'geocode'
 require 'shadowget'
 require 'time'
 
-# $debugMode = 0
-
 class CountryState
+
   include Common
   include Messages
 
@@ -159,4 +158,5 @@ class CountryState
     }
     return [post_vars, options]
   end
+
 end

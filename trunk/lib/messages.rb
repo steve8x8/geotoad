@@ -1,8 +1,9 @@
-# This is where code specific to the user interface display gets put.
-#
 # $Id$
 
+# This is where code specific to the user interface display gets put.
+
 module Messages
+
   def enableDebug
     $debugMode = 1
   end

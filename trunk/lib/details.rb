@@ -1,9 +1,11 @@
 # $Id$
+
 require 'lib/funfactor'
 require 'time'
 require 'zlib'
 
 class CacheDetails
+
   attr_writer :useShadow, :cookie
   attr_accessor :preserve
 
@@ -847,4 +849,4 @@ class CacheDetails
     return removed
   end
 
-end  # end class
+end
