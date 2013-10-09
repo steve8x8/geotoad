@@ -1,4 +1,4 @@
-# $Id$
+# $Id: geocode.rb 1475 2013-10-09 08:39:26Z Steve8x8@googlemail.com $
 
 # A library for automatic location searches, using the Google Geocoding API v3
 # see documentation https://developers.google.com/maps/documentation/geocoding/
