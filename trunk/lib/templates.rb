@@ -1,3 +1,5 @@
+# $Id$
+
 # collect template definitions
 
 require 'common'

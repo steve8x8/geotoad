@@ -199,7 +199,7 @@ class ShadowFetch
       FileUtils::mkdir_p(localdir)
     end
 
-    debug "outputting #{localfile}"
+    debug "writing #{localfile}"
     begin
       cache = File.open(localfile, File::WRONLY|File::TRUNC|File::CREAT, 0666)
       cache.puts @data
