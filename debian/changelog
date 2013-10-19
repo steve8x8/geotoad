@@ -1,3 +1,14 @@
+geotoad (3.18.1-1) unstable; urgency=low
+
+  * New version 3.18.1, "Noble and priceless" release (Alfred Nobel *1833)
+  * Issue 176: unescape HTML entities in cache name/owner/finder
+  * Issue 198: modified error reporting for basic members
+  * Issue 277: more fixes
+  * Issue 281: avoid colliding date representations
+  * Lots of minor additions, modifications and bug fixes
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Mon, 21 Oct 2013 09:00:00 +0000
+
 geotoad (3.18.0-1) unstable; urgency=low
 
   * New version 3.18.0, "Beyond the horizon" release
