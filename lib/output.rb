@@ -848,10 +848,17 @@ class Output
     debug "Generating comment text for #{cache['name']}"
     cache['comments'].each { |comment|
       comment_text = icons2Text(comment['text'].to_s)
+      # unescape HTML in finder name
+      comment_user = deemoji(comment['user'], false)
+      begin
+        comment_user = CGI.unescapeHTML(comment_user)
+      rescue => e
+        debug "unescapeHTML throws exception #{e} - use original"
+      end
       formatted_date = comment['date'].strftime("%Y-%m-%d")
       entry = ''
       entry << "----------\n"
-      entry << "*#{comment['type']}* by #{comment['user']} on #{formatted_date}:\n"
+      entry << "*#{comment['type']}* by #{comment_user} on #{formatted_date}:\n"
       entry << makeText(comment_text) + "\n"
       entries << entry
     }
@@ -1270,6 +1277,16 @@ class Output
      # otherwise, sort GC1 < GCZZZZ < GC10000 < GCZZZZZ < GC100000
      (@title =~ /^GeoToad: user =/) ? (wpSearchOrder.reverse) : (@wpHash.keys.sort{|a,b| a[2..-1].rjust(6)<=>b[2..-1].rjust(6)})
     ).each { |wid|
+      # unescape HTML entities in _some_ fields (if not done yet)
+      ['name', 'creator'].each { |var|
+        temp = deemoji(@wpHash[wid][var], false)
+        begin
+          @wpHash[wid][var] = CGI.unescapeHTML(temp)
+        rescue => e
+          debug "unescapeHTML error: #{e}"
+          @wpHash[wid][var] = temp.gsub(/&/, '+')
+        end
+      }
       cache = @wpHash[wid]
       debug "--- Output loop: #{wid} - #{cache['name']} by #{cache['creator']}"
       counter += 1

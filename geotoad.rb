@@ -40,6 +40,7 @@ require 'getoptlong'
 require 'fileutils'
 require 'find' # for cleanup
 require 'zlib'
+require 'cgi'
 
 class GeoToad
 
@@ -699,7 +700,15 @@ class GeoToad
           message = "(unavailable)"
         end
       end
-      progress.updateText(token, "[#{wid}]".ljust(9)+" \"#{wpFiltered[wid]['name']}\" from #{page.src} #{message}")
+      name = wpFiltered[wid]['name']
+      # remove HTML cruft from name, may fail in rare cases (emoji)
+      begin
+        temp = CGI::unescapeHTML(name)
+      rescue => e
+        temp = name.gsub(/\&/, '+')
+      end
+      name = temp
+      progress.updateText(token, "[#{wid}]".ljust(9)+" \"#{name}\" from #{page.src} #{message}")
 
       if status == 'subscriber-only'
         wpFiltered.delete(wid)
