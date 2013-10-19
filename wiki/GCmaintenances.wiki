@@ -135,6 +135,15 @@ _*(year per year; new entries will be added at bottom)*_
   * [http://forums.groundspeak.com/GC/index.php?showtopic=315801 release notes]
   * *{{{Web.HotFix_20130917.3}}}*
 ----
+2013-10-0x:
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=316229 release notes]
+  * *{{{Web.HotFix_20131002.2}}}*
+----
+2013-10-17:
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=316664 release notes]
+  * _"some more love for geocache owners"_
+  * *{{{Web.HotFix_20131016.1}}}*
+----
 (...)
 ----
 
