@@ -1,11 +1,19 @@
 #summary Features of current version
 #labels Featured
 
-version=3.18.0
+version=3.18.1
 
-= "Beyond the horizon" release (Sep 24, 2013) =
-  * *ALWAYS download from http://code.google.com/p/geotoad/downloads/list ONLY*
-  * *otherwise you may miss the latest release!*
+= "Noble and priceless" (Alfred Nobel *1833) release (Oct 21, 2013) =
+
+= What's new in 3.18.1? =
+  * nicknamed "Noble and priceless" (Alfred Nobel's 180 birthday)
+
+== Issues addressed: ==
+  * Issue 176: unescape HTML entities in cache name/owner/finder
+  * Issue 198: modified error reporting for basic members
+  * Issue 277: more fixes
+  * Issue 281: avoid colliding date representations
+  * Lots of minor additions, modifications and bug fixes
 
 = What's new in 3.18.0? =
   * nicknamed "Beyond the horizon" (and still no end)

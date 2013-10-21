@@ -1,7 +1,14 @@
 #summary Features of current development version
 #labels Featured,Experimental
 
-version=3.18.0
+version=3.18.1
+
+= Important =
+  * *As there are no development versions any longer:*
+  * *Please change to stable series and read CurrentVersion wiki page*
+
+= Information below is outdated =
+  * *Don't read any further, go to CurrentVersion instead*
 
 = "Beyond the horizon" release (Sep 24, 2013) =
   * *ALWAYS download from http://code.google.com/p/geotoad/downloads/list ONLY*
