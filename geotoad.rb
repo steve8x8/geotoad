@@ -343,8 +343,8 @@ class GeoToad
 
     if @option['myLogs']
       displayMessage "Retrieving my logs"
-      count = getMyLogs()
-      displayInfo "Found count: #{count}"
+      count, logcount = getMyLogs()
+      displayInfo "Found count: #{count}. Total logs: #{logcount}"
     end
 
     if @queryType == "zipcode" || @queryType == "coord" || @queryType == 'location'
