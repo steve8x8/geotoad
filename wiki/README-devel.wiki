@@ -126,8 +126,8 @@ syntax: geotoad [options] <search:search2:search3>
  mapsend+     mxf          myfindgpx    myfindlist   ozi         
  pcx+         poi-nuvi+    psp+         sms          sms2        
  tab          text         tiger        tmpro+       tpg+        
- wp2guid      xmap+        yourfindgpx 
-    + requires gpsbabel in PATH           = requires cmconvert in PATH
+ wp2guid      xmap+        yourfindgpx  yourfindlist
+     + requires gpsbabel in PATH           = requires cmconvert in PATH
 
 ::: EXAMPLES:
   geotoad.rb -u helixblue -p password 27502

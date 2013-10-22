@@ -105,8 +105,8 @@ syntax: geotoad [options] <search:search2:search3>
  -n                     only include not found caches (virgins)
  -N                     only caches not yet found by login user
  -b                     only include caches with travelbugs
- -l                     set EasyName waypoint id length. (16)
- -L    [count]          limit number of search pages (0=unlimited)
+ -l [length]            set EasyName waypoint id length. (16)
+ -L [count]             limit number of search pages (0=unlimited)
  -Y                     do not fetch cache descriptions, search only
  -Z                     don't overwrite existing cache descriptions
  -O                     exclude Premium Member Only caches
@@ -126,8 +126,8 @@ syntax: geotoad [options] <search:search2:search3>
  mapsend+     mxf          myfindgpx    myfindlist   ozi         
  pcx+         poi-nuvi+    psp+         sms          sms2        
  tab          text         tiger        tmpro+       tpg+        
- wp2guid      xmap+        yourfindgpx 
-    + requires gpsbabel in PATH           = requires cmconvert in PATH
+ wp2guid      xmap+        yourfindgpx  yourfindlist
+     + requires gpsbabel in PATH           = requires cmconvert in PATH
 
 ::: EXAMPLES:
   geotoad.rb -u helixblue -p password 27502
