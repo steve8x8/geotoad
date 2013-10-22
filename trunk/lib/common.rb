@@ -44,14 +44,19 @@ module Common
     page = ShadowFetch.new(@@mylogs_url)
     page.localExpiry = 12 * 3600		# 12 hours
     data = page.fetch
-    counter = 0
+    foundcount = 0
+    logcount = 0
     # <strong style="display: block">
     #                         1,992 Caches Found</strong>
     # (language-dependent)
     if data =~ /<strong[^>]*>\s*([\d,\.]+)[\s\w]+<\/strong>/
-      counter = $1.gsub(/[,\.]/, '').to_i
+      foundcount = $1.gsub(/[,\.]/, '').to_i
     end
-    return counter
+    # seen 2013-10-xx
+    if data =~ /\n\s*([\d,\.]+)\s[\s\w]+<\/p>\s\n/
+      logcount = $1.gsub(/[,\.]/, '').to_i
+    end
+    return [foundcount, logcount]
   end
 
 # date patterns in "last found" column (as of 2013-08-28)
