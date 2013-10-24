@@ -3,7 +3,10 @@
 
 version=3.18.1
 
-= "Noble and priceless" (Alfred Nobel *1833) release (Oct 21, 2013) =
+= "Noble and priceless" (Alfred Nobel b.1833) release (Oct 21, 2013) =
+
+= Download =
+  * http://code.google.com/p/geotoad/downloads/list
 
 = What's new in 3.18.1? =
   * nicknamed "Noble and priceless" (Alfred Nobel's 180 birthday)

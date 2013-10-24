@@ -3,6 +3,9 @@
 
 version=3.18.1
 
+= Download =
+  * http://code.google.com/p/geotoad/downloads/list
+
 = Important =
   * *As there are no development versions any longer:*
   * *Please change to stable series and read CurrentVersion wiki page*
