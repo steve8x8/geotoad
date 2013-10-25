@@ -61,22 +61,21 @@ geocaching.com password (required)
 .TP
 \fB-m \fR\fIdelimiter(s)\fR, \fB--delimiter=\fR\fIdelimiter(s)\fR
 delimiter(s) to be used for \fB(MULTI)\fR input, default "|:"
-(without square brackets!)
 
 The TUI uses "|".
-For Windows command-line queries, you may try "^".
+You may try "^" to avoid delimiters that have to be "escaped" ("quoted").
 .TP
 \fB-o \fR\fIfilename\fR, \fB--output=\fR\fIfilename\fR
-output file name (automatic otherwise)
+output file name (default: created from query argument(s) and options)
 .TP
 \fB-x \fR\fIformat\fR, \fB--format=\fR\fIformat\fR
 \fB(MULTI)\fR
-output format type(s)
+output format type(s) (default: gpx)
 .TP
 \fB-q \fR\fI[location|coord|user|owner|country|state|keyword|wid|guid]\fR, \fB--query=\fR\fI...\fR
-query type (location by default)
+query type (default: location)
 
-"location" will ask Google Maps for a "translation" into coordinates (which may fail).
+"location" will use the Google Maps API to translate into coordinates.
 Use "coord" if you already have coordinates.
 
 "country" and "state" queries require a numerical id which the TUI may tell you.
@@ -89,7 +88,10 @@ set maximum cache size
 .TP
 \fB-c \fR\fI[traditional|multicache|letterbox|event|unknown|cito|virtual|webcam|earthcache|wherigo|...]\fR, \fB--cacheType=\fR\fI...\fR
 \fB(MULTI)\fR
-set cache type(s) - if only one type is selected, search will be sped up
+set cache type(s)
+
+If only one type is selected, search will be sped up considerably
+by reducing the number of queries sent to the server.
 .TP
 \fB-d \fR\fI1.0-5.0\fR, \fB--difficultyMin=\fR\fI...\fR
 set minimum difficulty
@@ -115,8 +117,8 @@ set minimum fav factor
 \fB-G \fR\fI0.0-5.0\fR, \fB--favFactorMax=\fR\fI...\fR
 set maximum fav factor
 .TP
-\fB-y \fR\fI1-500[km]\fR, \fB--distanceMax=\fR\fI...\fR
-distance maximum in miles or km (10mi)
+\fB-y \fR\fI0.01-500[km]\fR, \fB--distanceMax=\fR\fI...\fR
+distance maximum in miles or km (default: 10mi)
 .TP
 \fB-k \fR\fIkeyword\fR, \fB--titleKeyword=\fR\fIkeyword\fR
 \fB(MULTI)\fR
@@ -177,7 +179,7 @@ only include caches with travelbugs/trackables
 \fB-l \fR\fIlength\fR, \fB--waypointLength=\fR\fIlength\fR
 set EasyName waypoint id length. (16)
 .TP
-\fB-L \fR\fIpages\fR, \fB--limitSearchPages=\fR\fIpages\fR
+\fB-L \fR\fIcount\fR, \fB--limitSearchPages=\fR\fIcount\fR
 limit number of search pages (0=unlimited)
 .TP
 \fB-Y\fR, \fB--noCacheDescriptions\fR
@@ -272,21 +274,34 @@ for Bourne Again shell and derivatives (bash, dash)
 .TP
 There is a known yet unfixed issue with the pre-built Windows executable: To properly find some data files, it must be run from its own installation directory.
 .SH OUTPUT FORMATS
+\." set indentation to "none", use fixed-width font for format list
 .TP 0
+.ft CW
  cachemate=   cetus+       csv          delorme      delorme-nour
+.ft CW
  dna+         easygps      gclist       gcvisits     gpsdrive    
+.ft CW
  gpsman+      gpspilot+    gpspoint     gpspoint2+   gpsutil+    
+.ft CW
  gpx          gpx-gsak     gpx-nuvi     gpx-pa       gpx-wpts    
+.ft CW
  holux+       html         kml+         list         magnav+     
+.ft CW
  mapsend+     mxf          myfindgpx    myfindlist   ozi         
+.ft CW
  pcx+         poi-nuvi+    psp+         sms          sms2        
+.ft CW
  tab          text         tiger        tmpro+       tpg+        
+.ft CW
  wp2guid      xmap+        yourfindgpx  yourfindlist
+.ft CW
     + requires gpsbabel in PATH           = requires cmconvert in PATH
+.\" back to normal font
+.ft P
 
 .SH EXAMPLES
 .TP
-\fBNote:\fR Some of these examples, created around 2006, may no longer work as shown (as default settings have changed). Please help to fix this; see Issue 284 on GoogleCode.
+\fBNote:\fR Some of these examples may still no longer work as shown. Please help to fix this; see Issue 284 on GoogleCode.
 .TP
 .B  geotoad
 invokes the text user interface
@@ -295,43 +310,67 @@ invokes the text user interface
 Why do we need a username and password? In October of 2004, Geocaching.com
 began to require a login in order to see the coordinates of a geocache.
 Please note: Put quotes around your username if it has any spaces in it.
-You've just made a file named geotoad-output.loc containing all the
-geocaches nearby the zipcode 27513 suitable to be read by EasyGPS. Here are
-some more complex examples that you can work with:
+
+You've just made a file named gt_27513.gpx containing all the geocaches
+nearby the zipcode 27513 (Cary, NC - with a maximum distance of 10 miles)
+suitable to be read by almost every GPSr device.
 .TP
-.B  geotoad -u user -p password "N56 44.392, E015 52.780"  -y 5
-Search for caches within 5 miles of the above coordinates
+Here are some more complex examples that you can work with:
+.TP
+.B  geotoad -u user -p password -y 5 -q coord "N56 44.392, E015 52.780"
+searches for caches within 5 miles of the above coordinates
 .TP
 .B  geotoad -u user -p password 27513:27502:33434
-You can combine searches with a delimiter (default is ":" or "|").
+performs a multiple search, and combines the results into a single output.
+You can combine searches with a delimiter (default is "|", or ":" - except TUI).
 This works for all types, though it's most often used with coordinate searches.
 .TP
 .B  geotoad -u user -p password -x text -o nc.txt -n -q state 34
 Outputs a text file with all of the caches in US state North Carolina that are
 virgins (have never been found).
+
 Please note that for state and country queries, the numerical id has to be used.
 You may use the TUI to search for the country or state number.
+
+Warning: Querying a whole state can be dangerous and may harm your account!
+For example, NC has (as of Oct 2013) more than 24k active caches.
+You may want to limit the number of search pages parsed (e.g. using \fB-L 10\fR),
+as country and state searches return caches in reverse chronological order
+(newest ones first).
 .TP
-.B  geotoad -u user -p password -x text -o palestine.txt -n -q country 276
-Same as above, but for Palestine.
+.B  geotoad -u user -p password -x html -o palestine.html -q country 276
+Get a HTML representation of all caches in Palestine. (Oct 2013: 7, one of them unfound)
 .TP
-.B  geotoad -u user -p password -t 2.5 -x vcf -E "helixblue:Sallad" -o charlotte.vcf 28272
-Gets every cache in the 100 mile radius of zipcode 28272, with a terrain
-score of 2.5 or higher, and that helixblue and Sallad have not visited.
-Outputs a VCF format file, which is usable by iPod's and other devices.
+.B  geotoad -u ... -p ... -t 2.5 -E "helixblue:Sallad" -x gpx -o charlotte.gpx 28272
+Get caches in the 10-mile zone of zipcode 28272, with a terrain score of 2.5 or higher, 
+which users helixblue and Sallad have not visited.
+Outputs a GPX format file, which is usable by most GPSr's and other devices.
 .TP
-.B  geotoad -u user -p password -t 2.5 -x vcf -E dummyuser=/path/to/file -o charlotte.vcf 28272
-As before, but read a list of GCxxxx cache IDs from a file instead of querying the server.
+.B  geotoad -u ... -p ... -t 2.5 -E anyname=/path/to/file -x gpx -o charlotte.gpx 28272
+As before, but read a list of GCxxxx cache IDs from a file instead of querying the server
+for found caches.
 .TP
-.B  geotoad -u user -p password -x html -b -K 'stream|creek|lake|river|ocean' -o watery.html -q state 15
-Gets every cache in the state with travel bugs that matches those water keywords.
+.B  geotoad -u ... -p ... -b -K 'stream|creek|lake|river|ocean' -x html -o watery.html -q state 15
+Gets every cache in Indiana state with trackables that matches those water keywords.
 Makes a pretty HTML file out of it.
 .TP
-.B  geotoad -u user -p password -x gpx -o mylocal.gpx -z -y 1.75 -T 4 -q coord "N 51 23.456 E 012 34.567"
-Create a GPX (1.0.1, with attributes) file with all caches around the location above,
-max. 1.75 miles away, terrain value below or equal 4, include disabled ones.
+.B  geotoad -u ... -p ... -x gpx -o mylocal.gpx -z -y 1.75 -T 4 -q coord "N 51 23.456 E 012 34.567"
+Create a GPX file with all caches around the given location,
+max. 1.75 miles away, terrain rating below or equal 4, including disabled ones.
 .TP
-.B  geotoad -u user -p password -m '^+|' -o output.gpx -x "gpx+list|html" -y 3km -q coord "52.0,6.0^53.0,-7.0"
-Create three files output.{gpx,lst,html} with two center points and a 3 kilometre radius.
+.B  geotoad -u ... -p ... -m '^+|' -o output.gpx -x "gpx+list|html" -y 2km -q coord "52.25,6.075^53.1,-7.2"
+Perform a search around two travel stops with a 2 kilometre radius, 
+create three files output.gpx, output.lst, output.html combining the results.
+(Note the usage of the \fB-m\fR option to modify the set of delimiters.
+As the \fB|\fR character has a special meaning, it must be "quoted".)
+.TP
+.B  geotoad -u ... -p ... -c multicache -a 6 -A 57 -o family.gpx -x gpx:list -y 25km -q coord "52.25,6.075"
+Prepare for a Sunday afternoon walk, and find all multi-caches around
+which pretend to be "Kid friendly" (attribute 6) and shorter than 10km (attribute 57).
+.TP
+.B  geotoad -u ... -p ... -z -q owner -- -aBcDe-
+Find all caches created by one owner, even the disabled or archived ones.
+Note that the argument has to be separated by \fB--\fR from the rest of the command line.
+
 .SH AUTHOR
 Thomas Stromberg and The GeoToad Project
