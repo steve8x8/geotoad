@@ -239,17 +239,17 @@ class Input
     puts " -m [delimiters]        set delimiter(s) (default \"|:\") for multiple selections"
 
     puts " -o [filename]          output file name (automatic otherwise)"
-    puts " -x [format]            output format type, see list below"
+    puts " -x [format]            output format type, see list below (default: gpx)"
     puts " -q [location|coord|user|owner|country|state|keyword|wid|guid]"
-    puts "                        query type (location by default)"
+    puts "                        query type (default: location)"
 
     puts " -d/-D [1.0-5.0]        difficulty minimum/maximum"
     puts " -t/-T [1.0-5.0]        terrain minimum/maximum"
     puts " -f/-F [0.0-5.0]        fun factor minimum/maximum"
     puts " -g/-G [0.0-5.0]        fav factor minimum/maximum"
-    puts " -y    [1-500]          distance maximum, in miles, or suffixed \"km\" (10)"
+    puts " -y    [0.01-500]       distance maximum, in miles, or suffixed \"km\" (10)"
     puts " -k    [keyword]        title keyword(s) search"
-    puts " -K    [keyword]        desc keyword(s) search (slow)"
+    puts " -K    [keyword]        desc keyword(s) search (slow!)"
     puts " -i/-I [username]       include/exclude caches owned by this person"
     puts " -e/-E [username]       include/exclude caches found by this person"
     puts " -s/-S [virtual|not_chosen|other|micro|small|regular|large]"
@@ -303,7 +303,13 @@ class Input
     puts ""
     puts "::: EXAMPLES:"
     puts "  geotoad.rb -u helixblue -p password 27502"
-    puts "  geotoad.rb -u john -p password -d 3 -s helixblue -f vcf -o NC.vcf \'North Carolina\'"
+    puts "    find zipcode 27502 (Apex, NC 27502, USA), search 10 mi around, write gpx"
+    puts "  geotoad.rb -u john -p password -c unknown -d 3 -x csv -o NC.cvs -q state 34"
+    puts "    will find all mystery caches with difficulty >= 3 in all of North Carolina"
+    puts "    (Be careful: NC has more than 24k active caches!)"
+    puts "  geotoad.rb -u ... -p ... -z -Y -H -c cito -x list -o cito.list -q country 11"
+    puts "    creates a list (with dates, but without coordinates) of all CITO events in the UK"
+    puts "  more examples - and options explanations - see manual page and README"
   end
 
   def showMenu
