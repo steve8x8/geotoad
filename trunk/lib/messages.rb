@@ -28,7 +28,7 @@ module Messages
   end
 
   # often worth displaying
-  def displayTitleMessage(text)
+  def displayTitle(text)
     puts "(===) #{text}"
   end
 

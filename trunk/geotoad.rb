@@ -15,7 +15,7 @@ if RUBY_VERSION.gsub('.', '').to_i < 191
   exit(99)
 end
 if RUBY_VERSION.gsub('.', '').to_i >= 200
-  puts "WARNING: GeoToad has not been thoroughly tested with Ruby versions >= 2.0 yet!"
+  puts " ***  GeoToad has not been thoroughly tested with Ruby versions >= 2.0 yet!"
   sleep(5)
 end
 
@@ -963,7 +963,7 @@ exit if Object.const_defined?(:Ocra)
 ###### MAIN ACTIVITY ###############################################################
 # have some output before initializing the GeoToad, Output, Template classes
 include Messages
-displayTitleMessage "GeoToad #{$VERSION} (#{RUBY_PLATFORM}-#{RUBY_VERSION})"
+displayTitle "GeoToad #{$VERSION} (Ruby #{RUBY_VERSION}p#{RUBY_PATCHLEVEL}/#{RUBY_RELEASE_DATE} on #{RUBY_PLATFORM})"
 displayInfo "Report bugs or suggestions at http://code.google.com/p/geotoad/issues/"
 displayInfo "Please include verbose output (-v) without passwords in the bug report."
 cli = GeoToad.new
