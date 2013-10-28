@@ -346,7 +346,7 @@ class Input
       #  (@@optHash['funFactorMax'] || 5.0), @@optHash['sizeMin'] || 'any', @@optHash['sizeMax'] || 'any')
       printf("(7)  fav factor           [%-1.1f - %-1.1f] | (8)  cache size            [%3.3s - %3.3s]\n", (@@optHash['favFactorMin'] || 0.0),
         (@@optHash['favFactorMax'] || 5.0), @@optHash['sizeMin'] || 'any', @@optHash['sizeMax'] || 'any')
-      printf("(9)  cache type   [%-58.58s]\n", (@@optHash['cacheType'] || 'any'))
+      printf("(9)  cache type   [%58.58s]\n", (@@optHash['cacheType'] || 'any'))
       printf("(10) virgin caches only           [%1.1s] | (11) travel bug caches only        [%1.1s]\n", @@optHash['notFound'], @@optHash['travelBug'])
       printf("(12) cache age (days)     [%3.3s - %-3.3s] | (13) last found (days)     [%3.3s - %-3.3s] \n",
         (@@optHash['placeDateExclude'] || 0), (@@optHash['placeDateInclude'] || 'any'),
