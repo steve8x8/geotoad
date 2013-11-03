@@ -661,7 +661,7 @@ class Input
           answerf = Float(answer)
           # negative values aren't allowed
           if (answerf < 0) and (not allowNegative)
-            puts "*** #{answer} is negative, not allowed."
+            puts "** #{answer} is negative, not allowed."
           # If it is equivalent to it's integer, return the integer instead
           elsif answerf == answerf.to_i
             return answerf.to_i
@@ -670,7 +670,7 @@ class Input
           end
         end
       rescue ArgumentError
-        puts "*** #{answer} does not look like a valid number."
+        puts "** #{answer} does not look like a valid number."
       end
     end
   end
@@ -698,11 +698,11 @@ class Input
               return answerf, defaultunit
             end
           else
-            puts "*** Cannot parse #{answer}!"
+            puts "** Cannot parse #{answer}!"
           end
         end
       rescue ArgumentError
-        puts "*** #{answer} does not look like valid input."
+        puts "** #{answer} does not look like valid input."
       end
     end
   end
@@ -713,7 +713,7 @@ class Input
     while not country
       try_country = ask("What country would you like to search for (id, or name pattern)?", nil)
       # numerical value?
-      if try_country.to_i.nonzero?
+      if try_country.to_i > 0
         country = try_country.to_i
       else
         # match from country list
@@ -724,9 +724,9 @@ class Input
           i = 0
           countries.each do |co|
             i += 1
-            puts "  #{i}. #{co}"
+            puts "  #{i}.\t#{co}"
           end
-          country = askFromList("Enter index (not id!)", countries, nil)
+          country = askFromList("Enter index", countries, nil)
         else
           puts "No country matches found. Try something else!"
         end
@@ -745,15 +745,19 @@ class Input
     while not state
       try_state = ask("Which state do you want to search for (id, or country/state pattern)?", nil)
       # numerical value?
-      if try_state.to_i.nonzero?
+      if try_state.to_i > 0
         state = try_state.to_i
       else
         # get from country's list
-        try_country = try_state.split(/\//)[0]
-        try_state = try_state.split(/\//)[1]
-        if try_state.empty?
-          puts "Use \"Country/State\" style"
+        try_country = try_state.to_s.split(/\//)[0]
+        if try_country.nil? or try_country.empty?
+          puts "** No country pattern. Use \"Country/State\""
         else
+          try_state = try_state.split(/\//)[1]
+          if try_state.nil? or try_state.empty?
+            puts "** No state pattern, using \".\" to match all"
+            try_state = '.'
+          end
           # match country from list
           countries = c.findMatchingCountry(try_country)
           if countries.length == 1
@@ -762,11 +766,11 @@ class Input
             i = 0
             countries.each do |co|
               i += 1
-              puts "  #{i}. #{co}"
+              puts "  #{i}.\t#{co}"
             end
-            country = askFromList("Enter index (not id!)", countries, nil)
+            country = askFromList("Enter index", countries, nil)
           else
-            puts "No country matches found. Try something else!"
+            puts "** No country matches found. Try something else!"
           end
           if country
             puts "Searching in country #{country}"
@@ -778,11 +782,11 @@ class Input
               i = 0
               states.each do |st|
                 i += 1
-                puts "  #{i}. #{st}"
+                puts "  #{i}.\t#{st}"
               end
-              state = askFromList("Enter index (not id!)", states, nil)
+              state = askFromList("Enter index", states, nil)
             else
-              puts "No state matches found. Try something else!"
+              puts "** No state matches found. Try something else!"
             end
           end
         end
@@ -806,8 +810,14 @@ class Input
         if not answer
           return default
         end
+        # exceeding choices
+        if answer.to_i > choices.length
+          #puts "** That is beyond the list. Use the index!"
+          #return default
+          puts "** That index is beyond the list. Try to match id."
+          # fall through to text pattern matching
         # numerical answer not validated, multiple not allowed
-        if answer.to_i > 0
+        elsif answer.to_i > 0
           return choices[answer.to_i - 1]
         end
         # validate text answer(s)
