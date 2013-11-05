@@ -379,7 +379,6 @@ class Input
         @@optHash['password'] = ask("What is your Geocaching.com password?", 'NO_DEFAULT')
 
       when '2'
-        # TODO(helixblue): Add state searches back in once things settle down.
         chosen = askFromList("What type of search would you like to perform:
 
   1. Within distance of a location (landmark, city, postal code, coordinates) - DEFAULT
@@ -712,8 +711,8 @@ class Input
     c = CountryState.new()
     while not country
       try_country = ask("What country would you like to search for (id, or name pattern)?", nil)
-      # numerical value?
-      if try_country.to_i > 0
+      # numerical value? country 1 doesn't exist
+      if try_country.to_i > 1
         country = try_country.to_i
       else
         # match from country list
@@ -744,8 +743,8 @@ class Input
     c = CountryState.new()
     while not state
       try_state = ask("Which state do you want to search for (id, or country/state pattern)?", nil)
-      # numerical value?
-      if try_state.to_i > 0
+      # numerical value? state 1 doesn't exist
+      if try_state.to_i > 1
         state = try_state.to_i
       else
         # get from country's list
