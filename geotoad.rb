@@ -137,9 +137,8 @@ class GeoToad
       # else leave usemetric unchanged
     end
     if @useMetric
-      @distanceMax    /= $MILE2KM
-      # round to multiple of ~5ft
-      @distanceMax     = sprintf("%.3f", @distanceMax).to_f
+      # convert to miles, round to multiple of ~.5ft
+      @distanceMax     = sprintf("%.4f", @distanceMax / $MILE2KM).to_f
     end
     debug "Internally using distance #{@distanceMax} miles."
     # include query type, will be parsed by output.rb
@@ -347,9 +346,19 @@ class GeoToad
       displayInfo "Found count: #{count}. Total logs: #{logcount}"
     end
 
-    if @queryType == "zipcode" || @queryType == "coord" || @queryType == 'location'
-      @queryTitle = @queryTitle + " (#{@distanceMax}mi. radius)"
-      @defaultOutputFile = @defaultOutputFile + "-y" + @distanceMax.to_s
+    # search radius applies to all queryArgs, show only once
+    if @queryType == 'location' || @queryType == 'coord'
+      # choose correct unit for query title and output filename
+      # strip off trailing 0's and period
+      if @useMetric
+        dist_km = sprintf("%.3f", @distanceMax * $MILE2KM).gsub(/\.?0*$/, '')
+        @queryTitle << " (#{dist_km} km radius)"
+        @defaultOutputFile << "-y" + dist_km + "km"
+      else
+        dist_mi = sprintf("%.3f", @distanceMax).gsub(/\.?0*$/, '')
+        @queryTitle << " (#{@distanceMax} mi radius)"
+        @defaultOutputFile << "-y" + dist_mi
+      end
     end
 
     @queryArg.to_s.split($delimiters).each { |queryArg|
@@ -357,12 +366,23 @@ class GeoToad
       message = "Performing #{@queryType} search for #{queryArg}"
       search = SearchCache.new
 
-      # only valid for zip or coordinate searches
-      if @queryType == "zipcode" || @queryType == "coord" || @queryType == 'location'
-        message << " (constraining to #{@distanceMax} miles)"
+      # radius is only valid for location or coordinate searches
+      if @queryType == 'location' || @queryType == 'coord'
+        if @useMetric
+          message << " (constraining to #{dist_km} km)"
+        else
+          message << " (constraining to #{dist_mi} miles)"
+        end
         search.distance = @distanceMax
       end
       displayMessage message
+
+      # this is kind of late, but we did our best
+      if (! search.setType(@queryType, queryArg))
+        displayWarning "Could not determine search type for #{@queryType} \"#{queryArg}\""
+        displayWarning "You may want to remove special characters or try a \"coord\" search instead"
+        next
+      end
 
       # limit search page count
       search.max_pages = @limitPages
@@ -375,21 +395,12 @@ class GeoToad
       # exclude own found
       search.notyetfound = (@option['notFoundByMe'] ? true : false)
 
-      if (! search.setType(@queryType, queryArg))
-        displayWarning "Could not determine search type for #{@queryType} \"#{queryArg}\""
-        displayWarning "You may want to remove special characters or try a \"coord\" search instead"
-        #displayError "No valid search type. Exiting."
-        #exit
-        next
-      end
-
       waypoints = search.getResults()
       # this gives us support for multiple searches. It adds together the search.waypoints hashes
       # and pops them into the @combinedWaypoints hash.
       @combinedWaypoints.update(waypoints)
       @combinedWaypoints.rehash
     }
-
 
     # Here we make sure that the amount of waypoints we've downloaded (@combinedWaypoints) matches the
     # amount of waypoints we found information for. This is just to check for buggy search code, and
