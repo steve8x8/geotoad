@@ -48,7 +48,7 @@ class ShadowFetch
   end
 
   def useCookie=(usecookie)
-    debug "use cookie: #{usecookie}"
+    nodebug "use cookie: #{usecookie}"
     @useCookie = usecookie
   end
 
@@ -287,13 +287,13 @@ class ShadowFetch
     begin
       if (@postVars)
         @httpHeaders['Content-Type'] =  "application/x-www-form-urlencoded"
-        nodebug "POST to #{query}, headers are #{@httpHeaders.keys.join(" ")}"
+        debug "POST to #{query}, headers are #{@httpHeaders.keys.join(" ")}"
         resp = http.post(query, @postString, @httpHeaders)
         # reset POST variables
         @postVars = nil
         @postString = nil
       else
-        nodebug "GET to #{query}, headers are #{@httpHeaders.keys.join(" ")}"
+        debug "GET to #{query}, headers are #{@httpHeaders.keys.join(" ")}"
         resp = http.get(query, @httpHeaders)
       end
     rescue Timeout::Error => e
