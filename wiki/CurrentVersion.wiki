@@ -1,12 +1,20 @@
 #summary Features of current version
 #labels Featured
 
-version=3.18.1
+version=3.19.0
 
-= "Noble and priceless" (Alfred Nobel b.1833) release (Oct 21, 2013) =
+= "Cookie monster" release (Nov 20, 2013) =
 
-= Download =
-  * http://code.google.com/p/geotoad/downloads/list
+= What's new in 3.19.0? =
+  * nicknamed "Cookie monster" (it resolves the cookie issue)
+
+== Issues addressed: ==
+  * Issue 272: stubs for trackable log list added, log counts
+  * Issue 284: some initial documentation fixes
+  * Issue 285: support for ruby 2.0 (including Windows installer)
+  * Issue 288: new in-memory cookie handling after 20131114 HotFix
+  * Country/state searches more robust now
+  * Some unavoidable additions, modifications, cleanups, and bug fixes
 
 = What's new in 3.18.1? =
   * nicknamed "Noble and priceless" (Alfred Nobel's 180 birthday)
