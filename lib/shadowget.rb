@@ -315,7 +315,7 @@ class ShadowFetch
         @cookie = resp.response['set-cookie']
         debug "received cookie: #{hideCookie(@cookie)}"
         # ...expires=Sat, 06-Apr-2013 07:45:26 GMT;...
-        if @cookie =~ /expires=(\w+, (\d+)-(\w+)-(\d+) (\d+):(\d+):(\d+) GMT);/
+        if @cookie =~ /SessionId=.*expires=(\w+, (\d+)-(\w+)-(\d+) (\d+):(\d+):(\d+) GMT);/
           expire = $1
           et = Time.gm($4, $3, $2, $5, $6, $7)
           life = sprintf("%.2f", (et.to_i - Time.now.to_i) / 86400.0)
@@ -392,13 +392,14 @@ class ShadowFetch
     if resp.response && resp.response['set-cookie'] && @useCookie
       @cookie = resp.response['set-cookie']
       debug "received cookie: #{hideCookie(@cookie)}"
-        # ...expires=Sat, 06-Apr-2013 07:45:26 GMT;...
-        if @cookie =~ /expires=(\w+, (\d+)-(\w+)-(\d+) (\d+):(\d+):(\d+) GMT);/
-          expire = $1
-          et = Time.gm($4, $3, $2, $5, $6, $7)
-          life = sprintf("%.2f", (et.to_i - Time.now.to_i) / 86400.0)
-          displayInfo "Cookie expires #{$1} (in #{life} days)"
-        end
+      # ...expires=Sat, 06-Apr-2013 07:45:26 GMT;...
+      if @cookie =~ /SessionId=.*expires=(\w+, (\d+)-(\w+)-(\d+) (\d+):(\d+):(\d+) GMT);/
+        expire = $1
+        et = Time.gm($4, $3, $2, $5, $6, $7)
+        life = sprintf("%.2f", (et.to_i - Time.now.to_i) / 86400.0)
+        displayInfo "Cookie expires #{$1} (in #{life} days)"
+      end
+      saveCookie(@cookie)
     end
 
     return resp.body

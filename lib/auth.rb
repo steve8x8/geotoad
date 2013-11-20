@@ -1,5 +1,10 @@
 # $Id$
 
+### 20131114 related modifications to cookie handling:
+### Each session started with a fresh cookie, no cookies file anymore
+### Received cookies dissected and written to hash,
+### cookies to be sent combined from hash
+### ToDo: remove cookie if expires= date is in the past
 
 module Auth
 
@@ -9,7 +14,10 @@ module Auth
   include Messages
   @@login_url = 'https://www.geocaching.com/login/'
   @@user = nil
+  # cookie to be sent
   @@cookie = nil
+  # cookie collection hash
+  @@cookies = {}
 
   # called by main program at the beginning
   def login(user, password)
@@ -27,6 +35,8 @@ module Auth
         saveCookie(cookie)
     end
     logged_in = checkLoginScreen(cookie)
+    # got to keep this kludge because login check returns another set of cookies :(
+    # FIXME!
     if logged_in and (cookie !~ /userid/)
       # successful login can happen without returning userid?
       cookie = cookie.to_s + ' userid=known;'
@@ -39,6 +49,10 @@ module Auth
   end
 
   def loadCookie()
+    ### 20131114
+    return @@cookie
+    # --- NOTREACH
+    ### 20131114
   # return cookie from variable if set, read from file otherwise
     if ! @@cookie and @@user
       cookie_file = cookieFile()
@@ -60,6 +74,25 @@ module Auth
   end
 
   def saveCookie(cookie)
+    ### 20131114
+    # don't do anything without a cookie
+    return if ! cookie
+    debug "saveCookie merges #{hideCookie(cookie)}"
+    cookie.split(/[;,] */).each{ |f|
+    # remove unneccessary information
+      if f !~ /=/
+       nil
+      elsif f =~ /(path|domain|secure|expires)=/
+        nil
+      elsif f =~ /(.*)=(.*)/
+        @@cookies[$1]=$2
+      end
+    }
+    @@cookie = @@cookies.keys.map{ |k| "#{k}=#{@@cookies[k]}" }.join('; ')
+    debug "saveCookie saved #{hideCookie(@@cookie)}"
+    return
+    # --- NOTREACH
+    ### 20131114
     if ! cookie
       debug "saveCookie: no cookie, will delete"
     end
@@ -106,8 +139,8 @@ module Auth
   # obfuscate cookie so nobody can use it
   def hideCookie(cookie)
     hcookie = cookie.to_s
-    if cookie =~ /([^=]+=)?(\w{5})(\w+)(\w{5})(;.*)?/
-      hcookie = $1.to_s + $2 + "*" * $3.length + $4 + $5.to_s
+    if cookie =~ /(ASP.NET_SessionId=)(\w{5})(\w+)(\w{5})(;.*)?/
+      hcookie = $1 + $2 + "*" * $3.length + $4 + $5.to_s
     end
     if hcookie.empty?
       hcookie = '(none)'
@@ -116,6 +149,11 @@ module Auth
   end
 
   def checkLoginScreen(cookie)
+    ### 20131114
+    # if we have no cookie we aren't logged in
+    debug "checkLoginScreen with #{hideCookie(cookie)}"
+    return nil if ! cookie
+    ### 20131114
     @postVars = Hash.new
     page = ShadowFetch.new(@@login_url + 'default.aspx')
     page.localExpiry = 1
@@ -177,13 +215,18 @@ module Auth
     # extract cookie
     cookie = page.cookie
     debug "getLoginCookie got cookie: [#{hideCookie(cookie)}]"
+    ### 20131114
+    # merge this new cookie with the one we got at login time
+    saveCookie(cookie)
+    cookie = loadCookie()
+    # FIXME: this always succeeds if we don't delete cookies
     if (cookie =~ /userid/) && (cookie =~ /(ASP.NET_SessionId=\w+)/)
-      cookie = $1
+      #cookie = $1
+      ### 20131114
       debug "userid found, rock on. Setting cookie to #{hideCookie(cookie)}"
       return cookie
     else
-      password2 = password.to_s.gsub(/./, '*')
-      #displayWarning "Login failed for #{user}:#{password2}, must retry."
+      #displayWarning "Login failed for #{user}:#{password.to_s.gsub(/./, '*')}, retry."
       return nil
     end
   end
