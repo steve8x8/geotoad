@@ -1,6 +1,6 @@
-#summary HotFix-es complement Releases for GC rollouts.
+#summary HotFixes complement Releases for GC rollouts.
 
-= What are HotFixes? =
+= What is a HotFix? =
 
 Every now and then, GC server software is updated. There are two major ways:
 

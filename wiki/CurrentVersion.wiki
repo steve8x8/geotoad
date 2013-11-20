@@ -1,7 +1,7 @@
 #summary Features of current version
 #labels Featured
 
-version=3.19.0*
+version=3.19.0`*`
 
 = "Cookie monster" release (Nov 20, 2013) =
   * Previous versions don't work any longer!
@@ -16,6 +16,7 @@ version=3.19.0*
   * Issue 288: new in-memory cookie handling after 20131114 HotFix
   * Country/state searches more robust now
   * Some unavoidable additions, modifications, cleanups, and bug fixes
+
 ----
 = What's new in 3.18.1? =
   * nicknamed "Noble and priceless" (Alfred Nobel's 180 birthday)
@@ -26,6 +27,7 @@ version=3.19.0*
   * Issue 277: more fixes
   * Issue 281: avoid colliding date representations
   * Lots of minor additions, modifications and bug fixes
+
 ----
 = What's new in 3.18.0? =
   * nicknamed "Beyond the horizon" (and still no end)
@@ -42,6 +44,7 @@ version=3.19.0*
 
 == IMPORTANT ==
   * There will be no more devel releases (for a while at least)!
+
 ----
 = What's new in 3.17.11? =
   * nicknamed "Speeding up" (fix issues towards 3.18.0)
@@ -56,6 +59,7 @@ version=3.19.0*
   * Issue 274: requires Ruby 1.9 (or possibly above, untested)
   * Issue 275: support for own templates
   * Issue 277: issue with new GC design (cache page, search results) partially fixed
+
 ----
 = What's new in 3.16.9? =
   * nicknamed "Good-bye Ruby 1.8 Tuesday" as support will be dropped
@@ -72,6 +76,7 @@ version=3.19.0*
 
 = 3.16.8 was revoked because of a nasty bug that somehow passed QA =
   * Apologies for that
+
 ----
 = What's new in 3.16.7? =
   * nicknamed "M'aidez!" (clearly an emergency bugfix release)
@@ -84,6 +89,7 @@ version=3.19.0*
   * Issue 273: old representations for D/T/size and dist/dir
   * Deliberately reduced amount of debugging information
   * Some minor fixes
+
 ----
 = What's new in 3.16.6? =
   * nicknamed "Tree Blossom Festival" (just look out of the window!)
@@ -94,6 +100,7 @@ version=3.19.0*
   * Issue 264: make GPX more consistent
   * Issue 265: convert smileys in log entries back to BB [...] code
   * Some minor fixes
+
 ----
 = What's new in 3.16.5? =
   * nicknamed "Women's Day" (get some flowers for her!)
@@ -102,6 +109,7 @@ version=3.19.0*
   * Issue 235: Option "-N" to limit to caches "not found by me" (logged-in user)
   * Issue 261: Some debugging added to narrow down the problem
   * Some minor fixes (encoding, cookies, login, Portuguese)
+
 ----
 = What's new in 3.16.4? =
   * nicknamed "Seven Squared" (do the math)
@@ -112,6 +120,7 @@ version=3.19.0*
   * CR/LF cleanup
   * Language support for Latvia and Italia
   * Some minor fixes
+
 ----
 = What's new in 3.16.3? =
   * nicknamed "World's End" (as it might be the last release ever)
@@ -121,6 +130,7 @@ version=3.19.0*
   * Issue 257: fix queries for country with states (caution!)
   * Issue 258: better handling for caches without logs (error 500)
   * Issue 259: parse logs with old and new GS icons
+
 ----
 = What's new in 3.16.2? =
   * nicknamed "E=m*c^2" referring to Einstein's paper in 1905
@@ -135,6 +145,7 @@ version=3.19.0*
   * Issue 255: "location" queries: error handling, info output
   * Remote fetches now progressively delayed, starting with 1 second
   * Some minor other stuff
+
 ----
 = What's new in 3.16.1? =
   * nicknamed "Jean-Jacques" because it was released on Rousseau's 300th birthday
@@ -145,6 +156,7 @@ version=3.19.0*
   * Issue 248: "yourfindgpx" template ("myfindgpx" for login!=query user)
   * Issue 249: Replace "medium" back with "regular"
   * Minor other stuff
+
 ----
 = What's new in 3.16.0? =
   * Version 3.16.0 ("Towel Day") was derived from development version 3.15.5.
@@ -164,6 +176,7 @@ enough to form the basis for a new stable series.
   * Issue 237: Shrink cipher list, force TLSv1 to work with newer OpenSSL
   * Issue 239: Ampersands not properly escaped in rare situations
   * Minor other stuff
+
 ----
 = Get it: =
   * _GeoToad will tell you that a new version is available._
@@ -179,4 +192,4 @@ enough to form the basis for a new stable series.
   * 3.16.0 is derived from (devel) 3.15.5, with some minor changes.
   * The 3.16 series will be "stable" in the same sense as 3.14 was.
   * Further testing and enhancements will go to 3.17.x
-    - for details, follow [CurrentDevelVersion development version]!
+  * For details, follow [CurrentDevelVersion development version]!
