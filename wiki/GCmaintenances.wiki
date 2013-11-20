@@ -157,6 +157,7 @@ _*(year per year; new entries will be added at bottom)*_
   * [http://forums.groundspeak.com/GC/index.php?showtopic=317409&view=findpost&p=5321222 (see also)]
   * *{{{Web.HotFix_20131114.1}}}*
   * *{{{Web.HotFix_20131115.2}}}*
+  * *{{{Web.HotFix_20131118.1}}}* (more Google Analytics)
 ----
 (...)
 ----
