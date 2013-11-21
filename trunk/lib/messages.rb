@@ -42,6 +42,16 @@ module Messages
     puts " ***  #{text}"
   end
 
+  # horizontal bar
+  def displayBar
+    puts "-"*78
+  end
+
+  # display boxed text
+  def displayBox(text)
+    puts "|  #{text.ljust(72)}  |"[0..77]
+  end
+
   # fatal errors
   def displayError(text)
     abort("ERROR: #{text}")
