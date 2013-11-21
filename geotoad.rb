@@ -225,11 +225,11 @@ class GeoToad
       obsoleteOlder = ! $3.to_s.empty?
 
       if comparableVersion(latestVersion) > comparableVersion($VERSION)
-        puts ""
-        puts "------------------------------------------------------------------------"
-        puts " ***  NOTE: GeoToad #{latestVersion} is now available!"
-        puts " ***  Download from http://code.google.com/p/geotoad/downloads/list"
-        puts "------------------------------------------------------------------------"
+        displayBar
+        displayWarning "VersionCheck: GeoToad #{latestVersion} is now available!"
+        displayWarning "Download from http://code.google.com/p/geotoad/downloads/list"
+        displayMessage "Release Notes below:"
+        displayBar
         version.data.scan(/\<div .*? id="wikimaincol"\>\s*(.*?)\s*(\<hr\/\>|\<\/div\>)/im) do |notes|
           text = notes[0].dup
           text.gsub!(/\<\/?tt\>/i, '')
@@ -238,7 +238,7 @@ class GeoToad
           text.gsub!(/\<h2\>/i, "\n\+ ")
           text.gsub!(/\<h3\>/i, "\n\- ")
           text.gsub!(/\<h[0,4-9]\>/i, "\n\. ")
-          text.gsub!(/\<li\>/i, "\n  - ")
+          text.gsub!(/\<li\>/i, "\n - ")
           text.gsub!(/\<a[^\>]+href=\"\/p\/geotoad\/wiki\/(.*?)\"\>\1\<\/a\>\s+/i) { "[#{$1}] " }
           text.gsub!(/\<a[^\>]+href=\"\#.*?\>/i, '')
           text.gsub!(/\<.*?\>/, '')
@@ -248,11 +248,11 @@ class GeoToad
           #puts text
           textlines = text.split("\n")
           (1..20).each{|line|
-            puts textlines[line] if textlines[line]
+            displayBox textlines[line] if textlines[line]
           }
-          puts "  ... see #{url} for more ..." if textlines.length > 20
+          displayMessage "  ... see #{url} for more ..." if textlines.length > 20
         end
-        puts "------------------------------------------------------------------------"
+        displayBar
         displayInfo "(sleeping for 30 seconds)"
         sleep(30)
       end
