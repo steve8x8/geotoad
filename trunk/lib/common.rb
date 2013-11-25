@@ -205,11 +205,11 @@ module Common
 
     # probably what we fallback to in most UNIX's.
     if cacheDir == ENV['HOME']
-      cacheDir=cacheDir + '/.geotoad/cache'
+      cacheDir = File.join(cacheDir, '.geotoad', 'cache')
     elsif cacheDir == "#{ENV['USERPROFILE']}/Documents and Settings"
-      cacheDir=cacheDir + "/GeoToad/Cache"
+      cacheDir = File.join(cacheDir, 'GeoToad', 'Cache')
     else
-      cacheDir=cacheDir + "/GeoToad"
+      cacheDir = File.join(cacheDir, 'GeoToad')
       nodebug "#{cacheDir} is being used for cache"
     end
 
@@ -230,9 +230,9 @@ module Common
             '/var/tmp']
     configDir=selectDirectory(dirs)
     if configDir == ENV['HOME']
-      configDir = configDir + '/.geotoad'
+      configDir = File.join(configDir, '.geotoad')
     elsif configDir !~ /geotoad/i
-      configDir = configDir + "/GeoToad"
+      configDir = File.join(configDir, 'GeoToad')
     end
     nodebug "#{configDir} is being used for config"
     FileUtils::mkdir_p(configDir, :mode => 0700)
@@ -286,7 +286,7 @@ module Common
 
   # history stuff
   def loadHistory
-    historyFile  = findConfigDir + '/' + 'history.yaml'
+    historyFile  = File.join(findConfigDir, 'history.yaml')
     history = false
     if File.readable?(historyFile)
       history = YAML::load(File.open(historyFile))
@@ -310,7 +310,7 @@ module Common
 
   def saveHistory(history)
     configDir = findConfigDir
-    historyFile  = configDir + '/' + 'history.yaml'
+    historyFile  = File.join(configDir, 'history.yaml')
     begin
       File.makedirs(configDir) if (! File.exists?(configDir))
       # do not sort on output!
@@ -321,7 +321,7 @@ module Common
 
   # mapping WID to GUID via dictionary file
   def loadMapping
-    mappingFile  = findConfigDir + '/' + 'mapping.yaml'
+    mappingFile  = File.join(findConfigDir, 'mapping.yaml')
     displayMessage "Reading dictionary from #{mappingFile}"
     mapping = false
     if File.readable?(mappingFile)
@@ -348,7 +348,7 @@ module Common
     # this is a simple YAML file that can just be appended to
     return if $mapping[wid]
     $mapping[wid] = guid
-    mappingFile  = findConfigDir + '/' + 'mapping.yaml'
+    mappingFile  = File.join(findConfigDir, 'mapping.yaml')
     displayInfo "Writing mapping #{wid} -> #{guid}"
     begin
       File.open(mappingFile, 'a'){ |f| f.puts "#{wid}: #{guid}" }

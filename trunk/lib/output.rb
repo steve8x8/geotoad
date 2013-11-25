@@ -424,7 +424,7 @@ class Output
     if @outputFormat['filter_exec']
       displayMessage "Executing #{@outputFormat['filter_exec']}"
       exec = @outputFormat['filter_exec'].dup
-      tmpfile = $CACHE_DIR + "/" + @outputType + "." + rand(500000).to_s
+      tmpfile = File.join($CACHE_DIR, @outputType + "." + rand(500000).to_s)
       exec.gsub!('INFILE', "\"#{tmpfile}\"")
       exec.gsub!('OUTFILE', "\"#{file}\"")
       writeFile(tmpfile)
@@ -436,8 +436,8 @@ class Output
       # if gpsbabel needs a style file, create it
       stylefile = nil
       if @outputFormat['filter_style']
-        stylefile = $CACHE_DIR + "/" + @outputType + ".s_" + rand(500000).to_s
-        File.open(stylefile, "w") {|f| f.write(@outputFormat['filter_style'])}
+        stylefile = File.join($CACHE_DIR, @outputType + ".s_" + rand(500000).to_s)
+        File.open(stylefile, 'w') { |f| f.write(@outputFormat['filter_style']) }
         exec.gsub!('STYLEFILE', "\"#{stylefile}\"")
       end
 
