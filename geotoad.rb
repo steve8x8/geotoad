@@ -296,27 +296,27 @@ class GeoToad
     displayMessage "Clearing #{$CACHE_DIR} selectively"
 
     displayInfo "Clearing account data older than 7 days"
-    findRemoveFiles("#{$CACHE_DIR}/www.geocaching.com/account/", 7)
+    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "account"), 7)
 
     displayInfo "Clearing login data older than 7 days"
-    findRemoveFiles("#{$CACHE_DIR}/www.geocaching.com/login/", 7)
+    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "login"), 7)
 
     # We do NOT clear cdpf files, in NO case. Instead, preserve old descriptions!
     # If you really want this functionality, uncomment the following displayInfo and findRemoveFiles lines.
     #displayInfo "Clearing cache descriptions older than 31 days"
-    #findRemoveFiles("#{$CACHE_DIR}/www.geocaching.com/seek/", 31, "^cdpf\\.aspx.*", true)
+    #findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "seek"), 31, "^cdpf\\.aspx.*", true)
 
     displayInfo "Clearing cache details older than 3 days"
-    findRemoveFiles("#{$CACHE_DIR}/www.geocaching.com/seek/", 3, "^cache_details\\.aspx.*", true)
+    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "seek"), 3, "^cache_details\\.aspx.*", true)
 
     displayInfo "Clearing lat/lon query data older than 3 days"
-    findRemoveFiles("#{$CACHE_DIR}/www.geocaching.com/seek/", 3, "^nearest\\.aspx.*_lat_.*_lng_.*", true)
+    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "seek"), 3, "^nearest\\.aspx.*_lat_.*_lng_.*", true)
 
     displayInfo "Clearing state and country query data older than 3 days"
-    findRemoveFiles("#{$CACHE_DIR}/www.geocaching.com/seek/", 3, "^nearest\\.aspx.*_(country|state)_id_.*", true)
+    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "seek"), 3, "^nearest\\.aspx.*_(country|state)_id_.*", true)
 
     displayInfo "Clearing other query data older than 7 days"
-    findRemoveFiles("#{$CACHE_DIR}/www.geocaching.com/seek/", 7, "^nearest\\.aspx.*", true)
+    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "seek"), 7, "^nearest\\.aspx.*", true)
 
     displayMessage "Cleared!"
     $CACHE_DIR = findCacheDir()
@@ -950,7 +950,7 @@ class GeoToad
       if (not @option['output']) || (formatTypeCounter > 0)
         outputFileBase = outputFileBase + "." + output.formatExtension(formatType)
       end
-      outputFile = outputDir + '/' + outputFileBase
+      outputFile = File.join(outputDir, outputFileBase)
       # Lets not mix and match DOS and UNIX /'s, we'll just make everyone like us!
       outputFile.gsub!(/\\/, '/')
       displayInfo "Output filename: #{outputFile}"

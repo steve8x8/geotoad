@@ -96,22 +96,22 @@ class ShadowFetch
 
 
     if fileParts[3]
-      dir = fileParts[3..-2].join('/')
+      dir = File.join(fileParts[3..-2])
       file = fileParts[-1]
-      localfile = '/' + host + '/' + dir + '/' + file
+      localfile = File.join(host, dir, file)
     end
 
     if url =~ /\/$/
-      localfile = localfile + '/index.html'
+      localfile = File.join(localfile, 'index.html')
     end
 
     # make a friendly filename
     localfile.gsub!(/[^\/\w\.\-]/, "_")
     localfile.gsub!(/_+/, "_")
     if $CACHE_DIR
-      localfile = $CACHE_DIR + localfile
+      localfile = File.join($CACHE_DIR, localfile)
     else
-      localfile = '/tmp' + localfile
+      localfile = File.join('', 'tmp', localfile)
     end
     # Windows users have a max of 255 characters I believe.
     if (localfile.length > 250)
@@ -143,7 +143,7 @@ class ShadowFetch
     time = Time.now
     localfile = cacheFile(@url)
     localparts = localfile.split(/[\\\/]/)
-    localdir = localparts[0..-2].join("/")  # basename sucks in Windows.
+    localdir = File.join(localparts[0..-2])  # basename sucks in Windows.
     nodebug "====+ Fetch URL: #{url}"
     nodebug "====+ Fetch File: #{localfile}"
 
