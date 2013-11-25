@@ -40,6 +40,7 @@ class SearchCache
 	'gshq'         => '416f2494-dc17-4b6a-9bab-1a29dd292d8c',
 	'lfceleb'      => 'af820035-787a-47af-b52b-becc8b0c0c88',
 	'exhibit'      => '72e69af2-7986-4990-afd9-bc16cbbb4ce3',
+	'block'        => 'bc2f3df2-1aab-4601-b2ff-b5091f6c02e3',
     # play safe
 	'mystery'      => '40861821-1835-4e11-b666-8d41064d03fe',
 	'puzzle'       => '40861821-1835-4e11-b666-8d41064d03fe',
@@ -908,6 +909,8 @@ class SearchCache
             cache['type'] = 'reverse'
           when /Block Party/
             cache['type'] = 'block'
+          when /Exhibit/
+            cache['type'] = 'exhibit'
           # planned transition
           when /Mystery/
             cache['fulltype'] = 'Unknown Cache'
@@ -971,6 +974,8 @@ class SearchCache
             cache['type'] = 'reverse'
           when /Block Party/
             cache['type'] = 'block'
+          when /Exhibit/
+            cache['type'] = 'exhibit'
           # planned transition
           when /Mystery/
             cache['fulltype'] = 'Unknown Cache'
