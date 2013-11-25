@@ -24,7 +24,7 @@ class Templates
         end
         # now read all templates from there
         displayMessage "Populating templates from #{dir}"
-        tempstring = Dir.entries(dir).sort.each{ |fn|
+        Dir.entries(dir).sort.each{ |fn|
           if fn =~ /^.*\.tm$/
             file = File.join(dir, fn)
             if File.file?(file)
