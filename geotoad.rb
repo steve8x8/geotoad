@@ -941,7 +941,7 @@ class GeoToad
         output.waypointLength=@option['waypointLength'].to_i
       end
       # keep filename if first run and not automatic
-      # strip suffix only on subsqeuent runs
+      # strip suffix only on subsequent runs
       if (formatTypeCounter > 0)
         outputFileBase.gsub!(/\.[^\.]*$/, '')
       end

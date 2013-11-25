@@ -280,6 +280,7 @@ class SearchCache
     return lat, lon
   end
 
+  # this code has been obsoleted, but is kept for documentation purposes
   def decodeDTS(v)
     debug "Invoking decodeDTS with \"#{v}\""
 
@@ -381,6 +382,7 @@ class SearchCache
     debug "Returning from decodeDD: \"#{distance}@#{direction}\""
     return [distance, direction]
   end
+  # end of obsolete code
 
   def getResults()
     nodebug "Getting results: #{@query_type} at #{@search_url}"
@@ -822,7 +824,7 @@ class SearchCache
         cache['cdays'] = daysAgo(cache['ctime'])
         debug "ctime=#{cache['ctime']} cdays=#{cache['cdays']}"
 
-# 2011-05-04: unchanged
+# 2011-05-04: unchanged, obsoleted by 2013-05-07 changes
       # 2010-12-22:
       # <img id="ctl00_ContentBody_dlResults_ctl??_uxDistanceAndHeading" ... \
       #  <src="../ImgGen/seek/CacheDir.ashx?k=..." ...>
@@ -841,6 +843,7 @@ class SearchCache
         end
         cache['distance'] = dist
         cache['direction'] = dir
+# end of obsolete code
 
 # 2013-05-07: back to the roots
       # <span class="small NoWrap"><img src="/images/icons/compass/S.gif" alt="S" title="S" />S<br />0.1mi</span>
@@ -1011,8 +1014,8 @@ class SearchCache
 # 2011-05-04: new pattern (try to improve!)
       # | GCabcde | (over multiple lines!)
       when /^ +(GC[0-9A-HJKMNPQRTV-Z]+)\s?$/
-	wid = $1
-	debug "wid=#{wid}"
+        wid = $1
+        debug "wid=#{wid}"
 
 # 2011-05-04: appended </span>
       # country/state: prefixed by 28 blanks
@@ -1043,7 +1046,7 @@ class SearchCache
         debug "#{wid} is a members only cache. Marking"
         cache['membersonly'] = true
 
-# 2011-05-04: unchanged, but obsolete
+# 2011-05-04: unchanged, obsoleted by 2013-05-07 changes
       # 2010-12-22:
       # <img id="ctl00_ContentBody_dlResults_ctl??_uxDTCacheTypeImage" src="../ImgGen/seek/CacheInfo.ashx?v=MwlMg9" border="0">
       when /CacheInfo.ashx\?v=([a-zA-Z0-9]*)/
@@ -1056,6 +1059,7 @@ class SearchCache
         cache['terrain'] = t
         cache['size'] = s
         cache['dtsv'] = v
+# end of obsolete code
 
 # 2013-05-07: back to the roots
       # <span class="small">1.5/1.5</span><br /><img src="/images/icons/container/micro.gif" alt="Size: Micro" title="Size: Micro" />
