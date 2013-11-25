@@ -455,8 +455,8 @@ class CacheDetails
       end
 
       if nextline_coords && (line =~ /([NWSE]) (\d+).*? ([\d\.]+) ([NWSE]) (\d+).*? ([\d\.]+)\</)
-        cache['latwritten'] = $1 + $2 + ' ' + $3
-        cache['lonwritten'] = $4 + $5 + ' ' + $6
+        cache['latwritten'] = $1 + ' ' + $2 + '° ' + $3
+        cache['lonwritten'] = $4 + ' ' + $5 + '° ' + $6
         cache['latdata'] = ($2.to_f + $3.to_f / 60) * ($1 == 'S' ? -1:1)
         cache['londata'] = ($5.to_f + $6.to_f / 60) * ($4 == 'W' ? -1:1)
         debug "got written lat/lon #{cache['latdata']}/#{cache['londata']}"

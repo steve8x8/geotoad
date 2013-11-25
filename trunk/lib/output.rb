@@ -1212,7 +1212,6 @@ class Output
       'IsAvailable' => (available==true).to_s.capitalize,
       'IsArchived' => (archived==true).to_s.capitalize,
       'location' => location,
-      'type3' => cache['type'][0..2].capitalize,
       'relativedistance' => relative_distance,
       'relativedistancekm' => relative_distance_km,
       'hintdecrypt' => decryptHint(cache['hint']),
@@ -1229,6 +1228,10 @@ class Output
       'warnAvail' => (available)?'':'[?]',
       'warnArchiv' => (archived)?'[%]':'',
       'premiumOnly' => (cache['membersonly']?'[$]':''),
+      'nuvi' => cache['type'][0..1].capitalize +
+        sprintf("%.1f", cache['difficulty']).gsub(/\.5/, '\'').gsub(/\.0/, ' ') +
+        sprintf("%.1f", cache['terrain']).gsub(/\.5/, '\'').gsub(/\.0/, ' ') +
+        cache['size'][0..1].capitalize + ((cache['membersonly'])?'$':'') + ((archived)?'%':'') + ((available)?'':'?'),
     }
     rescue => e
       displayWarning "Problem (#{e}) while converting cache #{wid}:\n#{cache.inspect}"
