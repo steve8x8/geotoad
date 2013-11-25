@@ -24,10 +24,11 @@ template = {
     'templateWP'    => "<wpt lat=\"<%out.latdatapad6%>\" lon=\"<%out.londatapad6%>\">\n" +
       "  <time><%out.XMLDate%></time>\n" +
       # title line, 1st line in POI list, max 24 chars shown
-      "  <name><%outEntity.id%>/<%out.type3%>/<%wp.difficulty%>/<%wp.terrain%></name>\n" +
+      "  <name><%outEntity.id%>:<%out.nuvi%></name>\n" +
       "  <cmt></cmt>\n" +
       # last line in display if cmt is empty
-      "  <desc><%wpEntity.name%> by <%wpEntity.creator%>, <%wp.fulltype%> (<%wp.size%>/<%wp.difficulty%>/<%wp.terrain%>)</desc>\n" +
+      "  <desc><%wpEntity.name%><%out.warnArchiv%><%out.warnAvail%> by <%wpEntity.creator%>," +
+        " <%wp.fulltype%> (<%wp.size%>/<%wp.difficulty%>/<%wp.terrain%>)</desc>\n" +
       "  <sym>Geocache</sym>\n" +
       "  <extensions>\n" +
       "    <gpxx:WaypointExtension>\n" +
@@ -49,6 +50,7 @@ template = {
       "      <gpxx:PhoneNumber Category=\"Details\">\n" +
         # only one line is shown first (press "more"...)
         # there are rumours that nuvis accept <b>...</b> <u>...</u>
+        "**Loca: <%wp.latwritten%> / <%wp.lonwritten%>\n" +
         "**Last: <%wp.last_find_type%>, <%wp.last_find_days%> days ago\n" +
         "**Stat: <%wp.logcounts%>\n" +
         "**Attr: <%out.premiumOnly%><%out.warnArchiv%><%out.warnAvail%> <%out.txtAttrs%>\n" +
