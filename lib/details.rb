@@ -404,6 +404,8 @@ class CacheDetails
             cache['type'] = 'reverse'
           when /Block Party/
             cache['type'] = 'block'
+          when /Exhibit/
+            cache['type'] = 'exhibit'
           # planned transition
           when /Mystery/
             cache['fulltype'] = 'Unknown Cache'
