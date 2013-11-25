@@ -29,7 +29,7 @@ class SearchCache
 	'letterbox'    => '4bdd8fb2-d7bc-453f-a9c5-968563b15d24',
 	'event'        => '69eb8534-b718-4b35-ae3c-a856a55b0874',
 	'unknown'      => '40861821-1835-4e11-b666-8d41064d03fe',
-    #	'project'      => '2555690d-b2bc-4b55-b5ac-0cb704c0b768',
+	'ape'          => '2555690d-b2bc-4b55-b5ac-0cb704c0b768',
 	'webcam'       => '31d2ae3c-c358-4b5f-8dcd-2185bf472d3d',
 	'reverse'      => '8f6dd7bc-ff39-4997-bd2e-225a0d2adf9d',
 	'cito'         => '57150806-bc1a-42d6-9cf0-538d171a2d22',
@@ -39,12 +39,13 @@ class SearchCache
 	'lost+found'   => '3ea6533d-bb52-42fe-b2d2-79a3424d4728',
 	'gshq'         => '416f2494-dc17-4b6a-9bab-1a29dd292d8c',
 	'lfceleb'      => 'af820035-787a-47af-b52b-becc8b0c0c88',
-    #	'exhibit'      => '72e69af2-7986-4990-afd9-bc16cbbb4ce3',
+	'exhibit'      => '72e69af2-7986-4990-afd9-bc16cbbb4ce3',
     # play safe
 	'mystery'      => '40861821-1835-4e11-b666-8d41064d03fe',
 	'puzzle'       => '40861821-1835-4e11-b666-8d41064d03fe',
-    #	'ape'          => '2555690d-b2bc-4b55-b5ac-0cb704c0b768',
-	'locationless' => '8f6dd7bc-ff39-4997-bd2e-225a0d2adf9d'
+	'project'      => '2555690d-b2bc-4b55-b5ac-0cb704c0b768',
+	'locationless' => '8f6dd7bc-ff39-4997-bd2e-225a0d2adf9d',
+	'lostfound'    => '3ea6533d-bb52-42fe-b2d2-79a3424d4728',
     }
     @txfilter = nil
 
@@ -105,6 +106,10 @@ class SearchCache
 
   def txfilter=(cacheType)
     # may return nil if not found
+    # ToDo: partial (first, frontal) match
+#    @cachetypetx.keys.each{ |k|
+#      cacheType = k if k =~ /^#{cacheType}/
+#    }
     @txfilter = @cachetypetx[cacheType]
     debug "Setting txfilter to \"#{cacheType}\", now #{@txfilter.inspect}"
   end
