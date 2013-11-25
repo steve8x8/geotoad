@@ -383,13 +383,6 @@ class GeoToad
       end
       displayMessage message
 
-      # this is kind of late, but we did our best
-      if (! search.setType(@queryType, queryArg))
-        displayWarning "Could not determine search type for #{@queryType} \"#{queryArg}\""
-        displayWarning "You may want to remove special characters or try a \"coord\" search instead"
-        next
-      end
-
       # limit search page count
       search.max_pages = @limitPages
 
@@ -400,6 +393,14 @@ class GeoToad
 
       # exclude own found
       search.notyetfound = (@option['notFoundByMe'] ? true : false)
+
+      # this is kind of late, but we did our best 
+      # we had to set txfilter and notyetfound before because setType creates the search URL
+      if (! search.setType(@queryType, queryArg))
+        displayWarning "Could not determine search type for #{@queryType} \"#{queryArg}\""
+        displayWarning "You may want to remove special characters or try a \"coord\" search instead"
+        next
+      end
 
       waypoints = search.getResults()
       # this gives us support for multiple searches. It adds together the search.waypoints hashes
