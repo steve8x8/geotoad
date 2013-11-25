@@ -415,9 +415,7 @@ class Output
   end
 
   def writeFile (file)
-    file = open(file, "w")
-    file.puts(@output)
-    file.close
+    File.open(file, 'w') { |f| f.write(@output) }
   end
 
   # writes the output to a file or to a program #############################
