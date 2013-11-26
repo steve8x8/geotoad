@@ -984,6 +984,7 @@ include Messages
 displayTitle "GeoToad #{$VERSION} (Ruby #{RUBY_VERSION}p#{RUBY_PATCHLEVEL}/#{RUBY_RELEASE_DATE} on #{RUBY_PLATFORM})"
 displayInfo "Report bugs or suggestions at http://code.google.com/p/geotoad/issues/"
 displayInfo "Please include verbose output (-v) without passwords in the bug report."
+displayBar
 cli = GeoToad.new
 cli.versionCheck
 puts

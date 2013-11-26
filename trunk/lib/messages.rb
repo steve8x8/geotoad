@@ -4,18 +4,16 @@
 
 module Messages
 
-  def enableDebug
-    $debugMode = 1
+  def enableDebug(level = 1)
+    $debugMode = level
   end
 
   def disableDebug
     $debugMode = 0
   end
 
-  def debug(text)
-    if $debugMode == 1
-      puts "D: #{text}"
-    end
+  def debug(text, level = 1)
+    puts "D: #{text}" if ($debugMode >= level)
   end
 
   def nodebug(text)
@@ -43,13 +41,13 @@ module Messages
   end
 
   # horizontal bar
-  def displayBar
-    puts "-"*78
+  def displayBar(len = 78)
+    puts "-"*len
   end
 
   # display boxed text
-  def displayBox(text)
-    puts "|  #{text.ljust(72)}  |"[0..77]
+  def displayBox(text, len = 78)
+    puts "|  #{text.ljust(len-6)}  |"[0..(len-1)]
   end
 
   # fatal errors

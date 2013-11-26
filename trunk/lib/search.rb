@@ -274,10 +274,10 @@ class SearchCache
       # did not recognize format
       displayError "Bad format in #{input}: #{key.split("\s").length} fields found."
     end
-    # sub-meter precision
-    lat = sprintf("%.7f", lat)
-    lon = sprintf("%.7f", lon)
-    displayMessage "Coordinates \"#{input}\" parsed as latitude #{lat}, longitude #{lon}"
+    # sub-meter precision, strip some trailing 0's
+    lat = sprintf("%.7f", lat).gsub(/0{1,4}$/, '')
+    lon = sprintf("%.7f", lon).gsub(/0{1,4}$/, '')
+    displayMessage "\"#{input}\" parsed as latitude #{lat}, longitude #{lon}"
     return lat, lon
   end
 
