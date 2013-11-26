@@ -45,11 +45,12 @@ module Auth
   end
 
   def cookieFile()
-    return findConfigDir() + '/cookies.yaml'
+    return File.join(findConfigDir(), 'cookies.yaml')
   end
 
   def loadCookie()
     ### 20131114
+    debug "loadCookie: #{hideCookie(@@cookie)}"
     return @@cookie
     # --- NOTREACH
     ### 20131114
@@ -77,19 +78,54 @@ module Auth
     ### 20131114
     # don't do anything without a cookie
     return if ! cookie
-    debug "saveCookie merges #{hideCookie(cookie)}"
-    cookie.split(/[;,] */).each{ |f|
-    # remove unneccessary information
-      if f !~ /=/
-       nil
-      elsif f =~ /(path|domain|secure|expires)=/
-        nil
-      elsif f =~ /(.*)=(.*)/
-        @@cookies[$1]=$2
+    nodebug "saveCookie: merge #{hideCookie(cookie)}"
+    # get individual cookies
+    cookie.split(/; */).map{ |f|
+      # split at ';' will yield 2nd cookie with "HttpOnly, " prefix
+      # recombine fragments
+      if f =~ /(.*),(.*?=.*)/
+        $1 + '%' + $2
+      else
+        f
+      end
+    }.join('; ').split(/% */).each{ |c|
+      # individual cookies
+      debug "saveCookie: process cookie #{hideCookie(c)}"
+      # do *not* split
+      # key=value; domain=...; expires=Sat, 06-Apr-2013 07:45:26 GMT; path=...; HttpOnly
+      # SessionId has no expires!
+      # if expires date is in the past, remove/disable
+      case c
+      when /^(.*?)=(.*?);.*expires=(\w+, (\d+)-(\w+)-(\d+) (\d+):(\d+):(\d+) GMT);/
+        key = $1
+        value = $2
+        expire = $3
+        nodebug "saveCookie: found expires = #{expire}"
+        et = Time.gm($6, $5, $4, $7, $8, $9)
+        life = (et.to_i - Time.now.to_i) / 86400.0
+        value = 'expired' if (life <= 0)
+        if key =~ /SessionId/
+          displayInfo "Cookie expires #{expire} (in #{sprintf("%.2f", life)} days)"
+        end
+        if @@cookies[key] != value
+          debug "saveCookie: set #{key}, expires #{expire}"
+          @@cookies[key] = value
+        else
+          debug "saveCookie: confirm #{key}, expires #{expire}"
+        end
+      when /^(.*?)=(.*?);/ # no expires
+        key = $1
+        value = $2
+        if @@cookies[key] != value
+          debug "saveCookie: set #{key}"
+          @@cookies[key] = value
+        else
+          debug "saveCookie: confirm #{key}"
+        end
       end
     }
-    @@cookie = @@cookies.keys.map{ |k| "#{k}=#{@@cookies[k]}" }.join('; ')
-    debug "saveCookie saved #{hideCookie(@@cookie)}"
+    @@cookie = @@cookies.keys.map{ |k| (@@cookies[k] == 'expired') ? nil : "#{k}=#{@@cookies[k]}" }.compact.join('; ')
+    debug "saveCookie: save #{hideCookie(@@cookie)}"
     return
     # --- NOTREACH
     ### 20131114
@@ -143,7 +179,7 @@ module Auth
       hcookie = $1 + $2 + "*" * $3.length + $4 + $5.to_s
     end
     if hcookie.empty?
-      hcookie = '(none)'
+      hcookie = 'nil'
     end
     return hcookie
   end
