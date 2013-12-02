@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 # $Id$
 
 require 'lib/funfactor'
