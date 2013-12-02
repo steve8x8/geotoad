@@ -423,6 +423,7 @@ class GeoToad
     if (waypointsExtracted < @combinedWaypoints.length)
       displayWarning "Downloaded #{@combinedWaypoints.length} waypoints, but only #{waypointsExtracted} parsed!"
     end
+    puts ""
     return waypointsExtracted
   end
 
@@ -493,7 +494,7 @@ class GeoToad
   def preFetchFilter
     puts ""
     @filtered = Filter.new(@combinedWaypoints)
-    debug "Filter running cycle 1, #{@filtered.totalWaypoints} caches left"
+    debug "Filter running cycle 1, #{@filtered.totalWaypoints} cache(s) left"
 
     beforeFilterTotal = @filtered.totalWaypoints
     if @option['cacheType']
@@ -503,7 +504,7 @@ class GeoToad
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
     if (excludedFilterTotal > 0)
-      displayMessage "Cache type filtering removed #{excludedFilterTotal} caches."
+      displayMessage "Cache type filtering removed #{excludedFilterTotal} cache(s)."
     end
 
     # exclude Premium Member Only caches on request
@@ -517,7 +518,7 @@ class GeoToad
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
     if (excludedFilterTotal > 0)
-      displayMessage "PMO filtering removed #{excludedFilterTotal} caches."
+      displayMessage "PMO filtering removed #{excludedFilterTotal} cache(s)."
     end
 
     if $DTSFILTER
@@ -555,12 +556,12 @@ class GeoToad
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
     if (excludedFilterTotal > 0)
-      displayMessage "Diff/Terr/Size filtering removed #{excludedFilterTotal} caches."
+      displayMessage "Diff/Terr/Size filtering removed #{excludedFilterTotal} cache(s)."
     end
     #-------------------
     end # $DTSFILTER
 
-    debug "Filter running cycle 2, #{@filtered.totalWaypoints} caches left"
+    debug "Filter running cycle 2, #{@filtered.totalWaypoints} cache(s) left"
 
     beforeFilterTotal = @filtered.totalWaypoints
     if @option['foundDateInclude']
@@ -585,10 +586,10 @@ class GeoToad
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
     if (excludedFilterTotal > 0)
-      displayMessage "Date filtering removed #{excludedFilterTotal} caches."
+      displayMessage "Date filtering removed #{excludedFilterTotal} cache(s)."
     end
 
-    debug "Filter running cycle 3, #{@filtered.totalWaypoints} caches left"
+    debug "Filter running cycle 3, #{@filtered.totalWaypoints} cache(s) left"
 
     beforeFilterTotal = @filtered.totalWaypoints
     if @option['notFound']
@@ -598,7 +599,7 @@ class GeoToad
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
     if (excludedFilterTotal > 0)
-      displayMessage "Unfound filtering removed #{excludedFilterTotal} caches."
+      displayMessage "Unfound filtering removed #{excludedFilterTotal} cache(s)."
     end
 
     beforeFilterTotal = @filtered.totalWaypoints
@@ -609,7 +610,7 @@ class GeoToad
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
     if (excludedFilterTotal > 0)
-      displayMessage "Trackable filtering removed #{excludedFilterTotal} caches."
+      displayMessage "Trackable filtering removed #{excludedFilterTotal} cache(s)."
     end
 
     beforeFilterTotal = @filtered.totalWaypoints
@@ -627,7 +628,7 @@ class GeoToad
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
     if (excludedFilterTotal > 0)
-      displayMessage "Owner filtering removed #{excludedFilterTotal} caches."
+      displayMessage "Owner filtering removed #{excludedFilterTotal} cache(s)."
     end
 
     beforeFilterTotal = @filtered.totalWaypoints
@@ -643,7 +644,7 @@ class GeoToad
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
     if (excludedFilterTotal > 0)
-      displayMessage "User filtering removed #{excludedFilterTotal} caches."
+      displayMessage "User filtering removed #{excludedFilterTotal} cache(s)."
     end
 
     beforeFilterTotal = @filtered.totalWaypoints
@@ -654,10 +655,10 @@ class GeoToad
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
     if (excludedFilterTotal > 0)
-      displayMessage "Title keyword filtering removed #{excludedFilterTotal} caches."
+      displayMessage "Title keyword filtering removed #{excludedFilterTotal} cache(s)."
     end
 
-    displayMessage "Filter stage 1 complete, #{@filtered.totalWaypoints} caches left"
+    displayMessage "Filter stage 1 complete, #{@filtered.totalWaypoints} cache(s) left"
   end
 
 
@@ -754,7 +755,7 @@ class GeoToad
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
     if (excludedFilterTotal > 0)
-      displayMessage "Disabled filtering removed #{excludedFilterTotal} caches."
+      displayMessage "Disabled filtering removed #{excludedFilterTotal} cache(s)."
     end
 
     # exclude Premium Member Only caches on request
@@ -767,7 +768,7 @@ class GeoToad
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
     if (excludedFilterTotal > 0)
-      displayMessage "PMO filtering removed #{excludedFilterTotal} caches."
+      displayMessage "PMO filtering removed #{excludedFilterTotal} cache(s)."
     end
 
     beforeFilterTotal = @filtered.totalWaypoints
@@ -778,7 +779,7 @@ class GeoToad
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
     if (excludedFilterTotal > 0)
-      displayMessage "Keyword filtering removed #{excludedFilterTotal} caches."
+      displayMessage "Keyword filtering removed #{excludedFilterTotal} cache(s)."
     end
 
     ##if not $DTSFILTER
@@ -816,7 +817,7 @@ class GeoToad
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
     if (excludedFilterTotal > 0)
-      displayMessage "Diff/Terr/Size filtering removed #{excludedFilterTotal} caches."
+      displayMessage "Diff/Terr/Size filtering removed #{excludedFilterTotal} cache(s)."
     end
     #-------------------
     ##end # not $DTSFILTER
@@ -834,7 +835,7 @@ class GeoToad
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
     if (excludedFilterTotal > 0)
-      displayMessage "FunFactor filtering removed #{excludedFilterTotal} caches."
+      displayMessage "FunFactor filtering removed #{excludedFilterTotal} cache(s)."
     end
 
     beforeFilterTotal = @filtered.totalWaypoints
@@ -850,7 +851,7 @@ class GeoToad
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
     if (excludedFilterTotal > 0)
-      displayMessage "FavFactor filtering removed #{excludedFilterTotal} caches."
+      displayMessage "FavFactor filtering removed #{excludedFilterTotal} cache(s)."
     end
 
     # We filter for users again. While this may be a bit obsessive, this is in case
@@ -868,7 +869,7 @@ class GeoToad
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
     if (excludedFilterTotal > 0)
-      displayMessage "User filtering removed #{excludedFilterTotal} caches."
+      displayMessage "User filtering removed #{excludedFilterTotal} cache(s)."
     end
 
     beforeFilterTotal = @filtered.totalWaypoints
@@ -884,10 +885,10 @@ class GeoToad
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
     if (excludedFilterTotal > 0)
-      displayMessage "Attribute filtering removed #{excludedFilterTotal} caches."
+      displayMessage "Attribute filtering removed #{excludedFilterTotal} cache(s)."
     end
 
-    displayMessage "Filter stage 2 complete, #{@filtered.totalWaypoints} caches left"
+    displayMessage "Filter stage 2 complete, #{@filtered.totalWaypoints} cache(s) left"
     return @filtered.totalWaypoints
   end
 
@@ -1013,7 +1014,7 @@ while true
   if count < 1
     cli.displayWarning "No caches found in search, exiting early."
   else
-    cli.displayMessage "#{count} caches matching query argument(s)."
+    cli.displayMessage "#{count} cache(s) matching query argument(s)."
     cli.prepareFilter
     #if (options['queryType'] != 'wid') and (options['queryType'] != 'guid')
     cli.preFetchFilter
