@@ -131,7 +131,7 @@ class ShadowFetch
         File.unlink(filename)
       rescue Errno::EACCES => e
         displayWarning "Could not delete #{filename}: #{e} - attempting truncation."
-        f = File.truncate(filename, 0)
+        File.truncate(filename, 0)
       end
     end
   end
@@ -232,6 +232,8 @@ class ShadowFetch
     randomizedSleep(@@remotePages)
     @httpHeaders['Referer'] = @url
     data = fetchURL(@url)
+    # although implicit:
+    return data
   end
 
 

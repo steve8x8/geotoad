@@ -723,7 +723,7 @@ class GeoToad
       # remove HTML cruft from name, may fail in rare cases (emoji)
       begin
         temp = CGI::unescapeHTML(name)
-      rescue => e
+      rescue
         temp = name.gsub(/\&/, '+')
       end
       name = temp
@@ -960,7 +960,7 @@ class GeoToad
       queryTitle = @queryTitle + " (" + Time.now.strftime("%d%b%y %H:%M") + ")"
 
       # and do the dirty.
-      outputData = output.prepare(queryTitle, @option['user'])
+      output.prepare(queryTitle, @option['user'])
       output.commit(outputFile)
       displayMessage "Saved to #{outputFile}"
       puts ""

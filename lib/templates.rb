@@ -18,7 +18,7 @@ class Templates
     owntempdir = File.join(findConfigDir(), 'templates')
     [systempdir, owntempdir].each{ |dir|
       begin
-        if not (File.directory?(dir) and FileTest.readable?(dir))
+        if ! (File.directory?(dir) && FileTest.readable?(dir))
           #displayWarning "#{dir} - not a readable directory, skipping"
           next
         end

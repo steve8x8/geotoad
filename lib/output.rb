@@ -200,7 +200,7 @@ class Output
     @waypointLength = 0
     @username = nil
     # initialize templates
-    t = Templates.new if $Format.empty?
+    Templates.new if $Format.empty?
   end
 
   def input(data)
@@ -670,6 +670,8 @@ class Output
 
   def generatePreOutput(title)
     output = replaceVariables(@outputFormat['templatePre'], nil)
+    # although implicit:
+    return output
   end
 
   def updateShortNames()
@@ -983,7 +985,7 @@ class Output
     lookup = nil
     wpname = nil
     wptype = nil
-    urlwid = ""
+    #urlwid = ""
     coord = nil
     wplat = 0
     wplon = 0
@@ -1235,6 +1237,8 @@ class Output
       displayWarning "Problem (#{e}) while converting cache #{wid}:\n#{cache.inspect}"
       displayError "Backtrace: #{e.backtrace}"
     end
+    # although implicit:
+    return variables
   end
 
   def generateOutput(title)

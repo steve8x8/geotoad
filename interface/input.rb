@@ -277,39 +277,38 @@ class Input
     puts ""
     puts "::: OUTPUT FORMATS:"
     outputDetails = Output.new
-    i=0
-    print ""
-    $validFormats.each { |type|
-      desc = outputDetails.formatDesc(type)
-      if (i>4)
+    column = 0
+    $validFormats.each { |f|
+      type = f.dup
+      if (column > 4)
         puts ""
-        print ""
-        i=0
+        column = 0
       end
-      i=i+1
-
-
+      #desc = outputDetails.formatDesc(type)
       if (outputDetails.formatRequirement(type) == 'gpsbabel')
-        type = type + "+"
+        type << '(+)'
       elsif (outputDetails.formatRequirement(type) == 'cmconvert')
-        type = type + "="
+        type << '(=)'
+      elsif (outputDetails.formatRequirement(type) == 'iconv')
+        type << '(%)'
+#      elsif (! outputDetails.formatRequirement(type).nil?)
+#        type << '?'
       end
-
-      printf(" %-12.12s", type)
-
+      printf(" %-13.13s", type)
+      column += 1
     }
     puts ""
-    puts "    + requires gpsbabel in PATH           = requires cmconvert in PATH"
+    puts " (+) requires gpsbabel  (=) requires cmconvert  (%) requires iconv in PATH"
     puts ""
     puts "::: EXAMPLES:"
-    puts "  geotoad.rb -u helixblue -p password 27502"
-    puts "    find zipcode 27502 (Apex, NC 27502, USA), search 10 mi around, write gpx"
-    puts "  geotoad.rb -u john -p password -c unknown -d 3 -x csv -o NC.cvs -q state 34"
-    puts "    will find all mystery caches with difficulty >= 3 in all of North Carolina"
-    puts "    (Be careful: NC has more than 24k active caches!)"
-    puts "  geotoad.rb -u ... -p ... -z -Y -H -c cito -x list -o cito.list -q country 11"
-    puts "    creates a list (with dates, but without coordinates) of all CITO events in the UK"
-    puts "  more examples - and options explanations - see manual page and README"
+    puts " geotoad.rb -u helixblue -p password 27502"
+    puts "   find zipcode 27502 (Apex, NC 27502, USA), search 10 mi around, write gpx"
+    puts " geotoad.rb -u john -p password -c unknown -d 3 -x csv -o NC.cvs -q state 34"
+    puts "   will find all mystery caches with difficulty >= 3 in all of North Carolina"
+    puts "   (Be careful: NC has more than 24k active caches!)"
+    puts " geotoad.rb -u ... -p ... -z -Y -H -c cito -x list -o cito.list -q country 11"
+    puts "   creates a list (with dates, but no coordinates) of all CITO events in the UK"
+    puts " for more examples - and options explanations - see manual page and README"
   end
 
   def showMenu
@@ -561,8 +560,6 @@ class Input
       when '22'
         puts "List of Output Formats: "
         outputDetails = Output.new
-        i=0
-        print ""
         $validFormats.each { |type|
           desc = outputDetails.formatDesc(type)
           req = outputDetails.formatRequirement(type)

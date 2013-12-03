@@ -129,26 +129,26 @@ syntax: geotoad [options] <search:search2:search3>
  -C                     selectively clear local browser cache
 
 ::: OUTPUT FORMATS:
- cachemate=   cetus+       csv          delorme      delorme-nour
- dna+         easygps      gclist       gcvisits     gpsdrive    
- gpsman+      gpspilot+    gpspoint     gpspoint2+   gpsutil+    
- gpx          gpx-gsak     gpx-nuvi     gpx-pa       gpx-wpts    
- holux+       html         kml+         list         magnav+     
- mapsend+     mxf          myfindgpx    myfindlist   ozi         
- pcx+         poi-nuvi+    psp+         sms          sms2        
- tab          text         tiger        tmpro+       tpg+        
- wp2guid      xmap+        yourfindgpx  yourfindlist
-     + requires gpsbabel in PATH           = requires cmconvert in PATH
+ cachemate(=)  cetus(+)      csv           delorme       delorme-nourl
+ dna(+)        easygps       gclist        gcvisits(%)   gpsdrive     
+ gpsman(+)     gpspilot(+)   gpspoint      gpspoint2(+)  gpsutil(+)   
+ gpx           gpx-gsak      gpx-nuvi      gpx-pa        gpx-wpts     
+ holux(+)      html          kml(+)        list          magnav(+)    
+ mapsend(+)    mxf           myfindgpx     myfindlist    ozi          
+ pcx(+)        poi-nuvi(+)   psp(+)        sms           sms2         
+ tab           text          tiger         tmpro(+)      tpg(+)       
+ vcf           wp2guid       xmap(+)       yourfindgpx   yourfindlist 
+ (+) requires gpsbabel  (=) requires cmconvert  (%) requires iconv in PATH
 
 ::: EXAMPLES:
-  geotoad.rb -u helixblue -p password 27502
-    find zipcode 27502 (Apex, NC 27502, USA), search 10mi around, write gpx
-  geotoad.rb -u john -p password -c unknown -d 3 -x csv -o NC.csv -q state 34
-    will find all mystery caches with difficulty >= 3 in all of North Carolina
-    (Be careful: NC has more that 24k active caches!)
-  geotoad.rb -u ... -p ... -z -Y -H -c cito -x list -o cito.list -q country 11
-    creates a list (with dates, but without coordinates) of all CITO events in the UK
-  more examples - and options explanations - see manual page and README
+ geotoad.rb -u helixblue -p password 27502
+   find zipcode 27502 (Apex, NC 27502, USA), search 10mi around, write gpx
+ geotoad.rb -u john -p password -c unknown -d 3 -x csv -o NC.csv -q state 34
+   will find all mystery caches with difficulty >= 3 in all of North Carolina
+   (Be careful: NC has more that 24k active caches!)
+ geotoad.rb -u ... -p ... -z -Y -H -c cito -x list -o cito.list -q country 11
+   creates a list (with dates, but no coordinates) of all CITO events in the UK
+ for more examples - and options explanations - see manual page and README
 
 
 ---------------------
