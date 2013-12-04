@@ -14,10 +14,6 @@ if RUBY_VERSION.gsub('.', '').to_i < 191
   sleep(5)
   exit(99)
 end
-if RUBY_VERSION.gsub('.', '').to_i >= 200
-  puts " ***  GeoToad has not been thoroughly tested with Ruby versions >= 2.0 yet!"
-  sleep(5)
-end
 
 Encoding.default_external = Encoding::UTF_8
 
