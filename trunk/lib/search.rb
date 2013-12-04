@@ -491,6 +491,33 @@ class SearchCache
       when /onclick=.s2phone\(.*?(GC\w+).*?\);return/
         wid = $1
         debug "Found WID: #{wid} (s2phone)"
+       # premium-member only
+      when /WptTypeImage.*\/wpttypes\/(\d+)/
+        ccode = $1.to_i
+        # list covers only "standard" types
+        if ccode == 2
+          ctype = 'Traditional Cache'
+        elsif ccode == 3
+          ctype = 'Multi-Cache'
+        elsif ccode == 5
+          ctype = 'Letterbox Hybrid'
+        elsif ccode == 15
+          ctype = 'Earthcache'
+        elsif ccode == 1858
+          ctype = 'Wherigo Cache'
+        else
+          ctype = 'Unknown Cache'
+        end
+        debug "Found PMO type code #{ccode} -> #{ctype}"
+      when /\s+\((GC\w+)\)<\/h2>/
+        wid = $1
+        debug "Found PMO WID: #{wid}"
+      when /uxCacheType.>A cache by (.*?)</
+        owner = $1
+        debug "Found PMO owner: #{owner.inspect}"
+      when /The owner of \<strong\>(.*?)\<\/strong\> has chosen to make/
+        cname = $1
+        debug "Found PMO cache name: #{cname.inspect}"
       # for filtering; don't care about ".0" representation
       when /_uxLegendScale.*?(\d(\.\d)?) out of/
         cdiff = tohalfint($1)
@@ -542,6 +569,15 @@ class SearchCache
     if data =~ /Cache Issues:.*class=.OldWarning..*This cache has been archived/
       archived = true
       debug "Cache appears to be archived"
+    end
+    # premium-member only
+    if data =~ /lblDifficulty.*?(\d(\.\d)?) out of/m
+      cdiff = tohalfint($1)
+      debug "Found PMO D: #{cdiff}"
+    end
+    if data =~ /lblTerrain.*?(\d(\.\d)?) out of/m
+      cterr = tohalfint($1)
+      debug "Found PMO T: #{cterr}"
     end
 
     cache_data = {
