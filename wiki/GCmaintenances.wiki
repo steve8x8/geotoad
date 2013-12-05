@@ -152,12 +152,17 @@ _*(year per year; new entries will be added at bottom)*_
   * 2013-10-31 (~2200 UTC, 3pm Seattle time) "performance update" (announced on Twitter)
 ----
 2013-11-15:
-  * _(no release notes yet)_
+  * _(no release notes)_
   * [http://forums.groundspeak.com/GC/index.php?showtopic=316971&view=findpost&p=5320945 "Change to the account service"]
   * [http://forums.groundspeak.com/GC/index.php?showtopic=317409&view=findpost&p=5321222 (see also)]
   * *{{{Web.HotFix_20131114.1}}}*
   * *{{{Web.HotFix_20131115.2}}}*
   * *{{{Web.HotFix_20131118.1}}}* (more Google Analytics)
+----
+2013-12-03:
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=317837 release notes]
+  * _"groundwork for future improvements"_ (no details)
+  * *{{{Web.HotFix_20131203.1}}}*
 ----
 (...)
 ----
