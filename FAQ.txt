@@ -158,7 +158,7 @@ there is a "Unicode" codepage (65001) which apparently uses UTF-16
 
 To enter non-ASCII characters within user/owner names,
 you will have to look them up in 
-[http://www.utf8-chartable.de/unicode-utf8-table.pl?number=1024 this table] 
+this table (=> http://www.utf8-chartable.de/unicode-utf8-table.pl?number=1024) 
 (you may have to scroll further) and prefix each two-digit hex number from 
 the third column with a percent sign, as in %c3%9cbercacherXY. 
 _(If you use the search page to list caches found by "ÜbercacherXY", geocaching.com will use the same encoding.)_
