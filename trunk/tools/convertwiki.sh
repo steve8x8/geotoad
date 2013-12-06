@@ -4,8 +4,8 @@
 # to be run inside a wiki svn working copy
 # doesn't work properly with links and some lists!
 
-#pages=`ls *.wiki | sed -e 's~\.wiki~~'`
-pages=${@:-README FAQ README-devel OtherSearches ReportingBugs xDebianUbuntuRepository GCmaintenances Templates Dictionary}
+#for page in `ls *.wiki | sed -e 's~\.wiki~~'`
+pages=${@:-README FAQ OtherSearches ReportingBugs DebianUbuntuRepository GCmaintenances Templates}
 for page in $pages
 do
     [ -f $page.wiki ] || continue
@@ -13,83 +13,132 @@ do
     (
 # pass 1: header line & toc
     cat $page.wiki \
-    | awk '{
-	if (/^= /){
+    | awk '
+	function links(line) {
+	if (line ~ /\[.+\]/) {
+	    pref=line; gsub("\\[.*","",pref)
+	    post=line; gsub(".*\\]","",post)
+	    link=line; gsub(".*\\[","",link); gsub("\\].*","",link)
+	    if (link ~ /[^ ]+ +.*/) {
+		url=link;  gsub(" .*$","",url)
+		name=link; gsub("^[^ ]* ","",name)
+		if (url ~ /^https*:\/\//) {
+		    link=name " (=> " url ")"
+		} else if (url == name) {
+		    link="\"" url "\""
+		} else {
+		    link=name " (=> Wiki:" url ")"
+		}
+	    }
+	    return pref link post
+	} else {
+	    return line
+	}
+	}
+	{
+	if (/^= /) {
 	    h=substr($0,3,length($0)-4)
+	    h=links(h)
 	    lh=length(h)
-	    for(i=0;i<lh;i++)printf "="
+	    for(i=0;i<lh;i++) printf "="
 	    print ""
 # version number
 	    gsub("[0-9]\\.[0-9][0-9]*\\.[0-9][0-9]*","%VERSION%",h)
 	    print h
-	    for(i=0;i<lh;i++)printf "="
+	    for(i=0;i<lh;i++) printf "="
 	    print ""
 	    print ""
 	    next
 	}
-	if (/^<wiki:toc/){
+	if (/^<wiki:toc/) {
 	    print "Table of Contents:"
 	    print "------------------"
 	    next
 	}
 # skip comments
-	if (/^<wiki:comment/){
+	if (/^<wiki:comment/) {
 	    while ($0 !~ /^<\/wiki:comment/) getline
 	    next
 	}
-	if (/^== /){
+	if (/^== /) {
 	    h=substr($0,4,length($0)-6)
+	    h=links(h)
 	    print "*",h
 	    next
 	}
 	}'
 # pass 2: full text
     cat $page.wiki \
-    | awk '{
+    | awk '
+	function links(line) {
+	if (line~/\[.+\]/) {
+	    pref=line; gsub("\\[.*","",pref)
+	    post=line; gsub(".*\\]","",post)
+	    link=line; gsub(".*\\[","",link); gsub("\\].*","",link)
+	    if (link ~ /[^ ]+ +.*/) {
+		url=link;  gsub(" .*$","",url)
+		name=link; gsub("^[^ ]* ","",name)
+		if (url ~ /^https*:\/\//) {
+		    link=name " (=> " url ")"
+		} else if (url == name) {
+		    link="\"" url "\""
+		} else {
+		    link=name " (=> Wiki:" url ")"
+		}
+	    }
+	    return pref link post
+	} else {
+	    return line
+	}
+	}
+	{
 # comment lines
 	if (/^#/ && NR<5) next
 	if (/^<wiki:toc/) next
 # skip blank
-	if (/.../)p=1
+	if (/.../) p=1
 	if (p==0) next
 # skip comments
-	if (/^<wiki:comment/){
+	if (/^<wiki:comment/) {
 	    while ($0 !~ /^<\/wiki:comment/) getline
 	    next
 	}
 # headings
-	if (/^= /){
+	if (/^= /) {
 	    next;
 	    h=substr($0,3,length($0)-4)
+	    h=links(h)
 	    lh=length(h)
-	    for(i=0;i<lh;i++)printf "="
+	    for(i=0;i<lh;i++) printf "="
 	    print ""
 # version number
 	    gsub("[0-9]\\.[0-9][0-9]*\\.[0-9][0-9]*","%VERSION%",h)
 	    print h
-	    for(i=0;i<lh;i++)printf "="
+	    for(i=0;i<lh;i++) printf "="
 	    print ""
 	    next
 	}
-	if (/^== /){
+	if (/^== /) {
 	    h=substr($0,4,length($0)-6)
-	    for(i=0;i<length(h);i++)printf "-"
+	    h=links(h)
+	    for(i=0;i<length(h);i++) printf "-"
 	    print ""
 	    print h
-	    for(i=0;i<length(h);i++)printf "-"
+	    for(i=0;i<length(h);i++) printf "-"
 	    print ""
 	    next
 	}
 # version number in TUI
-	if (/\/\/ .* \/\//){
+	if (/\/\/ .* \/\//) {
 	    l=$0
+	    l=links(l)
 	    gsub("[0-9]\\.[0-9][0-9]*\\.[0-9][0-9]*","%VERSION%",l)
 	    print l
 	    next
 	}
 # separations
-	if (/^----$/){
-	    for(i=0;i<50;i++)printf "~"
+	if (/^----$/) {
+	    for(i=0;i<50;i++) printf "~"
 	    print ""
 	    next
 	}
@@ -118,27 +167,8 @@ do
 # oblique face
 #	gsub("_[^\\*]*_","_&_",$0)
 #	gsub("__","",$0)
-# links
-	if (/\[[^ ][^ ]* [^ ][^ ]*\]/){
-	    pref=$0;gsub("\\[.*","",pref)
-	    post=$0;gsub(".*\\]","",post)
-	    link=$0;gsub(".*\\[","",link);gsub("\\].*","",link)
-# "rename" link?
-	    if (link ~ /.*  *.*/){
-		url=link; gsub(" .*","",url)
-		name=link;gsub(".* ","",name)
-#		print "link " url " is " name
-		if (url ~ /^http:\/\//){
-		    link=name " (=> " url ")"
-		}else{
-		    link="\"" name "\""
-		}
-	    }
-	    print pref link post
-	    next
-	}
 # everything else
-	print $0
+	print links($0)
 	}'
     ) > $page.txt.new
     diff 2>/dev/null -q $page.txt $page.txt.new || {
