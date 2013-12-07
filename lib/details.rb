@@ -679,7 +679,7 @@ class CacheDetails
     end
 
     # Parse the additional waypoints table. Needs additional work for non-HTML templates.
-    comments, last_find_date, fun_factor, visitors = parseComments(data, cache['creator'])
+    comments, last_find_date, visitors = parseComments(data, cache['creator'])
     cache['visitors'] = cache['visitors'] + visitors
     cache['comments'] = comments
     if comments.length > 0
@@ -825,7 +825,7 @@ class CacheDetails
       nodebug "COMMENT: #{comment.inspect}"
       comments <<  comment
     }
-    return [comments, last_find, 0.0, visitors]
+    return [comments, last_find, visitors]
   end
 
   def removeSpam(text)
