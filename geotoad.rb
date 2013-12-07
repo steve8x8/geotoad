@@ -4,9 +4,10 @@
 #
 # This is the main geotoad binary.
 #
-$LOAD_PATH << File.dirname(__FILE__.gsub(/\\/, '/'))
-$LOAD_PATH << File.dirname(__FILE__.gsub(/\\/, '/')) + '/lib'
-$LOAD_PATH << (File.dirname(__FILE__.gsub(/\\/, '/')) + '/' + '..')
+$BASEDIR = File.dirname(File.realpath(__FILE__))
+$LOAD_PATH << $BASEDIR
+$LOAD_PATH << File.join($BASEDIR, 'lib')
+#$LOAD_PATH << File.join($BASEDIR, '..')
 
 # check ruby version compatibility
 if RUBY_VERSION.gsub('.', '').to_i < 191
