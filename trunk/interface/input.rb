@@ -1,7 +1,8 @@
 # $Id$
 
-$LOAD_PATH << (File.dirname(__FILE__.gsub(/\\/, '/')) + '/' + '..')
-$LOAD_PATH << (File.dirname(__FILE__.gsub(/\\/, '/')) + '/' + '../lib')
+$THISDIR = File.dirname(File.realpath(__FILE__))
+$LOAD_PATH << File.join($THISDIR, '..')
+$LOAD_PATH << File.join($THISDIR, '..', 'lib')
 
 require 'country_state'
 
@@ -17,7 +18,7 @@ class Input
 
     resetOptions
     @configDir = findConfigDir
-    @configFile = @configDir + '/' + 'config.yaml'
+    @configFile = File.join(@configDir, 'config.yaml')
   end
 
   def resetOptions
@@ -172,16 +173,16 @@ class Input
     saveConfig()
 
     if (@@optHash['outDir'])
-      @@optHash['output']=@@optHash['outDir'] + "/"
+      @@optHash['output'] = @@optHash['outDir']
     else
-      @@optHash['output']=findOutputDir + "/"
+      @@optHash['output'] = findOutputDir
     end
 
     if (@@optHash['outFile'])
       if @@optHash['output']
-        @@optHash['output']=@@optHash['output'] + @@optHash['outFile']
+        @@optHash['output'] = File.join(@@optHash['output'], @@optHash['outFile'])
       else
-        @@optHash['output']=@@optHash['outFile']
+        @@optHash['output'] = @@optHash['outFile']
       end
     end
 

@@ -3,8 +3,9 @@
 # So, is the cache any good or not?
 
 # $Id$
-$LOAD_PATH << (File.dirname(__FILE__.gsub(/\\/, '/')) + '/' + '..')
-$LOAD_PATH << (File.dirname(__FILE__.gsub(/\\/, '/')) + '/' + '../lib')
+$THISDIR = File.dirname(File.realpath(__FILE__))
+$LOAD_PATH << File.join($THISDIR, '..')
+$LOAD_PATH << File.join($THISDIR, '..' , 'lib')
 
 require 'yaml'
 require 'bishop'

@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
 # $Id$
-$LOAD_PATH << (File.dirname(__FILE__.gsub(/\\/, '/')) + '/' + '..')
-$LOAD_PATH << (File.dirname(__FILE__.gsub(/\\/, '/')) + '/' + '../lib')
+$THISDIR = File.dirname(File.realpath(__FILE__))
+$LOAD_PATH << File.join($THISDIR, '..')
+$LOAD_PATH << File.join($THISDIR, '..', 'lib')
 
 require 'shadowget'
 require 'auth'

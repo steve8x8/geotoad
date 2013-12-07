@@ -14,7 +14,7 @@ class Templates
 
   def initialize
     # default template directory
-    systempdir = File.join(findDataDir(), '..', 'templates')
+    systempdir = File.join(File.dirname(File.realpath(__FILE__)), '..', 'templates')
     owntempdir = File.join(findConfigDir(), 'templates')
     [systempdir, owntempdir].each{ |dir|
       begin
