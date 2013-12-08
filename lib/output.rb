@@ -1115,7 +1115,7 @@ class Output
     else
       location = 'Undetermined'
     end
-    coord_query = URI.escape("#{cache['latdata']},#{cache['londata']}")
+    coord_query = URI.escape(sprintf("%.6f,%.6f", cache['latdata'], cache['londata']))
     available = (not cache['disabled'] and not cache['archived'])
     archived = cache['archived']
 
