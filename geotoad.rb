@@ -141,6 +141,11 @@ class GeoToad
     # include query type, will be parsed by output.rb
     @queryTitle        = "GeoToad: #{@queryType} = #{@queryArg}"
     @defaultOutputFile = "gt_" + @queryArg.to_s
+    # collect additional title and output filename text
+    # key: short option
+    # 'f': filename << "#{key}#{h['f']}"
+    # 't': title << "#{h['t']} #{h['f']}"}"
+    @appliedFilters    = Hash.new
 
     @formatTypes.split($delimiters).each { |formatType|
       if ! $validFormats.include?(formatType)
@@ -353,14 +358,17 @@ class GeoToad
     if @queryType == 'location' || @queryType == 'coord'
       # choose correct unit for query title and output filename
       # strip off trailing 0's and period
+      # keep information close to the query location
       if @useMetric
         dist_km = sprintf("%.3f", @distanceMax * $MILE2KM).gsub(/\.?0*$/, '')
         @queryTitle << " (#{dist_km} km radius)"
-        @defaultOutputFile << "-y" + dist_km + "km"
+        @defaultOutputFile << "-y#{dist_km}km"
+        #@appliedFilters['-y'] = { 'f' => "#{dist_km}km", 't' => "radius"}
       else
         dist_mi = sprintf("%.3f", @distanceMax).gsub(/\.?0*$/, '')
         @queryTitle << " (#{@distanceMax} mi radius)"
-        @defaultOutputFile << "-y" + dist_mi
+        @defaultOutputFile << "-y#{dist_mi}"
+        #@appliedFilters['-y'] = { 'f' => "#{dist_mi}mi", 't' => "radius" }
       end
     end
 
@@ -430,8 +438,9 @@ class GeoToad
     @filtered = Filter.new(@combinedWaypoints)
 
     if @option['notFoundByMe']
-      @queryTitle = @queryTitle + ", not done by " + @option['user']
-      @defaultOutputFile = @defaultOutputFile + '-N'
+      #@queryTitle = @queryTitle + ", not done by " + @option['user']
+      #@defaultOutputFile = @defaultOutputFile + '-N'
+      @appliedFilters['-N'] = { 'f' => "", 't' => "not done by #{@option['user']}" }
     end
 
     # This is where we do a little bit of cheating. In order to avoid downloading the
@@ -441,14 +450,16 @@ class GeoToad
 
     userLookups = Array.new
     if @option['userExclude'] and not @option['userExclude'].empty?
-      @queryTitle = @queryTitle + ", not done by " + @option['userExclude']
-      @defaultOutputFile = @defaultOutputFile + '-E' + @option['userExclude']
+      #@queryTitle = @queryTitle + ", not done by " + @option['userExclude']
+      #@defaultOutputFile = @defaultOutputFile + '-E' + @option['userExclude']
+      @appliedFilters['-E'] = { 'f' => "#{@option['userExclude']}", 't' => "not done by" }
       userLookups = @option['userExclude'].split($delimiters)
     end
 
     if @option['userInclude'] and not @option['userInclude'].empty?
-      @queryTitle = @queryTitle + ", done by " + @option['userInclude']
-      @defaultOutputFile = @defaultOutputFile + '-e' + @option['userInclude']
+      #@queryTitle = @queryTitle + ", done by " + @option['userInclude']
+      #@defaultOutputFile = @defaultOutputFile + '-e' + @option['userInclude']
+      @appliedFilters['-e'] = { 'f' => "#{@option['userInclude']}", 't' => "done by" }
       userLookups = userLookups + @option['userInclude'].split($delimiters)
     end
 
@@ -496,8 +507,9 @@ class GeoToad
 
     beforeFilterTotal = @filtered.totalWaypoints
     if @option['cacheType']
-      @queryTitle = @queryTitle + ", type #{@option['cacheType']}"
-      @defaultOutputFile = @defaultOutputFile + '-c' + @option['cacheType']
+      #@queryTitle = @queryTitle + ", type #{@option['cacheType']}"
+      #@defaultOutputFile = @defaultOutputFile + '-c' + @option['cacheType']
+      @appliedFilters['-c'] = { 'f' => "#{@option['cacheType']}", 't' => "type" }
       @filtered.cacheType(@option['cacheType'])
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
@@ -508,12 +520,12 @@ class GeoToad
     # exclude Premium Member Only caches on request
     beforeFilterTotal = @filtered.totalWaypoints
     if @option['noPMO']
-      @defaultOutputFile = @defaultOutputFile + '-O'
+      #@defaultOutputFile = @defaultOutputFile + '-O'
       @filtered.removeByElement('membersonly')
     end
     # may not be accurate before fetching details?
     if @option['onlyPMO']
-      @defaultOutputFile = @defaultOutputFile + '-Q'
+      #@defaultOutputFile = @defaultOutputFile + '-Q'
       @filtered.removeByElement('membersonly', false)
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
@@ -525,33 +537,39 @@ class GeoToad
     #-------------------
     beforeFilterTotal = @filtered.totalWaypoints
     if @option['difficultyMin']
-      @queryTitle = @queryTitle + ", difficulty #{@option['difficultyMin']}+"
-      @defaultOutputFile = @defaultOutputFile + '-d' + @option['difficultyMin'].to_s
+      #@queryTitle = @queryTitle + ", difficulty #{@option['difficultyMin']}+"
+      #@defaultOutputFile = @defaultOutputFile + '-d' + @option['difficultyMin'].to_s
+      @appliedFilters['-d'] = { 'f' => "#{@option['difficultyMin']}", 't' => "difficulty >=" }
       @filtered.difficultyMin(@option['difficultyMin'].to_f)
     end
     if @option['difficultyMax']
-      @queryTitle = @queryTitle + ", difficulty #{@option['difficultyMax']} or lower"
-      @defaultOutputFile = @defaultOutputFile + '-D' + @option['difficultyMax'].to_s
+      #@queryTitle = @queryTitle + ", difficulty #{@option['difficultyMax']} or lower"
+      #@defaultOutputFile = @defaultOutputFile + '-D' + @option['difficultyMax'].to_s
+      @appliedFilters['-D'] = { 'f' => "#{@option['difficultyMax']}", 't' => "difficulty <=" }
       @filtered.difficultyMax(@option['difficultyMax'].to_f)
     end
     if @option['terrainMin']
-      @queryTitle = @queryTitle + ", terrain #{@option['terrainMin']}+"
-      @defaultOutputFile = @defaultOutputFile + '-t' + @option['terrainMin'].to_s
+      #@queryTitle = @queryTitle + ", terrain #{@option['terrainMin']}+"
+      #@defaultOutputFile = @defaultOutputFile + '-t' + @option['terrainMin'].to_s
+      @appliedFilters['-t'] = { 'f' => "#{@option['terrainMin']}", 't' => "terrain >=" }
       @filtered.terrainMin(@option['terrainMin'].to_f)
     end
     if @option['terrainMax']
-      @queryTitle = @queryTitle + ", terrain #{@option['terrainMax']} or lower"
-      @defaultOutputFile = @defaultOutputFile + '-T' + @option['terrainMax'].to_s
+      #@queryTitle = @queryTitle + ", terrain #{@option['terrainMax']} or lower"
+      #@defaultOutputFile = @defaultOutputFile + '-T' + @option['terrainMax'].to_s
+      @appliedFilters['-T'] = { 'f' => "#{@option['terrainMax']}", 't' => "terrain <=" }
       @filtered.terrainMax(@option['terrainMax'].to_f)
     end
     if @option['sizeMin']
-      @queryTitle = @queryTitle + ", size #{@option['sizeMin']}+"
-      @defaultOutputFile = @defaultOutputFile + '-s' + @option['sizeMin'].to_s
+      #@queryTitle = @queryTitle + ", size #{@option['sizeMin']}+"
+      #@defaultOutputFile = @defaultOutputFile + '-s' + @option['sizeMin'].to_s
+      @appliedFilters['-s'] = { 'f' => "#{@option['sizeMin']}", 't' => "size >=" }
       @filtered.sizeMin(@option['sizeMin'])
     end
     if @option['sizeMax']
-      @queryTitle = @queryTitle + ", size #{@option['sizeMax']} or lower"
-      @defaultOutputFile = @defaultOutputFile + '-S' + @option['sizeMax'].to_s
+      #@queryTitle = @queryTitle + ", size #{@option['sizeMax']} or lower"
+      #@defaultOutputFile = @defaultOutputFile + '-S' + @option['sizeMax'].to_s
+      @appliedFilters['-S'] = { 'f' => "#{@option['sizeMax']}", 't' => "size <=" }
       @filtered.sizeMax(@option['sizeMax'])
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
@@ -565,23 +583,27 @@ class GeoToad
 
     beforeFilterTotal = @filtered.totalWaypoints
     if @option['foundDateInclude']
-      @queryTitle = @queryTitle + ", found in the last  #{@option['foundDateInclude']} days"
-      @defaultOutputFile = @defaultOutputFile + '-r' + @option['foundDateInclude'].to_s
+      #@queryTitle = @queryTitle + ", found in the last  #{@option['foundDateInclude']} days"
+      #@defaultOutputFile = @defaultOutputFile + '-r' + @option['foundDateInclude'].to_s
+      @appliedFilters['-r'] = { 'f' => "#{@option['foundDateInclude']}", 't' => "found age <=" }
       @filtered.foundDateInclude(@option['foundDateInclude'].to_f)
     end
     if @option['foundDateExclude']
-      @queryTitle = @queryTitle + ", not found in the last #{@option['foundDateExclude']} days"
-      @defaultOutputFile = @defaultOutputFile + '-R' + @option['foundDateExclude'].to_s
+      #@queryTitle = @queryTitle + ", not found in the last #{@option['foundDateExclude']} days"
+      #@defaultOutputFile = @defaultOutputFile + '-R' + @option['foundDateExclude'].to_s
+      @appliedFilters['-R'] = { 'f' => "#{@option['foundDateExclude']}", 't' => "found age >=" }
       @filtered.foundDateExclude(@option['foundDateExclude'].to_f)
     end
     if @option['placeDateInclude']
-      @queryTitle = @queryTitle + ", newer than #{@option['placeDateInclude']} days"
-      @defaultOutputFile = @defaultOutputFile + '-j' + @option['placeDateInclude'].to_s
+      #@queryTitle = @queryTitle + ", newer than #{@option['placeDateInclude']} days"
+      #@defaultOutputFile = @defaultOutputFile + '-j' + @option['placeDateInclude'].to_s
+      @appliedFilters['-j'] = { 'f' => "#{@option['placeDateInclude']}", 't' => "cache age <=" }
       @filtered.placeDateInclude(@option['placeDateInclude'].to_f)
     end
     if @option['placeDateExclude']
-      @queryTitle = @queryTitle + ", over #{@option['placeDateExclude']} days old"
-      @defaultOutputFile = @defaultOutputFile + '-J' + @option['placeDateExclude'].to_s
+      #@queryTitle = @queryTitle + ", over #{@option['placeDateExclude']} days old"
+      #@defaultOutputFile = @defaultOutputFile + '-J' + @option['placeDateExclude'].to_s
+      @appliedFilters['-J'] = { 'f' => "#{@option['placeDateExclude']}", 't' => "cache age >=" }
       @filtered.placeDateExclude(@option['placeDateExclude'].to_f)
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
@@ -593,8 +615,9 @@ class GeoToad
 
     beforeFilterTotal = @filtered.totalWaypoints
     if @option['notFound']
-      @queryTitle = @queryTitle + ", virgins only"
-      @defaultOutputFile = @defaultOutputFile + '-n'
+      #@queryTitle = @queryTitle + ", virgins only"
+      #@defaultOutputFile = @defaultOutputFile + '-n'
+      @appliedFilters['-n'] = { 'f' => "", 't' => "virgins" }
       @filtered.notFound
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
@@ -604,8 +627,9 @@ class GeoToad
 
     beforeFilterTotal = @filtered.totalWaypoints
     if @option['travelBug']
-      @queryTitle = @queryTitle + ", only with trackables"
-      @defaultOutputFile = @defaultOutputFile + '-b'
+      #@queryTitle = @queryTitle + ", only with trackables"
+      #@defaultOutputFile = @defaultOutputFile + '-b'
+      @appliedFilters['-b'] = { 'f' => "", 't' => "trackables" }
       @filtered.travelBug
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
@@ -615,15 +639,17 @@ class GeoToad
 
     beforeFilterTotal = @filtered.totalWaypoints
     if (@option['ownerExclude'])
-      @queryTitle = @queryTitle + ", not by #{@option['ownerExclude']}"
-      @defaultOutputFile = @defaultOutputFile + '-I' + @option['ownerExclude']
+      #@queryTitle = @queryTitle + ", not by #{@option['ownerExclude']}"
+      #@defaultOutputFile = @defaultOutputFile + '-I' + @option['ownerExclude']
+      @appliedFilters['-I'] = { 'f' => "#{@option['ownerExclude']}", 't' => "not owned by" }
       @option['ownerExclude'].split($delimiters).each { |owner|
         @filtered.ownerExclude(owner)
       }
     end
     if (@option['ownerInclude'])
-      @queryTitle = @queryTitle + ", by #{@option['ownerInclude']}"
-      @defaultOutputFile = @defaultOutputFile + '-i' + @option['ownerInclude']
+      #@queryTitle = @queryTitle + ", by #{@option['ownerInclude']}"
+      #@defaultOutputFile = @defaultOutputFile + '-i' + @option['ownerInclude']
+      @appliedFilters['-i'] = { 'f' => "#{@option['ownerInclude']}", 't' => "owned by" }
       @option['ownerInclude'].split($delimiters).each { |owner|
         @filtered.ownerInclude(owner)
       }
@@ -635,15 +661,17 @@ class GeoToad
 
     beforeFilterTotal = @filtered.totalWaypoints
     if (@option['userExclude'])
-      @queryTitle = @queryTitle + ", not done by #{@option['userExclude']}"
-      @defaultOutputFile = @defaultOutputFile + '-E' + @option['userExclude']
+      #@queryTitle = @queryTitle + ", not done by #{@option['userExclude']}"
+      #@defaultOutputFile = @defaultOutputFile + '-E' + @option['userExclude']
+      @appliedFilters['-E'] = { 'f' => "#{@option['userExclude']}", 't' => "not done by" }
       @option['userExclude'].split($delimiters).each { |user|
         @filtered.userExclude(user)
       }
     end
     if (@option['userInclude'])
-      @queryTitle = @queryTitle + ", done by #{@option['userInclude']}"
-      @defaultOutputFile = @defaultOutputFile + '-e' + @option['userInclude']
+      #@queryTitle = @queryTitle + ", done by #{@option['userInclude']}"
+      #@defaultOutputFile = @defaultOutputFile + '-e' + @option['userInclude']
+      @appliedFilters['-e'] = { 'f' => "#{@option['userInclude']}", 't' => "done by" }
       @option['userInclude'].split($delimiters).each { |user|
         @filtered.userInclude(user)
       }
@@ -655,8 +683,9 @@ class GeoToad
 
     beforeFilterTotal = @filtered.totalWaypoints
     if @option['titleKeyword']
-      @queryTitle = @queryTitle + ", matching title keywords #{@option['titleKeyword']}"
-      @defaultOutputFile = @defaultOutputFile + '-k' + @option['titleKeyword']
+      #@queryTitle = @queryTitle + ", matching title keywords #{@option['titleKeyword']}"
+      #@defaultOutputFile = @defaultOutputFile + '-k' + @option['titleKeyword']
+      @appliedFilters['-k'] = { 'f' => "#{@option['titleKeyword']}", 't' => "matching title keyword" }
       @filtered.titleKeyword(@option['titleKeyword'])
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
@@ -756,11 +785,13 @@ class GeoToad
 
     # caches with warnings we choose not to include.
     beforeFilterTotal = @filtered.totalWaypoints
-    if ! @option['includeDisabled']
-      @queryTitle = @queryTitle + ", no disabled"
-      @filtered.removeByElement('disabled')
+    if @option['includeDisabled']
+      #@defaultOutputFile = @defaultOutputFile + '-z'
+      @appliedFilters['-z'] = { 'f' => "", 't' => "also disabled" }
     else
-      @defaultOutputFile = @defaultOutputFile + '-z'
+      #@queryTitle = @queryTitle + ", no disabled"
+      @appliedFilters['+z'] = { 'f' => "", 't' => "not disabled" }
+      @filtered.removeByElement('disabled')
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
     if (excludedFilterTotal > 0)
@@ -770,13 +801,15 @@ class GeoToad
     # exclude Premium Member Only caches on request
     beforeFilterTotal = @filtered.totalWaypoints
     if @option['noPMO']
-      @queryTitle = @queryTitle + ", no PMO"
-      @defaultOutputFile = @defaultOutputFile + '-O'
+      #@queryTitle = @queryTitle + ", no PMO"
+      #@defaultOutputFile = @defaultOutputFile + '-O'
+      @appliedFilters['-O'] = { 'f' => "", 't' => "no PMO" }
       @filtered.removeByElement('membersonly')
     end
     if @option['onlyPMO']
-      @queryTitle = @queryTitle + ", only PMO"
-      @defaultOutputFile = @defaultOutputFile + '-Q'
+      #@queryTitle = @queryTitle + ", only PMO"
+      #@defaultOutputFile = @defaultOutputFile + '-Q'
+      @appliedFilters['-Q'] = { 'f' => "", 't' => "PMO" }
       @filtered.removeByElement('membersonly', false)
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
@@ -786,8 +819,9 @@ class GeoToad
 
     beforeFilterTotal = @filtered.totalWaypoints
     if @option['descKeyword']
-      @queryTitle = @queryTitle + ", matching desc keywords #{@option['descKeyword']}"
-      @defaultOutputFile = @defaultOutputFile + '-K' + @option['descKeyword']
+      #@queryTitle = @queryTitle + ", matching desc keywords #{@option['descKeyword']}"
+      #@defaultOutputFile = @defaultOutputFile + '-K' + @option['descKeyword']
+      @appliedFilters['-K'] = { 'f' => "#{@option['descKeyword']}", 't' => "matching descr. keyword" }
       @filtered.descKeyword(@option['descKeyword'])
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
@@ -799,33 +833,39 @@ class GeoToad
     #-------------------
     beforeFilterTotal = @filtered.totalWaypoints
     if @option['difficultyMin']
-      @queryTitle = @queryTitle + ", difficulty #{@option['difficultyMin']}+"
-      @defaultOutputFile = @defaultOutputFile + '-d' + @option['difficultyMin'].to_s
+      #@queryTitle = @queryTitle + ", difficulty #{@option['difficultyMin']}+"
+      #@defaultOutputFile = @defaultOutputFile + '-d' + @option['difficultyMin'].to_s
+      @appliedFilters['-d'] = { 'f' => "#{@option['difficultyMin']}", 't' => "difficulty >=" }
       @filtered.difficultyMin(@option['difficultyMin'].to_f)
     end
     if @option['difficultyMax']
-      @queryTitle = @queryTitle + ", difficulty #{@option['difficultyMax']} or lower"
-      @defaultOutputFile = @defaultOutputFile + '-D' + @option['difficultyMax'].to_s
+      #@queryTitle = @queryTitle + ", difficulty #{@option['difficultyMax']} or lower"
+      #@defaultOutputFile = @defaultOutputFile + '-D' + @option['difficultyMax'].to_s
+      @appliedFilters['-D'] = { 'f' => "#{@option['difficultyMax']}", 't' => "difficulty <=" }
       @filtered.difficultyMax(@option['difficultyMax'].to_f)
     end
     if @option['terrainMin']
-      @queryTitle = @queryTitle + ", terrain #{@option['terrainMin']}+"
-      @defaultOutputFile = @defaultOutputFile + '-t' + @option['terrainMin'].to_s
+      #@queryTitle = @queryTitle + ", terrain #{@option['terrainMin']}+"
+      #@defaultOutputFile = @defaultOutputFile + '-t' + @option['terrainMin'].to_s
+      @appliedFilters['-t'] = { 'f' => "#{@option['terrainMin']}", 't' => "terrain >=" }
       @filtered.terrainMin(@option['terrainMin'].to_f)
     end
     if @option['terrainMax']
-      @queryTitle = @queryTitle + ", terrain #{@option['terrainMax']} or lower"
-      @defaultOutputFile = @defaultOutputFile + '-T' + @option['terrainMax'].to_s
+      #@queryTitle = @queryTitle + ", terrain #{@option['terrainMax']} or lower"
+      #@defaultOutputFile = @defaultOutputFile + '-T' + @option['terrainMax'].to_s
+      @appliedFilters['-T'] = { 'f' => "#{@option['terrainMax']}", 't' => "terrain <=" }
       @filtered.terrainMax(@option['terrainMax'].to_f)
     end
     if @option['sizeMin']
-      @queryTitle = @queryTitle + ", size #{@option['sizeMin']}+"
-      @defaultOutputFile = @defaultOutputFile + '-s' + @option['sizeMin'].to_s
+      #@queryTitle = @queryTitle + ", size #{@option['sizeMin']}+"
+      #@defaultOutputFile = @defaultOutputFile + '-s' + @option['sizeMin'].to_s
+      @appliedFilters['-s'] = { 'f' => "#{@option['sizeMin']}", 't' => "size >=" }
       @filtered.sizeMin(@option['sizeMin'])
     end
     if @option['sizeMax']
-      @queryTitle = @queryTitle + ", size #{@option['sizeMax']} or lower"
-      @defaultOutputFile = @defaultOutputFile + '-S' + @option['sizeMax'].to_s
+      #@queryTitle = @queryTitle + ", size #{@option['sizeMax']} or lower"
+      #@defaultOutputFile = @defaultOutputFile + '-S' + @option['sizeMax'].to_s
+      @appliedFilters['-S'] = { 'f' => "#{@option['sizeMax']}", 't' => "size <=" }
       @filtered.sizeMax(@option['sizeMax'])
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
@@ -839,11 +879,13 @@ class GeoToad
     if @option['funFactorMin']
       @queryTitle = @queryTitle + ", funFactor #{@option['funFactorMin']}+"
       @defaultOutputFile = @defaultOutputFile + '-f' + @option['funFactorMin'].to_s
+      @appliedFilters['-f'] = { 'f' => "#{@option['funFactorMin']}", 't' => "funFactor >=" }
       @filtered.funFactorMin(@option['funFactorMin'].to_f)
     end
     if @option['funFactorMax']
       @queryTitle = @queryTitle + ", funFactor #{@option['funFactorMax']} or lower"
       @defaultOutputFile = @defaultOutputFile + '-F' + @option['funFactorMax'].to_s
+      @appliedFilters['-F'] = { 'f' => "#{@option['funFactorMax']}", 't' => "funFactor <=" }
       @filtered.funFactorMax(@option['funFactorMax'].to_f)
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
@@ -853,13 +895,15 @@ class GeoToad
 
     beforeFilterTotal = @filtered.totalWaypoints
     if @option['favFactorMin']
-      @queryTitle = @queryTitle + ", favFactor #{@option['favFactorMin']}+"
-      @defaultOutputFile = @defaultOutputFile + '-g' + @option['favFactorMin'].to_s
+      #@queryTitle = @queryTitle + ", favFactor #{@option['favFactorMin']}+"
+      #@defaultOutputFile = @defaultOutputFile + '-g' + @option['favFactorMin'].to_s
+      @appliedFilters['-g'] = { 'f' => "#{@option['favFactorMin']}", 't' => "favFactor >=" }
       @filtered.favFactorMin(@option['favFactorMin'].to_f)
     end
     if @option['favFactorMax']
-      @queryTitle = @queryTitle + ", favFactor #{@option['favFactorMax']} or lower"
-      @defaultOutputFile = @defaultOutputFile + '-G' + @option['favFactorMax'].to_s
+      #@queryTitle = @queryTitle + ", favFactor #{@option['favFactorMax']} or lower"
+      #@defaultOutputFile = @defaultOutputFile + '-G' + @option['favFactorMax'].to_s
+      @appliedFilters['-G'] = { 'f' => "#{@option['favFactorMax']}", 't' => "favFactor <=" }
       @filtered.favFactorMax(@option['favFactorMax'].to_f)
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
@@ -871,11 +915,13 @@ class GeoToad
     # our local cache is not valid.
     beforeFilterTotal = @filtered.totalWaypoints
     if (@option['userExclude'])
+      @appliedFilters['-E'] = { 'f' => "#{@option['userExclude']}", 't' => "not done by" }
       @option['userExclude'].split($delimiters).each { |user|
         @filtered.userExclude(user)
       }
     end
     if (@option['userInclude'])
+      @appliedFilters['-e'] = { 'f' => "#{@option['userInclude']}", 't' => "done by" }
       @option['userInclude'].split($delimiters).each { |user|
         @filtered.userInclude(user)
       }
@@ -887,11 +933,13 @@ class GeoToad
 
     beforeFilterTotal = @filtered.totalWaypoints
     if (@option['attributeExclude'])
+      @appliedFilters['-A'] = { 'f' => "#{@option['attributeExclude']}", 't' => "attr no" }
       @option['attributeExclude'].split($delimiters).each { |attribute|
         @filtered.attributeExclude(attribute)
       }
     end
     if (@option['attributeInclude'])
+      @appliedFilters['-a'] = { 'f' => "#{@option['attributeExclude']}", 't' => "attr yes" }
       @option['attributeInclude'].split($delimiters).each { |attribute|
         @filtered.attributeInclude(attribute)
       }
@@ -911,6 +959,24 @@ class GeoToad
   def saveFile
     puts ""
     formatTypeCounter = 0
+
+    # @appliedFilters: sort by option letter, ignore case
+    nodebug "appliedFilters: #{@appliedFilters.inspect}"
+    queryTitleAdd = @appliedFilters.sort{ |a,b|
+      a.join.upcase <=> b.join.upcase
+    }.map{ |k,v|
+      v['t'] + (v['f'].empty? ? "": " #{v['f']}")
+    }.join(', ')
+    debug "title+ #{queryTitleAdd}"
+    @queryTitle << '; ' + queryTitleAdd
+    defaultOutputFileAdd = @appliedFilters.sort{ |a,b|
+      a.join.upcase <=> b.join.upcase
+    }.map{ |k,v|
+      (k =~ /^-/) ? "#{k}#{v['f']}" : ""
+    }.join
+    debug "fname+ #{defaultOutputFileAdd}"
+    @defaultOutputFile << defaultOutputFileAdd
+
     # if we have selected the name of the output file, use it for first run
     #   for subsequent runs, drop extension and append default (for type) one
     # otherwise, take our invented name, sanitize it, and slap a file extension on it.
