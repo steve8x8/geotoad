@@ -30,7 +30,7 @@ class GeoCode
 
   def lookup_coords(lat, lon)
     #coords = "#{lat},#{lon}"
-    coords = sprintf("%.6f,%.6f", lat, lon)
+    coords = sprintf("%.6f,%.6f", lat.to_f, lon.to_f)
     debug "geocode looking up coords #{coords.inspect}"
     data = get_url(create_url(coords, 'latlng'))
     status, accuracy, lat0, lon0, location, count = parse_data(data)

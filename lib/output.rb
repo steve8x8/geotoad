@@ -1111,11 +1111,11 @@ class Output
 
     if get_location
       geocoder = GeoCode.new()
-      location = geocoder.lookup_coords(cache['latdata'], cache['londata'])
+      location = geocoder.lookup_coords(cache['latdata'].to_f, cache['londata'].to_f)
     else
       location = 'Undetermined'
     end
-    coord_query = URI.escape(sprintf("%.6f,%.6f", cache['latdata'], cache['londata']))
+    coord_query = URI.escape(sprintf("%.6f,%.6f", cache['latdata'].to_f, cache['londata'].to_f))
     available = (not cache['disabled'] and not cache['archived'])
     archived = cache['archived']
 
