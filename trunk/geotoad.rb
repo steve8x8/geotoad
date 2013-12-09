@@ -877,14 +877,14 @@ class GeoToad
 
     beforeFilterTotal = @filtered.totalWaypoints
     if @option['funFactorMin']
-      @queryTitle = @queryTitle + ", funFactor #{@option['funFactorMin']}+"
-      @defaultOutputFile = @defaultOutputFile + '-f' + @option['funFactorMin'].to_s
+      #@queryTitle = @queryTitle + ", funFactor #{@option['funFactorMin']}+"
+      #@defaultOutputFile = @defaultOutputFile + '-f' + @option['funFactorMin'].to_s
       @appliedFilters['-f'] = { 'f' => "#{@option['funFactorMin']}", 't' => "funFactor >=" }
       @filtered.funFactorMin(@option['funFactorMin'].to_f)
     end
     if @option['funFactorMax']
-      @queryTitle = @queryTitle + ", funFactor #{@option['funFactorMax']} or lower"
-      @defaultOutputFile = @defaultOutputFile + '-F' + @option['funFactorMax'].to_s
+      #@queryTitle = @queryTitle + ", funFactor #{@option['funFactorMax']} or lower"
+      #@defaultOutputFile = @defaultOutputFile + '-F' + @option['funFactorMax'].to_s
       @appliedFilters['-F'] = { 'f' => "#{@option['funFactorMax']}", 't' => "funFactor <=" }
       @filtered.funFactorMax(@option['funFactorMax'].to_f)
     end
