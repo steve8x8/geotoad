@@ -527,27 +527,27 @@ class GeoToad
     #-------------------
     beforeFilterTotal = @filtered.totalWaypoints
     if @option['difficultyMin']
-      @appliedFilters['-d'] = { 'f' => "#{@option['difficultyMin']}", 't' => "difficulty >=" }
+      @appliedFilters['-d'] = { 'f' => "#{@option['difficultyMin']}", 't' => "difficulty min" }
       @filtered.difficultyMin(@option['difficultyMin'].to_f)
     end
     if @option['difficultyMax']
-      @appliedFilters['-D'] = { 'f' => "#{@option['difficultyMax']}", 't' => "difficulty <=" }
+      @appliedFilters['-D'] = { 'f' => "#{@option['difficultyMax']}", 't' => "difficulty max" }
       @filtered.difficultyMax(@option['difficultyMax'].to_f)
     end
     if @option['terrainMin']
-      @appliedFilters['-t'] = { 'f' => "#{@option['terrainMin']}", 't' => "terrain >=" }
+      @appliedFilters['-t'] = { 'f' => "#{@option['terrainMin']}", 't' => "terrain min" }
       @filtered.terrainMin(@option['terrainMin'].to_f)
     end
     if @option['terrainMax']
-      @appliedFilters['-T'] = { 'f' => "#{@option['terrainMax']}", 't' => "terrain <=" }
+      @appliedFilters['-T'] = { 'f' => "#{@option['terrainMax']}", 't' => "terrain max" }
       @filtered.terrainMax(@option['terrainMax'].to_f)
     end
     if @option['sizeMin']
-      @appliedFilters['-s'] = { 'f' => "#{@option['sizeMin']}", 't' => "size >=" }
+      @appliedFilters['-s'] = { 'f' => "#{@option['sizeMin']}", 't' => "size min" }
       @filtered.sizeMin(@option['sizeMin'])
     end
     if @option['sizeMax']
-      @appliedFilters['-S'] = { 'f' => "#{@option['sizeMax']}", 't' => "size <=" }
+      @appliedFilters['-S'] = { 'f' => "#{@option['sizeMax']}", 't' => "size max" }
       @filtered.sizeMax(@option['sizeMax'])
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
@@ -561,19 +561,19 @@ class GeoToad
 
     beforeFilterTotal = @filtered.totalWaypoints
     if @option['foundDateInclude']
-      @appliedFilters['-r'] = { 'f' => "#{@option['foundDateInclude']}", 't' => "found age <=" }
+      @appliedFilters['-r'] = { 'f' => "#{@option['foundDateInclude']}", 't' => "found age max" }
       @filtered.foundDateInclude(@option['foundDateInclude'].to_f)
     end
     if @option['foundDateExclude']
-      @appliedFilters['-R'] = { 'f' => "#{@option['foundDateExclude']}", 't' => "found age >=" }
+      @appliedFilters['-R'] = { 'f' => "#{@option['foundDateExclude']}", 't' => "found age min" }
       @filtered.foundDateExclude(@option['foundDateExclude'].to_f)
     end
     if @option['placeDateInclude']
-      @appliedFilters['-j'] = { 'f' => "#{@option['placeDateInclude']}", 't' => "cache age <=" }
+      @appliedFilters['-j'] = { 'f' => "#{@option['placeDateInclude']}", 't' => "cache age max" }
       @filtered.placeDateInclude(@option['placeDateInclude'].to_f)
     end
     if @option['placeDateExclude']
-      @appliedFilters['-J'] = { 'f' => "#{@option['placeDateExclude']}", 't' => "cache age >=" }
+      @appliedFilters['-J'] = { 'f' => "#{@option['placeDateExclude']}", 't' => "cache age min" }
       @filtered.placeDateExclude(@option['placeDateExclude'].to_f)
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
@@ -781,27 +781,27 @@ class GeoToad
     #-------------------
     beforeFilterTotal = @filtered.totalWaypoints
     if @option['difficultyMin']
-      @appliedFilters['-d'] = { 'f' => "#{@option['difficultyMin']}", 't' => "difficulty >=" }
+      @appliedFilters['-d'] = { 'f' => "#{@option['difficultyMin']}", 't' => "difficulty min" }
       @filtered.difficultyMin(@option['difficultyMin'].to_f)
     end
     if @option['difficultyMax']
-      @appliedFilters['-D'] = { 'f' => "#{@option['difficultyMax']}", 't' => "difficulty <=" }
+      @appliedFilters['-D'] = { 'f' => "#{@option['difficultyMax']}", 't' => "difficulty max" }
       @filtered.difficultyMax(@option['difficultyMax'].to_f)
     end
     if @option['terrainMin']
-      @appliedFilters['-t'] = { 'f' => "#{@option['terrainMin']}", 't' => "terrain >=" }
+      @appliedFilters['-t'] = { 'f' => "#{@option['terrainMin']}", 't' => "terrain min" }
       @filtered.terrainMin(@option['terrainMin'].to_f)
     end
     if @option['terrainMax']
-      @appliedFilters['-T'] = { 'f' => "#{@option['terrainMax']}", 't' => "terrain <=" }
+      @appliedFilters['-T'] = { 'f' => "#{@option['terrainMax']}", 't' => "terrain max" }
       @filtered.terrainMax(@option['terrainMax'].to_f)
     end
     if @option['sizeMin']
-      @appliedFilters['-s'] = { 'f' => "#{@option['sizeMin']}", 't' => "size >=" }
+      @appliedFilters['-s'] = { 'f' => "#{@option['sizeMin']}", 't' => "size min" }
       @filtered.sizeMin(@option['sizeMin'])
     end
     if @option['sizeMax']
-      @appliedFilters['-S'] = { 'f' => "#{@option['sizeMax']}", 't' => "size <=" }
+      @appliedFilters['-S'] = { 'f' => "#{@option['sizeMax']}", 't' => "size max" }
       @filtered.sizeMax(@option['sizeMax'])
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
@@ -813,11 +813,11 @@ class GeoToad
 
     beforeFilterTotal = @filtered.totalWaypoints
     if @option['funFactorMin']
-      @appliedFilters['-f'] = { 'f' => "#{@option['funFactorMin']}", 't' => "funFactor >=" }
+      @appliedFilters['-f'] = { 'f' => "#{@option['funFactorMin']}", 't' => "funFactor min" }
       @filtered.funFactorMin(@option['funFactorMin'].to_f)
     end
     if @option['funFactorMax']
-      @appliedFilters['-F'] = { 'f' => "#{@option['funFactorMax']}", 't' => "funFactor <=" }
+      @appliedFilters['-F'] = { 'f' => "#{@option['funFactorMax']}", 't' => "funFactor max" }
       @filtered.funFactorMax(@option['funFactorMax'].to_f)
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
@@ -827,11 +827,11 @@ class GeoToad
 
     beforeFilterTotal = @filtered.totalWaypoints
     if @option['favFactorMin']
-      @appliedFilters['-g'] = { 'f' => "#{@option['favFactorMin']}", 't' => "favFactor >=" }
+      @appliedFilters['-g'] = { 'f' => "#{@option['favFactorMin']}", 't' => "favFactor min" }
       @filtered.favFactorMin(@option['favFactorMin'].to_f)
     end
     if @option['favFactorMax']
-      @appliedFilters['-G'] = { 'f' => "#{@option['favFactorMax']}", 't' => "favFactor <=" }
+      @appliedFilters['-G'] = { 'f' => "#{@option['favFactorMax']}", 't' => "favFactor max" }
       @filtered.favFactorMax(@option['favFactorMax'].to_f)
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
