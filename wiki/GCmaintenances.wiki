@@ -164,6 +164,12 @@ _*(year per year; new entries will be added at bottom)*_
   * _"groundwork for future improvements"_ (no details)
   * *{{{Web.HotFix_20131203.1}}}*
 ----
+2013-12-05:
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=317890 release notes]
+  * _"Special site release"_ (show/hide souvenirs)
+  * *{{{Web.HotFix_20131204.2}}}*
+----
+== (now) ==
 (...)
 ----
 
