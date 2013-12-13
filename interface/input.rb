@@ -93,7 +93,7 @@ class Input
       [ "--notFoundByMe",     "--notme", "-N",    GetoptLong::NO_ARGUMENT ],
       [ "--output",                      "-o",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--noPMO",            "--nopmo", "-O",    GetoptLong::NO_ARGUMENT ],
-      [ "--password",                    "-p",    GetoptLong::REQUIRED_ARGUMENT ],         # * REQ
+      [ "--password",                    "-p",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--proxy",                       "-P",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--queryType",                   "-q",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--onlyPMO",            "--pmo", "-Q",    GetoptLong::NO_ARGUMENT ],
@@ -103,7 +103,7 @@ class Input
       [ "--sizeMax",        "--maxSize", "-S",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--terrainMin",  "--minTerrain", "-t",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--terrainMax",  "--maxTerrain", "-T",    GetoptLong::REQUIRED_ARGUMENT ],
-      [ "--user",          "--username", "-u",    GetoptLong::REQUIRED_ARGUMENT ],         # * REQ
+      [ "--user",          "--username", "-u",    GetoptLong::REQUIRED_ARGUMENT ],
 
       [ "--verbose",          "--debug", "-v",    GetoptLong::NO_ARGUMENT ],
 

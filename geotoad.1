@@ -10,16 +10,15 @@ geotoad \- geocaching query tool
  (command-line version)
 .SH NOTE
 If GeoToad was not installed from a (distribution-specific) package
-(like .rpm for RedHat/OpenSuse/CentOS and derivatives, .deb for Debian
+(like .rpm for RedHat, OpenSuse, CentOS and derivatives; .deb for Debian
 and Ubuntu, etc.), it may be necessary to invoke GeoToad with the
 .B .rb
-suffix, as in
-.B geotoad.rb
-or
-.B ./geotoad.rb
-or even
-.B ruby geotoad.rb
-.
+suffix, as in \fBgeotoad.rb\fR, \fB./geotoad.rb\fR, \fBruby geotoad.rb\fR
+or even \fBruby1.9.3 geotoad.rb\fR
+(if the \fBruby\fR in your PATH is not the one you want to use).
+'
+'In a Windows environment, when not using the installer, create a desktop
+'link - using a terminal is highly recommended.
 .SH DESCRIPTION
 GeoToad is software to help speed up the boring part of geocaching:
 choosing the cache and collecting the data. GeoToad lets you perform
@@ -55,7 +54,8 @@ as \fB--pas\fR (but not \fB--p\fR).
 get a short command-line option summary
 .TP
 \fB-v\fR|\fB--verbose\fR|\fB--debug\fR
-enable debugging output - very copious but helpful in case of malfunctions
+enable debugging output - very helpful in case of malfunctions.
+Multiple \fB-v\fR options raise the debug level, resulting in copious output.
 .TP
 \fB-u\fR|\fB--user\fR|\fB--username\fR \fIusername\fR
 geocaching.com username (required)
