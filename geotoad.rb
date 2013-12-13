@@ -257,6 +257,11 @@ class GeoToad
             displayBox textlines[line] if textlines[line]
           }
           displayMessage "  ... see #{url} for more ..." if textlines.length > 20
+          if obsoleteOlder
+            displayBar
+            displayWarning "Older versions do not work any longer. Update NOW!"
+            displayBar
+          end
         end
         displayBar
         displayInfo "(sleeping for 30 seconds)"
