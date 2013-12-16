@@ -85,7 +85,7 @@ class Input
       [ "--placeDateExclude", "--until", "-J",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--titleKeyword",                "-k",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--descKeyword",                 "-K",    GetoptLong::REQUIRED_ARGUMENT ],
-      [ "--waypointLength",              "-l",    GetoptLong::REQUIRED_ARGUMENT ],
+
       [ "--limitSearchPages",            "-L",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--delimiter",   "--delimiters", "-m",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--myLogs",         "--getlogs", "-M",    GetoptLong::NO_ARGUMENT ],
@@ -106,6 +106,8 @@ class Input
       [ "--user",          "--username", "-u",    GetoptLong::REQUIRED_ARGUMENT ],
 
       [ "--verbose",          "--debug", "-v",    GetoptLong::NO_ARGUMENT ],
+
+      [ "--waypointLength",              "-w",    GetoptLong::REQUIRED_ARGUMENT ],
 
       [ "--format",                      "-x",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--disableEarlyFilter",          "-X",    GetoptLong::NO_ARGUMENT ],
@@ -264,7 +266,7 @@ class Input
     puts " -n                     only include not found caches (virgins)"
     puts " -N                     only caches not yet found by login user"
     puts " -b                     only include caches with travelbugs/trackables"
-    puts " -l [length]            set EasyName waypoint id length. (16)"
+    puts " -w [length]            set EasyName waypoint id length. (default: 0=use WID)"
     puts " -L [count]             limit number of search pages (0=unlimited)"
     puts " -Y                     do not fetch cache descriptions, search only"
     puts " -Z                     don't overwrite existing cache descriptions"

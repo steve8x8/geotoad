@@ -116,7 +116,7 @@ syntax: geotoad [options] <search:search2:search3>
  -n                     only include not found caches (virgins)
  -N                     only caches not yet found by login user
  -b                     only include caches with travelbugs
- -l [length]            set EasyName waypoint id length. (16)
+ -w [length]            set EasyName waypoint id length. (0=use WID)
  -L [count]             limit number of search pages (0=unlimited)
  -Y                     do not fetch cache descriptions, search only
  -Z                     don't overwrite existing cache descriptions
