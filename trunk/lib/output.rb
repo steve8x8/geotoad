@@ -13,7 +13,6 @@ class Output
   include Common
   include Messages
 
-  $MAX_NOTES_LEN = 1999
   $ReplaceWords = {
     'KILOMETER' => 'km',
     'KILOMETERS' => 'km',
@@ -522,7 +521,7 @@ class Output
   end
 
   def deemoji(str, soft=true)
-    text = str
+    text = str.dup
     # pre-translate decimal into hex for large codepoints
     text.gsub!(/(\&#(\d+);)/) { ($2.to_i < 55296) ? $1 : ('&#x' + $2.to_i.to_s(16).upcase + ';') }
     # translate some UTF-16 surrogates into UTF-8 code points, remove others
@@ -784,7 +783,7 @@ class Output
       if (cache['mdays'].to_i < 0)
         index_item << '</strong>'
       end
-      index_item << " <font color=\"#444444\">(#{cache['sname']})</font></li>\n"
+      index_item << " <font color=\"#444444\">(#{wid} = \"#{cache['sname']}\")</font></li>\n"
       index << index_item
     }
     index << '</ul>'
