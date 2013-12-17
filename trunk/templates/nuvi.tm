@@ -24,7 +24,7 @@ template = {
     'templateWP'    => "<wpt lat=\"<%out.latdatapad6%>\" lon=\"<%out.londatapad6%>\">\n" +
       "  <time><%out.XMLDate%></time>\n" +
       # title line, 1st line in POI list, max 24 chars shown
-      "  <name><%outEntity.id%>:<%out.nuvi%></name>\n" +
+      "  <name><%outEntity.wid%>:<%out.nuvi%></name>\n" +
       "  <cmt></cmt>\n" +
       # last line in display if cmt is empty
       "  <desc><%wpEntity.name%><%out.warnArchiv%><%out.warnAvail%> by <%wpEntity.creator%>," +

@@ -23,7 +23,7 @@ template = {
     'usesLocation' => true,
     'templateWP'    =>
       "\n\n<hr noshade size=\"1\">\n" +
-      "<h3><a name=\"<%out.wid%>\"></a><font color=\"#000099\"><%out.symbols%><a href=\"<%wp.url%>\"><%wp.name%></a></font> by <font color=\"#555555\"><%wpEntity.creator%></font> <font color=\"#444444\">(<%out.id%>)</font></h3>\n" +
+      "<h3><a name=\"<%out.wid%>\"></a><font color=\"#000099\"><%out.symbols%><a href=\"<%wp.url%>\"><%wp.name%></a></font> by <font color=\"#555555\"><%wpEntity.creator%></font> <font color=\"#444444\">(<%out.wid%>)</font></h3>\n" +
       "<a href=\"<%out.maps_url%>\"><%wp.latwritten%> <%wp.lonwritten%></a> <i>near <%out.location%></i><br>" +
       "<font color=\"#339933\"><%wp.type%> (<%wp.size%>) D<%wp.difficulty%>/T<%wp.terrain%> (F<%wp.funfactor%>) Fav<%wp.favfactor%>(<%wp.favorites%>/<%wp.foundcount%>) &rarr;<%out.relativedistance%><br>" +
       "Placed: <%out.cdate%> Last comment: <%wp.last_find_days%> days ago (<%wp.last_find_type%>)</font><br>\n" +
