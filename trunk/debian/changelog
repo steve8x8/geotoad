@@ -1,3 +1,20 @@
+geotoad (3.19.1-1) unstable; urgency=low
+
+  * New version 3.19.1, "Santa 13" release (Merry Christmas everyone!)
+  * Issue 198: get some data from PMO caches (but no coords)
+  * Issue 271: more nuvi adjustments
+  * Issue 285: no problems with ruby 2.0
+  * Issue 288: cookie cleanup
+  * Issue 293: avoid listing filters twice
+  * Added some long options (to be abridged again)
+  * "-l" ("--waypointLength") option renamed to "-w" (issue 286 related)
+  * Still open important issues (feedback required):
+    281 (logging date of archived caches)
+    283 (GC statistics and GCStatistic, different weekday distribution)
+  * Numerous minor additions, modifications, cleanups, and bug fixes
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Fri, 20 Dec 2013 09:00:00 +0000
+
 geotoad (3.19.0-1) unstable; urgency=low
 
   * New version 3.19.0, "Cookie monster" release (see Issue 288)
