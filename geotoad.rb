@@ -79,6 +79,8 @@ class GeoToad
       $mode = 'CLI'
     else
       # Then go into interactive.
+      print "** Press Enter to start the Text User Interface: "
+      $stdin.gets
       @option = @uin.interactive
       $mode = 'TUI'
     end
