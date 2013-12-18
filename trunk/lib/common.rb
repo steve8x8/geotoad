@@ -1,4 +1,5 @@
 # -*- encoding : utf-8 -*-
+
 # $Id$
 
 require 'fileutils'
@@ -184,7 +185,7 @@ module Common
     end
   end
 
-  ## finds a place to put temp files on the system ###################################
+  ## find an existing directory from a list
   def selectDirectory(dirs)
     dirs.compact.each do |dir|
       dir = dir.gsub(/\\/, '/')
@@ -199,10 +200,19 @@ module Common
   end
 
   def findCacheDir
-    # find out where we want our cache #############################
-    cacheDir=selectDirectory([ENV['GEO_DIR'], "#{ENV['HOME']}/Library/Caches", "#{ENV['USERPROFILE']}/Documents and Settings", ENV['HOME'], ENV['TEMP'],
-        "C:/temp/", "C:/windows/temp", "C:/tmp/", "/var/tmp"])
-
+    # find out where we want our file cache
+    dirs = [
+      ENV['GEO_DIR'],
+      "#{ENV['HOME']}/Library/Caches",
+      "#{ENV['USERPROFILE']}/Documents and Settings",
+      ENV['HOME'],
+      ENV['TEMP'],
+      "C:/temp/",
+      "C:/windows/temp",
+      "C:/tmp/",
+      "/var/tmp"
+    ]
+    cacheDir = selectDirectory(dirs)
     # probably what we fallback to in most UNIX's.
     if cacheDir == ENV['HOME']
       cacheDir = File.join(cacheDir, '.geotoad', 'cache')
@@ -212,23 +222,25 @@ module Common
       cacheDir = File.join(cacheDir, 'GeoToad')
       nodebug "#{cacheDir} is being used for cache"
     end
-
     FileUtils::mkdir_p(cacheDir, :mode => 0700)
     return cacheDir
   end
+
   def findConfigDir
-    # find out where we want our cache #############################
+    # find out where we want our config files #
     # First check for the .geotoad directory. We may have accidentally been using it already.
-    dirs = ["#{ENV['HOME']}/.geotoad",
-            ENV['GEO_DIR'],
-            "#{ENV['HOME']}/Library/Preferences",
-            "#{ENV['USERPROFILE']}/Documents and Settings",
-            ENV['HOME'],
-            'C:/temp/',
-            'C:/windows/temp',
-            '/var/cache',
-            '/var/tmp']
-    configDir=selectDirectory(dirs)
+    dirs = [
+      "#{ENV['HOME']}/.geotoad",
+      ENV['GEO_DIR'],
+      "#{ENV['HOME']}/Library/Preferences",
+      "#{ENV['USERPROFILE']}/Documents and Settings",
+      ENV['HOME'],
+      'C:/temp/',
+      'C:/windows/temp',
+      '/var/cache',
+      '/var/tmp'
+    ]
+    configDir = selectDirectory(dirs)
     if configDir == ENV['HOME']
       configDir = File.join(configDir, '.geotoad')
     elsif configDir !~ /geotoad/i
@@ -259,9 +271,8 @@ module Common
     return "../data"
   end
 
-  ## finds a place to put temp files on the system ###################################
   def findOutputDir
-    # find out where we want our cache #############################
+    # find out where we want to output to
     dirs = [
       ENV['GEO_DIR'],
       "#{ENV['HOME']}/Desktop",
@@ -269,8 +280,7 @@ module Common
       "#{ENV['USERPROFILE']}/Desktop",
       ENV['HOME']
     ]
-
-    outputDir=selectDirectory(dirs)
+    outputDir = selectDirectory(dirs)
     FileUtils::mkdir_p(outputDir)
     return outputDir
   end
@@ -322,7 +332,7 @@ module Common
   # mapping WID to GUID via dictionary file
   def loadMapping
     mappingFile  = File.join(findConfigDir, 'mapping.yaml')
-    displayMessage "Reading dictionary from #{mappingFile}"
+    displayMessage "Loading dictionary from #{mappingFile}"
     mapping = false
     if File.readable?(mappingFile)
       mapping = YAML::load(File.open(mappingFile))
@@ -336,7 +346,7 @@ module Common
         displayWarning "Could not reset dictionary:\n\t#{error}"
       end
     end
-    displayInfo "#{mapping.length} WID->GUID mappings read"
+    displayInfo "#{mapping.length} WID->GUID mappings total"
     return mapping
   end
 

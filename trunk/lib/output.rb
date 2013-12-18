@@ -783,7 +783,7 @@ class Output
       if (cache['mdays'].to_i < 0)
         index_item << '</strong>'
       end
-      index_item << " <font color=\"#444444\">(#{wid} = \"#{cache['sname']}\")</font></li>\n"
+      index_item << " <font color=\"#444444\">(#{wid})</font></li>\n"
       index << index_item
     }
     index << '</ul>'

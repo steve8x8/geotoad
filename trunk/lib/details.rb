@@ -762,7 +762,7 @@ class CacheDetails
     new_text.gsub!(/(\<p .*?)align=/m, '\1noalign=')
     new_text.gsub!('<center>', '')
     if text != new_text
-      debug "fixed alignments in #{new_text}"
+      debug "fixed alignments"
     end
     return new_text
   end
@@ -770,7 +770,7 @@ class CacheDetails
   def fixRelativeImageLinks(text)
     new_text = text.gsub(' src="/', ' src="http://www.geocaching.com/')
     if text != new_text
-      debug "fixed relative links in #{new_text}"
+      debug "fixed relative links"
     end
     return new_text
   end
