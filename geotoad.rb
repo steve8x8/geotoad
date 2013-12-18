@@ -1006,7 +1006,7 @@ displayInfo "Please include verbose output (-v) without passwords in the bug rep
 displayBar
 cli = GeoToad.new
 cli.versionCheck
-puts
+displayBar
 
 while true
   options = cli.getoptions
