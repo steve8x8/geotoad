@@ -10,7 +10,7 @@ class Templates
   include Common
   include Messages
 
-  $Format = Hash.new
+  $FORMATS = Hash.new
 
   def initialize
     # default template directory
@@ -34,7 +34,7 @@ class Templates
                   # ready to catch syntax errors
                   newentry = eval(s)
                   # add/replace in hash
-                  $Format.merge!(newentry)
+                  $FORMATS.merge!(newentry)
                 rescue SyntaxError => e
                   displayWarning "#{file} - syntax error, skipping:"
                   displayInfo    "  #{e}"
@@ -49,7 +49,7 @@ class Templates
         displayWarning "#{dir} causing problems: #{e}"
       end
     }
-    displayInfo "#{$Format.keys.length} templates total"
+    displayInfo "#{$FORMATS.keys.length} templates total"
   end
 
 end
