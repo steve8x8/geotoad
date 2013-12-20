@@ -509,8 +509,8 @@ class Output
       elsif (type == "outTextEntity")
         value = CGI.escapeHTML(makeText(@outVars[var].to_s))
       end
-      # this one produces a lot of noise - FIXME
-      debug "TAG <%#{tag}%> for #{wid} -> #{value}"
+      # this one produces a lot of noise - make it a single line, then FIXME
+      debug "TAG <%#{tag}%> for #{wid} -> #{value.gsub(/[\n\r]+/, '<|>')}"
 
       # This looks very ugly, but it works around backreference issues. Thanks ddollar!
       text.gsub!('<%' + tag[0] + '%>') { value }
@@ -1200,10 +1200,10 @@ class Output
       }
     end
     if xmlTrackables.length > 0
-      debug "Generated trackables XML: #{xmlTrackables}"
+      nodebug "Generated trackables XML: #{xmlTrackables}"
     end
     if txtTrackables.length > 0
-      debug "Generated trackables text: #{txtTrackables}"
+      nodebug "Generated trackables text: #{txtTrackables}"
     end
 
     begin
