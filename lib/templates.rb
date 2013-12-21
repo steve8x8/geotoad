@@ -14,7 +14,9 @@ class Templates
 
   def initialize
     # default template directory
-    systempdir = File.join(File.dirname(File.realpath(__FILE__)), '..', 'templates')
+    # this doesn't work for Windows combined exe (as this script isn't in ./lib/):
+    #systempdir = File.join(File.dirname(File.realpath(__FILE__)), '..', 'templates')
+    systempdir = File.join(findDataDir(), '..', 'templates')
     owntempdir = File.join(findConfigDir(), 'templates')
     [systempdir, owntempdir].each{ |dir|
       begin
