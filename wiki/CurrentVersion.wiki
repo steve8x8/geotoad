@@ -1,13 +1,30 @@
 #summary Features of current version
 #labels Featured
 
-version=3.19.0`*`
+version=3.19.1`*`
 
-= "Cookie monster" release (Nov 20, 2013) =
-  * Previous versions don't work any longer!
+= "Santa 13" (Merry Christmas everyone!) release (Dec 21, 2013) =
 
+= What's new in 3.19.1? =
+  * nicknamed "Santa 13" (Merry Christmas everyone!)
+
+== Issues addressed: ==
+  * Issue 198: get some data from PMO caches (but no coords)
+  * Issue 271: more nuvi adjustments
+  * Issue 285: no problems with ruby 2.0
+  * Issue 288: cookie cleanup
+  * Issue 293: avoid listing filters twice
+  * Added some long options (to be abridged again)
+  * "-l" ("--waypointLength") option renamed to "-w" (issue 286 related)
+  * Still open important issues (feedback required):
+    281 (logging date of archived caches)
+    283 (GC statistics and GCStatistic, different weekday distribution)
+  * Numerous minor additions, modifications, cleanups, and bug fixes
+
+----
 = What's new in 3.19.0? =
   * nicknamed "Cookie monster" (it resolves the cookie issue)
+  * Previous versions don't work any longer!
 
 == Issues addressed: ==
   * Issue 272: stubs for trackable log list added, log counts
