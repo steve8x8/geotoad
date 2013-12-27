@@ -354,7 +354,7 @@ class Input
       printf("(7)  fav factor           [%-1.1f - %-1.1f] | (8)  cache size            [%3.3s - %3.3s]\n", (@@optHash['favFactorMin'] || 0.0),
         (@@optHash['favFactorMax'] || 5.0), @@optHash['sizeMin'] || 'any', @@optHash['sizeMax'] || 'any')
       printf("(9)  cache type   [%58.58s]\n", (@@optHash['cacheType'] || 'any'))
-      printf("(10) caches not found by anyone   [%1.1s] | (11) caches with trackables only   [%1.1s]\n", @@optHash['notFound'], @@optHash['travelBug'])
+      printf("(10) caches not found by me       [%1.1s] | (11) caches not found by anyone    [%1.1s]\n", @@optHash['notFoundByMe'], @@optHash['notFound'])
       printf("(12) cache age (days)     [%3.3s - %-3.3s] | (13) last found (days ago) [%3.3s - %-3.3s]\n",
         (@@optHash['placeDateExclude'] || 0), (@@optHash['placeDateInclude'] || 'any'),
         (@@optHash['foundDateExclude'] || 0), (@@optHash['foundDateInclude'] || 'any'))
@@ -364,9 +364,10 @@ class Input
       printf("(18) cache found by      [%-10.10s] | (19) cache owner is    [%-13.13s]\n", @@optHash['userInclude'], @@optHash['ownerInclude'])
 
       printf("(20) EasyName WP length         [%3.3s] | (21) include disabled caches       [%1.1s]\n", @@optHash['waypointLength'] || '0', @@optHash['includeDisabled'])
+      printf("(22) caches with trackables only  [%1.1s] | (23) no Premium Member Only caches [%1.1s]\n", @@optHash['travelBug'], @@optHash['noPMO'])
       puts "- - - - - - - - - - - - - - - - - - - + - - - - - - - - - - - - - - - - - - -"
-      printf("(22) output format  [%-15.15s] | (23) filename   [%-20.20s]\n", (@@optHash['format'] || 'gpx'), (@@optHash['outFile'] || 'automatic'))
-      printf("(24) output directory    [%-51.51s]\n", (@@optHash['outDir'] || findOutputDir))
+      printf("(24) output format  [%-15.15s] | (25) filename   [%-20.20s]\n", (@@optHash['format'] || 'gpx'), (@@optHash['outFile'] || 'automatic'))
+      printf("(26) output directory    [%-51.51s]\n", (@@optHash['outDir'] || findOutputDir))
       puts "=============================================================================="
       if @@optHash['verbose']
         enableDebug
@@ -508,21 +509,20 @@ class Input
         @@optHash['cacheType'] = askFromList("Valid types: #{kinds.join(', ')}\nWhat do you seek (separate with commas)?", kinds, nil)
 
       when '10'
+        answer = ask('Would you like to only include geocaches you have not found yet?', nil)
+        if (answer =~ /y/)
+          @@optHash['notFoundByMe'] = 'X'
+        else
+          @@optHash['notFoundByMe'] = nil
+        end
+
+      when '11'
         answer = ask('Would you like to only include virgin geocaches (geocaches that have never been found)?', nil)
         if (answer =~ /y/)
           @@optHash['notFound'] = 'X'
         else
           @@optHash['notFound'] = nil
         end
-
-      when '11'
-        answer = ask('Would you like to only include geocaches with travelbugs in them?', nil)
-        if (answer =~ /y/)
-          @@optHash['travelBug'] = 'X'
-        else
-          @@optHash['travelBug'] = nil
-        end
-
 
       when '12'
         @@optHash['placeDateExclude'] = askNumber('How many days old is the youngest a geocache can be for your list? (0)', nil)
@@ -562,6 +562,22 @@ class Input
         end
 
       when '22'
+        answer = ask('Would you like to only include geocaches with travelbugs in them?', nil)
+        if (answer =~ /y/)
+          @@optHash['travelBug'] = 'X'
+        else
+          @@optHash['travelBug'] = nil
+        end
+
+      when '23'
+        answer = ask('Would you like to only include geocaches which are not Premium Member Only?', nil)
+        if (answer =~ /y/)
+          @@optHash['noPMO'] = 'X'
+        else
+          @@optHash['noPMO'] = nil
+        end
+
+      when '24'
         puts "List of Output Formats: "
         outputDetails = Output.new
         $validFormats.each { |type|
@@ -576,7 +592,7 @@ class Input
         puts ""
         @@optHash['format'] = ask('What format would you like your output in?', 'gpx').gsub(/, */, '|')
 
-      when '23'
+      when '25'
         @@optHash['outFile'] = ask('What filename would you like to output to? (press enter for automatic)', nil)
         if (@@optHash['outFile'])
           @@optHash['outFile'].gsub!(/\\/,  '/')
@@ -587,7 +603,7 @@ class Input
           @@optHash['outFile']=File.basename(@@optHash['outFile'])
         end
 
-      when '24'
+      when '26'
         @@optHash['outDir'] = ask("Output directory (#{findOutputDir})", nil)
         if @@optHash['outDir']
           @@optHash['outDir'].gsub!(/\\/,  '/')
