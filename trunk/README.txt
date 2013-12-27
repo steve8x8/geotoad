@@ -118,6 +118,7 @@ syntax: geotoad [options] <search:search2:search3>
  -b                     only include caches with travelbugs
  -w [length]            set EasyName waypoint id length. (0=use WID)
  -L [count]             limit number of search pages (0=unlimited)
+ -l [count]             limit number of log entries (default: 10)
  -Y                     do not fetch cache descriptions, search only
  -Z                     don't overwrite existing cache descriptions
  -O                     exclude Premium Member Only caches

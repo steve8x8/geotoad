@@ -960,6 +960,9 @@ class GeoToad
       if (@option['waypointLength'])
         output.waypointLength=@option['waypointLength'].to_i
       end
+      if (@option['logCount'])
+        output.commentLimit=@option['logCount'].to_i
+      end
       # keep filename if first run and not automatic
       # strip suffix only on subsequent runs
       if (formatTypeCounter > 0)

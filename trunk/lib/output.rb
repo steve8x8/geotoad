@@ -218,6 +218,7 @@ class Output
     @username = nil
     # initialize templates
     Templates.new if $FORMATS.empty?
+    @commentLimit = 10
   end
 
   def input(data)
@@ -380,8 +381,13 @@ class Output
   end
 
   def waypointLength=(length)
-    @waypointLength=length
+    @waypointLength = length
     debug "set waypoint id length to #{@waypointLength}"
+  end
+
+  def commentLimit=(logcount)
+    @commentLimit = logcount
+    debug "set log entry limit to #{@commentLimit}"
   end
 
   # exploratory functions.
@@ -801,7 +807,7 @@ class Output
     brlf = "\&lt;br /\&gt;\n"
 
     # info log entry
-    if cache['ltime']
+    if (@commentLimit > 0) && cache['ltime']
       nodebug "info log entry"
       entry = ''
       entry << "    <groundspeak:log id=\"-2\">\n"
@@ -833,7 +839,9 @@ class Output
     end
 
     if cache['comments']
+      commentcount = 0
       cache['comments'].each { |comment|
+        break if (commentcount >= @commentLimit)
         # strip images from log entries
         comment_text = icons2Text(comment['text'].to_s)
         comment_id = Zlib.crc32(comment_text)
@@ -847,6 +855,7 @@ class Output
         entry << "      <groundspeak:text encoded=\"True\">" + makeXML(comment_text) + "</groundspeak:text>\n"
         entry << "    </groundspeak:log>\n"
         entries << entry
+        commentcount += 1
       }
     end
     debug "Finished generating comment XML for #{cache['name']}"
@@ -863,7 +872,9 @@ class Output
 
     entries = []
     debug "Generating comment text for #{cache['name']}"
+    commentcount = 0
     cache['comments'].each { |comment|
+      break if (commentcount >= @commentLimit)
       comment_text = icons2Text(comment['text'].to_s)
       # unescape HTML in finder name
       comment_user = deemoji(comment['user'], false)
@@ -878,6 +889,7 @@ class Output
       entry << "*#{comment['type']}* by #{comment_user} on #{formatted_date}:\n"
       entry << makeText(comment_text) + "\n"
       entries << entry
+      commentcount += 1
     }
     debug "Finished generating comment text for #{cache['name']}"
     nodebug "Comment Data: #{entries}"
@@ -893,7 +905,9 @@ class Output
 
     entries = []
     debug "Generating comment HTML for #{cache['name']}"
+    commentcount = 0
     cache['comments'].each { |comment|
+      break if (commentcount >= @commentLimit)
       formatted_date = comment['date'].strftime("%Y-%m-%d")
       entry = ''
       entry << "<hr noshade size=\"1\" width=\"150\" align=\"left\"/>\n"
@@ -903,6 +917,7 @@ class Output
       entry << comment['text'].gsub(/\<\/?img.*?\>/, '').gsub(/\<\/?a.*?\>/, '').gsub(/\<\/?font.*?\>/, '')
       entry << "<br />\n\n"
       entries << entry
+      commentcount += 1
     }
     debug "Finished generating comment HTML for #{cache['name']}"
     nodebug "Comment Data: #{entries}"
