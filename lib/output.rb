@@ -1,4 +1,5 @@
 # -*- encoding : utf-8 -*-
+
 # $Id$
 
 require 'cgi'
@@ -25,11 +26,12 @@ class Output
 
     'CACHE'     => 'C',
     'GEOCACHE'  => 'C',
-    'GEOC'	=> 'C',
+    'GEOC'      => 'C',
     'GEOCACHING' => 'GC',
+    'NIGHTCACHE' => 'NC',
+    'NIGHTC'    => 'NC',
     'GEOKRET'   => 'GK',
     'GEOKRETY'  => 'GK',
-    'NIGHTC'    => 'NC',
 
     'A'         => '',
     'AN'        => '',
@@ -113,6 +115,7 @@ class Output
     'DECEMBER'  => 'Dec',
 
     # German Words Follow
+    'NACHTCACHE' => 'NC',
     'NACHTC'    => 'NC',
 
     'DER'       => '',
@@ -122,26 +125,27 @@ class Output
     'DEM'       => '',
     'DES'       => '',
     'AM'        => '',
+    'AN'        => '',
     'ZUM'       => 'Z',
     'ZUR'       => 'Z',
+    'IN'        => '',
     'IM'        => '',
     'INS'       => '',
     'VON'       => '',
     'VOM'       => '',
     'BEI'       => '',
     'BEIM'      => '',
-    'F~R'       => '',
-#   'FüR'       => '',
-#   'FÜR'       => '',
+    'FÜR'       => '',
     'AUS'       => '',
     'AUF'       => '',
     'UM'        => '',
+    'ZU'        => '',
+    'ZUM'        => '',
+    'ZUR'        => '',
     'MIT'       => 'M',
     'BIS'       => '',
     'ZWISCHEN'  => 'Zw',
-    '~BER'      => '',
-#   'üBER'      => '',
-#   'ÜBER'      => '',
+    'ÜBER'      => '',
     'UEBER'     => '',
     'OBERHALB'  => '',
     'UNTER'     => '',
@@ -159,25 +163,34 @@ class Output
     'NATURLEHRPFAD' => 'NLP',
     'BAHNHOF'   => 'Bf',
     'HAUPTBAHNHOF' => 'Hbf',
+    'DEUTSCH'   => 'Dt',
+    'DEUTSCHE'  => 'Dt',
+    'DEUTSCHES' => 'Dt',
+    'DEUTSCHER' => 'Dt',
     'KLEIN'     => 'Kl',
     'KLEINE'    => 'Kl',
     'KLEINER'   => 'Kl',
     'KLEINES'   => 'Kl',
     'KLEINEN'   => 'Kl',
-    'GRO~'      => 'Gr',
-#   'GROß'      => 'Gr',
-    'GRO~E'     => 'Gr',
-#   'GROßE'     => 'Gr',
-    'GRO~ER'    => 'Gr',
-#   'GROßER'    => 'Gr',
-    'GRO~EN'    => 'Gr',
-#   'GROßEN'    => 'Gr',
+    'GROß'      => 'Gr',
+    'GROßE'     => 'Gr',
+    'GROßER'    => 'Gr',
+    'GROßEN'    => 'Gr',
+    'NEUE'      => 'N',
+    'NEUEN'     => 'N',
+    'NEUER'     => 'N',
+    'NEUES'     => 'N',
     'RUND'      => 'Rd',
     'RUNDE'     => 'Rd',
-    'TEIL'      => 'T',
+    'RUNDGANG'  => 'Rd',
+    'TEIL'      => 'Tl',
     #'SEE'       => 'S',
     #'BERG'      => 'Bg',
     #'BURG'      => 'Bg',
+    'VERSION'   => 'V',
+    'VERS'      => 'V',
+    'SCHWESTER' => 'Schw',
+    'BRUDER'    => 'Br',
 
     'EIN'       => '',
     'EINE'      => '',
@@ -187,9 +200,7 @@ class Output
     'ZWEI'      => '2',
     'DREI'      => '3',
     'VIER'      => '4',
-    'F~NF'      => '5',
-#   'FüNF'      => '5',
-#   'FÜNF'      => '5',
+    'FÜNF'      => '5',
     'SECHS'     => '6',
     'SIEBEN'    => '7',
     'ACHT'      => '8',
@@ -200,9 +211,7 @@ class Output
     'JAHR'      => 'J',
     'JANUAR'    => 'Jan',
     'FEBRUAR'   => 'Feb',
-    'M~RZ'      => 'Mar',
-#   'MäRZ'      => 'Mar',
-#   'MÄRZ'      => 'Mar',
+    'MÄRZ'      => 'Mar',
     'JUNI'      => 'Jun',
     'JULI'      => 'Jul',
     'OKTOBER'   => 'Okt',
@@ -222,17 +231,33 @@ class Output
   end
 
   def input(data)
-    @wpHash=data
+    @wpHash = data
+  end
+
+  $utf8lo = 'àáâãäåæçèéêëìíîïðñòóôõöøùúûüýß'
+  $utf8hi = 'ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝß'
+  # extension of Ruby's upcase/downcase
+  def utf8upcase(string)
+    return string.upcase.tr($utf8lo, $utf8hi)
+  end
+
+  def utf8downcase(string)
+    return string.downcase.tr($utf8hi, $utf8lo)
   end
 
   # converts a geocache name into a much shorter name. This algorithm is
   # very sketchy and needs some real work done to it by a brave volunteer.
+  # UTF-8 overhaul: 2013-12-17 (S)
   def shortName(name)
-    # the "fudge factor" has to be adjusted
-    #maxlength = (@waypointLength * 1.25).to_i
-    maxlength = @waypointLength #+ 1
-    debug "shortname: \"#{name}\"" #+ " to max. #{maxlength}"
-    tempname = name[0..0].upcase + name[1..-1]
+    # idea: have maxlength "a bit" longer than final @waypointLength?
+    maxlength = @waypointLength
+    debug "shortname: start with \"#{name}\""
+    tempname = name.dup
+    tempname = makeText(tempname)
+    tempname = utf8upcase(tempname[0..0]) + tempname[1..-1].to_s
+    if (tempname.length <= maxlength)
+      return tempname
+    end
     tempname.gsub!(/cache/i, 'C')
     tempname.gsub!(/lost[\s-]*place/i, 'LP')
     tempname.gsub!(/bonus/i, 'BO')
@@ -243,129 +268,178 @@ class Output
     # I'm taking care of it to fix a bug with caches with _ in their name.
     tempname.gsub!(/_/, '')
     tempname.gsub!(/[~\-\#]/, ' ')
-    tempname.gsub!(/\&quot;/, '"')
+    tempname.gsub!(/\"/, ' ')
+    debug "shortname: clean \"#{tempname}\""
 
     # acronym.
-    if tempname =~ /(\w)\. (\w)\. (\w)/
-      debug "shortname: acronym detected.. removing extraneous dots and spaces"
-      # Note: a bit dangerous
-      tempname.gsub!(/\. /, '')
-    end
+    #if tempname =~ /(\w)\. +(\w)\. +(\w)/
+    #  debug "shortname: acronym detected.. removing extraneous dots and spaces"
+    #  # Note: a bit dangerous
+    #  tempname.gsub!(/\. +/, '')
+    #end
 
     # remove long stuff in parentheses
-    if tempname =~ /^(.*?)( *\(.{7,}\))(.*)/
-      tempname = $1+$3.to_s
+    if tempname =~ /^(.*?)(\s*\(.{7,}\))(.*)/
+      tempname = $1 + $3.to_s
     end
 
-    # Umlauts and other special characters: mark for later removal
-    tempname.gsub!(/\&[^;]*;/, '~')
-
-    tempwords = tempname.split(' ')
-    wordcount = tempwords.length
-
-    # multiple words
+    # split into "meaningful" words, squeeze them
     newwords = Array.new
-    tempwords.each { |word|
+    tempname.split(/ /).each { |word|
+      # skip "empty" words
+      next if (word.length < 1)
       # word.capitalize! would downcase everything else
-      word = word[0..0].upcase + word[1..-1]
+      word = utf8upcase(word[0..0]) + word[1..-1].to_s
       newwords.push(word)
     }
-    # check for short enough
-    result = newwords[0..-1].join
+    wordcount = newwords.length
+    # handle all-capitals (for readability)
+    (1 .. wordcount).each { |index|
+      word = newwords[-index]
+      # if word is longer than 4 characters and contains no lc letter, force down
+      if (word =~ /[A-Z][A-Z][A-Z][A-Z]/) and (word !~ /[a-z]/)
+        #word.capitalize!
+        word = utf8upcase(word[0..0]) + utf8downcase(word[1..-1].to_s)
+        newwords[-index] = word
+      end
+    }
+    # already short enough?
+    result = newwords.join
     if result.length <= maxlength
       debug "shortname: returning \"#{result}\" (#{result.length})"
       return result
     end
-    # handle all-capitals
-    (1  .. wordcount).each { |index|
-      # clean up
+    debug "shortname: lower \"#{result}\""
+    # shorten by removing special characters
+    (1 .. wordcount).each { |index|
       word = newwords[-index]
-      # if word is longer than 4 characters and contains no lc letter, force down
-      if (word =~ /[A-Z][A-Z][A-Z][A-Z]/) and (word !~ /[a-z]/)
-        word.downcase!
-      end
-      word = word[0..0].upcase + word[1..-1]
+      next if (word.length <= 1)
+      # keep: (blank,) digits, ? @ alpha ~; utf-8 unharmed
+      word.gsub!(/[\x21-\x2f\x3a-\x3e\x5b-\x60\x7b-\x7d]/, '')
       newwords[-index] = word
-    }
-    # total length hasn't changed- no check!
-    # remove extra characters word by word from right to left
-    (1  .. wordcount).each { |index|
-      # clean up
-      word = newwords[-index]
-      word.gsub!(/[^\w~+]/, '')
-      newwords[-index] = word
-      # check for short enough
-      result = newwords[0..-1].join
+      result = newwords.join
       if result.length <= maxlength
         debug "shortname: returning \"#{result}\" (#{result.length})"
         return result
       end
     }
+    debug "shortname: extra \"#{result}\""
     # shorten by replacing some keywords, again right to left
     (1 .. wordcount).each { |index|
       # case insensitive replacement
       word = newwords[-index]
-      if word.length > 0
-        testWord = word.upcase
-        if $ReplaceWords[testWord]
-          word = $ReplaceWords[testWord]
-          # do not capitalize!
-          newwords[-index] = word
-        end
+      next if (word.length <= 1)
+      testWord = utf8upcase(word)
+      if $ReplaceWords[testWord]
+        word = $ReplaceWords[testWord]
+        # do not capitalize!
+        newwords[-index] = word
       end
-      # check for short enough
-      result = newwords[0..-1].join
+      result = newwords.join
       if result.length <= maxlength
         debug "shortname: returning \"#{result}\" (#{result.length})"
         return result
       end
     }
-    # shorten by removing special characters
+    debug "shortname: words \"#{result}\""
+    # remove extra characters word by word from right to left
     (1 .. wordcount).each { |index|
       word = newwords[-index]
-      word.gsub!(/[\x21-\x2f\x3a-\x3e\x5b-\x60\x7b-\x7d]/, '')
+      # non-"alpha" stuff ('i' option doesn't work!)
+      #word.gsub!(/[^\w#àáâãäåæçèéêëìíîïðñòóôõöøùúûüýÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝß]+/, '')
+      word.gsub!(/[^\w#{$utf8lo}#{$utf8hi}]+/, '')
       newwords[-index] = word
-      # check for short enough
-      result = newwords[0..-1].join
+      result = newwords.join
       if result.length <= maxlength
         debug "shortname: returning \"#{result}\" (#{result.length})"
         return result
       end
     }
+    debug "shortname: extra \"#{result}\""
     # shorten by removing vowels from long words first
     (1 .. wordcount).each { |index|
       word = newwords[-index]
-      if word.length >= 8
-        #word = word[0..0] + word[1..-1].gsub(/[AEIOUaeiou~]/, '')
-        word = word[0..0] + word[1..-1].gsub(/[aeiou~]/, '')
+      next if (word.length < 8)
+      #word = word[0..0] + word[1..-1].to_s.gsub(/[AEIOUaeiou~]/, '')
+      #word = word[0..0] + word[1..-1].to_s.gsub(/[aeiou~]/, '')
+      # one by one
+      while (word.length > 1) && (i=word.rindex(/[aeiouäöü]/))
+        word[i] = ''
         newwords[-index] = word
+        break if (newwords.join.length <= maxlength)
       end
-      # check for short enough
-      result = newwords[0..-1].join
+      result = newwords.join
       if result.length <= maxlength
         debug "shortname: returning \"#{result}\" (#{result.length})"
         return result
       end
     }
-    # shorten by removing vowels from all words
+    # last: shorten by removing vowels from all words
     (1 .. wordcount).each { |index|
       word = newwords[-index]
-      if word.length > 0
-        #word = word[0..0] + word[1..-1].gsub(/[AEIOUaeiou~]/, '')
-        word = word[0..0] + word[1..-1].gsub(/[aeiou~]/, '')
+      # one by one
+      while (word.length > 1) && (i = word.rindex(/[aeiouäöü]/))
+        word[i] = ''
         newwords[-index] = word
+        break if (newwords.join.length <= maxlength)
       end
-      # check for short enough
-      result = newwords[0..-1].join
+      result = newwords.join
       if result.length <= maxlength
         debug "shortname: returning \"#{result}\" (#{result.length})"
         return result
       end
     }
     # if we got here we can't do a lot more
-    result = newwords[0..-1].join
+    result = newwords.join
     debug "shortname: last exit, returning \"#{result}\" (#{result.length})"
     return result
+  end
+
+  def updateShortNames()
+    # Generate short names (EasyNames). Why EasyNames have to be unique?
+    # This code never fully worked - creating a "unique" name might trigger
+    # a ping-pong with carefully crafted shortNames.
+    # let's have another go...
+    snames = {}
+    @wpHash.each_key { |wid|
+      cache = @wpHash[wid]
+      if (@waypointLength < 1)
+        cache['sname'] = wid.dup
+        next
+      end
+      # get a short name, and cut down to exact length
+      shorter_name = shortName(cache['name'])
+      shortest_name = shorter_name[0..(@waypointLength - 1)].ljust(@waypointLength)
+      # may be shorter than required!
+      debug "updateshortnames: #{shorter_name} -> #{shortest_name}"
+      # do we share this name with at least another cache?
+      if snames.has_key?(utf8upcase(shortest_name))
+        other_wid = snames[utf8upcase(shortest_name)]
+        debug "updateshortnames: Conflict found with #{shortest_name} (#{wid} vs #{other_wid})"
+        # we want to fill in 'GC12345' backwards, and a '#'
+        unique = wid
+        widlen = unique.length
+        # make sure we do not underrun a short string!
+        # if limited to 6, max is 12345# (and 345# for 4)
+        if (widlen >= @waypointLength)
+          widlen = @waypointLength - 1
+        end
+        # create string of exact max length, fill in wid backwards
+        newname = shortest_name.ljust(@waypointLength)
+        1.upto(widlen){ |i|
+          newname[-i] = unique[-i]
+          newname[-(i+1)] = '#'
+          break if ! snames.has_key?(utf8upcase(newname))
+        }
+        # we might still not have resolved the issue...
+        #if snames.has_key(utf8upcase(newname)) ...
+        shortest_name = newname
+        debug "updateshortnames: short name using wid: #{wid} -> #{shortest_name}"
+        #displayMessage "Resolved short-name conflict for #{wid} (#{shortest_name}) and #{other_wid} (#{other_cache['sname']})"
+      end
+      snames[utf8upcase(shortest_name)] = wid
+      cache['sname'] = shortest_name
+    }
   end
 
   # select the format for the next set of output
@@ -695,43 +769,6 @@ class Output
     output = replaceVariables(@outputFormat['templatePre'], nil)
     # although implicit:
     return output
-  end
-
-  def updateShortNames()
-    snames = {}
-    @wpHash.each_key { |wid|
-      cache = @wpHash[wid]
-      if @waypointLength > 1
-        shorter_name = shortName(cache['name'])
-        shortest_name = shorter_name[0..(@waypointLength - 1)]
-        debug "updateshortnames: #{shorter_name} -> #{shortest_name}"
-        # If we have two caches that generate the same short name
-        if snames.has_key?(shortest_name.upcase)
-          other_wid = snames[shortest_name.upcase]
-          other_cache = @wpHash[other_wid]
-          debug "updateshortnames: Conflict found with #{shortest_name} (#{wid} vs #{other_wid})"
-          unique_chars = ''
-          debug "updateshortnames: Conflict resolution using #{shorter_name} and #{other_cache['snameUncut']}"
-          0.upto(shorter_name.length-1) { |x|
-            if shorter_name[x] != other_cache['snameUncut'][x]
-              unique_chars << shorter_name[x].chr
-            end
-          }
-          shortest_name = shorter_name[0..(@waypointLength - 4)] + unique_chars[0..3]
-          debug "updateshortnames: short name unique chars: #{unique_chars} -> #{shortest_name}"
-          displayMessage "Resolved short-name conflict for #{wid} (#{shortest_name}) and #{other_wid} (#{other_cache['sname']})"
-        end
-
-        snames[shortest_name.upcase] = wid
-        cache['sname'] = shortest_name
-        cache['snameUncut'] = shorter_name
-      # Full length short-name
-      elsif @waypointLength == -1
-        cache['sname'] = @wpHash[wid]['name']
-      else
-        cache['sname'] = wid.dup
-      end
-    }
   end
 
   def generateHtmlIndex()
