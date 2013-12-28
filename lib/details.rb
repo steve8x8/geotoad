@@ -834,9 +834,9 @@ class CacheDetails
     removed = text.gsub(/\<a href[^\>]*\>\<img src[^\>]*(flagcounter|gccounter|andyhoppe\.com\/count|gcstat\.selfip|gcvote)[^\>]*\>\<\/a\>/m, '')
     removed.gsub!(/\<\/*center\>/, '')
     if removed != text
-      debug "Removed spam from: ----------------------------------"
-      debug removed
-      debug "-----------------------------------------------------"
+      nodebug "Removed spam from: ----------------------------------"
+      nodebug removed
+      nodebug "-----------------------------------------------------"
     end
     return removed
   end
