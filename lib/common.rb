@@ -32,10 +32,11 @@ module Common
       end
     }
     dateFormat = prefs['ctl00$ContentBody$uxDateTimeFormat']
+    prefLanguage = prefs['ctl00$ContentBody$uxLanguagePreference']
     if ! dateFormat.to_s.empty?
       @@dateFormat = dateFormat
     end
-    return @@dateFormat
+    return [ @@dateFormat, prefLanguage ]
   end
 
   def setDateFormat(dateFormat)

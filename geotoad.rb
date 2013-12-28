@@ -356,8 +356,8 @@ class GeoToad
       displayWarning "Note: Subsequent operations may fail. You've been warned."
     end
     displayMessage "Querying user preferences"
-    @dateFormat = getPreferences()
-    displayInfo "Using date format #{@dateFormat}"
+    @dateFormat, prefLang = getPreferences()
+    displayInfo "Using date format #{@dateFormat}, language #{prefLang}"
 
     if @option['myLogs']
       displayMessage "Retrieving my logs"
