@@ -548,7 +548,7 @@ class SearchCache
     #                Hidden:
     #                10/11/2011
     # 2013-08-21: "Hidden\n:"
-    if data =~ /<div[^>]*mcd2.>\s*[\w ]*\s*:\s*((\d+ \w{3} \d+)|([0-9\/\.-]+))/m
+    if data =~ /<div[^>]*mcd2.>\s*[\w ]*\s*:\s*(([0-9\/\.-]+)|(\d+[ \/]\w{3}[ \/]\d+)|(\w{3}\/\d+\/\d+))/m
       debug "Found creation date: #{$1}"
       ctime = parseDate($1)
       cdays = daysAgo(ctime)
@@ -778,6 +778,7 @@ class SearchCache
         debug "Premium Member upgrade option found"
       # <td class="PageBuilderWidget"><span>Total Records: <b>718</b> - Page: <b>23</b> of <b>36</b>&nbsp;-&nbsp;</span>
       # pt: <td class="PageBuilderWidget"><span>Total de Registos:: <b>7976</b> - Página: <b>1</b> de <b>399</b>&nbsp;-&nbsp;</span>
+      # Note: the only occurrence of utf-8 characters is in the comment above (2013-12-21)
       when /PageBuilderWidget[^:]+:+ +\<b\>(\d+)\<\/b\> [^:]+: +\<b\>(\d+)\<\/b\>.*?\<b\>(\d+)\<\/b\>/
         if not waypoints_total
           waypoints_total = $1.to_i
@@ -855,7 +856,7 @@ class SearchCache
 # 2013-01-07: now use
       # <span class="small">02/16/2011</span>
       # <span class="small">04/26/2013</span> <span class="Recent">New!</span>
-      when /^\s+(<span[^>]*>\s*)?((\d+ \w{3} \d+)|([0-9\/\.-]+))(\s+\<img [^\>]* title="New!" \/\>)?<\/span>\s?(<span[^>]*>New!<\/span>)?\s*$/
+      when /^\s+(<span[^>]*>\s*)?(([0-9\/\.-]+)|(\d+[ \/]\w{3}[ \/]\d+)|(\w{3}\/\d+\/\d+))(\s+\<img [^\>]* title="New!" \/\>)?<\/span>\s?(<span[^>]*>New!<\/span>)?\s*$/
         debug "create date: #{$2} at line: #{line}"
         cache['ctime'] = parseDate($2)
         cache['cdays'] = daysAgo(cache['ctime'])

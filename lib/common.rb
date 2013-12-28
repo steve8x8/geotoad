@@ -150,12 +150,14 @@ module Common
         debug "Trying to swap month and day in #{year}/#{month}/#{day}"
         timestamp = Time.local(year, day, month)
       end
+    # MMM/dd/yyyy
     when /^(\w{3})\/(\d+)\/(\d+)/
       year = $3
       month = $1
       day = $2
       debug "MMM/dd/yyyy date: year=#{year} month=#{month} day=#{day}"
       timestamp = Time.parse("#{day} #{month} #{year}")
+    # dd/MMM/yyyy, dd MMM yy
     when /^(\d+[ \/]\w+[ \/]\d+)/
       debug "dd MMM yy[yy] date: #{$1}"
       timestamp = Time.parse(date)
