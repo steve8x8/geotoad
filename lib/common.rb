@@ -188,38 +188,47 @@ module Common
     end
   end
 
+  def flipSlash(path)
+    # convert backslashes to slashes (Windows Ruby uses a mix of both)
+    return path.to_s.gsub(/\\/, '/')
+  end
+
   ## find an existing directory from a list
   def selectDirectory(dirs)
+    # skip nils and empty strings
     dirs.compact.each do |dir|
-      dir = dir.gsub(/\\/, '/')
+      next if dir.empty?
       if File.readable?(dir) && File.stat(dir).directory?
-        # write tests seem to be broken in Windows occassionaly.
+        # write tests seem to be broken in Windows occasionally.
         if dir =~ /^\w:/ or File.stat(dir).writable?
           return dir
         end
       end
     end
-    return Dir.pwd.gsub(/\\/, '/')
+    # last resort: current directory
+    return flipSlash(Dir.pwd)
   end
 
   def findCacheDir
     # find out where we want our file cache
     dirs = [
-      ENV['GEO_DIR'],
-      "#{ENV['HOME']}/Library/Caches",
-      "#{ENV['USERPROFILE']}/Documents and Settings",
-      ENV['HOME'],
-      ENV['TEMP'],
-      "C:/temp/",
-      "C:/windows/temp",
-      "C:/tmp/",
-      "/var/tmp"
+      #File.join(flipSlash(ENV['HOME']), '.geotoad'),
+      flipSlash(ENV['GEO_DIR']),
+      File.join(flipSlash(ENV['HOME']), 'Library', 'Caches'),
+      File.join(flipSlash(ENV['USERPROFILE']), 'Documents and Settings'),
+      flipSlash(ENV['HOME']),
+      flipSlash(ENV['TEMP']),
+      'C:/temp/',
+      'C:/windows/temp',
+      'C:/tmp/',
+      '/var/cache',
+      '/var/tmp'
     ]
     cacheDir = selectDirectory(dirs)
     # probably what we fallback to in most UNIX's.
     if cacheDir == ENV['HOME']
       cacheDir = File.join(cacheDir, '.geotoad', 'cache')
-    elsif cacheDir == "#{ENV['USERPROFILE']}/Documents and Settings"
+    elsif cacheDir == File.join(flipSlash(ENV['USERPROFILE']), 'Documents and Settings')
       cacheDir = File.join(cacheDir, 'GeoToad', 'Cache')
     else
       cacheDir = File.join(cacheDir, 'GeoToad')
@@ -230,16 +239,18 @@ module Common
   end
 
   def findConfigDir
-    # find out where we want our config files #
+    # find out where we want our config files
     # First check for the .geotoad directory. We may have accidentally been using it already.
     dirs = [
-      "#{ENV['HOME']}/.geotoad",
-      ENV['GEO_DIR'],
-      "#{ENV['HOME']}/Library/Preferences",
-      "#{ENV['USERPROFILE']}/Documents and Settings",
-      ENV['HOME'],
-      'C:/temp/',
+      File.join(flipSlash(ENV['HOME']), '.geotoad'),
+      flipSlash(ENV['GEO_DIR']),
+      File.join(flipSlash(ENV['HOME']), 'Library', 'Preferences'),
+      File.join(flipSlash(ENV['USERPROFILE']), 'Documents and Settings'),
+      flipSlash(ENV['HOME']),
+      flipSlash(ENV['TEMP']),
+      'C:/temp',
       'C:/windows/temp',
+      'C:/tmp/',
       '/var/cache',
       '/var/tmp'
     ]
@@ -256,13 +267,14 @@ module Common
 
   def findDataDir
     dirs = [
-      "data",
-      "../data",
-      File.dirname(__FILE__) + "/../data",
-      "#{ENV['COMMONPROGRAMFILES']}/GeoToad/data",
-      "#{ENV['PROGRAMFILES']}/GeoToad/data",
-      "/usr/share/geotoad",
-      "/usr/local/share/geotoad"
+      File.join(File.dirname(File.realpath(__FILE__)), 'data'),
+      File.join(File.dirname(File.realpath(__FILE__)), '..', 'data'),
+      'data',
+      File.join('..', 'data'),
+      File.join(flipSlash(ENV['COMMONPROGRAMFILES']), 'GeoToad', 'data'),
+      File.join(flipSlash(ENV['PROGRAMFILES']), 'GeoToad', 'data'),
+      '/usr/share/geotoad/data',
+      '/usr/local/share/geotoad/data'
     ]
     dirs.each {|dir|
       if File.exist?("#{dir}/funfactor.txt")
@@ -271,17 +283,17 @@ module Common
     }
     puts " ***  Could not identify data directory."
     puts " ***  If GeoToad crashes, you may want to run from the install directory."
-    return "../data"
+    return File.join('..', 'data')
   end
 
   def findOutputDir
     # find out where we want to output to
     dirs = [
-      ENV['GEO_DIR'],
-      "#{ENV['HOME']}/Desktop",
-      "#{ENV['HOME']}/Skrivbord",
-      "#{ENV['USERPROFILE']}/Desktop",
-      ENV['HOME']
+      flipSlash(ENV['GEO_DIR']),
+      File.join(flipSlash(ENV['HOME']), 'Desktop'),
+      File.join(flipSlash(ENV['HOME']), 'Skrivbord'),
+      File.join(flipSlash(ENV['USERPROFILE']), 'Desktop'),
+      flipSlash(ENV['HOME'])
     ]
     outputDir = selectDirectory(dirs)
     FileUtils::mkdir_p(outputDir)
