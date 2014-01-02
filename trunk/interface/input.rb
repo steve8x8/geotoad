@@ -191,6 +191,9 @@ class Input
       @@optHash['output'] = File.join(@@optHash['output'], '')
     end
 
+    # completely forget about those:
+    @@optHash.delete('outDir')
+    @@optHash.delete('outFile')
 
     # demonstrate a sample command line
     cmdline = "geotoad.rb"

@@ -916,20 +916,25 @@ class GeoToad
     debug "fname+ #{defaultOutputFileAdd}"
     @defaultOutputFile << defaultOutputFileAdd
 
-    # if we have selected the name of the output file, use it for first run
-    #   for subsequent runs, drop extension and append default (for type) one
-    # otherwise, take our invented name, sanitize it, and slap a file extension on it.
-    outputFileBase = nil
-    if @option['output']
-      filename = @option['output'].dup
-      #displayInfo "Output filename: #{filename}"
-      filename.gsub!('\\', '/')
-      if filename and filename !~ /\/$/
-        outputFileBase = File.basename(filename)
-      end
+    # 'output' may be a directory, with or without trailing slash (should exist)
+    # if there's nil (no path at all), use current working directory
+    # or the filename for the first output file, explicitly given
+    filename = @option['output'].to_s
+    if filename.empty?
+      filename = Dir.pwd
     end
-    # automatic, or bad input
-    if not outputFileBase
+    filename.gsub!('\\', '/')
+    # if it's a directory, append a slash just in case
+    if File.directory?(filename)
+      filename = File.join(filename, '')
+    end
+    message = "Output filename pattern: #{filename}"
+    # we can now check for a trailing slash safely
+    if filename =~ /\/$/
+      # automatic mode
+      outputDir = filename
+      outputFileBase = nil
+      message << " (automatic)"
       # flag as automatic for suffixing
       @option['output'] = nil
       outputFileBase = @defaultOutputFile.gsub(/[^0-9A-Za-z\.-]/, '_')
@@ -938,18 +943,12 @@ class GeoToad
       if outputFileBase.length > 220
         outputFileBase = outputFileBase[0..215] + "_etc"
       end
-    end
-    if (! @option['output']) || (@option['output'] !~ /\//)
-      # prepend the current working directory. This is mostly done as a service to
-      # users who just double click to launch GeoToad, and wonder where their output file went.
-      outputDir = @option['outDir']
-      if not outputDir
-        outputDir = Dir.pwd
-      end
     else
-      # fool it so that trailing slashes work.
-      outputDir = File.dirname(@option['output'] + "x")
+      outputFileBase = File.basename(filename)
+      # 
+      outputDir = File.dirname(filename + 'x')
     end
+    displayInfo message
     debug "Using output #{outputDir}/#{outputFileBase}"
     # loop over all chosen formats
     @formatTypes.split($delimiters).each { |formatType|
