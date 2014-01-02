@@ -177,7 +177,7 @@ class Input
     if (@@optHash['outDir'])
       @@optHash['output'] = @@optHash['outDir']
     else
-      @@optHash['output'] = findOutputDir
+      @@optHash['output'] = findOutputDir()
     end
 
     if (@@optHash['outFile'])
@@ -186,6 +186,9 @@ class Input
       else
         @@optHash['output'] = @@optHash['outFile']
       end
+    else
+      # automatic filename: append slash
+      @@optHash['output'] = File.join(@@optHash['output'], '')
     end
 
 
@@ -597,32 +600,50 @@ class Input
         if (@@optHash['outFile'])
           @@optHash['outFile'].gsub!(/\\/,  '/')
         end
-
+        # if (full) path: split into parts
         if (@@optHash['outFile'] =~ /\//)
-          @@optHash['outDir']=File.dirname(@@optHash['outFile'])
-          @@optHash['outFile']=File.basename(@@optHash['outFile'])
+          @@optHash['outDir'] = File.dirname(@@optHash['outFile'])
+          @@optHash['outFile'] = File.basename(@@optHash['outFile'])
         end
 
       when '26'
-        @@optHash['outDir'] = ask("Output directory (#{findOutputDir})", nil)
+        currentOutDir = @@optHash['outDir'] || findOutputDir()
+        @@optHash['outDir'] = ask("Output directory (#{currentOutDir})", currentOutDir)
         if @@optHash['outDir']
           @@optHash['outDir'].gsub!(/\\/,  '/')
 
-          if (! File.exists?(@@optHash['outDir']))
+          if File.exists?(@@optHash['outDir'])
+            if (! File.directory?(@@optHash['outDir']))
+              puts " ***  Although existing, this is no directory. Trouble ahead!"
+              print "Press enter to continue: "
+              answer=$stdin.gets
+            end
+            if (! File.writable?(@@optHash['outDir']))
+              puts " ***  Although existing, this is not writable. Trouble ahead!"
+              print "Press enter to continue: "
+              answer=$stdin.gets
+            end
+          else
             answer = ask("This directory does not exist. Would you like me to create it?", 'n')
             if answer =~ /y/
-              FileUtils::mkdir_p(@@optHash['outDir'], :mode => 0700)
+              begin
+                FileUtils::mkdir_p(@@optHash['outDir'], :mode => 0700)
+              rescue
+                puts " ***  Directory cannot be created. Trouble ahead!"
+                print "Press enter to continue: "
+                answer=$stdin.gets
+              end
             else
               puts "Fine, suit yourself."
-              sleep(1)
+              sleep(3)
             end
           end
         end
 
       when 's', 'q'
         if (! @@optHash['queryArg']) || (@@optHash['queryArg'].size < 1)
-          puts "You cannot start till you specify what #{@@optHash['queryType']} data you would like to search with"
-          puts "(press enter to continue)"
+          puts " ***  You cannot start till you specify what #{@@optHash['queryType']} data you would like to search with"
+          print "Press enter to continue: "
           answer=$stdin.gets
         end
         # in case of country or state query, return numeric id only
