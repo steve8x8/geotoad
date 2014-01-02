@@ -297,7 +297,7 @@ module Common
     ]
     outputDir = selectDirectory(dirs)
     FileUtils::mkdir_p(outputDir)
-    return File.join(outputDir, '') # append slash
+    return outputDir
   end
 
   # convert string "i" or "i.5" to int/float number
