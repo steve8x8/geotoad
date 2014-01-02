@@ -919,8 +919,9 @@ class GeoToad
     # 'output' may be a directory, with or without trailing slash (should exist)
     # if there's nil (no path at all), use current working directory
     # or the filename for the first output file, explicitly given
-    filename = @option['output'].to_s
-    if filename.empty?
+    if @option['output']
+      filename = @option['output'].dup
+    else
       filename = Dir.pwd
     end
     filename.gsub!('\\', '/')
