@@ -197,7 +197,7 @@ class Input
 
     # demonstrate a sample command line
     cmdline = "geotoad.rb"
-    hidden_opts = ['queryArg', 'outDir', 'outFile', 'user', 'password', 'usemetric', 'verbose']
+    hidden_opts = ['queryArg', 'user', 'password', 'usemetric', 'verbose']
     # hide unlimited search
     if @@optHash['limitSearchPages'] == 0
       hidden_opts.push('limitSearchPages')
