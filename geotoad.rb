@@ -170,7 +170,7 @@ class GeoToad
   def commandline(optHash)
     cmdline = ""
   # code stolen from interface/input.rb
-    hidden_opts = ['queryArg', 'outDir', 'outFile', 'user', 'password', 'usemetric', 'verbose']
+    hidden_opts = ['queryArg', 'user', 'password', 'usemetric', 'verbose']
     hidden_args = ['userInclude', 'userExclude', 'ownerInclude', 'ownerExclude', 'output']
     # hide unlimited search
     if optHash['limitSearchPages'] == 0
