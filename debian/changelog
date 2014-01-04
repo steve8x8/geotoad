@@ -1,3 +1,19 @@
+geotoad (3.19.2-1) unstable; urgency=low
+
+  * New version 3.19.2 "Final fun" release (Good-bye, fun factors)
+  * Issue 286: Limit log counts (-l option) to less than 10
+  * Issue 290: Checkboxes for "not found by me" and "no PMO" in TUI
+  * TUI reordered (watch out for changed index numbers!)
+  * Issue 294: Parse dd/MMM/yyyy date format
+  * Issue 295: Automatic filenames
+  * EasyName generation now more UTF-8 aware
+  * Still open important issues (feedback required):
+    281 (logging date of archived caches)
+    283 (GC statistics and GCStatistic, different weekday distribution)
+  * Minor additions, modifications, cleanups, and bug fixes
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Mon, 6 Jan 2014 12:00:00 +0000
+
 geotoad (3.19.1-1) unstable; urgency=low
 
   * New version 3.19.1, "Santa 13" release (Merry Christmas everyone!)

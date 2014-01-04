@@ -1,5 +1,5 @@
 ==========================================================================
-GeoToad %VERSION% by Thomas Stromberg and The GeoToad Project (c) 2002 - 2013
+GeoToad %VERSION% by Thomas Stromberg and The GeoToad Project (c) 2002 - 2014
 ==========================================================================
 
 Table of Contents:
@@ -53,15 +53,16 @@ You will then see a screen that looks similar to this:
 (5)  difficulty           [2.0 - 5.0] | (6)  terrain               [1.0 - 3.5]
 (7)  fav factor           [0.0 - 5.0] | (8)  cache size            [any - any]
 (9)  cache type   [                                                       any]
-(10) caches not found by anyone   [ ] | (11) caches with trackables only   [ ]
+(10) caches not found by me       [ ] | (11) caches not found by anyone    [ ]
 (12) cache age (days)     [  0 - any] | (13) last found (days ago) [  0 - any]
-(14) title keyword       [          ] | (15) descr. keyword    [             ]
+(14) title keyword       [          ] | (15) descript. keyword [             ]
 (16) cache not found by  [          ] | (17) cache owner isn't [             ]
 (18) cache found by      [          ] | (19) cache owner is    [             ]
 (20) EasyName WP length         [  0] | (21) include disabled caches       [X]
+(22) caches with trackables only  [ ] | (23) no Premium Member Only caches [ ]
 - - - - - - - - - - - - - - - - - - - + - - - - - - - - - - - - - - - - - - -
-(22) output format  [gpx|list|text  ] | (23) filename   [automatic           ]
-(24) output directory    [/home/user/geocaching/geotoad                      ]
+(24) output format  [gpx|list|text  ] | (25) filename   [automatic           ]
+(26) output directory    [/home/user/geocaching/geotoad                      ]
 ==============================================================================
 ** Verbose (debug) mode disabled, (v) to change
 -- Enter menu number, (s) to start, (r) to reset, or (x) to exit --> 
