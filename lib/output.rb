@@ -512,7 +512,13 @@ class Output
   end
 
   def writeFile (file)
-    File.open(file, 'w') { |f| f.write(@output) }
+    begin
+      File.open(file, 'w') { |f| f.write(@output) }
+      return true
+    rescue => error
+      displayWarning "Error writing #{file}:\n\t#{error}"
+      return false
+    end
   end
 
   # writes the output to a file or to a program #############################
@@ -528,7 +534,7 @@ class Output
       begin
         File.unlink(file) if File.exists?(file)
       rescue
-        debug "Failed to unlink output file"
+        displayWarning "Failed to unlink output file"
       end
       # if gpsbabel needs a style file, create it
       stylefile = nil
@@ -539,25 +545,26 @@ class Output
       end
 
       debug "exec = #{exec}"
-      system(exec)
+      ok = system(exec)
       # clean up temp files
       begin
         File.unlink(tmpfile) if File.exists?(tmpfile)
       rescue
-        debug "Failed to unlink temp file"
+        displayWarning "Failed to unlink temp file"
       end
       begin
         File.unlink(stylefile) if stylefile and File.exists?(stylefile)
       rescue
-        debug "Failed to unlink style file"
+        displayWarning "Failed to unlink style file"
       end
       if (! File.exists?(file))
-        displayError "Output filter did not create file #{file}. exec was: #{exec}"
+        displayWarning "Output filter did not create file #{file}. exec was: #{exec}"
       end
     else
       nodebug "no exec"
-      writeFile(file)
+      ok = writeFile(file)
     end
+    return ok
   end
 
   def replaceVariables(templateText, wid)

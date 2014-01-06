@@ -982,8 +982,11 @@ class GeoToad
 
       # and do the dirty.
       output.prepare(queryTitle, @option['user'])
-      output.commit(outputFile)
-      displayMessage "Saved to #{outputFile}"
+      if output.commit(outputFile)
+        displayMessage "Saved to #{outputFile}"
+      else
+        displayWarning "Not saved to #{outputFile}!"
+      end
       puts ""
 
       formatTypeCounter += 1
@@ -1061,10 +1064,10 @@ while true
   # Don't loop if you're in automatic mode.
   if ($mode == "TUI")
     puts ""
-    puts "***********************************************"
-    puts "* Complete! Press Enter to return to the menu *"
-    puts "***********************************************"
-    $stdin.gets
+    puts "*************************************************"
+    #puts "* Complete! Press Enter to return to the menu *"
+    #puts "***********************************************"
+    #$stdin.gets
   else
     exit
   end
