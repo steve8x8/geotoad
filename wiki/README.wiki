@@ -1,7 +1,7 @@
 #summary GeoToad README.txt
 #labels Featured
 
-= GeoToad 3.19.1 by Thomas Stromberg and The GeoToad Project (c) 2002 - 2013 =
+= GeoToad 3.19.2 by Thomas Stromberg and The GeoToad Project (c) 2002 - 2014 =
 
 <wiki:toc max_depth="2" />
 
@@ -34,7 +34,7 @@ You will then see a screen that looks similar to this:
 {{{
 
 ==============================================================================
-:::                // GeoToad 3.19.1 Text User Interface //                :::
+:::                // GeoToad 3.19.2 Text User Interface //                :::
 ==============================================================================
 (1)  GC.com login [REQUIRED         ] | (2)  search type          [location  ]
 (3)  location     [Dead Sea         ] | (4)  distance maximum (km)  [      25]
@@ -42,15 +42,16 @@ You will then see a screen that looks similar to this:
 (5)  difficulty           [2.0 - 5.0] | (6)  terrain               [1.0 - 3.5]
 (7)  fav factor           [0.0 - 5.0] | (8)  cache size            [any - any]
 (9)  cache type   [                                                       any]
-(10) caches not found by anyone   [ ] | (11) caches with trackables only   [ ]
+(10) caches not found by me       [ ] | (11) caches not found by anyone    [ ]
 (12) cache age (days)     [  0 - any] | (13) last found (days ago) [  0 - any]
-(14) title keyword       [          ] | (15) descr. keyword    [             ]
+(14) title keyword       [          ] | (15) descript. keyword [             ]
 (16) cache not found by  [          ] | (17) cache owner isn't [             ]
 (18) cache found by      [          ] | (19) cache owner is    [             ]
 (20) EasyName WP length         [  0] | (21) include disabled caches       [X]
+(22) caches with trackables only  [ ] | (23) no Premium Member Only caches [ ]
 - - - - - - - - - - - - - - - - - - - + - - - - - - - - - - - - - - - - - - -
-(22) output format  [gpx|list|text  ] | (23) filename   [automatic           ]
-(24) output directory    [/home/user/geocaching/geotoad                      ]
+(24) output format  [gpx|list|text  ] | (25) filename   [automatic           ]
+(26) output directory    [/home/user/geocaching/geotoad                      ]
 ==============================================================================
 ** Verbose (debug) mode disabled, (v) to change
 -- Enter menu number, (s) to start, (r) to reset, or (x) to exit --> 
@@ -107,6 +108,7 @@ syntax: geotoad [options] <search:search2:search3>
  -b                     only include caches with travelbugs
  -w [length]            set EasyName waypoint id length. (0=use WID)
  -L [count]             limit number of search pages (0=unlimited)
+ -l [count]             limit number of log entries (default: 10)
  -Y                     do not fetch cache descriptions, search only
  -Z                     don't overwrite existing cache descriptions
  -O                     exclude Premium Member Only caches

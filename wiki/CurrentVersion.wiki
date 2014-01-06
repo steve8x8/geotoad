@@ -1,10 +1,26 @@
 #summary Features of current version
 #labels Featured
 
-version=3.19.1`*`
+version=3.19.2
 
-= "Santa 13" (Merry Christmas everyone!) release (Dec 21, 2013) =
+= "Final fun" release (Jan 6, 2014) =
 
+= What's new in 3.19.2? =
+  * nicknamed "Final fun" (last release to support fun factors)
+
+== Issues addressed: ==
+  * Issue 286: Limit log counts (-l option) to less than 10
+  * Issue 290: Checkboxes for "not found by me" and "no PMO" in TUI
+  * TUI reordered (watch out for changed index numbers!)
+  * Issue 294: Parse dd/MMM/yyyy date format
+  * Issue 295: Automatic filenames
+  * EasyName generation now more UTF-8 aware
+  * Still open important issues (feedback required):
+    281 (logging date of archived caches)
+    283 (GC statistics and GCStatistic, different weekday distribution)
+  * Minor additions, modifications, cleanups, and bug fixes
+
+----
 = What's new in 3.19.1? =
   * nicknamed "Santa 13" (Merry Christmas everyone!)
 
