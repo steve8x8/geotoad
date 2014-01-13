@@ -1,7 +1,6 @@
 # -*- encoding : utf-8 -*-
 # $Id$
 
-require 'lib/funfactor'
 require 'time'
 require 'zlib'
 
@@ -20,12 +19,6 @@ class CacheDetails
     @waypointHash = data
     @useShadow = 1
     @preserve = nil
-
-    nodebug "Loading funfactor"
-    @funfactor = FunFactor.new()
-    @funfactor.load_scores()
-    @funfactor.load_adjustments()
-    nodebug "Loaded funfactor: #{@funfactor}"
   end
 
   def waypoints
@@ -191,27 +184,6 @@ class CacheDetails
     end
   end
 
-  def calculateFun(total, num_graded)
-    # if no num_graded, it must be at least somewhat interesting!
-    if num_graded == 0
-      return 3.0
-    end
-
-    score=total.to_f / num_graded.to_f
-
-    # a grade of >28 is considered awesome
-    # a grade of <-20 is considered pretty bad
-    debug "fun total=#{total} num_graded=#{num_graded} score=#{score}"
-    grade=((score + 25) / 5.3).round.to_f / 2.0
-    if grade > 5.0
-      grade=5.0
-    elsif grade < 0.0
-      grade=0.0
-    end
-    debug "calculateFun: score=#{score} grade=#{grade}"
-    return grade
-  end
-
 # calculate fav factor
 # 1st approach: ignore pre-fav times (before Feb 1, 2011)
 # best: 10 of 10 -> 5.0
@@ -366,7 +338,6 @@ class CacheDetails
         end
         cache['shortdesc'] = ''
         cache['longdesc'] = ''
-        cache['funfactor'] = 0
         cache['favfactor'] = 0
         cache['url'] = "http://www.geocaching.com/geocache/" + wid
 
@@ -726,15 +697,6 @@ class CacheDetails
     end
 
     comment_text = comments.collect{ |x| x['text'] }
-    # may return NaN when comment_text is empty
-    ff_score = @funfactor.calculate_score_from_list(comment_text)
-    # replace NaN by zero
-    if ff_score.nan?
-      ff_score = 0.0
-    end
-    # A primitive form of approximate rounding
-    cache['funfactor'] = (ff_score * 20).round / 20.0
-    debug "Funfactor score: #{cache['funfactor']}"
     cache['additional_raw'] = parseAdditionalWaypoints(data)
 
     # Fix cache owner/name

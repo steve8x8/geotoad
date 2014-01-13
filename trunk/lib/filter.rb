@@ -74,20 +74,6 @@ class Filter
     }
   end
 
-  def funFactorMin(num)
-    debug "filtering by funFactorMin: #{num}"
-    @waypointHash.delete_if { |wid, values|
-      @waypointHash[wid]['funfactor'].to_f < num
-    }
-  end
-
-  def funFactorMax(num)
-    debug "filtering by funFactorMax: #{num}"
-    @waypointHash.delete_if { |wid, values|
-      @waypointHash[wid]['funfactor'].to_f > num
-    }
-  end
-
   def favFactorMin(num)
     debug "filtering by favFactorMin: #{num}"
     @waypointHash.delete_if { |wid, values|
