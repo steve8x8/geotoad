@@ -265,25 +265,24 @@ module Common
     return configDir
   end
 
-  def findDataDir
+  def findTemplateDir
     dirs = [
-      File.join(File.dirname(File.realpath(__FILE__)), 'data'),
-      File.join(File.dirname(File.realpath(__FILE__)), '..', 'data'),
-      'data',
-      File.join('..', 'data'),
-      File.join(flipSlash(ENV['COMMONPROGRAMFILES']), 'GeoToad', 'data'),
-      File.join(flipSlash(ENV['PROGRAMFILES']), 'GeoToad', 'data'),
-      '/usr/share/geotoad/data',
-      '/usr/local/share/geotoad/data'
+      File.join(File.dirname(File.realpath(__FILE__)), 'templates'),
+      File.join(File.dirname(File.realpath(__FILE__)), '..', 'templates'),
+      'templates',
+      File.join('..', 'templates'),
+      File.join(flipSlash(ENV['COMMONPROGRAMFILES']), 'GeoToad', 'templates'),
+      File.join(flipSlash(ENV['PROGRAMFILES']), 'GeoToad', 'templates'),
+      '/usr/share/geotoad/templates',
+      '/usr/local/share/geotoad/templates'
     ]
-    dirs.each {|dir|
-      if File.exist?("#{dir}/funfactor.txt")
+    dirs.each { |dir|
+      if File.exist?(File.join(dir, 'geotoad.tm'))
         return dir
       end
     }
-    puts " ***  Could not identify data directory."
-    puts " ***  If GeoToad crashes, you may want to run from the install directory."
-    return File.join('..', 'data')
+    puts " ***  Could not identify templates directory. Please report."
+    return File.join('..', 'templates')
   end
 
   def findOutputDir
