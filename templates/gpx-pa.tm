@@ -16,7 +16,7 @@ template = {
     'templateWP'    => "<wpt lat=\"<%out.latdatapad6%>\" lon=\"<%out.londatapad6%>\">\n" +
       "  <name>" + '<![CDATA[' + "<%outEntity.id%>" + ']]>' + "</name>\n" +
       "  <desc>" + '<![CDATA[' +
-        "<%outEntity.wid%>:<%wpText.name%>\n=== <%wp.type%> (D:<%wp.difficulty%>/T:<%wp.terrain%>/F:<%wp.funfactor%>/S:<%wp.size%>) by <%wpText.creator%>\n" +
+        "<%outEntity.wid%>:<%wpText.name%>\n=== <%wp.type%> (D:<%wp.difficulty%>/T:<%wp.terrain%>/F:<%wp.favfactor%>/S:<%wp.size%>) by <%wpText.creator%>\n" +
         "<%outText.warnArchiv%><%outText.warnAvail%><%outText.txtAttrs%>\n" +
         "<%wpText.shortdesc%>\nDescription: <%wpText.longdesc%>\n" +
         "Hint:<%outText.hint%>" + ']]>' +

@@ -99,7 +99,6 @@ syntax: geotoad [options] <search:search2:search3>
                         query type (default: location)
  -d/-D [1.0-5.0]        difficulty minimum/maximum
  -t/-T [1.0-5.0]        terrain minimum/maximum
- -f/-F [0.0-5.0]        fun factor minimum/maximum
  -g/-G [0.0-5.0]        fav factor minimum/maximum
  -y    [0.01-500]       distance maximum, in miles, or suffixed "km" (10)
  -k    [keyword]        title keyword(s) search

@@ -10,7 +10,7 @@ template = {
       "=> <%wpText.name%> (<%out.wid%>) by <%wpText.creator%> <=\n" +
       "----------------------------------------------------------------\n\n" +
       "Lat: <%wp.latwritten%> Lon: <%wp.lonwritten%>\n" +
-      "Difficulty: <%wp.difficulty%>, Terrain: <%wp.terrain%>, FunFactor: <%wp.funfactor%>, FavFactor: <%wp.favfactor%>\n" +
+      "Difficulty: <%wp.difficulty%>, Terrain: <%wp.terrain%>, FavFactor: <%wp.favfactor%>\n" +
       "Type/Size: <%wp.type%> (<%wp.size%>), Distance: <%out.relativedistance%>\n" +
       "Creation: <%out.cdate%>, Last comment: <%wp.last_find_days%> days ago (<%wp.last_find_type%>)\n\n" +
       "Age of info: <%wp.ldays%> days\n" +

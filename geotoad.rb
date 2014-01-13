@@ -823,20 +823,6 @@ class GeoToad
     ##end # not $DTSFILTER
 
     beforeFilterTotal = @filtered.totalWaypoints
-    if @option['funFactorMin']
-      @appliedFilters['-f'] = { 'f' => "#{@option['funFactorMin']}", 't' => "funFactor min" }
-      @filtered.funFactorMin(@option['funFactorMin'].to_f)
-    end
-    if @option['funFactorMax']
-      @appliedFilters['-F'] = { 'f' => "#{@option['funFactorMax']}", 't' => "funFactor max" }
-      @filtered.funFactorMax(@option['funFactorMax'].to_f)
-    end
-    excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
-    if (excludedFilterTotal > 0)
-      displayMessage "FunFactor filtering removed #{caches(excludedFilterTotal)}."
-    end
-
-    beforeFilterTotal = @filtered.totalWaypoints
     if @option['favFactorMin']
       @appliedFilters['-g'] = { 'f' => "#{@option['favFactorMin']}", 't' => "favFactor min" }
       @filtered.favFactorMin(@option['favFactorMin'].to_f)

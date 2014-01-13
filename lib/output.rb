@@ -818,11 +818,7 @@ class Output
       end
 
       if (cache['favfactor'].to_f >= 3.0)
-        symbolHash[wid] << "<b><font color=\"#66BB66\">+</font></b>"
-      end
-
-      if (cache['funfactor'].to_f >= 3.5)
-        symbolHash[wid] << "<b><font color=\"#BB6666\">&hearts;</font></b>"
+        symbolHash[wid] << "<b><font color=\"#66BB66\">&hearts;</font></b>"
       end
 
       index_item = "<li> #{symbolHash[wid]} "
@@ -867,9 +863,6 @@ class Output
       formatted_date = cache['ctime'].strftime("%Y-%m-%d")
       entry << "Placed: #{formatted_date}" + brlf
       entry << "D/T/S:  #{cache['difficulty']}/#{cache['terrain']}/#{cache['size']}"
-      if cache['funfactor']
-        entry << ", Fun: #{cache['funfactor']}"
-      end
       if cache['favfactor']
         entry << ", Fav: #{cache['favfactor']}"
       end
@@ -1277,7 +1270,7 @@ class Output
       'adate' => cache['atime'].strftime("%Y-%m-%d"),
       'size' => (cache['size'] || 'empty').to_s.gsub(/ /, '_'),
       'favcount' => (cache['favorites'] || 0).to_s,
-      'foundcount' => (cache['foundcount'] || 1).to_s,
+      'foundcount' => (cache['foundcount'] || '?').to_s,
       'favfactor' => (cache['favfactor'] || 0.0).to_s,
       'XMLDate' => cache['ctime'].strftime("%Y-%m-%dT07:00:00.000Z"),
       'latdatapad5' => sprintf("%2.5f", cache['latdata'] || 0.0),

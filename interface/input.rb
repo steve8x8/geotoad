@@ -73,8 +73,8 @@ class Input
       [ "--difficultyMax",  "--maxDiff", "-D",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--userInclude",     "--doneBy", "-e",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--userExclude",  "--notdoneBy", "-E",    GetoptLong::REQUIRED_ARGUMENT ],
-      [ "--funFactorMin",                "-f",    GetoptLong::REQUIRED_ARGUMENT ],
-      [ "--funFactorMax",                "-F",    GetoptLong::REQUIRED_ARGUMENT ],
+
+
       [ "--favFactorMin",    "--minFav", "-g",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--favFactorMax",    "--maxFav", "-G",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--help",                        "-h",    GetoptLong::NO_ARGUMENT ],
@@ -254,7 +254,6 @@ class Input
 
     puts " -d/-D [1.0-5.0]        difficulty minimum/maximum"
     puts " -t/-T [1.0-5.0]        terrain minimum/maximum"
-    puts " -f/-F [0.0-5.0]        fun factor minimum/maximum"
     puts " -g/-G [0.0-5.0]        fav factor minimum/maximum"
     puts " -y    [0.01-500]       distance maximum, in miles, or suffixed \"km\" (10)"
     puts " -k    [keyword]        title keyword(s) search"
@@ -355,8 +354,6 @@ class Input
       printf("(5)  difficulty           [%-2.1f - %-1.1f] | (6)  terrain               [%-1.1f - %-1.1f]\n",
         (@@optHash['difficultyMin'] || 1.0), (@@optHash['difficultyMax'] || 5.0),
         (@@optHash['terrainMin'] || 1.0), (@@optHash['terrainMax'] || 5.0))
-      #printf("(7)  fun factor           [%-1.1f - %-1.1f] | (8)  cache size            [%3.3s - %3.3s]\n", (@@optHash['funFactorMin'] || 0.0),
-      #  (@@optHash['funFactorMax'] || 5.0), @@optHash['sizeMin'] || 'any', @@optHash['sizeMax'] || 'any')
       printf("(7)  fav factor           [%-1.1f - %-1.1f] | (8)  cache size            [%3.3s - %3.3s]\n", (@@optHash['favFactorMin'] || 0.0),
         (@@optHash['favFactorMax'] || 5.0), @@optHash['sizeMin'] || 'any', @@optHash['sizeMax'] || 'any')
       printf("(9)  cache type   [%58.58s]\n", (@@optHash['cacheType'] || 'any'))
@@ -499,8 +496,6 @@ class Input
         @@optHash['terrainMax'] = askNumber('What is the maximum terrain you would like? (5.0)', nil)
 
       when '7'
-        #@@optHash['funFactorMin'] = askNumber('What is the minimum fun factor you would like? (0.0)', nil)
-        #@@optHash['funFactorMax'] = askNumber('What is the maximum fun factor you would like? (5.0)', nil)
         @@optHash['favFactorMin'] = askNumber('What is the minimum fav factor you would like? (0.0)', nil)
         @@optHash['favFactorMax'] = askNumber('What is the maximum fav factor you would like? (5.0)', nil)
 
