@@ -903,9 +903,9 @@ class GeoToad
     @defaultOutputFile << defaultOutputFileAdd
 
     # 'output' may be a directory, with or without trailing slash (should exist)
-    # if there's nil (no path at all), use current working directory
+    # if there's nil or empty (no path at all), use current working directory
     # or the filename for the first output file, explicitly given
-    if @option['output']
+    if ! @option['output'].to_s.empty?
       filename = @option['output'].dup
     else
       filename = Dir.pwd
