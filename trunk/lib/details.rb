@@ -346,7 +346,7 @@ class CacheDetails
       # <h2>
       #     <img src="../images/WptTypes/2.gif" alt="Traditional Cache" width="32" height="32" />&nbsp;Lake Crabtree computer software store
       # </h2>
-      if line =~ /WptTypes.*? alt="(.*?)".*?\/>(.nbsp;)?(.*?)\s*$/
+      if line =~ /WptTypes.*? alt=\"(.*?)\".*?\/>(.nbsp;)?(.*?)\s*$/
         full_type = $1
         name = $3
         if ! cache
@@ -398,7 +398,7 @@ class CacheDetails
 
       # <p class="Meta">\s*<strong>Size:</strong>\s*<img src="../images/icons/container/regular.gif" alt="Size: Regular" />&nbsp;<small>(Regular)</small>\s*</p>
       # match only image part
-      if line =~ /<img src=".*?" alt="Size: (.*?)" \/>/
+      if line =~ /<img src=\".*?\" alt=\"Size: (.*?)\" \/>/
         if not cache['size']
           cache['size'] = $1.downcase.gsub(/medium/, 'regular')
         end
@@ -455,7 +455,7 @@ class CacheDetails
 
       # extract attributes assigned, and their value, plus the short text
       # ...<a href="/about/icons.aspx" title="Wat zijn eigenschappen?">...
-      if line =~ /a href="\/about\/icons.aspx" title=/
+      if line =~ /a href=\"\/about\/icons.aspx\" title=/
         nodebug "inspecting attributes: #{line}"
         # list of attributes only in cdpf version :(
         # cumulative text
@@ -537,7 +537,7 @@ class CacheDetails
     # FIXME: This one may be language-sensitive!
     # (But if we don't find creator2, a found name2 won't be effective.)
     # changed 2014-01-14
-    if data =~ /<div class=.HalfLeft.>\s*<p class=.Meta.>\s*(.*?):\s*(.*?)\s*<\/p>\s*<\/div>/m
+    if data =~ /<div class=\"HalfLeft\">\s*<p class=\"Meta\">\s*(.*?):\s*(.*?)\s*<\/p>\s*<\/div>/m
       debug "Found alternative creator #{$2.inspect}"
       creator = $2
       cache['creator2'] = creator.gsub(/^\s+/, '').gsub(/\s+$/, '').gsub(/\s+/, ' ')
@@ -559,13 +559,13 @@ class CacheDetails
     end
 
     # to compute a fav rate we need the total found count
-    if data =~ /alt="Found it" \/>&nbsp;(\d+)&nbsp;Found it/
+    if data =~ /alt=\"Found it\" \/>&nbsp;(\d+)&nbsp;Found it/
       cache['foundcount'] = $1.to_i
       cache['favfactor'] = calculateFav(cache['favorites'], cache['foundcount'])
       debug "found: #{cache['foundcount']} favs: #{cache['favorites']} favfactor: #{cache['favfactor']}"
     end
 
-    if data =~ /id="uxDecryptedHint".*?>\s*(.*?)\s*<\/div/m
+    if data =~ /id=\"uxDecryptedHint\".*?>\s*(.*?)\s*<\/div/m
       hint = $1.strip
       if hint =~ /[<>]/
         debug "Hint contains HTML: #{hint}"
@@ -581,13 +581,13 @@ class CacheDetails
       debug "got hint: [#{hint}]"
     end
 
-    if data =~ /Short Description\s*<\/h2>\s*<\/div>\s*<div class="item-content">(.*?)<\/div>\s*<\/div>\s*<div class="item">/m
+    if data =~ /Short Description\s*<\/h2>\s*<\/div>\s*<div class=\"item-content\">(.*?)<\/div>\s*<\/div>\s*<div class=\"item\">/m
       shortdesc = $1.gsub(/^\s+/, '').gsub(/\s+$/, '')
       nodebug "got short desc: [#{shortdesc}]"
       cache['shortdesc'] = removeAlignments(fixRelativeImageLinks(removeSpam(removeSpan(shortdesc))))
     end
 
-    if data =~ /Long Description\s*<\/h2>\s*<\/div>\s*<div class="item-content">(.*?)<\/div>\s*<\/div>\s*<div class="item">/m
+    if data =~ /Long Description\s*<\/h2>\s*<\/div>\s*<div class=\"item-content\">(.*?)<\/div>\s*<\/div>\s*<div class=\"item\">/m
       longdesc = $1.gsub(/^\s+/, '').gsub(/\s+$/, '')
       nodebug "got long desc [#{longdesc}]"
       longdesc = removeAlignments(fixRelativeImageLinks(removeSpam(removeSpan(longdesc))))
@@ -596,7 +596,7 @@ class CacheDetails
 
     # <h2>\n   Trackable Items</h2>\n   </div>\n   <div class="item-content">\n   (empty)\n   </div>
     # ... <img src="http://www.geocaching.com/images/wpttypes/sm/21.gif" alt="" /> SCOUBIDOU, <img src="http://www.geocaching.com/images/wpttypes/sm/3916.gif" alt="" /> colorful kite ...
-    if data =~ /<h.>\s*Trackable Items\s*<\/h.>\s*<\/div>\s*<div [^>]*>\s*(.*?)\s*<\/div>/
+    if data =~ /<h\d>\s*Trackable Items\s*<\/h\d>\s*<\/div>\s*<div [^>]*>\s*(.*?)\s*<\/div>/
       # travel bug data, all in a single line
       line = $1
       nodebug "List of trackables: #{line}"
@@ -642,7 +642,7 @@ class CacheDetails
     #   <p class="Meta">
     #   Log Counts:
     #   <img src="../images/icons/icon_smile.gif" alt="Found it" />&nbsp;71&nbsp;Found it&nbsp;<img src="../images/icons/icon_sad.gif" alt="Didn't find it" />&nbsp;9&nbsp;Didn't find it&nbsp;<img src="../images/icons/icon_note.gif" alt="Write note" />&nbsp;8&nbsp;Write note&nbsp;<img src="../images/icons/traffic_cone.gif" alt="Archive" />&nbsp;1&nbsp;Archive&nbsp;<img src="../images/icons/traffic_cone.gif" alt="Unarchive" />&nbsp;1&nbsp;Unarchive&nbsp;<img src="../images/icons/icon_disabled.gif" alt="Temporarily Disable Listing" />&nbsp;1&nbsp;Temporarily Disable Listing&nbsp;<img src="../images/icons/icon_enabled.gif" alt="Enable Listing" />&nbsp;1&nbsp;Enable Listing&nbsp;<img src="../images/icons/icon_greenlight.gif" alt="Publish Listing" />&nbsp;1&nbsp;Publish Listing&nbsp;<img src="../images/icons/icon_needsmaint.gif" alt="Needs Maintenance" />&nbsp;3&nbsp;Needs Maintenance&nbsp;<img src="../images/icons/icon_maint.gif" alt="Owner Maintenance" />&nbsp;1&nbsp;Owner Maintenance&nbsp;<img src="../images/icons/big_smile.gif" alt="Post Reviewer Note" />&nbsp;1&nbsp;Post Reviewer Note&nbsp;</p>
-    if data =~ /<p class=.Meta.>\s*(<strong>)?Log Counts:(<\/strong>)?\s*(<img.*?)\s*<\/p>/m
+    if data =~ /<p class=\"Meta\">\s*(<strong>)?Log Counts:(<\/strong>)?\s*(<img.*?)\s*<\/p>/m
       logcounts = $3.gsub(/<img[^>]*>/, '').gsub(/\&nbsp;/, ' ')
       cache['logcounts'] = logcounts
       debug "Found log counts: #{logcounts}"
