@@ -406,7 +406,7 @@ class CacheDetails
       end
 
       # latitude and longitude in the written form. Rewritten by Scott Brynen for Southpole compatibility.
-      if data =~ /=\"LatLong Meta\">/
+      if line =~ /=\"LatLong Meta\">/
         nextline_coords = true
       end
       # changed 2014-01-14
