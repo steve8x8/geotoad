@@ -288,7 +288,7 @@ class CacheDetails
     how = text.gsub(/^.*-/, "")
     # get mapping
     attrid = attrmap[what.downcase]
-    attrval = (how.downcase=="yes")?1:0
+    attrval = (how.downcase == "yes") ? 1 : 0
     if not attrid
       # we may have missed an addition or change to the list
       displayWarning "Unknown attribute #{text}, please report!"
@@ -413,8 +413,8 @@ class CacheDetails
       if nextline_coords && (line =~ /([NS]) (\d+).*? ([\d\.]+) ([EW]) (\d+).*? ([\d\.]+)/)
         cache['latwritten'] = $1 + ' ' + $2 + '° ' + $3
         cache['lonwritten'] = $4 + ' ' + $5 + '° ' + $6
-        cache['latdata'] = ($2.to_f + $3.to_f / 60) * ($1 == 'S' ? -1:1)
-        cache['londata'] = ($5.to_f + $6.to_f / 60) * ($4 == 'W' ? -1:1)
+        cache['latdata'] = ($2.to_f + $3.to_f / 60) * ($1 == 'S' ? -1 : 1)
+        cache['londata'] = ($5.to_f + $6.to_f / 60) * ($4 == 'W' ? -1 : 1)
         debug "got written lat/lon #{cache['latdata']}/#{cache['londata']}"
         nextline_coords = false
       end
