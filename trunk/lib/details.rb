@@ -459,7 +459,7 @@ class CacheDetails
         nodebug "inspecting attributes: #{line}"
         # list of attributes only in cdpf version :(
         # cumulative text
-        atxt = ""
+        atxt = Array.new
         # attribute counter
         anum = 0
         # is this really necessary?
@@ -474,12 +474,12 @@ class CacheDetails
             cache["attribute#{anum}id"] = aid
             cache["attribute#{anum}inc"] = ainc
             cache["attribute#{anum}txt"] = alt
-            anum = anum + 1
-            atxt << alt + ", "
+            atxt << alt
+            anum += 1
           end
         }   # no more attributes
         # keep the collected text in wp hash, for GPSr units to show
-        cache['attributeText'] = atxt.gsub(/, $/, '')
+        cache['attributeText'] = atxt.join(', ')
         cache['attributeCount'] = anum
         debug "Found #{anum} attributes: #{atxt}"
       end
