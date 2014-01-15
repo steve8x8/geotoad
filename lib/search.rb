@@ -451,11 +451,11 @@ class SearchCache
       line.gsub!(/&#39;/, '\'')
       case line
       # <span id="ctl00_litPMLevel">Basic Member</span>
-      when /id=.ctl00_litPMLevel.>([^>]+)</
+      when /id=\"ctl00_litPMLevel\">([^>]+)</
         debug "Membership confirmed as \"#{$1}\""
         $membership = $1
       # <a id="hlUpgrade" accesskey="r" title="Upgrade to Premium" class="LinkButton" href="https://payments.geocaching.com">Upgrade to PREMIUM</a>
-      when /id=.hlUpgrade[^>]*Upgrade to Premium/
+      when /id=\"hlUpgrade\"[^>]*Upgrade to Premium/
         debug "Premium Member upgrade option found"
       when /Geocaching . Hide and Seek a Geocache . Unpublished Geocache/
         debug "Unpublished cache, leaving parser"
@@ -479,16 +479,19 @@ class SearchCache
       when /_(GC\w+)[^>]+>Bing Maps/
         wid = $1
         debug "Found WID: #{wid} (Bing)"
-      when /<meta name=.og:url.\s+content=.http:\/\/coord.info\/(GC\w+)./
+      when /<meta name=\"og:url\"\s+content=\"http:\/\/coord.info\/(GC\w+)./
         wid = $1
         debug "Found WID: #{wid} (coord.info)"
+      when /<meta name=\"og:url\"\s+content=\"http:\/\/www.geocaching.com\/seek\/cache_details.aspx?wp=(GC\w+)/
+        wid = $1
+        debug "Found WID: #{wid} (cache_details)"
       # added 2012-05-15:
       #<span id="ctl00_ContentBody_CoordInfoLinkControl1_uxCoordInfoCode" class="CoordInfoCode">GCZFC2</span>
-      when /class=.CoordInfoCode.>(GC\w+)<\/span>/
+      when /class=\"CoordInfoCode\">(GC\w+)<\/span>/
         wid = $1
         debug "Found WID: #{wid} (CoordInfo)"
       #<input type="submit" name="ctl00$ContentBody$btnSendToPhone" value="Send to My Phone" onclick="s2phone(&#39;GC332MT&#39;);return false;" id="ctl00_ContentBody_btnSendToPhone" />
-      when /onclick=.s2phone\(.*?(GC\w+).*?\);return/
+      when /onclick=\"s2phone\(.*?(GC\w+).*?\);return/
         wid = $1
         debug "Found WID: #{wid} (s2phone)"
        # premium-member only
@@ -512,7 +515,7 @@ class SearchCache
       when /\s+\((GC\w+)\)<\/h2>/
         wid = $1
         debug "Found PMO WID: #{wid}"
-      when /uxCacheType.>A cache by (.*?)\s*</
+      when /uxCacheType\">A cache by (.*?)\s*</
         owner = $1
         debug "Found PMO owner: #{owner.inspect}"
       when /The owner of <strong>(.*?)<\/strong> has chosen to make/
@@ -525,20 +528,20 @@ class SearchCache
       when /_Localize12.*?(\d(\.\d)?) out of/
         cterr = tohalfint($1)
         debug "Found T: #{cterr}"
-      when /alt=.Size: .*\((.*?)\)/
+      when /alt=\"Size: .*?>\((.*?)\)</
         csize = $1.downcase
         debug "Found size: #{csize}"
-      when /_CacheName.>(.*?)<\/span>/
+      when /_CacheName\">\s*(.*?)\s*<\/span>/
         cname = $1
         debug "Found cache name: #{cname.inspect}"
-      when /\s*A cache by <a[^>]*>(.*?)\s*<\/a/
+      when /\s*A cache by <a[^>]*>\s*(.*?)\s*<\/a/
         owner = $1
         debug "Found owner: #{owner.inspect}"
       end
     }
     rescue => error
       displayWarning "Error in getWidSearchResult():data.split"
-      if data =~ /(\+\(|_|CoordInfoCode.>)(GC\w+)(\)\+[^>]+>Google Maps|[^>]+>Bing Maps|<\/span>)/
+      if data =~ /(\+\(|_|CoordInfoCode\">)(GC\w+)(\)\+[^>]+>Google Maps|[^>]+>Bing Maps|<\/span>)/
         displayWarning "WID affected: #{$2}"
       end
       raise error
@@ -548,7 +551,7 @@ class SearchCache
     #                Hidden:
     #                10/11/2011
     # 2013-08-21: "Hidden\n:"
-    if data =~ /<div[^>]*mcd2.>\s*[\w ]*\s*:\s*(([0-9\/\.-]+)|(\d+[ \/]\w{3}[ \/]\d+)|(\w{3}\/\d+\/\d+))/m
+    if data =~ /<div[^>]*mcd2\">\s*[\w ]*\s*:\s*(([0-9\/\.-]+)|(\d+[ \/]\w{3}[ \/]\d+)|(\w{3}\/\d+\/\d+))/m
       debug "Found creation date: #{$1}"
       ctime = parseDate($1)
       cdays = daysAgo(ctime)
@@ -558,7 +561,7 @@ class SearchCache
       guid = $1
       debug "Found GUID: #{guid}"
     end
-    if data =~ /Cache Issues:.*class=.OldWarning..*This cache is temporarily unavailable/
+    if data =~ /Cache Issues:.*class=\"OldWarning\".*This cache is temporarily unavailable/
       disabled = true
       debug "Cache appears to be disabled"
     end
@@ -566,16 +569,16 @@ class SearchCache
       archived = true
       debug "Cache appears to be archived"
     end
-    if data =~ /Cache Issues:.*class=.OldWarning..*This cache has been archived/
+    if data =~ /Cache Issues:.*class=\"OldWarning\".*This cache has been archived/
       archived = true
       debug "Cache appears to be archived"
     end
     # premium-member only
-    if data =~ /lblDifficulty.*?(\d(\.\d)?) out of/m
+    if data =~ /lblDifficulty\"*?(\d(\.\d)?) out of/m
       cdiff = tohalfint($1)
       debug "Found PMO D: #{cdiff}"
     end
-    if data =~ /lblTerrain.*?(\d(\.\d)?) out of/m
+    if data =~ /lblTerrain\"*?(\d(\.\d)?) out of/m
       cterr = tohalfint($1)
       debug "Found PMO T: #{cterr}"
     end
@@ -770,11 +773,11 @@ class SearchCache
       # stuff outside results table
       case line
       # <span id="ctl00_litPMLevel">Basic Member</span>
-      when /id=.ctl00_litPMLevel.>([^>]+)</
+      when /id=\"ctl00_litPMLevel\">([^>]+)</
         debug "Membership confirmed as \"#{$1}\""
         $membership = $1
       # <a id="hlUpgrade" accesskey="r" title="Upgrade to Premium" class="LinkButton" href="https://payments.geocaching.com">Upgrade to PREMIUM</a>
-      when /id=.hlUpgrade[^>]*Upgrade to Premium/
+      when /id=\"hlUpgrade\"[^>]*Upgrade to Premium/
         debug "Premium Member upgrade option found"
       # <td class="PageBuilderWidget"><span>Total Records: <b>718</b> - Page: <b>23</b> of <b>36</b>&nbsp;-&nbsp;</span>
       # pt: <td class="PageBuilderWidget"><span>Total de Registos:: <b>7976</b> - Página: <b>1</b> de <b>399</b>&nbsp;-&nbsp;</span>
@@ -799,7 +802,7 @@ class SearchCache
         post_vars[$1]=$2
       # GC change 2012-02-14
       # <table class="SearchResultsTable Table"> (search results) </table>
-      when /<table class=.SearchResultsTable/
+      when /<table class=\"SearchResultsTable/
         inresultstable = true
       when /<\/table>/
         inresultstable = false
@@ -1122,7 +1125,7 @@ class SearchCache
 
 # 2013-08-21: /geocache/${wid}[_.*] links to new pages
       # <a href="http://www.geocaching.com/geocache/GC42CGC_platz-der-einheit" ...
-      when /href=..*\/geocache\/(GC[A-Z0-9]*)_.*/
+      when /href=\".*\/geocache\/(GC[A-Z0-9]*)_.*/
         if @widsonly
           wid = $1
           debug "found link to WID #{wid}"

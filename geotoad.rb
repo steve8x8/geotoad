@@ -238,7 +238,7 @@ class GeoToad
         displayWarning "Download from http://code.google.com/p/geotoad/downloads/list"
         displayMessage "Release Notes below:"
         displayBar
-        version.data.scan(/<div .*? id="wikimaincol">\s*(.*?)\s*(<hr\/>|<\/div>)/im) do |notes|
+        version.data.scan(/<div .*? id=\"wikimaincol\">\s*(.*?)\s*(<hr\/>|<\/div>)/im) do |notes|
           text = notes[0].dup
           text.gsub!(/<\/?tt>/i, '')
           #text.gsub!(/<p>/i, "\n")
