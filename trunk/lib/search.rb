@@ -512,7 +512,7 @@ class SearchCache
       when /\s+\((GC\w+)\)<\/h2>/
         wid = $1
         debug "Found PMO WID: #{wid}"
-      when /uxCacheType.>A cache by (.*?)</
+      when /uxCacheType.>A cache by (.*?)\s*</
         owner = $1
         debug "Found PMO owner: #{owner.inspect}"
       when /The owner of \<strong\>(.*?)\<\/strong\> has chosen to make/
@@ -531,7 +531,7 @@ class SearchCache
       when /_CacheName.\>(.*?)\<\/span\>/
         cname = $1
         debug "Found cache name: #{cname.inspect}"
-      when /\s*A cache by \<a[^\>]*\>(.*?)\<\/a/
+      when /\s*A cache by \<a[^\>]*\>(.*?)\s*\<\/a/
         owner = $1
         debug "Found owner: #{owner.inspect}"
       end
@@ -589,7 +589,7 @@ class SearchCache
       'country' => country,
       'state' => state,
       'name' => cname,
-      'creator' => owner,
+      'creator' => owner, # ToDo: strip off extra white space
       'fulltype' => ctype,
       'type' => ctype.to_s.split(' ')[0].downcase.gsub(/\-/, ''),
       'size' => csize.to_s.gsub(/medium/, 'regular'),
@@ -1048,9 +1048,9 @@ class SearchCache
 
 # 2011-05-04: unchanged
       # by gonsuke@Zerosen and Bakatono@Zerosen
-      when /^ +by (.*?)$/
+      when /^\s+by (.*?)\s*$/
         creator = $1
-        cache['creator'] = creator.gsub(/\s+$/, '')
+        cache['creator'] = creator
         debug "creator=#{cache['creator']}"
 
 # 2011-05-04: new pattern (try to improve!)

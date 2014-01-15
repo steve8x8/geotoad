@@ -307,7 +307,7 @@ class CacheDetails
     begin
     data.split("\n").each { |line|
       # <title id="pageTitle">(GC1145) Lake Crabtree computer software store by darylb</title>
-      if line =~ /\<title.*\>\((GC\w+)\) (.*? by .*?)\</
+      if line =~ /\<title.*\>\((GC\w+)\) (.*? by .*?)\s*\</
         wid = $1
         namecreator = $2
         name = nil
@@ -328,10 +328,10 @@ class CacheDetails
         if name and creator
           # do not overwrite what we might have got from search
           if not cache['name']
-            cache['name'] = name.gsub(/^ +/, '').gsub(/ +$/, '').gsub(/  */, ' ')
+            cache['name'] = name.gsub(/^\s+/, '').gsub(/\s+$/, '').gsub(/\s+/, ' ')
           end
           if not cache['creator']
-            cache['creator'] = creator
+            cache['creator'] = creator.gsub(/^\s+/, '').gsub(/\s+$/, '').gsub(/\s+/, ' ')
           end
           # Calculate a semi-unique integer creator id, since we can no longer get it from this page.
           cache['creator_id'] = Zlib.crc32(cache['creator'])
@@ -352,7 +352,7 @@ class CacheDetails
           displayWarning "Found waypoint type, but never saw cache title. Did geocaching.com change their layout again?"
         end
         debug "Found alternative name #{$3.inspect}"
-        cache['name2'] = $3.gsub(/^ +/, '').gsub(/ +$/, '').gsub(/  */, ' ')
+        cache['name2'] = $3.gsub(/^\s+/, '').gsub(/\s+$/, '').gsub(/\s+/, ' ')
         # there may be more than 1 match, don't overwrite (see GC1PQKR, GC1PQKT)
         # actually, types have been set by search - is this code obsolete then?
         if cache['fulltype']
@@ -508,7 +508,7 @@ class CacheDetails
     }
     rescue => error
       displayWarning "Error in parseCache():data.split"
-      if data =~ /\<title.*\>\((GC\w+)\) (.*?) by (.*?)\</
+      if data =~ /\<title.*\>\((GC\w+)\) (.*?) by (.*?)\s*\</
         displayWarning "WID affected: #{$1}"
       end
       raise error
@@ -531,9 +531,11 @@ class CacheDetails
     # </div>
     # FIXME: This one may be language-sensitive!
     # (But if we don't find creator2, a found name2 won't be effective.)
-    if data =~ /\<div class=.HalfLeft.\>\s*\<p class=.Meta.\>\s*(.*?):\s*(.*?)\<\/p\>\s*\<\/div\>/m
+    if data =~ /\<div class=.HalfLeft.\>\s*\<p class=.Meta.\>\s*(.*?):\s*(.*?)\s*\<\/p\>\s*\<\/div\>/m
       debug "Found alternative creator #{$2.inspect}"
-      cache['creator2'] = $2
+      creator = $2
+      cache['creator2'] = creator.gsub(/^\s+/, '').gsub(/\s+$/, '').gsub(/\s+/, ' ')
+
     end
 
     if data =~ /Difficulty:.*?([\d\.]+) out of 5/m
