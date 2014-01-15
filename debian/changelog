@@ -1,6 +1,19 @@
+geotoad (3.20.0-1) unstable; urgency=low
+
+  * New version 3.20.0, "No fun" release (Fun factors gone)
+  * Issue 292: Remove fun factors (use fav factors instead)
+  * Issue 295: Handle --output="" as "automatic"
+  * Issue 297: Trailing whitespace in owner field after 2014-01-14 update
+  * Still open important issues (feedback required):
+    281 (logging date of archived caches)
+    283 (GC statistics and GCStatistic, different weekday distribution)
+  * Minor additions, modifications, cleanups, and bug fixes
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 16 Jan 2014 09:00:00 +0000
+
 geotoad (3.19.2-1) unstable; urgency=low
 
-  * New version 3.19.2 "Final fun" release (Good-bye, fun factors)
+  * New version 3.19.2, "Final fun" release (Good-bye, fun factors)
   * Issue 286: Limit log counts (-l option) to less than 10
   * Issue 290: Checkboxes for "not found by me" and "no PMO" in TUI
   * TUI reordered (watch out for changed index numbers!)
