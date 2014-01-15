@@ -305,9 +305,10 @@ class CacheDetails
 
     # catch bad input data
     begin
+    # start with single-line matches
     data.split("\n").each { |line|
       # <title id="pageTitle">(GC1145) Lake Crabtree computer software store by darylb</title>
-      if line =~ /\<title.*\>\((GC\w+)\) (.*? by .*?)\s*\</
+      if line =~ /<title.*>\((GC\w+)\) (.*? by .*?)\s*</
         wid = $1
         namecreator = $2
         name = nil
@@ -340,19 +341,19 @@ class CacheDetails
         cache['longdesc'] = ''
         cache['favfactor'] = 0
         cache['url'] = "http://www.geocaching.com/geocache/" + wid
-
       end
 
       # <h2>
       #     <img src="../images/WptTypes/2.gif" alt="Traditional Cache" width="32" height="32" />&nbsp;Lake Crabtree computer software store
       # </h2>
-      if line =~ /WptTypes.*? alt="(.*?)".*?\/\>(.nbsp;)?(.*?)\s*$/
+      if line =~ /WptTypes.*? alt="(.*?)".*?\/>(.nbsp;)?(.*?)\s*$/
         full_type = $1
+        name = $3
         if ! cache
           displayWarning "Found waypoint type, but never saw cache title. Did geocaching.com change their layout again?"
         end
-        debug "Found alternative name #{$3.inspect}"
-        cache['name2'] = $3.gsub(/^\s+/, '').gsub(/\s+$/, '').gsub(/\s+/, ' ')
+        debug "Found alternative name #{name.inspect}"
+        cache['name2'] = name.gsub(/^\s+/, '').gsub(/\s+$/, '').gsub(/\s+/, ' ')
         # there may be more than 1 match, don't overwrite (see GC1PQKR, GC1PQKT)
         # actually, types have been set by search - is this code obsolete then?
         if cache['fulltype']
@@ -390,33 +391,14 @@ class CacheDetails
         end
       end
 
-
-      # <p class="Meta">Placed Date: 7/17/2001</p>
-      # also, event dates.
-      if line =~ /[lE][av][ce][ne][dt] Date: ([\w\/-]+)\</
-        if $1 != 'N/A'
-          # do not overwrite what we got from search
-          ctime = parseDate($1)
-          if not cache['ctime']
-            cache['time'] = ctime
-          elsif (ctime != cache['ctime'])
-            debug "ctime changed: " + cache['ctime'].strftime("%Y-%m-%d") + " -> " + ctime.strftime("%Y-%m-%d")
-          end
-          cache['cdays'] = daysAgo(cache['ctime'])
-          if line =~ /Event Date:/
-            cache['event'] = true
-          end
-          debug "ctime=#{cache['ctime']} cdays=#{cache['cdays']}"
-        end
-      end
-
       if line =~ /with an account to view|You must be logged in/
         displayWarning "Oops, we are not actually logged in!"
         return 'login-required'
       end
 
-      # <p class="Meta"><strong>Size:</strong> <img src="../images/icons/container/regular.gif" alt="Size: Regular" />&nbsp;<small>(Regular)</small></p>
-      if line =~ /\<img src=".*?" alt="Size: (.*?)" \/\>/
+      # <p class="Meta">\s*<strong>Size:</strong>\s*<img src="../images/icons/container/regular.gif" alt="Size: Regular" />&nbsp;<small>(Regular)</small>\s*</p>
+      # match only image part
+      if line =~ /<img src=".*?" alt="Size: (.*?)" \/>/
         if not cache['size']
           cache['size'] = $1.downcase.gsub(/medium/, 'regular')
         end
@@ -424,11 +406,11 @@ class CacheDetails
       end
 
       # latitude and longitude in the written form. Rewritten by Scott Brynen for Southpole compatibility.
-      if line =~ /=\"LatLong Meta\"\>/
+      if data =~ /=\"LatLong Meta\">/
         nextline_coords = true
       end
-
-      if nextline_coords && (line =~ /([NWSE]) (\d+).*? ([\d\.]+) ([NWSE]) (\d+).*? ([\d\.]+)\</)
+      # changed 2014-01-14
+      if nextline_coords && (line =~ /([NS]) (\d+).*? ([\d\.]+) ([EW]) (\d+).*? ([\d\.]+)/)
         cache['latwritten'] = $1 + ' ' + $2 + '° ' + $3
         cache['lonwritten'] = $4 + ' ' + $5 + '° ' + $6
         cache['latdata'] = ($2.to_f + $3.to_f / 60) * ($1 == 'S' ? -1:1)
@@ -439,9 +421,9 @@ class CacheDetails
 
       # why a geocache is closed. It seems to always be the same.
       # <span id="ctl00_ContentBody_ErrorText"><p class="OldWarning"><strong>Cache Issues:</strong></p><ul class="OldWarning"><li>This cache is temporarily unavailable. Read the logs below to read the status for this cache.</li></ul></span>
-      if line =~ /Warning\".*?>(.*?)\</
+      if line =~ /Warning\".*?>(.*?)</
         warning = $1
-        warning.gsub!(/\<.*?\>/, '')
+        warning.gsub!(/<.*?>/, '')
         debug "got a warning: #{warning}"
         if (wid)
           if warning =~ /has been archived/
@@ -481,9 +463,9 @@ class CacheDetails
         # attribute counter
         anum = 0
         # is this really necessary?
-        line.gsub!(/\<p\>/, ' ')
+        line.gsub!(/<p[^>]*>/, '')
         # <img src="/images/attributes/bicycles-no.gif" alt="no bikes" width="30" height="30" />
-        line.scan(/\/images\/attributes\/(.+?)\.gif" alt="(.*?)"[^\>]*\/>/) { |icon, alt|
+        line.scan(/\/images\/attributes\/(.+?)\.gif. alt=\"(.*?)\"[^>]*\/>/) { |icon, alt|
           # convert each image name into index/value pair, keep related text
           aid, ainc = parseAttr(icon)
           nodebug "attribute #{anum}: ic=#{icon} id=#{aid} inc=#{ainc} alt=#{alt} "
@@ -502,13 +484,13 @@ class CacheDetails
         debug "Found #{anum} attributes: #{atxt}"
       end
 
-      if line =~ /^\s*\<[hH]\d\>Cache is Unpublished\<\/[hH]\d\>\s*$/
+      if line =~ /^\s*<h\d>Cache is Unpublished<\/h\d>\s*$/i
         return "unpublished"
       end
     }
     rescue => error
       displayWarning "Error in parseCache():data.split"
-      if data =~ /\<title.*\>\((GC\w+)\) (.*?) by (.*?)\s*\</
+      if data =~ /<title.*>\((GC\w+)\) (.*?) by (.*?)\s*</
         displayWarning "WID affected: #{$1}"
       end
       raise error
@@ -523,6 +505,29 @@ class CacheDetails
       return false
     end
 
+    # MULTI-LINE MATCHES BELOW
+
+    # <p class="Meta">\s*Placed Date: 7/17/2001\s*</p>
+    # also, event dates.
+    if data =~ />\s*(Placed|Event) Date: ([\w\/ -]+)\s*</m
+        what = $1
+        date = $2
+        if date != 'N/A'
+          # do not overwrite what we got from search
+          ctime = parseDate(date)
+          if not cache['ctime']
+            cache['time'] = ctime
+          elsif (ctime != cache['ctime'])
+            debug "ctime changed: " + cache['ctime'].strftime("%Y-%m-%d") + " -> " + ctime.strftime("%Y-%m-%d")
+          end
+          cache['cdays'] = daysAgo(cache['ctime'])
+          if what =~ /Event/
+            cache['event'] = true
+          end
+          debug "ctime=#{cache['ctime']} cdays=#{cache['cdays']}"
+        end
+    end
+
     # Owner:
     # <div class="HalfLeft">
     #     <p class="Meta">
@@ -531,7 +536,8 @@ class CacheDetails
     # </div>
     # FIXME: This one may be language-sensitive!
     # (But if we don't find creator2, a found name2 won't be effective.)
-    if data =~ /\<div class=.HalfLeft.\>\s*\<p class=.Meta.\>\s*(.*?):\s*(.*?)\s*\<\/p\>\s*\<\/div\>/m
+    # changed 2014-01-14
+    if data =~ /<div class=.HalfLeft.>\s*<p class=.Meta.>\s*(.*?):\s*(.*?)\s*<\/p>\s*<\/div>/m
       debug "Found alternative creator #{$2.inspect}"
       creator = $2
       cache['creator2'] = creator.gsub(/^\s+/, '').gsub(/\s+$/, '').gsub(/\s+/, ' ')
@@ -553,21 +559,21 @@ class CacheDetails
     end
 
     # to compute a fav rate we need the total found count
-    if data =~ /alt="Found it" \/\>&nbsp;(\d+)&nbsp;Found it/
+    if data =~ /alt="Found it" \/>&nbsp;(\d+)&nbsp;Found it/
       cache['foundcount'] = $1.to_i
       cache['favfactor'] = calculateFav(cache['favorites'], cache['foundcount'])
       debug "found: #{cache['foundcount']} favs: #{cache['favorites']} favfactor: #{cache['favfactor']}"
     end
 
-    if data =~ /id="uxDecryptedHint".*?\>(.*?)\s*\<\/div/m
+    if data =~ /id="uxDecryptedHint".*?>\s*(.*?)\s*<\/div/m
       hint = $1.strip
-      if hint =~ /[\<\>]/
+      if hint =~ /[<>]/
         debug "Hint contains HTML: #{hint}"
       end
       hint.gsub!(/^ +/, '')
       # remove whitespace/linebreaks
       hint.gsub!(/\s*[\r\n]+\s*/, '|')
-      hint.gsub!(/\s*\<[bB][rR] *\/?\>\s*/, '|')
+      hint.gsub!(/\s*<[bB][rR] *\/?>\s*/, '|')
       hint.gsub!('<div>', '')
       # only one linebreak
       hint.gsub!(/\|\|+/, '|')
@@ -575,13 +581,13 @@ class CacheDetails
       debug "got hint: [#{hint}]"
     end
 
-    if data =~ /Short Description\<\/h2\>\s*\<\/div\>\s*\<div class="item-content"\>(.*?)\<\/div\>\s*\<\/div\>\s*\<div class="item"\>/m
+    if data =~ /Short Description\s*<\/h2>\s*<\/div>\s*<div class="item-content">(.*?)<\/div>\s*<\/div>\s*<div class="item">/m
       shortdesc = $1.gsub(/^\s+/, '').gsub(/\s+$/, '')
       nodebug "got short desc: [#{shortdesc}]"
       cache['shortdesc'] = removeAlignments(fixRelativeImageLinks(removeSpam(removeSpan(shortdesc))))
     end
 
-    if data =~ /Long Description\<\/h2\>\s*\<\/div\>\s*\<div class="item-content"\>(.*?)\<\/div\>\s*\<\/div\>\s*\<div class="item"\>/m
+    if data =~ /Long Description\s*<\/h2>\s*<\/div>\s*<div class="item-content">(.*?)<\/div>\s*<\/div>\s*<div class="item">/m
       longdesc = $1.gsub(/^\s+/, '').gsub(/\s+$/, '')
       nodebug "got long desc [#{longdesc}]"
       longdesc = removeAlignments(fixRelativeImageLinks(removeSpam(removeSpan(longdesc))))
@@ -590,15 +596,15 @@ class CacheDetails
 
     # <h2>\n   Trackable Items</h2>\n   </div>\n   <div class="item-content">\n   (empty)\n   </div>
     # ... <img src="http://www.geocaching.com/images/wpttypes/sm/21.gif" alt="" /> SCOUBIDOU, <img src="http://www.geocaching.com/images/wpttypes/sm/3916.gif" alt="" /> colorful kite ...
-    if data =~ /\<h.\>\s*Trackable Items\s*\<\/h.\>\s*\<\/div\>\s*\<div [^\>]*\>\s*(.*?)\s*\<\/div\>/
+    if data =~ /<h.>\s*Trackable Items\s*<\/h.>\s*<\/div>\s*<div [^>]*>\s*(.*?)\s*<\/div>/
       # travel bug data, all in a single line
       line = $1
       nodebug "List of trackables: #{line}"
       trackables = ''
       # split at icon tag, drop everything before
-      line.gsub(/^.*?\</, '').split(/\</).each { |item|
+      line.gsub(/^.*?</, '').split(/</).each { |item|
         debug "trackable item #{item}"
-        item.gsub!(/[^\>]*\>\s*/, '')
+        item.gsub!(/[^>]*>\s*/, '')
         item.gsub!(/[,\s]*$/, '')
         # shorten the name a bit
         item.gsub!(/^Geocoins:\s+/, '')
@@ -617,7 +623,7 @@ class CacheDetails
 
     # Page Generated on
     # 09/11/2011 18:04:45</p>
-    if data =~ /Page Generated on\s*(\d+)\/(\d+)\/(\d+)\s(\d+:\d+:\d+)\<\/p\>/m
+    if data =~ /Page Generated on\s*(\d+)\/(\d+)\/(\d+)\s(\d+:\d+:\d+)\s*<\/p>/m
       begin
         cache['ltime'] = Time.parse("#{$3}-#{$1}-#{$2} #{$4} PDT/PST")
         cache['ldays'] = daysAgo(cache['ltime'])
@@ -636,8 +642,8 @@ class CacheDetails
     #   <p class="Meta">
     #   Log Counts:
     #   <img src="../images/icons/icon_smile.gif" alt="Found it" />&nbsp;71&nbsp;Found it&nbsp;<img src="../images/icons/icon_sad.gif" alt="Didn't find it" />&nbsp;9&nbsp;Didn't find it&nbsp;<img src="../images/icons/icon_note.gif" alt="Write note" />&nbsp;8&nbsp;Write note&nbsp;<img src="../images/icons/traffic_cone.gif" alt="Archive" />&nbsp;1&nbsp;Archive&nbsp;<img src="../images/icons/traffic_cone.gif" alt="Unarchive" />&nbsp;1&nbsp;Unarchive&nbsp;<img src="../images/icons/icon_disabled.gif" alt="Temporarily Disable Listing" />&nbsp;1&nbsp;Temporarily Disable Listing&nbsp;<img src="../images/icons/icon_enabled.gif" alt="Enable Listing" />&nbsp;1&nbsp;Enable Listing&nbsp;<img src="../images/icons/icon_greenlight.gif" alt="Publish Listing" />&nbsp;1&nbsp;Publish Listing&nbsp;<img src="../images/icons/icon_needsmaint.gif" alt="Needs Maintenance" />&nbsp;3&nbsp;Needs Maintenance&nbsp;<img src="../images/icons/icon_maint.gif" alt="Owner Maintenance" />&nbsp;1&nbsp;Owner Maintenance&nbsp;<img src="../images/icons/big_smile.gif" alt="Post Reviewer Note" />&nbsp;1&nbsp;Post Reviewer Note&nbsp;</p>
-    if data =~ /\<p class=.Meta.\>\s*(<strong>)?Log Counts:(<\/strong>)?\s*(\<img.*?)\<\/p\>/
-      logcounts = $3.gsub(/\<img[^\>]*\>/, '').gsub(/\&nbsp;/, ' ')
+    if data =~ /<p class=.Meta.>\s*(<strong>)?Log Counts:(<\/strong>)?\s*(<img.*?)\s*<\/p>/m
+      logcounts = $3.gsub(/<img[^>]*>/, '').gsub(/\&nbsp;/, ' ')
       cache['logcounts'] = logcounts
       debug "Found log counts: #{logcounts}"
     end
@@ -660,7 +666,7 @@ class CacheDetails
       cache['last_find_days'] = daysAgo(comments[0]['date'])
       # Remove possibly unpaired font tags (issue 231)
       (0...comments.length).each { |c|
-        cache['comments'][c]['text'].gsub!(/\<\/?font[^\>]*\>/, '')
+        cache['comments'][c]['text'].gsub!(/<\/?font[^>]*>/, '')
       }
     end
 
@@ -722,8 +728,8 @@ class CacheDetails
   end  # end function
 
   def removeAlignments(text)
-    new_text = text.gsub(/(\<div .*?)align=/m, '\1noalign=')
-    new_text.gsub!(/(\<p .*?)align=/m, '\1noalign=')
+    new_text = text.gsub(/(<div .*?)align=/m, '\1noalign=')
+    new_text.gsub!(/(<p .*?)align=/m, '\1noalign=')
     new_text.gsub!('<center>', '')
     if text != new_text
       debug "fixed alignments"
@@ -741,7 +747,7 @@ class CacheDetails
 
   def parseAdditionalWaypoints(text)
     # <p><p><strong>Additional Waypoints</strong></p></p>
-    if text =~ /Additional Waypoints.*?(\<table.*?\/table\>)/m
+    if text =~ /Additional Waypoints.*?(<table.*?\/table>)/m
       additional = $1
       return fixRelativeImageLinks(additional)
     else
@@ -765,8 +771,8 @@ class CacheDetails
     # </dt>
     # <dd>
     # Gut gefunden. Man sollte nur auf Muggels achten!  Danke!</dd>
-    #data.scan(/<dt.*?icon_(\w+).*?alt=\"(.*?)\".*?, ([\w, ]+)\s+by \<strong\>\s*(.*?)\s*\<\/strong\>.*?\<dd\>\s*(.*?)\s*\<\/dd\>/m) { |icon, type, datestr, user, comment|
-    data.scan(/<dt.*?\/([\w]+)\.[^\.]+?\salt=\"(.*?)\".*?, ([\w, ]+)\s+by \<strong\>\s*(.*?)\s*\<\/strong\>.*?\<dd\>\s*(.*?)\s*\<\/dd\>/m) { |icon, type, datestr, user, comment|
+    #data.scan(/<dt.*?icon_(\w+).*?alt=\"(.*?)\".*?, ([\w, ]+)\s+by <strong>\s*(.*?)\s*<\/strong>.*?<dd>\s*(.*?)\s*<\/dd>/m) { |icon, type, datestr, user, comment|
+    data.scan(/<dt.*?\/([\w]+)\.[^\.]+?\salt=\"(.*?)\".*?, ([\w, ]+)\s+by <strong>\s*(.*?)\s*<\/strong>.*?<dd>\s*(.*?)\s*<\/dd>/m) { |icon, type, datestr, user, comment|
       debug "comment date: #{datestr}, icon: #{icon}, type: #{type}, user: #{user}"
       # strip "icon_" from old style image name
       icon.gsub!(/^icon_/, '')
@@ -794,9 +800,9 @@ class CacheDetails
 
   def removeSpam(text)
     # <a href="http://s06.flagcounter.com/more/NOk"><img src= "http://s06.flagcounter.com/count/NOk/bg=E2FFC4/txt=000000/border=CCCCCC/columns=4/maxflags=32/viewers=0/labels=1/pageviews=1/" alt="free counters" /></a>
-    #removed = text.gsub(/\<a href.*?flagcounter.*?\<\/a\>/m, '')
-    removed = text.gsub(/\<a href[^\>]*\>\<img src[^\>]*(flagcounter|gccounter|andyhoppe\.com\/count|gcstat\.selfip|gcvote)[^\>]*\>\<\/a\>/m, '')
-    removed.gsub!(/\<\/*center\>/, '')
+    #removed = text.gsub(/<a href.*?flagcounter.*?<\/a>/m, '')
+    removed = text.gsub(/<a href[^>]*><img src[^>]*(flagcounter|gccounter|andyhoppe\.com\/count|gcstat\.selfip|gcvote)[^>]*><\/a>/m, '')
+    removed.gsub!(/<\/*center>/, '')
     if removed != text
       nodebug "Removed spam from: ----------------------------------"
       nodebug removed
@@ -807,7 +813,7 @@ class CacheDetails
 
   def removeSpan(text)
     # remove <span> tags from HTML
-    removed = text.gsub(/\<\/?span[^\>]*\>/m, '')
+    removed = text.gsub(/<\/?span[^>]*>/m, '')
     if removed != text
       nodebug "Removed span tags from: ----------------------------------"
       nodebug removed
