@@ -123,10 +123,10 @@ module Auth
       when /You are (logged|signed) in as/
         debug "Found login confirmation!"
         return true
-      when /^\<input type=\"hidden\" name=\"(.*?)\".*value=\"(.*?)\"/
+      when /^<input type=\"hidden\" name=\"(.*?)\".*value=\"(.*?)\"/
         @postVars[$1] = $2
         nodebug "found hidden post variable: #{$1}"
-      when /\<form name=\"aspnetForm\" method=\"post\" action=\"(.*?)\"/
+      when /<form name=\"aspnetForm\" method=\"post\" action=\"(.*?)\"/
         @postURL = @@login_url + $1
         @postURL.gsub!('&amp;', '&')
         nodebug "post URL is #{@postURL}"
@@ -145,10 +145,10 @@ module Auth
     data = page.fetch
     data.each_line do |line|
       case line
-      when /^\<input type=\"hidden\" name=\"(.*?)\".*value=\"(.*?)\"/
+      when /<input type=\"hidden\" name=\"(.*?)\".*value=\"(.*?)\"/
         @postVars[$1] = $2
         debug "found hidden post variable: #{$1}"
-      when /\<form name=\"aspnetForm\" method=\"post\" action=\"(.*?)\"/
+      when /<form name=\"aspnetForm\" method=\"post\" action=\"(.*?)\"/
         nodebug "found post action: #{$1.inspect}"
         @postURL = @@login_url + $1
         @postURL.gsub!('&amp;', '&')

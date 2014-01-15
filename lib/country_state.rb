@@ -133,16 +133,16 @@ class CountryState
     options = Hash.new
 
     data.each_line {|line|
-      if line =~ /^\<input type=\"hidden\" name=\"([^\"]*?)\".* value=\"([^\"]*?)\" \/\>/
+      if line =~ /^<input type=\"hidden\" name=\"([^\"]*?)\".* value=\"([^\"]*?)\" \/>/
         debug "found hidden post variable: #{$1}=#{$2}"
         post_vars[$1] = $2
-      elsif line =~ /^\<input type=\"submit\" name=\"([^\"]*?)\".* value=\"([^\"]*?)\"/
+      elsif line =~ /^<input type=\"submit\" name=\"([^\"]*?)\".* value=\"([^\"]*?)\"/
         debug "found submit post variable: #{$1}=#{$2}"
         post_vars[$1] = $2
-      elsif line =~ /\<select name=\"([^\"]*?)\"/
+      elsif line =~ /<select name=\"([^\"]*?)\"/
         current_select_name = $1
         options[current_select_name] = []
-      elsif line =~ /\<option selected=\"selected\" value=\"([^\"]*?)\".*?\>(.*?)\</
+      elsif line =~ /<option selected=\"selected\" value=\"([^\"]*?)\".*?>(.*?)</
         options[current_select_name] << [$1, $2]
         if current_select_name
           debug "found selected option for #{current_select_name} #{$1}=#{$2}"
@@ -151,7 +151,7 @@ class CountryState
           displayWarning "Found selected <option> #{$1}, but no previous <select> tag."
           return nil
         end
-      elsif line =~ /\<option.*value=\"([^\"]*?)\".*?\>(.*?)\</
+      elsif line =~ /<option.*value=\"([^\"]*?)\".*?>(.*?)</
         debug "found option: #{$1}=#{$2}"
         options[current_select_name] << [$1, $2]
       end

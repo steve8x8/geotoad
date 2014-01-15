@@ -19,11 +19,11 @@ module Common
     prefs = Hash.new
     current_select_name = nil
     data.each_line {|line|
-      if line =~ /\<select name=\"([^\"]*?)\"/
+      if line =~ /<select name=\"([^\"]*?)\"/
         current_select_name = $1
         nodebug "found select #{current_select_name}"
         prefs[current_select_name] = []
-      elsif line =~ /\<option selected=\"selected\" value=\"([^\"]*?)\".*?\>(.*?)\</
+      elsif line =~ /<option selected=\"selected\" value=\"([^\"]*?)\".*?>(.*?)</
         nodebug "found selected option #{$1}=#{$2}"
         if current_select_name
           debug "setting selected option #{current_select_name}=#{$1} (#{$2})"

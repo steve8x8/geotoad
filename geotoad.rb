@@ -227,8 +227,8 @@ class GeoToad
     version.fetch
 
     # version=a.bb.cc[`*`] in wiki page (`*` marks "supersedes all")
-    #if (($VERSION =~ /^(\d\.\d+\.\d+)/) && (version.data =~ /version=(\d\.\d+[\.\d]+)(\<tt\>)?(\*)?/))
-    if version.data =~ /version=(\d\.\d+[\.\d]+)(\<tt\>)?(\*)?/
+    #if (($VERSION =~ /^(\d\.\d+\.\d+)/) && (version.data =~ /version=(\d\.\d+[\.\d]+)(<tt>)?(\*)?/))
+    if version.data =~ /version=(\d\.\d+[\.\d]+)(<tt>)?(\*)?/
       latestVersion = $1
       obsoleteOlder = ! $3.to_s.empty?
 
@@ -238,18 +238,18 @@ class GeoToad
         displayWarning "Download from http://code.google.com/p/geotoad/downloads/list"
         displayMessage "Release Notes below:"
         displayBar
-        version.data.scan(/\<div .*? id="wikimaincol"\>\s*(.*?)\s*(\<hr\/\>|\<\/div\>)/im) do |notes|
+        version.data.scan(/<div .*? id="wikimaincol">\s*(.*?)\s*(<hr\/>|<\/div>)/im) do |notes|
           text = notes[0].dup
-          text.gsub!(/\<\/?tt\>/i, '')
-          #text.gsub!(/\<p\>/i, "\n")
-          text.gsub!(/\<h1\>/i, "\n\* ")
-          text.gsub!(/\<h2\>/i, "\n\+ ")
-          text.gsub!(/\<h3\>/i, "\n\- ")
-          text.gsub!(/\<h[0,4-9]\>/i, "\n\. ")
-          text.gsub!(/\<li\>/i, "\n - ")
-          text.gsub!(/\<a[^\>]+href=\"\/p\/geotoad\/wiki\/(.*?)\"\>\1\<\/a\>\s+/i) { "[#{$1}] " }
-          text.gsub!(/\<a[^\>]+href=\"\#.*?\>/i, '')
-          text.gsub!(/\<.*?\>/, '')
+          text.gsub!(/<\/?tt>/i, '')
+          #text.gsub!(/<p>/i, "\n")
+          text.gsub!(/<h1>/i, "\n\* ")
+          text.gsub!(/<h2>/i, "\n\+ ")
+          text.gsub!(/<h3>/i, "\n\- ")
+          text.gsub!(/<h[0,4-9]>/i, "\n\. ")
+          text.gsub!(/<li>/i, "\n - ")
+          text.gsub!(/<a[^>]+href=\"\/p\/geotoad\/wiki\/(.*?)\">\1<\/a>\s+/i) { "[#{$1}] " }
+          text.gsub!(/<a[^>]+href=\"\#.*?>/i, '')
+          text.gsub!(/<.*?>/, '')
           text.gsub!(/\n\n+/, "\n")
           text.gsub!(/\&nbsp;/, '-')
           text = CGI::unescapeHTML(text)

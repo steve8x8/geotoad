@@ -479,12 +479,12 @@ class SearchCache
       when /_(GC\w+)[^>]+>Bing Maps/
         wid = $1
         debug "Found WID: #{wid} (Bing)"
-      when /\<meta name=.og:url.\s+content=.http:\/\/coord.info\/(GC\w+)./
+      when /<meta name=.og:url.\s+content=.http:\/\/coord.info\/(GC\w+)./
         wid = $1
         debug "Found WID: #{wid} (coord.info)"
       # added 2012-05-15:
       #<span id="ctl00_ContentBody_CoordInfoLinkControl1_uxCoordInfoCode" class="CoordInfoCode">GCZFC2</span>
-      when /class=.CoordInfoCode.\>(GC\w+)\<\/span\>/
+      when /class=.CoordInfoCode.>(GC\w+)<\/span>/
         wid = $1
         debug "Found WID: #{wid} (CoordInfo)"
       #<input type="submit" name="ctl00$ContentBody$btnSendToPhone" value="Send to My Phone" onclick="s2phone(&#39;GC332MT&#39;);return false;" id="ctl00_ContentBody_btnSendToPhone" />
@@ -515,7 +515,7 @@ class SearchCache
       when /uxCacheType.>A cache by (.*?)\s*</
         owner = $1
         debug "Found PMO owner: #{owner.inspect}"
-      when /The owner of \<strong\>(.*?)\<\/strong\> has chosen to make/
+      when /The owner of <strong>(.*?)<\/strong> has chosen to make/
         cname = $1
         debug "Found PMO cache name: #{cname.inspect}"
       # for filtering; don't care about ".0" representation
@@ -528,17 +528,17 @@ class SearchCache
       when /alt=.Size: .*\((.*?)\)/
         csize = $1.downcase
         debug "Found size: #{csize}"
-      when /_CacheName.\>(.*?)\<\/span\>/
+      when /_CacheName.>(.*?)<\/span>/
         cname = $1
         debug "Found cache name: #{cname.inspect}"
-      when /\s*A cache by \<a[^\>]*\>(.*?)\s*\<\/a/
+      when /\s*A cache by <a[^>]*>(.*?)\s*<\/a/
         owner = $1
         debug "Found owner: #{owner.inspect}"
       end
     }
     rescue => error
       displayWarning "Error in getWidSearchResult():data.split"
-      if data =~ /(\+\(|_|CoordInfoCode.\>)(GC\w+)(\)\+[^>]+>Google Maps|[^>]+>Bing Maps|\<\/span\>)/
+      if data =~ /(\+\(|_|CoordInfoCode.>)(GC\w+)(\)\+[^>]+>Google Maps|[^>]+>Bing Maps|<\/span>)/
         displayWarning "WID affected: #{$2}"
       end
       raise error
@@ -779,29 +779,29 @@ class SearchCache
       # <td class="PageBuilderWidget"><span>Total Records: <b>718</b> - Page: <b>23</b> of <b>36</b>&nbsp;-&nbsp;</span>
       # pt: <td class="PageBuilderWidget"><span>Total de Registos:: <b>7976</b> - Página: <b>1</b> de <b>399</b>&nbsp;-&nbsp;</span>
       # Note: the only occurrence of utf-8 characters is in the comment above (2013-12-21)
-      when /PageBuilderWidget[^:]+:+ +\<b\>(\d+)\<\/b\> [^:]+: +\<b\>(\d+)\<\/b\>.*?\<b\>(\d+)\<\/b\>/
+      when /PageBuilderWidget[^:]+:+ +<b>(\d+)<\/b> [^:]+: +<b>(\d+)<\/b>.*?<b>(\d+)<\/b>/
         if not waypoints_total
           waypoints_total = $1.to_i
           page_number = $2.to_i
           pages_total = $3.to_i
         end
         # href="javascript:__doPostBack('ctl00$ContentBody$pgrTop$ctl08','')"><b>Next &gt;</b></a></td>
-        if line =~ /doPostBack\(\'([\w\$]+)\',\'\'\)\"\>\<b\>[^\>]+ \&gt;\<\/b\>/ #Next
+        if line =~ /doPostBack\(\'([\w\$]+)\',\'\'\)\"><b>[^>]+ \&gt;<\/b>/ #Next
           debug "Found next target: #{$1}"
           post_vars['__EVENTTARGET'] = $1
         end
       # at least Dutch is different...
-      when /doPostBack\(\'([\w\$]+)\',\'\'\)\"\>\<b\>[^\>]+ \&gt;\<\/b\>/ #Next
+      when /doPostBack\(\'([\w\$]+)\',\'\'\)\"><b>[^>]+ \&gt;<\/b>/ #Next
         debug "Found next target: #{$1}"
         post_vars['__EVENTTARGET'] = $1
-      when /^\<input type=\"hidden\" name=\"(.*?)\".*value=\"(.*?)\" \/\>/
+      when /^<input type=\"hidden\" name=\"(.*?)\".*value=\"(.*?)\" \/>/
         debug "found hidden post variable: #{$1}"
         post_vars[$1]=$2
       # GC change 2012-02-14
       # <table class="SearchResultsTable Table"> (search results) </table>
-      when /\<table class=.SearchResultsTable/
+      when /<table class=.SearchResultsTable/
         inresultstable = true
-      when /\<\/table\>/
+      when /<\/table>/
         inresultstable = false
       end #case
 
@@ -830,8 +830,8 @@ class SearchCache
 # 2011-05-04: unchanged
       #                             11 Jul 10<br />
       # Yesterday<strong>*</strong><br />
-      #when /^ +((\w+[ \w]+)|([0-9\/\.-]+))(\<strong\>)?(\*)?(\<\/strong\>)?\<br/
-      when /^ +(\w.*?)(\<strong\>)?(\*)?(\<\/strong\>)?\<br/
+      #when /^ +((\w+[ \w]+)|([0-9\/\.-]+))(<strong>)?(\*)?(<\/strong>)?<br/
+      when /^ +(\w.*?)(<strong>)?(\*)?(<\/strong>)?<br/
         debug "last found date: #{$1}#{$3} at line: #{line}"
         cache['mtime'] = parseDate($1+$3.to_s)
         cache['mdays'] = daysAgo(cache['mtime'])
@@ -841,8 +841,8 @@ class SearchCache
       # found date:
       # <span id="ctl00_ContentBody_dlResults_ctl??_uxUserLogDate" class="Success">5 days ago</span></span>
       # <span id="ctl00_ContentBody_dlResults_ctl01_uxUserLogDate" class="Success">Today<strong>*</strong></span></span>
-      #when /^ +\<span [^\>]*UserLogDate[^\>]*\>((\w+[ \w]+)|([0-9\/\.-]+))(\<strong\>)?(\*?)(\<\/strong\>)?\<\/span\>\<\/span\>/
-      when /^ +\<span [^\>]*UserLogDate[^\>]*\>(.*?)(\<strong\>)?(\*?)(\<\/strong\>)?\<\/span\>\<\/span\>/
+      #when /^ +<span [^>]*UserLogDate[^>]*>((\w+[ \w]+)|([0-9\/\.-]+))(<strong>)?(\*?)(<\/strong>)?<\/span><\/span>/
+      when /^ +<span [^>]*UserLogDate[^>]*>(.*?)(<strong>)?(\*?)(<\/strong>)?<\/span><\/span>/
         debug "user found date: #{$1}#{$3} at line: #{line}"
         cache['atime'] = parseDate($1+$3.to_s)
         cache['adays'] = daysAgo(cache['atime'])
@@ -856,7 +856,7 @@ class SearchCache
 # 2013-01-07: now use
       # <span class="small">02/16/2011</span>
       # <span class="small">04/26/2013</span> <span class="Recent">New!</span>
-      when /^\s+(<span[^>]*>\s*)?(([0-9\/\.-]+)|(\d+[ \/]\w{3}[ \/]\d+)|(\w{3}\/\d+\/\d+))(\s+\<img [^\>]* title="New!" \/\>)?<\/span>\s?(<span[^>]*>New!<\/span>)?\s*$/
+      when /^\s+(<span[^>]*>\s*)?(([0-9\/\.-]+)|(\d+[ \/]\w{3}[ \/]\d+)|(\w{3}\/\d+\/\d+))(\s+<img [^>]* title="New!" \/>)?<\/span>\s?(<span[^>]*>New!<\/span>)?\s*$/
         debug "create date: #{$2} at line: #{line}"
         cache['ctime'] = parseDate($2)
         cache['cdays'] = daysAgo(cache['ctime'])
@@ -905,7 +905,7 @@ class SearchCache
 # 2011-05-04: unchanged
       # 2010-12-22:
       # <span id="ctl00_ContentBody_dlResults_ctl01_uxFavoritesValue" title="0" class="favorite-rank">0</span>
-      when /_uxFavoritesValue[^\>]*\>(\d+)\</
+      when /_uxFavoritesValue[^>]*>(\d+)</
         favs = $1.to_i
         debug "found Favorites=#{favs}"
         cache['favorites'] = favs
@@ -916,8 +916,8 @@ class SearchCache
       # <a href="/seek/cache_details.aspx?guid=ecfd0038-8e51-4ac8-a073-1aebe7c10cbc" class="lnk">
       # ...<img src="http://www.geocaching.com/images/wpttypes/sm/3.gif" alt="Multi-cache" title="Multi-cache" /></a>
       # ... <a href="/seek/cache_details.aspx?guid=ecfd0038-8e51-4ac8-a073-1aebe7c10cbc" class="lnk  Strike"><span>Besinnungsweg</span></a>
-      #when /cache_details.aspx\?guid=([0-9a-f-]*)[^\>]*>(.*?)\<\/a\>/
-      when /(<img[^\>]*alt=\"(.*?)\".*)?cache_details.aspx\?guid=([0-9a-f-]*)([^\>]*)>\<span\>(.*?)\<\/span\>\<\/a\>/
+      #when /cache_details.aspx\?guid=([0-9a-f-]*)[^>]*>(.*?)<\/a>/
+      when /(<img[^>]*alt=\"(.*?)\".*)?cache_details.aspx\?guid=([0-9a-f-]*)([^>]*)><span>(.*?)<\/span><\/a>/
         debug "found type=#{$2} guid=#{$3} name=#{$5}"
         cache['guid'] = $3
         strike = $4
@@ -982,7 +982,7 @@ class SearchCache
         debug "guid=#{cache['guid']} name=#{cache['name']} (disabled=#{cache['disabled']}, archived=#{cache['archived']})"
 
       # 2013-08-21:
-      when /(<img[^\>]*alt=\"(.*?)\".*)?\/geocache\/(GC[0-9A-Z]+)([^\>]*)>\<span\>(.*?)\<\/span\>\<\/a\>/
+      when /(<img[^>]*alt=\"(.*?)\".*)?\/geocache\/(GC[0-9A-Z]+)([^>]*)><span>(.*?)<\/span><\/a>/
         debug "found type=#{$2} wid=#{$3} name=#{$5}"
         #cache['wid'] = $3
         strike = $4
@@ -1128,7 +1128,7 @@ class SearchCache
           debug "found link to WID #{wid}"
         end
 
-      when /^\s+<\/tr\>/
+      when /^\s+<\/tr>/
         debug "--- end of row ---"
         if wid and not @waypoints.has_key?(wid)
           debug "- closing #{wid} record -"

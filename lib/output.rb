@@ -571,7 +571,7 @@ class Output
     # okay. I will fully admit this is a *very* unusual way to handle
     # the templates. This all came to be due to a lot of debugging.
     nodebug "out.wid for #{wid.inspect} is [#{@outVars['wid'].inspect}]"
-    tags = templateText.scan(/\<%(\w+\.\w+)%\>/)
+    tags = templateText.scan(/<%(\w+\.\w+)%>/)
     text = templateText.dup
     tags.each { |tag|
       (type, var) = tag[0].split('.')
@@ -695,30 +695,30 @@ class Output
     text.gsub!(/[\r\n]+/m, "\n") # was ' '
 
     # rip some tags out.
-    text.gsub!(/\<\/li\>/i, '')
-    text.gsub!(/\<\/p\>/i, '')
-    text.gsub!(/\<\/?i\>/i, '')
-    text.gsub!(/\<\/?b\>/i, '')
-    text.gsub!(/\<\/?body\>/i, '')
-    text.gsub!(/\<\/?option.*?\>/i, '')
-    text.gsub!(/\<\/?select.*?\>/i, '')
-    text.gsub!(/\<\/?span.*?\>/i, '')
-    text.gsub!(/\<\/?div.*?\>/i, "\n")
-    text.gsub!(/\<\/?font.*?\>/i, '')
-    text.gsub!(/\<\/?[uo]l\>/i, "\n")
+    text.gsub!(/<\/li>/i, '')
+    text.gsub!(/<\/p>/i, '')
+    text.gsub!(/<\/?i>/i, '')
+    text.gsub!(/<\/?b>/i, '')
+    text.gsub!(/<\/?body>/i, '')
+    text.gsub!(/<\/?option.*?>/i, '')
+    text.gsub!(/<\/?select.*?>/i, '')
+    text.gsub!(/<\/?span.*?>/i, '')
+    text.gsub!(/<\/?div.*?>/i, "\n")
+    text.gsub!(/<\/?font.*?>/i, '')
+    text.gsub!(/<\/?[uo]l>/i, "\n")
     text.gsub!(/\s*style=\".*?\"/i, '')
 
     # substitute
-    text.gsub!(/\<p\>/i, "\n\n")
-    text.gsub!(/\<\/?tr\>/i, "\n")
-    text.gsub!(/\<\/*br(\s*\/)?\>/i, "\n") #
-    text.gsub!(/\<li\>/i, "\n * (o) ")
-    text.gsub!(/\<img.*?\>/i, '[img]')
-    text.gsub!(/\<a.*?\>/i, '[link]')
-    text.gsub!(/\<a.*?\>/i, '[/link]')
-    text.gsub!(/\<table.*?\>/i, "\n[table]\n")
-    text.gsub!(/\<table.*?\>/i, "\n[/table]\n")
-    text.gsub!(/\<.*?\>/m, '')
+    text.gsub!(/<p>/i, "\n\n")
+    text.gsub!(/<\/?tr>/i, "\n")
+    text.gsub!(/<\/*br(\s*\/)?>/i, "\n") #
+    text.gsub!(/<li>/i, "\n * (o) ")
+    text.gsub!(/<img.*?>/i, '[img]')
+    text.gsub!(/<a.*?>/i, '[link]')
+    text.gsub!(/<a.*?>/i, '[/link]')
+    text.gsub!(/<table.*?>/i, "\n[table]\n")
+    text.gsub!(/<table.*?>/i, "\n[/table]\n")
+    text.gsub!(/<.*?>/m, '')
     text.gsub!(/\&(amp;)?quot;/, '"')
     text.gsub!(/\&(amp;)?[lrb]dquo;/, '"')
     text.gsub!(/\&(amp;)?[lr]aquo;/, '"')
@@ -951,7 +951,7 @@ class Output
       entry << "<h4><em>#{comment['type']}</em> by #{comment['user']} on #{formatted_date}</h4>\n"
 #      entry << makeXML(comment['text']) + "<br />\n\n"
       # strip images and links
-      entry << comment['text'].gsub(/\<\/?img.*?\>/, '').gsub(/\<\/?a.*?\>/, '').gsub(/\<\/?font.*?\>/, '')
+      entry << comment['text'].gsub(/<\/?img.*?>/, '').gsub(/<\/?a.*?>/, '').gsub(/<\/?font.*?>/, '')
       entry << "<br />\n\n"
       entries << entry
       commentcount += 1
@@ -1009,27 +1009,27 @@ class Output
     # un-fix spaces
     new_text = text.gsub(/\s*\&nbsp;/, ' ')
     # remove images
-    new_text.gsub!(/\s*\<img\s+[^\>]*\>/m, '')
+    new_text.gsub!(/\s*<img\s+[^>]*>/m, '')
     # remove hyperlinks
     # note: this will drop waypoint URLs!
-    new_text.gsub!(/\s*\<a\s+[^\>]*\>/m, '')
-    new_text.gsub!(/\s*\<\/a\>/m, '')
+    new_text.gsub!(/\s*<a\s+[^>]*>/m, '')
+    new_text.gsub!(/\s*<\/a>/m, '')
     # not yet ready: do not remove but clean up hyperlinks
     # new_text.gsub!(/\&RefID=[0-9a-f-]*\&RefDS=[0-9]/, '')
     # remove form elements
-    new_text.gsub!(/\s*\<input\s+[^\>]*\>/m, '')
+    new_text.gsub!(/\s*<input\s+[^>]*>/m, '')
     # remove table head
-    new_text.gsub!(/\s*\<thead\>.*\<\/thead\>/m, '')
+    new_text.gsub!(/\s*<thead>.*<\/thead>/m, '')
     # remove spans
-    #new_text.gsub!(/\s*\<\/span\>/m, '')
-    #new_text.gsub!(/\s*\<span\s+[^\>]*\>/m, '')
-    new_text.gsub!(/\s*\<\/?span[^\>]*\>/m, '')
+    #new_text.gsub!(/\s*<\/span>/m, '')
+    #new_text.gsub!(/\s*<span\s+[^>]*>/m, '')
+    new_text.gsub!(/\s*<\/?span[^>]*>/m, '')
     # remove leading and trailing blanks
     new_text.gsub!(/^\s+/, '')
     new_text.gsub!(/\s+$/, '')
     # combine table entries
-    new_text.gsub!(/\<td[^\>]*\>\n+/m, '<td>')
-    new_text.gsub!(/\n+\<\/td[^\>]*\>/m, '</td>')
+    new_text.gsub!(/<td[^>]*>\n+/m, '<td>')
+    new_text.gsub!(/\n+<\/td[^>]*>/m, '</td>')
     # ToDo: fuse continuation lines together between <td> .. </td>
     # remove "class" string from <tr>
     new_text.gsub!(/\s*class=\"[^\"]*\"/m, '')
@@ -1062,8 +1062,8 @@ class Output
     trcount = 0
     tdcount = 0
     # table consists of row pairs: 1st row with WP details, 2nd with note
-    text.gsub(/\<br[^\>]*\>/, '|').split("\n").each { |line|
-      if line =~ /\<tr/
+    text.gsub(/<br[^>]*>/, '|').split("\n").each { |line|
+      if line =~ /<tr/
         # start of a row - trcount is 1 for 1st, 2 for 2nd
         trcount += 1
         tdcount = 0
@@ -1071,7 +1071,7 @@ class Output
         if line =~ /ishidden=\"true\"/
           hidden = true
         end
-      elsif line =~ /\<td\>(.*)\<\/td\>/
+      elsif line =~ /<td>(.*)<\/td>/
         tdcount += 1
         # extract fields
         if trcount == 1
@@ -1118,16 +1118,16 @@ class Output
           if tdcount == 3
             desc = $1
             # remove some HTML stuff, but keep track of line breaks
-            desc.gsub!(/\<(br|p|\/p)[^\>]*\>/, "|")
+            desc.gsub!(/<(br|p|\/p)[^>]*>/, "|")
             # remove all other tags
-            desc.gsub!(/\<[^\>]*\>/, "")
+            desc.gsub!(/<[^>]*>/, "")
             # &euro; confuses gpsbabel, try to avoid
             desc.gsub!(/\&euro;/, "EURO")
             # escape special characters, just in case
             desc = makeXML(desc)
           end
         end
-      elsif line =~ /\<\/tr/
+      elsif line =~ /<\/tr/
         # end of table row: did we collect info from two rows?
         if trcount == 2
           # output what has been gathered

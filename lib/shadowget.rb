@@ -172,7 +172,7 @@ class ShadowFetch
     # check for valid closed html
     if not @data
       debug "we must not have a net connection, uh no"
-    elsif @data !~ /\<\/html\>\s*$/
+    elsif @data !~ /<\/html>\s*$/
       if @url =~ /geocaching\.com/
         displayWarning "No closing HTML tag found"
         #@data = nil
