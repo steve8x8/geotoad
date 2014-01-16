@@ -26,7 +26,7 @@ _*(year per year; new entries will be added at bottom)*_
 2014-01-14:
   * [http://forums.groundspeak.com/GC/index.php?showtopic=318865 release notes]
   * *{{{Web.HotFix_20140113.2}}}*
-  * _Issue 297: owner string with trailing whitespace_
+  * _Issue 297: trailing whitespace in patterns (owner, coordinates)_
 ----
 == (now) ==
 ----

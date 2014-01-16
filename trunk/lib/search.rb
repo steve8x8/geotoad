@@ -574,11 +574,17 @@ class SearchCache
       debug "Cache appears to be archived"
     end
     # premium-member only
-    if data =~ /lblDifficulty\"*?(\d(\.\d)?) out of/m
+    #         <strong>
+    #        <span id="ctl00_ContentBody_lblDifficulty">Difficulty:</span></strong>
+    #    <img src="http://www.geocaching.com/images/stars/stars1_5.gif" alt="1.5 out of 5" />&nbsp;
+    #    <strong>
+    #        <span id="ctl00_ContentBody_lblTerrain">Terrain:</span></strong>
+    #    <img src="http://www.geocaching.com/images/stars/stars1_5.gif" alt="1.5 out of 5" />
+    if data =~ /lblDifficulty\".*?(\d(\.\d)?) out of 5/m
       cdiff = tohalfint($1)
       debug "Found PMO D: #{cdiff}"
     end
-    if data =~ /lblTerrain\"*?(\d(\.\d)?) out of/m
+    if data =~ /lblTerrain\".*?(\d(\.\d)?) out of 5/m
       cterr = tohalfint($1)
       debug "Found PMO T: #{cterr}"
     end
