@@ -1,10 +1,24 @@
 #summary Features of current version
 #labels Featured
 
-version=3.19.2
+version=3.20.0`*`
 
-= "Final fun" release (Jan 6, 2014) =
+= "No fun" (Fun factors gone) release (Jan 16, 2014) =
+  * *Strongly recommended after 2014-01-14 site update!*
 
+= What's new in 3.20.0? =
+  * nicknamed "No fun" (Fun factors no longer supported)
+
+== Issues addressed: ==
+  * Issue 292: Remove fun factors (use fav factors instead)
+  * Issue 295: Handle --output="" as "automatic"
+  * Issue 297: Trailing whitespace in owner field after 2014-01-14 update
+  * Still open important issues (feedback required):
+    281 (logging date of archived caches)
+    283 (GC statistics and GCStatistic, different weekday distribution)
+  * Minor additions, modifications, cleanups, and bug fixes
+
+----
 = What's new in 3.19.2? =
   * nicknamed "Final fun" (last release to support fun factors)
 
