@@ -214,10 +214,10 @@ UninstallDisplayIcon={app}\geotoad.exe
 
 [Files]
 Source: "geotoad.exe";               DestDir: "{app}"
-Source: "contrib\Delorme_Icons\*.*"; DestDir: "{app}\contrib\Delorme_Icons"
-Source: "data\*.*";                  DestDir: "{app}\data"
+Source: "contrib\Delorme_Icons\*.*"; DestDir: "{app}\contrib\Delorme_Icons"; Flags: skipifsourcedoesntexist
+Source: "data\*.*";                  DestDir: "{app}\data"; Flags: skipifsourcedoesntexist
 Source: "templates\*.*";             DestDir: "{app}\templates"
-Source: "tools\*.*";                 DestDir: "{app}\tools"
+Source: "tools\*.*";                 DestDir: "{app}\tools"; Flags: skipifsourcedoesntexist
 Source: "ChangeLog.txt";             DestDir: "{app}"
 Source: "COPYRIGHT.txt";             DestDir: "{app}"
 Source: "FAQ.txt";                   DestDir: "{app}"
