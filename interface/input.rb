@@ -104,7 +104,7 @@ class Input
       [ "--terrainMin",  "--minTerrain", "-t",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--terrainMax",  "--maxTerrain", "-T",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--user",          "--username", "-u",    GetoptLong::REQUIRED_ARGUMENT ],
-
+      [ "--unbufferedOutput",            "-U",    GetoptLong::NO_ARGUMENT ],
       [ "--verbose",          "--debug", "-v",    GetoptLong::NO_ARGUMENT ],
 
       [ "--waypointLength",              "-w",    GetoptLong::REQUIRED_ARGUMENT ],
@@ -283,6 +283,7 @@ class Input
     puts " -X                     emergency switch: disable early filtering"
     puts " -H                     suppress history collection"
     puts " -C                     selectively clear local browser cache"
+    puts " -U                     use unbuffered output"
     puts ""
     puts "::: OUTPUT FORMATS:"
     outputDetails = Output.new
