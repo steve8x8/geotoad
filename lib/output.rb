@@ -1280,6 +1280,8 @@ class Output
       'maps_url' => "#{GOOGLE_MAPS_URL}?q=#{coord_query}",
       'IsAvailable' => (available==true).to_s.capitalize,
       'IsArchived' => (archived==true).to_s.capitalize,
+      # cartridge CGUID has 36 characters, so has the "dummy" one
+      'cartridge' => (cache['cartridge'] || '_no_link_to_wherigo_cartridge_found_'),
       'location' => location,
       'relativedistance' => relative_distance,
       'relativedistancekm' => relative_distance_km,
