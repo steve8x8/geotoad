@@ -432,6 +432,7 @@ class SearchCache
     disabled = false
     archived = false
     membersonly = false
+    cartridge = nil
     country = nil
     state = nil
     ctype = 'Unknown Cache'
@@ -450,6 +451,15 @@ class SearchCache
     data.split("\n").each { |line|
       line.gsub!(/&#39;/, '\'')
       case line
+      # wherigo cartridge link
+      # http://www.wherigo.com/cartridge/details.aspx?CGUID=...
+      # http://www.wherigo.com/cartridge/download.aspx?CGUID=...
+      when /(www\.wherigo\.com\/cartridge\/\w+.aspx\?CGUID=([0-9a-f-]+))/
+        debug "Wherigo cartridge at #{$1}"
+        # do not overwrite with later ones
+        if not cartridge
+          cartridge = $2
+        end
       # <span id="ctl00_litPMLevel">Basic Member</span>
       when /id=\"ctl00_litPMLevel\">([^>]+)</
         debug "Membership confirmed as \"#{$1}\""
@@ -595,6 +605,7 @@ class SearchCache
       'disabled' => disabled,
       'archived' => archived,
       'membersonly' => membersonly,
+      'cartridge' => cartridge,
       'country' => country,
       'state' => state,
       'name' => cname,

@@ -139,7 +139,8 @@ syntax: geotoad [options] <search:search2:search3>
  mapsend(+)    mxf           myfindgpx     myfindlist    ozi          
  pcx(+)        poi-nuvi(+)   psp(+)        sms           sms2         
  tab           text          tiger         tmpro(+)      tpg(+)       
- vcf           wp2guid       xmap(+)       yourfindgpx   yourfindlist 
+ vcf           wherigo       wp2guid       xmap(+)       yourfindgpx  
+ yourfindlist 
  (+) requires gpsbabel  (=) requires cmconvert  (%) requires iconv in PATH
 
 ::: EXAMPLES:

@@ -484,6 +484,17 @@ class CacheDetails
         debug "Found #{anum} attributes: #{atxt}"
       end
 
+      # wherigo cartridge link
+      # http://www.wherigo.com/cartridge/details.aspx?CGUID=...
+      # http://www.wherigo.com/cartridge/download.aspx?CGUID=...
+      if line =~ /(www\.wherigo\.com\/cartridge\/\w+.aspx\?CGUID=([0-9a-f-]+))/
+        debug "Wherigo cartridge at #{$1}"
+        # do not overwrite with later ones
+        if not cache['cartridge']
+          cache['cartridge'] = $2
+        end
+      end
+
       if line =~ /^\s*<h\d>Cache is Unpublished<\/h\d>\s*$/i
         return "unpublished"
       end
