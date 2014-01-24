@@ -14,8 +14,8 @@ version=3.20.0`*`
   * Issue 295: Handle --output="" as "automatic"
   * Issue 297: Trailing whitespace in owner field after 2014-01-14 update
   * Still open important issues (feedback required):
-    281 (logging date of archived caches)
-    283 (GC statistics and GCStatistic, different weekday distribution)
+    * 281 (logging date of archived caches)
+    * 283 (GC statistics and GCStatistic, different weekday distribution)
   * Minor additions, modifications, cleanups, and bug fixes
 
 ----

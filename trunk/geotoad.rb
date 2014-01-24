@@ -85,6 +85,15 @@ class GeoToad
       $mode = 'TUI'
     end
 
+    # enable synchronous output if selected by user
+    if (@option['unbufferedOutput'])
+      if (! $stdout.sync)
+        $stdout.flush
+        $stdout.sync = true
+        puts "(***) Switched to unbuffered output"
+      end
+    end
+
     if (@option['verbose'])
       enableDebug
     else
