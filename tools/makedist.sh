@@ -83,7 +83,7 @@ cd $GENERIC_DIR
 # fix permissions
 chmod 755 *.rb
 # remove non-distributable stuff
-rm VERSION tools/*.sh data/*.gz
+rm VERSION tools/convert*.sh tools/makedist*.sh data/*.gz
 # create PDF version of manual page
 groff -Tps -mman geotoad.1 | ps2pdf - geotoad.pdf
 
