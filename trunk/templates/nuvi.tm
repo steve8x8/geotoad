@@ -10,9 +10,11 @@ template = {
   # http://geocachingunterland.wordpress.com/2009/04/20/babylonisches-sprachgenie-teil-2-ersatz-fur-den-garmin-poi-loader/
   # http://bigfraud.org/mac/MacGarminTools/gpx2gpi.html
   # Still missing: radial alerts (need TourGuide features? not in gpsbabel)
+  #
+  # You may consider using the gpx-wpts (wgpx) output for additional waypoints (parking etc.)!
 
   'gpx-nuvi'    => {
-    'ext'     => 'gpxn',
+    'ext'     => 'ngpx',
     'mime'    => 'text/ascii',
     'desc'    => 'GPX Geocaching XML for Nuvi, without Additional Waypoints',
     'templatePre' => "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>\n" +
@@ -33,7 +35,7 @@ template = {
       "  <extensions>\n" +
       "    <gpxx:WaypointExtension>\n" +
       # do NOT set proximity here as it cannot be overwritten by POIloader/gpsbabel!
-      #"      <gpxx:Proximity>200</gpxx:Proximity>\n" +
+      #"      <gpxx:Proximity>250</gpxx:Proximity>\n" +
       "      <gpxx:DisplayMode>SymbolAndName</gpxx:DisplayMode>\n" +
       # gpsbabel doesn't know (but complains) about categories
       #"      <gpxx:Categories>\n" +
@@ -77,7 +79,7 @@ template = {
     # proximity: set alert at given distance (forces alerts=1)
     # sleep: make sure no 2 files have same timestamp
     # -bitmap: it's currently impossible to specify a full path name
-    'filter_exec' => 'gpsbabel -i gpx -o garmin_gpi,category="Geocaches",hide,proximity=200m,sleep=2 -f INFILE -F OUTFILE'
+    'filter_exec' => 'gpsbabel -i gpx -o garmin_gpi,category="Geocaches",hide,proximity=250m,sleep=3 -f INFILE -F OUTFILE'
   },
 
 }
