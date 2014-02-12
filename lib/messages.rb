@@ -6,6 +6,7 @@ module Messages
 
   def enableDebug(level = 1)
     $debugMode = level
+    debug "Debug level set to #{level}"
   end
 
   def disableDebug
@@ -16,9 +17,13 @@ module Messages
     puts "D: #{text}" if ($debugMode >= level)
   end
 
-  def nodebug(text)
-    # do nothing
-  end
+  # only levels 0-3 are supported by TUI
+  # temporary definitions:
+  def debug1(text) debug text, 1 end
+  def debug2(text) debug text, 2 end
+  def debug3(text) debug text, 3 end
+  # beyond 3
+  def nodebug(text) debug text, 9 end
 
   # Text that's just fluff that can be ignored.
   def displayInfo(text)
