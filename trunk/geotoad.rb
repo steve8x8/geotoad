@@ -94,9 +94,17 @@ class GeoToad
       end
     end
 
+    # may be nil, a number, or "something non-nil" (=1)
     if (@option['verbose'])
-      enableDebug
+      if (@option['verbose'].to_i > 0)
+        displayInfo "Setting debug level to #{@option['verbose']}"
+        enableDebug(@option['verbose'].to_i)
+      else
+        displayInfo "Setting debug level to 1"
+        enableDebug
+      end
     else
+      displayInfo "Suppressing debug output"
       disableDebug
     end
 

@@ -134,7 +134,12 @@ class Input
           arg = guessQueryType(arg)
           debug "queryType is now #{arg}"
         end
-        @@optHash[opt.gsub(/-/,'')] = arg
+        # verbose special treatment: sum up how often
+        if (opt == '--verbose')
+          @@optHash['verbose'] = @@optHash['verbose'].to_i + 1
+        else
+          @@optHash[opt.gsub(/-/,'')] = arg
+        end
       end
     rescue
       usage
@@ -374,12 +379,15 @@ class Input
       printf("(26) output directory    [%-51.51s]\n", (@@optHash['outDir'] || findOutputDir))
       puts "=============================================================================="
       if @@optHash['verbose']
-        enableDebug
-        puts "** VERBOSE MODE ENABLED"
+        level = @@optHash['verbose'].to_i
+        level = (level > 0) ? level : 1
+        enableDebug(level)
+        msg = "enabled (level #{level})"
       else
         disableDebug
-        puts "** Verbose (debug) mode disabled, (v) to change"
+        msg = "disabled"
       end
+      puts "** Verbose (debug) mode #{msg}, (v) to change"
       print "-- Enter menu number, (s) to start, (r) to reset, or (x) to exit --> "
       answer = $stdin.gets.chop
       puts ""
@@ -649,21 +657,30 @@ class Input
         if (@@optHash['queryType'] == 'country' || @@optHash['queryType'] == 'state')
           @@optHash['queryArg'] = @@optHash['queryArg'].to_s.split(/=/)[0]
         end
+
       when 'r'
         resetOptions
+
       when 'v'
-        if  @@optHash['verbose']
-          @@optHash['verbose']=nil
+        # cycle through verbose levels 0--3
+        # get current level
+        if @@optHash['verbose']
+          level = @@optHash['verbose'].to_i
+          level = (level > 0) ? level : 1
         else
-          @@optHash['verbose'] = 'X'
+          level = 0
         end
+        # next one
+        level = (level + 1) % 4
+        # map 0 back to nil
+        level = (level == 0) ? nil : level
+        @@optHash['verbose'] = level
+
       when 'x'
         puts "Cya!"
         exit
 
-
       end
-
       saveConfig
     end
 
