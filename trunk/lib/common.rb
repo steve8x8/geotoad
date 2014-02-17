@@ -329,7 +329,7 @@ module Common
     end
     history[cmdhash]['count'] = history[cmdhash]['count'].to_i + 1
     history[cmdhash]['cmdline'] = cmdline
-    nodebug "history: #{history.inspect}"
+    #debug "history: #{history.inspect}"
   end
 
   def saveHistory(history)

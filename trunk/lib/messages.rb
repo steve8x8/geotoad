@@ -15,14 +15,14 @@ module Messages
 
   def debug(text, level = 1)
     puts "D: #{text}" if ($debugMode >= level)
+    #puts "D#{level}: #{text}" if ($debugMode >= level)
+    #puts "D#{(level > 1) ? level : ''}: #{text}" if ($debugMode >= level)
   end
 
   # only levels 0-3 are supported by TUI
-  # temporary definitions:
   def debug1(text) debug text, 1 end
   def debug2(text) debug text, 2 end
   def debug3(text) debug text, 3 end
-  # beyond 3
   def nodebug(text) debug text, 9 end
 
   # Text that's just fluff that can be ignored.
