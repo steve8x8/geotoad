@@ -251,7 +251,7 @@ class Output
   def shortName(name)
     # idea: have maxlength "a bit" longer than final @waypointLength?
     maxlength = @waypointLength
-    debug "shortname: start with \"#{name}\""
+    debug2 "shortname: start with \"#{name}\""
     tempname = name.dup
     tempname = makeText(tempname)
     tempname = utf8upcase(tempname[0..0]) + tempname[1..-1].to_s
@@ -269,11 +269,11 @@ class Output
     tempname.gsub!(/_/, '')
     tempname.gsub!(/[~\-\#]/, ' ')
     tempname.gsub!(/\"/, ' ')
-    debug "shortname: clean \"#{tempname}\""
+    debug3 "shortname: clean \"#{tempname}\""
 
     # acronym.
     #if tempname =~ /(\w)\. +(\w)\. +(\w)/
-    #  debug "shortname: acronym detected.. removing extraneous dots and spaces"
+    #  debug3 "shortname: acronym detected.. removing extraneous dots and spaces"
     #  # Note: a bit dangerous
     #  tempname.gsub!(/\. +/, '')
     #end
@@ -306,10 +306,10 @@ class Output
     # already short enough?
     result = newwords.join
     if result.length <= maxlength
-      debug "shortname: returning \"#{result}\" (#{result.length})"
+      debug2 "shortname: returning \"#{result}\" (#{result.length})"
       return result
     end
-    debug "shortname: lower \"#{result}\""
+    debug3 "shortname: lower \"#{result}\""
     # shorten by removing special characters
     (1 .. wordcount).each { |index|
       word = newwords[-index]
@@ -319,11 +319,11 @@ class Output
       newwords[-index] = word
       result = newwords.join
       if result.length <= maxlength
-        debug "shortname: returning \"#{result}\" (#{result.length})"
+        debug2 "shortname: returning \"#{result}\" (#{result.length})"
         return result
       end
     }
-    debug "shortname: extra \"#{result}\""
+    debug3 "shortname: extra \"#{result}\""
     # shorten by replacing some keywords, again right to left
     (1 .. wordcount).each { |index|
       # case insensitive replacement
@@ -337,11 +337,11 @@ class Output
       end
       result = newwords.join
       if result.length <= maxlength
-        debug "shortname: returning \"#{result}\" (#{result.length})"
+        debug2 "shortname: returning \"#{result}\" (#{result.length})"
         return result
       end
     }
-    debug "shortname: words \"#{result}\""
+    debug3 "shortname: words \"#{result}\""
     # remove extra characters word by word from right to left
     (1 .. wordcount).each { |index|
       word = newwords[-index]
@@ -351,11 +351,11 @@ class Output
       newwords[-index] = word
       result = newwords.join
       if result.length <= maxlength
-        debug "shortname: returning \"#{result}\" (#{result.length})"
+        debug2 "shortname: returning \"#{result}\" (#{result.length})"
         return result
       end
     }
-    debug "shortname: extra \"#{result}\""
+    debug3 "shortname: extra \"#{result}\""
     # shorten by removing vowels from long words first
     (1 .. wordcount).each { |index|
       word = newwords[-index]
@@ -370,7 +370,7 @@ class Output
       end
       result = newwords.join
       if result.length <= maxlength
-        debug "shortname: returning \"#{result}\" (#{result.length})"
+        debug2 "shortname: returning \"#{result}\" (#{result.length})"
         return result
       end
     }
@@ -385,13 +385,13 @@ class Output
       end
       result = newwords.join
       if result.length <= maxlength
-        debug "shortname: returning \"#{result}\" (#{result.length})"
+        debug2 "shortname: returning \"#{result}\" (#{result.length})"
         return result
       end
     }
     # if we got here we can't do a lot more
     result = newwords.join
-    debug "shortname: last exit, returning \"#{result}\" (#{result.length})"
+    debug2 "shortname: last exit, returning \"#{result}\" (#{result.length})"
     return result
   end
 
@@ -411,11 +411,11 @@ class Output
       shorter_name = shortName(cache['name'])
       shortest_name = shorter_name[0..(@waypointLength - 1)].ljust(@waypointLength)
       # may be shorter than required!
-      debug "updateshortnames: #{shorter_name} -> #{shortest_name}"
+      debug2 "updateshortnames: #{shorter_name} -> #{shortest_name}"
       # do we share this name with at least another cache?
       if snames.has_key?(utf8upcase(shortest_name))
         other_wid = snames[utf8upcase(shortest_name)]
-        debug "updateshortnames: Conflict found with #{shortest_name} (#{wid} vs #{other_wid})"
+        debug3 "updateshortnames: Conflict found with #{shortest_name} (#{wid} vs #{other_wid})"
         # we want to fill in 'GC12345' backwards, and a '#'
         unique = wid
         widlen = unique.length
@@ -434,7 +434,7 @@ class Output
         # we might still not have resolved the issue...
         #if snames.has_key(utf8upcase(newname)) ...
         shortest_name = newname
-        debug "updateshortnames: short name using wid: #{wid} -> #{shortest_name}"
+        debug2 "updateshortnames: short name using wid: #{wid} -> #{shortest_name}"
         #displayMessage "Resolved short-name conflict for #{wid} (#{shortest_name}) and #{other_wid} (#{other_cache['sname']})"
       end
       snames[utf8upcase(shortest_name)] = wid
@@ -496,15 +496,15 @@ class Output
     @username = username
 
     # if we are not actually generating the output, lets do it in a meta-fashion.
-    nodebug "preparing for #{@outputType}"
+    debug2 "preparing for #{@outputType}"
     if @outputFormat['filter_exec']
       post_format = @outputType
-      debug "pre-formatting as #{@outputFormat['filter_src']} (from #{post_format})"
+      debug3 "pre-formatting as #{@outputFormat['filter_src']} (from #{post_format})"
       self.formatType=@outputFormat['filter_src']
-      debug "pre-format: #{@outputFormat['desc']}"
+      debug3 "pre-format: #{@outputFormat['desc']}"
       @output = generateOutput(title)
       self.formatType = post_format
-      debug "post-format: #{@outputFormat['desc']} via #{@outputFormat['filter_exec']}"
+      debug3 "post-format: #{@outputFormat['desc']} via #{@outputFormat['filter_exec']}"
     else
       @output = generateOutput(title)
     end
@@ -523,7 +523,7 @@ class Output
 
   # writes the output to a file or to a program #############################
   def commit (file)
-    nodebug "committing file type #{@outputType} to #{file}"
+    debug2 "committing file type #{@outputType} to #{file}"
     if @outputFormat['filter_exec']
       displayMessage "Executing #{@outputFormat['filter_exec']}"
       exec = @outputFormat['filter_exec'].dup
@@ -544,7 +544,7 @@ class Output
         exec.gsub!('STYLEFILE', "\"#{stylefile}\"")
       end
 
-      debug "exec = #{exec}"
+      debug2 "exec = #{exec}"
       ok = system(exec)
       # clean up temp files
       begin
@@ -561,7 +561,7 @@ class Output
         displayWarning "Output filter did not create file #{file}. exec was: #{exec}"
       end
     else
-      nodebug "no exec"
+      debug3 "no exec"
       ok = writeFile(file)
     end
     return ok
@@ -570,7 +570,7 @@ class Output
   def replaceVariables(templateText, wid)
     # okay. I will fully admit this is a *very* unusual way to handle
     # the templates. This all came to be due to a lot of debugging.
-    nodebug "out.wid for #{wid.inspect} is [#{@outVars['wid'].inspect}]"
+    debug3 "out.wid for #{wid.inspect} is [#{@outVars['wid'].inspect}]"
     tags = templateText.scan(/<%(\w+\.\w+)%>/)
     text = templateText.dup
     tags.each { |tag|
@@ -597,13 +597,13 @@ class Output
         value = CGI.escapeHTML(makeText(@outVars[var].to_s))
       end
       # this one produces a lot of noise - make it a single line, then FIXME
-      debug "TAG <%#{tag}%> for #{wid} -> #{value.gsub(/[\n\r]+/, '<|>')}"
+      debug2 "TAG <%#{tag}%> for #{wid} -> #{value.gsub(/[\n\r]+/, '<|>')}"
 
       # This looks very ugly, but it works around backreference issues. Thanks ddollar!
       text.gsub!('<%' + tag[0] + '%>') { value }
     }
 
-    nodebug "Replaced text: #{text}"
+    debug3 "Replaced text: #{text}"
     return text
   end
 
@@ -621,7 +621,7 @@ class Output
         u = ((hi >> 6) & 0x1f) + 1
         c = (u << 16) | x
         hex = c.to_s(16).upcase
-        debug "converting surrogate #{$1}/#{$2} to #{hex}"
+        debug2 "converting surrogate #{$1}/#{$2} to #{hex}"
         '&#x' + hex + ';'
       }
     end
@@ -837,18 +837,13 @@ class Output
   end
 
   def createGpxCommentLogs(cache)
-    #if not cache['comments']
-    #  debug "No comments found for #{cache['name']}"
-    #  return nil
-    #end
-
     entries = []
     debug "Generating comment XML for #{cache['name']}"
     brlf = "\&lt;br /\&gt;\n"
 
     # info log entry
     if (@commentLimit > 0) && cache['ltime']
-      nodebug "info log entry"
+      debug3 "info log entry"
       entry = ''
       entry << "    <groundspeak:log id=\"-2\">\n"
       formatted_date = cache['ltime'].strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -882,7 +877,7 @@ class Output
         # strip images from log entries
         comment_text = icons2Text(comment['text'].to_s)
         comment_id = Zlib.crc32(comment_text)
-        nodebug "Comment ID: #{comment_id} by #{comment['user']}: #{comment_text}"
+        debug3 "Comment ID: #{comment_id} by #{comment['user']}: #{comment_text}"
         formatted_date = comment['date'].strftime("%Y-%m-%dT07:00:00.000Z")
         entry = ''
         entry << "    <groundspeak:log id=\"#{comment_id}\">\n"
@@ -896,8 +891,8 @@ class Output
       }
     end
     debug "Finished generating comment XML for #{cache['name']}"
-    nodebug "Comment Data: #{entries}"
-    nodebug "Comment Data Length: #{entries.length}"
+    debug2 "Comment Data Length: #{entries.length}"
+    debug3 "Comment Data: #{entries}"
     return entries.join('')
   end
 
@@ -929,8 +924,8 @@ class Output
       commentcount += 1
     }
     debug "Finished generating comment text for #{cache['name']}"
-    nodebug "Comment Data: #{entries}"
-    nodebug "Comment Data Length: #{entries.length}"
+    debug2 "Comment Data Length: #{entries.length}"
+    debug3 "Comment Data: #{entries}"
     return entries.join('')
   end
 
@@ -957,8 +952,8 @@ class Output
       commentcount += 1
     }
     debug "Finished generating comment HTML for #{cache['name']}"
-    nodebug "Comment Data: #{entries}"
-    nodebug "Comment Data Length: #{entries.length}"
+    debug2 "Comment Data Length: #{entries.length}"
+    debug3 "Comment Data: #{entries}"
     return entries.join('')
   end
 
@@ -966,13 +961,13 @@ class Output
     if hint
       # split hint into bracketed and unbracketed fragments
       decrypted = hint.gsub(/\[/, '\n[').gsub(/\]/, ']\n').split('\n').collect { |x|
-        nodebug "hint fragment #{x}"
+        debug3 "hint fragment #{x}"
         if x[0..0] != '['
           # only decrypt text not within brackets
           x.tr!('A-MN-Za-mn-z', 'N-ZA-Mn-za-m')
           # re-"en"crypt HTML entities
           x.gsub!(/(\&.*?;)/) { $1.tr('A-MN-Za-mn-z', 'N-ZA-Mn-za-m') }
-          nodebug "decrypted #{x}"
+          debug3 "decrypted #{x}"
         end
         # join decrypted and unchanged fragments
         x }.join
@@ -1035,9 +1030,9 @@ class Output
     new_text.gsub!(/\s*class=\"[^\"]*\"/m, '')
     # we have to keep the "ishidden" information for later
     if text != new_text
-      nodebug "reduced HTML to #{new_text}"
+      debug3 "reduced HTML to #{new_text}"
     end
-    debug "reduceHTML old: #{text.length} new: #{new_text.length}"
+    debug2 "reduceHTML old: #{text.length} new: #{new_text.length}"
     return new_text
   end
 
@@ -1153,7 +1148,7 @@ class Output
       end
     }
     if wptlist.length > 0
-      nodebug "XML waypoints #{wptlist}"
+      debug3 "XML waypoints #{wptlist}"
       return wptlist
     else
       return nil
@@ -1226,7 +1221,7 @@ class Output
             sprintf("id=\"%s\" inc=\"%s\">", cache["attribute#{x}id"], cache["attribute#{x}inc"]) +
             cache["attribute#{x}txt"].to_s.capitalize.gsub(/\\/,"/") +
             "</groundspeak:attribute>\n"
-          nodebug "Attribute #{x} XML: #{rawattrib}"
+          debug3 "Attribute #{x} XML: #{rawattrib}"
           xmlAttrs << rawattrib
         end
       }
@@ -1243,7 +1238,7 @@ class Output
         tbid = 801205108 + rand(923520) # = X0abcd
         # convert into string
         tbref = 'TB' + (tbid + 411120).to_s(31).upcase.tr('0-9A-U', '0-9A-HJKMNPQRTV-Z')
-        debug "Trackables: use fake id #{tbid} = #{tbref} for #{tbname}"
+        debug2 "Trackables: use fake id #{tbid} = #{tbref} for #{tbname}"
         xmlTrackables << "\n"
         xmlTrackables << "    <groundspeak:travelbug id=\"#{tbid}\" ref=\"#{tbref}\">\n"
         xmlTrackables << "      <groundspeak:name>" + makeXML(tbname) + "</groundspeak:name>\n"
@@ -1252,10 +1247,10 @@ class Output
       }
     end
     if xmlTrackables.length > 0
-      nodebug "Generated trackables XML: #{xmlTrackables}"
+      debug3 "Generated trackables XML: #{xmlTrackables}"
     end
     if txtTrackables.length > 0
-      nodebug "Generated trackables text: #{txtTrackables}"
+      debug3 "Generated trackables text: #{txtTrackables}"
     end
 
     begin
@@ -1313,7 +1308,7 @@ class Output
   end
 
   def generateOutput(title)
-    nodebug "generating output: #{@outputType} - #{$FORMATS[@outputType]['desc']}"
+    debug3 "generating output: #{@outputType} - #{$FORMATS[@outputType]['desc']}"
     @outVars = Hash.new
     @outVars['title'] = title
     @outVars['version'] = GTVersion.version
@@ -1343,7 +1338,7 @@ class Output
     }
     # remove unset elements ([0])
     wpSearchOrder.compact!
-    debug "WPs in search order: #{wpSearchOrder.inspect}"
+    debug2 "WPs in search order: #{wpSearchOrder.inspect}"
     # use wpSearchOrder.reverse_each{} for reverse search order
 
     counter = 0

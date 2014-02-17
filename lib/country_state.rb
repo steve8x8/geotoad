@@ -35,7 +35,7 @@ class CountryState
   def getCountriesPage()
     post_vars, options = parseSearchPage(@@base_url, nil)
     option, key = findOptionAndValue(options, "By Country")
-    debug "Changing #{option} from #{post_vars[option]} to #{key}"
+    debug2 "Changing #{option} from #{post_vars[option]} to #{key}"
     post_vars[option] = key
 
     post_vars, options = parseSearchPage(@@base_url, post_vars)
@@ -73,7 +73,7 @@ class CountryState
       if option =~ /selectCountry/
         options[option].each do |key, desc|
           if key == country or desc == country
-            debug "Setting country option #{option} to #{key} (#{desc})"
+            debug2 "Setting country option #{option} to #{key} (#{desc})"
             found_country = key
             post_vars[option] = key
           end
@@ -134,10 +134,10 @@ class CountryState
 
     data.each_line {|line|
       if line =~ /^<input type=\"hidden\" name=\"([^\"]*?)\".* value=\"([^\"]*?)\" \/>/
-        debug "found hidden post variable: #{$1}=#{$2}"
+        debug3 "found hidden post variable: #{$1}=#{$2}"
         post_vars[$1] = $2
       elsif line =~ /^<input type=\"submit\" name=\"([^\"]*?)\".* value=\"([^\"]*?)\"/
-        debug "found submit post variable: #{$1}=#{$2}"
+        debug3 "found submit post variable: #{$1}=#{$2}"
         post_vars[$1] = $2
       elsif line =~ /<select name=\"([^\"]*?)\"/
         current_select_name = $1
@@ -145,14 +145,14 @@ class CountryState
       elsif line =~ /<option selected=\"selected\" value=\"([^\"]*?)\".*?>(.*?)</
         options[current_select_name] << [$1, $2]
         if current_select_name
-          debug "found selected option for #{current_select_name} #{$1}=#{$2}"
+          debug3 "found selected option for #{current_select_name} #{$1}=#{$2}"
           post_vars[current_select_name] = $1
         else
           displayWarning "Found selected <option> #{$1}, but no previous <select> tag."
           return nil
         end
       elsif line =~ /<option.*value=\"([^\"]*?)\".*?>(.*?)</
-        debug "found option: #{$1}=#{$2}"
+        debug3 "found option: #{$1}=#{$2}"
         options[current_select_name] << [$1, $2]
       end
     }

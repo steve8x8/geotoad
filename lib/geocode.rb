@@ -46,7 +46,7 @@ class GeoCode
   def create_url(location, type)
     q = CGI.escape(location)
     url = "#{MAPS_URL}&#{type}=#{q}"
-    debug "geocode url: #{url}"
+    debug2 "geocode url: #{url}"
     return url
   end
 
@@ -56,7 +56,7 @@ class GeoCode
     http.maxFailures = 5
     http.useCookie = false
     results = http.fetch
-    nodebug "geocode data: #{results.inspect}"
+    debug3 "geocode data: #{results.inspect}"
     return results
   end
 
