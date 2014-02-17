@@ -48,7 +48,7 @@ class ShadowFetch
   end
 
   def useCookie=(usecookie)
-    nodebug "use cookie: #{usecookie}"
+    debug "use cookie: #{usecookie}"
     @useCookie = usecookie
   end
 
@@ -57,7 +57,7 @@ class ShadowFetch
     if vars
       vars.each_key {|key|
         if key !~ /^__/
-          debug "SET #{key}: #{(key =~ /[Pp]assword/)?'(hidden)':vars[key]}"
+          debug2 "SET #{key}: #{(key =~ /[Pp]assword/)?'(hidden)':vars[key]}"
         end
         if (@postString)
           @postString = @postString + "&"
@@ -73,7 +73,7 @@ class ShadowFetch
   end
 
   def src
-    debug "src of last get was #{@@src}"
+    debug2 "src of last get was #{@@src}"
     @@src
   end
 
@@ -88,7 +88,7 @@ class ShadowFetch
       # we used to just keep the postdata in the filename, but DOS has
       # a 255 character limit on filenames. Lets hash it instead.
       url = url + "-P=" + Digest::MD5.hexdigest(postdata)
-      nodebug "added post vars to url: #{url}"
+      debug3 "added post vars to url: #{url}"
     end
 
     fileParts = url.split('/')
@@ -144,8 +144,8 @@ class ShadowFetch
     localfile = cacheFile(@url)
     localparts = localfile.split(/[\\\/]/)
     localdir = File.join(localparts[0..-2])  # basename sucks in Windows.
-    nodebug "====+ Fetch URL: #{url}"
-    nodebug "====+ Fetch File: #{localfile}"
+    debug3 "====+ Fetch URL: #{url}"
+    debug3 "====+ Fetch File: #{localfile}"
 
     # expiry?
     if (File.readable?(localfile))
@@ -197,7 +197,7 @@ class ShadowFetch
     end
 
     if (! File.exists?(localdir))
-      debug "creating #{localdir}"
+      debug2 "creating #{localdir}"
       FileUtils::mkdir_p(localdir)
     end
 
@@ -224,7 +224,7 @@ class ShadowFetch
       invalidate()
       return nil
     end
-    debug "#{data.length} bytes retrieved from local cache"
+    debug2 "#{data.length} bytes retrieved from local cache"
     return data
   end
 
@@ -252,10 +252,10 @@ class ShadowFetch
     if ENV['HTTP_PROXY']
       proxy = URI.parse(ENV['HTTP_PROXY'])
       proxy_user, proxy_pass = uri.userinfo.split(/:/) if uri.userinfo
-      debug "Using proxy from environment: " + ENV['HTTP_PROXY']
+      debug2 "Using proxy from environment: " + ENV['HTTP_PROXY']
       http = Net::HTTP::Proxy(proxy.host, proxy.port, proxy_user, proxy_pass).new(uri.host, uri.port)
     else
-      nodebug "No proxy found in environment, using standard HTTP connection."
+      debug3 "No proxy found in environment, using standard HTTP connection."
       http = Net::HTTP.new(uri.host, uri.port)
     end
     if uri.scheme == 'https'
@@ -278,26 +278,26 @@ class ShadowFetch
     if @useCookie
       @cookie = loadCookie()
       if @cookie
-        nodebug "Added Cookie to #{url_str}: #{hideCookie(@cookie)}"
+        debug3 "Added Cookie to #{url_str}: #{hideCookie(@cookie)}"
         @httpHeaders['Cookie'] = @cookie
       else
-        debug "No cookie to add to #{url_str}"
+        debug3 "No cookie to add to #{url_str}"
       end
     else
-      debug "Cookie not added to #{url_str}"
+      debug3 "Cookie not added to #{url_str}"
     end
 
     success = true
     begin
       if (@postVars)
         @httpHeaders['Content-Type'] =  "application/x-www-form-urlencoded"
-        debug "POST to #{query}, headers are #{@httpHeaders.keys.join(" ")}"
+        debug2 "POST to #{query}, headers are #{@httpHeaders.keys.join(" ")}"
         resp = http.post(query, @postString, @httpHeaders)
         # reset POST variables
         @postVars = nil
         @postString = nil
       else
-        debug "GET to #{query}, headers are #{@httpHeaders.keys.join(" ")}"
+        debug2 "GET to #{query}, headers are #{@httpHeaders.keys.join(" ")}"
         resp = http.get(query, @httpHeaders)
       end
     rescue Timeout::Error => e
@@ -317,7 +317,7 @@ class ShadowFetch
       # we may have received a cookie
       if resp.response && resp.response['set-cookie'] && @useCookie
         @cookie = resp.response['set-cookie']
-        debug "received cookie: #{hideCookie(@cookie)}"
+        debug2 "received cookie: #{hideCookie(@cookie)}"
         saveCookie(@cookie)
       end
       location = resp['location']
@@ -380,7 +380,7 @@ class ShadowFetch
       return fetchURL(url_str, redirects)
     end
 
-    nodebug "#{url_str} successfully downloaded."
+    debug3 "#{url_str} successfully downloaded."
     # clear/decrement error counter
     if @@downloadErrors > 0
       @@downloadErrors -= 1
@@ -388,7 +388,7 @@ class ShadowFetch
 
     if resp.response && resp.response['set-cookie'] && @useCookie
       @cookie = resp.response['set-cookie']
-      debug "received cookie: #{hideCookie(@cookie)}"
+      debug2 "received cookie: #{hideCookie(@cookie)}"
       saveCookie(@cookie)
     end
 
@@ -403,7 +403,7 @@ class ShadowFetch
     if ENV['HTTP_PROXY']
       proxy = URI.parse(ENV['HTTP_PROXY'])
       proxy_user, proxy_pass = uri.userinfo.split(/:/) if uri.userinfo
-      debug "Using proxy from environment: " + ENV['HTTP_PROXY']
+      debug2 "Using proxy from environment: " + ENV['HTTP_PROXY']
       http = Net::HTTP::Proxy(proxy.host, proxy.port, proxy_user, proxy_pass).new(uri.host, uri.port)
     else
       http = Net::HTTP.new(uri.host, uri.port)
@@ -412,13 +412,13 @@ class ShadowFetch
     if @useCookie
       @cookie = loadCookie()
       if @cookie
-        debug "Added Cookie to #{url_str}: #{hideCookie(@cookie)}"
+        debug3 "Added Cookie to #{url_str}: #{hideCookie(@cookie)}"
         @httpHeaders['Cookie'] = @cookie
       else
-        debug "No cookie to add to #{url_str}"
+        debug3 "No cookie to add to #{url_str}"
       end
     else
-      debug "Cookie not added to #{url_str}"
+      debug3 "Cookie not added to #{url_str}"
     end
     success = true
     begin
@@ -436,7 +436,7 @@ class ShadowFetch
       success = false
       displayWarning "Cannot connect to #{uri.host}:#{uri.port}: #{e}"
     end
-    debug "Response: #{resp.body}"
+    debug3 "Response: #{resp.body}"
     return resp.body
   end
 
@@ -447,7 +447,7 @@ class ShadowFetch
     sleeptime = ($SLEEP + counter/250.0) * (rand+0.5)
     sleeptime = (10.0*sleeptime).round/10.0
     sleeptime = $SLEEP if (sleeptime<$SLEEP)
-    nodebug "sleep #{sleeptime} seconds"
+    debug3 "sleep #{sleeptime} seconds"
     sleep sleeptime
   end
 

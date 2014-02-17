@@ -47,49 +47,49 @@ class Filter
   end
 
   def difficultyMin(num)
-    debug "filtering by difficultyMin: #{num}"
+    debug2 "filtering by difficultyMin: #{num}"
     @waypointHash.delete_if { |wid, values|
       @waypointHash[wid]['difficulty'].to_f < num
     }
   end
 
   def difficultyMax(num)
-    debug "filtering by difficultyMax: #{num}"
+    debug2 "filtering by difficultyMax: #{num}"
     @waypointHash.delete_if { |wid, values|
       @waypointHash[wid]['difficulty'].to_f > num
     }
   end
 
   def terrainMin(num)
-    debug "filtering by terrainMin: #{num}"
+    debug2 "filtering by terrainMin: #{num}"
     @waypointHash.delete_if { |wid, values|
       @waypointHash[wid]['terrain'].to_f < num
     }
   end
 
   def terrainMax(num)
-    debug "filtering by terrainMax: #{num}"
+    debug2 "filtering by terrainMax: #{num}"
     @waypointHash.delete_if { |wid, values|
       @waypointHash[wid]['terrain'].to_f > num
     }
   end
 
   def favFactorMin(num)
-    debug "filtering by favFactorMin: #{num}"
+    debug2 "filtering by favFactorMin: #{num}"
     @waypointHash.delete_if { |wid, values|
       @waypointHash[wid]['favfactor'].to_i < num
     }
   end
 
   def favFactorMax(num)
-    debug "filtering by favFactorMax: #{num}"
+    debug2 "filtering by favFactorMax: #{num}"
     @waypointHash.delete_if { |wid, values|
       @waypointHash[wid]['favfactor'].to_i > num
     }
   end
 
   def sizeMin(size_name)
-    debug "filtering by sizeMin: #{size_name} (#{@@sizes[size_name]})"
+    debug2 "filtering by sizeMin: #{size_name} (#{@@sizes[size_name]})"
     @waypointHash.delete_if { |wid, values|
       debug "size check for #{wid}: #{@waypointHash[wid]['size']}"
       @@sizes[@waypointHash[wid]['size']].to_i < @@sizes[size_name]
@@ -102,14 +102,14 @@ class Filter
     typestr.gsub!('puzzle', 'unknown')
     typestr.gsub!('mystery', 'unknown')
     types = typestr.split($delimiters)
-    debug "filtering by types: #{types}"
+    debug2 "filtering by types: #{types}"
     @waypointHash.delete_if { |wid, values|
       not types.include?(@waypointHash[wid]['type'])
     }
   end
 
   def sizeMax(size_name)
-    debug "filtering by sizeMax: #{size_name} (#{@@sizes[size_name]})"
+    debug2 "filtering by sizeMax: #{size_name} (#{@@sizes[size_name]})"
     @waypointHash.delete_if { |wid, values|
       debug "size check for #{wid}: #{@waypointHash[wid]['size']}"
       @@sizes[@waypointHash[wid]['size']].to_i > @@sizes[size_name]
@@ -117,49 +117,49 @@ class Filter
   end
 
   def notFound
-    debug "filtering by notFound"
+    debug2 "filtering by notFound"
     @waypointHash.delete_if { |wid, values|
       @waypointHash[wid]['mdays'].to_i > -1
     }
   end
 
   def foundDateInclude(days)
-    debug "filtering by foundDateInclude: #{days}"
+    debug2 "filtering by foundDateInclude: #{days}"
     @waypointHash.delete_if { |wid, values|
       @waypointHash[wid]['mdays'].to_i >= days.to_i
     }
   end
 
   def foundDateExclude(days)
-    debug "filtering by foundDateExclude: #{days}"
+    debug2 "filtering by foundDateExclude: #{days}"
     @waypointHash.delete_if { |wid, values|
       @waypointHash[wid]['mdays'].to_i < days.to_i
     }
   end
 
   def placeDateInclude(days)
-    debug "filtering by placeDateInclude: #{days}"
+    debug2 "filtering by placeDateInclude: #{days}"
     @waypointHash.delete_if { |wid, values|
       @waypointHash[wid]['cdays'].to_i >= days.to_i
     }
   end
 
   def placeDateExclude(days)
-    debug "filtering by placeDateExclude: #{days}"
+    debug2 "filtering by placeDateExclude: #{days}"
     @waypointHash.delete_if { |wid, values|
       @waypointHash[wid]['cdays'].to_i < days.to_i
     }
   end
 
   def travelBug
-    debug "filtering by travelBug"
+    debug2 "filtering by travelBug"
     @waypointHash.delete_if { |wid, values|
       @waypointHash[wid]['travelbug'].to_s.length < 1
     }
   end
 
   def ownerExclude(nick)
-    debug "filtering by ownerExclude: #{nick}"
+    debug2 "filtering by ownerExclude: #{nick}"
     @waypointHash.delete_if { |wid, values|
       creator = CGI.unescapeHTML(@waypointHash[wid]['creator'].to_s)
       creator =~ /#{nick}/i
@@ -167,7 +167,7 @@ class Filter
   end
 
   def ownerInclude(nick)
-    debug "filtering by ownerInclude: #{nick}"
+    debug2 "filtering by ownerInclude: #{nick}"
     @waypointHash.delete_if { |wid, values|
       @waypointHash[wid]['creator'].to_s !~ /#{nick}/i
     }
@@ -175,11 +175,11 @@ class Filter
 
   def userExclude(nick0)
     nick = nick0.gsub(/=.*/, '').downcase
-    debug "filtering by notUser: #{nick}"
+    debug2 "filtering by notUser: #{nick}"
     @waypointHash.each_key { |wid|
-      debug "#{wid} visitors: #{@waypointHash[wid]['visitors']}"
+      debug3 "#{wid} visitors: #{@waypointHash[wid]['visitors']}"
       if (@waypointHash[wid]['visitors'].include?(nick))
-        debug " - #{nick} has visited #{wid} #{@waypointHash[wid]['name']}, filtering."
+        debug3 " - #{nick} has visited #{wid} #{@waypointHash[wid]['name']}, filtering."
         @waypointHash.delete(wid)
       end
     }
@@ -187,11 +187,11 @@ class Filter
 
   def userInclude(nick0)
     nick = nick0.gsub(/=.*/, '').downcase
-    debug "filtering by User: #{nick}"
+    debug2 "filtering by User: #{nick}"
     @waypointHash.each_key { |wid|
-      debug "#{wid} visitors: #{@waypointHash[wid]['visitors']}"
+      debug3 "#{wid} visitors: #{@waypointHash[wid]['visitors']}"
       if (! @waypointHash[wid]['visitors'].include?(nick))
-        debug " - #{nick} has not visited #{@waypointHash[wid]['name']}, filtering."
+        debug3 " - #{nick} has not visited #{@waypointHash[wid]['name']}, filtering."
         @waypointHash.delete(wid)
       end
     }
@@ -202,7 +202,7 @@ class Filter
     aid = id.to_i
     # remove only if attribute set to "no"
     checkfor = ((id =~ /-$/) != nil)?0:1
-    debug "filtering by notAttribute: #{id}"
+    debug2 "filtering by notAttribute: #{id}"
     @waypointHash.delete_if { |wid, values|
       dodelete = false
       cnt = @waypointHash[wid]['attributeCount']
@@ -210,12 +210,12 @@ class Filter
         (0...cnt).each { |attr|
           if (@waypointHash[wid]["attribute#{attr}id"] == aid)
             ainc = @waypointHash[wid]["attribute#{attr}inc"]
-            debug "attribute check #{aid} for #{wid}: #{ainc}==#{checkfor}?"
+            debug3 "attribute check #{aid} for #{wid}: #{ainc}==#{checkfor}?"
             dodelete = true if (ainc == checkfor)
           end
         }
       end
-      debug "#{wid} selected for removal" if dodelete
+      debug3 "#{wid} selected for removal" if dodelete
       dodelete
     }
   end
@@ -224,7 +224,7 @@ class Filter
     aid = id.to_i
     # always remove unless attribute set to "yes"
     checkfor = ((id =~ /-$/) != nil)?0:1
-    debug "filtering by Attribute: #{id}"
+    debug2 "filtering by Attribute: #{id}"
     @waypointHash.delete_if { |wid, values|
       dodelete = true
       cnt = @waypointHash[wid]['attributeCount']
@@ -232,18 +232,18 @@ class Filter
         (0...cnt).each { |attr|
           if (@waypointHash[wid]["attribute#{attr}id"] == aid)
             ainc = @waypointHash[wid]["attribute#{attr}inc"]
-            debug "attribute check #{aid} for #{wid}: #{ainc}!=#{checkfor}?"
+            debug3 "attribute check #{aid} for #{wid}: #{ainc}!=#{checkfor}?"
             dodelete = false  if (ainc == checkfor)
           end
         }
       end
-      debug "#{wid} selected for removal" if dodelete
+      debug3 "#{wid} selected for removal" if dodelete
       dodelete
     }
   end
 
   def titleKeyword(string)
-    debug "filtering by title keyword: #{string}"
+    debug2 "filtering by title keyword: #{string}"
     @waypointHash.each_key { |wid|
       # I wanted to use delete_if, but I had run into a segfault in ruby 1.6.7/8
       if string =~ /^\!(.*)/
@@ -260,7 +260,7 @@ class Filter
   end
 
   def descKeyword(string)
-    debug "filtering by desc keyword: #{string}"
+    debug2 "filtering by desc keyword: #{string}"
     @waypointHash.each_key { |wid|
       cache = @waypointHash[wid]
       if string =~ /^\!(.*)/
@@ -277,12 +277,12 @@ class Filter
   end
 
   def removeByElement(element, is = true)
-    debug "filtering by removeByElement: #{element}"
+    debug2 "filtering by removeByElement: #{element}"
     @waypointHash.each_key { |wid|
       value = @waypointHash[wid][element]
       # handle nil as false
       if (value == true) == is
-        debug " - #{wid}: #{element} => #{value.inspect}, filtering."
+        debug3 " - #{wid}: #{element} => #{value.inspect}, filtering."
         @waypointHash.delete(wid)
       end
     }
@@ -291,7 +291,7 @@ class Filter
   # add a visitor to a cache. Used by the userlookup feeder.
   def addVisitor(wid, visitor)
     if (@waypointHash[wid] && visitor)
-      debug "Added visitor to #{wid}: #{visitor}"
+      debug3 "Added visitor to #{wid}: #{visitor}"
       @waypointHash[wid]['visitors'] << visitor.downcase
     else
       return 0

@@ -309,7 +309,7 @@ class GeoToad
       return
     end
     filecount = filelist.length
-    debug "found #{filecount} files to remove: #{filelist.inspect}"
+    debug2 "found #{filecount} files to remove: #{filelist.inspect}"
     if not filelist.empty?
       displayInfo "... #{filecount} files to remove"
       filelist.each { |file|
@@ -448,7 +448,7 @@ class GeoToad
 
     waypointsExtracted = 0
     @combinedWaypoints.each_key { |wp|
-      debug "pre-filter: #{wp}"
+      debug2 "pre-filter: #{wp}"
       waypointsExtracted = waypointsExtracted + 1
     }
 
@@ -498,7 +498,7 @@ class GeoToad
           File.foreach(filename) { |line|
           if (line =~ /^(GC\w+)/i)
             wid = $1
-            debug "Add #{wid} for #{username}"
+            debug2 "Add #{wid} for #{username}"
             @filtered.addVisitor(wid, username)
             counter = counter + 1
           end
@@ -903,7 +903,7 @@ class GeoToad
     formatTypeCounter = 0
 
     # @appliedFilters: sort by option letter, ignore case
-    nodebug "appliedFilters: #{@appliedFilters.inspect}"
+    debug3 "appliedFilters: #{@appliedFilters.inspect}"
     queryTitleAdd = @appliedFilters.sort{ |a,b|
       a.join.upcase <=> b.join.upcase
     }.map{ |k,v|

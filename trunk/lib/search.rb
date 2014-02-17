@@ -102,7 +102,7 @@ class SearchCache
 
     # server uses UTC!
     @code = @codetable[Time.now.utc.day]
-    nodebug "D/T/S decoding uses code #{@code}"
+    debug3 "D/T/S decoding uses code #{@code}"
   end
 
   def txfilter=(cacheType)
@@ -283,7 +283,7 @@ class SearchCache
 
   # this code has been obsoleted, but is kept for documentation purposes
   def decodeDTS(v)
-    debug "Invoking decodeDTS with \"#{v}\""
+    debug2 "Invoking decodeDTS with \"#{v}\""
 
     # get current decoding alphabet from list
     base = @base
@@ -296,12 +296,12 @@ class SearchCache
       digit =  (code =~ /#{text[index,1]}/)
       if not digit
         # serious error: we're pretty sure to know the character set
-        debug "Cannot interpret \"#{text[index,1]}\", setting to 0"
+        debug2 "Cannot interpret \"#{text[index,1]}\", setting to 0"
         digit = 0
       end
       value = base * value + digit
     }
-    debug "Converted #{text}(#{base}) to #{value}"
+    debug3 "Converted #{text}(#{base}) to #{value}"
 
     if base == 42
       # old code that worked only two days, kept here for reference
@@ -346,13 +346,13 @@ class SearchCache
       d = [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5][d0]
       # deliberately not setting defaults if nil
     end
-    debug "Using preD/T/S=#{d0}/#{t0}/#{s0}, return D/T/S=#{d}/#{t}/#{s}"
+    debug2 "Using preD/T/S=#{d0}/#{t0}/#{s0}, return D/T/S=#{d}/#{t}/#{s}"
     return d, t, s, "#{value}=#{d}/#{t}/#{s}"
     #return d, t, s, value
   end
 
   def decodeDD(v)
-    debug "Invoking decodeDD with \"#{v}\""
+    debug2 "Invoking decodeDD with \"#{v}\""
     # the xor pattern is "signalthefrog"
     xorpattern = ["73", "69", "67", "6e", "61", "6c", "74", "68",
                   "65", "66", "72", "6f", "67", "73", "69", "67"]
@@ -380,13 +380,13 @@ class SearchCache
     direction = directions[((dd[1].to_f+22.5)/45.0).to_i]
     # anyone interested in precise azimuth?
     #direction << "(#{dd[1]})"
-    debug "Returning from decodeDD: \"#{distance}@#{direction}\""
+    debug2 "Returning from decodeDD: \"#{distance}@#{direction}\""
     return [distance, direction]
   end
   # end of obsolete code
 
   def getResults()
-    nodebug "Getting results: #{@query_type} at #{@search_url}"
+    debug3 "Getting results: #{@query_type} at #{@search_url}"
     if @query_type == 'wid'
       waypoint = getWidSearchResult(@search_url)
       if ! waypoint
@@ -662,7 +662,7 @@ class SearchCache
       debug "*** On page #{page_number} of #{pages_total}"
       last_page_number = page_number
       page_number, total_pages, total_waypoints, post_vars, src = processPage(post_vars)
-      debug "processPage returns #{page_number}/#{total_pages}"
+      debug2 "processPage returns #{page_number}/#{total_pages}"
       progress.updateText(page_number, "from #{src}")
 
       if page_number == last_page_number
@@ -807,15 +807,15 @@ class SearchCache
         end
         # href="javascript:__doPostBack('ctl00$ContentBody$pgrTop$ctl08','')"><b>Next &gt;</b></a></td>
         if line =~ /doPostBack\(\'([\w\$]+)\',\'\'\)\"><b>[^>]+ \&gt;<\/b>/ #Next
-          debug "Found next target: #{$1}"
+          debug2 "Found next target: #{$1}"
           post_vars['__EVENTTARGET'] = $1
         end
       # at least Dutch is different...
       when /doPostBack\(\'([\w\$]+)\',\'\'\)\"><b>[^>]+ \&gt;<\/b>/ #Next
-        debug "Found next target: #{$1}"
+        debug2 "Found next target: #{$1}"
         post_vars['__EVENTTARGET'] = $1
       when /^<input type=\"hidden\" name=\"(.*?)\".*value=\"(.*?)\" \/>/
-        debug "found hidden post variable: #{$1}"
+        debug2 "found hidden post variable: #{$1}"
         post_vars[$1]=$2
       # GC change 2012-02-14
       # <table class="SearchResultsTable Table"> (search results) </table>
@@ -852,7 +852,7 @@ class SearchCache
       # Yesterday<strong>*</strong><br />
       #when /^ +((\w+[ \w]+)|([0-9\/\.-]+))(<strong>)?(\*)?(<\/strong>)?<br/
       when /^ +(\w.*?)(<strong>)?(\*)?(<\/strong>)?<br/
-        debug "last found date: #{$1}#{$3} at line: #{line}"
+        debug2 "last found date: #{$1}#{$3} at line: #{line}"
         cache['mtime'] = parseDate($1+$3.to_s)
         cache['mdays'] = daysAgo(cache['mtime'])
         debug "mtime=#{cache['mtime']} mdays=#{cache['mdays']}"
@@ -863,7 +863,7 @@ class SearchCache
       # <span id="ctl00_ContentBody_dlResults_ctl01_uxUserLogDate" class="Success">Today<strong>*</strong></span></span>
       #when /^ +<span [^>]*UserLogDate[^>]*>((\w+[ \w]+)|([0-9\/\.-]+))(<strong>)?(\*?)(<\/strong>)?<\/span><\/span>/
       when /^ +<span [^>]*UserLogDate[^>]*>(.*?)(<strong>)?(\*?)(<\/strong>)?<\/span><\/span>/
-        debug "user found date: #{$1}#{$3} at line: #{line}"
+        debug2 "user found date: #{$1}#{$3} at line: #{line}"
         cache['atime'] = parseDate($1+$3.to_s)
         cache['adays'] = daysAgo(cache['atime'])
         debug "atime=#{cache['atime']} adays=#{cache['adays']}"
@@ -877,7 +877,7 @@ class SearchCache
       # <span class="small">02/16/2011</span>
       # <span class="small">04/26/2013</span> <span class="Recent">New!</span>
       when /^\s+(<span[^>]*>\s*)?(([0-9\/\.-]+)|(\d+[ \/]\w{3}[ \/]\d+)|(\w{3}\/\d+\/\d+))(\s+<img [^>]* title="New!" \/>)?<\/span>\s?(<span[^>]*>New!<\/span>)?\s*$/
-        debug "create date: #{$2} at line: #{line}"
+        debug2 "create date: #{$2} at line: #{line}"
         cache['ctime'] = parseDate($2)
         cache['cdays'] = daysAgo(cache['ctime'])
         debug "ctime=#{cache['ctime']} cdays=#{cache['cdays']}"
@@ -888,7 +888,7 @@ class SearchCache
       #  <src="../ImgGen/seek/CacheDir.ashx?k=..." ...>
       when /CacheDir.ashx\?k=([^\"]*)/
         code = $1
-        debug "found CacheDir=#{code.inspect}"
+        debug2 "found CacheDir=#{code.inspect}"
         dist, dir = decodeDD(code)
         # distance is in miles, traditionally
         if (dist =~ /km/)
@@ -1113,7 +1113,7 @@ class SearchCache
       # <img id="ctl00_ContentBody_dlResults_ctl??_uxDTCacheTypeImage" src="../ImgGen/seek/CacheInfo.ashx?v=MwlMg9" border="0">
       when /CacheInfo.ashx\?v=([a-zA-Z0-9]*)/
         code = $1
-        debug "found DTCacheTypeImage #{code}"
+        debug2 "found DTCacheTypeImage #{code}"
         # decode into 'difficulty', 'terrain', 'size'
         cache['dts'] = code # testing only
         d, t, s, v = decodeDTS(code)
@@ -1151,7 +1151,7 @@ class SearchCache
       when /^\s+<\/tr>/
         debug "--- end of row ---"
         if wid and not @waypoints.has_key?(wid)
-          debug "- closing #{wid} record -"
+          debug2 "- closing #{wid} record -"
           parsed_total += 1
           if not cache['mtime']
             cache['mdays'] = -1
@@ -1182,7 +1182,7 @@ class SearchCache
       displayWarning "Error in parseSearchData():data.split"
       raise error
     end
-    debug "processPage done: page:#{page_number} total_pages: #{pages_total} parsed: #{parsed_total}"
+    debug2 "processPage done: page:#{page_number} total_pages: #{pages_total} parsed: #{parsed_total}"
     return [page_number, pages_total, parsed_total, post_vars]
   end #end parsecache
 

@@ -55,7 +55,7 @@ class CacheDetails
     # returns json object {"d":"http://...guid=..."}
     if response =~ /guid=([\w-]*)/
       guid = $1
-      debug "Found GUID: #{guid}"
+      debug2 "Found GUID: #{guid}"
       return guid
     end
     displayWarning "Could not map(1) #{wid} to GUID"
@@ -72,7 +72,7 @@ class CacheDetails
     data = page.fetch
     if data =~ /cdpf\.aspx\?guid=([\w-]+)/m
       guid = $1
-      debug "Found GUID: #{guid}"
+      debug2 "Found GUID: #{guid}"
       return guid
     end
     displayWarning "Could not map(2) #{wid} to GUID"
@@ -87,7 +87,7 @@ class CacheDetails
         # parseCache() returns "unpublished" for pm-only w/o premium membership
         # there is no cdpf.aspx?wp=...
         guid = getMapping(id.to_s)
-        debug "dictionary maps #{id.inspect} to #{guid.inspect}"
+        debug2 "dictionary maps #{id.inspect} to #{guid.inspect}"
         if not guid
           # it's not in the dictionary; try to map using the "unpub" interface
           guid = getRemoteMapping(id.to_s)
@@ -96,7 +96,7 @@ class CacheDetails
           # no way
           return nil
         end
-        debug "mapped #{id.inspect} to #{guid.inspect}"
+        debug2 "mapped #{id.inspect} to #{guid.inspect}"
         appendMapping(id, guid)
         @waypointHash[id]['guid'] = guid
       end
@@ -138,7 +138,7 @@ class CacheDetails
           # favour caches with small "absolute age"
           if age.abs <= 10
             ttl = age.abs * 86400 / 2
-            debug "age: #{id} (#{age}, event #{@waypointHash[id]['event'].inspect}) ttl=#{ttl}"
+            debug2 "age: #{id} (#{age}, event #{@waypointHash[id]['event'].inspect}) ttl=#{ttl}"
           end
         else
           debug "no creation date found for #{id}"
@@ -318,7 +318,7 @@ class CacheDetails
           name = $1
           creator = $2
           if namecreator =~ /by .* by/
-            debug "Could not determine unambiguously name and creator"
+            debug2 "Could not determine unambiguously name and creator"
           end
         end
         debug "wid = #{wid} name=#{name} creator=#{creator}"
@@ -456,7 +456,7 @@ class CacheDetails
       # extract attributes assigned, and their value, plus the short text
       # ...<a href="/about/icons.aspx" title="Wat zijn eigenschappen?">...
       if line =~ /a href=\"\/about\/icons.aspx\" title=/
-        nodebug "inspecting attributes: #{line}"
+        debug3 "inspecting attributes: #{line}"
         # list of attributes only in cdpf version :(
         # cumulative text
         atxt = Array.new
@@ -468,7 +468,7 @@ class CacheDetails
         line.scan(/\/images\/attributes\/(.+?)\.gif. alt=\"(.*?)\"[^>]*\/>/) { |icon, alt|
           # convert each image name into index/value pair, keep related text
           aid, ainc = parseAttr(icon)
-          nodebug "attribute #{anum}: ic=#{icon} id=#{aid} inc=#{ainc} alt=#{alt} "
+          debug3 "attribute #{anum}: ic=#{icon} id=#{aid} inc=#{ainc} alt=#{alt} "
           if aid > 0
             # make this a 3d array instead? ...['attributes'][aid]=ainc
             cache["attribute#{anum}id"] = aid
@@ -529,7 +529,7 @@ class CacheDetails
           if not cache['ctime']
             cache['time'] = ctime
           elsif (ctime != cache['ctime'])
-            debug "ctime changed: " + cache['ctime'].strftime("%Y-%m-%d") + " -> " + ctime.strftime("%Y-%m-%d")
+            debug2 "ctime changed: " + cache['ctime'].strftime("%Y-%m-%d") + " -> " + ctime.strftime("%Y-%m-%d")
           end
           cache['cdays'] = daysAgo(cache['ctime'])
           if what =~ /Event/
@@ -579,7 +579,7 @@ class CacheDetails
     if data =~ /id=\"uxDecryptedHint\".*?>\s*(.*?)\s*<\/div/m
       hint = $1.strip
       if hint =~ /[<>]/
-        debug "Hint contains HTML: #{hint}"
+        debug2 "Hint contains HTML: #{hint}"
       end
       hint.gsub!(/^ +/, '')
       # remove whitespace/linebreaks
@@ -594,13 +594,13 @@ class CacheDetails
 
     if data =~ /Short Description\s*<\/h2>\s*<\/div>\s*<div class=\"item-content\">(.*?)<\/div>\s*<\/div>\s*<div class=\"item\">/m
       shortdesc = $1.gsub(/^\s+/, '').gsub(/\s+$/, '')
-      nodebug "got short desc: [#{shortdesc}]"
+      debug3 "got short desc: [#{shortdesc}]"
       cache['shortdesc'] = removeAlignments(fixRelativeImageLinks(removeSpam(removeSpan(shortdesc))))
     end
 
     if data =~ /Long Description\s*<\/h2>\s*<\/div>\s*<div class=\"item-content\">(.*?)<\/div>\s*<\/div>\s*<div class=\"item\">/m
       longdesc = $1.gsub(/^\s+/, '').gsub(/\s+$/, '')
-      nodebug "got long desc [#{longdesc}]"
+      debug3 "got long desc [#{longdesc}]"
       longdesc = removeAlignments(fixRelativeImageLinks(removeSpam(removeSpan(longdesc))))
       cache['longdesc'] = longdesc
     end
@@ -610,11 +610,11 @@ class CacheDetails
     if data =~ /<h\d>\s*Trackable Items\s*<\/h\d>\s*<\/div>\s*<div [^>]*>\s*(.*?)\s*<\/div>/
       # travel bug data, all in a single line
       line = $1
-      nodebug "List of trackables: #{line}"
+      debug2 "List of trackables: #{line}"
       trackables = ''
       # split at icon tag, drop everything before
       line.gsub(/^.*?</, '').split(/</).each { |item|
-        debug "trackable item #{item}"
+        debug2 "trackable item #{item}"
         item.gsub!(/[^>]*>\s*/, '')
         item.gsub!(/[,\s]*$/, '')
         # shorten the name a bit
@@ -622,7 +622,7 @@ class CacheDetails
         item.gsub!(/Travel Bug( Dog Tag)?/, 'TB')
         item.gsub!(/Geocoin/, 'GC')
         item.gsub!(/^The /, '')
-        debug "trackable in list #{item}"
+        debug2 "trackable in list #{item}"
         trackables << item + ', '
       }
       if trackables.length > 0
@@ -743,7 +743,7 @@ class CacheDetails
     new_text.gsub!(/(<p .*?)align=/m, '\1noalign=')
     new_text.gsub!('<center>', '')
     if text != new_text
-      debug "fixed alignments"
+      debug2 "fixed alignments"
     end
     return new_text
   end
@@ -751,7 +751,7 @@ class CacheDetails
   def fixRelativeImageLinks(text)
     new_text = text.gsub(' src="/', ' src="http://www.geocaching.com/')
     if text != new_text
-      debug "fixed relative links"
+      debug2 "fixed relative links"
     end
     return new_text
   end
@@ -784,7 +784,7 @@ class CacheDetails
     # Gut gefunden. Man sollte nur auf Muggels achten!  Danke!</dd>
     #data.scan(/<dt.*?icon_(\w+).*?alt=\"(.*?)\".*?, ([\w, ]+)\s+by <strong>\s*(.*?)\s*<\/strong>.*?<dd>\s*(.*?)\s*<\/dd>/m) { |icon, type, datestr, user, comment|
     data.scan(/<dt.*?\/([\w]+)\.[^\.]+?\salt=\"(.*?)\".*?, ([\w, ]+)\s+by <strong>\s*(.*?)\s*<\/strong>.*?<dd>\s*(.*?)\s*<\/dd>/m) { |icon, type, datestr, user, comment|
-      debug "comment date: #{datestr}, icon: #{icon}, type: #{type}, user: #{user}"
+      debug2 "comment date: #{datestr}, icon: #{icon}, type: #{type}, user: #{user}"
       # strip "icon_" from old style image name
       icon.gsub!(/^icon_/, '')
       date = Time.parse(datestr)
@@ -803,7 +803,7 @@ class CacheDetails
         'user_id' => Zlib.crc32(user),
         'text' => comment
       }
-      nodebug "COMMENT: #{comment.inspect}"
+      debug3 "COMMENT: #{comment.inspect}"
       comments <<  comment
     }
     return [comments, last_find, visitors]

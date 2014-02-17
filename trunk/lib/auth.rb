@@ -38,7 +38,7 @@ module Auth
 
   def loadCookie()
     ### 20131114
-    debug "loadCookie: #{hideCookie(@@cookie)}"
+    debug2 "loadCookie: #{hideCookie(@@cookie)}"
     return @@cookie
   end
 
@@ -46,7 +46,7 @@ module Auth
     ### 20131114
     # don't do anything without a cookie
     return if ! cookie
-    nodebug "saveCookie: merge #{hideCookie(cookie)}"
+    debug3 "saveCookie: merge #{hideCookie(cookie)}"
     # get individual cookies
     cookie.split(/; */).map{ |f|
       # split at ';' will yield 2nd cookie with "HttpOnly, " prefix
@@ -58,7 +58,7 @@ module Auth
       end
     }.join('; ').split(/% */).each{ |c|
       # individual cookies
-      debug "saveCookie: process cookie #{hideCookie(c)}"
+      debug3 "saveCookie: process cookie #{hideCookie(c)}"
       # key=value; [domain=...; ][expires=Sat, 06-Apr-2013 07:45:26 GMT; ]path=...; HttpOnly
       # if expires date is in the past, remove/disable
       case c
@@ -73,24 +73,24 @@ module Auth
           displayWarning "Cookie \"#{key}\" has expired! (#{expire})"
         end
         if @@cookies[key] != value
-          debug "saveCookie: set #{key}, expires #{expire}"
+          debug3 "saveCookie: set #{key}, expires #{expire}"
           @@cookies[key] = value
         else
-          debug "saveCookie: confirm #{key}, expires #{expire}"
+          debug3 "saveCookie: confirm #{key}, expires #{expire}"
         end
       when /^(.*?)=(.*?);/ # SessionId has no expires
         key = $1
         value = $2
         if @@cookies[key] != value
-          debug "saveCookie: set #{key}"
+          debug3 "saveCookie: set #{key}"
           @@cookies[key] = value
         else
-          debug "saveCookie: confirm #{key}"
+          debug3 "saveCookie: confirm #{key}"
         end
       end
     }
     @@cookie = @@cookies.keys.map{ |k| (@@cookies[k] == 'expired') ? nil : "#{k}=#{@@cookies[k]}" }.compact.join('; ')
-    debug "saveCookie: save #{hideCookie(@@cookie)}"
+    debug2 "saveCookie: save #{hideCookie(@@cookie)}"
     return
   end
 
@@ -107,13 +107,13 @@ module Auth
   def checkLoginScreen(cookie)
     ### 20131114
     # if we have no cookie we aren't logged in
-    nodebug "checkLoginScreen with #{hideCookie(cookie)}"
+    debug3 "checkLoginScreen with #{hideCookie(cookie)}"
     return nil if ! cookie
     ### 20131114
     @postVars = Hash.new
     page = ShadowFetch.new(@@login_url + 'default.aspx')
     page.localExpiry = 1
-    debug "Checking validity of cookie #{hideCookie(cookie)}"
+    debug3 "Checking validity of cookie #{hideCookie(cookie)}"
     data = page.fetch
     data.each_line do |line|
       case line
@@ -125,11 +125,11 @@ module Auth
         return true
       when /^<input type=\"hidden\" name=\"(.*?)\".*value=\"(.*?)\"/
         @postVars[$1] = $2
-        nodebug "found hidden post variable: #{$1}"
+        debug3 "found hidden post variable: #{$1}"
       when /<form name=\"aspnetForm\" method=\"post\" action=\"(.*?)\"/
         @postURL = @@login_url + $1
         @postURL.gsub!('&amp;', '&')
-        nodebug "post URL is #{@postURL}"
+        debug3 "post URL is #{@postURL}"
       end
     end
     debug "Looks like we don't have a valid cookie. Must login."
@@ -147,12 +147,11 @@ module Auth
       case line
       when /<input type=\"hidden\" name=\"(.*?)\".*value=\"(.*?)\"/
         @postVars[$1] = $2
-        debug "found hidden post variable: #{$1}"
+        debug3 "found hidden post variable: #{$1}"
       when /<form name=\"aspnetForm\" method=\"post\" action=\"(.*?)\"/
-        nodebug "found post action: #{$1.inspect}"
         @postURL = @@login_url + $1
         @postURL.gsub!('&amp;', '&')
-        debug "post URL is #{@postURL}"
+        debug3 "post URL is #{@postURL}"
       end
     end
     # fill in form, and submit
@@ -166,7 +165,7 @@ module Auth
     data = page.fetch
     # extract cookie
     cookie = page.cookie
-    debug "getLoginCookie got cookie: [#{hideCookie(cookie)}]"
+    debug3 "getLoginCookie got cookie: [#{hideCookie(cookie)}]"
     ### 20131114
     # merge this new cookie with the one we got at login time
     saveCookie(cookie)

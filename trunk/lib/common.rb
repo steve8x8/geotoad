@@ -21,10 +21,10 @@ module Common
     data.each_line {|line|
       if line =~ /<select name=\"([^\"]*?)\"/
         current_select_name = $1
-        nodebug "found select #{current_select_name}"
+        debug3 "found select #{current_select_name}"
         prefs[current_select_name] = []
       elsif line =~ /<option selected=\"selected\" value=\"([^\"]*?)\".*?>(.*?)</
-        nodebug "found selected option #{$1}=#{$2}"
+        debug3 "found selected option #{$1}=#{$2}"
         if current_select_name
           debug "setting selected option #{current_select_name}=#{$1} (#{$2})"
           prefs[current_select_name] = $1
@@ -107,27 +107,27 @@ module Common
     case date
     # relative dates end in a "*"
     when /^(Today|Heute|Hier|Hoje|Dnes|I dag|Idag|Hoy|Täna|Oggi|Σήμερα|Šodien|Vandaag|Avui|Dzisiaj|I dag|오늘|Ma|Azi|今日)\*/i
-      debug "date: Today"
+      debug2 "date: Today"
       days_ago=0
     when /^(Yesterday|Gestern|Aujourd.hui|Ontem|Včera|I går|Igår|Ayer|Eile|Ieri|Χτές|Vakar|Gisteren|Ahir|Wczoraj|I går|어제|Tegnap|Ieri|昨日)\*/i
-      debug "date: Yesterday"
+      debug2 "date: Yesterday"
       days_ago=1
     # (any string ending with a * and a number in it)
     when /(\d)+ .+\*$/
-      debug "date: #{$1} days ago"
+      debug2 "date: #{$1} days ago"
       days_ago=$1.to_i
     # yyyy-MM-dd, yyyy/MM/dd (ISO style)
     when /^(\d{4})[\/-](\d+)[\/-](\d+)$/
       year = $1
       month = $2
       day = $3
-      debug "ISO-coded date: year=#{year} month=#{month} day=#{day}"
+      debug2 "ISO-coded date: year=#{year} month=#{month} day=#{day}"
       timestamp = Time.local(year, month, day)
     when /^(\d+)\.(\d+)\.(\d{4})$/
       year = $3
       month = $2
       day = $1
-      debug "dotted date: year=#{year} month=#{month} day=#{day}"
+      debug2 "dotted date: year=#{year} month=#{month} day=#{day}"
       timestamp = Time.local(year, month, day)
     # MM/dd/yyyy, dd/MM/yyyy (need to distinguish!)
     when /^(\d+)\/(\d+)\/(\d{4})$/
@@ -136,18 +136,18 @@ module Common
       day = $2
       # interpretation depends on dateFormat
       if @@dateFormat =~ /^MM/
-        debug "MM/dd/yyyy date: year=#{year} month=#{month}, day=#{day}"
+        debug2 "MM/dd/yyyy date: year=#{year} month=#{month}, day=#{day}"
       else
         temp = month
         month = day
         day = temp
-        debug "dd/MM/yyyy date: year=#{year} month=#{month}, day=#{day}"
+        debug2 "dd/MM/yyyy date: year=#{year} month=#{month}, day=#{day}"
       end
       # catch errors
       begin
         timestamp = Time.local(year, month, day)
       rescue ArgumentError
-        debug "Trying to swap month and day in #{year}/#{month}/#{day}"
+        debug2 "Trying to swap month and day in #{year}/#{month}/#{day}"
         timestamp = Time.local(year, day, month)
       end
     # MMM/dd/yyyy
@@ -155,14 +155,14 @@ module Common
       year = $3
       month = $1
       day = $2
-      debug "MMM/dd/yyyy date: year=#{year} month=#{month} day=#{day}"
+      debug2 "MMM/dd/yyyy date: year=#{year} month=#{month} day=#{day}"
       timestamp = Time.parse("#{day} #{month} #{year}")
     # dd/MMM/yyyy, dd MMM yy
     when /^(\d+[ \/]\w+[ \/]\d+)/
-      debug "dd MMM yy[yy] date: #{$1}"
+      debug2 "dd MMM yy[yy] date: #{$1}"
       timestamp = Time.parse(date)
     when 'N/A'
-      debug "no date: N/A"
+      debug2 "no date: N/A"
       return nil
     else
       displayWarning "Could not parse date: #{date}"
@@ -232,7 +232,7 @@ module Common
       cacheDir = File.join(cacheDir, 'GeoToad', 'Cache')
     else
       cacheDir = File.join(cacheDir, 'GeoToad')
-      nodebug "#{cacheDir} is being used for cache"
+      debug3 "#{cacheDir} is being used for cache"
     end
     FileUtils::mkdir_p(cacheDir, :mode => 0700)
     return cacheDir
@@ -260,7 +260,7 @@ module Common
     elsif configDir !~ /geotoad/i
       configDir = File.join(configDir, 'GeoToad')
     end
-    nodebug "#{configDir} is being used for config"
+    debug3 "#{configDir} is being used for config"
     FileUtils::mkdir_p(configDir, :mode => 0700)
     return configDir
   end
