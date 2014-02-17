@@ -815,9 +815,10 @@ class CacheDetails
     removed = text.gsub(/<a href[^>]*><img src[^>]*(flagcounter|gccounter|andyhoppe\.com\/count|gcstat\.selfip|gcvote)[^>]*><\/a>/m, '')
     removed.gsub!(/<\/*center>/, '')
     if removed != text
-      nodebug "Removed spam from: ----------------------------------"
-      nodebug removed
-      nodebug "-----------------------------------------------------"
+      debug2 "Removed spam"
+      #debug "Removed spam from: ----------------------------------"
+      #debug removed
+      #debug "-----------------------------------------------------"
     end
     return removed
   end
@@ -826,9 +827,10 @@ class CacheDetails
     # remove <span> tags from HTML
     removed = text.gsub(/<\/?span[^>]*>/m, '')
     if removed != text
-      nodebug "Removed span tags from: ----------------------------------"
-      nodebug removed
-      nodebug "-----------------------------------------------------"
+      debug2 "Removed span"
+      #debug "Removed span tags from: ----------------------------------"
+      #debug removed
+      #debug "-----------------------------------------------------"
     end
     return removed
   end

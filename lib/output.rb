@@ -676,9 +676,9 @@ class Output
 
     # Fix apostrophes so that they show up as expected. Fixes issue 26.
     text.gsub!('&#8217;', "'")
-    if text != str
-      nodebug "makeXML: %s" % text
-    end
+    #if text != str
+    #  debug "makeXML: %s" % text
+    #end
     return text
   end
 
