@@ -28,6 +28,15 @@ _*(year per year; new entries will be added at bottom)*_
   * *{{{Web.HotFix_20140113.2}}}*
   * _Issue 297: trailing whitespace in patterns (owner, coordinates)_
 ----
+2014-01-28:
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=319292 release notes]
+  * *{{{Web.HotFix_20140127.5}}}*
+----
+2014-02-13:
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=319732 release notes]
+  * *{{{Web.HotFix_20140213.1}}}*
+  * _"a combination of bug fixes, text updates and other cool stuff"_ (no details)
+----
 == (now) ==
 ----
 

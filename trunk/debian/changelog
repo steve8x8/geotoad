@@ -1,6 +1,7 @@
 geotoad (3.20.1-1) unstable; urgency=low
 
-  * New version 3.20.1, "Boltzmann" release (170th b'day)
+  * New version 3.20.1, "Dame Myra" release
+  * Issue 144: Multiple -v options for debugging. Handle with care.
   * Issue 267: Add -U (--unbufferedOutput) to be used with wrappers
   * Issue 296: Add "wherigo" stub (extract cartridge CGUID). Plus script to fill gaps.
   * Still open important issues (feedback required):
@@ -8,7 +9,7 @@ geotoad (3.20.1-1) unstable; urgency=low
     283 (GC statistics and GCStatistic, different weekday distribution)
   * Minor additions, modifications, cleanups, and bug fixes
 
- -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 20 Feb 2014 09:00:00 +0000
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Tue, 25 Feb 2014 09:00:00 +0000
 
 geotoad (3.20.0-1) unstable; urgency=low
 

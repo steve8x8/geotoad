@@ -937,7 +937,7 @@ class SearchCache
       # ...<img src="http://www.geocaching.com/images/wpttypes/sm/3.gif" alt="Multi-cache" title="Multi-cache" /></a>
       # ... <a href="/seek/cache_details.aspx?guid=ecfd0038-8e51-4ac8-a073-1aebe7c10cbc" class="lnk  Strike"><span>Besinnungsweg</span></a>
       #when /cache_details.aspx\?guid=([0-9a-f-]*)[^>]*>(.*?)<\/a>/
-      when /(<img[^>]*alt=\"(.*?)\".*)?cache_details.aspx\?guid=([0-9a-f-]*)([^>]*)><span>(.*?)<\/span><\/a>/
+      when /(<img[^>]*alt=\"(.*?)\".*)?cache_details.aspx\?guid=([0-9a-f-]*)([^>]*)><span>\s*(.*?)\s*<\/span><\/a>/
         debug "found type=#{$2} guid=#{$3} name=#{$5}"
         cache['guid'] = $3
         strike = $4
@@ -998,11 +998,11 @@ class SearchCache
           cache['disabled'] = false
         end
 
-        cache['name'] = name.gsub(/ *$/, '').gsub(/  */, ' ')
+        cache['name'] = name.gsub(/  */, ' ')
         debug "guid=#{cache['guid']} name=#{cache['name']} (disabled=#{cache['disabled']}, archived=#{cache['archived']})"
 
       # 2013-08-21:
-      when /(<img[^>]*alt=\"(.*?)\".*)?\/geocache\/(GC[0-9A-Z]+)([^>]*)><span>(.*?)<\/span><\/a>/
+      when /(<img[^>]*alt=\"(.*?)\".*)?\/geocache\/(GC[0-9A-Z]+)([^>]*)><span>\s*(.*?)\s*<\/span><\/a>/
         debug "found type=#{$2} wid=#{$3} name=#{$5}"
         #cache['wid'] = $3
         strike = $4
@@ -1063,7 +1063,7 @@ class SearchCache
           cache['disabled'] = false
         end
 
-        cache['name'] = name.gsub(/ *$/, '').gsub(/  */, ' ')
+        cache['name'] = name.gsub(/  */, ' ')
         debug "guid=#{cache['guid']} name=#{cache['name']} (disabled=#{cache['disabled']}, archived=#{cache['archived']})"
 
 # 2011-05-04: unchanged

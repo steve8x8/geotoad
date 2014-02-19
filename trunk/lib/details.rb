@@ -308,7 +308,7 @@ class CacheDetails
     # start with single-line matches
     data.split("\n").each { |line|
       # <title id="pageTitle">(GC1145) Lake Crabtree computer software store by darylb</title>
-      if line =~ /<title.*>\((GC\w+)\) (.*? by .*?)\s*</
+      if line =~ /<title.*>\((GC\w+)\) \s*(.*? by .*?)\s*</
         wid = $1
         namecreator = $2
         name = nil
@@ -346,7 +346,7 @@ class CacheDetails
       # <h2>
       #     <img src="../images/WptTypes/2.gif" alt="Traditional Cache" width="32" height="32" />&nbsp;Lake Crabtree computer software store
       # </h2>
-      if line =~ /WptTypes.*? alt=\"(.*?)\".*?\/>(.nbsp;)?(.*?)\s*$/
+      if line =~ /WptTypes.*? alt=\"(.*?)\".*?\/>(.nbsp;)?\s*(.*?)\s*$/
         full_type = $1
         name = $3
         if ! cache
