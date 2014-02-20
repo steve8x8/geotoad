@@ -91,8 +91,16 @@ class Filter
   def sizeMin(size_name)
     debug2 "filtering by sizeMin: #{size_name} (#{@@sizes[size_name]})"
     @waypointHash.delete_if { |wid, values|
-      debug "size check for #{wid}: #{@waypointHash[wid]['size']}"
+      debug3 "size check for #{wid}: #{@waypointHash[wid]['size']}"
       @@sizes[@waypointHash[wid]['size']].to_i < @@sizes[size_name]
+    }
+  end
+
+  def sizeMax(size_name)
+    debug2 "filtering by sizeMax: #{size_name} (#{@@sizes[size_name]})"
+    @waypointHash.delete_if { |wid, values|
+      debug3 "size check for #{wid}: #{@waypointHash[wid]['size']}"
+      @@sizes[@waypointHash[wid]['size']].to_i > @@sizes[size_name]
     }
   end
 
@@ -105,14 +113,6 @@ class Filter
     debug2 "filtering by types: #{types}"
     @waypointHash.delete_if { |wid, values|
       not types.include?(@waypointHash[wid]['type'])
-    }
-  end
-
-  def sizeMax(size_name)
-    debug2 "filtering by sizeMax: #{size_name} (#{@@sizes[size_name]})"
-    @waypointHash.delete_if { |wid, values|
-      debug "size check for #{wid}: #{@waypointHash[wid]['size']}"
-      @@sizes[@waypointHash[wid]['size']].to_i > @@sizes[size_name]
     }
   end
 
