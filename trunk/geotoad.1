@@ -57,17 +57,18 @@ get a short command-line option summary
 enable debugging output - very helpful in case of malfunctions.
 Multiple (up to 3) \fB-v\fR options raise the debug level, resulting in copious output.
 .TP
+.B User credentials:
+.TP
 \fB-u\fR|\fB--user\fR|\fB--username\fR \fIusername\fR
 geocaching.com username (required)
 .TP
 \fB-p\fR|\fB--password\fR \fIpassword\fR
 geocaching.com password (required)
 .TP
-\fB-m\fR|\fB--delimiter\fR \fIdelimiter(s)\fR
-delimiter(s) to be used for \fB(MULTI)\fR input, default "|:"
-
-The TUI uses "|".
-You may try "^" to avoid delimiters that have to be "escaped" ("quoted").
+\fB-P\fR|\fB--proxy\fR \fIproxy\fR
+HTTP proxy server, http://username@password@host:port/
+.TP
+.B Output control:
 .TP
 \fB-o\fR|\fB--output\fR \fIfilename\fR
 (first) output file name (default: created from query argument(s) and options)
@@ -78,6 +79,16 @@ In case of multiple output formats, subsequent file names are derived from this 
 \fB(MULTI)\fR
 output format type(s) (default: gpx)
 .TP
+\fB-w\fR|\fB--waypointLength\fR \fIlength\fR
+set EasyName waypoint id length. (default: 0=use WID)
+
+Note: negative values are no longer allowed.
+.TP
+\fB-l\fR|\fB--logCount\fR \fIcount\fR
+limit number of log entries (default: 10)
+.TP
+.B Query type:
+.TP
 \fB-q\fR|\fB--queryType\fR \fI[location|coord|user|owner|country|state|keyword|wid|guid]\fR
 query type (default: location)
 
@@ -86,11 +97,26 @@ Use \fIcoord\fR if you already have coordinates.
 
 \fIcountry\fR and \fIstate\fR queries require a numerical id which the TUI may tell you.
 .TP
-\fB-s\fR|\fB--sizeMin\fR|\fB--minSize\fR \fI[virtual|not_chosen|other|micro|small|regular|large]\fR
-set minimum cache size - \fInot_chosen\fR is equivalent to \fIvirtual\fR
+\fB-y\fR|\fB--distanceMax\fR|\fB--radius\fR \fI0.01-500[km]\fR
+distance maximum in miles or km (default: 10mi)
+
+Applies to \fIlocation\fR and \fIcoord\fR queries only.
 .TP
-\fB-S\fR|\fB--sizeMax\fR|\fB--maxSize\fR \fI[virtual|not_chosen|other|micro|small|regular|large]\fR
-set maximum cache size
+.B Limit queries:
+.TP
+\fB-L\fR|\fB--limitSearchPages\fR \fIcount\fR
+limit number of search pages (0=unlimited)
+.TP
+\fB-Y\fR|\fB--noCacheDescriptions\fR
+do not fetch nor parse cache descriptions, search only
+
+This will reduce the amount of server requests, but there's no way
+to determine cache coordinates, hints, attributes, or descriptions.
+.TP
+\fB-Z\fR|\fB--preserveCache\fR|\fB--keepOld\fR
+do not overwrite existing cache description files in file cache
+.TP
+.B Filtering options:
 .TP
 \fB-c\fR|\fB--cacheType\fR|\fB--type\fR \fI[traditional|multicache|letterbox|event|unknown|cito|virtual|webcam|earthcache|wherigo|...]\fR
 \fB(MULTI)\fR
@@ -111,14 +137,17 @@ set minimum terrain
 \fB-T\fR|\fB--terrainMax\fR|\fB--maxTerrain\fR \fI1.0-5.0\fR
 set maximum terrain
 .TP
+\fB-s\fR|\fB--sizeMin\fR|\fB--minSize\fR \fI[virtual|not_chosen|other|micro|small|regular|large]\fR
+set minimum cache size - \fInot_chosen\fR is equivalent to \fIvirtual\fR
+.TP
+\fB-S\fR|\fB--sizeMax\fR|\fB--maxSize\fR \fI[virtual|not_chosen|other|micro|small|regular|large]\fR
+set maximum cache size
+.TP
 \fB-g\fR|\fB--favFactorMin\fR|\fB-minFav\fR \fI0.0-5.0\fR
 set minimum fav factor
 .TP
 \fB-G\fR|\fB--favFactorMax\fR|\fB-maxFav\fR \fI0.0-5.0\fR
 set maximum fav factor
-.TP
-\fB-y\fR|\fB--distanceMax\fR|\fB--radius\fR \fI0.01-500[km]\fR
-distance maximum in miles or km (default: 10mi)
 .TP
 \fB-k\fR|\fB--titleKeyword\fR \fIkeyword\fR
 \fB(MULTI)\fR
@@ -176,36 +205,27 @@ only caches not yet found by login user
 \fB-b\fR|\fB--travelBug\fR|\fB--trackable\fR
 only include caches with travelbugs/trackables
 .TP
-\fB-w\fR|\fB--waypointLength\fR \fIlength\fR
-set EasyName waypoint id length. (default: 0=use WID)
-
-Note: negative values are no longer allowed.
-.TP
-\fB-L\fR|\fB--limitSearchPages\fR \fIcount\fR
-limit number of search pages (0=unlimited)
-.TP
-\fB-l\fR|\fB--logCount\fR \fIcount\fR
-limit number of log entries (default: 10)
-.TP
-\fB-Y\fR|\fB--noCacheDescriptions\fR
-do not fetch nor parse cache descriptions, search only
-
-This will reduce the amount of server requests, but there's no way
-to determine cache coordinates, hints, attributes, or descriptions.
-.TP
-\fB-Z\fR|\fB--preserveCache\fR|\fB--keepOld\fR
-do not overwrite existing cache description files in file cache
-.TP
 \fB-O\fR|\fB--noPMO\fR|\fB--nopmo\fR
 exclude Premium Member Only caches
 .TP
 \fB-Q\fR|\fB--onlyPMO\fR|\fB--pmo\fR
 select only Premium Member Only caches
-
-Note that \fB-O\fR and \fB-Q\fR are mutually exclusive!
 .TP
-\fB-P\fR|\fB--proxy\fR \fIproxy\fR
-HTTP proxy server, http://username@password@host:port/
+.B Note that \fB-O\fR and \fB-Q\fR are mutually exclusive!
+.TP
+.B Additional options:
+.TP
+\fB-C\fR|\fB--clearCache\fR|\fB--cleanup\fR
+selectively clear browser cache
+
+You are advised to remove the outdated remnants of old queries every now and then.
+Cache descriptions will never be removed!
+.TP
+\fB-m\fR|\fB--delimiter\fR \fIdelimiter(s)\fR
+delimiter(s) to be used for \fB(MULTI)\fR input, default "|:"
+
+The TUI uses "|".
+You may try "^" to avoid delimiters that have to be "escaped" ("quoted").
 .TP
 \fB-M\fR|\fB--myLogs\fR|\fB--getlogs\fR
 retrieve "my logs" page containing links to all (cache) logs, and store in cache
@@ -221,9 +241,6 @@ suppress history collection (anonymized command lines and counts)
 
 History data won't leave your computer without your intervention,
 but may be useful for user surveys.
-.TP
-\fB-C\fR|\fB--clearCache\fR|\fB--cleanup\fR
-selectively clear browser cache
 .TP
 \fB-U\fR|\fB--unbufferedOutput\fR
 switch output to unbuffered (useful for wrappers)
@@ -247,11 +264,13 @@ you may not be able to login or run a "user" query.
 In those cases, you'll have to pre-encode those characters.
 .B http://www.utf8-chartable.de/unicode-utf8-table.pl?number=1024
 will help you to look up the proper UTF-8 codes.
+
 Prefix each two-digit hex value with a percent sign, for example:
+
 .B (capital_letter_O_with_diaeresis)lscheich
 will become
 .B %c3%96lscheich
-(the TUI will may show strange characters, don't worry about them).
+(The TUI may show strange characters, don't worry about them.)
 
 If you're planning to use colons (e.g. for \fB(USERFILE)\fR) on the command line,
 you may have a look at the \fB-m\fR option which allows you to redefine the
