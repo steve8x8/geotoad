@@ -141,11 +141,13 @@ class Input
           @@optHash[opt.gsub(/-/,'')] = arg
         end
       end
-    rescue
-      usage
-      exit
+    rescue => e
+      displayError "Error in option parsing: #{e} - this may be a bug, please check and report."
+      #usage
+      #exit
     end
 
+    # some sanity check
     if @@optHash['noPMO'] and @@optHash['onlyPMO']
       displayError   "Cannot select and exclude PMO at the same time."
     end
