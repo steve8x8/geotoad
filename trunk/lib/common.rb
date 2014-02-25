@@ -308,6 +308,66 @@ module Common
     end
   end
 
+  def parseCoordinate(input)
+    # kinds of coordinate representations to parse (cf. geo-*):
+    #
+    #        -93.49130       DegDec (decimal degrees, simple format)
+    #        W93.49130       DegDec (decimal degrees)
+    #        -93 29.478      MinDec (decimal minutes, caching format)
+    #        W93 29.478      MinDec (decimal minutes)
+    #        -93 29 25       DMS
+    #        W 93 29 25       DMS
+    # not yet (":" is separator for input)
+    #        -93:29.478      MinDec (decimal minutes, gccalc format)
+    #        W93:29.478      MinDec (decimal minutes)
+    #
+    # this function parses a single coordinate in one of three formats
+    # (NESW -> __-- has to be done before)
+    # "+dd.ddd" "+dd dd.ddd" "+dd dd dd.ddd"
+
+    # count number of fields
+    case input.split("\s").length # 1, 2, or 3
+    when 1 # Deg
+      if input =~ /(-?)([\d\.]+)/
+        value = $2.to_f
+        if $1 == '-'
+          value = -value
+        end
+      else
+        value = 0
+        #displayError "Cannot parse #{input} as degree value!"
+      end
+    when 2 # Deg Min
+      if input =~ /(-?)([\d\.]+)\W+([\d\.]+)/
+        value = $2.to_f + $3.to_f/60.0
+        if $1 == '-'
+          value = -value
+        end
+      else
+        value = 0
+        #displayError "Cannot parse #{input} as degree/minute value!"
+      end
+    when 3 # Deg Min Sec
+      if input =~ /(-?)([\d\.]+)\W+([\d\.]+)\W+([\d\.]+)/
+        value = $2.to_f + $3.to_f/60.0 + $4.to_f/3600.0
+        if $1 == '-'
+          value = -value
+        end
+      else
+        value = 0
+        #displayError "Cannot parse #{input} as degree/minute/second value!"
+      end
+    else
+      # did not recognize format
+      value = 0
+      #displayError "Bad format in #{input}: #{input.split("\s").length} fields found."
+    end
+    # sub-meter precision, strip some trailing 0's
+    #value = sprintf("%.7f", value).gsub(/0{1,4}$/, '')
+    #displayMessage "\"#{input}\" parsed as #{value}"
+    return value
+  end
+
   # history stuff
   def loadHistory
     historyFile  = File.join(findConfigDir, 'history.yaml')
