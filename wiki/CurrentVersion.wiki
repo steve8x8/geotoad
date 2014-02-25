@@ -1,11 +1,24 @@
 #summary Features of current version
 #labels Featured
 
-version=3.20.0`*`
+version=3.20.1
 
-= "No fun" (Fun factors gone) release (Jan 16, 2014) =
-  * *Strongly recommended after 2014-01-14 site update!*
+= "Dame Myra" release (Feb 25, 2014) =
 
+= What's new in 3.20.1? =
+  * nicknamed "Dame Myra" (to celebrate the birthday of pianist Myra Hess)
+  * while 3.20.0 is still operational, 3.20.1 comes with some enhancements
+
+== Issues addressed: ==
+  * Issue 144: Multiple -v options for debugging. Handle with care.
+  * Issue 267: Add -U (--unbufferedOutput) to be used with wrappers
+  * Issue 296: Add "wherigo" stub (extract cartridge CGUID). Plus script to fill gaps.
+  * Still open important issues (feedback required):
+    281 (logging date of archived caches)
+    283 (GC statistics and GCStatistic, different weekday distribution)
+  * Minor additions, modifications, cleanups, and bug fixes
+
+----
 = What's new in 3.20.0? =
   * nicknamed "No fun" (Fun factors no longer supported)
 

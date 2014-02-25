@@ -1,7 +1,7 @@
 #summary GeoToad README.txt
 #labels Featured
 
-= GeoToad 3.20.0 by Thomas Stromberg and The GeoToad Project (c) 2002 - 2014 =
+= GeoToad 3.20.1 by Thomas Stromberg and The GeoToad Project (c) 2002 - 2014 =
 
 <wiki:toc max_depth="2" />
 
@@ -34,7 +34,7 @@ You will then see a screen that looks similar to this:
 {{{
 
 ==============================================================================
-:::                // GeoToad 3.20.0 Text User Interface //                :::
+:::                // GeoToad 3.20.1 Text User Interface //                :::
 ==============================================================================
 (1)  GC.com login [REQUIRED         ] | (2)  search type          [location  ]
 (3)  location     [Dead Sea         ] | (4)  distance maximum (km)  [      25]
@@ -117,6 +117,7 @@ syntax: geotoad [options] <search:search2:search3>
  -X                     emergency switch: disable early filtering
  -H                     suppress history collection
  -C                     selectively clear local browser cache
+ -U                     use unbuffered output
 
 ::: OUTPUT FORMATS:
  cachemate(=)  cetus(+)      csv           delorme       delorme-nourl
@@ -127,7 +128,8 @@ syntax: geotoad [options] <search:search2:search3>
  mapsend(+)    mxf           myfindgpx     myfindlist    ozi          
  pcx(+)        poi-nuvi(+)   psp(+)        sms           sms2         
  tab           text          tiger         tmpro(+)      tpg(+)       
- vcf           wp2guid       xmap(+)       yourfindgpx   yourfindlist 
+ vcf           wherigo       wp2guid       xmap(+)       yourfindgpx  
+ yourfindlist 
  (+) requires gpsbabel  (=) requires cmconvert  (%) requires iconv in PATH
 
 ::: EXAMPLES:
