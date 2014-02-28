@@ -104,6 +104,34 @@ class Filter
     }
   end
 
+  def longMin(num)
+    debug2 "filtering by longMin: #{num}"
+    @waypointHash.delete_if { |wid, values|
+      @waypointHash[wid]['londata'].to_f < num
+    }
+  end
+
+  def longMax(num)
+    debug2 "filtering by longMax: #{num}"
+    @waypointHash.delete_if { |wid, values|
+      @waypointHash[wid]['londata'].to_f > num
+    }
+  end
+
+  def latMin(num)
+    debug2 "filtering by latMin: #{num}"
+    @waypointHash.delete_if { |wid, values|
+      @waypointHash[wid]['latdata'].to_f < num
+    }
+  end
+
+  def latMax(num)
+    debug2 "filtering by latMax: #{num}"
+    @waypointHash.delete_if { |wid, values|
+      @waypointHash[wid]['latdata'].to_f > num
+    }
+  end
+
   def cacheType(typestr0)
     typestr = typestr0.dup
     typestr.gsub!('regular', 'traditional')

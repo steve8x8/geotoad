@@ -5,6 +5,8 @@ $LOAD_PATH << File.join($THISDIR, '..')
 $LOAD_PATH << File.join($THISDIR, '..', 'lib')
 
 require 'country_state'
+require 'common'
+require 'messages'
 
 class Input
 
@@ -114,10 +116,16 @@ class Input
       [ "--distanceMax",     "--radius", "-y",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--noCacheDescriptions",         "-Y",    GetoptLong::NO_ARGUMENT ],
       [ "--includeDisabled",    "--bad", "-z",    GetoptLong::NO_ARGUMENT ],
-      [ "--preserveCache",  "--keepOld", "-Z",    GetoptLong::NO_ARGUMENT ]
+      [ "--preserveCache",  "--keepOld", "-Z",    GetoptLong::NO_ARGUMENT ],
+    # no short option available
+      [ "--minLongitude", "--longMin",            GetoptLong::REQUIRED_ARGUMENT ],
+      [ "--maxLongitude", "--longMax",            GetoptLong::REQUIRED_ARGUMENT ],
+      [ "--minLatitude",  "--latMin",             GetoptLong::REQUIRED_ARGUMENT ],
+      [ "--maxLatitude",  "--latMax",             GetoptLong::REQUIRED_ARGUMENT ]
     ) || usage
 
     # put the stupid crap in a hash. Much nicer to deal with.
+    #opts.each { |o, a| puts "o #{o} = #{a}" }
     begin
       @@optHash = Hash.new
       opts.each do |opt, arg|
@@ -133,6 +141,12 @@ class Input
         if (opt == '--queryType')
           arg = guessQueryType(arg)
           debug "queryType is now #{arg}"
+        end
+        # rectangular filter: 4 options
+        if (opt =~ /--(min|max)L(ong|at)itude/)
+          input = arg.tr(':,', '  ').gsub(/[NE\+]\s*/i, '').gsub(/[SW-]\s*/i, '-')
+          arg = parseCoordinate(input)
+          debug "#{opt[2..-1]} is now #{arg}"
         end
         # verbose special treatment: sum up how often
         if (opt == '--verbose')
@@ -274,6 +288,8 @@ class Input
     puts " -j/-J [# days]         include/exclude caches placed in the last X days"
     puts " -r/-R [# days]         include/exclude caches found in the last X days"
     puts " -a/-A [attribute]      include/exclude caches with attributes set"
+    #puts " --minLatitude [a], --maxLatitude [b], --minLongitude [c], --maxLongitude [d]"
+    #puts "                        filter by lat/lon rectangle"
     puts " -z                     include disabled caches"
     puts " -n                     only include not found caches (virgins)"
     puts " -N                     only caches not yet found by login user"
