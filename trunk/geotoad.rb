@@ -891,6 +891,28 @@ class GeoToad
       displayMessage "Attribute filtering removed #{caches(excludedFilterTotal)}."
     end
 
+    beforeFilterTotal = @filtered.totalWaypoints
+    if (@option['minLongitude'])
+      @appliedFilters['--minLon'] = { 'f' => "#{@option['minLongitude']}", 't' => "West" }
+      @filtered.longMin(@option['minLongitude'])
+    end
+    if (@option['maxLongitude'])
+      @appliedFilters['--maxLon'] = { 'f' => "#{@option['maxLongitude']}", 't' => "East" }
+      @filtered.longMax(@option['maxLongitude'])
+    end
+    if (@option['minLatitude'])
+      @appliedFilters['--minLat'] = { 'f' => "#{@option['minLatitude']}", 't' => "South" }
+      @filtered.latMin(@option['minLatitude'])
+    end
+    if (@option['maxLatitude'])
+      @appliedFilters['--maxLat'] = { 'f' => "#{@option['maxLatitude']}", 't' => "North" }
+      @filtered.latMax(@option['maxLatitude'])
+    end
+    excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
+    if (excludedFilterTotal > 0)
+      displayMessage "Lat/lon filtering removed #{caches(excludedFilterTotal)}."
+    end
+
     displayMessage "Filter stage 2 complete, #{caches(@filtered.totalWaypoints)} left."
     return @filtered.totalWaypoints
   end

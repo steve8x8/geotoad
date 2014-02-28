@@ -211,6 +211,21 @@ exclude Premium Member Only caches
 \fB-Q\fR|\fB--onlyPMO\fR|\fB--pmo\fR
 select only Premium Member Only caches
 .TP
+The following 4 options have no one-letter version, and are used for limiting the search area.
+Note that this filter is applied \fBafter\fR fetching all cache details (as coordinates aren't available before).
+.TP
+\fB--minLongitude\fR|\fB--longMin\fR \fI...\fR
+set minimum longitude (South filter limit)
+.TP
+\fB--maxLongitude\fR|\fB--longMax\fR \fI...\fR
+set maximum longitude (North filter limit)
+.TP
+\fB--minLatitude\fR|\fB--latMin\fR \fI...\fR
+set minimum latitude (West filter limit)
+.TP
+\fB--maxLatitude\fR|\fB--latMax\fR \fI...\fR
+set maximum latitude (East filter limit)
+.TP
 .B Note that \fB-O\fR and \fB-Q\fR are mutually exclusive!
 .TP
 .B Additional options:
@@ -396,6 +411,11 @@ As the \fB|\fR character has a special meaning, it must be "quoted".)
 .B  geotoad -u ... -p ... -c multicache -a 6 -A 57 -o family.gpx -x gpx:list -y 25km -q coord "52.25,6.075"
 Prepare for a Sunday afternoon walk, and find all multi-caches around
 which pretend to be "Kid friendly" (attribute 6) and shorter than 10km (attribute 57).
+.TP
+.B  geotoad ... (as above) --minLat 52.10 --maxLat 52.40 -q coord "52.25,6.075"
+This will further reduce the number of caches, by dropping all outside a "strip".
+You may also define Eastern and Western limits, e.g. \fB--minLon 6.00 --maxLon 6.2\fR.
+Note that this is a \fBfilter\fR applied after querying the server (no additions).
 .TP
 .B  geotoad -u ... -p ... -z -q owner -- -aBcDe-
 Find all caches created by one owner, even the disabled or archived ones.
