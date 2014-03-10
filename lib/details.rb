@@ -520,7 +520,7 @@ class CacheDetails
 
     # <p class="Meta">\s*Placed Date: 7/17/2001\s*</p>
     # also, event dates.
-    if data =~ />\s*(Placed|Event) Date: ([\w\/ -]+)\s*</m
+    if data =~ />\s*(Placed|Event) Date\s*:\s*([\w\/ -]+)\s*</m
         what = $1
         date = $2
         if date != 'N/A'

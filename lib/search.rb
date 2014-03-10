@@ -543,7 +543,8 @@ class SearchCache
     #                Hidden:
     #                10/11/2011
     # 2013-08-21: "Hidden\n:"
-    if data =~ /<div[^>]*mcd2\">\s*[\w ]*\s*:\s*(([0-9\/\.-]+)|(\d+[ \/]\w{3}[ \/]\d+)|(\w{3}\/\d+\/\d+))/m
+    #if data =~ /<div[^>]*mcd2\">\s*[\w ]*\s*:\s*(([0-9\/\.-]+)|(\d+[ \/]\w{3}[ \/]\d+)|(\w{3}\/\d+\/\d+))\s+</m
+    if data =~ /<div[^>]*mcd2\">\s*[\w ]*\s*:\s*([\w\/ -]+)\s+</m
       debug "Found creation date: #{$1}"
       ctime = parseDate($1)
       cdays = daysAgo(ctime)
