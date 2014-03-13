@@ -1291,13 +1291,13 @@ class Output
       'xmlWpts' => xmlWpts.to_s.gsub(/XXXWIDXXX/, wid[2 .. -1]),
       'xmlAttrs' => xmlAttrs.to_s,
       'txtAttrs' => (cache['attributeText'].to_s.empty?)?'':'[' + cache['attributeText'].to_s.capitalize.gsub(/\\/,"/") + ']',
-      'warnAvail' => (available)?'':'[?]',
+      'warnAvail' => (available or archived)?'':'[?]',
       'warnArchiv' => (archived)?'[%]':'',
       'premiumOnly' => (cache['membersonly']?'[$]':''),
       'nuvi' => cache['type'][0..1].capitalize +
         sprintf("%.1f", cache['difficulty']).gsub(/\.5/, '\'').gsub(/\.0/, ' ') +
         sprintf("%.1f", cache['terrain']).gsub(/\.5/, '\'').gsub(/\.0/, ' ') +
-        cache['size'][0..1].capitalize + ((cache['membersonly'])?'$':'') + ((archived)?'%':'') + ((available)?'':'?'),
+        cache['size'][0..1].capitalize + ((cache['membersonly'])?'$':'') + ((archived)?'%':'') + ((available or archived)?'':'?'),
     }
     rescue => e
       displayWarning "Problem (#{e}) while converting cache #{wid}:\n#{cache.inspect}"
