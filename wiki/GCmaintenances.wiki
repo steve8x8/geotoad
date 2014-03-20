@@ -37,6 +37,21 @@ _*(year per year; new entries will be added at bottom)*_
   * *{{{Web.HotFix_20140213.1}}}*
   * _"a combination of bug fixes, text updates and other cool stuff"_ (no details)
 ----
+2014-02-25:
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=320086 release notes]
+  * *{{{Web.HotFix_20140225.1}}}*
+<wiki:comment>
+<!-- Android App 3.3 -->
+</wiki:comment>
+  * _"the ever-present round of bug extermination"_ (no details)
+  * *{{{Web.HotFix_20140227.1}}}*
+  * *{{{Web.HotFix_20140303.1}}}* (2014-03-04)
+<wiki:comment>
+<!-- Android App 3.3.1 -->
+</wiki:comment>
+  * *{{{Web.HotFix_20140311.2}}}* (2014-03-12)
+  * *{{{Web.HotFix_20140314.1}}}* (2014-03-15)
+----
 == (now) ==
 ----
 
