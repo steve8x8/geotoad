@@ -1,3 +1,11 @@
+geotoad (3.20.2-1) unstable; urgency=low
+
+  * New version 3.20.2, "Spring ahead" release
+  * Issue 299: Filter by min/max latitude/longitude
+  * Minor additions, modifications, cleanups, and bug fixes
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 20 Mar 2014 09:00:00 +0000
+
 geotoad (3.20.1-1) unstable; urgency=low
 
   * New version 3.20.1, "Dame Myra" release
