@@ -1,10 +1,26 @@
 #summary Features of current version
 #labels Featured
 
-version=3.20.1
+version=3.20.2
 
-= "Dame Myra" release (Feb 25, 2014) =
+= "Spring ahead" release (Mar 20, 2014) =
 
+= What's new in 3.20.2? =
+  * nicknamed "Spring ahead"
+
+== Issues addressed: ==
+  * Issue 299: Filter by min/max latitude/longitude
+  * Minor additions, modifications, cleanups, and bug fixes
+
+== Downloading: ==
+  * Google Code seems to have shutdown uploads to the Downloads area!
+  * (I cannot even leave a message there.)
+  * An emergency mirror has been set up:
+  * Download from [http://geotoad.faehrwiese.selfhost.me/download/ here].
+  * Emergency server is slow, and may be unaccessible due to DSL problems.
+  * Debian/Ubuntu users: see the updated DebianUbuntuRepository article.
+
+----
 = What's new in 3.20.1? =
   * nicknamed "Dame Myra" (to celebrate the birthday of pianist Myra Hess)
   * while 3.20.0 is still operational, 3.20.1 comes with some enhancements
