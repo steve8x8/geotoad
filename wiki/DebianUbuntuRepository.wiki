@@ -11,7 +11,7 @@ _Last change: 2013-12-05 Steve8x8_
 
   * Add this to your {{{/etc/apt/sources.list}}}:
 {{{
-deb http://geotoad.googlecode.com/ svn/branches/downloads/
+deb http://geotoad.googlecode.com/svn/branches/downloads/ ./
 }}}
 
 == Goal ==
@@ -51,7 +51,7 @@ deb http://geotoad.googlecode.com/ svn/branches/downloads/
 
   * Add this line into your {{{/etc/apt/sources.list}}}:
 {{{
-deb http://geotoad.googlecode.com/ svn/branches/downloads/
+deb http://geotoad.googlecode.com/svn/branches/downloads/ ./
 }}}
   * There is no development version anymore.
   * Run {{{apt-get update}}} and {{{apt-get upgrade|install}}} (or the {{{aptitude}}} equivalents).
