@@ -5,13 +5,13 @@
 
 <wiki:toc max_depth="2">
 
-_Last change: 2014-03-21 Steve8x8_
+_Last change: 2013-12-05 Steve8x8_
 
 == tl;dr ==
 
   * Add this to your {{{/etc/apt/sources.list}}}:
 {{{
-deb http://geotoad.faehrwiese.selfhost.me/download/ ./
+deb http://geotoad.googlecode.com/ svn/branches/downloads/
 }}}
 
 == Goal ==
@@ -51,9 +51,9 @@ deb http://geotoad.faehrwiese.selfhost.me/download/ ./
 
   * Add this line into your {{{/etc/apt/sources.list}}}:
 {{{
-deb http://geotoad.faehrwiese.selfhost.me/download/ ./
+deb http://geotoad.googlecode.com/ svn/branches/downloads/
 }}}
-  * There is no separate development version anymore!
+  * There is no development version anymore.
   * Run {{{apt-get update}}} and {{{apt-get upgrade|install}}} (or the {{{aptitude}}} equivalents).
     You will have to answer a question with "y" (this is safe, and unavoidable):
 {{{
