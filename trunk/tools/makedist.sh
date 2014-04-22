@@ -15,7 +15,7 @@ if [ ! -d tools ]; then
   exit 3
 fi
 
-DEFAULTRUBY=193
+DEFAULTRUBY=200
 SVNPATH=http://geotoad.googlecode.com/svn/trunk/
 
 # checkout SVN to temporary directory
@@ -255,12 +255,9 @@ fi
 echo ""
 echo "Build Debian package (build $DEBBUILD)"
 cd $DEST
-if [ ! -f $DEBNAME.orig.tar.gz ]; then
-  ln -s $DISTNAME.tar.gz $DEBNAME.orig.tar.gz
-fi
 # refresh build directory
 rm -rf $DISTNAME
-tar zxf $DEBNAME.orig.tar.gz
+tar zxf $DISTNAME.tar.gz
 cd $DISTNAME
 # Debian packages love ToDo lists
 # we point to the Issues tracker just in case somebody hasn't noticed yet
@@ -308,11 +305,13 @@ else
   | sed "s~$DEST/~files/~" \
   | gzip -9 > $DEST/Sources.gz
   if [ -z "$SVN" ]; then
-    cp -p *es.gz $INITIALDIR/data/
+    cp -p *es.gz $INITIALDIR/dist/
     echo "*** Do not forget to update the package lists!"
   fi
   echo "Done."
 fi
+
+exit 0
 
 echo ""
 cd $DEST
