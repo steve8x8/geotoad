@@ -308,6 +308,8 @@ class Input
     puts " -C                     selectively clear local browser cache"
     puts " -U                     use unbuffered output"
     puts ""
+    puts "See manual page for more details, including \"long\" options."
+    puts ""
     puts "::: OUTPUT FORMATS:"
     outputDetails = Output.new
     column = 0
