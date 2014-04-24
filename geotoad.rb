@@ -419,9 +419,16 @@ class GeoToad
       # limit search page count
       search.max_pages = @limitPages
 
-      # set tx filter if only one cache type
-      if @option['cacheType'] and (@option['cacheType'].split($delimiters).length == 1)
-        search.txfilter = @option['cacheType']
+      if @option['cacheType']
+        # filter by cacheType
+        if (@option['cacheType'].split($delimiters).length == 1)
+          # if only one type, use tx= parameter (pre-filtering)
+          search.txfilter = @option['cacheType']
+        elsif @option['cacheType'] =~ /-all/ or @option['cacheType'] =~ /\+/
+          # otherwise, warn if "all xxx" is in the list
+          displayWarning "Filtering for \"all\" only works for single cache type - your results will be wrong!"
+          sleep 10
+        end
       end
 
       # exclude own found
@@ -432,6 +439,7 @@ class GeoToad
       if (! search.setType(@queryType, queryArg))
         displayWarning "Could not determine search type for #{@queryType} \"#{queryArg}\""
         displayWarning "You may want to remove special characters or try a \"coord\" search instead"
+        sleep 10
         next
       end
 
@@ -529,8 +537,14 @@ class GeoToad
 
     beforeFilterTotal = @filtered.totalWaypoints
     if @option['cacheType']
+      # post-filter by cacheType
       @appliedFilters['-c'] = { 'f' => "#{@option['cacheType']}", 't' => "type" }
-      @filtered.cacheType(@option['cacheType'])
+      if @option['cacheType'] !~ /-all/ and @option['cacheType'] !~ /\+/
+        # but only if there's no "all xxx" chosen
+        @filtered.cacheType(@option['cacheType'])
+      else
+        displayWarning "Not filtering for cache type!"
+      end
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
     if (excludedFilterTotal > 0)

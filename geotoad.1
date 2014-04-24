@@ -125,6 +125,15 @@ set cache type(s)
 
 If \fBonly one type\fR is selected, search will be sped up considerably
 by reducing the number of queries sent to the server.
+
+\fBevent\fR and \fBunknown\fR do not include "special" types.
+To search for "all event" (including cito, mega, and giga, and some 
+rare other events) or "all unknown" (including Groundspeak HQ) types,
+use
+\fBevent-all\fR or \fBevent+\fR, or
+\fBunknown-all\fR or \fBunknown+\fR respectively,
+\fBas the only cache type\fR (otherwise,
+filtering won't work - you've been warned).
 .TP
 \fB-d\fR|\fB--difficultyMin\fR|\fB--minDiff\fR \fI1.0-5.0\fR
 set minimum difficulty
