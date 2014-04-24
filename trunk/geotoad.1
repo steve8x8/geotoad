@@ -75,8 +75,7 @@ HTTP proxy server, http://username@password@host:port/
 
 In case of multiple output formats, subsequent file names are derived from this one.
 .TP
-\fB-x\fR|\fB--format\fR \fIformat\fR
-\fB(MULTI)\fR
+\fB-x\fR|\fB--format\fR \fIformat\fR  \fB(MULTI)\fR
 output format type(s) (default: gpx)
 .TP
 \fB-w\fR|\fB--waypointLength\fR \fIlength\fR
@@ -89,18 +88,19 @@ limit number of log entries (default: 10)
 .TP
 .B Query type:
 .TP
-\fB-q\fR|\fB--queryType\fR \fI[location|coord|user|owner|country|state|keyword|wid|guid]\fR
-query type (default: location)
+\fB-q\fR|\fB--queryType\fR \fItype\fR
+\fB[location|coord|user|owner|country|state|keyword|wid|guid]\fR\p
+query type, default \fBlocation\fR
 
-\fIlocation\fR will use the Google Maps API to translate into coordinates.
-Use \fIcoord\fR if you already have coordinates.
+\fBlocation\fR will use the Google Maps API to translate into coordinates.
+Use \fBcoord\fR if you already have coordinates.
 
-\fIcountry\fR and \fIstate\fR queries require a numerical id which the TUI may tell you.
+\fBcountry\fR and \fBstate\fR queries require a numerical id which the TUI may tell you.
 .TP
 \fB-y\fR|\fB--distanceMax\fR|\fB--radius\fR \fI0.01-500[km]\fR
 distance maximum in miles or km (default: 10mi)
 
-Applies to \fIlocation\fR and \fIcoord\fR queries only.
+Applies to \fBlocation\fR and \fBcoord\fR queries only.
 .TP
 .B Limit queries:
 .TP
@@ -118,11 +118,12 @@ do not overwrite existing cache description files in file cache
 .TP
 .B Filtering options:
 .TP
-\fB-c\fR|\fB--cacheType\fR|\fB--type\fR \fI[traditional|multicache|letterbox|event|unknown|cito|virtual|webcam|earthcache|wherigo|...]\fR
-\fB(MULTI)\fR
+\fB-c\fR|\fB--cacheType\fR|\fB--type\fR \fItype\fR  \fB(MULTI)\fR
+\fB[traditional|multicache|letterbox|event|unknown|cito|\p
+ virtual|webcam|earthcache|wherigo|...]\fR\p
 set cache type(s)
 
-If only one type is selected, search will be sped up considerably
+If \fBonly one type\fR is selected, search will be sped up considerably
 by reducing the number of queries sent to the server.
 .TP
 \fB-d\fR|\fB--difficultyMin\fR|\fB--minDiff\fR \fI1.0-5.0\fR
@@ -137,10 +138,12 @@ set minimum terrain
 \fB-T\fR|\fB--terrainMax\fR|\fB--maxTerrain\fR \fI1.0-5.0\fR
 set maximum terrain
 .TP
-\fB-s\fR|\fB--sizeMin\fR|\fB--minSize\fR \fI[virtual|not_chosen|other|micro|small|regular|large]\fR
-set minimum cache size - \fInot_chosen\fR is equivalent to \fIvirtual\fR
+\fB-s\fR|\fB--sizeMin\fR|\fB--minSize\fR \fIsize\fR
+\fB[virtual|not_chosen|other|micro|small|regular|large]\fR\p
+set minimum cache size - \fBnot_chosen\fR is equivalent to \fBvirtual\fR
 .TP
-\fB-S\fR|\fB--sizeMax\fR|\fB--maxSize\fR \fI[virtual|not_chosen|other|micro|small|regular|large]\fR
+\fB-S\fR|\fB--sizeMax\fR|\fB--maxSize\fR \fIsize\fR
+\fB[virtual|not_chosen|other|micro|small|regular|large]\fR\p
 set maximum cache size
 .TP
 \fB-g\fR|\fB--favFactorMin\fR|\fB-minFav\fR \fI0.0-5.0\fR
@@ -149,28 +152,22 @@ set minimum fav factor
 \fB-G\fR|\fB--favFactorMax\fR|\fB-maxFav\fR \fI0.0-5.0\fR
 set maximum fav factor
 .TP
-\fB-k\fR|\fB--titleKeyword\fR \fIkeyword\fR
-\fB(MULTI)\fR
+\fB-k\fR|\fB--titleKeyword\fR \fIkeyword\fR  \fB(MULTI)\fR
 title keyword search, exclude if prefixed with \fB!\fR
 .TP
-\fB-K\fR|\fB--descKeyword \fR \fIkeyword\fR
-\fB(MULTI)\fR
+\fB-K\fR|\fB--descKeyword \fR \fIkeyword\fR  \fB(MULTI)\fR
 description keyword search (slow), exclude if prefixed with \fB!\fR
 .TP
-\fB-i\fR|\fB--ownerInclude\fR|\fB--by\fR \fIusername\fR
-\fB(MULTI)\fR
+\fB-i\fR|\fB--ownerInclude\fR|\fB--by\fR \fIusername\fR  \fB(MULTI)\fR
 include caches owned by this person
 .TP
-\fB-I\fR|\fB--ownerExclude\fR|\fB--notby\fR \fIusername\fR
-\fB(MULTI)\fR \fB(USERFILE)\fR
+\fB-I\fR|\fB--ownerExclude\fR|\fB--notby\fR \fIusername\fR  \fB(MULTI)\fR \fB(USERFILE)\fR
 exclude caches owned by this person
 .TP
-\fB-e\fR|\fB--userInclude\fR|\fB--doneBy\fR \fIusername\fR
-\fB(MULTI)\fR
+\fB-e\fR|\fB--userInclude\fR|\fB--doneBy\fR \fIusername\fR  \fB(MULTI)\fR
 include caches found by this person
 .TP
-\fB-E\fR|\fB--userExclude\fR|\fB--notdoneBy\fR \fIusername\fR
-\fB(MULTI)\fR \fB(USERFILE)\fR
+\fB-E\fR|\fB--userExclude\fR|\fB--notdoneBy\fR \fIusername\fR  \fB(MULTI)\fR \fB(USERFILE)\fR
 exclude caches found by this person
 .TP
 \fB-j\fR|\fB--placeDateInclude\fR|\fB--since\fR \fIX\fR
@@ -185,12 +182,10 @@ include caches found in the last \fIX\fR days
 \fB-R\fR|\fB--foundDateExclude\fR \fIX\fR
 exclude caches found in the last \fIX\fR days
 .TP
-\fB-a\fR|\fB--attributeInclude\fR \fIid[-]\fR
-\fB(MULTI)\fR
+\fB-a\fR|\fB--attributeInclude\fR \fIid[-]\fR  \fB(MULTI)\fR
 select caches with attribute ID \fIid\fR set to "yes", or to "no" if "-" suffix
 .TP
-\fB-A\fR|\fB--attributeExclude\fR \fIid[-]\fR
-\fB(MULTI)\fR
+\fB-A\fR|\fB--attributeExclude\fR \fIid[-]\fR  \fB(MULTI)\fR
 exclude caches with attribute ID \fIid\fR set to "yes", or to "no" if "-" suffix
 .TP
 \fB-z\fR|\fB--includeDisabled\fR|\fB--bad\fR
@@ -211,6 +206,8 @@ exclude Premium Member Only caches
 \fB-Q\fR|\fB--onlyPMO\fR|\fB--pmo\fR
 select only Premium Member Only caches
 .TP
+.B Note that \fB-O\fR and \fB-Q\fR are mutually exclusive!
+.TP
 The following 4 options have no one-letter version, and are used for limiting the search area.
 Note that this filter is applied \fBafter\fR fetching all cache details (as coordinates aren't available before).
 .TP
@@ -225,8 +222,6 @@ set minimum latitude (West filter limit)
 .TP
 \fB--maxLatitude\fR|\fB--latMax\fR \fI...\fR
 set maximum latitude (East filter limit)
-.TP
-.B Note that \fB-O\fR and \fB-Q\fR are mutually exclusive!
 .TP
 .B Additional options:
 .TP
@@ -262,9 +257,9 @@ switch output to unbuffered (useful for wrappers)
 .SH SPECIAL CASES
 If your
 \fIsearch\fR
-item(s) start with a dash (minus sign), it has to be
-"hidden" from the option parser. This, in Unix tradition, is done by
-inserting a "double dash"
+item(s) (matching the \fBqueryType\fR) start with a dash (minus sign),
+it has to be "hidden" from the option parser.
+This, in Unix tradition, is done by inserting a "double dash"
 .B --
 between the last option and the search argument(s).
 
