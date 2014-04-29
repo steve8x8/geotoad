@@ -1274,7 +1274,7 @@ class Output
       'latdatapad6' => sprintf("%2.6f", cache['latdata'] || 0.0),
       'londatapad6' => sprintf("%2.6f", cache['londata'] || 0.0),
       'latdegmin' => lat2str(cache['latdata'] || 0.0, degsign=':').gsub(/ */, '').gsub(/([NSEW])0+/, '\1'),
-      'londegmin' => lng2str(cache['londata'] || 0.0, degsign=':').gsub(/ */, '').gsub(/([NSEW])0+/, '\1'),
+      'londegmin' => lon2str(cache['londata'] || 0.0, degsign=':').gsub(/ */, '').gsub(/([NSEW])0+/, '\1'),
       'maps_url' => "#{GOOGLE_MAPS_URL}?q=#{coord_query}",
       'IsAvailable' => (available==true).to_s.capitalize,
       'IsArchived' => (archived==true).to_s.capitalize,
