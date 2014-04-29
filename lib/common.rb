@@ -314,9 +314,9 @@ module Common
     return sprintf("%s %02d%s %06.3f", ((lat >= 0) ? "N" : "S"), lat.abs.div(1), degsign, lat.abs.remainder(1) * 60.0)
   end
 
-  def lng2str(lng0, degsign="°")
-    lng = lng0.to_f
-    return sprintf("%s %03d%s %06.3f", ((lng >= 0) ? "E" : "W"), lng.abs.div(1), degsign, lng.abs.remainder(1) * 60.0)
+  def lon2str(lon0, degsign="°")
+    lon = lon0.to_f
+    return sprintf("%s %03d%s %06.3f", ((lon >= 0) ? "E" : "W"), lon.abs.div(1), degsign, lon.abs.remainder(1) * 60.0)
   end
 
   def parseCoordinate(input)
