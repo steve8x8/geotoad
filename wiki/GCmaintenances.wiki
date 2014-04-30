@@ -51,7 +51,18 @@ _*(year per year; new entries will be added at bottom)*_
 </wiki:comment>
   * *{{{Web.HotFix_20140311.2}}}* (2014-03-12)
   * *{{{Web.HotFix_20140314.1}}}* (2014-03-15)
+  * *{{{Tucson.Main.master.Release_12}}}* (2014-03-25) _CR partially removed (reverted later)_
 ----
+2014-04-08:
+  * 2pm~8pm PST downtime for server upgrade (announced on Twitter)
+  * _no release notes available (no modifications to the site)_
+  * *{{{Tucson.Main.hotfix-20140408-avg.Release_33}}}* (seen 2014-04-13)
+----
+2014-04-15:
+  * _"spruced up a few things" (Twitter, 1828 UTC)_
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=321391 release notes]
+  * *{{{Tucson.Main.release-20140415.Release_46}}}*
+  * *{{{Tucson.Main.feature-Giga.Release_51}}}* (2014-04-22, +giga-events)
 == (now) ==
 ----
 
