@@ -179,14 +179,12 @@ class ShadowFetch
       end
     end
     if (@data)
-      @data.force_encoding("UTF-8")
       @@src = 'remote'
       size = @data.length
     else
       if (File.readable?(localfile))
         debug "using local cache instead"
         @data = fetchLocal(localfile)
-        @data.force_encoding("UTF-8")
         @@src = "local <offline>"
         return @data
       else
@@ -225,6 +223,7 @@ class ShadowFetch
       return nil
     end
     debug2 "#{data.length} bytes retrieved from local cache"
+    data.force_encoding("UTF-8")
     return data
   end
 
@@ -234,6 +233,7 @@ class ShadowFetch
     randomizedSleep(@@remotePages)
     @httpHeaders['Referer'] = @url
     data = fetchURL(@url)
+    data.force_encoding("UTF-8")
     # although implicit:
     return data
   end
