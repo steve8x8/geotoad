@@ -57,6 +57,10 @@ module Messages
 
   # fatal errors
   def displayError(text)
-    abort("ERROR: #{text}")
+    if text.to_s.length > 0
+      abort("ERROR: #{text}")
+    else
+      abort("")
+    end
   end
 end
