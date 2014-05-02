@@ -207,7 +207,7 @@ class ShadowFetch
     rescue
       displayWarning "Could not overwrite #{localfile}!"
     end
-    nodebug "Returning #{@data.length} bytes: #{@data[0..20]}(...)#{data[-21..-1]}"
+    debug3 "Returning #{@data.length} bytes: #{@data[0..20]}(...)#{data[-21..-1]}"
     return @data
   end
 
@@ -233,6 +233,7 @@ class ShadowFetch
     randomizedSleep(@@remotePages)
     @httpHeaders['Referer'] = @url
     data = fetchURL(@url)
+    debug2 "#{data.length} bytes retrieved from #{@url}"
     data.force_encoding("UTF-8")
     # although implicit:
     return data
