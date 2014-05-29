@@ -679,6 +679,9 @@ class CacheDetails
       (0...comments.length).each { |c|
         cache['comments'][c]['text'].gsub!(/<\/?font[^>]*>/, '')
       }
+      if cache['membersonly']
+        cache['olddesc'] = true
+      end
     end
 
     if (not cache['mdays'] or cache['mdays'] == -1) and last_find_date

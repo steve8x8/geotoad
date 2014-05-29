@@ -199,13 +199,35 @@ class ShadowFetch
       FileUtils::mkdir_p(localdir)
     end
 
-    debug "writing #{localfile}"
-    begin
-      cache = File.open(localfile, File::WRONLY|File::TRUNC|File::CREAT, 0666)
-      cache.puts @data
-      cache.close
-    rescue
-      displayWarning "Could not overwrite #{localfile}!"
+    # some magic to not overwrite a publicly viewable cdpf with PMO
+    dowrite = true
+    if File.readable?(localfile) and @data =~ /be a Premium Member to view/
+      # Properly handle changed cache characteristics (D/T/S), coordinates:
+      # Get "old" non-PMO file, then append "new" data. Parser should find last info.
+      # Works at least with non-WID/GUID queries.
+      # As this is a kludge anyway, mimicking the old "paperful caching", don't care.
+      olddata = fetchLocal(localfile)
+      if olddata =~ /be a Premium Member to view/
+        # we do not lose important information by overwriting
+        dowrite = true
+      else
+        # we would lose information by overwriting, but have to concat
+        dowrite = false
+        @data = olddata + @data
+        @@src = 'local+remote'
+      end
+    end
+    if not dowrite
+      displayWarning "Will not overwrite existing cache file with PMO!"
+    else
+      debug "writing #{localfile}"
+      begin
+        cache = File.open(localfile, File::WRONLY|File::TRUNC|File::CREAT, 0666)
+        cache.puts @data
+        cache.close
+      rescue
+        displayWarning "Could not overwrite #{localfile}!"
+      end
     end
     debug3 "Returning #{@data.length} bytes: #{@data[0..20]}(...)#{data[-21..-1]}"
     return @data
