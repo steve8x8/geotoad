@@ -63,6 +63,16 @@ _*(year per year; new entries will be added at bottom)*_
   * [http://forums.groundspeak.com/GC/index.php?showtopic=321391 release notes]
   * *{{{Tucson.Main.release-20140415.Release_46}}}*
   * *{{{Tucson.Main.feature-Giga.Release_51}}}* (2014-04-22, +giga-events)
+  * *{{{Tucson.Main.develop.Release_56}}}* (2014-05-01)
+----
+2014-05-13:
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=322309 release notes]
+  * _"a solid round of text changes, site updates and bug extermination"_
+  * _multi stages renamed to "physical" and "virtual"_
+  * *{{{Tucson.Main.release-20140513.Release_75}}}*
+  * *(((Tucson.Main.hotfix-20140513.Release_86}}}* (2014-05-15)
+  * *{{{Tucson.Main.release-20140520.Release_93}}}* (2014-05-21)
+  * *{{{Tucson.Main.hotfix-20140521.Release_96}}}* (2014-05-22)
 == (now) ==
 ----
 
