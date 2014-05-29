@@ -1296,7 +1296,7 @@ class Output
       'txtAttrs' => (cache['attributeText'].to_s.empty?)?'':'[' + cache['attributeText'].to_s.capitalize.gsub(/\\/,"/") + ']',
       'warnAvail' => (available or archived)?'':'[?]',
       'warnArchiv' => (archived)?'[%]':'',
-      'premiumOnly' => (cache['membersonly']?'[$]':''),
+      'premiumOnly' => (cache['membersonly']?('[$' + (cache['olddesc']?'+':'') + ']'):''),
       'nuvi' => cache['type'][0..1].capitalize +
         sprintf("%.1f", cache['difficulty']).gsub(/\.5/, '\'').gsub(/\.0/, ' ') +
         sprintf("%.1f", cache['terrain']).gsub(/\.5/, '\'').gsub(/\.0/, ' ') +
