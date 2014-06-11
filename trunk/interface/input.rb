@@ -1,5 +1,6 @@
 # $Id$
 
+require 'realpath'
 $THISDIR = File.dirname(File.realpath(__FILE__))
 $LOAD_PATH << File.join($THISDIR, '..')
 $LOAD_PATH << File.join($THISDIR, '..', 'lib')

@@ -1,8 +1,8 @@
---- a/geotoad.rb	2013-08-28 11:37:25.000000000 +0200
-+++ b/geotoad.rb	2013-08-28 11:38:43.000000000 +0200
-@@ -5,9 +5,11 @@
- # This is the main geotoad binary.
- #
+--- a/geotoad.rb
++++ b/geotoad.rb
+@@ -7,9 +7,11 @@
+ 
+ require 'pathname'
  $BASEDIR = File.dirname(File.realpath(__FILE__))
 -$LOAD_PATH << $BASEDIR
 -$LOAD_PATH << File.join($BASEDIR, 'lib')
