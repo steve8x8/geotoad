@@ -4,7 +4,7 @@
 
 require 'common'
 require 'messages'
-require 'realpath'
+require 'pathname'
 
 class Templates
 
