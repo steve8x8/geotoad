@@ -3,6 +3,7 @@
 # $Id$
 
 require 'fileutils'
+require 'realpath'
 require 'time'
 
 module Common

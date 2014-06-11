@@ -1,6 +1,6 @@
---- a/interface/input.rb	2012-09-25 13:01:26.000000000 +0200
-+++ b/interface/input.rb	2012-09-25 17:01:48.000000000 +0200
-@@ -187,7 +187,7 @@
+--- a/interface/input.rb
++++ b/interface/input.rb
+@@ -218,7 +218,7 @@
      @@optHash.delete('outFile')
  
      # demonstrate a sample command line
@@ -9,7 +9,7 @@
      hidden_opts = ['queryArg', 'user', 'password', 'usemetric', 'verbose']
      # hide unlimited search
      if @@optHash['limitSearchPages'] == 0
-@@ -230,7 +230,7 @@
+@@ -261,7 +261,7 @@
  
  
    def usage
@@ -18,7 +18,7 @@
      puts ""
      puts " -u <username>          Geocaching.com username, required for coordinates"
      puts " -p <password>          Geocaching.com password, required for coordinates"
-@@ -300,12 +300,12 @@
+@@ -337,12 +337,12 @@
      puts " (+) requires gpsbabel  (=) requires cmconvert  (%) requires iconv in PATH"
      puts ""
      puts "::: EXAMPLES:"
