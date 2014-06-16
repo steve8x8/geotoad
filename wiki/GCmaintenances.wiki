@@ -71,8 +71,17 @@ _*(year per year; new entries will be added at bottom)*_
   * _multi stages renamed to "physical" and "virtual"_
   * *{{{Tucson.Main.release-20140513.Release_75}}}*
   * *(((Tucson.Main.hotfix-20140513.Release_86}}}* (2014-05-15)
-  * *{{{Tucson.Main.release-20140520.Release_93}}}* (2014-05-21)
-  * *{{{Tucson.Main.hotfix-20140521.Release_96}}}* (2014-05-22)
+  * *{{{Tucson.Main.release-20140520.Release_93}}}* (2014-05-21, no RN)
+  * *{{{Tucson.Main.hotfix-20140521.Release_96}}}* (2014-05-22, no RN)
+  * *{{{Tucson.Main.develop.Release_100}}}* (2014-05-30, no RN)
+----
+2014-06-04:
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=322935 release notes]
+  * _"stats, bug squashes"_
+  * _uses term "Mystery Cache", even in GPX download_
+  * *{{{Tucson.Main.release-20140603.Release_113}}}*
+  * *{{{Tucson.Main.release-20140603.Release_119}}}* (2014-06-05)
+  * *{{{Tucson.Main.release-20140610.Release_123}}}* (2014-06-11)
 == (now) ==
 ----
 
@@ -80,7 +89,7 @@ _*(year per year; new entries will be added at bottom)*_
 ----
 2013-01-08:
   * [http://forums.groundspeak.com/GC/index.php?showtopic=306136 release notes]
-  * *{{{Web.HotFix_20130107.1}}}* 
+  * *{{{Web.HotFix_20130107.1}}}*
   * _parsing placed date fails_
 ----
 2013-01-22:
