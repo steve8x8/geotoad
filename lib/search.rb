@@ -464,6 +464,9 @@ class SearchCache
         membersonly = true
       when /^\s+GC.*\((.*)\) in ((.*), )?(.*) created by (.*?)\s*$/
         ctype = $1
+        if ctype =~ /Mystery Cache/
+          ctype = "Unknown Cache"
+        end
         state = $3
         country = $4
         owner = $5
