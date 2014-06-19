@@ -255,9 +255,12 @@ fi
 echo ""
 echo "Build Debian package (build $DEBBUILD)"
 cd $DEST
+if [ ! -f $DEBNAME.orig.tar.gz ]; then
+  ln -s $DISTNAME.tar.gz $DEBNAME.orig.tar.gz
+fi
 # refresh build directory
 rm -rf $DISTNAME
-tar zxf $DISTNAME.tar.gz
+tar zxf $DEBNAME.orig.tar.gz
 cd $DISTNAME
 # Debian packages love ToDo lists
 # we point to the Issues tracker just in case somebody hasn't noticed yet
