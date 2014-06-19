@@ -1,3 +1,14 @@
+geotoad (3.21.0) unstable; urgency=low
+
+  * New version 3.21.0, "Summer '14" release
+  * Support for giga-events added; generic "event" and "unknown" searches
+  * Issue 302: Keep old cdpf copy if cache becomes PMO (mimic paper)
+  * Man page overhauls
+  * Coord to string conversion (may be required for non-public extensions)
+  * Minor additions, modifications, cleanups, and bug fixes
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Tue, 24 Jun 2014 09:00:00 +0000
+
 geotoad (3.20.2-1) unstable; urgency=low
 
   * New version 3.20.2, "Spring ahead" release
