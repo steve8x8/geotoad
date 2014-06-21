@@ -298,12 +298,11 @@ if [ -z "`ls 2>/dev/null $DEBNAME-${DEBBUILD}_*.deb`" ]; then
 else
   echo "Done."
   echo "Build Debian package list(s)"
-  # deb http://geotoad.googlecode.com/ svn/trunk/data/
   #     ^-- append files/$filename     ^-- get package list
   dpkg-scanpackages $DEST \
   | sed "s~$DEST/~files/~" \
   | gzip -9 > $DEST/Packages.gz
-  false && \
+  #false && \
   dpkg-scansources $DEST \
   | sed "s~$DEST/~files/~" \
   | gzip -9 > $DEST/Sources.gz
@@ -313,74 +312,6 @@ else
   fi
   echo "Done."
 fi
-
-exit 0
-
-echo ""
-cd $DEST
-#$#echo "Removing ZIP files"
-#$#rm -f *.zip
-#$#echo "Done."
-
-echo ""
-echo "Files for upload:"
-ls -l 2>/dev/null $DISTNAME.tar.gz $DEBNAME-${DEBBUILD}_*.deb ${DISTNAME}_Windows_Installer*.exe ${DISTNAME}_MacOSX.dmg
-echo ""
-read -p "*** Upload to GoogleCode now? " x
-if [ -z "$SVN" ]; then
-  . ~/.googlecoderc
-  if [ -n "$GOOGLECODEUSER" ]; then
-    GCU="googlecode_upload.py --project geotoad --user $GOOGLECODEUSER --password $GOOGLECODEPASS"
-  fi
-fi
-if [ -z "$GCU" ]; then
-  echo "*** Fake upload!"
-  GCU="echo would upload: "
-fi
-read -p "*** OK? " x
-if [ -f $DISTNAME.tar.gz ]; then
-  $GCU \
-    -s "geotoad $VERSION source code (requires ruby 1.9.x)" \
-    -l "Featured,Type-Source,OpSys-All" \
-      $DISTNAME.tar.gz
-fi
-if [ -n "`ls 2>/dev/null $DEBNAME-${DEBBUILD}_*.deb`" ]; then
-  $GCU \
-    -s "geotoad $VERSION package for Debian/Ubuntu" \
-    -l "Featured,Type-Package,OpSys-Linux" \
-      $DEBNAME-${DEBBUILD}_*.deb
-fi
-if [ -f ${DISTNAME}_Windows_Installer.exe ]; then
-  $GCU \
-    -s "geotoad $VERSION installer for Windows" \
-    -l "Featured,Type-Installer,OpSys-Windows" \
-      ${DISTNAME}_Windows_Installer.exe
-fi
-#if [ -f ${DISTNAME}_Windows_Installer_Ruby18.exe ]; then
-#  $GCU \
-#    -s "geotoad $VERSION installer for Windows using Ruby 1.8" \
-#    -l "Featured,Type-Installer,OpSys-Windows" \
-#      ${DISTNAME}_Windows_Installer_Ruby18.exe
-#fi
-if [ -f ${DISTNAME}_Windows_Installer_Ruby19.exe ]; then
-  $GCU \
-    -s "geotoad $VERSION installer for Windows using Ruby 1.9.x" \
-    -l "Featured,Type-Installer,OpSys-Windows" \
-      ${DISTNAME}_Windows_Installer_Ruby19.exe
-fi
-if [ -f ${DISTNAME}_Windows_Installer_Ruby20.exe ]; then
-  $GCU \
-    -s "geotoad $VERSION installer for Windows using Ruby 2.0 (testing)" \
-    -l "Featured,Type-Installer,OpSys-Windows" \
-      ${DISTNAME}_Windows_Installer_Ruby20.exe
-fi
-if [ -f ${DISTNAME}_MacOSX.dmg ]; then
-  $GCU \
-    -s "geotoad $VERSION package for Mac OS X (requires ruby 1.9.x)" \
-    -l "Featured,Type-Installer,OpSys-OSX" \
-      ${DISTNAME}_MacOSX.dmg
-fi
-echo "Done."
 
 echo ""
 echo "All done."
