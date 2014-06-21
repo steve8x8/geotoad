@@ -82,6 +82,14 @@ _*(year per year; new entries will be added at bottom)*_
   * *{{{Tucson.Main.release-20140603.Release_113}}}*
   * *{{{Tucson.Main.release-20140603.Release_119}}}* (2014-06-05)
   * *{{{Tucson.Main.release-20140610.Release_123}}}* (2014-06-11)
+----
+2014-06-19:
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=323369 release notes]
+  * *{{{Tucson.Main.release-20140616.Release_135}}}*
+  * _revert renaming of "Unknown" to "Mystery", PM PQ enhancements_
+  * _in the past month, Russian and Finnish were added._
+  * _new bug/feature: switch to uncommon language (Spanish etc), find nearest caches, click on PMO -> error 500_
+----
 == (now) ==
 ----
 
