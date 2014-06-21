@@ -608,6 +608,9 @@ class Output
   end
 
   def deemoji(str, soft=true)
+    if not str or str.length == 0
+        return ""
+    end
     text = str.dup
     # pre-translate decimal into hex for large codepoints
     text.gsub!(/(\&#(\d+);)/) { ($2.to_i < 55296) ? $1 : ('&#x' + $2.to_i.to_s(16).upcase + ';') }
@@ -633,7 +636,7 @@ class Output
 
   def makeXML(str)
     if not str or str.length == 0
-        return str
+        return ""
     end
     # issue 262: "emoji" seem to break GPSr devices
     text = deemoji(str, false)
