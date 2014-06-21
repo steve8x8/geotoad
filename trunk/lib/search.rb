@@ -531,7 +531,12 @@ class SearchCache
       when /_Localize12.*?(\d(\.\d)?) out of/
         cterr = tohalfint($1)
         debug "Found T: #{cterr}"
-      when /alt=\"Size: .*?>\((.*?)\)</
+      # this causes problems when using a language != English
+      #when /alt=\"Size: .*?>\((.*?)\)</
+      # better use a match on the corresponding image
+      # Size:&nbsp;<span class="minorCacheDetails"><img src="/images/icons/container/regular.gif" alt="Size: regular" title="Size: regular" />&nbsp<small>(regular)</small></span>
+      # (PMO) <img src="/images/icons/container/large.gif" alt="Size: Large" />&nbsp<small>(Large)</small>&nbsp;
+      when /images\/icons\/container\/(\w*)\./
         csize = $1.downcase
         debug "Found size: #{csize}"
       when /_CacheName\">\s*(.*?)\s*<\/span>/
