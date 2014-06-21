@@ -464,12 +464,12 @@ class SearchCache
         membersonly = true
       when /^\s+GC.*\((.*)\) in ((.*), )?(.*) created by (.*?)\s*$/
         ctype = $1
-        if ctype =~ /Mystery Cache/
-          ctype = "Unknown Cache"
-        end
         state = $3
         country = $4
         owner = $5
+        if ctype =~ /Mystery Cache/
+          ctype = "Unknown Cache"
+        end
         debug "#{ctype} by #{owner} in #{country}/#{state}"
       #<span id="ctl00_ContentBody_MapLinks_MapLinks">...
       #...<li><a href="http://maps.google.com/maps?q=N+12%c2%b0+46.880+E+100%c2%b0+54.304+(GC10011)+" target="_blank">Google Maps</a></li>...
