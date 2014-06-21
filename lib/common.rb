@@ -78,26 +78,29 @@ module Common
   end
 
 # date patterns in "last found" column (as of 2013-08-28)
+# new sort order
 #en-US	English		Today		Yesterday	(n) days ago
-#de-DE	Deutsch		Heute		Gestern		vor (n) Tagen
-#fr-FR	Français	Hier		Aujourd'hui	Il y a (n) jours
-#pt-PT	Português	Hoje		Ontem		(n) dias atrás
+#ca-ES	Català		Avui		Ahir		Fa (n) dies
 #cs-CZ	Čeština		Dnes		Včera		před (n) dny
 #da-DK	Dansk		I dag		I går		(n) dage siden
-#sv-SE	Svenska		Idag		Igår		för (n) dagar sedan
-#es-ES	Español		Hoy		Ayer		hace (n) días
-#et-EE	Eesti		Täna		Eile		(n) päeva tagasi
-#it-IT	Italiano	Oggi		Ieri		(n) giorni fa
+#de-DE	Deutsch		Heute		Gestern		vor (n) Tagen
 #el-GR	Ελληνικά	Σήμερα		Χτές		(n) μέρες πριν
-#lv-LV	Latviešu	Šodien		Vakar		pirms (n) dienām
-#nl-NL	Nederlands	Vandaag		Gisteren	(n) dagen geleden
-#ca-ES	Català		Avui		Ahir		Fa (n) dies
-#pl-PL	Polski		Dzisiaj		Wczoraj		(n) dni temu
-#nb-NO	Norsk, Bokmål	I dag		I går		(n) dager siden
-#ko-KR	한국어		오늘		어제		(n) 일 전
-#hu-HU	Magyar		Ma		Tegnap		(n) napja
-#ro-RO	Română		Azi		Ieri		(n) zile in urmă
+#et-EE	Eesti		Täna		Eile		(n) päeva tagasi
+#es-ES	Español		Hoy		Ayer		hace (n) días
+#fr-FR	Français	Hier		Aujourd'hui	Il y a (n) jours
+#it-IT	Italiano	Oggi		Ieri		(n) giorni fa
 #ja-JP	日本語		今日		昨日		(n)日前
+#ko-KR	한국어		오늘		어제		(n) 일 전
+#lv-LV	Latviešu	Šodien		Vakar		pirms (n) dienām
+#hu-HU	Magyar		Ma		Tegnap		(n) napja
+#nl-NL	Nederlands	Vandaag		Gisteren	(n) dagen geleden
+#nb-NO	Norsk, Bokmål	I dag		I går		(n) dager siden
+#pl-PL	Polski		Dzisiaj		Wczoraj		(n) dni temu
+#pt-PT	Português	Hoje		Ontem		(n) dias atrás
+#ro-RO	Română		Azi		Ieri		(n) zile in urmă
+#ru-RU	Русский		Сегодня		Вчера		(n) дн.назад
+#fi-FI	Suomi		Tänään		Eilen		(n) päivää sitten
+#sv-SE	Svenska		Idag		Igår		för (n) dagar sedan
 
   def parseDate(date)
     debug "parsing date: [#{date}]"
@@ -107,10 +110,10 @@ module Common
     # patterns may be duplicated (Dansk/Norsk) intentionally
     case date
     # relative dates end in a "*"
-    when /^(Today|Heute|Hier|Hoje|Dnes|I dag|Idag|Hoy|Täna|Oggi|Σήμερα|Šodien|Vandaag|Avui|Dzisiaj|I dag|오늘|Ma|Azi|今日)\*/i
+    when /^(Today|Avui|Dnes|I dag|Heute|Σήμερα|Täna|Hoy|Hier|Oggi|今日|오늘|Šodien|Ma|Vandaag|I dag|Dzisiaj|Hoje|Azi|Сегодня|Tänään|Idag)\*/i
       debug2 "date: Today"
       days_ago=0
-    when /^(Yesterday|Gestern|Aujourd.hui|Ontem|Včera|I går|Igår|Ayer|Eile|Ieri|Χτές|Vakar|Gisteren|Ahir|Wczoraj|I går|어제|Tegnap|Ieri|昨日)\*/i
+    when /^(Yesterday|Ahir|Včera|I går|Gestern|Χτές|Eile|Ayer|Aujourd.hui|Ieri|昨日|어제|Vakar|Tegnap|Gisteren|I går|Wczoraj|Ontem|Ieri|Вчера|Eilen|Igår)\*/i
       debug2 "date: Yesterday"
       days_ago=1
     # (any string ending with a * and a number in it)
@@ -166,7 +169,7 @@ module Common
       debug2 "no date: N/A"
       return nil
     else
-      displayWarning "Could not parse date: #{date}"
+      displayWarning "Could not parse date: #{date} - unknown language?"
       return nil
     end
    rescue => error
