@@ -357,6 +357,9 @@ class ShadowFetch
             return fetchURL(url_str, redirects - 1)
           end
         end
+        if location =~ /aspxerrorpath=\/seek\/cache_details.aspx/
+          displayInfo "May be issue 304. Try to use another language."
+        end
         displayInfo "Not following redirect [#{location}]"
         return "" # nil would cause split()ting to fail
       end
