@@ -89,6 +89,7 @@ _*(year per year; new entries will be added at bottom)*_
   * _revert renaming of "Unknown" to "Mystery", PM PQ enhancements_
   * _in the past month, Russian and Finnish were added._
   * _new bug/feature: switch to uncommon language (Spanish etc), find nearest caches, click on PMO -> error 500_
+  * *{{{Tucson.Main.release-20140616.Release_142}}}* (2014-06-21)
 ----
 == (now) ==
 ----

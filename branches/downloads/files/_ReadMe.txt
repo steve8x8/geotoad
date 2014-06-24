@@ -9,12 +9,11 @@ Note: You need sufficient administrator privileges.
 1A. Windows ..................................................... proceed to 11
 1B. MacOSX ...................................................... proceed to 21
 1C. Debian/Ubuntu Linux ......................................... proceed to 31
-1D. another Unix(oid) system .................................... proceed to 12
-1E. something else .............................................. proceed to 98
+1D. another Unix(oid) system .................................... proceed to 41
+1E. something else (like CP/M, IBM/SVM...) ...................... proceed to 98
 
 
 11. Do you prefer an all-in-one package, or to keep things separate?
-
 11A. I want to be in control of everything, even if that means some
    additional work!
    .............................................................. proceed to 12
@@ -24,7 +23,6 @@ Note: You need sufficient administrator privileges.
 
 
 12. Do you have Ruby (1.9.1 or higher) installed?
-
 12A. No ......................................................... proceed to 13
 12B. Yes ........................................................ proceed to 14
 
@@ -46,7 +44,6 @@ Note: You need sufficient administrator privileges.
 
 
 21. Do you have Ruby (1.9.1 or higher) installed?
-
 21A. No ......................................................... proceed to 22
 21B. Yes ........................................................ proceed to 23
 
@@ -61,7 +58,6 @@ Note: You need sufficient administrator privileges.
 
 31. Do you want automatic updates via apt, and dependencies resolved
    automatically?
-
 31A. No ......................................................... proceed to 34
 31B. Yes ........................................................ proceed to 32
 
@@ -82,8 +78,14 @@ Note: You need sufficient administrator privileges.
    .............................................................. proceed to 90
 
 
+41. Get the latest source package from http://ruby-lang.org, and install
+   (You're on your own with this for now.)
+   .............................................................. proceed to 90
+
+
 90. Done - you are now ready to run GeoToad!
    Now check the manual page and the README file for some examples.
+   Also visit the Wiki frequently!
    .............................................................. proceed to 99
 
 
