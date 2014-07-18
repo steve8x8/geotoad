@@ -54,7 +54,8 @@ class GeoToad
   $DTSFILTER = true
 
   # time to use for "unknown" creation dates
-  $ZEROTIME = 315576000
+  #$ZEROTIME = 315576000 # 1980-01-01T13:00:00Z
+  $ZEROTIME = 946728000 # 2000-01-01T13:00:00Z
 
   # conversion miles to kilometres
   $MILE2KM = 1.609344
