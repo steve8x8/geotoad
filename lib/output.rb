@@ -1085,8 +1085,9 @@ class Output
           elsif tdcount == 6
             # WP name and type
             wpname = $1
-            # extract sym type (in parentheses)
+            # extract sym type (in parentheses), replace outdated types (from old cdpfs)
             wptype = wpname.gsub(/^.*\(/, '').gsub(/\).*/, '')
+            wptype = wptype.gsub(/Question to Answer/, 'Virtual Stage').gsub(/Stages of a Multicache/, 'Physical Stage')
             # and drop type from name
             if wpname =~ /(.*) \(/
               wpname = $1
