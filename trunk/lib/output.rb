@@ -962,8 +962,10 @@ class Output
 
   def decryptHint(hint)
     if hint
+      # translate smileys
+      hint2 = icons2Text(hint)
       # split hint into bracketed and unbracketed fragments
-      decrypted = hint.gsub(/\[/, '\n[').gsub(/\]/, ']\n').split('\n').collect { |x|
+      decrypted = hint2.gsub(/\[/, '\n[').gsub(/\]/, ']\n').split('\n').collect { |x|
         debug3 "hint fragment #{x}"
         if x[0..0] != '['
           # only decrypt text not within brackets
