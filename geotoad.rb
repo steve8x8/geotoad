@@ -71,8 +71,13 @@ class GeoToad
     $membership   = nil # unknown before searching
   end
 
-  def caches(num, what = "cache")
-    return "#{num} #{what}" + ((num > 1) ? 's' : '')
+  def caches(num, what = "cache", length = 4)
+    if (num > 0)
+      counter = "#{num.to_s}"
+    else
+      counter = "no"
+    end
+    return "#{counter.rjust(length)} #{what}" + ((num != 1) ? 's' : '')
   end
 
   def getoptions
@@ -530,6 +535,13 @@ class GeoToad
   end
 
 
+  def showRemoved(count, text)
+    if (count > 0)
+      text10 = text.ljust(10)
+      displayMessage "#{text10} filtering removed #{caches(count)}."
+    end
+  end
+
   ## step #1 in filtering! ############################
   # This step filters out all the geocaches by information
   # found from the searches.
@@ -550,9 +562,7 @@ class GeoToad
       end
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
-    if (excludedFilterTotal > 0)
-      displayMessage "Cache type filtering removed #{caches(excludedFilterTotal)}."
-    end
+    showRemoved(excludedFilterTotal, "Cache type")
 
     # exclude Premium Member Only caches on request
     beforeFilterTotal = @filtered.totalWaypoints
@@ -564,9 +574,7 @@ class GeoToad
       @filtered.removeByElement('membersonly', false)
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
-    if (excludedFilterTotal > 0)
-      displayMessage "PMO filtering removed #{caches(excludedFilterTotal)}."
-    end
+    showRemoved(excludedFilterTotal, "PM-Only")
 
     if $DTSFILTER
     #-------------------
@@ -596,9 +604,7 @@ class GeoToad
       @filtered.sizeMax(@option['sizeMax'])
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
-    if (excludedFilterTotal > 0)
-      displayMessage "Diff/Terr/Size filtering removed #{caches(excludedFilterTotal)}."
-    end
+    showRemoved(excludedFilterTotal, "D/T/Size")
     #-------------------
     end # $DTSFILTER
 
@@ -622,9 +628,7 @@ class GeoToad
       @filtered.placeDateExclude(@option['placeDateExclude'].to_f)
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
-    if (excludedFilterTotal > 0)
-      displayMessage "Date filtering removed #{caches(excludedFilterTotal)}."
-    end
+    showRemoved(excludedFilterTotal, "Date")
 
     debug "Filter running cycle 3, #{caches(@filtered.totalWaypoints)} left."
 
@@ -634,9 +638,7 @@ class GeoToad
       @filtered.notFound
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
-    if (excludedFilterTotal > 0)
-      displayMessage "Unfound filtering removed #{caches(excludedFilterTotal)}."
-    end
+    showRemoved(excludedFilterTotal, "Unfound")
 
     beforeFilterTotal = @filtered.totalWaypoints
     if @option['travelBug']
@@ -644,9 +646,7 @@ class GeoToad
       @filtered.travelBug
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
-    if (excludedFilterTotal > 0)
-      displayMessage "Trackable filtering removed #{caches(excludedFilterTotal)}."
-    end
+    showRemoved(excludedFilterTotal, "Trackable")
 
     beforeFilterTotal = @filtered.totalWaypoints
     if (@option['ownerExclude'])
@@ -662,9 +662,7 @@ class GeoToad
       }
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
-    if (excludedFilterTotal > 0)
-      displayMessage "Owner filtering removed #{caches(excludedFilterTotal)}."
-    end
+    showRemoved(excludedFilterTotal, "Owner")
 
     beforeFilterTotal = @filtered.totalWaypoints
     if (@option['userExclude'])
@@ -680,9 +678,7 @@ class GeoToad
       }
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
-    if (excludedFilterTotal > 0)
-      displayMessage "User filtering removed #{caches(excludedFilterTotal)}."
-    end
+    showRemoved(excludedFilterTotal, "User")
 
     beforeFilterTotal = @filtered.totalWaypoints
     if @option['titleKeyword']
@@ -690,11 +686,9 @@ class GeoToad
       @filtered.titleKeyword(@option['titleKeyword'])
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
-    if (excludedFilterTotal > 0)
-      displayMessage "Title keyword filtering removed #{caches(excludedFilterTotal)}."
-    end
+    showRemoved(excludedFilterTotal, "Title")
 
-    displayMessage "Filter stage 1 complete, #{caches(@filtered.totalWaypoints)} left."
+    displayMessage "Pre-fetch  filter  complete, #{caches(@filtered.totalWaypoints)} left."
   end
 
 
@@ -793,9 +787,7 @@ class GeoToad
       @filtered.removeByElement('disabled')
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
-    if (excludedFilterTotal > 0)
-      displayMessage "Disabled filtering removed #{caches(excludedFilterTotal)}."
-    end
+    showRemoved(excludedFilterTotal, "Disabled")
 
     # exclude Premium Member Only caches on request
     beforeFilterTotal = @filtered.totalWaypoints
@@ -808,9 +800,7 @@ class GeoToad
       @filtered.removeByElement('membersonly', false)
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
-    if (excludedFilterTotal > 0)
-      displayMessage "PMO filtering removed #{caches(excludedFilterTotal)}."
-    end
+    showRemoved(excludedFilterTotal, "PM-Only")
 
     beforeFilterTotal = @filtered.totalWaypoints
     if @option['descKeyword']
@@ -818,9 +808,7 @@ class GeoToad
       @filtered.descKeyword(@option['descKeyword'])
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
-    if (excludedFilterTotal > 0)
-      displayMessage "Keyword filtering removed #{caches(excludedFilterTotal)}."
-    end
+    showRemoved(excludedFilterTotal, "Keyword")
 
     ##if not $DTSFILTER
     #-------------------
@@ -850,9 +838,7 @@ class GeoToad
       @filtered.sizeMax(@option['sizeMax'])
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
-    if (excludedFilterTotal > 0)
-      displayMessage "Diff/Terr/Size filtering removed #{caches(excludedFilterTotal)}."
-    end
+    showRemoved(excludedFilterTotal, "D/T/Size")
     #-------------------
     ##end # not $DTSFILTER
 
@@ -866,9 +852,7 @@ class GeoToad
       @filtered.favFactorMax(@option['favFactorMax'].to_f)
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
-    if (excludedFilterTotal > 0)
-      displayMessage "FavFactor filtering removed #{caches(excludedFilterTotal)}."
-    end
+    showRemoved(excludedFilterTotal, "FavFactor")
 
     # We filter for users again. While this may be a bit obsessive, this is in case
     # our local cache is not valid.
@@ -886,9 +870,7 @@ class GeoToad
       }
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
-    if (excludedFilterTotal > 0)
-      displayMessage "User filtering removed #{caches(excludedFilterTotal)}."
-    end
+    showRemoved(excludedFilterTotal, "User")
 
     beforeFilterTotal = @filtered.totalWaypoints
     if (@option['attributeExclude'])
@@ -904,9 +886,7 @@ class GeoToad
       }
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
-    if (excludedFilterTotal > 0)
-      displayMessage "Attribute filtering removed #{caches(excludedFilterTotal)}."
-    end
+    showRemoved(excludedFilterTotal, "Attribute")
 
     beforeFilterTotal = @filtered.totalWaypoints
     if (@option['minLongitude'])
@@ -926,11 +906,9 @@ class GeoToad
       @filtered.latMax(@option['maxLatitude'])
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
-    if (excludedFilterTotal > 0)
-      displayMessage "Lat/lon filtering removed #{caches(excludedFilterTotal)}."
-    end
+    showRemoved(excludedFilterTotal, "Lat/Lon")
 
-    displayMessage "Filter stage 2 complete, #{caches(@filtered.totalWaypoints)} left."
+    displayMessage "Post-fetch filter  complete, #{caches(@filtered.totalWaypoints)} left."
     return @filtered.totalWaypoints
   end
 
@@ -1078,13 +1056,11 @@ while true
     count = cli.downloadGeocacheList()
   end
   if count < 1
-    cli.displayWarning "No caches found in search, exiting early."
+    cli.displayWarning "No valid query or no caches found in search, exiting early."
   else
-    cli.displayMessage "Found #{cli.caches(count)} matching your query."
+    cli.displayMessage "Your \"#{options['queryType']}\" query \"#{options['queryArg']}\" returned #{cli.caches(count)}."
     cli.prepareFilter
-    #if (options['queryType'] != 'wid') and (options['queryType'] != 'guid')
     cli.preFetchFilter
-    #end
 
     if options['noCacheDescriptions']
       cli.displayMessage "Skipping retrieval of cache descriptions."
@@ -1096,7 +1072,7 @@ while true
     if caches > 0
       cli.saveFile
     else
-      cli.displayMessage "No caches are matching your requirements."
+      cli.displayMessage "After filtering, no caches are left matching your requirements."
     end
   end
   # dummy operation
