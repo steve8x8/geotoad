@@ -409,7 +409,7 @@ class Input
         msg = "disabled"
       end
       puts "** Verbose (debug) mode #{msg}, (v) to change"
-      print "-- Enter menu number, (s) to start, (r) to reset, or (x) to exit --> "
+      print "-- Enter menu number, (s) to start, (R) to reset, or (Q) to exit --> "
       answer = $stdin.gets.chop
       puts ""
 
@@ -679,7 +679,7 @@ class Input
           @@optHash['queryArg'] = @@optHash['queryArg'].to_s.split(/=/)[0]
         end
 
-      when 'r'
+      when 'R'
         resetOptions
 
       when 'v'
@@ -697,7 +697,7 @@ class Input
         level = (level == 0) ? nil : level
         @@optHash['verbose'] = level
 
-      when 'x'
+      when 'x', 'X', 'Q'
         puts "Cya!"
         exit
 
