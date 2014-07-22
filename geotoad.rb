@@ -949,7 +949,7 @@ class GeoToad
     if File.directory?(filename)
       filename = File.join(filename, '')
     end
-    message = "Output filename pattern: #{filename}"
+    message = "Output pattern:  #{filename}"
     # we can now check for a trailing slash safely
     if filename =~ /\/$/
       # automatic mode
@@ -974,7 +974,7 @@ class GeoToad
     # loop over all chosen formats
     @formatTypes.split($delimiters).each { |formatType|
       output = Output.new
-      displayInfo "Output format: #{output.formatDesc(formatType)} format"
+      displayInfo "Output format:   #{output.formatDesc(formatType)} (#{formatType})"
       output.input(@filtered.waypoints)
       output.formatType = formatType
       if (@option['waypointLength'])
@@ -1083,8 +1083,8 @@ while true
   if ($mode == "TUI")
     puts ""
     puts "*************************************************"
-    #puts "* Complete! Press Enter to return to the menu *"
-    #puts "***********************************************"
+    #puts "* Complete! Press Enter to return to the menu   *"
+    #puts "*************************************************"
     #$stdin.gets
   else
     exit
