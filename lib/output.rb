@@ -709,18 +709,18 @@ class Output
     text.gsub!(/<\/?div.*?>/i, "\n")
     text.gsub!(/<\/?font.*?>/i, '')
     text.gsub!(/<\/?[uo]l>/i, "\n")
-    text.gsub!(/\s*style=\".*?\"/i, '')
+    text.gsub!(/\s*style=\s*\".*?\"/im, '')
 
     # substitute
     text.gsub!(/<p>/i, "\n\n")
     text.gsub!(/<\/?tr>/i, "\n")
-    text.gsub!(/<\/*br(\s*\/)?>/i, "\n") #
+    text.gsub!(/<\/?br(\s*\/)?>/i, "\n") #
     text.gsub!(/<li>/i, "\n * (o) ")
-    text.gsub!(/<img.*?>/i, '[img]')
-    text.gsub!(/<a.*?>/i, '[link]')
-    text.gsub!(/<a.*?>/i, '[/link]')
-    text.gsub!(/<table.*?>/i, "\n[table]\n")
-    text.gsub!(/<table.*?>/i, "\n[/table]\n")
+    text.gsub!(/<img.*?>/im, '[img]')
+    text.gsub!(/<a.*?>/im, '[link]')
+    text.gsub!(/<\/a.*?>/im, '[/link]')
+    text.gsub!(/<table.*?>/im, "\n[table]\n")
+    text.gsub!(/<\/table.*?>/im, "\n[/table]\n")
     text.gsub!(/<.*?>/m, '')
     text.gsub!(/\&(amp;)?quot;/, '"')
     text.gsub!(/\&(amp;)?[lrb]dquo;/, '"')
