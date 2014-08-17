@@ -640,11 +640,22 @@ class Output
     end
     # issue 262: "emoji" seem to break GPSr devices
     text = deemoji(str, false)
+
+    # remove images, links
+    #text.gsub!(/(<img\s.*?src=\s*[\'\"]https?:\/\/(.*?)[\'\"].*?>)/im){"[img #{$2}]#{$1}"}
+    text.gsub!(/<img\s.*?src=\s*[\'\"]https?:\/\/(.*?)[\'\"].*?>/im){"[* #{$1}]"}
+    #text.gsub!(/(<a\s.*?href=\s*[\'\"]https?:\/\/(.*?)[\'\"].*?>)/im){"[link #{$2}]#{$1}"}
+    text.gsub!(/<a\s.*?href=\s*[\'\"]https?:\/\/(.*?)[\'\"].*?>/im){"[= #{$1}]"}
+    #text.gsub!(/(<\/a.*?>)/im){"#{$1}[/link]"}
+    text.gsub!(/<\/a.*?>/im){"[=]"}
+
+    # escape HTML entities (including <>)
     begin
         text = CGI.escapeHTML(text)
     rescue => e
         debug "escapeHTML throws exception #{e} - use original"
     end
+
     # CGI.escapeHTML will try to re-escape previously escaped entities.
     # Fix numerical and hex entities such as Pateniemen l&amp;#xE4;mp&amp;#246;keskus
     text.gsub!(/\&amp;(\#[\d]+;)/, "&\\1")
@@ -716,9 +727,9 @@ class Output
     text.gsub!(/<\/?tr>/i, "\n")
     text.gsub!(/<\/?br(\s*\/)?>/i, "\n") #
     text.gsub!(/<li>/i, "\n * (o) ")
-    text.gsub!(/<img.*?>/im, '[img]')
-    text.gsub!(/<a.*?>/im, '[link]')
-    text.gsub!(/<\/a.*?>/im, '[/link]')
+    text.gsub!(/<img\s.*?src=\s*[\'\"]https?:\/\/(.*?)[\'\"].*?>/im){"[* #{$1}]"}
+    text.gsub!(/<a\s.*?href=\s*[\'\"]https?:\/\/(.*?)[\'\"].*?>/im){"[= #{$1}]"}
+    text.gsub!(/<\/a.*?>/im, '[=]')
     text.gsub!(/<table.*?>/im, "\n[table]\n")
     text.gsub!(/<\/table.*?>/im, "\n[/table]\n")
     text.gsub!(/<.*?>/m, '')
