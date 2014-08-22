@@ -216,10 +216,16 @@ module Common
   def findCacheDir
     # find out where we want our file cache
     dirs = [
-      #File.join(flipSlash(ENV['HOME']), '.geotoad'),
       flipSlash(ENV['GEO_DIR']),
+      # old style to be checked first
+      File.join(flipSlash(ENV['HOME']), '.geotoad'),
+      # XDG
+      File.join(flipSlash(ENV['HOME']), '.config'),
+      # MacOS
       File.join(flipSlash(ENV['HOME']), 'Library', 'Caches'),
+      # Windows
       File.join(flipSlash(ENV['USERPROFILE']), 'Documents and Settings'),
+      # some fallbacks
       flipSlash(ENV['HOME']),
       flipSlash(ENV['TEMP']),
       'C:/temp/',
@@ -231,7 +237,13 @@ module Common
     cacheDir = selectDirectory(dirs)
     # probably what we fallback to in most UNIX's.
     if cacheDir == ENV['HOME']
+      # old style as there's no XDG root
       cacheDir = File.join(cacheDir, '.geotoad', 'cache')
+    elsif cacheDir == File.join(flipSlash(ENV['HOME']), '.geotoad')
+      cacheDir = File.join(cacheDir, 'cache')
+    elsif cacheDir == File.join(flipSlash(ENV['HOME']), '.config')
+      # use XDG for newly created tree
+      cacheDir = File.join(cacheDir, 'GeoToad', 'cache')
     elsif cacheDir == File.join(flipSlash(ENV['USERPROFILE']), 'Documents and Settings')
       cacheDir = File.join(cacheDir, 'GeoToad', 'Cache')
     else
@@ -246,10 +258,17 @@ module Common
     # find out where we want our config files
     # First check for the .geotoad directory. We may have accidentally been using it already.
     dirs = [
+      # this one would cause confusion
+      #flipSlash(ENV['GEO_DIR']),
+      # old style
       File.join(flipSlash(ENV['HOME']), '.geotoad'),
-      flipSlash(ENV['GEO_DIR']),
+      # XDG style (issue 305)
+      File.join(flipSlash(ENV['HOME']), '.config'),
+      # MacOS
       File.join(flipSlash(ENV['HOME']), 'Library', 'Preferences'),
+      # Windows
       File.join(flipSlash(ENV['USERPROFILE']), 'Documents and Settings'),
+      # some fallbacks
       flipSlash(ENV['HOME']),
       flipSlash(ENV['TEMP']),
       'C:/temp',
@@ -260,7 +279,11 @@ module Common
     ]
     configDir = selectDirectory(dirs)
     if configDir == ENV['HOME']
+      # no XDG root
       configDir = File.join(configDir, '.geotoad')
+      # XDG
+    elsif configDir == File.join(flipSlash(ENV['HOME']), '.config')
+      configDir = File.join(configDir, 'GeoToad')
     elsif configDir !~ /geotoad/i
       configDir = File.join(configDir, 'GeoToad')
     end
