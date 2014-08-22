@@ -12,8 +12,12 @@ $LOAD_PATH << File.join($BASEDIR, 'lib')
 #$LOAD_PATH << File.join($BASEDIR, '..')
 
 # check ruby version compatibility
+if RUBY_VERSION.gsub('.', '').to_i >= 210
+  puts "WARNING: Your version of Ruby is #{RUBY_VERSION}, but we don't support 2.1.0 and above (yet)."
+  sleep(5)
+end
 if RUBY_VERSION.gsub('.', '').to_i < 191
-  puts "ERROR: The version of Ruby your system has installed is #{RUBY_VERSION}, but we now require 1.9.1 or higher"
+  puts "ERROR: Your version of Ruby is #{RUBY_VERSION}, but we now require 1.9.1 or higher."
   sleep(5)
   exit(99)
 end
