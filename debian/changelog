@@ -1,3 +1,18 @@
+geotoad (3.21.1) unstable; urgency=low
+
+  * New version 3.21.1, "Happy Birthday" release (dedicated to someone special)
+  * Smileys in hints converted to BB style
+  * Unknown times are set to Jan 1, 2000 (not 1980)
+  * Use new multi stage types
+  * Filter messages
+  * Man page bugfix
+  * Show links and image URLs in text and GPX
+  * Remove <font>, font-size, (background-)color for better readability
+  * Follow XDG for newly created tree (move existing by hand only!)
+  * Minor stuff
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 28 Aug 2014 09:30:00 +0000
+
 geotoad (3.21.0) unstable; urgency=low
 
   * New version 3.21.0, "Summer '14" release
