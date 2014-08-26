@@ -434,9 +434,12 @@ class GeoToad
       if @option['cacheType']
         # filter by cacheType
         if (@option['cacheType'].split($delimiters).length == 1)
-          # if only one type, use tx= parameter (pre-filtering)
-          search.txfilter = @option['cacheType']
-        elsif @option['cacheType'] =~ /-all/ or @option['cacheType'] =~ /\+/
+          # inverted filter? careful...
+          if (@option['cacheType'] !~ /-$/)
+            # if only one type, use tx= parameter (pre-filtering)
+            search.txfilter = @option['cacheType']
+          end
+        elsif @option['cacheType'] =~ /\+$/
           # otherwise, warn if "all xxx" is in the list
           displayWarning "Filtering for \"all\" only works for single cache type - your results will be wrong!"
           sleep 10
@@ -558,7 +561,7 @@ class GeoToad
     if @option['cacheType']
       # post-filter by cacheType
       @appliedFilters['-c'] = { 'f' => "#{@option['cacheType']}", 't' => "type" }
-      if @option['cacheType'] !~ /-all/ and @option['cacheType'] !~ /\+/
+      if @option['cacheType'] !~ /\+$/
         # but only if there's no "all xxx" chosen
         @filtered.cacheType(@option['cacheType'])
       else

@@ -30,7 +30,6 @@ class SearchCache
 	'virtual'      => '294d4360-ac86-4c83-84dd-8113ef678d7e',
 	'letterbox'    => '4bdd8fb2-d7bc-453f-a9c5-968563b15d24',
 	'event+'       => '69eb8534-b718-4b35-ae3c-a856a55b0874', # all event types
-	'event-all'    => '69eb8534-b718-4b35-ae3c-a856a55b0874',
 	 'event'        => '69eb8534-b718-4b35-ae3c-a856a55b0874&children=n',
 	 'cito'         => '57150806-bc1a-42d6-9cf0-538d171a2d22',
 	 'megaevent'    => '69eb8535-b718-4b35-ae3c-a856a55b0874',
@@ -40,7 +39,6 @@ class SearchCache
 	 'block'        => 'bc2f3df2-1aab-4601-b2ff-b5091f6c02e3',
 	 'gigaevent'    => '51420629-5739-4945-8bdd-ccfd434c0ead',
 	'unknown+'     => '40861821-1835-4e11-b666-8d41064d03fe', # all unknown types
-	'unknown-all'  => '40861821-1835-4e11-b666-8d41064d03fe',
 	 'unknown'      => '40861821-1835-4e11-b666-8d41064d03fe&children=n',
 #	 'mystery'      => '40861821-1835-4e11-b666-8d41064d03fe&children=n',
 #	 'puzzle'       => '40861821-1835-4e11-b666-8d41064d03fe&children=n',
