@@ -9,6 +9,7 @@ geotoad (3.21.1) unstable; urgency=low
   * Show links and image URLs in text and GPX
   * Remove <font>, font-size, (background-)color for better readability
   * Follow XDG for newly created tree (move existing by hand only!)
+  * Inverse cache type filtering
   * Minor stuff
 
  -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 28 Aug 2014 09:30:00 +0000

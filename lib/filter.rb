@@ -138,9 +138,24 @@ class Filter
     typestr.gsub!('puzzle', 'unknown')
     typestr.gsub!('mystery', 'unknown')
     types = typestr.split($delimiters)
+    fwdtypes = types.each.map{|t| (t =~ /-$/) ? nil : t}.compact
+    invtypes = types.each.map{|t| (t =~ /-$/) ? t.gsub(/-$/, '') : nil}.compact
     debug2 "filtering by types: #{types}"
-    @waypointHash.delete_if { |wid, values|
-      not types.include?(@waypointHash[wid]['type'])
+    #@waypointHash.delete_if { |wid, values|
+    #  checkType = @waypointHash[wid]['type']
+    #  types.include?("!#{checkType}") or not types.include?(checkType)
+    #}
+    # sort this out first, then rewrite as delete_if clause
+    @waypointHash.each_key { |wid|
+      checkType = @waypointHash[wid]['type']
+      debug3 "wid #{wid} type #{checkType}"
+      if (not invtypes.empty?) and (invtypes.include?(checkType))
+        debug3 "matches inverse"
+        @waypointHash.delete(wid)
+      elsif (not fwdtypes.empty?) and (not fwdtypes.include?(checkType))
+        debug3 "matches forward"
+        @waypointHash.delete(wid)
+      end
     }
   end
 

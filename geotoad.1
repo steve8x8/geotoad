@@ -120,12 +120,18 @@ do not overwrite existing cache description files in file cache
 .TP
 \fB-c\fR|\fB--cacheType\fR|\fB--type\fR \fItype\fR  \fB(MULTI)\fR
 \fB[traditional|multicache|virtual|letterbox|\p
- event+|event|cito| megaevent|gigaevent|lost+found|lfceleb|block|\p
- unknown+|unknown|gshq|ape|webcam|earthcache|exhibit|wherigo]\fR\p
+ event+|event|cito|megaevent|gigaevent|lost+found|lfceleb|block|\p
+ unknown+|unknown|gshq|ape|webcam|earthcache|exhibit|wherigo\p
+ ]\fR
 set cache type(s)
 
 If \fBonly one type\fR is selected, search will be sped up considerably
 by reducing the number of queries sent to the server.
+
+By suffixing one or more cacheType(s) with a minus sign (dash) \fB-\fR,
+you may invert the filter,
+i.e. \fBunknown-\fR will return only non-mystery caches.
+Inverse filters supersede forward filters! (\fBtype:type-\fR will exclude \fBtype\fR.)
 
 \fBevent\fR and \fBunknown\fR do not include "special" types.
 To search for "all event" (including cito, mega, and giga, and some 
@@ -135,6 +141,7 @@ use
 \fBunknown+\fR respectively,
 \fBas the only cache type\fR (otherwise,
 filtering won't work - you've been warned).
+Warning: Inverted filtering for these types does \fBnot\fR work!
 .TP
 \fB-d\fR|\fB--difficultyMin\fR|\fB--minDiff\fR \fI1.0-5.0\fR
 set minimum difficulty
