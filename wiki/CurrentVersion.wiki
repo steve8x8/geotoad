@@ -1,10 +1,26 @@
 #summary Features of current version
 #labels Featured
 
-version=3.21.0
+version=3.21.1
 
-= "Summer '14" release (Jun 24, 2014) =
+= "Happy Birthday" (dedicated to someone special) release (Aug 28, 2014) =
 
+= What's new in 3.21.1? =
+  * nicknamed "Happy Birthday"
+
+== Issues addressed: ==
+  * Smileys in hints converted to BB style
+  * Unknown times are set to Jan 1, 2000 (not 1980)
+  * Use new multi stage types
+  * Filter messages
+  * Man page bugfix
+  * Show links and image URLs in text and GPX
+  * Remove <font>, font-size, (background-)color for better readability
+  * Follow XDG for newly created tree (move existing by hand only!)
+  * Experimental: Inverse cache type filtering
+  * Minor stuff
+
+----
 = What's new in 3.21.0? =
   * nicknamed "Summer '14"
 

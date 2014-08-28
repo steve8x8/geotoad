@@ -107,6 +107,12 @@ _*(current year on top; history at bottom)*_
   * _"strong foundation for future improvements"_ (whatever that means)
   * *{{{Tucson.Main.release-20140812.Release_175}}}*
   * _(undocumented changes in HTML e-mails, reported in RN forum thread)_
+  * *{{{Tucson.Main.develop.Debug_478}}}* (seen 2014-08-26)
+----
+2014-08-26:
+  * *{{{Tucson.Main.release-20140826.Release_186}}}* (seen 2014-08-26)
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=325539 release notes]
+  * _new account settings page_
 ----
 == (now) ==
 ----
