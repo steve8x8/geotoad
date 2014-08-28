@@ -13,4 +13,4 @@
 +$LOAD_PATH << '/usr/share/geotoad'
  
  # check ruby version compatibility
- if RUBY_VERSION.gsub('.', '').to_i < 191
+ #if RUBY_VERSION.gsub('.', '').to_i >= 210
