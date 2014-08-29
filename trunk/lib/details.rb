@@ -384,6 +384,11 @@ class CacheDetails
             cache['fulltype'] = 'Unknown Cache'
             cache['type'] = 'unknown'
           end
+          # 2014-08-26
+          when /Traditional/
+            cache['fulltype'] = 'Traditional Cache'
+            cache['type'] = 'traditional'
+          end
           if full_type =~ /Event/
             cache['event'] = true
           end

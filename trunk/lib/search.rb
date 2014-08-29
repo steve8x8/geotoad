@@ -468,6 +468,10 @@ class SearchCache
         if ctype =~ /Mystery Cache/
           ctype = "Unknown Cache"
         end
+        # 2014-08-26
+        if ctype =~ /Traditional Geocache/
+          ctype = "Traditional Cache"
+        end
         debug "#{ctype} by #{owner} in #{country}/#{state}"
       #<span id="ctl00_ContentBody_MapLinks_MapLinks">...
       #...<li><a href="http://maps.google.com/maps?q=N+12%c2%b0+46.880+E+100%c2%b0+54.304+(GC10011)+" target="_blank">Google Maps</a></li>...
@@ -970,6 +974,11 @@ class SearchCache
             cache['fulltype'] = 'Unknown Cache'
             cache['type'] = 'unknown'
           end
+          # 2014-08-26
+          when /Traditional/
+            cache['fulltype'] = 'Traditional Cache'
+            cache['type'] = 'traditional'
+          end
           if full_type =~ /Event/
             debug "Setting event flag for #{full_type}"
             cache['event'] = true
@@ -1034,6 +1043,11 @@ class SearchCache
           when /Mystery/
             cache['fulltype'] = 'Unknown Cache'
             cache['type'] = 'unknown'
+          end
+          # 2014-08-26
+          when /Traditional/
+            cache['fulltype'] = 'Traditional Cache'
+            cache['type'] = 'traditional'
           end
           if full_type =~ /Event/
             debug "Setting event flag for #{full_type}"
