@@ -383,7 +383,6 @@ class CacheDetails
           when /Mystery/
             cache['fulltype'] = 'Unknown Cache'
             cache['type'] = 'unknown'
-          end
           # 2014-08-26
           when /Traditional/
             cache['fulltype'] = 'Traditional Cache'
