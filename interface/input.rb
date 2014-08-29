@@ -536,8 +536,11 @@ class Input
         @@optHash['sizeMax'] = askFromList("Great! What is the largest cache you seek (#{sizes.join(', ')})?", sizes, nil)
 
       when '9'
-        kinds = ['traditional', 'multicache', 'event', 'unknown', 'letterbox', 'virtual', 'earthcache', 'wherigo', 'cito']
-        @@optHash['cacheType'] = askFromList("Valid types: #{kinds.join(', ')}\nWhat do you seek (separate with commas)?", kinds, nil)
+        # full list of supported types; no "+" types
+        kinds = ['traditional', 'multicache', 'virtual', 'letterbox',
+                  'event', 'cito', 'megaevent', 'gigaevent', 'lost+found', 'lfceleb', 'block',
+                  'unknown', 'gshq', 'ape', 'webcam', 'earthcache', 'exhibit', 'wherigo']
+        @@optHash['cacheType'] = askFromList("Valid types: #{kinds.join(', ')}.\nWhat do you seek (separate with commas)?", kinds, nil, trailing_dash_allowed = true)
 
       when '10'
         answer = ask('Would you like to only include geocaches you have not found yet?', nil)
@@ -903,16 +906,24 @@ class Input
         try_again = false
         answer = answer.split($delimiters).map{ |try_answer|
           # build a list of matches: 0 means invalid, 1 is perfect, 2 ambiguous
-          matches = choices.map{ |e| (e =~ Regexp.compile('^'+try_answer)) ? e : nil }.compact
+          # for cacheTypes, we allow trailing dashes (inverse filtering)
+          if trailing_dash_allowed
+            try_answer_nodash = try_answer.gsub(/-$/, '')
+          else
+            try_answer_nodash = try_answer
+          end
+          # check for match
+          matches = choices.map{ |e| (e =~ Regexp.compile('^'+try_answer_nodash)) ? e : nil }.compact
           if matches.length == 0
             puts "** \"#{try_answer}\" is invalid!"
             #puts "Try: #{choices.join(', ')}"
             try_again = true
             nil
           elsif  matches.length == 1
-            matches[0]
+            # if needed, re-add dash
+            (trailing_dash_allowed and (try_answer =~ /-$/)) ? matches[0]+'-' : matches[0]
           else
-            puts "** \"#{try_answer}\" is ambiguous! Matches: #{matches.join(', ')}"
+            puts "** \"#{try_answer_nodash}\" is ambiguous! Matches: #{matches.join(', ')}"
             try_again = true
             nil
           end

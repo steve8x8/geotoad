@@ -131,7 +131,8 @@ by reducing the number of queries sent to the server.
 By suffixing one or more cacheType(s) with a minus sign (dash) \fB-\fR,
 you may invert the filter,
 i.e. \fBunknown-\fR will return only non-mystery caches.
-Inverse filters supersede forward filters! (\fBtype:type-\fR will exclude \fBtype\fR.)
+Inverse filters are applied before, and therefore supersede, forward filters!
+(This means, \fBtype:type-\fR will exclude \fBtype\fR.)
 
 \fBevent\fR and \fBunknown\fR do not include "special" types.
 To search for "all event" (including cito, mega, and giga, and some 
@@ -142,6 +143,7 @@ use
 \fBas the only cache type\fR (otherwise,
 filtering won't work - you've been warned).
 Warning: Inverted filtering for these types does \fBnot\fR work!
+Also, these types may not be supported by the TUI.
 .TP
 \fB-d\fR|\fB--difficultyMin\fR|\fB--minDiff\fR \fI1.0-5.0\fR
 set minimum difficulty
