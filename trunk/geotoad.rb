@@ -420,31 +420,34 @@ class GeoToad
       # radius is only valid for location or coordinate searches
       if @queryType == 'location' || @queryType == 'coord'
         if @useMetric
-          message << " (constraining to #{dist_km} km)"
+          message << ", constraining to #{dist_km} km"
         else
-          message << " (constraining to #{dist_mi} miles)"
+          message << ", constraining to #{dist_mi} miles"
         end
         search.distance = @distanceMax
       end
-      displayMessage message
 
       # limit search page count
       search.max_pages = @limitPages
 
       if @option['cacheType']
         # filter by cacheType
-        if (@option['cacheType'].split($delimiters).length == 1)
+        cacheTypes = @option['cacheType'].split($delimiters)
+        cacheType0 = cacheTypes[0]
+        if (cacheTypes.length == 1)
           # inverted filter? careful...
-          if (@option['cacheType'] !~ /-$/)
+          if (cacheType0 !~ /-$/)
             # if only one type, use tx= parameter (pre-filtering)
-            search.txfilter = @option['cacheType']
+            message << ", filter for \"#{cacheType0}\""
+            search.txfilter = cacheType0
           end
-        elsif @option['cacheType'] =~ /\+$/
           # otherwise, warn if "all xxx" is in the list
+        elsif cacheTypes.map{ |t| (t =~ /\+$/) ? "x" : nil}.any?
           displayWarning "Filtering for \"all\" only works for single cache type - your results will be wrong!"
           sleep 10
         end
       end
+      displayMessage message
 
       # exclude own found
       search.notyetfound = (@option['notFoundByMe'] ? true : false)
