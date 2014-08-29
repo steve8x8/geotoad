@@ -112,10 +112,6 @@ class SearchCache
 
   def txfilter=(cacheType)
     # may return nil if not found
-    # ToDo: partial (first, frontal) match
-#    @cachetypetx.keys.each{ |k|
-#      cacheType = k if k =~ /^#{cacheType}/
-#    }
     @txfilter = @cachetypetx[cacheType]
     @txfilter = @txfilter + '&children=y' if (@txfilter and (@txfilter !~ /children=/))
     debug "Setting txfilter to \"#{cacheType}\", now #{@txfilter.inspect}"
@@ -561,7 +557,6 @@ class SearchCache
     #                Hidden:
     #                10/11/2011
     # 2013-08-21: "Hidden\n:"
-    #if data =~ /<div[^>]*mcd2\">\s*[\w ]*\s*:\s*(([0-9\/\.-]+)|(\d+[ \/]\w{3}[ \/]\d+)|(\w{3}\/\d+\/\d+))\s+</m
     if data =~ /<div[^>]*mcd2\">\s*[\w ]*\s*:\s*([\w\/ -]+)\s+</m
       debug "Found creation date: #{$1}"
       ctime = parseDate($1)
@@ -610,7 +605,7 @@ class SearchCache
       'country' => country,
       'state' => state,
       'name' => cname,
-      'creator' => owner, # ToDo: strip off extra white space
+      'creator' => owner,
       'fulltype' => ctype,
       'type' => ctype.to_s.split(' ')[0].downcase.gsub(/\-/, ''),
       'size' => csize.to_s.gsub(/medium/, 'regular'),
@@ -851,7 +846,6 @@ class SearchCache
 # 2011-05-04: unchanged
       #                             11 Jul 10<br />
       # Yesterday<strong>*</strong><br />
-      #when /^ +((\w+[ \w]+)|([0-9\/\.-]+))(<strong>)?(\*)?(<\/strong>)?<br/
       when /^ +(\w.*?)(<strong>)?(\*)?(<\/strong>)?<br/
         debug2 "last found date: #{$1}#{$3} at line: #{line}"
         cache['mtime'] = parseDate($1+$3.to_s)
@@ -862,7 +856,6 @@ class SearchCache
       # found date:
       # <span id="ctl00_ContentBody_dlResults_ctl??_uxUserLogDate" class="Success">5 days ago</span></span>
       # <span id="ctl00_ContentBody_dlResults_ctl01_uxUserLogDate" class="Success">Today<strong>*</strong></span></span>
-      #when /^ +<span [^>]*UserLogDate[^>]*>((\w+[ \w]+)|([0-9\/\.-]+))(<strong>)?(\*?)(<\/strong>)?<\/span><\/span>/
       when /^ +<span [^>]*UserLogDate[^>]*>(.*?)(<strong>)?(\*?)(<\/strong>)?<\/span><\/span>/
         debug2 "user found date: #{$1}#{$3} at line: #{line}"
         cache['atime'] = parseDate($1+$3.to_s)
@@ -937,7 +930,6 @@ class SearchCache
       # <a href="/seek/cache_details.aspx?guid=ecfd0038-8e51-4ac8-a073-1aebe7c10cbc" class="lnk">
       # ...<img src="http://www.geocaching.com/images/wpttypes/sm/3.gif" alt="Multi-cache" title="Multi-cache" /></a>
       # ... <a href="/seek/cache_details.aspx?guid=ecfd0038-8e51-4ac8-a073-1aebe7c10cbc" class="lnk  Strike"><span>Besinnungsweg</span></a>
-      #when /cache_details.aspx\?guid=([0-9a-f-]*)[^>]*>(.*?)<\/a>/
       when /(<img[^>]*alt=\"(.*?)\".*)?cache_details.aspx\?guid=([0-9a-f-]*)([^>]*)><span>\s*(.*?)\s*<\/span><\/a>/
         debug "found type=#{$2} guid=#{$3} name=#{$5}"
         cache['guid'] = $3
@@ -1009,7 +1001,6 @@ class SearchCache
       # 2013-08-21:
       when /(<img[^>]*alt=\"(.*?)\".*)?\/geocache\/(GC[0-9A-Z]+)([^>]*)><span>\s*(.*?)\s*<\/span><\/a>/
         debug "found type=#{$2} wid=#{$3} name=#{$5}"
-        #cache['wid'] = $3
         strike = $4
         name = $5
       # type is also in here!

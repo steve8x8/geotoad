@@ -157,7 +157,6 @@ class Output
     'ABER'      => '',
 
     'KIRCHE'    => 'Ki',
-    'BAHNHOF'   => 'Bf',
     'PLATZ'     => 'Pl',
     'PARKPLATZ' => 'PPl',
     'NATURLEHRPFAD' => 'NLP',
@@ -184,9 +183,6 @@ class Output
     'RUNDE'     => 'Rd',
     'RUNDGANG'  => 'Rd',
     'TEIL'      => 'Tl',
-    #'SEE'       => 'S',
-    #'BERG'      => 'Bg',
-    #'BURG'      => 'Bg',
     'VERSION'   => 'V',
     'VERS'      => 'V',
     'SCHWESTER' => 'Schw',
@@ -197,6 +193,7 @@ class Output
     'EINEN'     => '',
     'EINEM'     => '',
     'EINER'     => '',
+    'EINES'     => '',
     'ZWEI'      => '2',
     'DREI'      => '3',
     'VIER'      => '4',
@@ -271,13 +268,6 @@ class Output
     tempname.gsub!(/\"/, ' ')
     debug3 "shortname: clean \"#{tempname}\""
 
-    # acronym.
-    #if tempname =~ /(\w)\. +(\w)\. +(\w)/
-    #  debug3 "shortname: acronym detected.. removing extraneous dots and spaces"
-    #  # Note: a bit dangerous
-    #  tempname.gsub!(/\. +/, '')
-    #end
-
     # remove long stuff in parentheses
     if tempname =~ /^(.*?)(\s*\(.{7,}\))(.*)/
       tempname = $1 + $3.to_s
@@ -298,7 +288,6 @@ class Output
       word = newwords[-index]
       # if word is longer than 4 characters and contains no lc letter, force down
       if (word =~ /[A-Z][A-Z][A-Z][A-Z]/) and (word !~ /[a-z]/)
-        #word.capitalize!
         word = utf8upcase(word[0..0]) + utf8downcase(word[1..-1].to_s)
         newwords[-index] = word
       end
@@ -346,7 +335,6 @@ class Output
     (1 .. wordcount).each { |index|
       word = newwords[-index]
       # non-"alpha" stuff ('i' option doesn't work!)
-      #word.gsub!(/[^\w#àáâãäåæçèéêëìíîïðñòóôõöøùúûüýÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝß]+/, '')
       word.gsub!(/[^\w#{$utf8lo}#{$utf8hi}]+/, '')
       newwords[-index] = word
       result = newwords.join
@@ -360,8 +348,6 @@ class Output
     (1 .. wordcount).each { |index|
       word = newwords[-index]
       next if (word.length < 8)
-      #word = word[0..0] + word[1..-1].to_s.gsub(/[AEIOUaeiou~]/, '')
-      #word = word[0..0] + word[1..-1].to_s.gsub(/[aeiou~]/, '')
       # one by one
       while (word.length > 1) && (i=word.rindex(/[aeiouäöü]/))
         word[i] = ''
@@ -435,7 +421,6 @@ class Output
         #if snames.has_key(utf8upcase(newname)) ...
         shortest_name = newname
         debug2 "updateshortnames: short name using wid: #{wid} -> #{shortest_name}"
-        #displayMessage "Resolved short-name conflict for #{wid} (#{shortest_name}) and #{other_wid} (#{other_cache['sname']})"
       end
       snames[utf8upcase(shortest_name)] = wid
       cache['sname'] = shortest_name
@@ -677,11 +662,9 @@ class Output
     text.gsub!(/\&(amp;)?[lr]aquo;/, "&quot;")
     text.gsub!(/\&(amp;)?[rl]squo;/, "&apos;")
     text.gsub!(/\&(amp;)?sbquo;/, "&apos;")
-    #text.gsub!(/\&(amp;)?nbsp;/, ' ')
     text.gsub!(/\&(amp;)?ndash;/, ' - ')
     text.gsub!(/\&(amp;)?mdash;/, ' -- ')
     text.gsub!(/\&(amp;)?hellip;/, '...')
-    #text.gsub!(/\&(amp;)?deg;/, "&#176;")
 
     # From http://snippets.dzone.com/posts/show/1161
     text = text.unpack("U*").collect {|s| (s > 127 ? "&##{s};" : s.chr) }.join("")
@@ -697,9 +680,6 @@ class Output
 
     # Fix apostrophes so that they show up as expected. Fixes issue 26.
     text.gsub!('&#8217;', "'")
-    #if text != str
-    #  debug "makeXML: %s" % text
-    #end
     return text
   end
 
@@ -965,7 +945,6 @@ class Output
       entry = ''
       entry << "<hr noshade size=\"1\" width=\"150\" align=\"left\"/>\n"
       entry << "<h4><em>#{comment['type']}</em> by #{comment['user']} on #{formatted_date}</h4>\n"
-#      entry << makeXML(comment['text']) + "<br />\n\n"
       # strip images and links
       entry << comment['text'].gsub(/<\/?img.*?>/, '').gsub(/<\/?a.*?>/, '').gsub(/<\/?font.*?>/, '')
       entry << "<br />\n\n"
@@ -1039,8 +1018,6 @@ class Output
     # remove table head
     new_text.gsub!(/\s*<thead>.*<\/thead>/m, '')
     # remove spans
-    #new_text.gsub!(/\s*<\/span>/m, '')
-    #new_text.gsub!(/\s*<span\s+[^>]*>/m, '')
     new_text.gsub!(/\s*<\/?span[^>]*>/m, '')
     # remove leading and trailing blanks
     new_text.gsub!(/^\s+/, '')
@@ -1390,15 +1367,9 @@ class Output
       counter += 1
       @outVars = createExtraVariablesForWid(wid, symbolHash, @outputFormat.fetch('usesLocation', false))
       @outVars['counter'] = counter
-      #if @outputType =~ /gpx/
-        @outVars['gpxlogs'] = createGpxCommentLogs(cache)
-      #end
-      #if @outputType =~ /text/
-        @outVars['textlogs'] = createTextCommentLogs(cache)
-      #end
-      #if @outputType =~ /html/
-        @outVars['htmllogs'] = createHTMLCommentLogs(cache)
-      #end
+      @outVars['gpxlogs'] = createGpxCommentLogs(cache)
+      @outVars['textlogs'] = createTextCommentLogs(cache)
+      @outVars['htmllogs'] = createHTMLCommentLogs(cache)
       output << replaceVariables(@outputFormat['templateWP'], wid)
     }
 

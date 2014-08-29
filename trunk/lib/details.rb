@@ -128,12 +128,6 @@ class CacheDetails
     if (id =~ /^GC/)
       if @waypointHash[id]['guid']
         age = @waypointHash[id]['cdays']
-        # past events
-        #if @waypointHash[id]['event']
-        #  if age.to_i > 0
-        #    age = nil
-        #  end
-        #end
         if age
           # favour caches with small "absolute age"
           if age.abs <= 10
@@ -208,7 +202,6 @@ class CacheDetails
   def parseAttr(text)
     # "bicycles-yes" -> 32, 1
     attrmap = {
-      # list confirmed 2010-10-20 ("edit attributes")
       "attribute-blank"  =>  0,
       "dogs"             =>  1,
       "fee"              =>  2,
@@ -451,8 +444,7 @@ class CacheDetails
         if warning =~ /be a Premium Member to view/
           # 'archived' should have been set by search
           debug "This cache appears to be available to premium members only."
-          # do not return, take care of missing info later!
-          #return 'subscriber-only'
+          # do not return 'subscriber-only', take care of missing info later!
           cache['membersonly'] = true
         end
       end
@@ -823,9 +815,6 @@ class CacheDetails
     removed.gsub!(/<!--[^>]*hitwebcounter[^>]*-->/m, '')
     if removed != text
       debug2 "Removed spam"
-      #debug "Removed spam from: ----------------------------------"
-      #debug removed
-      #debug "-----------------------------------------------------"
     end
     return removed
   end
@@ -835,9 +824,6 @@ class CacheDetails
     removed = text.gsub(/<\/?span[^>]*>/m, '')
     if removed != text
       debug2 "Removed span"
-      #debug "Removed span tags from: ----------------------------------"
-      #debug removed
-      #debug "-----------------------------------------------------"
     end
     return removed
   end

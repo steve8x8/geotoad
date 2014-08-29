@@ -263,7 +263,6 @@ class ShadowFetch
 
 
   def fetchURL (url_str, redirects=2)  # full http:// string!
-    #raise ArgumentError, 'HTTP redirect too deep' if redirects == 0
     if (redirects == 0)
       displayWarning "HTTP redirect loop for #{url_str}."
       displayWarning "Your cookie may have expired suddenly. Try to re-run once."
@@ -367,10 +366,7 @@ class ShadowFetch
       if location =~ /^https?:\/\//
         # full url given, use this location
       elsif location =~ /^\//
-        prefix = "#{uri.scheme}://#{uri.host}"
-        #if (uri.scheme == 'http' && uri.port != 80) || (uri.scheme == 'https' && uri.port != 443)
-          prefix = "#{prefix}:#{uri.port}"
-        #end
+        prefix = "#{uri.scheme}://#{uri.host}:#{uri.port}"
         location = prefix + location
       else
         displayWarning "RFC violation: rel redirect [#{location}]"
@@ -399,7 +395,7 @@ class ShadowFetch
       elsif @@downloadErrors == @maxFailures
         debug "#{@@downloadErrors} download errors so far, maximum reached"
         sleep(10*@@downloadErrors**2)
-      else #elsif @@downloadErrors > @maxFailures
+      else
         displayInfo "Offline mode: not fetching #{url_str}"
         return nil
       end
@@ -407,7 +403,7 @@ class ShadowFetch
     end
 
     debug3 "#{url_str} successfully downloaded."
-    # clear/decrement error counter
+    # decrement error counter
     if @@downloadErrors > 0
       @@downloadErrors -= 1
     end

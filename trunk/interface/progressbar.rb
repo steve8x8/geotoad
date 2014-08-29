@@ -54,7 +54,6 @@ class ProgressBar
       bardiv = percentage.divmod(minichars)
       fullbars = bardiv[0]
       minibars = bardiv[1]
-      #debug "#{percentage} -> #{fullbars}*full+#{minibars}"
       meter = meterchar[-1,1] * fullbars + meterchar[minibars,1]
       meter = meter.ljust(metercols)
     end
