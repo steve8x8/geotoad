@@ -9,13 +9,7 @@ require 'pathname'
 $BASEDIR = File.dirname(File.realpath(__FILE__))
 $LOAD_PATH << $BASEDIR
 $LOAD_PATH << File.join($BASEDIR, 'lib')
-#$LOAD_PATH << File.join($BASEDIR, '..')
 
-# check ruby version compatibility
-#if RUBY_VERSION.gsub('.', '').to_i >= 210
-#  puts "WARNING: Your version of Ruby is #{RUBY_VERSION}, but we don't support 2.1.0 and above (yet)."
-#  sleep(5)
-#end
 if RUBY_VERSION.gsub('.', '').to_i < 191
   puts "ERROR: Your version of Ruby is #{RUBY_VERSION}, but we now require 1.9.1 or higher."
   sleep(5)
@@ -58,7 +52,6 @@ class GeoToad
   $DTSFILTER = true
 
   # time to use for "unknown" creation dates
-  #$ZEROTIME = 315576000 # 1980-01-01T13:00:00Z
   $ZEROTIME = 946728000 # 2000-01-01T13:00:00Z
 
   # conversion miles to kilometres
@@ -238,7 +231,6 @@ class GeoToad
     # Make a calculatable/comparable version number
     parts = text.split('.')
     version = (parts[0].to_i * 10000) + (parts[1].to_i * 100) + parts[2].to_i
-    #puts version
     return version
   end
 
@@ -256,7 +248,6 @@ class GeoToad
     version.fetch
 
     # version=a.bb.cc[`*`] in wiki page (`*` marks "supersedes all")
-    #if (($VERSION =~ /^(\d\.\d+\.\d+)/) && (version.data =~ /version=(\d\.\d+[\.\d]+)(<tt>)?(\*)?/))
     if version.data =~ /version=(\d\.\d+[\.\d]+)(<tt>)?(\*)?/
       latestVersion = $1
       obsoleteOlder = ! $3.to_s.empty?
@@ -270,7 +261,6 @@ class GeoToad
         version.data.scan(/<div .*? id=\"wikimaincol\">\s*(.*?)\s*(<hr\/>|<\/div>)/im) do |notes|
           text = notes[0].dup
           text.gsub!(/<\/?tt>/i, '')
-          #text.gsub!(/<p>/i, "\n")
           text.gsub!(/<h1>/i, "\n\* ")
           text.gsub!(/<h2>/i, "\n\+ ")
           text.gsub!(/<h3>/i, "\n\- ")
@@ -282,7 +272,6 @@ class GeoToad
           text.gsub!(/\n\n+/, "\n")
           text.gsub!(/\&nbsp;/, '-')
           text = CGI::unescapeHTML(text)
-          #puts text
           textlines = text.split("\n")
           (1..20).each{|line|
             displayBox textlines[line] if textlines[line]
@@ -344,7 +333,7 @@ class GeoToad
     findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "login"), 7)
 
     # We do NOT clear cdpf files, in NO case. Instead, preserve old descriptions!
-    # If you really want this functionality, uncomment the following displayInfo and findRemoveFiles lines.
+    # If you really want this functionality, uncomment the following two lines:
     #displayInfo "Clearing cache descriptions older than 31 days"
     #findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "seek"), 31, "^cdpf\\.aspx.*", true)
 
@@ -375,7 +364,6 @@ class GeoToad
     @combinedWaypoints = Hash.new
 
     displayMessage "Logging in as #{@option['user']}"
-    #@cookie = getCookie(@option['user'], @option['password'])
     @cookie = login(@option['user'], @option['password'])
     debug "Login returned cookie #{hideCookie(@cookie).inspect}"
     if (@cookie)
@@ -403,12 +391,10 @@ class GeoToad
         dist_km = sprintf("%.3f", @distanceMax * $MILE2KM).gsub(/\.?0*$/, '')
         @queryTitle << " (#{dist_km} km radius)"
         @defaultOutputFile << "-y#{dist_km}km"
-        #@appliedFilters['-y'] = { 'f' => "#{dist_km}km", 't' => "radius"}
       else
         dist_mi = sprintf("%.3f", @distanceMax).gsub(/\.?0*$/, '')
         @queryTitle << " (#{@distanceMax} mi radius)"
         @defaultOutputFile << "-y#{dist_mi}"
-        #@appliedFilters['-y'] = { 'f' => "#{dist_mi}mi", 't' => "radius" }
       end
     end
 
@@ -743,11 +729,9 @@ class GeoToad
       elsif ! status or status == 'login-required'
         if (wpFiltered[wid]['warning'])
           debug "Could not parse page, but it had a warning, so I am not invalidating"
-          #message = "(could not fetch, private cache?)"
           message = "(PMO? #{wpFiltered[wid]['warning'].inspect})"
         else
           # don't throw this out yet, will get null entries in output though
-          #message = "(error)"
           message = "(PMO? #{status.to_s.inspect})"
         end
       else
@@ -1093,9 +1077,6 @@ while true
   if ($mode == "TUI")
     puts ""
     puts "*************************************************"
-    #puts "* Complete! Press Enter to return to the menu   *"
-    #puts "*************************************************"
-    #$stdin.gets
   else
     exit
   end
