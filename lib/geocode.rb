@@ -8,7 +8,7 @@ require 'cgi'
 require 'shadowget'
 
 MAPS_URL = 'http://maps.googleapis.com/maps/api/geocode/xml?sensor=false'
-CACHE_SECONDS = 86400 * 180
+CACHE_SECONDS = 86400 * 60
 
 class GeoCode
 
@@ -29,7 +29,6 @@ class GeoCode
   end
 
   def lookup_coords(lat, lon)
-    #coords = "#{lat},#{lon}"
     coords = sprintf("%.6f,%.6f", lat.to_f, lon.to_f)
     debug "geocode looking up coords #{coords.inspect}"
     data = get_url(create_url(coords, 'latlng'))

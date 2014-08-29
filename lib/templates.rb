@@ -15,14 +15,11 @@ class Templates
 
   def initialize
     # default template directory
-    # this doesn't work for Windows combined exe (as this script isn't in ./lib/):
-    #systempdir = File.join(File.dirname(File.realpath(__FILE__)), '..', 'templates')
     systempdir = findTemplateDir()
     owntempdir = File.join(findConfigDir(), 'templates')
     [systempdir, owntempdir].each{ |dir|
       begin
         if ! (File.directory?(dir) && FileTest.readable?(dir))
-          #displayWarning "#{dir} - not a readable directory, skipping"
           next
         end
         # now read all templates from there

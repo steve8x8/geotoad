@@ -15,23 +15,13 @@ class Filter
     # events, earthcaches, citos are kind of virtual too
     'not chosen' => 0,
     'not_chosen' => 0,
-    # 'other' here means 'nano' (nacro, bison, ...)
+    # 'other' here means 'nano' (nacro, bison, ...) mostly
     'other' => 1,
     'micro'   => 2,
     'small' => 3,
     'regular' => 4,
-    # 2012-06-26
     'medium' => 4,
     'large' => 5
-    # don't confuse with GC's internal mapping (modulo offset 1):
-    #'not chosen' => 0,
-    #'not_chosen' => 0,
-    #'micro'      => 1,
-    #'regular'    => 2,
-    #'large'      => 3,
-    #'virtual'    => 4,
-    #'other'      => 5,
-    #'small'      => 7
   }
 
   def initialize(data)
@@ -141,11 +131,11 @@ class Filter
     fwdtypes = types.each.map{|t| (t =~ /-$/) ? nil : t}.compact
     invtypes = types.each.map{|t| (t =~ /-$/) ? t.gsub(/-$/, '') : nil}.compact
     debug2 "filtering by types: #{types}"
+    # delete_if rule to be tested - FIXME
     #@waypointHash.delete_if { |wid, values|
     #  checkType = @waypointHash[wid]['type']
-    #  types.include?("!#{checkType}") or not types.include?(checkType)
+    #  ((not invtypes.empty?) and (invtypes.include?(checkType))) or ((not fwdtypes.empty?) and (not fwdtypes.include?(checkType)))
     #}
-    # sort this out first, then rewrite as delete_if clause
     @waypointHash.each_key { |wid|
       checkType = @waypointHash[wid]['type']
       debug3 "wid #{wid} type #{checkType}"
@@ -288,7 +278,7 @@ class Filter
   def titleKeyword(string)
     debug2 "filtering by title keyword: #{string}"
     @waypointHash.each_key { |wid|
-      # I wanted to use delete_if, but I had run into a segfault in ruby 1.6.7/8
+      # I wanted to use delete_if, but I had run into a segfault in ruby 1.6.7/8 [helixblue]
       if string =~ /^\!(.*)/
         real_string = $1
         if (! (@waypointHash[wid]['name'] !~ /#{real_string}/i) )

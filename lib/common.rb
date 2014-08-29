@@ -77,8 +77,7 @@ module Common
     return logcount
   end
 
-# date patterns in "last found" column (as of 2013-08-28)
-# new sort order
+# date patterns in "last found" column
 #en-US	English		Today		Yesterday	(n) days ago
 #ca-ES	Català		Avui		Ahir		Fa (n) dies
 #cs-CZ	Čeština		Dnes		Včera		před (n) dny
@@ -372,8 +371,8 @@ module Common
           value = -value
         end
       else
+        debug1 "Cannot parse #{input} as degree value!"
         value = 0
-        #displayError "Cannot parse #{input} as degree value!"
       end
     when 2 # Deg Min
       if input =~ /(-?)([\d\.]+)\W+([\d\.]+)/
@@ -382,8 +381,8 @@ module Common
           value = -value
         end
       else
+        debug1 "Cannot parse #{input} as degree/minute value!"
         value = 0
-        #displayError "Cannot parse #{input} as degree/minute value!"
       end
     when 3 # Deg Min Sec
       if input =~ /(-?)([\d\.]+)\W+([\d\.]+)\W+([\d\.]+)/
@@ -392,17 +391,13 @@ module Common
           value = -value
         end
       else
+        debug1 "Cannot parse #{input} as degree/minute/second value!"
         value = 0
-        #displayError "Cannot parse #{input} as degree/minute/second value!"
       end
     else
       # did not recognize format
       value = 0
-      #displayError "Bad format in #{input}: #{input.split("\s").length} fields found."
     end
-    # sub-meter precision, strip some trailing 0's
-    #value = sprintf("%.7f", value).gsub(/0{1,4}$/, '')
-    #displayMessage "\"#{input}\" parsed as #{value}"
     return value
   end
 
@@ -427,7 +422,6 @@ module Common
     end
     history[cmdhash]['count'] = history[cmdhash]['count'].to_i + 1
     history[cmdhash]['cmdline'] = cmdline
-    #debug "history: #{history.inspect}"
   end
 
   def saveHistory(history)

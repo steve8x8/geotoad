@@ -1,6 +1,5 @@
 # $Id$
 
-### 20131114 related modifications to cookie handling:
 ### Each session started with a fresh cookie, no cookies file anymore
 ### Received cookies dissected and written to hash,
 ### cookies to be sent combined from hash
@@ -37,13 +36,11 @@ module Auth
   end
 
   def loadCookie()
-    ### 20131114
     debug2 "loadCookie: #{hideCookie(@@cookie)}"
     return @@cookie
   end
 
   def saveCookie(cookie)
-    ### 20131114
     # don't do anything without a cookie
     return if ! cookie
     debug3 "saveCookie: merge #{hideCookie(cookie)}"
@@ -105,11 +102,9 @@ module Auth
   end
 
   def checkLoginScreen(cookie)
-    ### 20131114
     # if we have no cookie we aren't logged in
     debug3 "checkLoginScreen with #{hideCookie(cookie)}"
     return nil if ! cookie
-    ### 20131114
     @postVars = Hash.new
     page = ShadowFetch.new(@@login_url + 'default.aspx')
     page.localExpiry = 1
@@ -117,9 +112,6 @@ module Auth
     data = page.fetch
     data.each_line do |line|
       case line
-      #when /ctl00_ContentBody_LoggedInPanel/
-        #debug "Found logged-in panel"
-        #return true
       when /You are (logged|signed) in as/
         debug "Found login confirmation!"
         return true
@@ -166,7 +158,6 @@ module Auth
     # extract cookie
     cookie = page.cookie
     debug3 "getLoginCookie got cookie: [#{hideCookie(cookie)}]"
-    ### 20131114
     # merge this new cookie with the one we got at login time
     saveCookie(cookie)
     cookie = loadCookie()

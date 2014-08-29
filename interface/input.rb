@@ -130,8 +130,12 @@ class Input
     begin
       @@optHash = Hash.new
       opts.each do |opt, arg|
-        # debug doesn't work here
-        #puts "opt=#{opt.inspect} arg=#{arg.inspect}"
+        # verbose special treatment: sum up how often
+        if (opt == '--verbose')
+          @@optHash['verbose'] = @@optHash['verbose'].to_i + 1
+        else
+          @@optHash[opt.gsub(/-/,'')] = arg
+        end
         # replace default delimiter(s)
         if (opt == '--delimiter')
           $delimiters = Regexp.compile('['+Regexp.escape(arg)+']')
@@ -149,17 +153,9 @@ class Input
           arg = parseCoordinate(input)
           debug "#{opt[2..-1]} is now #{arg}"
         end
-        # verbose special treatment: sum up how often
-        if (opt == '--verbose')
-          @@optHash['verbose'] = @@optHash['verbose'].to_i + 1
-        else
-          @@optHash[opt.gsub(/-/,'')] = arg
-        end
       end
     rescue => e
       displayError "Error in option parsing: #{e} - this may be a bug, please check and report."
-      #usage
-      #exit
     end
 
     # some sanity check
@@ -266,7 +262,6 @@ class Input
     puts " -u <username>          Geocaching.com username, required for coordinates"
     puts " -p <password>          Geocaching.com password, required for coordinates"
 
-    #puts " -m [delimiters]        set delimiter(s) (default #{$delimiters.inspect})"
     puts " -m [delimiters]        set delimiter(s) (default \"|:\") for multiple selections"
 
     puts " -o [filename]          output file name (automatic otherwise)"
@@ -289,8 +284,6 @@ class Input
     puts " -j/-J [# days]         include/exclude caches placed in the last X days"
     puts " -r/-R [# days]         include/exclude caches found in the last X days"
     puts " -a/-A [attribute]      include/exclude caches with attributes set"
-    #puts " --minLatitude [a], --maxLatitude [b], --minLongitude [c], --maxLongitude [d]"
-    #puts "                        filter by lat/lon rectangle"
     puts " -z                     include disabled caches"
     puts " -n                     only include not found caches (virgins)"
     puts " -N                     only caches not yet found by login user"
@@ -320,15 +313,12 @@ class Input
         puts ""
         column = 0
       end
-      #desc = outputDetails.formatDesc(type)
       if (outputDetails.formatRequirement(type) == 'gpsbabel')
         type << '(+)'
       elsif (outputDetails.formatRequirement(type) == 'cmconvert')
         type << '(=)'
       elsif (outputDetails.formatRequirement(type) == 'iconv')
         type << '(%)'
-#      elsif (! outputDetails.formatRequirement(type).nil?)
-#        type << '?'
       end
       printf(" %-13.13s", type)
       column += 1
@@ -348,8 +338,6 @@ class Input
   end
 
   def showMenu
-    # if windows
-    # else
     answer = nil
 
     # if using TUI, only | is delimiter
@@ -361,8 +349,6 @@ class Input
       if RUBY_PLATFORM =~ /win32/
         system("cls")
       else
-        # This could be bad under Ubuntu
-        #        system("stty erase ^H >/dev/null 2>/dev/null")
         system("clear")
       end
 
@@ -388,7 +374,6 @@ class Input
       printf("(12) cache age (days)     [%3.3s - %-3.3s] | (13) last found (days ago) [%3.3s - %-3.3s]\n",
         (@@optHash['placeDateExclude'] || 0), (@@optHash['placeDateInclude'] || 'any'),
         (@@optHash['foundDateExclude'] || 0), (@@optHash['foundDateInclude'] || 'any'))
-      #puts   "                                      |"
       printf("(14) title keyword       [%-10.10s] | (15) descript. keyword [%-13.13s]\n", @@optHash['titleKeyword'], @@optHash['descKeyword'])
       printf("(16) cache not found by  [%-10.10s] | (17) cache owner isn't [%-13.13s]\n", @@optHash['userExclude'], @@optHash['ownerExclude'])
       printf("(18) cache found by      [%-10.10s] | (19) cache owner is    [%-13.13s]\n", @@optHash['userInclude'], @@optHash['ownerInclude'])
@@ -730,7 +715,7 @@ class Input
     return answer
   end
 
-  def askNumber(string, default) #, allowNegative=false)
+  def askNumber(string, default)
     # Ask for a floating point number. Only accept non-negative values.
     while true
       begin
@@ -741,7 +726,7 @@ class Input
           # this may throw an ArgumentError
           answerf = Float(answer)
           # negative values aren't allowed
-          if (answerf < 0) #and (not allowNegative)
+          if (answerf < 0)
             puts "** #{answer} is negative, not allowed."
           # If it is equivalent to it's integer, return the integer instead
           elsif answerf == answerf.to_i
@@ -880,7 +865,7 @@ class Input
     return state
   end
 
-  def askFromList(string, choices, default)
+  def askFromList(string, choices, default, trailing_dash_allowed = false)
     # Ask for an item from a list. We accept either a number or word.
 
     try_again = true
@@ -893,8 +878,6 @@ class Input
         end
         # exceeding choices
         if answer.to_i > choices.length
-          #puts "** That is beyond the list. Use the index!"
-          #return default
           puts "** That index is beyond the list. Try to match id."
           # fall through to text pattern matching
         # numerical answer not validated, multiple not allowed
@@ -916,7 +899,6 @@ class Input
           matches = choices.map{ |e| (e =~ Regexp.compile('^'+try_answer_nodash)) ? e : nil }.compact
           if matches.length == 0
             puts "** \"#{try_answer}\" is invalid!"
-            #puts "Try: #{choices.join(', ')}"
             try_again = true
             nil
           elsif  matches.length == 1
