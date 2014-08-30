@@ -130,12 +130,6 @@ class Input
     begin
       @@optHash = Hash.new
       opts.each do |opt, arg|
-        # verbose special treatment: sum up how often
-        if (opt == '--verbose')
-          @@optHash['verbose'] = @@optHash['verbose'].to_i + 1
-        else
-          @@optHash[opt.gsub(/-/,'')] = arg
-        end
         # replace default delimiter(s)
         if (opt == '--delimiter')
           $delimiters = Regexp.compile('['+Regexp.escape(arg)+']')
@@ -152,6 +146,12 @@ class Input
           input = arg.tr(':,', '  ').gsub(/[NE\+]\s*/i, '').gsub(/[SW-]\s*/i, '-')
           arg = parseCoordinate(input)
           debug "#{opt[2..-1]} is now #{arg}"
+        end
+        # verbose special treatment: sum up how often
+        if (opt == '--verbose')
+          @@optHash['verbose'] = @@optHash['verbose'].to_i + 1
+        else
+          @@optHash[opt.gsub(/-/,'')] = arg
         end
       end
     rescue => e
