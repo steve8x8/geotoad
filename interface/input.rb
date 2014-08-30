@@ -126,32 +126,33 @@ class Input
     ) || usage
 
     # put the stupid crap in a hash. Much nicer to deal with.
-    #opts.each { |o, a| puts "o #{o} = #{a}" }
     begin
       @@optHash = Hash.new
-      opts.each do |opt, arg|
+      opts.each do |opt0, arg|
+        opt = opt0.gsub(/-/, '')
         # replace default delimiter(s)
-        if (opt == '--delimiter')
+        if (opt == 'delimiter')
           $delimiters = Regexp.compile('['+Regexp.escape(arg)+']')
           $delimiter = arg[0]
           displayWarning "Using delimiter pattern #{$delimiters.inspect}"
         end
         # queryType gets special treatment. We try and normalize what they mean.
-        if (opt == '--queryType')
+        if (opt == 'queryType')
           arg = guessQueryType(arg)
           debug "queryType is now #{arg}"
         end
         # rectangular filter: 4 options
-        if (opt =~ /--(min|max)L(ong|at)itude/)
+        if (opt =~ /(min|max)L(ong|at)itude/)
           input = arg.tr(':,', '  ').gsub(/[NE\+]\s*/i, '').gsub(/[SW-]\s*/i, '-')
           arg = parseCoordinate(input)
-          debug "#{opt[2..-1]} is now #{arg}"
+          debug "#{opt} is now #{arg}"
         end
+        # store opt/arg pairs into hash
         # verbose special treatment: sum up how often
-        if (opt == '--verbose')
+        if (opt == 'verbose')
           @@optHash['verbose'] = @@optHash['verbose'].to_i + 1
         else
-          @@optHash[opt.gsub(/-/,'')] = arg
+          @@optHash[opt] = arg
         end
       end
     rescue => e
