@@ -151,6 +151,10 @@ class Input
         # verbose special treatment: sum up how often
         if (opt == 'verbose')
           @@optHash['verbose'] = @@optHash['verbose'].to_i + 1
+        elsif (@@optHash[opt] == "")
+          # NO_ARG but already set: toggle
+          #@@optHash[opt] = nil
+          @@optHash.delete(opt)
         else
           @@optHash[opt] = arg
         end

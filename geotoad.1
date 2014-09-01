@@ -30,11 +30,15 @@ If run without any parameters,
 will launch the interactive mode ("text user interface", "TUI").
 It can also be used in command-line mode for specific queries.
 .PP
-Where multiple entries are possible (e.g. for cache sizes, owners, etc.,
+Where \fBmultiple entries\fR are possible (e.g. for cache sizes, owners, etc.,
 marked by \fB(MULTI)\fR below),
 they can be delimited by a pipe symbol (\fB|\fR) or a colon (\fB:\fR),
 or you can define your own delimiter(s).
 Make sure the pipe symbols are properly escaped from the command shell!
+.PP
+\fB"No-argument"\fR options, with the exception of \fB--verbose\fR which
+implements a counter, are \fB"toggles"\fR, i.e. they can be switched
+on by the first usage on the command line, switched off by the second, etc.
 .PP
 \fB(USERFILE)\fR - if the user name is followed by an "equal" sign and a filename
 (as in \fIusername\fR\fB=\fR\fIfilename\fR),
@@ -55,7 +59,7 @@ get a short command-line option summary
 .TP
 \fB-v\fR|\fB--verbose\fR|\fB--debug\fR
 enable debugging output - very helpful in case of malfunctions.
-Multiple (up to 3) \fB-v\fR options raise the debug level, resulting in copious output.
+Multiple (currently up to 3) \fB-v\fR options raise the debug level, resulting in copious output.
 .TP
 .B User credentials:
 .TP
