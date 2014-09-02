@@ -1,10 +1,18 @@
 #summary Features of current version
 #labels Featured
 
-version=3.21.1
+version=3.21.2
 
-= "Happy Birthday" (dedicated to someone special) release (Aug 28, 2014) =
+= "September Blues" release (Sep 02, 2014) =
 
+= What's new in 3.21.2? =
+  * nicknamed "September Blues" (yes, I got it)
+
+== Issues addressed: ==
+  * Maintenance release to cure some ill side-effects of 20140826 site update
+  * Minor additions and fixes
+
+----
 = What's new in 3.21.1? =
   * nicknamed "Happy Birthday"
 

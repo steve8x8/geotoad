@@ -1,0 +1,28 @@
+Format: 1.8
+Date: Tue, 02 Sep 2014 16:13:25 +0200
+Source: geotoad
+Binary: geotoad
+Architecture: source all
+Version: 3.21.2-1
+Distribution: unstable
+Urgency: low
+Maintainer: Steve Sixty-Four <steve8x8@gmail.com>
+Changed-By: Steve8x8 <steve8x8@googlemail.com>
+Description: 
+ geotoad    - geocaching query tool
+Changes: 
+ geotoad (3.21.2-1) unstable; urgency=low
+ .
+   * New release 3.21.2
+Checksums-Sha1: 
+ ce46683cd1d00d8aeeff615f4f803b64336ffdcc 776 geotoad_3.21.2-1.dsc
+ a5ed90a1a0894d54e16650c23c33135791569557 8028 geotoad_3.21.2-1.debian.tar.gz
+ d2f4a771061d8151adc10c0e0f7784471b4e7067 750352 geotoad_3.21.2-1_all.deb
+Checksums-Sha256: 
+ 760b60229a1aeb41ba38b8721caf44951c05c58bb2ea2e13fadb9ed0a359b917 776 geotoad_3.21.2-1.dsc
+ fbdf8545f514c6e9bbfa5828b4c034a615a8c5c6f6eae5c29987bc289facd886 8028 geotoad_3.21.2-1.debian.tar.gz
+ 6ede84dbf4ee2823a3215f7e6612d1ebe97504a76d51aae72679c64b055b2f29 750352 geotoad_3.21.2-1_all.deb
+Files: 
+ d52b1735ba7e2b286575725eadf825e4 776 utils optional geotoad_3.21.2-1.dsc
+ 731c24f23cf08b16660d93eda51aff77 8028 utils optional geotoad_3.21.2-1.debian.tar.gz
+ b276dc3ec50e20ccad1723d3c09b90f2 750352 utils optional geotoad_3.21.2-1_all.deb
