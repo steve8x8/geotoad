@@ -1,0 +1,19 @@
+{
+   "name": "GeoToad",
+   "title": "Geocaching.com Query Tool",
+   "description": "",
+   "homepage": "http://code.google.com/p/geotoad/",
+   "license": "BSDL",
+   "tags": "windows, unix. macos, linux, ruby, education, geocaching",
+   "image": "http://code.google.com/p/geotoad/logo?cct=1379588096",
+   "releases": [
+      {
+        "version": "3.21.2",
+        "changes": "Maintenance release, covering the 20140826 change in cache type naming",
+        "scope": "minor bugfix",
+        "state": "mature",
+        "download": "http://geotoad.googlecode.com/svn/branches/downloads/files/",
+        "published": "2014-09-02T14:00:00+00:00"
+      },
+   ]
+}
