@@ -557,7 +557,7 @@ class SearchCache
     #                Hidden:
     #                10/11/2011
     # 2013-08-21: "Hidden\n:"
-    if data =~ /<div[^>]*mcd2\">\s*[\w ]*\s*:\s*([\w\/ -]+)\s+</m
+    if data =~ /<div[^>]*mcd2\">\s*[\w ]*\s*:\s*([\w\/\. -]+)\s+</m
       debug "Found creation date: #{$1}"
       ctime = parseDate($1)
       cdays = daysAgo(ctime)
@@ -870,7 +870,7 @@ class SearchCache
 # 2013-01-07: now use
       # <span class="small">02/16/2011</span>
       # <span class="small">04/26/2013</span> <span class="Recent">New!</span>
-      when /^\s+(<span[^>]*>\s*)?(([0-9\/\.-]+)|(\d+[ \/]\w{3}[ \/]\d+)|(\w{3}\/\d+\/\d+))(\s+<img [^>]* title="New!" \/>)?<\/span>\s?(<span[^>]*>New!<\/span>)?\s*$/
+      when /^\s+(<span[^>]*>\s*)?(([0-9\/\.-]+)|(\d+[ \/\.]\w{3}[ \/\.]\d+)|(\w{3}\/\d+\/\d+))(\s+<img [^>]* title="New!" \/>)?<\/span>\s?(<span class=.Recent.>[^<]*<\/span>)?\s*$/
         debug2 "create date: #{$2} at line: #{line}"
         cache['ctime'] = parseDate($2)
         cache['cdays'] = daysAgo(cache['ctime'])
