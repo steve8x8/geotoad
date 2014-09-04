@@ -126,6 +126,7 @@ module Common
       day = $3
       debug2 "ISO-coded date: year=#{year} month=#{month} day=#{day}"
       timestamp = Time.local(year, month, day)
+    # dd.MM.yyyy (supported before 20140826)
     when /^(\d+)\.(\d+)\.(\d{4})$/
       year = $3
       month = $2
@@ -160,9 +161,10 @@ module Common
       day = $2
       debug2 "MMM/dd/yyyy date: year=#{year} month=#{month} day=#{day}"
       timestamp = Time.parse("#{day} #{month} #{year}")
-    # dd/MMM/yyyy, dd MMM yy
-    when /^(\d+[ \/]\w+[ \/]\d+)/
-      debug2 "dd MMM yy[yy] date: #{$1}"
+    # dd/MMM/yyyy, dd.MMM.yyyy (20140826), dd MMM yy
+    # ToDo: i18n month names?
+    when /^(\d+[ \/\.]\w{3}[ \/\.]\d{2}(\d{2})?)/
+      debug2 "dd_MMM_yy[yy] date: #{$1}"
       timestamp = Time.parse(date)
     when 'N/A'
       debug2 "no date: N/A"
