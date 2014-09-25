@@ -26,7 +26,7 @@ class ShadowFetch
   def initialize (url)
     @url = url
     @remote = 0
-    @localExpiry = 6 * 86400		# 6 days
+    @localExpiry = 5 * 86400		# 5 days
     @maxFailures = 3			#was 2
     @useCookie   = true
     @httpHeaders = {
