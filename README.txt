@@ -126,7 +126,6 @@ syntax: geotoad [options] <search:search2:search3>
  -P                     HTTP proxy server, http://username:pass@host:port/
  -M                     download my cache logs (/my/logs.aspx)
  -X                     emergency switch: disable early filtering
- -H                     suppress history collection
  -C                     selectively clear local browser cache
  -U                     use unbuffered output
 
