@@ -403,40 +403,6 @@ module Common
     return value
   end
 
-  # history stuff
-  def loadHistory
-    historyFile  = File.join(findConfigDir, 'history.yaml')
-    history = false
-    if File.readable?(historyFile)
-      history = YAML::load(File.open(historyFile))
-    end
-    if not history or (history.class != Hash)
-      history = Hash.new
-    end
-    return history
-  end
-
-  def mergeHistory(history, cmdline, cmdhash)
-    # cmdhash is _not_ hash of cmdline but of all options
-    if ! history[cmdhash]
-      history[cmdhash] = Hash.new()
-      history[cmdhash]['count'] = 0
-    end
-    history[cmdhash]['count'] = history[cmdhash]['count'].to_i + 1
-    history[cmdhash]['cmdline'] = cmdline
-  end
-
-  def saveHistory(history)
-    configDir = findConfigDir
-    historyFile  = File.join(configDir, 'history.yaml')
-    begin
-      File.makedirs(configDir) if (! File.exists?(configDir))
-      # do not sort on output!
-      File.open(historyFile, 'w'){ |f| f.puts history.to_yaml }
-    rescue
-    end
-  end
-
   # mapping WID to GUID via dictionary file
   def loadMapping
     mappingFile  = File.join(findConfigDir, 'mapping.yaml')

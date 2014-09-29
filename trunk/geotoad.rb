@@ -127,6 +127,11 @@ class GeoToad
       exit
     end
 
+    if @option['noHistory']
+      displayWarning "The \"noHistory\" (-H) option is no longer supported."
+      displayWarning "It will cause an error in a future release. Please fix your command-line."
+    end
+
     if ! @option['clearCache'] && ! @queryArg
       displayError "You forgot to specify a #{@queryType} search argument"
       @uin.usage
@@ -187,43 +192,6 @@ class GeoToad
     debug "Limiting search to #{@limitPages.inspect} pages" if (@limitPages != 0)
 
     return @option
-  end
-
-  def commandline(optHash)
-    cmdline = ""
-  # code stolen from interface/input.rb
-    hidden_opts = ['queryArg', 'user', 'password', 'usemetric', 'verbose']
-    hidden_args = ['userInclude', 'userExclude', 'ownerInclude', 'ownerExclude', 'output']
-    # hide unlimited search
-    if optHash['limitSearchPages'] == 0
-      hidden_opts.push('limitSearchPages')
-    end
-    optHash.keys.sort.each { |option|
-      # "empty" non-nil value = "X" in TUI
-      if optHash[option] and ! hidden_opts.include?(option)
-        if optHash[option].to_s.empty? or optHash[option] == "X"
-          cmdline << " --#{option}"
-        elsif not optHash[option].to_s.empty?
-          cmdline << " --#{option}="
-          if ! hidden_args.include?(option)
-            # Omit the quotes if the argument is 'simple'
-            if optHash[option].to_s =~ /^[\w\.:]+$/
-              cmdline << "#{optHash[option]}"
-            else
-              cmdline << "\'#{optHash[option]}\'"
-            end
-          else # hide args
-            cmdline << optHash[option].gsub(/[^=%]/, '*').gsub(/\*\**/, '*')
-          end
-        end
-        # in the metric case, we must append "km" to the distance
-        if option == 'distanceMax' and optHash['usemetric']
-          cmdline << "km"
-        end
-      end
-    }
-    # do not append queryArg
-    return cmdline
   end
 
   ## Check the version #######################
@@ -1030,16 +998,6 @@ displayBar
 
 while true
   options = cli.getoptions
-  if ! options['noHistory']
-    cmdline = cli.commandline(options)
-    # sort array representation of all options but queryArg, hash to hex
-    # this should make entries unique even across multiple users
-    cmdhash = Zlib.crc32(options.dup.merge({'queryArg'=>nil}).to_a.sort.to_s).to_s(16)
-    cli.debug "History #{cmdhash}: #{cmdline}"
-    history = cli.loadHistory()
-    cli.mergeHistory(history, cmdline, cmdhash)
-    cli.saveHistory(history)
-  end
   if options['clearCache']
     cli.clearCacheDirectory()
   end

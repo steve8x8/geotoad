@@ -303,7 +303,6 @@ class Input
     puts " -P                     HTTP proxy server, http://username:pass@host:port/"
     puts " -M                     download my cache logs (/my/logs.aspx)"
     puts " -X                     emergency switch: disable early filtering"
-    puts " -H                     suppress history collection"
     puts " -C                     selectively clear local browser cache"
     puts " -U                     use unbuffered output"
     puts ""
