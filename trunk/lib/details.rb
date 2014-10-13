@@ -380,6 +380,9 @@ class CacheDetails
           when /Traditional/
             cache['fulltype'] = 'Traditional Cache'
             cache['type'] = 'traditional'
+          when /Earth/
+            cache['fulltype'] = 'Earthcache'
+            cache['type'] = 'earthcache'
           end
           if full_type =~ /Event/
             cache['event'] = true

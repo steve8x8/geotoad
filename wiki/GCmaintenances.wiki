@@ -119,6 +119,11 @@ _*(current year on top; history at bottom)*_
   * *{{{Tucson.Main.release-20140910.Release_196}}}*
   * [http://forums.groundspeak.com/GC/index.php?showtopic=326055 release notes]
 ----
+2014-10-01:
+  * *{{{Tucson.Main.release-20140930.Release_204}}}*
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=326545 release notes]
+  * _(nothing known yet)_
+----
 == (now) ==
 ----
 
