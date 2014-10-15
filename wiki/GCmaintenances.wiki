@@ -124,6 +124,12 @@ _*(current year on top; history at bottom)*_
   * [http://forums.groundspeak.com/GC/index.php?showtopic=326545 release notes]
   * _(nothing known yet)_
 ----
+2014-10-14:
+  * *{{{Tucson.Main.release-20141014.Release_208}}}*
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=326959 release notes]
+  * _"New Account Settings features replace Your Account Details"_
+  * _breaks access to account preferences (Issue 309), to be fixed in 3.22.0_
+  * _adds new date formats (Issue 310)_
 == (now) ==
 ----
 
