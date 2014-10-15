@@ -7,7 +7,9 @@ require 'pathname'
 require 'time'
 
 module Common
-  @@prefs_url = 'http://www.geocaching.com/account/ManagePreferences.aspx'
+  # 2014-10-14
+  #@@prefs_url = 'http://www.geocaching.com/account/ManagePreferences.aspx'
+  @@prefs_url = 'https://www.geocaching.com/myaccount/settings/preferences'
   # logs.aspx s=1: geocaches (default); s=2: trackables; s=3: benchmarks
   @@mylogs_url = 'http://www.geocaching.com/my/logs.aspx?s=1'
   @@mytrks_url = 'http://www.geocaching.com/my/logs.aspx?s=2'
@@ -15,25 +17,41 @@ module Common
 
   def getPreferences()
     page = ShadowFetch.new(@@prefs_url)
-    page.localExpiry = 6 * 3600		# 6 hours
+    page.localExpiry = 3 * 3600		# 3 hours
     data = page.fetch
     prefs = Hash.new
     current_select_name = nil
     data.each_line {|line|
-      if line =~ /<select name=\"([^\"]*?)\"/
+      # pre 2014-10-14: <select name="ctl00$ContentBody$uxLanguagePreference", "ctl00$ContentBody$uxDateTimeFormat"
+      # post 2014-10-14: <div class="language-dropdown native"><span class="label">Choose Your Language:</span><select>, 
+      #                 <select ... name="SelectedCultureCode"><option selected="selected" value="en-US">English</option>
+      #                 <select ... name="SelectedDateFormat"><option value="d.M.yyyy">15.10.2014</option>
+
+      if line =~ /<select[^>]*name=\"([^\"]*?)\"/
         current_select_name = $1
-        debug3 "found select #{current_select_name}"
+        debug2 "found select #{current_select_name}"
         prefs[current_select_name] = []
-      elsif line =~ /<option selected=\"selected\" value=\"([^\"]*?)\".*?>(.*?)</
-        debug3 "found selected option #{$1}=#{$2}"
+      end
+      # 2014-10-14: selected option may be on same line!
+      if line =~ /<option selected=\"selected\" value=\"([^\"]*?)\".*?>(.*?)</
+        debug2 "found selected option #{$1}=#{$2}"
         if current_select_name
           debug "setting selected option #{current_select_name}=#{$1} (#{$2})"
           prefs[current_select_name] = $1
+          current_select_name = nil
         end
       end
     }
-    dateFormat = prefs['ctl00$ContentBody$uxDateTimeFormat']
-    prefLanguage = prefs['ctl00$ContentBody$uxLanguagePreference']
+    # 2014-10-14
+    dateFormat = prefs['SelectedDateFormat']
+    prefLanguage = prefs['SelectedCultureCode']
+    # fallbacks
+    if dateFormat.to_s.empty?
+      dateFormat = prefs['ctl00$ContentBody$uxDateTimeFormat']
+    end
+    if prefLanguage.to_s.empty?
+      prefLanguage = prefs['ctl00$ContentBody$uxLanguagePreference']
+    end
     if ! dateFormat.to_s.empty?
       @@dateFormat = dateFormat
     end
