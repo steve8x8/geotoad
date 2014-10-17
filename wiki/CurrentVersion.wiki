@@ -1,10 +1,22 @@
 #summary Features of current version
 #labels Featured
 
-version=3.21.2
+version=3.22.0'*'
 
-= "September Blues" release (Sep 02, 2014) =
+= "Autumn Fall" release (Oct 17, 2014) =
 
+= What's new in 3.22.0? =
+  * Nicknamed "Autumn Fall"
+
+== Issues addressed: ==
+  * Issue 309: Use new user preferences page after 2014-10-14 site update
+  * Support for some new ("dotted") data formats
+  * History logging removed again
+  * Minor stuff
+
+== Please upgrade! ==
+
+----
 = What's new in 3.21.2? =
   * nicknamed "September Blues" (yes, I got it)
 
