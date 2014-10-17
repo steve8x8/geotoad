@@ -1,3 +1,13 @@
+geotoad (3.22.0) unstable; urgency=low
+
+  * New version 3.22.0, "Autumn Fall"
+  * Issue 309: Use new user preferences page after 2014-10-14 site update
+  * Support for some new ("dotted") data formats
+  * History logging removed again
+  * Minor stuff
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Fri, 17 Oct 2014 08:30:00 +0000
+
 geotoad (3.21.2) unstable; urgency=low
 
   * New version 3.21.2, "September Blues"
