@@ -7,9 +7,11 @@ require 'pathname'
 require 'time'
 
 module Common
-  # 2014-10-14
   #@@prefs_url = 'http://www.geocaching.com/account/ManagePreferences.aspx'
-  @@prefs_url = 'https://www.geocaching.com/myaccount/settings/preferences'
+  # 2014-10-14
+  #@@prefs_url = 'https://www.geocaching.com/myaccount/settings/preferences'
+  # 2014-10-28
+  @@prefs_url = 'https://www.geocaching.com/account/settings/preferences'
   # logs.aspx s=1: geocaches (default); s=2: trackables; s=3: benchmarks
   @@mylogs_url = 'http://www.geocaching.com/my/logs.aspx?s=1'
   @@mytrks_url = 'http://www.geocaching.com/my/logs.aspx?s=2'

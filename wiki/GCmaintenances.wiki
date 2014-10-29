@@ -130,6 +130,11 @@ _*(current year on top; history at bottom)*_
   * _"New Account Settings features replace Your Account Details"_
   * _breaks access to account preferences (Issue 309), to be fixed in 3.22.0_
   * _adds new date formats (Issue 310)_
+----
+2014-10-28:
+  * *{{{Tucson.Main.release-20141028.Release_214}}}*
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=327446 release notes]
+  * _/myaccount becomes /account again_
 == (now) ==
 ----
 
