@@ -296,6 +296,8 @@ class GeoToad
 
     displayInfo "Clearing account data older than 7 days"
     findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "account"), 7)
+    # obsolete again 2014-10-28
+    #findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "myaccount"), 7)
 
     displayInfo "Clearing login data older than 7 days"
     findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "login"), 7)
