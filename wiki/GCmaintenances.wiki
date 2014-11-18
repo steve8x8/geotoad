@@ -135,6 +135,11 @@ _*(current year on top; history at bottom)*_
   * *{{{Tucson.Main.release-20141028.Release_214}}}*
   * [http://forums.groundspeak.com/GC/index.php?showtopic=327446 release notes]
   * _/myaccount becomes /account again_
+----
+2014-11-12:
+  * *{{{Tucson.Main.release-20141111.Release_217}}}*
+  * _no release notes_
+----
 == (now) ==
 ----
 

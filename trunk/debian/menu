@@ -1,2 +1,5 @@
-?package(geotoad):command="geotoad" needs="text" section="Apps/Tools" \
+?package(geotoad): \
+	command="geotoad" \
+	needs="text" \
+	section="Applications/File Management" \
 	title="GeoToad"
