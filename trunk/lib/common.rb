@@ -121,6 +121,32 @@ module Common
 #fi-FI	Suomi		Tänään		Eilen		(n) päivää sitten
 #sv-SE	Svenska		Idag		Igår		för (n) dagar sedan
 
+# date formats (last checked: 2014-12-01) M, MM num; MMM alpha
+# A	d.M.yyyy
+# B	d.MM.yyyy
+# C	d/M/yyyy
+# D	d/MM/yyyy
+# E	dd MMM yy
+# F	dd.MM.yyyy
+# G	dd.MMM.yyyy
+# H	dd/MM/yyyy
+# I	dd/MMM/yyyy
+# J	dd-MM-yyyy
+# K	d-M-yyyy
+# L	M/d/yyyy
+# M	MM/dd/yyyy
+# N	MMM/dd/yyyy
+# O	yyyy.MM.dd.
+# P	yyyy/MM/dd
+# Q	yyyy-MM-dd
+#  resulting in combined patterns:
+# ABFJK		d+[.-]m+[.-]y+
+# CDH		d+/m+/y+ (see LM!)
+# EGI		d+[ ./]MMM[ ./]y+
+# LM		m+/d+/y+
+# N		MMM/d+/y+
+# OPQ		y+[./-]m+[./-]d+(.)?
+
   def parseDate(date)
     debug "parsing date: [#{date}]"
     timestamp = nil
@@ -139,32 +165,26 @@ module Common
     when /(\d)+ .+\*$/
       debug2 "date: #{$1} days ago"
       days_ago=$1.to_i
-    # yyyy-MM-dd, yyyy/MM/dd (ISO style)
-    when /^(\d{4})[\/-](\d+)[\/-](\d+)$/
-      year = $1
-      month = $2
-      day = $3
-      debug2 "ISO-coded date: year=#{year} month=#{month} day=#{day}"
-      timestamp = Time.local(year, month, day)
-    # dd.MM.yyyy (supported before 20140826)
-    when /^(\d+)\.(\d+)\.(\d{4})$/
+    # [ABFJK] dd.MM.yyyy, d-M-yyyy etc. (dots and dashes)
+    when /^(\d+)[\.-](\d+)[\.-](\d{4})$/
       year = $3
       month = $2
       day = $1
       debug2 "dotted date: year=#{year} month=#{month} day=#{day}"
       timestamp = Time.local(year, month, day)
-    # MM/dd/yyyy, dd/MM/yyyy (need to distinguish!)
+    # [CDH] dd/MM/yyyy, [LM] MM/dd/yyyy (need to distinguish!)
     when /^(\d+)\/(\d+)\/(\d{4})$/
       year = $3
-      month = $1
-      day = $2
+      value1 = $1
+      value2 = $2
       # interpretation depends on dateFormat
-      if @@dateFormat =~ /^MM/
+      if @@dateFormat =~ /^M/
+        month = value1
+        day = value2
         debug2 "MM/dd/yyyy date: year=#{year} month=#{month}, day=#{day}"
       else
-        temp = month
-        month = day
-        day = temp
+        day = value1
+        month = value2
         debug2 "dd/MM/yyyy date: year=#{year} month=#{month}, day=#{day}"
       end
       # catch errors
@@ -174,18 +194,25 @@ module Common
         debug2 "Trying to swap month and day in #{year}/#{month}/#{day}"
         timestamp = Time.local(year, day, month)
       end
-    # MMM/dd/yyyy
+    # [EGI] dd/MMM/yyyy, dd.MMM.yyyy (20140826), dd MMM yy
+    # ToDo: i18n month names?
+    when /^(\d+[ \/\.]\w{3}[ \/\.]\d{2}(\d{2})?)/
+      debug2 "dd_MMM_yy[yy] date: #{$1}"
+      timestamp = Time.parse(date)
+    # [N] MMM/dd/yyyy
     when /^(\w{3})\/(\d+)\/(\d+)/
       year = $3
       month = $1
       day = $2
       debug2 "MMM/dd/yyyy date: year=#{year} month=#{month} day=#{day}"
       timestamp = Time.parse("#{day} #{month} #{year}")
-    # dd/MMM/yyyy, dd.MMM.yyyy (20140826), dd MMM yy
-    # ToDo: i18n month names?
-    when /^(\d+[ \/\.]\w{3}[ \/\.]\d{2}(\d{2})?)/
-      debug2 "dd_MMM_yy[yy] date: #{$1}"
-      timestamp = Time.parse(date)
+    # [OPQ] yyyy-MM-dd, yyyy/MM/dd etc. (ISO style)
+    when /^(\d{4})[\/\.-](\d+)[\/\.-](\d+)(\.)?$/
+      year = $1
+      month = $2
+      day = $3
+      debug2 "ISO-coded date: year=#{year} month=#{month} day=#{day}"
+      timestamp = Time.local(year, month, day)
     when 'N/A'
       debug2 "no date: N/A"
       return nil
