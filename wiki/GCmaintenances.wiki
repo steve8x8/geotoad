@@ -122,25 +122,28 @@ _*(current year on top; history at bottom)*_
 2014-10-01:
   * *{{{Tucson.Main.release-20140930.Release_204}}}*
   * [http://forums.groundspeak.com/GC/index.php?showtopic=326545 release notes]
-  * _(nothing known yet)_
 ----
 2014-10-14:
   * *{{{Tucson.Main.release-20141014.Release_208}}}*
   * [http://forums.groundspeak.com/GC/index.php?showtopic=326959 release notes]
   * _"New Account Settings features replace Your Account Details"_
-  * _breaks access to account preferences (Issue 309), to be fixed in 3.22.0_
+  * _breaks access to account preferences (Issue 309), fixed in 3.22.0_
   * _adds new date formats (Issue 310)_
 ----
 2014-10-28:
   * *{{{Tucson.Main.release-20141028.Release_214}}}*
   * [http://forums.groundspeak.com/GC/index.php?showtopic=327446 release notes]
   * _/myaccount becomes /account again_
+  * *{{{Tucson.Main.release-20141111.Release_217}}}* (2014-11-12)
 ----
-2014-11-12:
-  * *{{{Tucson.Main.release-20141111.Release_217}}}*
-  * _no release notes_
+2014-12-03:
+  * *{{{Tucson.Main.release-20141202.Release_221}}}*
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=328229 release notes]
+  * _(nothing known yet)_
 ----
 == (now) ==
+----
+== 2015 ==
 ----
 
 == Past years ==
