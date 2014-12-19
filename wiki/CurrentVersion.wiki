@@ -1,8 +1,21 @@
 #summary Features of current version
 #labels Featured
 
-version=3.22.0'*'
+version=3.22.1
 
+= "Mary X" (It's the season) release (Dec 19, 2014) =
+
+= What's new in 3.22.1? =
+  * nicknamed "Mary X" (well...)
+
+== Issues addressed: ==
+  * Issue 309 aftermath
+  * Issue 310: parse more date representations
+  * Debian package dependencies revisited
+  * Manual page reformatted
+  * Minor stuff
+
+----
 = "Autumn Fall" release (Oct 17, 2014) =
 
 = What's new in 3.22.0? =
