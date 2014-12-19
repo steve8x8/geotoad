@@ -1,3 +1,14 @@
+geotoad (3.22.1) unstable; urgency=low
+
+  * New version 3.22.1, "Mary X"
+  * Issue 309 aftermath
+  * Issue 310: parse more date representations
+  * Debian package dependencies revisited
+  * Manual page reformatted
+  * Minor stuff
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Fri, 19 Dec 2014 10:30:00 +0000
+
 geotoad (3.22.0) unstable; urgency=low
 
   * New version 3.22.0, "Autumn Fall"

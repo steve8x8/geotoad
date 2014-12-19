@@ -139,6 +139,7 @@ _*(current year on top; history at bottom)*_
 2014-12-03:
   * *{{{Tucson.Main.release-20141202.Release_221}}}*
   * [http://forums.groundspeak.com/GC/index.php?showtopic=328229 release notes]
+  * *{{{Tucson.Main.release-20141211.Release_227}}}*
   * _(nothing known yet)_
 ----
 == (now) ==

@@ -8,6 +8,14 @@
    "image": "http://code.google.com/p/geotoad/logo?cct=1379588096",
    "releases": [
       {
+        "version": "3.22.1",
+        "changes": "Minor update. The usual feature additions and bug fixes. See Wiki:CurrentVersion for more.",
+        "scope": "minor bugfix and enhancement",
+        "state": "mature",
+        "download": "https://drive.google.com/folderview?id=0B214JJmar6j-N3NLVGxzS3JYcnM&usp=sharing#list",
+        "published": "2014-12-19T09:30:00+00:00"
+      },
+      {
         "version": "3.22.0",
         "changes": "Major update to recover access to user preferences. Also the usual feature additions and bug fixes. See Wiki:CurrentVersion for more.",
         "scope": "major release",
