@@ -1,0 +1,3 @@
+b9e85498450f12f31a8fadde2f7284a9  geotoad-3.22.0_MacOSX.dmg
+a5b768c123b60e707f4fa054676f461b  geotoad-3.22.0.tar.gz
+1baf2ab8a2453e85ee4c28c127d0f692  geotoad-3.22.0_Windows_Installer.exe
