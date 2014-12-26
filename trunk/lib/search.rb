@@ -454,7 +454,10 @@ class SearchCache
       when /Geocaching . Hide and Seek a Geocache . Unpublished Geocache/
         debug "Unpublished cache, leaving parser"
         break
-      when /Premium Member Only Cache/
+      # BM sees: Geocaching > Hide and Seek a Geocache > Premium Member Only Cache
+      # PM sees: <p class="Warning NoBottomSpacing">This is a Premium Member Only cache.</p>
+      when /[>a] Premium Member Only Cache/i
+        debug "Premium Member cache detected"
         membersonly = true
       when /^\s+GC.*\((.*)\) in ((.*), )?(.*) created by (.*?)\s*$/
         ctype = $1
