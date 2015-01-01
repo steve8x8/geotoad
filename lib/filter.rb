@@ -159,7 +159,7 @@ class Filter
   def foundDateInclude(days)
     debug2 "filtering by foundDateInclude: #{days}"
     @waypointHash.delete_if { |wid, values|
-      @waypointHash[wid]['mdays'].to_i >= days.to_i
+      @waypointHash[wid]['mdays'].to_i > days.to_i
     }
   end
 
@@ -173,7 +173,7 @@ class Filter
   def placeDateInclude(days)
     debug2 "filtering by placeDateInclude: #{days}"
     @waypointHash.delete_if { |wid, values|
-      @waypointHash[wid]['cdays'].to_i >= days.to_i
+      @waypointHash[wid]['cdays'].to_i > days.to_i
     }
   end
 
