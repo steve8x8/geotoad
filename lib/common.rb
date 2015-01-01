@@ -72,12 +72,19 @@ module Common
     logcount = 0
     # <strong style="display: block">
     #                         1,992 Caches Found</strong>
-    # (language-dependent)
+    # or
+    # <strong class="find-count">
+    #                         3,288 Caches Found</strong>
+    # (language-dependent?!)
     if data =~ /<strong[^>]*>\s*([\d,\.]+)[\s\w]+<\/strong>/
       foundcount = $1.gsub(/[,\.]/, '').to_i
     end
     # seen 2013-10-xx
-    if data =~ /\n\s*([\d,\.]+)\s[\s\w]+<\/p>\s\n/
+    #    <p>
+    #        3728 Results</p>
+    #    <p>
+    #if data =~ /\n\s*([\d,\.]+)\s[\s\w]+<\/p>\s\n/
+    if data =~ /\n\s*<p>\s*\n\s*([\d,\.]+)\s[\s\w]+<\/p>\s*\n/
       logcount = $1.gsub(/[,\.]/, '').to_i
     end
     return [foundcount, logcount]
@@ -88,10 +95,12 @@ module Common
     page.localExpiry = 12 * 3600		# 12 hours
     data = page.fetch
     logcount = 0
+    # (like log count above)
     #     <p>
-    #   2528 Results</p>
+    #         2528 Results</p>
     # (not language-dependent)
-    if data =~ /\n\s*([\d,\.]+)\s[\s\w]+<\/p>\s\n/
+    #if data =~ /\n\s*([\d,\.]+)\s[\s\w]+<\/p>\s\n/
+    if data =~ /\n\s*<p>\s*\n\s*([\d,\.]+)\s[\s\w]+<\/p>\s*\n/
       logcount = $1.gsub(/[,\.]/, '').to_i
     end
     return logcount
