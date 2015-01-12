@@ -46,7 +46,7 @@ class ProgressBar
     meterchar = ' .-+x*=%#'		# [0..7] for mini, [8] for full
     minichars = meterchar.length - 1	# 8
     if @value == @max
-      meter = meterchar[-1,1] * metercols
+      meter = meterchar[-1, 1] * metercols
     else
       # map 0..100% to 0..24 different states
       percentage = (@value.to_f / @max.to_f) * metercols * minichars
@@ -54,12 +54,12 @@ class ProgressBar
       bardiv = percentage.divmod(minichars)
       fullbars = bardiv[0]
       minibars = bardiv[1]
-      meter = meterchar[-1,1] * fullbars + meterchar[minibars,1]
+      meter = meterchar[-1, 1] * fullbars + meterchar[minibars, 1]
       meter = meter.ljust(metercols)
     end
 
     pvalue = "#{@value}".rjust(@max.to_s.length)
-    addtext = (@valueText)? ": #{@valueText}" : ""
+    addtext = (@valueText) ? ": #{@valueText}" : ""
     puts "[#{meter}] (#{pvalue}/#{@max}) #{@name}#{addtext}"
   end
 

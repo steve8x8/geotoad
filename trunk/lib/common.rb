@@ -7,10 +7,8 @@ require 'pathname'
 require 'time'
 
 module Common
-  #@@prefs_url = 'http://www.geocaching.com/account/ManagePreferences.aspx'
-  # 2014-10-14
-  #@@prefs_url = 'https://www.geocaching.com/myaccount/settings/preferences'
-  # 2014-10-28
+  # pre 2014-10-14: @@prefs_url = 'http://www.geocaching.com/account/ManagePreferences.aspx'
+  # pre 2014-10-28: @@prefs_url = 'https://www.geocaching.com/myaccount/settings/preferences'
   @@prefs_url = 'https://www.geocaching.com/account/settings/preferences'
   # logs.aspx s=1: geocaches (default); s=2: trackables; s=3: benchmarks
   @@mylogs_url = 'http://www.geocaching.com/my/logs.aspx?s=1'
@@ -23,7 +21,7 @@ module Common
     data = page.fetch
     prefs = Hash.new
     current_select_name = nil
-    data.each_line {|line|
+    data.each_line{ |line|
       # pre 2014-10-14: <select name="ctl00$ContentBody$uxLanguagePreference", "ctl00$ContentBody$uxDateTimeFormat"
       # post 2014-10-14: <div class="language-dropdown native"><span class="label">Choose Your Language:</span><select>, 
       #                 <select ... name="SelectedCultureCode"><option selected="selected" value="en-US">English</option>
@@ -360,7 +358,7 @@ module Common
       '/usr/share/geotoad/templates',
       '/usr/local/share/geotoad/templates'
     ]
-    dirs.each { |dir|
+    dirs.each{ |dir|
       if File.exist?(File.join(dir, 'geotoad.tm'))
         return dir
       end

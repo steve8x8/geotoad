@@ -22,8 +22,7 @@ module Auth
     @@user = user
     password2 = password.to_s.gsub(/./, '*')
     debug "login called for user=#{user} pass=#{password2}"
-    # We only login if there's something wrong with the cookie
-    # remove invalid cookie, and recreate
+    # trash and recreate cookie
     saveCookie(nil)
     cookie = getLoginCookie(user, password)
     if cookie

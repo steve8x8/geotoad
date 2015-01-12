@@ -35,7 +35,7 @@ class Input
       File.makedirs(@configDir)
     end
 
-    @@optHash.each_key {|key|
+    @@optHash.each_key{ |key|
       if @@optHash[key].to_s.empty?
         @@optHash.delete(key)
       end
@@ -226,7 +226,7 @@ class Input
       hidden_opts.push('limitSearchPages')
     end
 
-    @@optHash.keys.sort.each { |option|
+    @@optHash.keys.sort.each{ |option|
       if ! @@optHash[option].to_s.empty? and ! hidden_opts.include?(option)
         if @@optHash[option] == 'X'
           cmdline = cmdline + " --#{option}"
@@ -311,7 +311,7 @@ class Input
     puts "::: OUTPUT FORMATS:"
     outputDetails = Output.new
     column = 0
-    $validFormats.each { |f|
+    $validFormats.each{ |f|
       type = f.dup
       if (column > 4)
         puts ""
@@ -603,7 +603,7 @@ class Input
       when '24'
         puts "List of Output Formats: "
         outputDetails = Output.new
-        $validFormats.each { |type|
+        $validFormats.each{ |type|
           desc = outputDetails.formatDesc(type)
           req = outputDetails.formatRequirement(type)
           if (req)

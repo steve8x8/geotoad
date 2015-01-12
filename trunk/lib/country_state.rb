@@ -22,7 +22,7 @@ class CountryState
     page = ShadowFetch.new(url)
     page.localExpiry = @ttl
     if post_vars
-      page.postVars=post_vars.dup
+      page.postVars = post_vars.dup
     end
 
     if (page.fetch)
@@ -132,7 +132,7 @@ class CountryState
     post_vars = Hash.new
     options = Hash.new
 
-    data.each_line {|line|
+    data.each_line{ |line|
       if line =~ /^<input type=\"hidden\" name=\"([^\"]*?)\".* value=\"([^\"]*?)\" \/>/
         debug3 "found hidden post variable: #{$1}=#{$2}"
         post_vars[$1] = $2

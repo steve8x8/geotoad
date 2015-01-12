@@ -275,7 +275,7 @@ class Output
 
     # split into "meaningful" words, squeeze them
     newwords = Array.new
-    tempname.split(/ /).each { |word|
+    tempname.split(/ /).each{ |word|
       # skip "empty" words
       next if (word.length < 1)
       # word.capitalize! would downcase everything else
@@ -284,7 +284,7 @@ class Output
     }
     wordcount = newwords.length
     # handle all-capitals (for readability)
-    (1 .. wordcount).each { |index|
+    (1..wordcount).each{ |index|
       word = newwords[-index]
       # if word is longer than 4 characters and contains no lc letter, force down
       if (word =~ /[A-Z][A-Z][A-Z][A-Z]/) and (word !~ /[a-z]/)
@@ -300,7 +300,7 @@ class Output
     end
     debug3 "shortname: lower \"#{result}\""
     # shorten by removing special characters
-    (1 .. wordcount).each { |index|
+    (1..wordcount).each{ |index|
       word = newwords[-index]
       next if (word.length <= 1)
       # keep: (blank,) digits, ? @ alpha ~; utf-8 unharmed
@@ -314,7 +314,7 @@ class Output
     }
     debug3 "shortname: extra \"#{result}\""
     # shorten by replacing some keywords, again right to left
-    (1 .. wordcount).each { |index|
+    (1..wordcount).each{ |index|
       # case insensitive replacement
       word = newwords[-index]
       next if (word.length <= 1)
@@ -332,7 +332,7 @@ class Output
     }
     debug3 "shortname: words \"#{result}\""
     # remove extra characters word by word from right to left
-    (1 .. wordcount).each { |index|
+    (1..wordcount).each{ |index|
       word = newwords[-index]
       # non-"alpha" stuff ('i' option doesn't work!)
       word.gsub!(/[^\w#{$utf8lo}#{$utf8hi}]+/, '')
@@ -345,11 +345,11 @@ class Output
     }
     debug3 "shortname: extra \"#{result}\""
     # shorten by removing vowels from long words first
-    (1 .. wordcount).each { |index|
+    (1..wordcount).each{ |index|
       word = newwords[-index]
       next if (word.length < 8)
       # one by one
-      while (word.length > 1) && (i=word.rindex(/[aeiouäöü]/))
+      while (word.length > 1) && (i = word.rindex(/[aeiouäöü]/))
         word[i] = ''
         newwords[-index] = word
         break if (newwords.join.length <= maxlength)
@@ -361,7 +361,7 @@ class Output
       end
     }
     # last: shorten by removing vowels from all words
-    (1 .. wordcount).each { |index|
+    (1..wordcount).each{ |index|
       word = newwords[-index]
       # one by one
       while (word.length > 1) && (i = word.rindex(/[aeiouäöü]/))
@@ -387,7 +387,7 @@ class Output
     # a ping-pong with carefully crafted shortNames.
     # let's have another go...
     snames = {}
-    @wpHash.each_key { |wid|
+    @wpHash.each_key{ |wid|
       cache = @wpHash[wid]
       if (@waypointLength < 1)
         cache['sname'] = wid.dup
@@ -452,7 +452,7 @@ class Output
   # exploratory functions.
   def formatList
     formatList = Array.new
-    $FORMATS.each_key { |format|
+    $FORMATS.each_key{ |format|
       formatList.push(format)
     }
     formatList
@@ -498,7 +498,7 @@ class Output
 
   def writeFile (file)
     begin
-      File.open(file, 'w') { |f| f.write(@output) }
+      File.open(file, 'w'){ |f| f.write(@output) }
       return true
     rescue => error
       displayWarning "Error writing #{file}:\n\t#{error}"
@@ -525,7 +525,7 @@ class Output
       stylefile = nil
       if @outputFormat['filter_style']
         stylefile = File.join($CACHE_DIR, @outputType + ".s_" + rand(500000).to_s)
-        File.open(stylefile, 'w') { |f| f.write(@outputFormat['filter_style']) }
+        File.open(stylefile, 'w'){ |f| f.write(@outputFormat['filter_style']) }
         exec.gsub!('STYLEFILE', "\"#{stylefile}\"")
       end
 
@@ -558,7 +558,7 @@ class Output
     debug3 "out.wid for #{wid.inspect} is [#{@outVars['wid'].inspect}]"
     tags = templateText.scan(/<%(\w+\.\w+)%>/)
     text = templateText.dup
-    tags.each { |tag|
+    tags.each{ |tag|
       (type, var) = tag[0].split('.')
       value = 'UNKNOWN_TAG'
       if (type == "wp")
@@ -592,7 +592,7 @@ class Output
     return text
   end
 
-  def deemoji(str, soft=true)
+  def deemoji(str, soft = true)
     if not str or str.length == 0
         return ""
     end
@@ -667,7 +667,7 @@ class Output
     text.gsub!(/\&(amp;)?hellip;/, '...')
 
     # From http://snippets.dzone.com/posts/show/1161
-    text = text.unpack("U*").collect {|s| (s > 127 ? "&##{s};" : s.chr) }.join("")
+    text = text.unpack("U*").collect{ |s| (s > 127 ? "&##{s};" : s.chr) }.join("")
 
     # Collapse white space
     text.gsub!(/\&(amp;)*nbsp;/, ' ')
@@ -784,9 +784,8 @@ class Output
     index = '<ul>'
     symbolHash = Hash.new
 
-    #@wpHash.keys.sort.each { |wid|
     # sort GC1 < GCZZZZ < GC10000 < GCZZZZZ < GC100000
-    @wpHash.keys.sort{|a,b| a[2..-1].rjust(6)<=>b[2..-1].rjust(6)}.each { |wid|
+    @wpHash.keys.sort{ |a,b| a[2..-1].rjust(6) <=> b[2..-1].rjust(6) }.each{ |wid|
       cache = @wpHash[wid]
       symbolHash[wid] = ''
 
@@ -873,7 +872,7 @@ class Output
 
     if cache['comments']
       commentcount = 0
-      cache['comments'].each { |comment|
+      cache['comments'].each{ |comment|
         break if (commentcount >= @commentLimit)
         # strip images from log entries
         comment_text = icons2Text(comment['text'].to_s)
@@ -906,7 +905,7 @@ class Output
     entries = []
     debug "Generating comment text for #{cache['name']}"
     commentcount = 0
-    cache['comments'].each { |comment|
+    cache['comments'].each{ |comment|
       break if (commentcount >= @commentLimit)
       comment_text = icons2Text(comment['text'].to_s)
       # unescape HTML in finder name
@@ -939,7 +938,7 @@ class Output
     entries = []
     debug "Generating comment HTML for #{cache['name']}"
     commentcount = 0
-    cache['comments'].each { |comment|
+    cache['comments'].each{ |comment|
       break if (commentcount >= @commentLimit)
       formatted_date = comment['date'].strftime("%Y-%m-%d")
       entry = ''
@@ -962,7 +961,7 @@ class Output
       # translate smileys
       hint2 = icons2Text(hint)
       # split hint into bracketed and unbracketed fragments
-      decrypted = hint2.gsub(/\[/, '\n[').gsub(/\]/, ']\n').split('\n').collect { |x|
+      decrypted = hint2.gsub(/\[/, '\n[').gsub(/\]/, ']\n').split('\n').collect{ |x|
         debug3 "hint fragment #{x}"
         if x[0..0] != '['
           # only decrypt text not within brackets
@@ -1057,7 +1056,7 @@ class Output
     trcount = 0
     tdcount = 0
     # table consists of row pairs: 1st row with WP details, 2nd with note
-    text.gsub(/<br[^>]*>/, '|').split("\n").each { |line|
+    text.gsub(/<br[^>]*>/, '|').split("\n").each{ |line|
       if line =~ /<tr/
         # start of a row - trcount is 1 for 1st, 2 for 2nd
         trcount += 1
@@ -1215,12 +1214,12 @@ class Output
     numattrib = cache['attributeCount']
     # may be uninitialized
     if numattrib
-      # use attributes 0 .. (numattrib-1)
-      (0 ... numattrib).each { |x|
+      # use attributes 0..(numattrib-1)
+      (0...numattrib).each{ |x|
         if cache["attribute#{x}id"]
           rawattrib = "      <groundspeak:attribute " +
             sprintf("id=\"%s\" inc=\"%s\">", cache["attribute#{x}id"], cache["attribute#{x}inc"]) +
-            cache["attribute#{x}txt"].to_s.capitalize.gsub(/\\/,"/") +
+            cache["attribute#{x}txt"].to_s.capitalize.gsub(/\\/, "/") +
             "</groundspeak:attribute>\n"
           debug3 "Attribute #{x} XML: #{rawattrib}"
           xmlAttrs << rawattrib
@@ -1232,7 +1231,7 @@ class Output
     xmlTrackables = ''
     txtTrackables = ''
     if cache['travelbug'].to_s.length > 0
-      cache['travelbug'].split(', ').each { |tbname|
+      cache['travelbug'].split(', ').each{ |tbname|
         # we don't have the real trackable ref or id
         # therefore create a random number for the trackable
         # use a number range far above what exists now
@@ -1277,8 +1276,8 @@ class Output
       'latdegmin' => lat2str(cache['latdata'] || 0.0, degsign=':').gsub(/ */, '').gsub(/([NSEW])0+/, '\1'),
       'londegmin' => lon2str(cache['londata'] || 0.0, degsign=':').gsub(/ */, '').gsub(/([NSEW])0+/, '\1'),
       'maps_url' => "#{GOOGLE_MAPS_URL}?q=#{coord_query}",
-      'IsAvailable' => (available==true).to_s.capitalize,
-      'IsArchived' => (archived==true).to_s.capitalize,
+      'IsAvailable' => (available == true).to_s.capitalize,
+      'IsArchived' => (archived == true).to_s.capitalize,
       # cartridge CGUID has 36 characters, so has the "dummy" one
       'cartridge' => (cache['cartridge'] || '_no_link_to_wherigo_cartridge_found_'),
       'location' => location,
@@ -1288,20 +1287,20 @@ class Output
       'hint' => cache['hint'],
       'cacheSymbol' => symbol,
       'cacheID' => cacheID(wid),
-      'logID' => (100000000001+@wpHash.length-cache['index'].to_i),
+      'logID' => (100000000001 + @wpHash.length - cache['index'].to_i),
       'trackables' => cache['travelbug'].to_s,
       'xmlTrackables' => xmlTrackables,
       'shortWpts' => shortWpts.to_s,
-      'xmlWpts' => xmlWpts.to_s.gsub(/XXXWIDXXX/, wid[2 .. -1]),
+      'xmlWpts' => xmlWpts.to_s.gsub(/XXXWIDXXX/, wid[2..-1]),
       'xmlAttrs' => xmlAttrs.to_s,
-      'txtAttrs' => (cache['attributeText'].to_s.empty?)?'':'[' + cache['attributeText'].to_s.capitalize.gsub(/\\/,"/") + ']',
-      'warnAvail' => (available or archived)?'':'[?]',
-      'warnArchiv' => (archived)?'[%]':'',
-      'premiumOnly' => (cache['membersonly']?('[$' + (cache['olddesc']?'+':'') + ']'):''),
+      'txtAttrs' => (cache['attributeText'].to_s.empty?) ? '' : '[' + cache['attributeText'].to_s.capitalize.gsub(/\\/, "/") + ']',
+      'warnAvail' => (available or archived) ? '' : '[?]',
+      'warnArchiv' => (archived) ? '[%]' : '',
+      'premiumOnly' => (cache['membersonly'] ? ('[$' + (cache['olddesc'] ? '+' : '') + ']') : ''),
       'nuvi' => cache['type'][0..1].capitalize +
         sprintf("%.1f", cache['difficulty']).gsub(/\.5/, '\'').gsub(/\.0/, ' ') +
         sprintf("%.1f", cache['terrain']).gsub(/\.5/, '\'').gsub(/\.0/, ' ') +
-        cache['size'][0..1].capitalize + ((cache['membersonly'])?'$':'') + ((archived)?'%':'') + ((available or archived)?'':'?'),
+        cache['size'][0..1].capitalize + ((cache['membersonly']) ? '$' : '') + ((archived) ? '%' : '') + ((available or archived) ? '' : '?'),
     }
     rescue => e
       displayWarning "Problem (#{e}) while converting cache #{wid}:\n#{cache.inspect}"
@@ -1331,7 +1330,7 @@ class Output
     # restore [backwards] search order from cache counter
     wpSearchOrder = Array.new
     helpindex = 0
-    @wpHash.keys.each { |wid|
+    @wpHash.keys.each{ |wid|
       helpindex += 1
       index = @wpHash[wid]['index']
       # in "-q wid" mode, there's no index
@@ -1346,14 +1345,16 @@ class Output
     # use wpSearchOrder.reverse_each{} for reverse search order
 
     counter = 0
-    #@wpHash.keys.sort.each { |wid|
     (
      # arrange "-q user" queries in reverse search order
      # otherwise, sort GC1 < GCZZZZ < GC10000 < GCZZZZZ < GC100000
-     (@title =~ /^GeoToad: user =/) ? (wpSearchOrder.reverse) : (@wpHash.keys.sort{|a,b| a[2..-1].rjust(6)<=>b[2..-1].rjust(6)})
-    ).each { |wid|
+      (@title =~ /^GeoToad: user =/) ?
+        wpSearchOrder.reverse
+        :
+        @wpHash.keys.sort{ |a,b| a[2..-1].rjust(6) <=> b[2..-1].rjust(6) }
+    ).each{ |wid|
       # unescape HTML entities in _some_ fields (if not done yet)
-      ['name', 'creator'].each { |var|
+      ['name', 'creator'].each{ |var|
         temp = deemoji(@wpHash[wid][var], false)
         begin
           @wpHash[wid][var] = CGI.unescapeHTML(temp)
