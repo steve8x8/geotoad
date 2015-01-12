@@ -180,7 +180,7 @@ class GeoToad
     # 't': title << "#{h['t']} #{h['f']}"}"
     @appliedFilters    = Hash.new
 
-    @formatTypes.split($delimiters).each { |formatType|
+    @formatTypes.split($delimiters).each{ |formatType|
       if ! $validFormats.include?(formatType)
         displayError "#{formatType} is not a valid supported format."
         @uin.usage
@@ -241,7 +241,7 @@ class GeoToad
           text.gsub!(/\&nbsp;/, '-')
           text = CGI::unescapeHTML(text)
           textlines = text.split("\n")
-          (1..20).each{|line|
+          (1..20).each{ |line|
             displayBox textlines[line] if textlines[line]
           }
           displayMessage "  ... see #{url} for more ..." if textlines.length > 20
@@ -265,7 +265,7 @@ class GeoToad
     debug "findRemoveFiles() age=#{age}, pattern=#{pattern}, writable=#{writable.inspect}"
     filelist = Array.new
     begin # catch filesystem problems
-      Find.find(where) { |file|
+      Find.find(where){ |file|
         # never touch directories
         next if not File.file?(file)
         next if (age * 86400) > (Time.now - File.mtime(file)).to_i
@@ -281,7 +281,7 @@ class GeoToad
     debug2 "found #{filecount} files to remove: #{filelist.inspect}"
     if not filelist.empty?
       displayInfo "... #{filecount} files to remove"
-      filelist.each { |file|
+      filelist.each{ |file|
         begin
           File.delete(file)
         rescue => error
@@ -368,7 +368,7 @@ class GeoToad
       end
     end
 
-    @queryArg.to_s.split($delimiters).each { |queryArg|
+    @queryArg.to_s.split($delimiters).each{ |queryArg|
       puts ""
       message = "Performing #{@queryType} search for #{queryArg}"
       search = SearchCache.new
@@ -398,7 +398,7 @@ class GeoToad
             search.txfilter = cacheType0
           end
           # otherwise, warn if "all xxx" is in the list
-        elsif cacheTypes.map{ |t| (t =~ /\+$/) ? "x" : nil}.any?
+        elsif cacheTypes.map{ |t| (t =~ /\+$/) ? "x" : nil }.any?
           displayWarning "Filtering for \"all\" only works for single cache type - your results will be wrong!"
           sleep 10
         end
@@ -429,7 +429,7 @@ class GeoToad
     # really doesn't make much sense.
 
     waypointsExtracted = 0
-    @combinedWaypoints.each_key { |wp|
+    @combinedWaypoints.each_key{ |wp|
       debug2 "pre-filter: #{wp}"
       waypointsExtracted = waypointsExtracted + 1
     }
@@ -467,7 +467,7 @@ class GeoToad
       userLookups = userLookups + @option['userInclude'].split($delimiters)
     end
 
-    userLookups.each { |user|
+    userLookups.each{ |user|
       # issue 236: if "user" is file, read that
       if (user =~ /(.*)=(.*)/)
         username = $1
@@ -477,7 +477,7 @@ class GeoToad
         counter = 0
         # read file (1st column)
         begin
-          File.foreach(filename) { |line|
+          File.foreach(filename){ |line|
           if (line =~ /^(GC\w+)/i)
             wid = $1
             debug2 "Add #{wid} for #{username}"
@@ -493,7 +493,7 @@ class GeoToad
         search = SearchCache.new
         search.setType('user', user)
         waypoints = search.getResults()
-        waypoints.keys.each { |wid|
+        waypoints.keys.each{ |wid|
           @filtered.addVisitor(wid, user)
         }
       end
@@ -617,13 +617,13 @@ class GeoToad
     beforeFilterTotal = @filtered.totalWaypoints
     if (@option['ownerExclude'])
       @appliedFilters['-I'] = { 'f' => "#{@option['ownerExclude']}", 't' => "not owned by" }
-      @option['ownerExclude'].split($delimiters).each { |owner|
+      @option['ownerExclude'].split($delimiters).each{ |owner|
         @filtered.ownerExclude(owner)
       }
     end
     if (@option['ownerInclude'])
       @appliedFilters['-i'] = { 'f' => "#{@option['ownerInclude']}", 't' => "owned by" }
-      @option['ownerInclude'].split($delimiters).each { |owner|
+      @option['ownerInclude'].split($delimiters).each{ |owner|
         @filtered.ownerInclude(owner)
       }
     end
@@ -633,13 +633,13 @@ class GeoToad
     beforeFilterTotal = @filtered.totalWaypoints
     if (@option['userExclude'])
       @appliedFilters['-E'] = { 'f' => "#{@option['userExclude']}", 't' => "not done by" }
-      @option['userExclude'].split($delimiters).each { |user|
+      @option['userExclude'].split($delimiters).each{ |user|
         @filtered.userExclude(user)
       }
     end
     if (@option['userInclude'])
       @appliedFilters['-e'] = { 'f' => "#{@option['userInclude']}", 't' => "done by" }
-      @option['userInclude'].split($delimiters).each { |user|
+      @option['userInclude'].split($delimiters).each{ |user|
         @filtered.userInclude(user)
       }
     end
@@ -677,7 +677,7 @@ class GeoToad
     @detail.preserve = @preserveCache
     token = 0
 
-    wpFiltered.each_key { |wid|
+    wpFiltered.each_key{ |wid|
       token = token + 1
       detailURL = @detail.fullURL(wid)
       page = ShadowFetch.new(detailURL)
@@ -823,13 +823,13 @@ class GeoToad
     beforeFilterTotal = @filtered.totalWaypoints
     if (@option['userExclude'])
       @appliedFilters['-E'] = { 'f' => "#{@option['userExclude']}", 't' => "not done by" }
-      @option['userExclude'].split($delimiters).each { |user|
+      @option['userExclude'].split($delimiters).each{ |user|
         @filtered.userExclude(user)
       }
     end
     if (@option['userInclude'])
       @appliedFilters['-e'] = { 'f' => "#{@option['userInclude']}", 't' => "done by" }
-      @option['userInclude'].split($delimiters).each { |user|
+      @option['userInclude'].split($delimiters).each{ |user|
         @filtered.userInclude(user)
       }
     end
@@ -839,13 +839,13 @@ class GeoToad
     beforeFilterTotal = @filtered.totalWaypoints
     if (@option['attributeExclude'])
       @appliedFilters['-A'] = { 'f' => "#{@option['attributeExclude']}", 't' => "attr no" }
-      @option['attributeExclude'].split($delimiters).each { |attribute|
+      @option['attributeExclude'].split($delimiters).each{ |attribute|
         @filtered.attributeExclude(attribute)
       }
     end
     if (@option['attributeInclude'])
       @appliedFilters['-a'] = { 'f' => "#{@option['attributeExclude']}", 't' => "attr yes" }
-      @option['attributeInclude'].split($delimiters).each { |attribute|
+      @option['attributeInclude'].split($delimiters).each{ |attribute|
         @filtered.attributeInclude(attribute)
       }
     end
@@ -936,7 +936,7 @@ class GeoToad
     displayInfo message
     debug "Using output #{outputDir}/#{outputFileBase}"
     # loop over all chosen formats
-    @formatTypes.split($delimiters).each { |formatType|
+    @formatTypes.split($delimiters).each{ |formatType|
       output = Output.new
       displayInfo "Output format:   #{output.formatDesc(formatType)} (#{formatType})"
       output.input(@filtered.waypoints)

@@ -299,7 +299,7 @@ class CacheDetails
     # catch bad input data
     begin
     # start with single-line matches
-    data.split("\n").each { |line|
+    data.split("\n").each{ |line|
       # <title id="pageTitle">(GC1145) Lake Crabtree computer software store by darylb</title>
       if line =~ /<title.*>\((GC\w+)\) \s*(.*? by .*?)\s*</
         wid = $1
@@ -464,7 +464,7 @@ class CacheDetails
         # is this really necessary?
         line.gsub!(/<p[^>]*>/, '')
         # <img src="/images/attributes/bicycles-no.gif" alt="no bikes" width="30" height="30" />
-        line.scan(/\/images\/attributes\/(.+?)\.gif. alt=\"(.*?)\"[^>]*\/>/) { |icon, alt|
+        line.scan(/\/images\/attributes\/(.+?)\.gif. alt=\"(.*?)\"[^>]*\/>/){ |icon, alt|
           # convert each image name into index/value pair, keep related text
           aid, ainc = parseAttr(icon)
           debug3 "attribute #{anum}: ic=#{icon} id=#{aid} inc=#{ainc} alt=#{alt} "
@@ -612,7 +612,7 @@ class CacheDetails
       debug2 "List of trackables: #{line}"
       trackables = ''
       # split at icon tag, drop everything before
-      line.gsub(/^.*?</, '').split(/</).each { |item|
+      line.gsub(/^.*?</, '').split(/</).each{ |item|
         debug2 "trackable item #{item}"
         item.gsub!(/[^>]*>\s*/, '')
         item.gsub!(/[,\s]*$/, '')
@@ -675,7 +675,7 @@ class CacheDetails
       cache['last_find_type'] = comments[0]['type']
       cache['last_find_days'] = daysAgo(comments[0]['date'])
       # Remove possibly unpaired font tags (issue 231)
-      (0...comments.length).each { |c|
+      (0...comments.length).each{ |c|
         cache['comments'][c]['text'].gsub!(/<\/?font[^>]*>/, '')
       }
       if cache['membersonly']
@@ -784,8 +784,8 @@ class CacheDetails
     # </dt>
     # <dd>
     # Gut gefunden. Man sollte nur auf Muggels achten!  Danke!</dd>
-    #data.scan(/<dt.*?icon_(\w+).*?alt=\"(.*?)\".*?, ([\w, ]+)\s+by <strong>\s*(.*?)\s*<\/strong>.*?<dd>\s*(.*?)\s*<\/dd>/m) { |icon, type, datestr, user, comment|
-    data.scan(/<dt.*?\/([\w]+)\.[^\.]+?\salt=\"(.*?)\".*?, ([\w, ]+)\s+by <strong>\s*(.*?)\s*<\/strong>.*?<dd>\s*(.*?)\s*<\/dd>/m) { |icon, type, datestr, user, comment|
+    #data.scan(/<dt.*?icon_(\w+).*?alt=\"(.*?)\".*?, ([\w, ]+)\s+by <strong>\s*(.*?)\s*<\/strong>.*?<dd>\s*(.*?)\s*<\/dd>/m){ |icon, type, datestr, user, comment|
+    data.scan(/<dt.*?\/([\w]+)\.[^\.]+?\salt=\"(.*?)\".*?, ([\w, ]+)\s+by <strong>\s*(.*?)\s*<\/strong>.*?<dd>\s*(.*?)\s*<\/dd>/m){ |icon, type, datestr, user, comment|
       debug2 "comment date: #{datestr}, icon: #{icon}, type: #{type}, user: #{user}"
       # strip "icon_" from old style image name
       icon.gsub!(/^icon_/, '')

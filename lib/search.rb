@@ -276,7 +276,7 @@ class SearchCache
     text = v
     # base(base) to numeric
     value = 0
-    (0...text.length).each { |index|
+    (0...text.length).each{ |index|
       digit =  (code =~ /#{text[index,1]}/)
       if not digit
         # serious error: we're pretty sure to know the character set
@@ -351,7 +351,7 @@ class SearchCache
     # unfortunately there's no native xor for strings
     encoded = text.unpack("c" * textlen)
     decoded = []
-    textlen.times { |index|
+    textlen.times{ |index|
       decoded[index] = (encoded[index] ^ xorpattern[index].hex).chr
     }
     dd = decoded.join.split("|")
@@ -432,7 +432,7 @@ class SearchCache
       debug "Unknown cache, error 404"
       return nil
     end
-    data.split("\n").each { |line|
+    data.split("\n").each{ |line|
       line.gsub!(/&#39;/, '\'')
       case line
       # wherigo cartridge link
@@ -694,7 +694,7 @@ class SearchCache
     #end
     page.localExpiry = @ttl
     if (post_vars.length > 0)
-      page.postVars=post_vars.dup
+      page.postVars = post_vars.dup
     end
 
     if (page.fetch)
@@ -785,7 +785,7 @@ class SearchCache
 
     inresultstable = false
     begin
-    data.split("\n").each { |line|
+    data.split("\n").each{ |line|
       # GC change 2010-11-09
       line.gsub!(/&#39;/, '\'')
 

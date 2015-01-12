@@ -55,7 +55,7 @@ class ShadowFetch
 
   def postVars=(vars)
     if vars
-      vars.each_key {|key|
+      vars.each_key{ |key|
         if key !~ /^__/
           debug2 "SET #{key}: #{(key =~ /[Pp]assword/)?'(hidden)':vars[key]}"
         end
@@ -81,7 +81,7 @@ class ShadowFetch
   def cacheFile(url)
     if (@postVars)
       postdata=''
-      @postVars.each_key { |key|
+      @postVars.each_key{ |key|
         postdata = postdata + "#{key}=#{@postVars[key]}"
       }
 

@@ -83,7 +83,7 @@ class GeoCode
     results = data.split(/<\/result>/)
     count = results.length - 1
     debug "Number of results: #{count}"
-    results[0].split("\n").each { |line|
+    results[0].split("\n").each{ |line|
       case line
       when /<formatted_address>(.*?)<\/formatted_address>/
         location = $1
