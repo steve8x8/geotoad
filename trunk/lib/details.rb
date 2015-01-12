@@ -19,6 +19,41 @@ class CacheDetails
     @waypointHash = data
     @useShadow = 1
     @preserve = nil
+
+    @cachetypenum = {
+	'2'	=> 'Traditional Cache',
+	'3'	=> 'Multi-cache',
+	'4'	=> 'Virtual Cache',
+	'5'	=> 'Letterbox Hybrid',
+	'6'	=> 'Event Cache',
+	'8'	=> 'Unknown Cache', # now: 'Mystery Cache',
+	'9'	=> 'Project APE Cache',
+	'11'	=> 'Webcam Cache',
+	'12'	=> 'Locationless (Reverse) Cache',
+	'13'	=> 'Cache In Trash Out Event',
+	'137'	=> 'EarthCache',
+	'453'	=> 'Mega-Event Cache',
+	'1304'	=> 'GPS Adventures Exhibit',
+	'1858'	=> 'Wherigo Cache',
+	'3653'	=> 'Lost and Found Event Cache',
+	'3773'	=> 'Groundspeak HQ', # now: 'Geocaching HQ',
+	'3774'	=> 'Groundspeak Lost and Found Celebration',
+	'4738'	=> 'Geocaching Block Party',
+	'7005'	=> 'Giga-Event Cache',
+	'cito'		=> 'Cache In Trash Out Event',
+	'earthcache'	=> 'EarthCache',
+	'event'		=> 'Event Cache',
+	'giga'		=> 'Giga-Event Cache',
+	'locationless'	=> 'Locationless (Reverse) Cache',
+	'maze'		=> 'GPS Adventures Exhibit',
+	'mega'		=> 'Mega-Event Cache',
+	'multi'		=> 'Multi-cache',
+	'traditional'	=> 'Traditional Cache',
+	'unknown'	=> 'Unknown Cache', # now: 'Mystery Cache',
+	'virtual'	=> 'Virtual Cache',
+	'webcam'	=> 'Webcam Cache',
+	'wherigo'	=> 'Wherigo Cache',
+    }
   end
 
   def waypoints
@@ -339,9 +374,20 @@ class CacheDetails
       # <h2>
       #     <img src="../images/WptTypes/2.gif" alt="Traditional Cache" width="32" height="32" />&nbsp;Lake Crabtree computer software store
       # </h2>
-      if line =~ /WptTypes.*? alt=\"(.*?)\".*?\/>(.nbsp;)?\s*(.*?)\s*$/
-        full_type = $1
-        name = $3
+      if line =~ /WptTypes\/(\w+)\.[^>]* alt=\"(.*?)\".*?\/>(.nbsp;)?\s*(.*?)\s*$/
+        debug "found ccode=#{$1}, type=#{$2} name=#{$4}"
+        ccode = $1
+        full_type = $2
+        name = $4
+        # traditional_72 etc.
+        if ccode =~ /^(\w+)_\d+/
+          ccode = $1
+        end
+        if @cachetypenum[ccode]
+          full_type = @cachetypenum[ccode]
+        else
+          displayWarning "Cache image code #{ccode} for #{full_type} - please report"
+        end
         if ! cache
           displayWarning "Found waypoint type, but never saw cache title. Did geocaching.com change their layout again?"
         end
@@ -360,11 +406,13 @@ class CacheDetails
             cache['type'] = 'cito'
           when /Lost and Found Celebration/
             cache['type'] = 'lfceleb'
-          when /Lost and Found/
+          when /Lost and Found Event/
             cache['type'] = 'lost+found'
           when /Project APE Cache/
             cache['type'] = 'ape'
           when /Groundspeak HQ/
+            cache['type'] = 'gshq'
+          when /Geocaching HQ/
             cache['type'] = 'gshq'
           when /Locationless/
             cache['type'] = 'reverse'
@@ -376,7 +424,7 @@ class CacheDetails
           when /Mystery/
             cache['fulltype'] = 'Unknown Cache'
             cache['type'] = 'unknown'
-          # 2014-08-26
+          # 2014-08-26 - obsolete?
           when /Traditional/
             cache['fulltype'] = 'Traditional Cache'
             cache['type'] = 'traditional'

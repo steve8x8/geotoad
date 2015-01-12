@@ -55,6 +55,41 @@ class SearchCache
     }
     @txfilter = nil
 
+    @cachetypenum = {
+	'2'	=> 'Traditional Cache',
+	'3'	=> 'Multi-cache',
+	'4'	=> 'Virtual Cache',
+	'5'	=> 'Letterbox Hybrid',
+	'6'	=> 'Event Cache',
+	'8'	=> 'Unknown Cache', # now: 'Mystery Cache',
+	'9'	=> 'Project APE Cache',
+	'11'	=> 'Webcam Cache',
+	'12'	=> 'Locationless (Reverse) Cache',
+	'13'	=> 'Cache In Trash Out Event',
+	'137'	=> 'EarthCache',
+	'453'	=> 'Mega-Event Cache',
+	'1304'	=> 'GPS Adventures Exhibit',
+	'1858'	=> 'Wherigo Cache',
+	'3653'	=> 'Lost and Found Event Cache',
+	'3773'	=> 'Groundspeak HQ', # now: 'Geocaching HQ',
+	'3774'	=> 'Groundspeak Lost and Found Celebration',
+	'4738'	=> 'Geocaching Block Party',
+	'7005'	=> 'Giga-Event Cache',
+	'cito'		=> 'Cache In Trash Out Event',
+	'earthcache'	=> 'EarthCache',
+	'event'		=> 'Event Cache',
+	'giga'		=> 'Giga-Event Cache',
+	'locationless'	=> 'Locationless (Reverse) Cache',
+	'maze'		=> 'GPS Adventures Exhibit',
+	'mega'		=> 'Mega-Event Cache',
+	'multi'		=> 'Multi-cache',
+	'traditional'	=> 'Traditional Cache',
+	'unknown'	=> 'Unknown Cache', # now: 'Mystery Cache',
+	'virtual'	=> 'Virtual Cache',
+	'webcam'	=> 'Webcam Cache',
+	'wherigo'	=> 'Wherigo Cache',
+    }
+
     # exclude own found
     @notyetfound = false
 
@@ -502,20 +537,13 @@ class SearchCache
         wid = $1
         debug "Found WID: #{wid} (s2phone)"
        # premium-member only
-      when /WptTypeImage.*\/wpttypes\/(\d+)/
-        ccode = $1.to_i
-        # list covers only "standard" types
-        if ccode == 2
-          ctype = 'Traditional Cache'
-        elsif ccode == 3
-          ctype = 'Multi-Cache'
-        elsif ccode == 5
-          ctype = 'Letterbox Hybrid'
-        elsif ccode == 15
-          ctype = 'Earthcache'
-        elsif ccode == 1858
-          ctype = 'Wherigo Cache'
+      when /WptTypeImage.*\/wpttypes\/(\w+)\./
+        ccode = $1
+        # list covers only "standard" types! This may be incorrect
+        if @cachetypenum[ccode]
+          ctype = @cachetypenum[ccode]
         else
+          displayWarning "Cache image code #{ccode} for WID #{wid.inspect} - please report"
           ctype = 'Unknown Cache'
         end
         debug "Found PMO type code #{ccode} -> #{ctype}"
@@ -936,13 +964,22 @@ class SearchCache
       # <a href="/seek/cache_details.aspx?guid=ecfd0038-8e51-4ac8-a073-1aebe7c10cbc" class="lnk">
       # ...<img src="http://www.geocaching.com/images/wpttypes/sm/3.gif" alt="Multi-cache" title="Multi-cache" /></a>
       # ... <a href="/seek/cache_details.aspx?guid=ecfd0038-8e51-4ac8-a073-1aebe7c10cbc" class="lnk  Strike"><span>Besinnungsweg</span></a>
-      when /(<img[^>]*alt=\"(.*?)\".*)?cache_details.aspx\?guid=([0-9a-f-]*)([^>]*)><span>\s*(.*?)\s*<\/span><\/a>/
-        debug "found type=#{$2} guid=#{$3} name=#{$5}"
-        cache['guid'] = $3
-        strike = $4
-        name = $5
-      # type is also in here!
-        full_type = $2
+      when /(<img.*?wpttypes\/(\w+)\.[^>]*alt=\"(.*?)\".*)?cache_details.aspx\?guid=([0-9a-f-]*)([^>]*)><span>\s*(.*?)\s*<\/span><\/a>/
+        debug "found cd ccode=#{$2} type=#{$3} guid=#{$4} name=#{$6}"
+        ccode = $2
+        full_type = $3
+        cache['guid'] = $4
+        strike = $5
+        name = $6
+        # traditional_72 etc.
+        if ccode =~ /^(\w+)_\d+/
+          ccode = $1
+        end
+        if @cachetypenum[ccode]
+          full_type = @cachetypenum[ccode]
+        else
+          displayWarning "Cache image code #{ccode} for #{full_type} - please report"
+        end
         # there may be more than 1 match, don't overwrite
         if cache['fulltype']
           debug "Not overwriting \"#{cache['fulltype']}\"(#{cache['type']} with \"#{full_type}\""
@@ -955,11 +992,13 @@ class SearchCache
             cache['type'] = 'cito'
           when /Lost and Found Celebration/
             cache['type'] = 'lfceleb'
-          when /Lost and Found/
+          when /Lost and Found Event/
             cache['type'] = 'lost+found'
           when /Project APE Cache/
             cache['type'] = 'ape'
           when /Groundspeak HQ/
+            cache['type'] = 'gshq'
+          when /Geocaching HQ/
             cache['type'] = 'gshq'
           when /Locationless/
             cache['type'] = 'reverse'
@@ -1008,12 +1047,21 @@ class SearchCache
         debug "guid=#{cache['guid']} name=#{cache['name']} (disabled=#{cache['disabled']}, archived=#{cache['archived']})"
 
       # 2013-08-21:
-      when /(<img[^>]*alt=\"(.*?)\".*)?\/geocache\/(GC[0-9A-Z]+)([^>]*)><span>\s*(.*?)\s*<\/span><\/a>/
-        debug "found type=#{$2} wid=#{$3} name=#{$5}"
-        strike = $4
-        name = $5
-      # type is also in here!
-        full_type = $2
+      when /(<img.*?wpttypes\/(\w+)\.[^>]*alt=\"(.*?)\".*)?\/geocache\/(GC[0-9A-Z]+)([^>]*)><span>\s*(.*?)\s*<\/span><\/a>/
+        debug "found gc ccode=#{$2} type=#{$3} wid=#{$4} name=#{$6}"
+        ccode = $2
+        full_type = $3
+        strike = $5
+        name = $6
+        # traditional_72 etc.
+        if ccode =~ /^(\w+)_\d+/
+          ccode = $1
+        end
+        if @cachetypenum[ccode]
+          full_type = @cachetypenum[ccode]
+        else
+          displayWarning "Cache image code #{ccode} for #{full_type} - please report"
+        end
         # there may be more than 1 match, don't overwrite
         if cache['fulltype']
           debug "Not overwriting \"#{cache['fulltype']}\"(#{cache['type']} with \"#{full_type}\""
@@ -1026,11 +1074,13 @@ class SearchCache
             cache['type'] = 'cito'
           when /Lost and Found Celebration/
             cache['type'] = 'lfceleb'
-          when /Lost and Found/
+          when /Lost and Found Event/
             cache['type'] = 'lost+found'
           when /Project APE Cache/
             cache['type'] = 'ape'
           when /Groundspeak HQ/
+            cache['type'] = 'gshq'
+          when /Geocaching HQ/
             cache['type'] = 'gshq'
           when /Locationless/
             cache['type'] = 'reverse'
