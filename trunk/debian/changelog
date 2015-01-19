@@ -1,3 +1,11 @@
+geotoad (3.22.2) unstable; urgency=low
+
+  * New version 3.22.2, "Happy 2015"
+  * Issue 313: New cache type extraction from search results, finally language-proof
+  * Smaller bugfixes, cleanups, etc.
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Fri, 23 Jan 2015 10:00:00 +0000
+
 geotoad (3.22.1) unstable; urgency=low
 
   * New version 3.22.1, "Mary X"
