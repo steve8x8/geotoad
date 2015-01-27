@@ -180,13 +180,14 @@ class GeoToad
     # 't': title << "#{h['t']} #{h['f']}"}"
     @appliedFilters    = Hash.new
 
-    @formatTypes.split($delimiters).each{ |formatType|
-      if ! $validFormats.include?(formatType)
-        displayError "#{formatType} is not a valid supported format."
-        @uin.usage
-        exit
-      end
-    }
+# No early format validity check
+#    @formatTypes.split($delimiters).each{ |formatType|
+#      if ! $validFormats.include?(formatType)
+#        displayError "#{formatType} is not a valid supported format."
+#        @uin.usage
+#        exit
+#      end
+#    }
 
     @limitPages = @option['limitSearchPages'].to_i
     debug "Limiting search to #{@limitPages.inspect} pages" if (@limitPages != 0)
@@ -937,6 +938,10 @@ class GeoToad
     debug "Using output #{outputDir}/#{outputFileBase}"
     # loop over all chosen formats
     @formatTypes.split($delimiters).each{ |formatType|
+      if ! $validFormats.include?(formatType)
+        displayWarning "#{formatType} is not a valid supported format - skipping."
+        next
+      end
       output = Output.new
       displayInfo "Output format:   #{output.formatDesc(formatType)} (#{formatType})"
       output.input(@filtered.waypoints)
