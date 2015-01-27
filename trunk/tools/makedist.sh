@@ -242,6 +242,8 @@ EOF
       read -p "*** Press ENTER when done (${DISTNAME}_Windows_Installer$SUFFIX.exe exists): " x
     fi
   done #RUBYVERSIONS
+  pwd
+  ls *_Installer*.exe
   if [ -n "`ls 2>/dev/null *_Installer*.exe`" ]; then
     echo "Done."
   else

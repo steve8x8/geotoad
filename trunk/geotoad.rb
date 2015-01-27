@@ -977,11 +977,6 @@ class GeoToad
     } # end format loop
   end
 
-
-  def close
-    # Not currently used.
-  end
-
 end
 
 # for Ocra build
@@ -1029,9 +1024,6 @@ while true
       cli.displayMessage "After filtering, no caches are left matching your requirements."
     end
   end
-  # dummy operation
-  cli.close
-
 
   # Don't loop if you're in automatic mode.
   if ($mode == "TUI")
