@@ -59,13 +59,19 @@ class GeoToad
 
   def initialize
     $debugMode    = 0
-    output        = Output.new
-    $validFormats = output.formatList.sort
+#    output        = Output.new
+#    $validFormats = output.formatList.sort
     @uin          = Input.new
     $CACHE_DIR    = findCacheDir()
     @configDir    = findConfigDir
-    $mapping      = loadMapping()
+#    $mapping      = loadMapping()
     $membership   = nil # unknown before searching
+  end
+
+  def populate
+    output        = Output.new
+    $validFormats = output.formatList.sort
+    $mapping      = loadMapping()
   end
 
   def caches(num, what = "cache", length = 4)
@@ -88,6 +94,11 @@ class GeoToad
       $stdin.gets
       @option = @uin.interactive
       $mode = 'TUI'
+    end
+
+    # if version info requested, skip other checks
+    if @option['version']
+      return @option
     end
 
     # enable synchronous output if selected by user
@@ -991,17 +1002,32 @@ exit if Object.const_defined?(:Ocra)
 # have some output before initializing the GeoToad, Output, Template classes
 include Messages
 displayTitle "GeoToad #{$VERSION} (Ruby #{RUBY_VERSION}p#{RUBY_PATCHLEVEL}/#{RUBY_RELEASE_DATE} on #{RUBY_PLATFORM})"
-displayInfo "Report bugs or suggestions at http://code.google.com/p/geotoad/issues/"
-displayInfo "Please include verbose output (-v) without passwords in the bug report."
-displayBar
+# initialize method: 1st part of init
 cli = GeoToad.new
-cli.versionCheck
-displayBar
 
+loopcount = 0
 while true
   options = cli.getoptions
   if options['clearCache']
     cli.clearCacheDirectory()
+  end
+  if options['version']
+    # version information has been shown above
+    exit
+  end
+
+  if (loopcount == 0) # do only once, like before
+    displayInfo "Report bugs or suggestions at http://code.google.com/p/geotoad/issues/"
+    displayInfo "Please include verbose output (-v) without passwords in the bug report."
+    displayBar
+
+    # second part of initialize
+    cli.populate
+
+    cli.versionCheck
+    displayBar
+
+    loopcount = loopcount + 1
   end
 
   # avoid login if clearing only

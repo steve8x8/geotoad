@@ -109,7 +109,7 @@ class Input
       [ "--user",          "--username", "-u",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--unbufferedOutput",            "-U",    GetoptLong::NO_ARGUMENT ],
       [ "--verbose",          "--debug", "-v",    GetoptLong::NO_ARGUMENT ],
-
+      [ "--version",    "--showVersion", "-V",    GetoptLong::NO_ARGUMENT ],
       [ "--waypointLength",              "-w",    GetoptLong::REQUIRED_ARGUMENT ],
 
       [ "--format",                      "-x",    GetoptLong::REQUIRED_ARGUMENT ],
@@ -305,11 +305,14 @@ class Input
     puts " -X                     emergency switch: disable early filtering"
     puts " -C                     selectively clear local browser cache"
     puts " -U                     use unbuffered output"
+    puts " -V                     show version, then exit"
     puts ""
     puts "See manual page for more details, including \"long\" options."
     puts ""
-    puts "::: OUTPUT FORMATS:"
     outputDetails = Output.new
+    $validFormats = outputDetails.formatList.sort
+    puts ""
+    puts "::: OUTPUT FORMATS:"
     column = 0
     $validFormats.each{ |f|
       type = f.dup
