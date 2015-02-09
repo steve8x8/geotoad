@@ -128,6 +128,7 @@ syntax: geotoad [options] <search:search2:search3>
  -X                     emergency switch: disable early filtering
  -C                     selectively clear local browser cache
  -U                     use unbuffered output
+ -V                     show version, then exit
 
 ::: OUTPUT FORMATS:
  cachemate(=)  cetus(+)      csv           delorme       delorme-nourl
