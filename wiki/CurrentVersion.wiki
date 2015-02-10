@@ -13,6 +13,8 @@ version=3.22.2
   * Issue 313: New cache type extraction from search results, finally language-proof
   * Smaller bugfixes, cleanups, etc.
 
+== Download location: ==
+  * https://drive.google.com/folderview?id=0B214JJmar6j-TzRtdnRhdEhNYUE
 ----
 = What's new in 3.22.1? =
   * nicknamed "Mary X" (well...)
