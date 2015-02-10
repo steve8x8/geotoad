@@ -235,7 +235,7 @@ class GeoToad
       if comparableVersion(latestVersion) > comparableVersion($VERSION)
         displayBar
         displayWarning "VersionCheck: GeoToad #{latestVersion} is now available!"
-        displayWarning "Download from http://code.google.com/p/geotoad/downloads/list"
+        displayWarning "Download from: See Release Notes!"
         displayMessage "Release Notes below:"
         displayBar
         version.data.scan(/<div .*? id=\"wikimaincol\">\s*(.*?)\s*(<hr\/>|<\/div>)/im) do |notes|
