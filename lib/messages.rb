@@ -50,7 +50,15 @@ module Messages
 
   # display boxed text
   def displayBox(text, len = 78)
-    puts "|  #{text.ljust(len-6)}  |"[0..(len-1)]
+    #puts "| #{text.ljust(len-4)} |"[0..(len-1)]
+    if text.length <= (len-4)
+      # single-line output
+      puts "| #{text.ljust(len-4)} |"
+    else
+      # break into max two lines
+      puts "| #{text[0..(len-5)].ljust(len-4)}>|"
+      puts "|>#{text[(len-4)..-1].ljust(len-4)} |"[0..(len-1)]
+    end
   end
 
   # fatal errors

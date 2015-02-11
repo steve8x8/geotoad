@@ -120,7 +120,7 @@ class GeoToad
         enableDebug
       end
     else
-      displayInfo "Suppressing debug output"
+      debug "Suppressing debug output"
       disableDebug
     end
 
@@ -216,6 +216,7 @@ class GeoToad
 
   def versionCheck
     if $VERSION =~ /CURRENT/
+      displayWarning "Not checking for updates"
       return nil
     end
 
@@ -223,7 +224,7 @@ class GeoToad
 
     debug "Checking for latest version of GeoToad from #{url}"
     version = ShadowFetch.new(url)
-    version.localExpiry = 3 * 86400	# 3 days
+    version.localExpiry = 1 * 86400	# 1 day
     version.maxFailures = 0
     version.fetch
 
