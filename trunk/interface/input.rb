@@ -81,7 +81,7 @@ class Input
       [ "--favFactorMin",    "--minFav", "-g",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--favFactorMax",    "--maxFav", "-G",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--help",                        "-h",    GetoptLong::NO_ARGUMENT ],
-      [ "--noHistory",                   "-H",    GetoptLong::NO_ARGUMENT ],
+
       [ "--ownerInclude",        "--by", "-i",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--ownerExclude",     "--notby", "-I",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--placeDateInclude", "--since", "-j",    GetoptLong::REQUIRED_ARGUMENT ],

@@ -138,11 +138,6 @@ class GeoToad
       exit
     end
 
-    if @option['noHistory']
-      displayWarning "The \"noHistory\" (-H) option is no longer supported."
-      displayWarning "It will cause an error in a future release. Please fix your command-line."
-    end
-
     if ! @option['clearCache'] && ! @queryArg
       displayError "You forgot to specify a #{@queryType} search argument"
       @uin.usage
