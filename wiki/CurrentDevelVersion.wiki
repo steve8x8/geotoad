@@ -12,4 +12,3 @@ version=9.99.9
 
 = See also: =
   * [CurrentVersion Current stable version]
-  * [DebianUbuntuRepository Debian/Ubuntu repository]
