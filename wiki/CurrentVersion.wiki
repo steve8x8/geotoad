@@ -1,15 +1,25 @@
 #summary Features of current version
 #labels Featured
 
-version=3.22.2
+version=3.22.3
 
-= "Happy 2015" (dedicated to someone special) release (Jan 23, 2015) =
+= "Go CreaTe!" (hi, C.!) release (Feb 27, 2015) =
 
+= What's new in 3.22.3? =
+  * nicknamed "Go CreaTe!"
+
+== Issues addressed: ==
+  * --version (-V) option, can be combined with -C
+  * --noHistory (-H) option dropped, causes error now!
+  * Other minor stuff
+
+== Download location: ==
+  * https://drive.google.com/folderview?id=0B214JJmar6j-cGY3T1hYSFlidDQ
+----
 = What's new in 3.22.2? =
   * nicknamed "Happy 2015" (guess why)
 
 == Issues addressed: ==
-  * New version 3.22.2, "Happy 2015"
   * Issue 313: New cache type extraction from search results, finally language-proof
   * Smaller bugfixes, cleanups, etc.
 

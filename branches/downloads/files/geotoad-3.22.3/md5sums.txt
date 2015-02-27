@@ -1,0 +1,8 @@
+a5e6745b31e387169dd2a74ff348c2a8  geotoad_3.22.3-1_all.deb
+3eaf75d345725c52a52e97c299a742b3  geotoad_3.22.3-1.debian.tar.gz
+41896c53dc62f3ee0bc31ec2b1dc9fcb  geotoad_3.22.3-1.dsc
+978d6aa010a33a243f7fc53ed71dc0e8  geotoad_3.22.3-1_i386.changes
+8d1b4aecc8077d56d9ffe2e17db01e0d  geotoad-3.22.3_MacOSX.dmg
+193da918acb9957567d7b9b2e35f46c6  geotoad_3.22.3.orig.tar.gz
+193da918acb9957567d7b9b2e35f46c6  geotoad-3.22.3.tar.gz
+39626b2c93ae153aefa4023df7dfb040  geotoad-3.22.3_Windows_Installer.exe
