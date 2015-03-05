@@ -40,4 +40,20 @@ template = {
       " \"<%wpText.name%>\" by <%wpText.creator%>\n"
   },
 
+  # derived from "sms" as well, different coord representation
+  'sms4' => {
+    'ext'         => 'sms4',
+    'mime'        => 'text/plain',
+    'desc'        => '(SMS) Shorten relevant infos for SMS info',
+    'spacer'      => "",
+    'templatePre' => "",
+    'templateWP'  => "coord.info/<%out.wid%>" +
+      " <%out.latdegmin%> <%out.londegmin%>" +
+      " <%out.nuvi%> -" +
+      " \"<%wpText.name%>\"" +
+      " (<%wpText.creator%>" +
+      " <%out.cdateshort%>)" +
+      "\n"
+  },
+
 }
