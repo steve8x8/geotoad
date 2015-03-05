@@ -1301,6 +1301,8 @@ class Output
         sprintf("%.1f", cache['difficulty']).gsub(/\.5/, '\'').gsub(/\.0/, ' ') +
         sprintf("%.1f", cache['terrain']).gsub(/\.5/, '\'').gsub(/\.0/, ' ') +
         cache['size'][0..1].capitalize + ((cache['membersonly']) ? '$' : '') + ((archived) ? '%' : '') + ((available or archived) ? '' : '?'),
+      # Premium/Archive/Disabled
+      'pad' => ((cache['membersonly']) ? '$' : '') + ((archived) ? '%' : '') + ((available or archived) ? '' : '?'),
     }
     rescue => e
       displayWarning "Problem (#{e}) while converting cache #{wid}:\n#{cache.inspect}"
