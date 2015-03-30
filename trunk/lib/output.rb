@@ -734,7 +734,7 @@ class Output
 
     text.gsub!(/\n\n\n+/, "\n\n")
     # unprintable characters
-    text.gsub!(/[\x01-\x09\x0B-\x1F\x7F]/, '')
+    text.gsub!(/[\x00-\x09\x0B-\x1F\x7F]/, '')
     # remaining &s
     text.gsub!(/\&/, '+')
     # kill trailing space, which makes the CSV output nicer.
@@ -1300,9 +1300,16 @@ class Output
       'nuvi' => cache['type'][0..1].capitalize +
         sprintf("%.1f", cache['difficulty']).gsub(/\.5/, '\'').gsub(/\.0/, ' ') +
         sprintf("%.1f", cache['terrain']).gsub(/\.5/, '\'').gsub(/\.0/, ' ') +
-        cache['size'][0..1].capitalize + ((cache['membersonly']) ? '$' : '') + ((archived) ? '%' : '') + ((available or archived) ? '' : '?'),
+        cache['size'][0..1].capitalize +
+          ((cache['membersonly']) ? '$' : '') +
+            (cache['olddesc'] ? '+' : '') +
+          ((archived) ? '%' : '') +
+          ((available or archived) ? '' : '?'),
       # Premium/Archive/Disabled
-      'pad' => ((cache['membersonly']) ? '$' : '') + ((archived) ? '%' : '') + ((available or archived) ? '' : '?'),
+      'pad' => ((cache['membersonly']) ? '$' : '') +
+            (cache['olddesc'] ? '+' : '') +
+          ((archived) ? '%' : '') +
+          ((available or archived) ? '' : '?'),
     }
     rescue => e
       displayWarning "Problem (#{e}) while converting cache #{wid}:\n#{cache.inspect}"
