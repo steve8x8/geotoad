@@ -41,10 +41,23 @@ _*(current year on top; history at bottom)*_
   * *{{{Tucson.Main.release-20150316.Release_255}}}*
   * *{{{Tucson.Main.release-20150316.Release_260}}}*
 ----
-2015-03-26:
+2015-03-25:
   * *{{{Tucson.Main.release-20150325.1.Release_265}}}*
   * [http://forums.groundspeak.com/GC/index.php?showtopic=330746 release notes]
   * _"scripts aren't working anymore" - "bad luck"_
+----
+2015-03-30:
+  * *{{{Tucson.Main.release-20150330.1.Release_270}}}*
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=330903 release notes]
+  * _"seek" (old search page) is back for "a bit longer"_
+----
+2015-04-07:
+  * *{{{Tucson.Main.release-20150407.Release_272}}}*
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=331094 release notes]
+  * _message center hopefully not replacing "send email to"_
+  * *{{{Tucson.Main.release-20150407.Release_273}}}*
+  * "site update on Tuesday, August 14, 2015 at approximately 3pm PDT"
+  * *{{{Tucson.Main.release-20150414.Release_276}}}*
 ----
 == (now) ==
 ----
