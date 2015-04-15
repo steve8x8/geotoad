@@ -1,3 +1,11 @@
+geotoad (3.23.0) unstable; urgency=low
+
+  * New version 3.23.0, "April Fools"
+  * 3.23.0 marks the move from GoogleCode to GitHub
+  * some minor bugfixes
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Fri, 24 Apr 2015 10:00:00 +0000
+
 geotoad (3.22.3) unstable; urgency=low
 
   * New version 3.22.3, "Go CreaTe!"
