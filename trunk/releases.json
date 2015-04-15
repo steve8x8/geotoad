@@ -8,6 +8,14 @@
    "image": "http://code.google.com/p/geotoad/logo?cct=1379588096",
    "releases": [
       {
+        "version": "3.23.0",
+        "changes": "Major update. The usual feature additions and bug fixes. See Wiki:CurrentVersion for more.",
+        "scope": "major release",
+        "state": "mature",
+        "download": "https://drive.google.com/folderview?id=0B214JJmar6j-ZjNsUFp4M2tsMG8&usp=sharing#list",
+        "published": "2015-04-24T10:00:00+00:00"
+      },
+      {
         "version": "3.22.3",
         "changes": "Minor update. Some feature additions and bug fixes. See Wiki:CurrentVersion for more.",
         "scope": "minor bugfix and enhancement",
