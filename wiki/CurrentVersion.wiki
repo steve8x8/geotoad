@@ -1,10 +1,20 @@
 #summary Features of current version
 #labels Featured
 
-version=3.22.3
+version=3.23.0
 
-= "Go CreaTe!" (hi, C.!) release (Feb 27, 2015) =
+= "April Fools" (don't get fooled by this) release (Apr 24, 2015) =
 
+= What's new in 3.23.0? =
+  * nicknamed "April Fools"
+
+== Issues addressed: ==
+  * 3.23.0 marks the move from GoogleCode to GitHub
+  * some minor bugfixes
+
+== Download location: ==
+  * https://drive.google.com/folderview?id=0B214JJmar6j-ZjNsUFp4M2tsMG8
+----
 = What's new in 3.22.3? =
   * nicknamed "Go CreaTe!"
 
@@ -17,7 +27,7 @@ version=3.22.3
   * https://drive.google.com/folderview?id=0B214JJmar6j-cGY3T1hYSFlidDQ
 ----
 = What's new in 3.22.2? =
-  * nicknamed "Happy 2015" (guess why)
+  * nicknamed "Happy 2015"
 
 == Issues addressed: ==
   * Issue 313: New cache type extraction from search results, finally language-proof
@@ -28,7 +38,7 @@ version=3.22.3
   * no Debian/Ubuntu repository anymore
 ----
 = What's new in 3.22.1? =
-  * nicknamed "Mary X" (well...)
+  * nicknamed "Mary X"
 
 == Issues addressed: ==
   * Issue 309 aftermath

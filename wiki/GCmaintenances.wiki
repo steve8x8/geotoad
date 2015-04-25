@@ -56,8 +56,11 @@ _*(current year on top; history at bottom)*_
   * [http://forums.groundspeak.com/GC/index.php?showtopic=331094 release notes]
   * _message center hopefully not replacing "send email to"_
   * *{{{Tucson.Main.release-20150407.Release_273}}}*
-  * "site update on Tuesday, August 14, 2015 at approximately 3pm PDT"
+2015-04-14
+  * "site update on Tuesday, April 14, 2015 at approximately 3pm PDT"
   * *{{{Tucson.Main.release-20150414.Release_276}}}*
+  * [http://forums.groundspeak.com/GC/index.php?showtopic=331329 release notes]
+  * _week 2 of Message Center beta_
 ----
 == (now) ==
 ----
