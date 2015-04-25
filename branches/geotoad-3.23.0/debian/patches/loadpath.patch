@@ -1,0 +1,15 @@
+--- a/geotoad.rb
++++ b/geotoad.rb
+@@ -7,8 +7,10 @@
+ 
+ require 'pathname'
+ $BASEDIR = File.dirname(File.realpath(__FILE__))
+-$LOAD_PATH << $BASEDIR
+-$LOAD_PATH << File.join($BASEDIR, 'lib')
++# For Debian/Ubuntu, modules are below /usr/share/geotoad
++#$LOAD_PATH << $BASEDIR
++#$LOAD_PATH << File.join($BASEDIR, 'lib')
++$LOAD_PATH << '/usr/share/geotoad'
+ 
+ if RUBY_VERSION.gsub('.', '').to_i < 191
+   puts "ERROR: Your version of Ruby is #{RUBY_VERSION}, but we now require 1.9.1 or higher."

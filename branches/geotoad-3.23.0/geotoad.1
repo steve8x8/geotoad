@@ -1,0 +1,457 @@
+.TH "GEOTOAD" "1" "30 Nov 2014" "steve8x8@googlemail.com" "Geocaching Query Tool"
+
+.SH "NAME"
+geotoad \- geocaching query tool
+
+.SH "SYNOPSIS"
+.PP
+.B geotoad
+ will invoke text user interface (TUI)
+.PP
+.B geotoad \fI[options]\fR \fB[--]\fR \fI<search>\fR
+ (command-line version)
+
+.SH "NOTE"
+If GeoToad was not installed from a (distribution-specific) package
+(like .rpm for RedHat, OpenSuse, CentOS and derivatives; .deb for Debian
+and Ubuntu, etc.), it may be necessary to invoke GeoToad with the
+.B .rb
+suffix, as in \fBgeotoad.rb\fR, \fB./geotoad.rb\fR, \fBruby geotoad.rb\fR
+or even \fBruby1.9.3 geotoad.rb\fR
+(if the \fBruby\fR in your PATH is not the one you want to use).
+
+.SH "DESCRIPTION"
+GeoToad is software to help speed up the boring part of geocaching:
+choosing the cache(s) to target, and collecting the available data.
+.PP
+GeoToad lets you perform queries against the Geocaching website,
+and export the matching geocaches to numerous devices and over 20 file formats.
+.PP
+If run without any parameters,
+.B geotoad
+will launch the interactive mode ("text user interface", "TUI").
+It can also be used in command-line mode for specific queries.
+
+.SH "DISCLAIMER"
+GeoToad uses the public web pages created by GroundSpeak, to gather information
+about geocaches. It does not use the official API. Therefore, GeoToad's way
+of accessing information can be interpreted as "spidering" which is forbidden
+by GS's Terms of Use.
+Strictly speaking, using GeoToad may harm your GeoCaching account and possibly more!
+
+The authors have taken a few measures to reduce the impact of the website access,
+including a progressive slowdown for bigger queries, but there is no safe limit.
+
+The software is provided as-is, also in source form, for educational purposes.
+By using it to gather actual geocache descriptions and related information,
+you accept all liability for possible damages.
+
+.SH "OPTION SYNTAX"
+Where \fBmultiple entries\fR are possible (e.g. for cache sizes, owners, etc.,
+marked by \fB(MULTI)\fR below),
+they can be delimited by a pipe symbol (\fB|\fR) or a colon (\fB:\fR),
+or you can define your own delimiter(s).
+Make sure the pipe symbols are properly escaped from the command shell!
+.PP
+\fB"No-argument"\fR options, with the exception of \fB--verbose\fR which
+implements a counter, are \fB"toggles"\fR, i.e. they can be switched
+on by the first usage on the command line, switched off by the second, etc.
+.PP
+\fB(USERFILE)\fR - if the user name is followed by an "equal" sign and a filename
+(as in \fIusername\fR\fB=\fR\fIfilename\fR),
+instead of querying the server the first column of the file is interpreted as
+GCxxxxx cache IDs.
+\fBWarning:\fR Since colons are used as default \fB(MULTI)\fR delimiters,
+if you want to use a file from another (Windows) drive, or with a filename
+containing a colon for another reason, you will have to define your own
+delimiter (set) - see the \fB-m\fR option for that.
+
+.SH "OPTIONS"
+Option keywords are case-sensitive, and may be separated from values by whitespace
+or an equal sign \fB=\fR.
+Options can be unambiguously abbreviated, for example, \fB--password\fR may be written
+as \fB--pas\fR (but not \fB--p\fR).
+.PP
+\fB-h\fR|\fB--help\fR
+    get a short command-line option summary
+.PP
+\fB-v\fR|\fB--verbose\fR|\fB--debug\fR
+    enable debugging output - very helpful in case of malfunctions.
+    Multiple (currently up to 3) \fB-v\fR options raise the debug level, resulting in copious output.
+.PP
+.B User credentials:
+.PP
+\fB-u\fR|\fB--user\fR|\fB--username\fR \fIusername\fR
+    geocaching.com username (required)
+.PP
+\fB-p\fR|\fB--password\fR \fIpassword\fR
+    geocaching.com password (required)
+.PP
+\fB-P\fR|\fB--proxy\fR \fIproxy\fR
+    HTTP proxy server, http://username@password@host:port/
+.PP
+.B Query type:
+.PP
+\fB-q\fR|\fB--queryType\fR \fItype\fR
+    query type (default: \fBlocation\fR), choose from
+      \fB[location|coord|user|owner|country|state|keyword|wid|guid]\fR
+
+  Use \fBcoord\fR if you already have coordinates.
+  Coordinates may be given in the usual (Google Maps) representations:
+    dd.ddddd
+    dd mm.mmm
+    dd mm ss[.sss]
+  - possibly containing a degree symbol and a sign prefix.
+Both latitude and longitude must use the same representation.
+  \fBlocation\fR will use the Google Maps API to translate into coordinates.
+  \fBcountry\fR and \fBstate\fR queries require a \fInumerical id\fR which the TUI may tell you.
+.PP
+.B Output control:
+.PP
+\fB-o\fR|\fB--output\fR \fIfilename\fR
+    (first) output file name (default: created from query argument(s) and options)
+    In case of multiple output formats, subsequent file names are derived from this one.
+.PP
+\fB-x\fR|\fB--format\fR \fIformat\fR  \fB(MULTI)\fR
+    output format type(s) (default: gpx)
+    See the \fBOUTPUT FORMATS\fR section below for the list of supported formats.
+.PP
+\fB-w\fR|\fB--waypointLength\fR \fIlength\fR
+    set EasyName waypoint id length. (default: 0=use WID)
+    \fINote\fR: negative values are no longer allowed.
+.PP
+\fB-l\fR|\fB--logCount\fR \fIcount\fR
+    limit number of log entries (default: 10)
+    Currently, there is a maximum of 10 imposed by GC's interface.
+.PP
+.B Limit queries:
+.PP
+\fB-y\fR|\fB--distanceMax\fR|\fB--radius\fR \fI0.01-500[km]\fR
+    distance maximum in miles or km (default: 10mi)
+    Applies to \fBlocation\fR and \fBcoord\fR queries only.
+.PP
+\fB-L\fR|\fB--limitSearchPages\fR \fIcount\fR
+    limit number of search pages (default: 0=unlimited)
+.PP
+\fB-Y\fR|\fB--noCacheDescriptions\fR
+    do not fetch nor parse cache descriptions, search only
+    This will reduce the amount of server requests, but provides no means
+to determine (and use for filtering) cache coordinates, hints, attributes, or descriptions.
+.PP
+\fB-Z\fR|\fB--preserveCache\fR|\fB--keepOld\fR
+    do not overwrite existing cache description files in file cache
+.PP
+.B Filtering options:
+.PP
+\fB-c\fR|\fB--cacheType\fR|\fB--type\fR \fItype\fR  \fB(MULTI)\fR
+    set cache type(s), select from
+      \fB[traditional|multicache|virtual|letterbox|\fR
+      \fB event+|event|cito|megaevent|gigaevent|\fR
+      \fB lost+found|lfceleb|block|\fR
+      \fB unknown+|unknown|gshq|ape|\fR
+      \fB webcam|earthcache|exhibit|wherigo]\fR
+    If \fBonly one type\fR is selected, search will be sped up considerably
+by reducing the number of queries sent to the server.
+    By suffixing one or more cacheType(s) with a minus sign (dash) "-",
+you may invert the filter,
+i.e. \fBunknown-\fR will return only non-mystery caches.
+    Inverse filters are applied before, and therefore supersede, forward filters!
+(This means, \fBtype:type-\fR will exclude \fBtype\fR.)
+    \fBevent\fR and \fBunknown\fR do not include "special" types.
+To search for "all event" (including cito, mega, and giga, and some 
+rare other events) or "all unknown" (including Groundspeak HQ) types,
+use
+\fBevent+\fR, or \fBunknown+\fR respectively,
+\fBas the only cache type\fR (otherwise,
+filtering won't work - you've been warned).
+    Warning: Inverted filtering for these types does \fBnot\fR work!
+    Also, these types may not be supported by the TUI.
+.PP
+\fB-d\fR|\fB--difficultyMin\fR|\fB--minDiff\fR \fI1.0-5.0\fR
+    set minimum difficulty
+.PP
+\fB-D\fR|\fB--difficultyMax\fR|\fB--maxDiff\fR \fI1.0-5.0\fR
+    set maximum difficulty
+.PP
+\fB-t\fR|\fB--terrainMin\fR|\fB--minTerrain\fR \fI1.0-5.0\fR
+    set minimum terrain
+.PP
+\fB-T\fR|\fB--terrainMax\fR|\fB--maxTerrain\fR \fI1.0-5.0\fR
+    set maximum terrain
+.PP
+\fB-s\fR|\fB--sizeMin\fR|\fB--minSize\fR \fIsize\fR
+    set minimum cache size, select from
+      \fB[virtual|not_chosen|other|micro|small|regular|large]\fR
+    (\fBnot_chosen\fR is equivalent to \fBvirtual\fR)
+.PP
+\fB-S\fR|\fB--sizeMax\fR|\fB--maxSize\fR \fIsize\fR
+    set maximum cache size
+.PP
+\fB-g\fR|\fB--favFactorMin\fR|\fB-minFav\fR \fI0.0-5.0\fR
+    set minimum fav factor
+.PP
+\fB-G\fR|\fB--favFactorMax\fR|\fB-maxFav\fR \fI0.0-5.0\fR
+    set maximum fav factor
+.PP
+\fB-k\fR|\fB--titleKeyword\fR \fIkeyword\fR  \fB(MULTI)\fR
+    title keyword search, exclude if prefixed with \fB!\fR
+.PP
+\fB-K\fR|\fB--descKeyword \fR \fIkeyword\fR  \fB(MULTI)\fR
+    description keyword search (slow), exclude if prefixed with \fB!\fR
+.PP
+\fB-i\fR|\fB--ownerInclude\fR|\fB--by\fR \fIusername\fR  \fB(MULTI)\fR
+    select caches owned by this person
+.PP
+\fB-I\fR|\fB--ownerExclude\fR|\fB--notby\fR \fIusername\fR  \fB(MULTI)\fR \fB(USERFILE)\fR
+    exclude caches owned by this person
+.PP
+\fB-e\fR|\fB--userInclude\fR|\fB--doneBy\fR \fIusername\fR  \fB(MULTI)\fR
+    select caches found by this person
+.PP
+\fB-E\fR|\fB--userExclude\fR|\fB--notdoneBy\fR \fIusername\fR  \fB(MULTI)\fR \fB(USERFILE)\fR
+    exclude caches found by this person
+.PP
+\fB-j\fR|\fB--placeDateInclude\fR|\fB--since\fR \fIX\fR
+    select caches placed in the last \fIX\fR days
+.PP
+\fB-J\fR|\fB--placeDateExclude\fR|\fB--until\fR \fIX\fR
+    exclude caches placed in the last \fIX\fR days
+.PP
+\fB-r\fR|\fB--foundDateInclude\fR \fIX\fR
+    select caches found in the last \fIX\fR days
+.PP
+\fB-R\fR|\fB--foundDateExclude\fR \fIX\fR
+    exclude caches found in the last \fIX\fR days
+.PP
+\fB-a\fR|\fB--attributeInclude\fR \fIid[-]\fR  \fB(MULTI)\fR
+    select caches with attribute ID \fIid\fR set to "yes", or to "no" if "-" suffix
+.PP
+\fB-A\fR|\fB--attributeExclude\fR \fIid[-]\fR  \fB(MULTI)\fR
+    exclude caches with attribute ID \fIid\fR set to "yes", or to "no" if "-" suffix
+.PP
+\fB-z\fR|\fB--includeDisabled\fR|\fB--bad\fR
+    include disabled caches
+.PP
+\fB-n\fR|\fB--notFound\fR|\fB--virgin\fR
+    select only caches not found yet
+.PP
+\fB-N\fR|\fB--notFoundByMe\fR|\fB--notme\fR
+    select only caches not yet found by login user
+.PP
+\fB-b\fR|\fB--travelBug\fR|\fB--trackable\fR
+    select only caches with travelbugs/trackables
+.PP
+\fB-O\fR|\fB--noPMO\fR|\fB--nopmo\fR
+    exclude Premium Member Only caches
+.PP
+\fB-Q\fR|\fB--onlyPMO\fR|\fB--pmo\fR
+    select only Premium Member Only caches
+.PP
+  \fINote\fR: \fB-O\fR and \fB-Q\fR are mutually exclusive!
+.PP
+.B Lat/lon grid limits:
+.PP
+The following 4 options have no one-letter version, and are used for limiting the search area.
+Note that this filter is applied \fBafter\fR fetching all cache details (as coordinates aren't available before).
+Use numeric values only! (TBD: same representations as in a \fBcoord\fR search)
+.PP
+\fB--minLongitude\fR|\fB--longMin\fR \fI...\fR
+    set minimum longitude (West filter limit)
+.PP
+\fB--maxLongitude\fR|\fB--longMax\fR \fI...\fR
+    set maximum longitude (East filter limit)
+.PP
+\fB--minLatitude\fR|\fB--latMin\fR \fI...\fR
+    set minimum latitude (South filter limit)
+.PP
+\fB--maxLatitude\fR|\fB--latMax\fR \fI...\fR
+    set maximum latitude (North filter limit)
+.PP
+.B Additional options:
+.PP
+\fB-C\fR|\fB--clearCache\fR|\fB--cleanup\fR
+    selectively clear browser cache
+    You are advised to remove the outdated remnants of old queries every now and then.
+Cache descriptions will never be removed!
+.PP
+\fB-m\fR|\fB--delimiter\fR \fIdelimiter(s)\fR
+    delimiter(s) to be used for \fB(MULTI)\fR input, default "|:"
+    The TUI uses "|".
+You may try "^" to avoid delimiters that have to be "escaped" ("quoted").
+.PP
+\fB-M\fR|\fB--myLogs\fR|\fB--getlogs\fR
+    retrieve "my logs" page containing links to all (cache) logs, and store in cache
+.PP
+\fB-X\fR|\fB--disableEarlyFilter\fR
+    emergency switch to disable early (cache-list based) filtering by difficulty/terrain/size
+    This may be required should the representation of those values change again,
+after 2010 and 2012.
+Normally you don't want to use this!
+.PP
+\fB-U\fR|\fB--unbufferedOutput\fR
+    switch output to unbuffered (useful for wrappers)
+.PP
+\fB-V\fR|\fB--version\fR
+    show version information only (can be combined with \fB-C\fR)
+
+.SH "SEARCH ARGUMENT"
+\fIsearch\fR can be of the \fB(MULTI)\fR type.
+This, for example, allows you to combine multiple circular search spots
+into a single search - the query results will be merged.
+(Be warned that some output fields, like distances and directions, may become ambiguous!)
+
+.SH "SPECIAL CASES"
+If your \fIsearch\fR item(s)
+(according to the \fBqueryType\fR)
+start with a dash (minus sign),
+it has to be "hidden" from the option parser.
+This, in Unix tradition, is done by inserting a "double dash" \fB--\fR
+between the last option and the search argument(s).
+
+Characters like \fB!\fR and \fB|\fR may have to be "escaped" from the shell,
+usually by enclosing them, or the whole string, in quotes.
+
+If \fBuser\fR or \fBowner\fR names contain special (non-ASCII) characters,
+and you are using Windows, you may not be able to login or run a "user" query.
+In those cases, you'll have to pre-encode those characters.
+
+.B http://www.utf8-chartable.de/unicode-utf8-table.pl?number=1024
+will help you to look up the proper UTF-8 codes.
+Prefix each two-digit hex value with a percent sign, for example
+.B (capital_letter_O_with_diaeresis)lscheich
+will become
+.B %c3%96lscheich
+(The TUI may show strange characters, don't worry about them.)
+
+If you're planning to use colons (e.g. for \fB(USERFILE)\fR) on the command line,
+you may have a look at the \fB-m\fR option which allows you to redefine the
+delimiter set.
+
+.SH "ENVIRONMENT"
+.PP
+.B GEO_DIR
+    If set, GeoToad will put its cache in this directory. If not the cache is
+placed in ~/.geotoad/ . Note that it is not secure to set GEO_DIR to point
+to a world-writable directory such as /tmp.
+.PP
+.B LANG
+    To properly handle special characters (which are not in the ASCII character
+set, such as umlauts, etc.) we recommend to set
+.B LANG
+to
+.B en_US.UTF-8
+or similar. The syntax depends on the shell you're using:
+	.B setenv LANG en_US.UTF-8
+for C-shell derivatives (csh, tcsh)
+	.B LANG=en_US.UTF-8; export LANG
+for Bourne and Korn shell (sh, ksh)
+	.B export LANG=en_US.UTF-8
+for Bourne Again shell and derivatives (bash, dash)
+
+.SH "OUTPUT FORMATS"
+\." set indentation to "none", use fixed-width font for format list
+.PP 0
+.ft CW
+ cachemate(=)  cetus(+)      csv           delorme        delorme-nourl 
+.ft CW
+ dna(+)        easygps       gclist        gcvisits(%)    gpsdrive      
+.ft CW
+ gpsman(+)     gpspilot(+)   gpspoint      gpspoint2(+)   gpsutil(+)    
+.ft CW
+ gpx           gpx-gsak      gpx-nuvi      gpx-pa         gpx-wpts      
+.ft CW
+ holux(+)      html          kml(+)        list           magnav(+)     
+.ft CW
+ mapsend(+)    mxf           myfindgpx     myfindlist     ozi           
+.ft CW
+ pcx(+)        poi-nuvi(+)   psp(+)        sms            sms2          
+.ft CW
+ tab           text          tiger         tmpro(+)       tpg(+)        
+.ft CW
+ vcf           wherigo       wp2guid       xmap(+)        yourfindgpx   
+.ft CW
+ yourfindlist  
+.ft CW
+  (+) requires gpsbabel
+  (=) requires cmconvert
+  (%) requires iconv in PATH
+.\" back to normal font
+.ft P
+
+.SH "EXAMPLES"
+.PP
+\fINote:\fR Some of these examples may still no longer work as shown. Please help to fix this; see Issue 284 on GoogleCode.
+.PP
+.B  geotoad
+  invokes the text user interface
+.PP
+.B  geotoad -u user -p password 27513
+  Why do we need a username and password? In October of 2004, Geocaching.com
+began to require a login in order to see the coordinates of a geocache.
+Please note: Put quotes around your username if it has any spaces in it.
+  You've just made a file named gt_27513.gpx containing all the geocaches
+nearby the zipcode 27513 (Cary, NC - with a maximum distance of 10 miles)
+suitable to be read by almost every GPSr device.
+.PP
+Here are some more complex examples that you can work with:
+.PP
+.B  geotoad -u user -p password -y 5 -q coord "N56 44.392, E015 52.780"
+  searches for caches within 5 miles of the above coordinates
+.PP
+.B  geotoad -u user -p password 27513:27502:33434
+  performs a multiple search, and combines the results into a single output.
+  You can combine searches with a delimiter (default is "|", or ":" - except TUI).
+  This works for all types, though it's most often used with coordinate searches.
+.PP
+.B  geotoad -u user -p password -x text -o nc.txt -n -q state 34
+  Outputs a text file with all of the caches in US state North Carolina that are
+virgins (have never been found).
+  Please note that for state and country queries, the numerical id has to be used.
+You may use the TUI to search for the country or state number.
+  Warning: Querying a whole state can be dangerous and may harm your account!
+For example, NC has (as of Oct 2013) more than 24k active caches.
+  You may want to limit the number of search pages parsed (e.g. using \fB-L 10\fR),
+as country and state searches return caches in reverse chronological order
+(newest ones first).
+.PP
+.B  geotoad -u user -p password -x html -o palestine.html -q country 276
+  Get a HTML representation of all caches in Palestine. (Oct 2013: 7, one of them unfound)
+.PP
+.B  geotoad -u ... -p ... -t 2.5 -E "helixblue:Sallad" -x gpx -o charlotte.gpx 28272
+  Get caches in the 10-mile zone of zipcode 28272, with a terrain score of 2.5 or higher, 
+which users helixblue and Sallad have not visited.
+  Outputs a GPX format file, which is usable by most GPSr's and other devices.
+.PP
+.B  geotoad -u ... -p ... -t 2.5 -E anyname=/path/to/file -x gpx -o charlotte.gpx 28272
+  As before, but read a list of GCxxxx cache IDs from a file instead of querying the server
+for found caches.
+.PP
+.B  geotoad -u ... -p ... -b -K 'stream|creek|lake|river|ocean' -x html -o watery.html -q state 15
+  Gets every cache in Indiana state with trackables that matches those water keywords,
+and makes a pretty HTML file out of it.
+.PP
+.B  geotoad -u ... -p ... -x gpx -o mylocal.gpx -z -y 1.75 -T 4 -q coord "N 51 23.456 E 012 34.567"
+  Create a GPX file with all caches around the given location,
+max. 1.75 miles away, terrain rating below or equal 4, including disabled ones.
+.PP
+.B  geotoad -u ... -p ... -m '^+|' -o output.gpx -x "gpx+list|html" -y 2km -q coord "52.25,6.075^53.1,-7.2"
+  Perform a search around two travel stops with a 2 kilometre radius, 
+create three files output.gpx, output.lst, output.html combining the results.
+  (Note the usage of the \fB-m\fR option to modify the set of delimiters.
+As the \fB|\fR character has a special meaning, it must be "quoted".)
+.PP
+.B  geotoad -u ... -p ... -c multicache -a 6 -A 57 -o family.gpx -x gpx:list -y 25km -q coord "52.25,6.075"
+  Prepare for a Sunday afternoon walk, and find all multi-caches around
+which pretend to be "Kid friendly" (attribute 6) and shorter than 10km (attribute 57).
+.PP
+.B  geotoad ... (as above) --minLat 52.10 --maxLat 52.40 -q coord "52.25,6.075"
+  This will further reduce the number of caches, by dropping all outside a "latitude zone".
+  You may also define Eastern and Western limits, e.g. \fB--minLon 6.00 --maxLon 6.20\fR.
+  Note that this is a \fBfilter\fR applied after querying the server.
+.PP
+.B  geotoad -u ... -p ... -z -q owner -- -aBcDe-
+  Find all caches created by one owner, even the disabled or archived ones.
+  Note that here the argument (owner name) has to be separated by \fB--\fR from the rest of the command line.
+
+.SH "AUTHOR"
+Thomas Stromberg and The GeoToad Project
