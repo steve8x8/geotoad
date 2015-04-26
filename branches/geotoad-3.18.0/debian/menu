@@ -1,2 +1,0 @@
-?package(geotoad):command="geotoad" needs="text" section="Apps/Tools" \
-	title="GeoToad"
