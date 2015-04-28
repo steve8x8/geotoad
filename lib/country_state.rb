@@ -1,5 +1,3 @@
-# $Id: country_state.rb 1475 2013-10-09 08:39:26Z Steve8x8@googlemail.com $
-
 # Get a list of countries / states for the geocaching form.
 
 require 'cgi'

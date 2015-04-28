@@ -1,5 +1,3 @@
-# $Id$
-
 require 'pathname'
 $THISDIR = File.dirname(File.realpath(__FILE__))
 $LOAD_PATH << File.join($THISDIR, '..')

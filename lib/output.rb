@@ -1,7 +1,5 @@
 # -*- encoding : utf-8 -*-
 
-# $Id$
-
 require 'cgi'
 require 'lib/templates'
 require 'lib/version'

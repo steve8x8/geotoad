@@ -1,5 +1,3 @@
-# $Id$
-
 require 'digest/md5'
 require 'net/https'
 require 'fileutils'

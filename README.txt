@@ -1,5 +1,5 @@
 ==========================================================================
-GeoToad %VERSION% by Thomas Stromberg and The GeoToad Project (c) 2002 - 2014
+GeoToad %VERSION% by Thomas Stromberg and The GeoToad Project (c) 2002 - 2015
 ==========================================================================
 
 Table of Contents:

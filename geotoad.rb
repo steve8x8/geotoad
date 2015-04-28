@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
 
-# $Id$
 #
 # This is the main geotoad binary.
 #
@@ -210,29 +209,33 @@ class GeoToad
   end
 
   def versionCheck
-    if $VERSION =~ /CURRENT/
-      displayWarning "Not checking for updates"
-      return nil
-    end
+    #if $VERSION =~ /CURRENT/
+    #  displayWarning "Not checking for updates"
+    #  return nil
+    #end
 
-    url = "http://code.google.com/p/geotoad/wiki/CurrentVersion"
+    #url = "http://code.google.com/p/geotoad/wiki/CurrentVersion"
+    url = "https://github.com/steve8x8/geotoad/raw/wiki/CurrentVersion.md"
 
-    debug "Checking for latest version of GeoToad from #{url}"
+    displayInfo "Checking for latest version of GeoToad from #{url}"
     version = ShadowFetch.new(url)
     version.localExpiry = 1 * 86400	# 1 day
     version.maxFailures = 0
     version.fetch
 
+    #puts version.data
+
     # version=a.bb.cc[`*`] in wiki page (`*` marks "supersedes all")
     if version.data =~ /version=(\d\.\d+[\.\d]+)(<tt>)?(\*)?/
       latestVersion = $1
       obsoleteOlder = ! $3.to_s.empty?
+      #displayInfo "new version #{latestVersion} " + (obsoleteOlder ? "xxx" : "---")
 
       if comparableVersion(latestVersion) > comparableVersion($VERSION)
         displayBar
         displayWarning "VersionCheck: GeoToad #{latestVersion} is now available!"
-        displayWarning "Download from: See Release Notes!"
-        displayMessage "Release Notes below:"
+        #displayWarning "Download from: See Release Notes!"
+        #displayMessage "Release Notes below:"
         displayBar
         version.data.scan(/<div .*? id=\"wikimaincol\">\s*(.*?)\s*(<hr\/>|<\/div>)/im) do |notes|
           text = notes[0].dup
@@ -260,8 +263,10 @@ class GeoToad
           end
         end
         displayBar
-        displayInfo "(sleeping for 30 seconds)"
-        sleep(30)
+        if $VERSION !~ /CURRENT/
+          displayInfo "(sleeping for 30 seconds)"
+          sleep(30)
+        end
       end
     end
     debug "Check complete."
@@ -1000,6 +1005,7 @@ include Messages
 displayTitle "GeoToad #{$VERSION} (Ruby #{RUBY_VERSION}p#{RUBY_PATCHLEVEL}/#{RUBY_RELEASE_DATE} on #{RUBY_PLATFORM})"
 # initialize method: 1st part of init
 cli = GeoToad.new
+cli.versionCheck
 
 loopcount = 0
 while true
@@ -1013,14 +1019,13 @@ while true
   end
 
   if (loopcount == 0) # do only once, like before
-    displayInfo "Report bugs or suggestions at http://code.google.com/p/geotoad/issues/"
+    displayInfo "Report bugs or suggestions at https://github.com/steve8x8/geotoad/"
     displayInfo "Please include verbose output (-v) without passwords in the bug report."
     displayBar
 
     # second part of initialize
     cli.populate
 
-    cli.versionCheck
     displayBar
 
     loopcount = loopcount + 1

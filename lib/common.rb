@@ -1,7 +1,5 @@
 # -*- encoding : utf-8 -*-
 
-# $Id$
-
 require 'fileutils'
 require 'pathname'
 require 'time'

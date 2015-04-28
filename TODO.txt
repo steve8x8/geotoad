@@ -1,1 +1,1 @@
-For open issues, see https://code.google.com/p/geotoad/issues/list
+For open issues, see https://github.com/steve8x8/geotoad/issues

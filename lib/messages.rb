@@ -1,5 +1,3 @@
-# $Id$
-
 # This is where code specific to the user interface display gets put.
 
 module Messages

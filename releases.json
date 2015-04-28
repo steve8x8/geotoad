@@ -2,10 +2,10 @@
    "name": "GeoToad",
    "title": "Geocaching.com Query Tool",
    "description": "GeoToad is a tool for serious geocachers. It lets you make advanced queries to find the perfect caches to hit on your day out, and export them to any imaginable format. Here is what it can do: <ul> <li>On-demand queries for geocaches based on several constraints: query type, distance, difficulty, terrain, fav factor, size, type, unfound, trackables, cache age, last found date, title, description, found by, cache creator. <li>Outputs cache listing and details to HTML, GPX, CSV, VCF, Text, Ozi, MXF, Tiger, GPSPoint, etc., with extendable template base. <li>Integrated with GPSBabel to output to Google Earth (KML), and dozens of other formats. <li>Optional automatic waypoint names like "TheBookOfMozilla" instead of "GCABE4" <li>Runs on Windows, Mac OS X, Linux, and other UNIX flavors! <li>It's Opensource! </ul> GeoToad has been around since 2002, and is written using the Ruby Programming Language. We're looking for new people to join in and help develop, debug, and maintain the code. Patches welcome!",
-   "homepage": "http://code.google.com/p/geotoad/",
+   "homepage": "https://github.com/steve8x8/geotoad/",
    "license": "BSDL",
    "tags": "windows, unix. macos, linux, ruby, front-end, education, geocaching",
-   "image": "http://code.google.com/p/geotoad/logo?cct=1379588096",
+   "image": "https://github.com/steve8x8/geotoad/raw/master/data/bufos.png",
    "releases": [
       {
         "version": "3.23.0",

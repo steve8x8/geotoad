@@ -10,7 +10,7 @@ Table of Contents:
 * Yes, I've got the latest version. It used to work, but now it's dead, Jim.
 * GeoToad seems to work, but the output file is rejected (by the device, or other software).
 
-Some hints for reporting bugs. Updated 2013-12-05.
+Some hints for reporting bugs. Updated 2013-12-05/2015-04-27.
 
 
 (The stable release of) GeoToad is supposed to work.
@@ -21,7 +21,7 @@ Please check the list below:
 Are you using the stable version (=> Wiki:CurrentVersion)?
 ----------------------------------------------------------
 
- - If NOT, please do NOT submit an issue report. Problems in SVN are transient.
+ - If NOT, please do NOT submit an issue report. Problems with code in Git are usually transient.
  - Contact Steve8x8 at his GoogleMail account instead.
  - (See below for details which may help to isolate and reproduce the issue.)
 
@@ -76,8 +76,8 @@ If the problem persists:
 
 Before reporting an issue, please:
 
- - Check the Issues list (=> http://code.google.com/p/geotoad/issues/list?can=1) for similar reports.
- - Check the SVN browser (=> https://code.google.com/p/geotoad/source/list) whether SVN might already been fixed.
+ - Check the Issues list (=> https://github.com/steve8x8/geotoad/issues) for similar reports.
+ - Check the Git browser (=> https://github.com/steve8x8/geotoad/tree/master) whether it might already have been fixed.
  - (You are welcome to review the changes, and leave your comments and suggestions.)
  - Keep separate problems separate - duplicate issues can be merged if necessary.
 

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Builds a new development release of geotoad from SVN trunk
+# Builds a new development release of geotoad from Git head
 # For Windows build, "Pik" and "Ocra" gems are necessary.
 # optional parameters:
 # $@: Ruby versions for Pik
@@ -16,9 +16,9 @@ if [ ! -d tools ]; then
 fi
 
 DEFAULTRUBY=200
-SVNPATH=http://geotoad.googlecode.com/svn/trunk/
+GITPATH=https://github.com/steve8x8/geotoad.git
 
-# checkout SVN to temporary directory
+# checkout Git to temporary directory
 src_dir=/tmp/geotoad-$$
 base_dir=`pwd`
 DEST=$base_dir/dist
@@ -26,24 +26,20 @@ DEST=$base_dir/dist
 # clean up when done
 trap "/bin/rm -Rf $src_dir/ $DEST/*/ $DEST/*.sh; exit 0" 0 1 2 3 6 9 15
 
-# get fresh SVN copy
-echo "Checking out SVN from $SVNPATH"
-svn checkout --quiet $SVNPATH $src_dir
+# get fresh Git copy
+echo "Checking out Git from $GITPATH"
+git clone --quiet $GITPATH $src_dir
 cd $src_dir
-SVNREV=`svn info | sed -n 's~^Revision:\s*~~p'`
-echo "SVN revision $SVNREV"
+GITREV=`git log | head -n1 | cut -c8-15`
+echo "Git revision $GITREV"
 echo "Writing ChangeLog.txt"
-svn log -v > ChangeLog.txt
+git log -v > ChangeLog.txt
 
 # modify build behaviour
-SVN=""
 RUBYVERSIONS=${@:-$DEFAULTRUBY}
-if [ -n "$SVN" ]; then
-  echo "*** Append to version: \"$SVN\". "
-fi
 read -p "*** Build for Windows Ruby version(s): $RUBYVERSIONS. OK? " x
 
-VERSION=`cat VERSION`$SVN
+VERSION=`cat VERSION`
 DISTNAME="geotoad-$VERSION"
 DEBNAME="geotoad_$VERSION"
 DEBBUILD=1
@@ -72,7 +68,7 @@ WIN_INS="$DEST/${DISTNAME}_Windows_Installer" #...
 
 #echo "Creating $GENERIC_DIR"
 mkdir -p "$GENERIC_DIR"
-rsync -a --exclude ".svn/" $src_dir/. $GENERIC_DIR/
+rsync -a --exclude ".git/" --exclude .gitignore $src_dir/. $GENERIC_DIR/
 
 # insert version string
 sed s/"%VERSION%"/"$VERSION"/g lib/version.rb > $GENERIC_DIR/lib/version.rb
@@ -269,7 +265,7 @@ cd $DISTNAME
 if [ ! -f TODO.txt ]; then
   echo "Create TODO.txt"
   cat <<EOF > TODO.txt
-For open issues, see https://code.google.com/p/geotoad/issues/list
+For open issues, see https://github.com/steve8x8/geotoad/issues
 EOF
 fi
 # add new entry to changelog
@@ -299,6 +295,7 @@ if [ -z "`ls 2>/dev/null $DEBNAME-${DEBBUILD}_*.deb`" ]; then
   echo "*** Debian package not found!"
 else
   echo "Done."
+false && {
   echo "Build Debian package list(s)"
   #     ^-- append files/$filename     ^-- get package list
   dpkg-scanpackages $DEST \
@@ -308,10 +305,9 @@ else
   dpkg-scansources $DEST \
   | sed "s~$DEST/~files/~" \
   | gzip -9 > $DEST/Sources.gz
-  if [ -z "$SVN" ]; then
     cp -p *es.gz $INITIALDIR/dist/
     echo "*** Do not forget to update the package lists!"
-  fi
+}
   echo "Done."
 fi
 

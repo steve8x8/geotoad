@@ -1,5 +1,3 @@
-# $Id$
-
 class ProgressBar
 
   def initialize(start, max, name)

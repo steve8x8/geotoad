@@ -1,5 +1,3 @@
-# $Id$
-
 require 'cgi'
 require 'geocode'
 require 'shadowget'

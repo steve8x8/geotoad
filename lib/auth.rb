@@ -1,5 +1,3 @@
-# $Id$
-
 ### Each session started with a fresh cookie, no cookies file anymore
 ### Received cookies dissected and written to hash,
 ### cookies to be sent combined from hash

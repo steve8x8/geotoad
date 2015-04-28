@@ -1,5 +1,4 @@
 # -*- encoding : utf-8 -*-
-# $Id$
 
 require 'time'
 require 'zlib'
