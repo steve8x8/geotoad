@@ -237,20 +237,21 @@ class GeoToad
         #displayWarning "Download from: See Release Notes!"
         #displayMessage "Release Notes below:"
         displayBar
-        version.data.scan(/<div .*? id=\"wikimaincol\">\s*(.*?)\s*(<hr\/>|<\/div>)/im) do |notes|
+        version.data.scan(/version=\S*\s*(.*?)\s*---/im) do |notes|
           text = notes[0].dup
-          text.gsub!(/<\/?tt>/i, '')
-          text.gsub!(/<h1>/i, "\n\* ")
-          text.gsub!(/<h2>/i, "\n\+ ")
-          text.gsub!(/<h3>/i, "\n\- ")
-          text.gsub!(/<h[0,4-9]>/i, "\n\. ")
-          text.gsub!(/<li>/i, "\n - ")
-          text.gsub!(/<a[^>]+href=\"\/p\/geotoad\/wiki\/(.*?)\">\1<\/a>\s+/i) { "[#{$1}] " }
-          text.gsub!(/<a[^>]+href=\"\#.*?>/i, '')
-          text.gsub!(/<.*?>/, '')
+#          text.gsub!(/<\/?tt>/i, '')
+          text.gsub!(/^#\s/, "\n\* ")
+          text.gsub!(/^##\s/, "\n\+ ")
+          text.gsub!(/^###\s/, "\n\- ")
+          text.gsub!(/#+$/, "")
+#          text.gsub!(/<h[0,4-9]>/i, "\n\. ")
+#          text.gsub!(/^  \*\b/, "\n - ")
+#          text.gsub!(/<a[^>]+href=\"\/p\/geotoad\/wiki\/(.*?)\">\1<\/a>\s+/i) { "[#{$1}] " }
+#          text.gsub!(/<a[^>]+href=\"\#.*?>/i, '')
+#          text.gsub!(/<.*?>/, '')
           text.gsub!(/\n\n+/, "\n")
           text.gsub!(/\&nbsp;/, '-')
-          text = CGI::unescapeHTML(text)
+#          text = CGI::unescapeHTML(text)
           textlines = text.split("\n")
           (1..20).each{ |line|
             displayBox textlines[line] if textlines[line]
