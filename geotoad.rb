@@ -209,33 +209,22 @@ class GeoToad
   end
 
   def versionCheck
-    #if $VERSION =~ /CURRENT/
-    #  displayWarning "Not checking for updates"
-    #  return nil
-    #end
 
-    #url = "http://code.google.com/p/geotoad/wiki/CurrentVersion"
-    url = "https://github.com/steve8x8/geotoad/raw/wiki/CurrentVersion.md"
+    checkurl = "https://github.com/steve8x8/geotoad/raw/wiki/CurrentVersion.md"
 
-    displayInfo "Checking for latest version of GeoToad from #{url}"
-    version = ShadowFetch.new(url)
+    version = ShadowFetch.new(checkurl)
     version.localExpiry = 1 * 86400	# 1 day
     version.maxFailures = 0
     version.fetch
 
-    #puts version.data
-
-    # version=a.bb.cc[`*`] in wiki page (`*` marks "supersedes all")
-    if version.data =~ /version=(\d\.\d+[\.\d]+)(<tt>)?(\*)?/
+    # version=a.bb.cc[*] in wiki page (* marks "supersedes all")
+    if version.data =~ /version=(\d\.\d+[\.\d]+)(\*)?/
       latestVersion = $1
-      obsoleteOlder = ! $3.to_s.empty?
-      #displayInfo "new version #{latestVersion} " + (obsoleteOlder ? "xxx" : "---")
+      obsoleteOlder = ! $2.to_s.empty?
 
       if comparableVersion(latestVersion) > comparableVersion($VERSION)
         displayBar
         displayWarning "VersionCheck: GeoToad #{latestVersion} is now available!"
-        #displayWarning "Download from: See Release Notes!"
-        #displayMessage "Release Notes below:"
         displayBar
         version.data.scan(/version=\S*\s*(.*?)\s*---/im) do |notes|
           text = notes[0].dup
@@ -256,7 +245,7 @@ class GeoToad
           (1..20).each{ |line|
             displayBox textlines[line] if textlines[line]
           }
-          displayMessage "  ... see #{url} for more ..." if textlines.length > 20
+          displayMessage "  ... see #{checkurl} for more ..." if textlines.length > 20
           if obsoleteOlder
             displayBar
             displayWarning "Older versions do not work any longer. Update NOW!"

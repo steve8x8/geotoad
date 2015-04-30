@@ -307,8 +307,8 @@ false && {
   | gzip -9 > $DEST/Sources.gz
     cp -p *es.gz $INITIALDIR/dist/
     echo "*** Do not forget to update the package lists!"
-}
   echo "Done."
+}
 fi
 
 echo ""
