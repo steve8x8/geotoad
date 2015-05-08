@@ -15,9 +15,9 @@ How to write your own template files
 You always wanted to have your own, tailor-made output templates, and always hesitated to ask for them?
 Now the time has come for you and your creativity!
 
- * All template files have to reside in a template subdirectory (folder) in your _config_ directory, right next to cookies.yaml
- * Template files must have a file extension of .tm
- * Template files are written in Ruby's "hash" assignment syntax, and have the form
+ - All template files have to reside in a template subdirectory (folder) in your _config_ directory, right next to cookies.yaml
+ - Template files must have a file extension of .tm
+ - Template files are written in Ruby's "hash" assignment syntax, and have the form
 
 template = {
   'name' => {
@@ -28,11 +28,11 @@ template = {
   }, # the comma is only necessary if another template follows
 }
 
-  A single template file can contain multiple templates, each with a unique name*
- * Although basic syntax checking is done when importing, you should run ruby -wc template.tm and check for errors
-  All templates will be read into one internal format list, your own templates will overwrite* the ones which come with GeoToad if names are identical
- * GeoToad will show an alphabetically ordered list of templates when invoked with the -h (--help) option
- * A template may (a) describe the file structure, or (b) tell GeoToad "how to create" from an existing one (usually gpx). Don't mix!
+ - A single template file can contain multiple templates, each with a unique name
+ - Although basic syntax checking is done when importing, you should run ruby -wc template.tm and check for errors
+ - All templates will be read into one internal format list, your own templates will overwrite the ones which come with GeoToad if names are identical
+ - GeoToad will show an alphabetically ordered list of templates when invoked with the -h (--help) option
+ - A template may (a) describe the file structure, or (b) tell GeoToad "how to create" from an existing one (usually gpx). Don't mix!
 
 -------------
 Some examples
@@ -41,7 +41,7 @@ Some examples
 All examples are taken from the "real world". Let's start with (b) - it's easier.
 Currently GeoToad knows about cmconvert (for the "cachemate" format) and gpsbabel (for a lot of other formats)
 
-=== Second way: tell GeoToad what to do ===
+> Second way: tell GeoToad what to do <
 
 A template using gpsbabel, the strings INFILE and OUTFILE are mission-critical:
 
@@ -91,18 +91,18 @@ template = {
 }
 (see gpsbabel's documentation for a description of the individual style file fields).
 
-=== First way: describe the details of the output format ===
+> First way: describe the details of the output format <
 
 If you want to build your own format, you will have to use the information gathered from cache descriptions.
 Output files consist of a "preamble" (templatePre), the waypoint records (templateWP), and an optional "postscriptum" (templatePost).
 
 There are several flavours of variables, all set in <% and %> brackets:
- *    "wp.var"
- *    "wpText.var"
- *    "wpEntity.var"
- *    "out.var"
- *    "outText.var"
- *    "outEntity.var"
+ - "wp.var"
+ - "wpText.var"
+ - "wpEntity.var"
+ - "out.var"
+ - "outText.var"
+ - "outEntity.var"
 All wp... strings refer to data directly read from search and cache pages (to @wpHash[] in lib/search.rb and lib/details.rb,
 while a lot of out... strings are defined as @outVars[] inside lib/output.rb.
 A built-in "interpreter" performs the necessary replacements.
@@ -110,7 +110,7 @@ A built-in "interpreter" performs the necessary replacements.
 Details may be found in the replaceVariables() and createExtraVariablesForWid() functions in lib/output.rb.
 
 You don't have to read all the Ruby code to find the information you need - it's all in existing templates, waiting for you to copy it.
-The following examples may show you what's possible. 
+The following examples may show you what's possible.
 (Unknown variables will result in run-time errors - that's the price you pay for your freedom ;)
 
 First, have a look at the "list" template (derived from the "tab" one) and the resulting output:
@@ -190,6 +190,8 @@ template = {
 }
 We leave as an exercise to the reader to sketch the resulting output for both formats!
 
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 Additions, comments?

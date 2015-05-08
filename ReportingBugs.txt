@@ -10,7 +10,8 @@ Table of Contents:
 * Yes, I've got the latest version. It used to work, but now it's dead, Jim.
 * GeoToad seems to work, but the output file is rejected (by the device, or other software).
 
-Some hints for reporting bugs. Updated 2013-12-05/2015-04-27.
+
+Some hints for reporting bugs. Updated 2015-05-08.
 
 
 (The stable release of) GeoToad is supposed to work.
@@ -21,7 +22,7 @@ Please check the list below:
 Are you using the stable version (=> Wiki:CurrentVersion)?
 ----------------------------------------------------------
 
- - If NOT, please do NOT submit an issue report. Problems with code in Git are usually transient.
+ - If NOT, please do NOT submit an issue report. Problems in Git may be transient.
  - Contact Steve8x8 at his GoogleMail account instead.
  - (See below for details which may help to isolate and reproduce the issue.)
 
@@ -29,7 +30,7 @@ Are you using the stable version (=> Wiki:CurrentVersion)?
 Have you upgraded to the latest release (=> Wiki:CurrentVersion)?
 -----------------------------------------------------------------
 
- - Check the CurrentVersion wiki page.
+ - Check the CurrentVersion (=> Wiki:CurrentVersion) wiki page.
  - It may take up to 3 days to notice, but GeoToad will tell you about available updates.
 
 -------------------------------------
@@ -50,22 +51,22 @@ And, of course, there are "real" bugs which slipped through despite heavy testin
 To make it work for you again, we therefore need some input to be able to identify the problem.
 
  - Always try to reproduce the problem, and allow us to reproduce it as well.
- - If possible, use another (supported) ruby series (1.9.3 and 2.0.0 are supposed to work).
+ - If possible, use another (supported) ruby series (1.9.3, 2.0.0, 2.1.5 are supposed to work).
  - As much as possible, isolate the problem, rinse, repeat. Heisenbugs happen.
  - Do you by any chance have multiple GC accounts? Keep them separate.
 
 Some hints to narrow down issues yourself:
 
- - Toggle _verbose output_ on (using "v" in the TUI, or "-v"/"--verbose" from the command line), and write the (copious!) output to a file.
+ - Toggle _verbose output_ on (using "v" in the TUI, or "-v"/"--verbose" from the command line, 1-3 times), and write the (copious!) output to a file.
  - The last few lines might already give you (and us) an idea what could have happened.
  - Check for the last occurrence of "wid = " in the debugging output. A few lines before, there should be a line "cachefile: ...".
  - Rename that file in your cache as it might be corrupted. Do _not remove_ it, we might need it later.
  - Rename the debug output file too, and run again.
- - If the problem cannot be reproduced, the old cache file must be bad. Can you compare the two versions?
+ - If the problem can not be reproduced, the old cache file must be bad. Can you compare the two versions?
 
 If the problem persists:
 
- - Don't be shy to show your command line. (Noone cares to see your password though.)
+ - Don't be shy to show your command line. (Noone wants to see your password though.)
  - You're using the TUI? It writes out a command line too - right before running the query.
  - We also need the last output lines, starting with the "cachefile:" line, including the error thrown by Ruby.
  - Make sure you remove your credentials (password, perhaps username) and cookies from the command line and debug output.
@@ -77,9 +78,8 @@ If the problem persists:
 Before reporting an issue, please:
 
  - Check the Issues list (=> https://github.com/steve8x8/geotoad/issues) for similar reports.
- - Check the Git browser (=> https://github.com/steve8x8/geotoad/tree/master) whether it might already have been fixed.
+ - Check the Git browser (=> https://github.com/steve8x8/geotoad/tree/master) whether Git might already have a fix.
  - (You are welcome to review the changes, and leave your comments and suggestions.)
- - Keep separate problems separate - duplicate issues can be merged if necessary.
 
 ------------------------------------------------------------------------------------------
 GeoToad seems to work, but the output file is rejected (by the device, or other software).
@@ -101,6 +101,7 @@ do
         echo " OK"
     else
         cat /tmp/$$.chk
+        line=`grep "parse error at line " /tmp/$$.chk | sed -e 's~.*at line ~~' -e 's~ of.*~~'`
         sed -ne "${line}p" "$inputfile"
     fi
     rm -f /tmp/$$.chk
@@ -109,6 +110,8 @@ done
 This script (tested under Linux, to be invoked with a list of files) checks for the first error, and shows the corresponding line in the GPX file.
 If you don't understand the output, just make sure it's contained in your bug report.
 
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 (to be extended)

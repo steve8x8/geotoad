@@ -15,6 +15,7 @@ Table of Contents:
 _Note: Tested with Debian Linux and bash. Adaptions may be necessary._
 
 
+
 ----------------------------------------------
 "Proximity" search around an existing geocache
 ----------------------------------------------
@@ -136,7 +137,7 @@ Merging riddle solutions into GPX
 ---------------------------------
 
 Similarly, it is possible to merge a list of "solved" mysteries, or
-already reached multi-cache stages, into an existing GPX, using 
+already reached multi-cache stages, into an existing GPX, using
 gpxsolutions as follows:
 
 #!/usr/bin/env ruby
@@ -189,7 +190,7 @@ puts $stdin.read.split(/<\/wpt>/).map { |fragment|
 
 to be run as follows:   gpxsolutions solved.txt <input.gpx >output.gpx
 
-with a solved.txt file listing points by name, lat, lon (where point names are 
+with a solved.txt file listing points by name, lat, lon (where point names are
 constructed the same way as "normal" waypoints) as in the following fictional list:
 
 gcqmea  02.012345 53.987654
@@ -198,7 +199,9 @@ gcwpgf  13.543210 41.456789
 0116d4t 32.888888 23.555555
 0018k6k 42.010101 13.101010
 
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 -------------------------------------------------------
 Modify GPX files to be accepted by BaseCamp (issue 238)
@@ -208,7 +211,7 @@ BaseCamp 3.3.1 reportedly doesn't like GroundSpeak's GPX extensions (what they c
 "GPX 1.0.1"), and refuses to show cache details.
 
 Since extensions are essential for attribute support, GeoToad GPX output is (and will
-continue to be) 1.0.1 compatible, but it's rather easy to mangle a GPX file to look 
+continue to be) 1.0.1 compatible, but it's rather easy to mangle a GPX file to look
 like a 1.0 one:
 
 cat geotoadoutput.gpx \
@@ -217,13 +220,15 @@ cat geotoadoutput.gpx \
 
 It's not even necessary to remove the "groundspeak:attributes" section.
 
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 -----------------------------------------------------------------------------
 Get an approximate overview map of caches in a whole large area (now defunct)
 -----------------------------------------------------------------------------
 
- Note: This doesn't work anymore since 2013-05-07 and is kept for historical reasons only 
+Note: This doesn't work anymore since 2013-05-07 and is kept for historical reasons only
 
 For obvious reasons, one doesn't want to fetch thousands of caches to get an impression
 what would be possible in the area where you're planning your next holiday trip to.

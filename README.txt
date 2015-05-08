@@ -15,7 +15,7 @@ Table of Contents:
 About GeoToad
 -------------
 GeoToad is an open-source query tool to query the geocaching.com website.
-It supports exporting your results into a dozen or more formats such as 
+It supports exporting your results into a dozen or more formats such as
 GPX (also variants suited for GSAK, or your road nav device) and HTML.
 
 
