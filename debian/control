@@ -1,7 +1,7 @@
 Source: geotoad
 Section: utils
 Priority: optional
-Maintainer: Steve Sixty-Four <steve8x8@gmail.com>
+Maintainer: Steve Sixty-Four <steve8x8@googlemail.com>
 Build-Depends: debhelper (>= 7)
 Standards-Version: 3.8.6
 
