@@ -335,7 +335,9 @@ class CacheDetails
     # start with single-line matches
     data.split("\n").each{ |line|
       # <title id="pageTitle">(GC1145) Lake Crabtree computer software store by darylb</title>
-      if line =~ /<title.*>\((GC\w+)\) \s*(.*? by .*?)\s*</
+      # but: (without parentheses!)
+      # <title id="pageTitle">GCFD21 Grandma&#39;s idea by gopackers</title>
+      if line =~ /<title.*>\(?(GC\w+)\)? \s*(.*? by .*?)\s*</
         wid = $1
         namecreator = $2
         name = nil
