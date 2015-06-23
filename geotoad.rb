@@ -210,7 +210,7 @@ class GeoToad
 
   def versionCheck
 
-    checkurl = "https://github.com/steve8x8/geotoad/raw/wiki/CurrentVersion.md"
+    checkurl = "https://raw.githubusercontent.com/wiki/steve8x8/geotoad/CurrentVersion.md"
 
     version = ShadowFetch.new(checkurl)
     version.localExpiry = 1 * 86400	# 1 day
