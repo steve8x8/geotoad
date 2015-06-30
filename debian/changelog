@@ -1,11 +1,12 @@
 geotoad (3.23.1) unstable; urgency=low
 
-  * New version 3.23.1, "May be"
+  * New version 3.23.1, "May be July"
   * first release from GitHub
   * adjusted pointers to Wiki, download space, etc.
+  * GSAK templates from c:geo (TBC)
   * some minor bugfixes
 
- -- Steve Sixty-Four <steve8x8@gmail.com>  Wed, 13 May 2015 10:00:00 +0000
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Wed, 15 Jul 2015 10:00:00 +0000
 
 geotoad (3.23.0) unstable; urgency=low
 
