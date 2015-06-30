@@ -847,7 +847,8 @@ class Output
       formatted_date = cache['ltime'].strftime("%Y-%m-%dT%H:%M:%SZ")
       entry << "      <groundspeak:date>#{formatted_date}</groundspeak:date>\n"
       entry << "      <groundspeak:type>Write note</groundspeak:type>\n"
-      entry << "      <groundspeak:finder id=\"0\">**Info**</groundspeak:finder>\n"
+#      entry << "      <groundspeak:finder id=\"0\">**Info**</groundspeak:finder>\n"
+      entry << "      <groundspeak:finder id=\"\">**Info**</groundspeak:finder>\n"
       entry << "      <groundspeak:text encoded=\"True\">\n"
       if cache['logcounts']
         entry << "Last log: #{cache['last_find_type']}" + brlf
@@ -881,7 +882,8 @@ class Output
         entry << "    <groundspeak:log id=\"#{comment_id}\">\n"
         entry << "      <groundspeak:date>#{formatted_date}</groundspeak:date>\n"
         entry << "      <groundspeak:type>#{comment['type']}</groundspeak:type>\n"
-        entry << "      <groundspeak:finder id=\"#{comment['user_id']}\">#{comment['user']}</groundspeak:finder>\n"
+#        entry << "      <groundspeak:finder id=\"#{comment['user_id']}\">#{comment['user']}</groundspeak:finder>\n"
+        entry << "      <groundspeak:finder id=\"\">#{comment['user']}</groundspeak:finder>\n"
         entry << "      <groundspeak:text encoded=\"True\">" + makeXML(comment_text) + "</groundspeak:text>\n"
         entry << "    </groundspeak:log>\n"
         entries << entry
@@ -1242,7 +1244,8 @@ class Output
         tbref = 'TB' + (tbid + 411120).to_s(31).upcase.tr('0-9A-U', '0-9A-HJKMNPQRTV-Z')
         debug2 "Trackables: use fake id #{tbid} = #{tbref} for #{tbname}"
         xmlTrackables << "\n"
-        xmlTrackables << "    <groundspeak:travelbug id=\"#{tbid}\" ref=\"#{tbref}\">\n"
+#        xmlTrackables << "    <groundspeak:travelbug id=\"#{tbid}\" ref=\"#{tbref}\">\n"
+        xmlTrackables << "    <groundspeak:travelbug ref=\"\">\n"
         xmlTrackables << "      <groundspeak:name>" + makeXML(tbname) + "</groundspeak:name>\n"
         xmlTrackables << "    </groundspeak:travelbug>\n"
         txtTrackables << makeText(tbname)
