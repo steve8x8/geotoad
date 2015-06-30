@@ -369,7 +369,8 @@ class CacheDetails
         cache['shortdesc'] = ''
         cache['longdesc'] = ''
         cache['favfactor'] = 0
-        cache['url'] = "http://www.geocaching.com/geocache/" + wid
+#        cache['url'] = "http://www.geocaching.com/geocache/" + wid
+        cache['url'] = "http://coord.info/" + wid
       end
 
       # <h2>

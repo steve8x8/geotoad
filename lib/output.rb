@@ -1129,14 +1129,18 @@ class Output
             # Garmin Oregon shows only <desc>, not <cmt>, and limits to 48 chars
             wptlist = wptlist +
               "<wpt lat=\"#{wplat}\" lon=\"#{wplon}\">\n" +
-              "  <time>"+ timestamp.strftime("%Y-%m-%dT07:00:00.00Z") + "</time>\n" +
+#              "  <time>"+ timestamp.strftime("%Y-%m-%dT07:00:00.00Z") + "</time>\n" +
               "  <name>#{prefix}XXXWIDXXX</name>\n" +
               "  <cmt>#{desc}</cmt>\n" +
-              "  <desc>#{wpname}:#{desc}</desc>\n" +
-              "  <url>http://www.geocaching.com/seek/wpt.aspx?WID=#{widurl}</url>\n" +
-              "  <urlname>#{wpname}</urlname>\n" +
+#              "  <desc>#{wpname}:#{desc}</desc>\n" +
+              "  <desc>#{wpname}</desc>\n" +
+#              "  <url>http://www.geocaching.com/seek/wpt.aspx?WID=#{widurl}</url>\n" +
+#              "  <urlname>#{wpname}</urlname>\n" +
               "  <sym>#{wptype}</sym>\n" +
               "  <type>Waypoint|#{wptype}</type>\n" +
+              "  <gsak:wptExtension>\n" +
+              "    <gsak:Parent>GCXXXWIDXXX</gsak:Parent>\n" +
+              "  </gsak:wptExtension>\n" +
               "</wpt>\n"
           end
           # reset row counter and hidden flag for next WP
@@ -1276,6 +1280,8 @@ class Output
       'maps_url' => "#{GOOGLE_MAPS_URL}?q=#{coord_query}",
       'IsAvailable' => (available == true).to_s.capitalize,
       'IsArchived' => (archived == true).to_s.capitalize,
+      'IsPremium' => (cache['membersonly'] == true).to_s.capitalize,
+      'FavPoints' => cache['favorites'] || 0,
       # cartridge CGUID has 36 characters, so has the "dummy" one
       'cartridge' => (cache['cartridge'] || '_no_link_to_wherigo_cartridge_found_'),
       'location' => location,
