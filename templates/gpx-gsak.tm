@@ -11,13 +11,15 @@ template = {
        "xsi:schemaLocation=\"http://www.topografix.com/GPX/1/0 " +
         "http://www.topografix.com/GPX/1/0/gpx.xsd " +
         "http://www.groundspeak.com/cache/1/0/1 " +
-        "http://www.groundspeak.com/cache/1/0/1/cache.xsd " +
-        "http://www.gsak.net/xmlv1/6 http://www.gsak.net/xmlv1/6/gsak.xsd\" " +
+        "http://www.groundspeak.com/cache/1/0/1/cache.xsd\" " +
+#        "http://www.groundspeak.com/cache/1/0/1/cache.xsd " +
+#        "http://www.gsak.net/xmlv1/6 http://www.gsak.net/xmlv1/6/gsak.xsd\" " +
        "xmlns=\"http://www.topografix.com/GPX/1/0\" " +
        "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
        "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " +
-       "xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0\" " +
-       "xmlns:gsak=\"http://www.gsak.net/xmlv1/6\">\n" +
+       "xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0\">\n" +
+#       "xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0\" " +
+#       "xmlns:gsak=\"http://www.gsak.net/xmlv1/6\">\n" +
       "<name>" + Time.new.gmtime.strftime("%Y%m%dT%H%M%S") + "</name>\n" +
       "<desc><%outEntity.title%></desc>\n" +
       "<author>GeoToad <%outEntity.version%></author>\n" +
@@ -55,12 +57,12 @@ template = {
       "  </groundspeak:logs>\n" +
       "  <groundspeak:travelbugs><%out.xmlTrackables%></groundspeak:travelbugs>\n" +
       "  </groundspeak:cache>\n" +
-      "  <gsak:wptExtension>\n" +
-      "    <gsak:IsPremium><%out.IsPremium%></gsak:IsPremium>\n" +
-      "    <gsak:FavPoints><%out.FavPoints%></gsak:FavPoints>\n" +
+#      "  <gsak:wptExtension>\n" +
+#      "    <gsak:IsPremium><%out.IsPremium%></gsak:IsPremium>\n" +
+#      "    <gsak:FavPoints><%out.FavPoints%></gsak:FavPoints>\n" +
 #      "    <gsak:Watch>false</gsak:Watch>\n" +
 #      "    <gsak:GcNote>>/gsak:GcNote>\n" +
-      "  </gsak:wptExtension>\n" +
+#      "  </gsak:wptExtension>\n" +
       "</wpt>\n",
     'templatePost'    => "</gpx>\n"
   },
@@ -75,13 +77,15 @@ template = {
        "xsi:schemaLocation=\"http://www.topografix.com/GPX/1/0 " +
         "http://www.topografix.com/GPX/1/0/gpx.xsd " +
         "http://www.groundspeak.com/cache/1/0/1 " +
-        "http://www.groundspeak.com/cache/1/0/1/cache.xsd " +
-        "http://www.gsak.net/xmlv1/6 http://www.gsak.net/xmlv1/6/gsak.xsd\" " +
+        "http://www.groundspeak.com/cache/1/0/1/cache.xsd\" " +
+#        "http://www.groundspeak.com/cache/1/0/1/cache.xsd " +
+#        "http://www.gsak.net/xmlv1/6 http://www.gsak.net/xmlv1/6/gsak.xsd\" " +
        "xmlns=\"http://www.topografix.com/GPX/1/0\" " +
        "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
        "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " +
-       "xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0\" " +
-       "xmlns:gsak=\"http://www.gsak.net/xmlv1/6\">\n" +
+       "xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0\">\n" +
+#       "xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0\" " +
+#       "xmlns:gsak=\"http://www.gsak.net/xmlv1/6\">\n" +
       "<name>" +
         "Waypoints for Cache Listings Generated from Geocaching.com, geotoad " +
         Time.new.gmtime.strftime("%Y%m%dT%H%M%S") + "</name>\n" +

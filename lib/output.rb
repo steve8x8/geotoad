@@ -1140,9 +1140,9 @@ class Output
 #              "  <urlname>#{wpname}</urlname>\n" +
               "  <sym>#{wptype}</sym>\n" +
               "  <type>Waypoint|#{wptype}</type>\n" +
-              "  <gsak:wptExtension>\n" +
-              "    <gsak:Parent>GCXXXWIDXXX</gsak:Parent>\n" +
-              "  </gsak:wptExtension>\n" +
+#              "  <gsak:wptExtension>\n" +
+#              "    <gsak:Parent>GCXXXWIDXXX</gsak:Parent>\n" +
+#              "  </gsak:wptExtension>\n" +
               "</wpt>\n"
           end
           # reset row counter and hidden flag for next WP
