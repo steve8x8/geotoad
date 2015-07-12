@@ -1131,18 +1131,11 @@ class Output
             # Garmin Oregon shows only <desc>, not <cmt>, and limits to 48 chars
             wptlist = wptlist +
               "<wpt lat=\"#{wplat}\" lon=\"#{wplon}\">\n" +
-#              "  <time>"+ timestamp.strftime("%Y-%m-%dT07:00:00.00Z") + "</time>\n" +
               "  <name>#{prefix}XXXWIDXXX</name>\n" +
               "  <cmt>#{desc}</cmt>\n" +
-#              "  <desc>#{wpname}:#{desc}</desc>\n" +
               "  <desc>#{wpname}</desc>\n" +
-#              "  <url>http://www.geocaching.com/seek/wpt.aspx?WID=#{widurl}</url>\n" +
-#              "  <urlname>#{wpname}</urlname>\n" +
               "  <sym>#{wptype}</sym>\n" +
               "  <type>Waypoint|#{wptype}</type>\n" +
-#              "  <gsak:wptExtension>\n" +
-#              "    <gsak:Parent>GCXXXWIDXXX</gsak:Parent>\n" +
-#              "  </gsak:wptExtension>\n" +
               "</wpt>\n"
           end
           # reset row counter and hidden flag for next WP
