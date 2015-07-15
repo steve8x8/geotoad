@@ -57,8 +57,8 @@ class ProgressBar
     end
 
     pvalue = "#{@value}".rjust(@max.to_s.length)
-    addtext = (@valueText) ? ": #{@valueText}" : ""
-    puts "[#{meter}] (#{pvalue}/#{@max}) #{@name}#{addtext}"
+    addtext = "#{@name}" + ((@name.empty?)?"":": ") + "#{@valueText}"
+    puts "[#{meter}] (#{pvalue}/#{@max}) #{addtext}"
   end
 
 end
