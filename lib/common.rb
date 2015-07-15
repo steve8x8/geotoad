@@ -458,7 +458,7 @@ module Common
   # mapping WID to GUID via dictionary file
   def loadMapping
     mappingFile  = File.join(findConfigDir, 'mapping.yaml')
-    displayMessage "Loading dictionary from #{mappingFile}"
+    displayMessage "Dictionary: #{mappingFile}"
     mapping = false
     if File.readable?(mappingFile)
       mapping = YAML::load(File.open(mappingFile))
@@ -472,7 +472,7 @@ module Common
         displayWarning "Could not reset dictionary:\n\t#{error}"
       end
     end
-    displayInfo "#{mapping.length} WID->GUID mappings total"
+    displayInfo "#{mapping.length.to_s.rjust(6)} WID->GUID mappings total"
     return mapping
   end
 

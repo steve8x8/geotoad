@@ -21,7 +21,7 @@ class Templates
           next
         end
         # now read all templates from there
-        displayMessage "Populating templates from #{dir}"
+        displayMessage "Templates: #{dir}"
         Dir.entries(dir).sort.each{ |fn|
           if fn =~ /^.*\.tm$/
             file = File.join(dir, fn)
@@ -47,7 +47,7 @@ class Templates
         displayWarning "#{dir} causing problems: #{e}"
       end
     }
-    displayInfo "#{$FORMATS.keys.length} templates total"
+    displayInfo "#{$FORMATS.keys.length.to_s.rjust(6)} templates total"
   end
 
 end
