@@ -110,10 +110,14 @@ Both latitude and longitude must use the same representation.
 .PP
 \fB-o\fR|\fB--output\fR \fIfilename\fR
     (first) output file name (default: created from query argument(s) and options)
-    In case of multiple output formats, subsequent file names are derived from this one.
+    In case of multiple output formats, subsequent file names are derived from this one
+by substituting filename extensions.
 .PP
 \fB-x\fR|\fB--format\fR \fIformat\fR  \fB(MULTI)\fR
     output format type(s) (default: gpx)
+    Any entry can be of the form format=extension in which case the default extension
+specified in the template will be overwritten. For the first output file, a specified
+output file name takes precedence.
     See the \fBOUTPUT FORMATS\fR section below for the list of supported formats.
 .PP
 \fB-w\fR|\fB--waypointLength\fR \fIlength\fR

@@ -926,7 +926,9 @@ class GeoToad
     displayInfo message
     debug "Using output #{outputDir}/#{outputFileBase}"
     # loop over all chosen formats
-    @formatTypes.split($delimiters).each{ |formatType|
+    @formatTypes.split($delimiters).each{ |formatType0|
+      # does the formatType string contain a "="?
+      formatType = formatType0.split(/=/)[0]
       if ! $validFormats.include?(formatType)
         displayWarning "#{formatType} is not a valid supported format - skipping."
         next
@@ -948,7 +950,12 @@ class GeoToad
       end
       # append suffix if automatic or subsequent runs
       if (not @option['output']) || (formatTypeCounter > 0)
-        outputFileBase = outputFileBase + "." + output.formatExtension(formatType)
+        outputFileExt = output.formatExtension(formatType)
+        # override default extension?
+        if formatType0 =~ /=/
+          outputFileExt = formatType0.split(/=/)[1]
+        end
+        outputFileBase = outputFileBase + "." + outputFileExt
       end
       outputFile = File.join(outputDir, outputFileBase)
       # Lets not mix and match DOS and UNIX /'s, we'll just make everyone like us!
