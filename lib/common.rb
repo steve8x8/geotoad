@@ -485,7 +485,7 @@ module Common
     return if $mapping[wid]
     $mapping[wid] = guid
     mappingFile  = File.join(findConfigDir, 'mapping.yaml')
-    displayInfo "Writing mapping #{wid} -> #{guid}"
+    displayInfo "Mapping #{wid} -> #{guid}"
     begin
       File.open(mappingFile, 'a'){ |f| f.puts "#{wid}: #{guid}" }
     rescue => error

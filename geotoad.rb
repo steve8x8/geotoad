@@ -10,7 +10,7 @@ $LOAD_PATH << $BASEDIR
 $LOAD_PATH << File.join($BASEDIR, 'lib')
 
 if RUBY_VERSION.gsub('.', '').to_i < 191
-  puts "ERROR: Your version of Ruby is #{RUBY_VERSION}, but we now require 1.9.1 or higher."
+  puts "ERROR: Ruby version is #{RUBY_VERSION}. 1.9.1 or higher required."
   sleep(5)
   exit(99)
 end
@@ -328,7 +328,7 @@ class GeoToad
 
   ## Make the Initial Query ############################
   def downloadGeocacheList
-    displayInfo "Your cache directory is " + $CACHE_DIR
+    displayInfo "Cache directory: " + $CACHE_DIR
 
     # Mike Capito contributed a patch to allow for multiple
     # queries. He did it as a hash earlier, I'm just simplifying
@@ -373,15 +373,16 @@ class GeoToad
 
     @queryArg.to_s.split($delimiters).each{ |queryArg|
       puts ""
-      message = "Performing #{@queryType} search for #{queryArg}"
+      message = "\"#{@queryType}\" search for \"#{queryArg}\""
       search = SearchCache.new
 
       # radius is only valid for location or coordinate searches
       if @queryType == 'location' || @queryType == 'coord'
+        message << ", constraining to "
         if @useMetric
-          message << ", constraining to #{dist_km} km"
+          message << "#{dist_km} km"
         else
-          message << ", constraining to #{dist_mi} miles"
+          message << "#{dist_mi} miles"
         end
         search.distance = @distanceMax
       end
@@ -402,7 +403,7 @@ class GeoToad
           end
           # otherwise, warn if "all xxx" is in the list
         elsif cacheTypes.map{ |t| (t =~ /\+$/) ? "x" : nil }.any?
-          displayWarning "Filtering for \"all\" only works for single cache type - your results will be wrong!"
+          displayWarning "\"all\" only works as single cache type - your results will be wrong!"
           sleep 10
         end
       end
@@ -414,8 +415,8 @@ class GeoToad
       # this is kind of late, but we did our best 
       # we had to set txfilter and notyetfound before because setType creates the search URL
       if (! search.setType(@queryType, queryArg))
-        displayWarning "Could not determine search type for #{@queryType} \"#{queryArg}\""
-        displayWarning "You may want to remove special characters or try a \"coord\" search instead"
+        displayWarning "Search \"#{@queryType}\" for \"#{queryArg}\" unknown."
+        displayWarning "Check for special characters or try a \"coord\" search instead."
         sleep 10
         next
       end
@@ -916,7 +917,7 @@ class GeoToad
     if File.directory?(filename)
       filename = File.join(filename, '')
     end
-    message = "Output pattern:  #{filename}"
+    message = "Pattern:  #{filename}"
     # we can now check for a trailing slash safely
     if filename =~ /\/$/
       # automatic mode
@@ -945,7 +946,7 @@ class GeoToad
         next
       end
       output = Output.new
-      displayInfo "Output format:   #{output.formatDesc(formatType)} (#{formatType})"
+      displayInfo "Format:   #{output.formatDesc(formatType)} (#{formatType})"
       output.input(@filtered.waypoints)
       output.formatType = formatType
       if (@option['waypointLength'])
@@ -966,7 +967,7 @@ class GeoToad
       outputFile = File.join(outputDir, outputFileBase)
       # Lets not mix and match DOS and UNIX /'s, we'll just make everyone like us!
       outputFile.gsub!(/\\/, '/')
-      displayInfo "Output filename: #{outputFile}"
+      displayInfo "Filename: #{outputFile}"
 
       # append time to our title
       queryTitle = @queryTitle + " (" + Time.now.strftime("%d%b%y %H:%M") + ")"
@@ -974,9 +975,9 @@ class GeoToad
       # and do the dirty.
       output.prepare(queryTitle, @option['user'])
       if output.commit(outputFile)
-        displayMessage "Saved to #{outputFile}"
+        displayMessage "Saved #{outputFile}"
       else
-        displayWarning "Not saved to #{outputFile}!"
+        displayWarning "NOT saved #{outputFile}!"
       end
       puts ""
 

@@ -216,7 +216,7 @@ class ShadowFetch
       end
     end
     if not dowrite
-      displayWarning "Will not overwrite existing cache file with PMO!"
+      displayWarning "Merging current PMO with non-PMO cache file!"
     else
       debug "writing #{localfile}"
       begin
