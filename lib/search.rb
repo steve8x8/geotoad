@@ -32,24 +32,20 @@ class SearchCache
 	 'cito'         => '57150806-bc1a-42d6-9cf0-538d171a2d22',
 	 'megaevent'    => '69eb8535-b718-4b35-ae3c-a856a55b0874',
 	 'lost+found'   => '3ea6533d-bb52-42fe-b2d2-79a3424d4728',
-#	 'lostfound'    => '3ea6533d-bb52-42fe-b2d2-79a3424d4728',
 	 'lfceleb'      => 'af820035-787a-47af-b52b-becc8b0c0c88',
 	 'block'        => 'bc2f3df2-1aab-4601-b2ff-b5091f6c02e3',
 	 'gigaevent'    => '51420629-5739-4945-8bdd-ccfd434c0ead',
 	'unknown+'     => '40861821-1835-4e11-b666-8d41064d03fe', # all unknown types
 	 'unknown'      => '40861821-1835-4e11-b666-8d41064d03fe&children=n',
-#	 'mystery'      => '40861821-1835-4e11-b666-8d41064d03fe&children=n',
-#	 'puzzle'       => '40861821-1835-4e11-b666-8d41064d03fe&children=n',
 	 'gshq'         => '416f2494-dc17-4b6a-9bab-1a29dd292d8c',
 	'ape'          => '2555690d-b2bc-4b55-b5ac-0cb704c0b768',
-#	'project'      => '2555690d-b2bc-4b55-b5ac-0cb704c0b768',
 	'webcam'       => '31d2ae3c-c358-4b5f-8dcd-2185bf472d3d',
 	'earthcache'   => 'c66f5cf3-9523-4549-b8dd-759cd2f18db8',
 	'exhibit'      => '72e69af2-7986-4990-afd9-bc16cbbb4ce3',
 	'wherigo'      => '0544fa55-772d-4e5c-96a9-36a51ebcf5c9',
 # obsolete?
 	'reverse'      => '8f6dd7bc-ff39-4997-bd2e-225a0d2adf9d',
-#	'locationless' => '8f6dd7bc-ff39-4997-bd2e-225a0d2adf9d',
+	'locationless' => '8f6dd7bc-ff39-4997-bd2e-225a0d2adf9d',
     }
     @txfilter = nil
 
@@ -59,7 +55,7 @@ class SearchCache
 	'4'	=> 'Virtual Cache',
 	'5'	=> 'Letterbox Hybrid',
 	'6'	=> 'Event Cache',
-	'8'	=> 'Unknown Cache', # now: 'Mystery Cache',
+	'8'	=> 'Unknown Cache',
 	'9'	=> 'Project APE Cache',
 	'11'	=> 'Webcam Cache',
 	'12'	=> 'Locationless (Reverse) Cache',
@@ -82,7 +78,7 @@ class SearchCache
 	'mega'		=> 'Mega-Event Cache',
 	'multi'		=> 'Multi-cache',
 	'traditional'	=> 'Traditional Cache',
-	'unknown'	=> 'Unknown Cache', # now: 'Mystery Cache',
+	'unknown'	=> 'Unknown Cache',
 	'virtual'	=> 'Virtual Cache',
 	'webcam'	=> 'Webcam Cache',
 	'wherigo'	=> 'Wherigo Cache',
@@ -187,21 +183,21 @@ class SearchCache
 
     when 'user'
       @query_type = 'ul'
-      @ttl = 20 * 3600		# 20 hours, was 3 days
+      @ttl = 20 * 3600
 
     when 'owner'
       @query_type = 'u'
-      @ttl = 1 * 24 * 3600	# 1 day, was 3 days
+      @ttl = 1 * 24 * 3600
 
     when 'country'
       @query_type = 'country'
       @search_url = @@base_url + "?country_id=#{key}&as=1"
-      @ttl = 1 * 24 * 3600	# 1 day, was 2 weeks
+      @ttl = 1 * 24 * 3600
 
     when 'state'
       @query_type = 'state'
       @search_url = @@base_url + "?state_id=#{key}"
-      @ttl = 1 * 24 * 3600	# 1 day, was 2 weeks
+      @ttl = 1 * 24 * 3600
 
     when 'keyword'
       @query_type = 'key'
