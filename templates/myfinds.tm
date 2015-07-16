@@ -6,8 +6,17 @@ template = {
     'ext'        => 'gpx',
     'mime'    => 'text/ascii',
     'desc'    => 'GPX Geocaching XML (my finds)',
-    'templatePre' => "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-      "<gpx xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" version=\"1.0\" creator=\"GeoToad\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd http://www.groundspeak.com/cache/1/0/1 http://www.groundspeak.com/cache/1/0/1/cache.xsd\" xmlns=\"http://www.topografix.com/GPX/1/0\">\n" +
+    'templatePre' => "<?xml version=\'1.0\' encoding=\'UTF-8\' standalone=\'yes\' ?>\n" +
+      "<gpx" +
+       " version=\"1.0\" creator=\"GeoToad\"" +
+       " xsi:schemaLocation=\"" +
+         "http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd" +
+        " http://www.groundspeak.com/cache/1/0 http://www.groundspeak.com/cache/1/0/1/cache.xsd" +
+       "\n" +
+       " xmlns=\"http://www.topografix.com/GPX/1/0\"" +
+       " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" +
+       " xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0\"" +
+       ">\n" +
       "<name>My Finds Pocket Query</name>\n" +
       "<desc><%outEntity.title%></desc>\n" +
       "<author>GeoToad <%outEntity.version%></author>\n" +
@@ -69,8 +78,17 @@ template = {
     'ext'        => 'gpx',
     'mime'    => 'text/ascii',
     'desc'    => 'GPX Geocaching XML (user finds)',
-    'templatePre' => "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-      "<gpx xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" version=\"1.0\" creator=\"GeoToad\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd http://www.groundspeak.com/cache/1/0/1 http://www.groundspeak.com/cache/1/0/1/cache.xsd\" xmlns=\"http://www.topografix.com/GPX/1/0\">\n" +
+    'templatePre' => "<?xml version=\'1.0\' encoding=\'UTF-8\' standalone=\'yes\'?>\n" +
+      "<gpx" +
+       " version=\"1.0\" creator=\"GeoToad\"" +
+       " xsi:schemaLocation=\"" +
+         "http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd" +
+        " http://www.groundspeak.com/cache/1/0 http://www.groundspeak.com/cache/1/0/1/cache.xsd" +
+       "\n" +
+       " xmlns=\"http://www.topografix.com/GPX/1/0\"" +
+       " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" +
+       " xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0\"" +
+       ">\n" +
       "<name>My Finds Pocket Query</name>\n" +
       "<desc><%outEntity.title%></desc>\n" +
       "<author>GeoToad <%outEntity.version%></author>\n" +

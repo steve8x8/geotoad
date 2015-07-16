@@ -1129,6 +1129,8 @@ class Output
           if hidden == false
             # replace XXXWIDXXX by WID string later!
             # Garmin Oregon shows only <desc>, not <cmt>, and limits to 48 chars
+            # GSAK waypoints carry more info, but need additions to file header,
+            # we add the tags to be stripped off later
             wptlist = wptlist +
               "<wpt lat=\"#{wplat}\" lon=\"#{wplon}\">\n" +
               "  <name>#{prefix}XXXWIDXXX</name>\n" +
@@ -1136,6 +1138,9 @@ class Output
               "  <desc>#{wpname}</desc>\n" +
               "  <sym>#{wptype}</sym>\n" +
               "  <type>Waypoint|#{wptype}</type>\n" +
+              "  <gsak:wptExtension>\n" +
+              "    <gsak:Parent>GCXXXWIDXXX</gsak:Parent>\n" +
+              "  </gsak:wptExtension>\n" +
               "</wpt>\n"
           end
           # reset row counter and hidden flag for next WP
@@ -1198,9 +1203,13 @@ class Output
     end
     # make series of <wpt> elements containing non-hidden waypoints
     # (the ones with real coordinates)
+    xmlWptsGsak = nil
     xmlWpts = nil
     if shortWpts.to_s.length > 0
-      xmlWpts = toWptList(shortWpts, cache['ctime'])
+      xmlWptsGsak = toWptList(shortWpts, cache['ctime'])
+      if xmlWptsGsak
+        xmlWpts = xmlWptsGsak.each_line.map{|l| (l=~/<\/?gsak:/)?nil:l}.compact.join
+      end
       # add separator lines
       shortWpts = "<hr />" + shortWpts + "<hr />"
     end
@@ -1291,6 +1300,7 @@ class Output
       'trackables' => cache['travelbug'].to_s,
       'xmlTrackables' => xmlTrackables,
       'shortWpts' => shortWpts.to_s,
+      'xmlWptsGsak' => xmlWptsGsak.to_s.gsub(/XXXWIDXXX/, wid[2..-1]),
       'xmlWpts' => xmlWpts.to_s.gsub(/XXXWIDXXX/, wid[2..-1]),
       'xmlAttrs' => xmlAttrs.to_s,
       'txtAttrs' => (cache['attributeText'].to_s.empty?) ? '' : '[' + cache['attributeText'].to_s.capitalize.gsub(/\\/, "/") + ']',

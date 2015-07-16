@@ -1,10 +1,11 @@
 template = {
 
-  # Two templates for separate output of caches and add.wpts for GSAK use
-  'gpx-gsak'    => {
+
+  # GSAK-like GPX that can be imported into c:geo, with Additional Waypoints
+  'gpx-cgeo'    => {
     'ext'        => 'gpx',
     'mime'    => 'text/ascii',
-    'desc'    => 'GPX Geocaching XML for GSAK, without Additional Waypoints',
+    'desc'    => 'GPX Geocaching XML for c:geo, with Additional Waypoints',
     'templatePre' => "<?xml version=\'1.0\' encoding=\'UTF-8\' standalone=\'yes\' ?>\n" +
       "<gpx" +
        " version=\"1.0\" creator=\"GeoToad\"" +
@@ -17,17 +18,12 @@ template = {
        " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" +
        " xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0\"" +
        " xmlns:gsak=\"http://www.gsak.net/xmlv1/6\"" +
-      ">\n" +
-      "<name>Geocaches</name>\n" +
-      "<desc><%outEntity.title%></desc>\n" +
-      "<author>GeoToad <%outEntity.version%></author>\n" +
-      "<email>geotoad@googlegroups.com</email>\n" +
-      "<time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S")  + ".000Z</time>\n" +
-      "<keywords>cache, geocache, groundspeak, geotoad</keywords>\n",
+       " xmlns:cgeo=\"http://www.cgeo.org/wptext/1/0\"" +
+      ">\n",
     'templateWP'    => "<wpt lat=\"<%out.latdatapad6%>\" lon=\"<%out.londatapad6%>\">\n" +
       "  <time><%out.XMLDate%></time>\n" +
       "  <name><%outEntity.id%></name>\n" +
-      "  <desc><%wpEntity.name%> by <%wpEntity.creator%>, <%wp.type%> (<%wp.difficulty%>/<%wp.terrain%>)</desc>\n" +
+      "  <desc><%wpEntity.name%></desc>\n" +
       "  <url><%wp.url%></url>\n" +
       "  <urlname><%wpEntity.name%></urlname>\n" +
       "  <sym><%outEntity.cacheSymbol%></sym>\n" +
@@ -48,11 +44,8 @@ template = {
       "  </groundspeak:attributes>\n" +
       "  <groundspeak:short_description html=\"True\">" +
        "<%out.premiumOnly%><%outEntity.warnArchiv%><%outEntity.warnAvail%>&lt;br /&gt;" +
-       "<%outEntity.txtAttrs%>&lt;br /&gt;" +
        "<%wpEntity.shortdesc%></groundspeak:short_description>\n" +
-      "  <groundspeak:long_description html=\"True\">" +
-       "<%outEntity.shortWpts%>" +
-       "<%wpEntity.longdesc%></groundspeak:long_description>\n" +
+      "  <groundspeak:long_description html=\"True\"><%wpEntity.longdesc%></groundspeak:long_description>\n" +
       "  <groundspeak:logs>\n" +
       "<%out.gpxlogs%>" +
       "  </groundspeak:logs>\n" +
@@ -61,37 +54,11 @@ template = {
       "  <gsak:wptExtension>\n" +
       "    <gsak:IsPremium><%out.IsPremium%></gsak:IsPremium>\n" +
       "    <gsak:FavPoints><%out.FavPoints%></gsak:FavPoints>\n" +
-#      "    <gsak:Watch>false</gsak:Watch>\n" +
-#      "    <gsak:GcNote></gsak:GcNote>\n" +
+      "    <gsak:Watch>false</gsak:Watch>\n" +
+      "    <gsak:GcNote></gsak:GcNote>\n" +
       "  </gsak:wptExtension>\n" +
-      "</wpt>\n",
-    'templatePost'    => "</gpx>\n"
-  },
-
-  'gpx-wpts'    => {
-    'ext'        => 'wgpx',
-    'mime'    => 'text/ascii',
-    'desc'    => 'GPX Geocaching XML for GSAK, only Additional Waypoints',
-    'templatePre' => "<?xml version=\'1.0\' encoding=\'UTF-8\' standalone=\'yes\' ?>\n" +
-      "<gpx" +
-       " version=\"1.0\" creator=\"GeoToad\"" +
-       " xsi:schemaLocation=\"" +
-         "http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd" +
-        " http://www.groundspeak.com/cache/1/0 http://www.groundspeak.com/cache/1/0/1/cache.xsd" +
-        " http://www.gsak.net/xmlv1/6 http://www.gsak.net/xmlv1/6/gsak.xsd" +
-       "\"" +
-       " xmlns=\"http://www.topografix.com/GPX/1/0\"" +
-       " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" +
-       " xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0\"" +
-       " xmlns:gsak=\"http://www.gsak.net/xmlv1/6\"" +
-      ">\n" +
-      "<name>Waypoints</name>\n" +
-      "<desc><%outEntity.title%></desc>\n" +
-      "<author>GeoToad <%outEntity.version%></author>\n" +
-      "<email>geotoad@googlegroups.com</email>\n" +
-      "<time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S")  + ".000Z</time>\n" +
-      "<keywords>cache, geocache, groundspeak, geotoad</keywords>\n",
-    'templateWP'    => "<%out.xmlWptsGsak%>",
+      "</wpt>\n" +
+      "<%out.xmlWptsGsak%>",
     'templatePost'    => "</gpx>\n"
   },
 

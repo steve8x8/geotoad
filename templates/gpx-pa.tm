@@ -8,7 +8,16 @@ template = {
     'mime'    => 'text/ascii',
     'desc'    => 'GPX Geocaching XML for PathAway',
     'templatePre' => "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-      "<gpx xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" version=\"1.0\" creator=\"GeoToad\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd http://www.groundspeak.com/cache/1/0/1 http://www.groundspeak.com/cache/1/0/1/cache.xsd\" xmlns=\"http://www.topografix.com/GPX/1/0\">\n" +
+      "<gpx" +
+       " version=\"1.0\" creator=\"GeoToad\"" +
+       " xsi:schemaLocation=\"" +
+         "http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd" +
+        " http://www.groundspeak.com/cache/1/0/1 http://www.groundspeak.com/cache/1/0/1/cache.xsd" +
+       "\"" +
+       " xmlns=\"http://www.topografix.com/GPX/1/0\"" +
+       " xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"" +
+       " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" +
+      ">\n" +
       "<name>" + Time.new.gmtime.strftime("%Y%m%dT%H%M%S") + "</name>\n" +
       "<desc><%outEntity.title%></desc>\n" +
       "<author>GeoToad <%outEntity.version%></author>\n" +

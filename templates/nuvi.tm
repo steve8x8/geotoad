@@ -17,7 +17,7 @@ template = {
     'ext'     => 'ngpx',
     'mime'    => 'text/ascii',
     'desc'    => 'GPX Geocaching XML for Nuvi, without Additional Waypoints',
-    'templatePre' => "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>\n" +
+    'templatePre' => "<?xml version=\'1.0\' encoding=\'UTF-8\' standalone=\'yes\' ?>\n" +
       "<gpx>\n" +
       "<name>" + Time.new.gmtime.strftime("%Y%m%dT%H%M%S") + "</name>\n" +
       "<desc><%outEntity.title%></desc>\n" +
