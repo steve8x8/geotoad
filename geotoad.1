@@ -1,4 +1,4 @@
-.TH "GEOTOAD" "1" "27 Apr 2015" "steve8x8@googlemail.com" "Geocaching Query Tool"
+.TH "GEOTOAD" "1" "17 Jul 2015" "steve8x8@googlemail.com" "Geocaching Query Tool"
 
 .SH "NAME"
 geotoad \- geocaching query tool
@@ -345,11 +345,11 @@ set, such as umlauts, etc.) we recommend to set
 to
 .B en_US.UTF-8
 or similar. The syntax depends on the shell you're using:
-	.B setenv LANG en_US.UTF-8
+.B setenv LANG en_US.UTF-8
 for C-shell derivatives (csh, tcsh)
-	.B LANG=en_US.UTF-8; export LANG
+.B LANG=en_US.UTF-8; export LANG
 for Bourne and Korn shell (sh, ksh)
-	.B export LANG=en_US.UTF-8
+.B export LANG=en_US.UTF-8
 for Bourne Again shell and derivatives (bash, dash)
 
 .SH "OUTPUT FORMATS"
@@ -421,39 +421,39 @@ as country and state searches return caches in reverse chronological order
 .B  geotoad -u user -p password -x html -o palestine.html -q country 276
   Get a HTML representation of all caches in Palestine. (Oct 2013: 7, one of them unfound)
 .PP
-.B  geotoad -u ... -p ... -t 2.5 -E "helixblue:Sallad" -x gpx -o charlotte.gpx 28272
+.B  geotoad ... -t 2.5 -E "helixblue:Sallad" -x gpx -o charlotte.gpx 28272
   Get caches in the 10-mile zone of zipcode 28272, with a terrain score of 2.5 or higher, 
 which users helixblue and Sallad have not visited.
   Outputs a GPX format file, which is usable by most GPSr's and other devices.
 .PP
-.B  geotoad -u ... -p ... -t 2.5 -E anyname=/path/to/file -x gpx -o charlotte.gpx 28272
+.B  geotoad ... -t 2.5 -E anyname=/path/to/file -x gpx -o charlotte.gpx 28272
   As before, but read a list of GCxxxx cache IDs from a file instead of querying the server
 for found caches.
 .PP
-.B  geotoad -u ... -p ... -b -K 'stream|creek|lake|river|ocean' -x html -o watery.html -q state 15
+.B  geotoad ... -b -K 'stream|creek|lake|river|ocean' -x html -o watery.html -q state 15
   Gets every cache in Indiana state with trackables that matches those water keywords,
 and makes a pretty HTML file out of it.
 .PP
-.B  geotoad -u ... -p ... -x gpx -o mylocal.gpx -z -y 1.75 -T 4 -q coord "N 51 23.456 E 012 34.567"
+.B  geotoad ... -x gpx -o mylocal.gpx -z -y 1.75 -T 4 -q coord "N 51 23.456 E 012 34.567"
   Create a GPX file with all caches around the given location,
 max. 1.75 miles away, terrain rating below or equal 4, including disabled ones.
 .PP
-.B  geotoad -u ... -p ... -m '^+|' -o output.gpx -x "gpx+list|html" -y 2km -q coord "52.25,6.075^53.1,-7.2"
+.B  geotoad ... -m '^+|' -o output.gpx -x "gpx+list|html" -y 2km -q coord "52.25,6.075^53.1,-7.2"
   Perform a search around two travel stops with a 2 kilometre radius, 
 create three files output.gpx, output.lst, output.html combining the results.
   (Note the usage of the \fB-m\fR option to modify the set of delimiters.
 As the \fB|\fR character has a special meaning, it must be "quoted".)
 .PP
-.B  geotoad -u ... -p ... -c multicache -a 6 -A 57 -o family.gpx -x gpx:list -y 25km -q coord "52.25,6.075"
+.B  geotoad ... -c multicache -a 6 -A 57 -o family.gpx -x gpx:list -y 25km -q coord "52.25,6.075"
   Prepare for a Sunday afternoon walk, and find all multi-caches around
 which pretend to be "Kid friendly" (attribute 6) and shorter than 10km (attribute 57).
 .PP
-.B  geotoad ... (as above) --minLat 52.10 --maxLat 52.40 -q coord "52.25,6.075"
+.B  geotoad ... ... (as above) --minLat 52.10 --maxLat 52.40 -q coord "52.25,6.075"
   This will further reduce the number of caches, by dropping all outside a "latitude zone".
   You may also define Eastern and Western limits, e.g. \fB--minLon 6.00 --maxLon 6.20\fR.
   Note that this is a \fBfilter\fR applied after querying the server.
 .PP
-.B  geotoad -u ... -p ... -z -q owner -- -aBcDe-
+.B  geotoad ... -z -q owner -- -aBcDe-
   Find all caches created by one owner, even the disabled or archived ones.
   Note that here the argument (owner name) has to be separated by \fB--\fR from the rest of the command line.
 

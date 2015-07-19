@@ -1081,7 +1081,7 @@ class Output
             wpname = $1
             # extract sym type (in parentheses), replace outdated types (from old cdpfs)
             wptype = wpname.gsub(/^.*\(/, '').gsub(/\).*/, '')
-            wptype = wptype.gsub(/Question to Answer/, 'Virtual Stage').gsub(/Stages of a Multicache/, 'Physical Stage')
+            wptype = wptype.gsub(/Question to Answer/i, 'Virtual Stage').gsub(/Stages of a Multicache/i, 'Physical Stage')
             # and drop type from name
             if wpname =~ /(.*) \(/
               wpname = $1
@@ -1090,7 +1090,7 @@ class Output
             wpname = makeXML(wpname)
             # we have thrown away the WID link in reduceHTML
             # this may be bad, but for now we'll wait for requests
-            widurl = ""
+            #widurl = ""
           elsif tdcount == 7
             # coords in "written" format
             coord = $1
