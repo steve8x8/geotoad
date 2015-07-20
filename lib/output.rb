@@ -1101,14 +1101,19 @@ class Output
               wplat = ($2.to_f + $3.to_f / 60) * ($1 == 'S' ? -1:1)
               wplon = ($5.to_f + $6.to_f / 60) * ($4 == 'W' ? -1:1)
               #hidden = false
-            else # no coordinates ("???")
-              wplat = 0
-              wplon = 0
-              hidden = true
+            else # no coordinates ("???") -> <wpt>
+              wplat = nil
+              wplon = nil
+              # make "zero" waypoints available for c:geo etc.
+              ##hidden = true
             end
             # convert to shortened strings
-            wplat = sprintf("%2.6f", wplat)
-            wplon = sprintf("%2.6f", wplon)
+            if wplat
+              wplat = sprintf("%.6f", wplat)
+            end
+            if wplon
+              wplon = sprintf("%.6f", wplon)
+            end
           end
         else
           # second row of two
@@ -1131,13 +1136,17 @@ class Output
           if hidden == false
             # replace XXXWIDXXX by WID string later!
             # Garmin Oregon shows only <desc>, not <cmt>, and limits to 48 chars
-            # GSAK waypoints carry more info, but need additions to file header,
-            # we add the tags to be stripped off later
+            # GSAK waypoints carry more info, c:geo can also handle locationless
+            # return all info we may need, strip later
             wptlist = wptlist +
-              "<wpt lat=\"#{wplat}\" lon=\"#{wplon}\">\n" +
+              "<wpt" +
+                ((wplat and wplon) ? " lat=\"#{wplat}\" lon=\"#{wplon}\"" : "") +
+                ">\n" +
               "  <name>#{prefix}XXXWIDXXX</name>\n" +
               "  <cmt>#{desc}</cmt>\n" +
-              "  <desc>#{wpname}</desc>\n" +
+              "  <desc>#{wpname}" +
+                ((desc.to_s.length > 0) ? ":#{desc}" : "") +
+                "</desc>\n" +
               "  <sym>#{wptype}</sym>\n" +
               "  <type>Waypoint|#{wptype}</type>\n" +
               "  <gsak:wptExtension>\n" +
@@ -1211,15 +1220,22 @@ class Output
     if rawWpts.to_s.length > 0
       shortWpts = reduceHtml(rawWpts)
     end
-    # make series of <wpt> elements containing non-hidden waypoints
-    # (the ones with real coordinates)
+    # make series of <wpt> elements
+    xmlWptsCgeo = nil
     xmlWptsGsak = nil
     xmlWpts = nil
     if shortWpts.to_s.length > 0
-      xmlWptsGsak = toWptList(shortWpts, cache['ctime'])
+      xmlWptsCgeo = toWptList(shortWpts, cache['ctime'])
+      if xmlWptsCgeo
+        # remove locationless wpts
+        xmlWptsGsak = xmlWptsCgeo.gsub(/<wpt( lat="0.000000*" lon="0.000000*")?>.*?<\/wpt>\s*/, '')
+      end
       if xmlWptsGsak
+        # remove gsak additions
         xmlWpts = xmlWptsGsak.each_line.map{|l| (l=~/<\/?gsak:/)?nil:l}.compact.join
       end
+      # strip desc strings
+      xmlWptsCgeo.gsub!(/<desc>(.*?):.*?<\/desc>/){ "<desc>#{$1}</desc>" }
       # add separator lines
       shortWpts = "<hr />" + shortWpts + "<hr />"
     end
@@ -1310,6 +1326,7 @@ class Output
       'trackables' => cache['travelbug'].to_s,
       'xmlTrackables' => xmlTrackables,
       'shortWpts' => shortWpts.to_s,
+      'xmlWptsCgeo' => xmlWptsCgeo.to_s.gsub(/XXXWIDXXX/, wid[2..-1]),
       'xmlWptsGsak' => xmlWptsGsak.to_s.gsub(/XXXWIDXXX/, wid[2..-1]),
       'xmlWpts' => xmlWpts.to_s.gsub(/XXXWIDXXX/, wid[2..-1]),
       'xmlAttrs' => xmlAttrs.to_s,

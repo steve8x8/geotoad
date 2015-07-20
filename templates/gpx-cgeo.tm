@@ -58,7 +58,7 @@ template = {
       "    <gsak:GcNote></gsak:GcNote>\n" +
       "  </gsak:wptExtension>\n" +
       "</wpt>\n" +
-      "<%out.xmlWptsGsak%>",
+      "<%out.xmlWptsCgeo%>",
     'templatePost'    => "</gpx>\n"
   },
 
