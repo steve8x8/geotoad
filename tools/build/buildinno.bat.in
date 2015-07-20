@@ -1,0 +1,7 @@
+@echo off
+z:
+cd .
+c:\\Programme\\"Inno Setup 5"\\iscc /o.. /fgeotoad-XXXVERSIONXXX_Installer buildinno.iss
+cd ..
+dir *.exe
+pause

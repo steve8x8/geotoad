@@ -1,1 +1,5 @@
-tools/makedist-*.sh
+/tools/build/VERSION
+/tools/build/*/
+/tools/build/geotoad-*
+/tools/build/geotoad_*
+/tools/build/md5sums.txt

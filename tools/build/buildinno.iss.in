@@ -1,0 +1,27 @@
+; SEE THE DOCUMENTATION FOR DETAILS ON CREATING .ISS SCRIPT FILES!
+
+[Setup]
+AppName=GeoToad
+; Version string gets replaced by build script
+AppVersion=XXXVERSIONXXX
+DefaultDirName={pf}\GeoToad
+DefaultGroupName=GeoToad
+UninstallDisplayIcon={app}\geotoad.exe
+
+[Files]
+Source: "geotoad.exe";               DestDir: "{app}"
+Source: "geotoad.pdf";               DestDir: "{app}"
+Source: "templates\*.*";             DestDir: "{app}\templates"
+Source: "data\*.*";                  DestDir: "{app}\data"; Flags: skipifsourcedoesntexist
+Source: "contrib\Delorme_Icons\*.*"; DestDir: "{app}\contrib\Delorme_Icons"; Flags: skipifsourcedoesntexist
+Source: "tools\*.*";                 DestDir: "{app}\tools"; Flags: skipifsourcedoesntexist
+Source: "README.txt";                DestDir: "{app}\doc"; Flags: isreadme
+Source: "ChangeLog.txt";             DestDir: "{app}\doc"; Flags: skipifsourcedoesntexist
+Source: "COPYRIGHT.txt";             DestDir: "{app}\doc"; Flags: skipifsourcedoesntexist
+Source: "FAQ.txt";                   DestDir: "{app}\doc"; Flags: skipifsourcedoesntexist
+Source: "OtherSearches.txt";         DestDir: "{app}\doc"; Flags: skipifsourcedoesntexist
+Source: "ReportingBugs.txt";         DestDir: "{app}\doc"; Flags: skipifsourcedoesntexist
+Source: "Templates.txt";             DestDir: "{app}\doc"; Flags: skipifsourcedoesntexist
+
+[Icons]
+Name: "{group}\GeoToad"; Filename: "{app}\geotoad.exe"

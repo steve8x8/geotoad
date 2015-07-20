@@ -1,4 +1,4 @@
-# The version gets inserted by makedist.sh
+# The version gets inserted during release/packaging
 
 module GTVersion
 

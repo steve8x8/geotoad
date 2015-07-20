@@ -1,0 +1,10 @@
+@echo on
+z:
+call pik switch XXXWINRUBYXXX
+call pik ls
+path
+cd compile
+call ocra --console geotoad.rb
+dir *.exe
+cd ..
+pause
