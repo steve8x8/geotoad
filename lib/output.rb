@@ -4,6 +4,7 @@ require 'cgi'
 require 'lib/templates'
 require 'lib/version'
 require 'zlib'
+require 'lib/geodist'
 
 GOOGLE_MAPS_URL = 'http://maps.google.com/maps'
 
@@ -11,6 +12,7 @@ class Output
 
   include Common
   include Messages
+  include GeoDist
 
   $ReplaceWords = {
     'KILOMETER' => 'km',
@@ -1165,6 +1167,14 @@ class Output
       symbols = ''
     end
 
+    # we may have got a distance from the search
+    # if there's a home location, use that instead
+    newDistance, newDirection = geoDistDir($my_lat, $my_lon, cache['latdata'], cache['londata'])
+    # will return nil if input is missing
+    if newDistance and newDirection
+      cache['distance'] = newDistance
+      cache['direction'] = newDirection
+    end
     if cache['distance'] and cache['direction']
       distmi = (cache['distance'] || 0.0)
       distkm = distmi * $MILE2KM

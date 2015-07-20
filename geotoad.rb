@@ -20,6 +20,9 @@ Encoding.default_external = Encoding::UTF_8
 $delimiters = /[\|:]/
 $delimiter = '|'
 
+$my_lat = nil
+$my_lon = nil
+
 # toss in our own libraries.
 require 'interface/progressbar'
 require 'lib/common'
@@ -332,8 +335,9 @@ class GeoToad
       displayWarning "Note: Subsequent operations may fail. You've been warned."
     end
     displayMessage "Querying user preferences"
-    @dateFormat, prefLang = getPreferences()
+    @dateFormat, prefLang, $my_lat, $my_lon = getPreferences()
     displayInfo "Using date format #{@dateFormat}, language #{prefLang}"
+    displayInfo "Using home location (#{$my_lat || 'nil'}, #{$my_lon || 'nil'})"
 
     if @option['myLogs']
       displayMessage "Retrieving my logs"

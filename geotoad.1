@@ -351,6 +351,11 @@ for C-shell derivatives (csh, tcsh)
 for Bourne and Korn shell (sh, ksh)
 .B export LANG=en_US.UTF-8
 for Bourne Again shell and derivatives (bash, dash)
+.PP
+.B GEO_HOME_LAT, GEO_HOME_LON
+    If set, distances are computed (using Haversine) relative to that location.
+    If both values are set to zero, the home location registered at GC will be used.
+    If there's no setting, the distances reported by the search (or \fBN/A\fR) will be used.
 
 .SH "OUTPUT FORMATS"
 \." set indentation to "none", use fixed-width font for format list

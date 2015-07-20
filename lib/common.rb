@@ -8,6 +8,7 @@ module Common
   # pre 2014-10-14: @@prefs_url = 'http://www.geocaching.com/account/ManagePreferences.aspx'
   # pre 2014-10-28: @@prefs_url = 'https://www.geocaching.com/myaccount/settings/preferences'
   @@prefs_url = 'https://www.geocaching.com/account/settings/preferences'
+  @@homel_url = 'https://www.geocaching.com/account/settings/homelocation'
   # logs.aspx s=1: geocaches (default); s=2: trackables; s=3: benchmarks
   @@mylogs_url = 'http://www.geocaching.com/my/logs.aspx?s=1'
   @@mytrks_url = 'http://www.geocaching.com/my/logs.aspx?s=2'
@@ -53,7 +54,32 @@ module Common
     if ! dateFormat.to_s.empty?
       @@dateFormat = dateFormat
     end
-    return [ @@dateFormat, prefLanguage ]
+    # get center location for distance
+    my_lat = nil
+    my_lon = nil
+    # evaluate env variables too
+    if ENV['GEO_HOME_LAT'] and ENV['GEO_HOME_LON']
+      my_lat = ENV['GEO_HOME_LAT'].to_f
+      my_lon = ENV['GEO_HOME_LON'].to_f
+      debug "env location #{my_lat} #{my_lon}"
+    end
+    if (my_lat == 0.0) and (my_lon == 0.0)
+      # get location from user page, fall back
+      my_lat = nil
+      my_lon = nil
+      page = ShadowFetch.new(@@homel_url)
+      page.localExpiry = 7 * 24 * 3600
+      data = page.fetch
+      data.each_line{ |line|
+        # var viewModel = [{"homeLocation":[51.9968514417669,-9.50660705566406], ...
+        if line =~ /viewModel\s*=\s*...homeLocation.:\[([\d.-]*),([\d.-]*)\]/
+          my_lat = $1.to_f
+          my_lon = $2.to_f
+          debug "homeLocation #{my_lat} #{my_lon}"
+        end
+      }
+    end
+    return [ @@dateFormat, prefLanguage, my_lat, my_lon ]
   end
 
   def setDateFormat(dateFormat)
