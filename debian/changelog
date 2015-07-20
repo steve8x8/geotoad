@@ -1,4 +1,4 @@
-geotoad (3.23.1) unstable; urgency=low
+geotoad (3.23.1-1) unstable; urgency=low
 
   * New version 3.23.1, "May be July"
   * first release from GitHub
@@ -8,7 +8,7 @@ geotoad (3.23.1) unstable; urgency=low
 
  -- Steve Sixty-Four <steve8x8@gmail.com>  Wed, 15 Jul 2015 10:00:00 +0000
 
-geotoad (3.23.0) unstable; urgency=low
+geotoad (3.23.0-1) unstable; urgency=low
 
   * New version 3.23.0, "April Fools"
   * 3.23.0 marks the move from GoogleCode to GitHub
@@ -16,7 +16,7 @@ geotoad (3.23.0) unstable; urgency=low
 
  -- Steve Sixty-Four <steve8x8@gmail.com>  Fri, 24 Apr 2015 10:00:00 +0000
 
-geotoad (3.22.3) unstable; urgency=low
+geotoad (3.22.3-1) unstable; urgency=low
 
   * New version 3.22.3, "Go CreaTe!"
   * --version (-V) option, can be combined with -C
@@ -25,7 +25,7 @@ geotoad (3.22.3) unstable; urgency=low
 
  -- Steve Sixty-Four <steve8x8@gmail.com>  Fri, 27 Feb 2015 10:00:00 +0000
 
-geotoad (3.22.2) unstable; urgency=low
+geotoad (3.22.2-1) unstable; urgency=low
 
   * New version 3.22.2, "Happy 2015"
   * Issue 313: New cache type extraction from search results, finally language-proof
@@ -33,7 +33,7 @@ geotoad (3.22.2) unstable; urgency=low
 
  -- Steve Sixty-Four <steve8x8@gmail.com>  Fri, 23 Jan 2015 10:00:00 +0000
 
-geotoad (3.22.1) unstable; urgency=low
+geotoad (3.22.1-1) unstable; urgency=low
 
   * New version 3.22.1, "Mary X"
   * Issue 309 aftermath
@@ -44,7 +44,7 @@ geotoad (3.22.1) unstable; urgency=low
 
  -- Steve Sixty-Four <steve8x8@gmail.com>  Fri, 19 Dec 2014 10:30:00 +0000
 
-geotoad (3.22.0) unstable; urgency=low
+geotoad (3.22.0-1) unstable; urgency=low
 
   * New version 3.22.0, "Autumn Fall"
   * Issue 309: Use new user preferences page after 2014-10-14 site update
@@ -54,7 +54,7 @@ geotoad (3.22.0) unstable; urgency=low
 
  -- Steve Sixty-Four <steve8x8@gmail.com>  Fri, 17 Oct 2014 08:30:00 +0000
 
-geotoad (3.21.2) unstable; urgency=low
+geotoad (3.21.2-1) unstable; urgency=low
 
   * New version 3.21.2, "September Blues"
   * Maintenance release to cure some ill side-effects of 20140826 site update
@@ -62,7 +62,7 @@ geotoad (3.21.2) unstable; urgency=low
 
  -- Steve Sixty-Four <steve8x8@gmail.com>  Tue, 02 Sep 2014 09:30:00 +0000
 
-geotoad (3.21.1) unstable; urgency=low
+geotoad (3.21.1-1) unstable; urgency=low
 
   * New version 3.21.1, "Happy Birthday" release (dedicated to someone special)
   * Smileys in hints converted to BB style
@@ -78,7 +78,7 @@ geotoad (3.21.1) unstable; urgency=low
 
  -- Steve Sixty-Four <steve8x8@gmail.com>  Thu, 28 Aug 2014 09:30:00 +0000
 
-geotoad (3.21.0) unstable; urgency=low
+geotoad (3.21.0-1) unstable; urgency=low
 
   * New version 3.21.0, "Summer '14" release
   * Support for giga-events added; generic "event" and "unknown" searches
