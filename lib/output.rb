@@ -1187,8 +1187,8 @@ class Output
     if cache['distance'] and cache['direction']
       distmi = (cache['distance'] || 0.0)
       distkm = distmi * $MILE2KM
-      relative_distance = sprintf((distmi >= 1.0) ? "%.1f" : "%.2f", distmi) + 'mi@' + (cache['direction'] || 'N')
-      relative_distance_km = sprintf((distkm >= 1.0) ? "%.1f" : "%.2f", distkm) + 'km@' + (cache['direction'] || 'N')
+      relative_distance    = sprintf((distmi >= 1.0) ? "%5.1f" : "%5.2f", distmi) + 'mi@' + (cache['direction'] || 'N')
+      relative_distance_km = sprintf((distkm >= 1.0) ? "%5.1f" : "%5.2f", distkm) + 'km@' + (cache['direction'] || 'N')
     else
       relative_distance = 'N/A'
       relative_distance_km = 'N/A'
