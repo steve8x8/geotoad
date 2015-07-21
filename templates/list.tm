@@ -10,7 +10,7 @@ template = {
       "<%out.latdatapad5%> <%out.londatapad5%> " +
       "<%out.cdate%> " +
       "<%wp.difficulty%>/<%wp.terrain%><%out.premiumOnly%><%out.warnArchiv%><%out.warnAvail%>\t" +
-      "<%wp.type%>\t" +
+      "<%out.type8%>\t" +
       "<%out.relativedistancekm%>\t" +
       "<%out.size%>\t" + # testing only
       "\"<%wp.name%>\" by <%wp.creator%>\n"

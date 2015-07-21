@@ -1298,6 +1298,7 @@ class Output
       'cdateshort' => cache['ctime'].strftime("%y%m%d"),
       'adate' => cache['atime'].strftime("%Y-%m-%d"),
       'size' => (cache['size'] || 'empty').to_s.gsub(/ /, '_'),
+      'type8' => (cache['type'] || 'unknown').ljust(8),
       'favcount' => (cache['favorites'] || 0).to_s,
       'foundcount' => (cache['foundcount'] || '?').to_s,
       'favfactor' => (cache['favfactor'] || 0.0).to_s,
