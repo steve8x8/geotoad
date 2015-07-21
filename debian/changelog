@@ -1,3 +1,15 @@
+geotoad (3.23.2-1) unstable; urgency=low
+
+  * New version 3.23.2, "Enceladus" (226th anniversary of discovery)
+  * GSAK/c:geo templates/output (cont'd)
+  * Issue 316: Calculate distance from home location
+  * Issue 320: Override default filename extensions
+  * Issue 321: Include location-less waypoints in GPX output
+  * build tools rewrite
+  * some minor bugfixes, cleanups
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Fri, 28 Aug 2015 10:00:00 +0000
+
 geotoad (3.23.1-1) unstable; urgency=low
 
   * New version 3.23.1, "May be July"
