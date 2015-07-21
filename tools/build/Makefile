@@ -2,21 +2,20 @@
 
 GITPATH = https://github.com/steve8x8/geotoad.git
 WINRUBY = 200
-USB_DIR = GT-MAC
+USB_DIR = gt
+
 # get version to build
-VERSION = $(shell cat 2>/dev/null VERSION)
+VERSION = $(shell cat 2>/dev/null git/VERSION)
 ifeq "$(VERSION)" ""
+# get from local tree
 VERSION = $(shell cat ../../VERSION)
 endif
-
-version:
-	@echo "Building for version $(VERSION)"
 
 # Shortcuts
 GTV     = geotoad-$(VERSION)
 GUV     = geotoad_$(VERSION)
 
-all:	version tgz win mac deb
+all:	version tgz deb win mac
 
 tgz:	$(GTV).tar.gz
 
@@ -26,6 +25,9 @@ mac:	$(GTV).dmg
 
 deb:	$(GUV)-1_all.deb
 
+
+version:
+	@echo "Building for version $(VERSION)"
 
 clean:
 	@echo ""
@@ -43,7 +45,7 @@ fullclean: clean
 	@echo " FULL CLEANUP "
 	@echo "========================="
 	@echo ""
-	-rm  -fgeotoad-* geotoad_*
+	-rm  -f geotoad-* geotoad_*
 	-rm -rf git/
 	@echo $@ done.
 
@@ -122,27 +124,28 @@ $(GTV).dmg: $(GTV).tar.gz
 	mv $(GTV) mac/
 	@echo    "*** Insert a USB key with $(USB_DIR) directory"
 	@read -p "*** Press ENTER when done: " x
-	mount | grep /media
-	rsync -ax mac /media/`whoami`/*/$(USB_DIR)/
+	-mount | grep /media
+	-rsync -ax mac /media/`whoami`/*/$(USB_DIR)/
 	@sync
 	@sleep 3
 	@sync
 	@sleep 3
-	umount `df /media/\`whoami\`/*/$(USB_DIR)/ | tail -n+2 | awk '{print $$NF}'`
-	mount | grep /media
+	-umount `df /media/\`whoami\`/*/$(USB_DIR)/ | tail -n+2 | awk '{print $$NF}'` 2>/dev/null
+	-mount | grep /media
 	@echo    "*** Remove the USB key."
 	@read -p "*** Press ENTER when done: " x
 	@echo    "*** On a MacOSX machine, and run:"
 	@echo    "      bash mac/run_mac.sh"
 	@echo    "*** Insert the USB key with \"$(GTV).dmg\""
 	@read -p "*** Press ENTER when done: " x
-	mount | grep /media
-	rsync -ax /media/`whoami`/*/$(USB_DIR)/mac ./
-	mv mac/$(GTV).dmg ./
-	umount `df /media/\`whoami\`/*/$(USB_DIR)/ | tail -n+2 | awk '{print $$NF}'`
-	mount | grep /media
+	-mount | grep /media
+	-rsync -ax /media/`whoami`/*/$(USB_DIR)/mac ./
+	-mv mac/$(GTV).dmg ./
+	-umount `df /media/\`whoami\`/*/$(USB_DIR)/ | tail -n+2 | awk '{print $$NF}'` 2>/dev/null
+	-mount | grep /media
 	@echo    "*** Remove the USB key."
 	@read -p "*** Press ENTER when done: " x
+	touch $(GTV).dmg
 	@echo $@ done.
 
 $(GTV)_Installer.exe: $(GTV).tar.gz
@@ -178,7 +181,7 @@ $(GTV)_Installer.exe: $(GTV).tar.gz
 	@read -p "*** Press ENTER when done (geotoad.exe exists): " x
 	#rm -rf win/buildocra.bat
 	# we might need better error handling (back to square one?)
-	mv win/compile/geotoad.exe win/
+	-mv win/compile/geotoad.exe win/
 	mv win/compile/templates   win/ # see above
 	mv win/compile/data        win/ # see above
 	-rm -rf win/compile
@@ -187,6 +190,7 @@ $(GTV)_Installer.exe: $(GTV).tar.gz
 	@read -p "*** Press ENTER when done ($(GTV)_Installer.exe exists): " x
 	# does it make sense to have the executable alone?
 	#cp -p win/geotoad.exe $(GTV).exe
+	touch $(GTV)_Installer.exe
 	@echo $@ done.
 
 .PHONY: tgz win mac deb clean fullclean version
