@@ -98,7 +98,9 @@ module Common
     # <strong class="find-count">
     #                         3,288 Caches Found</strong>
     # (language-dependent?!)
-    if data =~ /<strong[^>]*>\s*([\d,\.]+)[\s\w]+<\/strong>/
+    #if data =~ /<strong[^>]*>\s*([\d,\.]+)[\s\w]+<\/strong>/
+    # <span class="cache-count">3,900 Finds</span> (2015-07-27)
+    if data =~ /<span class=.cache-count.[^>]*>\s*([\d,\.]+)[\s\w]+<\/span>/
       foundcount = $1.gsub(/[,\.]/, '').to_i
     end
     # seen 2013-10-xx

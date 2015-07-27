@@ -341,8 +341,10 @@ class GeoToad
 
     if @option['myLogs']
       displayMessage "Retrieving my logs"
-      count, logcount = getMyLogs()
-      displayInfo "Found count: #{count}. Total logs: #{logcount}"
+      foundcount, logcount = getMyLogs()
+      message = "Found count: #{foundcount}."
+      message << " Cache logs: #{logcount}."
+      displayInfo message
     end
 
     # search radius applies to all queryArgs, show only once
