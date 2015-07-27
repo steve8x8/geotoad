@@ -1229,13 +1229,13 @@ class Output
       if xmlWptsCgeo
         # remove locationless wpts
         xmlWptsGsak = xmlWptsCgeo.gsub(/<wpt( lat="0.000000*" lon="0.000000*")?>.*?<\/wpt>\s*/, '')
+        # strip desc strings
+        xmlWptsCgeo.gsub!(/<desc>(.*?):.*?<\/desc>/){ "<desc>#{$1}</desc>" }
       end
       if xmlWptsGsak
         # remove gsak additions
         xmlWpts = xmlWptsGsak.each_line.map{|l| (l=~/<\/?gsak:/)?nil:l}.compact.join
       end
-      # strip desc strings
-      xmlWptsCgeo.gsub!(/<desc>(.*?):.*?<\/desc>/){ "<desc>#{$1}</desc>" }
       # add separator lines
       shortWpts = "<hr />" + shortWpts + "<hr />"
     end
