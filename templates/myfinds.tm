@@ -11,11 +11,11 @@ template = {
        " version=\"1.0\" creator=\"GeoToad\"" +
        " xsi:schemaLocation=\"" +
          "http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd" +
-        " http://www.groundspeak.com/cache/1/0 http://www.groundspeak.com/cache/1/0/1/cache.xsd" +
+        " http://www.groundspeak.com/cache/1/0/1 http://www.groundspeak.com/cache/1/0/1/cache.xsd" +
        "\n" +
        " xmlns=\"http://www.topografix.com/GPX/1/0\"" +
        " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" +
-       " xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0\"" +
+       " xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0/1\"" +
        ">\n" +
       "<name>My Finds Pocket Query</name>\n" +
       "<desc><%outEntity.title%></desc>\n" +
@@ -31,7 +31,7 @@ template = {
       "  <urlname><%wpEntity.name%></urlname>\n" +
       "  <sym>Geocache Found</sym>\n" +
       "  <type>Geocache|<%wp.fulltype%></type>\n" +
-      "  <groundspeak:cache id=\"<%out.cacheID%>\" available=\"<%out.IsAvailable%>\" archived=\"<%out.IsArchived%>\" xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0/1\">\n" +
+      "  <groundspeak:cache id=\"<%out.cacheID%>\" available=\"<%out.IsAvailable%>\" archived=\"<%out.IsArchived%>\">\n" +
       "  <groundspeak:name><%wpEntity.name%></groundspeak:name>\n" +
       "  <groundspeak:placed_by><%wpEntity.creator%></groundspeak:placed_by>\n" +
       "  <groundspeak:owner id=\"<%wpEntity.creator_id%>\"><%wpEntity.creator%></groundspeak:owner>\n" +
@@ -83,11 +83,11 @@ template = {
        " version=\"1.0\" creator=\"GeoToad\"" +
        " xsi:schemaLocation=\"" +
          "http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd" +
-        " http://www.groundspeak.com/cache/1/0 http://www.groundspeak.com/cache/1/0/1/cache.xsd" +
+        " http://www.groundspeak.com/cache/1/0/1 http://www.groundspeak.com/cache/1/0/1/cache.xsd" +
        "\n" +
        " xmlns=\"http://www.topografix.com/GPX/1/0\"" +
        " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" +
-       " xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0\"" +
+       " xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0/1\"" +
        ">\n" +
       "<name>My Finds Pocket Query</name>\n" +
       "<desc><%outEntity.title%></desc>\n" +
@@ -103,7 +103,7 @@ template = {
       "  <urlname><%wpEntity.name%></urlname>\n" +
       "  <sym>Geocache Found</sym>\n" +
       "  <type>Geocache|<%wp.fulltype%></type>\n" +
-      "  <groundspeak:cache id=\"<%out.cacheID%>\" available=\"<%out.IsAvailable%>\" archived=\"<%out.IsArchived%>\" xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0/1\">\n" +
+      "  <groundspeak:cache id=\"<%out.cacheID%>\" available=\"<%out.IsAvailable%>\" archived=\"<%out.IsArchived%>\">\n" +
       "  <groundspeak:name><%wpEntity.name%></groundspeak:name>\n" +
       "  <groundspeak:placed_by><%wpEntity.creator%></groundspeak:placed_by>\n" +
       "  <groundspeak:owner id=\"<%wpEntity.creator_id%>\"><%wpEntity.creator%></groundspeak:owner>\n" +

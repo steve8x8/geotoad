@@ -2,7 +2,7 @@ template = {
 
   # Modified GPX XML for PathAway, which doesn't support HTML content in gpx files.
   # Since <groundspeak:...> tags are ignored, so we have to include all the necessary information in the <desc> tag
-  # Contributed by Tris Sethur, Sep 2011
+  # Originally contributed by Tris Sethur, Sep 2011
   'gpx-pa'    => {
     'ext'        => 'gpx',
     'mime'    => 'text/ascii',
@@ -17,6 +17,7 @@ template = {
        " xmlns=\"http://www.topografix.com/GPX/1/0\"" +
        " xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"" +
        " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" +
+       " xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0/1\"" +
       ">\n" +
       "<name>" + Time.new.gmtime.strftime("%Y%m%dT%H%M%S") + "</name>\n" +
       "<desc><%outEntity.title%></desc>\n" +
