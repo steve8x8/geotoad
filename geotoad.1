@@ -1,4 +1,4 @@
-.TH "GEOTOAD" "1" "17 Jul 2015" "steve8x8@googlemail.com" "Geocaching Query Tool"
+.TH "GEOTOAD" "1" "30 Jul 2015" "steve8x8@googlemail.com" "Geocaching Query Tool"
 
 .SH "NAME"
 geotoad \- geocaching query tool
@@ -126,7 +126,8 @@ output file name takes precedence.
 .PP
 \fB-l\fR|\fB--logCount\fR \fIcount\fR
     limit number of log entries (default: 10)
-    Currently, there is a maximum of 10 imposed by GC's interface.
+    Currently, there is a maximum of 10 imposed by GC's interface; specifying more will
+result in only 5 logs to be returned.
 .PP
 .B Limit queries:
 .PP
@@ -228,10 +229,10 @@ filtering won't work - you've been warned).
     exclude caches found in the last \fIX\fR days
 .PP
 \fB-a\fR|\fB--attributeInclude\fR \fIid[-]\fR  \fB(MULTI)\fR
-    select caches with attribute ID \fIid\fR set to "yes", or to "no" if "-" suffix
+    select caches with attribute ID \fIid\fR set to "yes", or to "no" if \fB-\fR suffix
 .PP
 \fB-A\fR|\fB--attributeExclude\fR \fIid[-]\fR  \fB(MULTI)\fR
-    exclude caches with attribute ID \fIid\fR set to "yes", or to "no" if "-" suffix
+    exclude caches with attribute ID \fIid\fR set to "yes", or to "no" if \fB-\fR suffix
 .PP
 \fB-z\fR|\fB--includeDisabled\fR|\fB--bad\fR
     include disabled caches
@@ -257,7 +258,8 @@ filtering won't work - you've been warned).
 .PP
 The following 4 options have no one-letter version, and are used for limiting the search area.
 Note that this filter is applied \fBafter\fR fetching all cache details (as coordinates aren't available before).
-Use numeric values only! (TBD: same representations as in a \fBcoord\fR search)
+Use numeric values only!
+.\" (TBD: same representations as in a \fBcoord\fR search)
 .PP
 \fB--minLongitude\fR|\fB--longMin\fR \fI...\fR
     set minimum longitude (West filter limit)
@@ -279,9 +281,9 @@ Use numeric values only! (TBD: same representations as in a \fBcoord\fR search)
 Cache descriptions will never be removed!
 .PP
 \fB-m\fR|\fB--delimiter\fR \fIdelimiter(s)\fR
-    delimiter(s) to be used for \fB(MULTI)\fR input, default "|:"
-    The TUI uses "|".
-You may try "^" to avoid delimiters that have to be "escaped" ("quoted").
+    delimiter(s) to be used for \fB(MULTI)\fR input, default "\fB|:\fR"
+    The TUI uses "\fB|\fR".
+You may try "\fB^\fR" to avoid delimiters that have to be "escaped" ("quoted").
 .PP
 \fB-M\fR|\fB--myLogs\fR|\fB--getlogs\fR
     retrieve "my logs" page containing links to all (cache) logs, and store in cache
@@ -353,12 +355,12 @@ for Bourne and Korn shell (sh, ksh)
 for Bourne Again shell and derivatives (bash, dash)
 .PP
 .B GEO_HOME_LAT, GEO_HOME_LON
-    If set, distances are computed (using Haversine) relative to that location.
+    If set (numerical values only!), distances are computed (using Haversine) relative to that location.
     If both values are set to zero, the home location registered at GC will be used.
     If there's no setting, the distances reported by the search (or \fBN/A\fR) will be used.
 
 .SH "OUTPUT FORMATS"
-\." set indentation to "none", use fixed-width font for format list
+.\" set indentation to "none", use fixed-width font for format list
 .PP 0
 .ft CW
  cachemate(=)  cetus(+)      csv           delorme        delorme-nourl 
