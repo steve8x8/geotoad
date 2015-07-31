@@ -1,6 +1,6 @@
 template = {
 
-  # Two templates for separate output of caches and add.wpts for GSAK use
+  # templates for separate output of caches and add.wpts for GSAK use
   'gpx-gsak'    => {
     'ext'        => 'gpx',
     'mime'    => 'text/ascii',
@@ -94,6 +94,36 @@ template = {
       "<time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S")  + ".000Z</time>\n" +
       "<keywords>cache, geocache, groundspeak, geotoad</keywords>\n",
     'templateWP'    => "<%out.xmlWptsGsak%>",
+    'templatePost'    => "</gpx>\n"
+  },
+
+  # Same as above, but including locationless waypoints
+  # Will produce XML validation errors because of <wpt> without lat=... lon=...
+  'gpx-wpts0'    => {
+    'ext'        => 'wgpx',
+    'mime'    => 'text/ascii',
+    'desc'    => 'GPX Geocaching XML for GSAK, only Additional Waypoints, also locationless',
+    'templatePre' => "<?xml version=\'1.0\' encoding=\'UTF-8\' standalone=\'yes\' ?>\n" +
+      "<gpx" +
+       " version=\"1.0\" creator=\"GeoToad\"" +
+       " xsi:schemaLocation=\"" +
+         "http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd" +
+        " http://www.groundspeak.com/cache/1/0/1 http://www.groundspeak.com/cache/1/0/1/cache.xsd" +
+        " http://www.gsak.net/xmlv1/6 http://www.gsak.net/xmlv1/6/gsak.xsd" +
+       "\"" +
+       " xmlns=\"http://www.topografix.com/GPX/1/0\"" +
+       " xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"" +
+       " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" +
+       " xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0/1\"" +
+       " xmlns:gsak=\"http://www.gsak.net/xmlv1/6\"" +
+      ">\n" +
+      "<name>Waypoints</name>\n" +
+      "<desc><%outEntity.title%></desc>\n" +
+      "<author>GeoToad <%outEntity.version%></author>\n" +
+      "<email>geotoad@googlegroups.com</email>\n" +
+      "<time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S")  + ".000Z</time>\n" +
+      "<keywords>cache, geocache, groundspeak, geotoad</keywords>\n",
+    'templateWP'    => "<%out.xmlWptsCgeo%>",
     'templatePost'    => "</gpx>\n"
   },
 

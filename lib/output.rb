@@ -1228,7 +1228,7 @@ class Output
       xmlWptsCgeo = toWptList(shortWpts, cache['ctime'])
       if xmlWptsCgeo
         # remove locationless wpts
-        xmlWptsGsak = xmlWptsCgeo.gsub(/<wpt( lat="0.000000*" lon="0.000000*")?>.*?<\/wpt>\s*/, '')
+        xmlWptsGsak = xmlWptsCgeo.gsub(/<wpt( lat="0.000000*" lon="0.000000*")?>.*?<\/wpt>\s*/m, '')
         # strip desc strings
         xmlWptsCgeo.gsub!(/<desc>(.*?):.*?<\/desc>/){ "<desc>#{$1}</desc>" }
       end

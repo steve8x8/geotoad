@@ -2,10 +2,11 @@ template = {
 
 
   # GSAK-like GPX that can be imported into c:geo, with Additional Waypoints
+  # Will produce XML validation errors because of <wpt> without lat=... lon=...
   'gpx-cgeo'    => {
     'ext'        => 'gpx',
     'mime'    => 'text/ascii',
-    'desc'    => 'GPX Geocaching XML for c:geo, with Additional Waypoints',
+    'desc'    => 'GPX Geocaching XML for c:geo, with Additional Waypoints, also locationless',
     'templatePre' => "<?xml version=\'1.0\' encoding=\'UTF-8\' standalone=\'yes\' ?>\n" +
       "<gpx" +
        " version=\"1.0\" creator=\"GeoToad\"" +
