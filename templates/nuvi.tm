@@ -18,7 +18,19 @@ template = {
     'mime'    => 'text/ascii',
     'desc'    => 'GPX Geocaching XML for Nuvi, without Additional Waypoints',
     'templatePre' => "<?xml version=\'1.0\' encoding=\'UTF-8\' standalone=\'yes\' ?>\n" +
-      "<gpx>\n" +
+      "<gpx" +
+       " version=\"1.0\" creator=\"GeoToad\"" +
+       " xsi:schemaLocation=\"" +
+         "http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd" +
+#        " http://www.groundspeak.com/cache/1/0/1 http://www.groundspeak.com/cache/1/0/1/cache.xsd" +
+        " http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www8.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd" +
+       "\"" +
+       " xmlns=\"http://www.topografix.com/GPX/1/0\"" +
+       " xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"" +
+       " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" +
+#       " xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0/1\"" +
+       " xmlns:gpxx=\"http://www.garmin.com/xmlschemas/GpxExtensions/v3\"" +
+      ">\n" +
       "<name>" + Time.new.gmtime.strftime("%Y%m%dT%H%M%S") + "</name>\n" +
       "<desc><%outEntity.title%></desc>\n" +
       "<author>GeoToad <%outEntity.version%></author>\n" +
@@ -32,7 +44,7 @@ template = {
       "  <desc><%wpEntity.name%><%out.warnArchiv%><%out.warnAvail%> by <%wpEntity.creator%>," +
         " <%wp.fulltype%> (<%wp.size%>/<%wp.difficulty%>/<%wp.terrain%>)</desc>\n" +
       "  <sym>Geocache</sym>\n" +
-      "  <extensions>\n" +
+#      "  <extensions>\n" +
       "    <gpxx:WaypointExtension>\n" +
       # do NOT set proximity here as it cannot be overwritten by POIloader/gpsbabel!
       #"      <gpxx:Proximity>250</gpxx:Proximity>\n" +
@@ -44,9 +56,9 @@ template = {
       "      <gpxx:Address>\n" +
                # 2nd line in POI list, max 24 chars shown
       "        <gpxx:StreetAddress><%wpEntity.name%></gpxx:StreetAddress>\n" +
-      "        <gpxx:PostalCode>by <%wpEntity.creator%> (<%out.cdate%>) -</gpxx:PostalCode>\n" +
       "        <gpxx:City><%wp.fulltype%> - <%wp.size%> -</gpxx:City>\n" +
       "        <gpxx:State>D <%wp.difficulty%> - T <%wp.terrain%></gpxx:State>\n" +
+      "        <gpxx:PostalCode>by <%wpEntity.creator%> (<%out.cdate%>) -</gpxx:PostalCode>\n" +
       "      </gpxx:Address>\n" +
              # nuvi 255 only accepts a single phone number, doesn't show the category
       "      <gpxx:PhoneNumber Category=\"Details\">\n" +
@@ -64,7 +76,7 @@ template = {
         #"**Wpts: <%outTextEntity.shortWpts%>\n" +
       "      </gpxx:PhoneNumber>\n" +
       "    </gpxx:WaypointExtension>\n" +
-      "  </extensions>\n" +
+#      "  </extensions>\n" +
       "</wpt>\n",
     'templatePost'    => "</gpx>\n"
   },

@@ -1312,7 +1312,7 @@ class Output
       'maps_url' => "#{GOOGLE_MAPS_URL}?q=#{coord_query}",
       'IsAvailable' => (available == true).to_s.capitalize,
       'IsArchived' => (archived == true).to_s.capitalize,
-      'IsPremium' => (cache['membersonly'] == true).to_s.capitalize,
+      'IsPremium' => (cache['membersonly'] == true).to_s, # do not capitalize!
       'FavPoints' => cache['favorites'] || 0,
       # cartridge CGUID has 36 characters, so has the "dummy" one
       'cartridge' => (cache['cartridge'] || '_no_link_to_wherigo_cartridge_found_'),

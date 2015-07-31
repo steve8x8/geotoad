@@ -14,6 +14,7 @@ template = {
         " http://www.gsak.net/xmlv1/6 http://www.gsak.net/xmlv1/6/gsak.xsd" +
        "\"" +
        " xmlns=\"http://www.topografix.com/GPX/1/0\"" +
+       " xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"" +
        " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" +
        " xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0/1\"" +
        " xmlns:gsak=\"http://www.gsak.net/xmlv1/6\"" +
@@ -38,14 +39,13 @@ template = {
       "  <groundspeak:owner><%wpEntity.creator%></groundspeak:owner>\n" +
       "  <groundspeak:type><%wp.fulltype%></groundspeak:type>\n" +
       "  <groundspeak:container><%wp.size%></groundspeak:container>\n" +
+      "  <groundspeak:attributes>\n" +
+      "<%out.xmlAttrs%>" +
+      "  </groundspeak:attributes>\n" +
       "  <groundspeak:difficulty><%wp.difficulty%></groundspeak:difficulty>\n" +
       "  <groundspeak:terrain><%wp.terrain%></groundspeak:terrain>\n" +
       "  <groundspeak:country><%wpEntity.country%></groundspeak:country>\n" +
       "  <groundspeak:state><%wpEntity.state%></groundspeak:state>\n" +
-      "  <groundspeak:encoded_hints><%outEntity.hintdecrypt%></groundspeak:encoded_hints>\n" +
-      "  <groundspeak:attributes>\n" +
-      "<%out.xmlAttrs%>" +
-      "  </groundspeak:attributes>\n" +
       "  <groundspeak:short_description html=\"True\">" +
        "<%out.premiumOnly%><%outEntity.warnArchiv%><%outEntity.warnAvail%>&lt;br /&gt;" +
        "<%outEntity.txtAttrs%>&lt;br /&gt;" +
@@ -53,6 +53,7 @@ template = {
       "  <groundspeak:long_description html=\"True\">" +
        "<%outEntity.shortWpts%>" +
        "<%wpEntity.longdesc%></groundspeak:long_description>\n" +
+      "  <groundspeak:encoded_hints><%outEntity.hintdecrypt%></groundspeak:encoded_hints>\n" +
       "  <groundspeak:logs>\n" +
       "<%out.gpxlogs%>" +
       "  </groundspeak:logs>\n" +
@@ -81,6 +82,7 @@ template = {
         " http://www.gsak.net/xmlv1/6 http://www.gsak.net/xmlv1/6/gsak.xsd" +
        "\"" +
        " xmlns=\"http://www.topografix.com/GPX/1/0\"" +
+       " xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"" +
        " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" +
        " xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0/1\"" +
        " xmlns:gsak=\"http://www.gsak.net/xmlv1/6\"" +

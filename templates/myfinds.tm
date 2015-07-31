@@ -14,6 +14,7 @@ template = {
         " http://www.groundspeak.com/cache/1/0/1 http://www.groundspeak.com/cache/1/0/1/cache.xsd" +
        "\n" +
        " xmlns=\"http://www.topografix.com/GPX/1/0\"" +
+       " xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"" +
        " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" +
        " xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0/1\"" +
        ">\n" +
@@ -37,13 +38,13 @@ template = {
       "  <groundspeak:owner id=\"<%wpEntity.creator_id%>\"><%wpEntity.creator%></groundspeak:owner>\n" +
       "  <groundspeak:type><%wp.fulltype%></groundspeak:type>\n" +
       "  <groundspeak:container><%wp.size%></groundspeak:container>\n" +
+      "  <groundspeak:attributes>\n" +
+      "<%out.xmlAttrs%>" +
+      "  </groundspeak:attributes>\n" +
       "  <groundspeak:difficulty><%wp.difficulty%></groundspeak:difficulty>\n" +
       "  <groundspeak:terrain><%wp.terrain%></groundspeak:terrain>\n" +
       "  <groundspeak:country><%wpEntity.country%></groundspeak:country>\n" +
       "  <groundspeak:state><%wpEntity.state%></groundspeak:state>\n" +
-      "  <groundspeak:attributes>\n" +
-      "<%out.xmlAttrs%>" +
-      "  </groundspeak:attributes>\n" +
       "  <groundspeak:short_description html=\"True\">short</groundspeak:short_description>\n" +
       "  <groundspeak:long_description html=\"True\">long</groundspeak:long_description>\n" +
       "  <groundspeak:encoded_hints>hint</groundspeak:encoded_hints>\n" +
@@ -86,6 +87,7 @@ template = {
         " http://www.groundspeak.com/cache/1/0/1 http://www.groundspeak.com/cache/1/0/1/cache.xsd" +
        "\n" +
        " xmlns=\"http://www.topografix.com/GPX/1/0\"" +
+       " xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"" +
        " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" +
        " xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0/1\"" +
        ">\n" +
@@ -109,13 +111,13 @@ template = {
       "  <groundspeak:owner id=\"<%wpEntity.creator_id%>\"><%wpEntity.creator%></groundspeak:owner>\n" +
       "  <groundspeak:type><%wp.fulltype%></groundspeak:type>\n" +
       "  <groundspeak:container><%wp.size%></groundspeak:container>\n" +
+      "  <groundspeak:attributes>\n" +
+      "<%out.xmlAttrs%>" +
+      "  </groundspeak:attributes>\n" +
       "  <groundspeak:difficulty><%wp.difficulty%></groundspeak:difficulty>\n" +
       "  <groundspeak:terrain><%wp.terrain%></groundspeak:terrain>\n" +
       "  <groundspeak:country><%wpEntity.country%></groundspeak:country>\n" +
       "  <groundspeak:state><%wpEntity.state%></groundspeak:state>\n" +
-      "  <groundspeak:attributes>\n" +
-      "<%out.xmlAttrs%>" +
-      "  </groundspeak:attributes>\n" +
       "  <groundspeak:short_description html=\"True\">short</groundspeak:short_description>\n" +
       "  <groundspeak:long_description html=\"True\">long</groundspeak:long_description>\n" +
       "  <groundspeak:encoded_hints>hint</groundspeak:encoded_hints>\n" +
