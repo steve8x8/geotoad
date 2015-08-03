@@ -363,8 +363,9 @@ class GeoToad
       end
     end
 
-    @queryArg.to_s.split($delimiters).each{ |queryArg|
+    @queryArg.to_s.split($delimiters).each{ |queryArg0|
       puts ""
+      queryArg = queryArg0.gsub(/^\s+/, '').gsub(/\s+$/, '')
       message = "\"#{@queryType}\" search for \"#{queryArg}\""
       search = SearchCache.new
 
