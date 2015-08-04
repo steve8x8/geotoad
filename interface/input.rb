@@ -67,19 +67,19 @@ class Input
       [ "--attributeInclude",            "-a",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--attributeExclude",            "-A",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--travelBug",    "--trackable", "-b",    GetoptLong::NO_ARGUMENT ],
-
+# -B
       [ "--cacheType",         "--type", "-c",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--clearCache",     "--cleanup", "-C",    GetoptLong::NO_ARGUMENT ],
       [ "--difficultyMin",  "--minDiff", "-d",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--difficultyMax",  "--maxDiff", "-D",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--userInclude",     "--doneBy", "-e",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--userExclude",  "--notdoneBy", "-E",    GetoptLong::REQUIRED_ARGUMENT ],
-
-
+# -f (was funFactorMin)
+# -F (was finFactorMax)
       [ "--favFactorMin",    "--minFav", "-g",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--favFactorMax",    "--maxFav", "-G",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--help",                        "-h",    GetoptLong::NO_ARGUMENT ],
-
+# -H
       [ "--ownerInclude",        "--by", "-i",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--ownerExclude",     "--notby", "-I",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--placeDateInclude", "--since", "-j",    GetoptLong::REQUIRED_ARGUMENT ],
@@ -109,7 +109,7 @@ class Input
       [ "--verbose",          "--debug", "-v",    GetoptLong::NO_ARGUMENT ],
       [ "--version",    "--showVersion", "-V",    GetoptLong::NO_ARGUMENT ],
       [ "--waypointLength",              "-w",    GetoptLong::REQUIRED_ARGUMENT ],
-
+      [ "--myTrackables",   "--gettrks", "-W",    GetoptLong::NO_ARGUMENT ],
       [ "--format",                      "-x",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--disableEarlyFilter",          "-X",    GetoptLong::NO_ARGUMENT ],
       [ "--distanceMax",     "--radius", "-y",    GetoptLong::REQUIRED_ARGUMENT ],
@@ -299,7 +299,8 @@ class Input
     puts " -O                     exclude Premium Member Only caches"
     puts " -Q                     select only Premium Member Only caches"
     puts " -P                     HTTP proxy server, http://username:pass@host:port/"
-    puts " -M                     download my cache logs (/my/logs.aspx)"
+    puts " -M                     download my cache logs (/my/logs.aspx?s=1)"
+    puts " -W                     download my trackable logs (/my/logs.aspx?s=2)"
     puts " -X                     emergency switch: disable early filtering"
     puts " -C                     selectively clear local browser cache"
     puts " -U                     use unbuffered output"

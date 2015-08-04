@@ -124,7 +124,8 @@ syntax: geotoad [options] <search:search2:search3>
  -O                     exclude Premium Member Only caches
  -Q                     select only Premium Member Only caches
  -P                     HTTP proxy server, http://username:pass@host:port/
- -M                     download my cache logs (/my/logs.aspx)
+ -M                     download my cache logs (/my/logs.aspx?s=1)
+ -W                     download my trackable logs (/my/logs.aspx?s=2)
  -X                     emergency switch: disable early filtering
  -C                     selectively clear local browser cache
  -U                     use unbuffered output

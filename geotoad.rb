@@ -339,11 +339,18 @@ class GeoToad
     displayInfo "Using date format #{@dateFormat}, language #{prefLang}"
     displayInfo "Using home location (#{$my_lat || 'nil'}, #{$my_lon || 'nil'})"
 
-    if @option['myLogs']
+    if @option['myLogs'] || @option['myTrackables']
       displayMessage "Retrieving my logs"
-      foundcount, logcount = getMyLogs()
-      message = "Found count: #{foundcount}."
-      message << " Cache logs: #{logcount}."
+      message = ""
+      if @option['myLogs']
+        foundcount, logcount = getMyLogs()
+        message << "Found count: #{foundcount}. "
+        message << "Cache logs: #{logcount}. "
+      end
+      if @option['myTrackables']
+        logcount = getMyTrks()
+        message << "Trackable logs: #{logcount}."
+      end
       displayInfo message
     end
 
