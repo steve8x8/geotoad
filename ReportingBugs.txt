@@ -87,7 +87,7 @@ GeoToad seems to work, but the output file is rejected (by the device, or other 
 
 This seems to happen every now and then, unfortunately. You have no idea what people are putting into their cache descriptions, and log texts!
 
-It's good practice to pass every GPX file through gpsbabel:
+It was good practice to pass every GPX file through gpsbabel:
 
 #!/bin/bash
 # check a GPX file by passing through gpsbabel
@@ -110,6 +110,8 @@ done
 This script (tested under Linux, to be invoked with a list of files) checks for the first error, and shows the corresponding line in the GPX file.
 If you don't understand the output, just make sure it's contained in your bug report.
 
+In the near past, gpsbabel was observed to corrupt GPX files. GPS handhelds usually didn't notice, but c:geo did.
+Be cautious!
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
