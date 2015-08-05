@@ -275,21 +275,26 @@ Use numeric values only!
 .PP
 .B Additional options:
 .PP
-\fB-C\fR|\fB--clearCache\fR|\fB--cleanup\fR
-    selectively clear browser cache
-    You are advised to remove the outdated remnants of old queries every now and then.
-Cache descriptions will never be removed!
-.PP
 \fB-m\fR|\fB--delimiter\fR \fIdelimiter(s)\fR
     delimiter(s) to be used for \fB(MULTI)\fR input, default "\fB|:\fR"
     The TUI uses "\fB|\fR".
 You may try "\fB^\fR" to avoid delimiters that have to be "escaped" ("quoted").
+.PP
+\fB-V\fR|\fB--version\fR
+    show version information only, then exit
+.PP
+\fB-C\fR|\fB--clearCache\fR|\fB--cleanup\fR
+    selectively clear browser cache, then exit
+    You are advised to remove the outdated remnants of old queries every now and then.
+Cache descriptions will never be removed!
 .PP
 \fB-M\fR|\fB--myLogs\fR|\fB--getlogs\fR
     retrieve "my logs" page containing links to all (cache) logs, and store in cache
 .PP
 \fB-W\fR|\fB--myTrackables\fR|\fB--gettrks\fR
     retrieve "my trackable logs" page, and store in cache
+
+Options \fB-V\fR, \fB-C\fR, \fB-M\fR and \fB-W\fR may be used without a real query.
 .PP
 \fB-X\fR|\fB--disableEarlyFilter\fR
     emergency switch to disable early (cache-list based) filtering by difficulty/terrain/size
@@ -299,9 +304,6 @@ Normally you don't want to use this!
 .PP
 \fB-U\fR|\fB--unbufferedOutput\fR
     switch output to unbuffered (useful for wrappers)
-.PP
-\fB-V\fR|\fB--version\fR
-    show version information only (can be combined with \fB-C\fR)
 
 .SH "SEARCH ARGUMENT"
 \fIsearch\fR can be of the \fB(MULTI)\fR type.

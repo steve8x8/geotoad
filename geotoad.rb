@@ -1010,6 +1010,7 @@ while true
   options = cli.getoptions
   if options['clearCache']
     cli.clearCacheDirectory()
+    exit
   end
   if options['version']
     # version information has been shown above
