@@ -140,7 +140,7 @@ class GeoToad
       exit
     end
 
-    if ! @option['clearCache'] && ! @queryArg
+    if ! @option['clearCache'] && ! @option['myLogs'] && ! @option['myTrackables'] && ! @queryArg
       displayError "You forgot to specify a #{@queryType} search argument"
       @uin.usage
       exit
@@ -1030,9 +1030,8 @@ while true
     loopcount = loopcount + 1
   end
 
-  # avoid login if clearing only
   count = 0
-  if options['queryArg']
+  if options['queryArg'] || options['myLogs'] || options['myTrackables']
     count = cli.downloadGeocacheList()
   end
   if count < 1
