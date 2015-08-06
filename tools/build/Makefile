@@ -1,21 +1,23 @@
 #!/usr/bin/make -f
+# may be called with $PREBUILD set e.g. to "-pre`date +%Y%m%d`"
 
 GITPATH = https://github.com/steve8x8/geotoad.git
 WINRUBY = 200
 USB_DIR = gt
 
 # get version to build
-VERSION = $(shell cat 2>/dev/null git/VERSION)
-ifeq "$(VERSION)" ""
+VERSION0 = $(shell cat 2>/dev/null git/VERSION)
+ifeq "$(VERSION0)" ""
 # get from local tree
-VERSION = $(shell cat ../../VERSION)
+VERSION0 = $(shell cat ../../VERSION)
 endif
+VERSION = $(VERSION0)$(PREBUILD)
 
 # Shortcuts
 GTV     = geotoad-$(VERSION)
 GUV     = geotoad_$(VERSION)
 
-all:	version tgz deb win mac
+all:	version tgz deb win mac md5sums.txt
 
 tgz:	$(GTV).tar.gz
 
@@ -45,7 +47,7 @@ fullclean: clean
 	@echo " FULL CLEANUP "
 	@echo "========================="
 	@echo ""
-	-rm  -f geotoad-* geotoad_*
+	-rm  -f geotoad-* geotoad_* md5sums.txt
 	-rm -rf git/
 	@echo $@ done.
 
@@ -103,6 +105,11 @@ $(GUV)-1_all.deb: $(GTV).tar.gz
 	-rm -rf $(GTV)/ deb/
 	tar zxf $(GTV).tar.gz
 	ln -sf $(GTV).tar.gz $(GUV).orig.tar.gz
+	# fix package version
+	if ! head -n1 $(GTV)/debian/changelog | grep -q "\($VERSION-1\)" ; then \
+	  sed -i "1s~(.*)~($(VERSION)-1)~" $(GTV)/debian/changelog ; \
+	fi
+	head -n1 $(GTV)/debian/changelog
 	sh -c "cd $(GTV); dpkg-buildpackage >/dev/null -rfakeroot -us -uc -tc"
 	mv $(GTV) deb
 	@echo ""
@@ -122,9 +129,10 @@ $(GTV).dmg: $(GTV).tar.gz
 	cp -p $(GTV)/tools/build/build_dmg.sh mac/run_mac.sh
 	-rm -rf $(GTV)/tools/build/
 	mv $(GTV) mac/
-	@echo    "*** Insert a USB key with $(USB_DIR) directory"
+	@echo    "*** Insert a USB key with \"$(USB_DIR)\" directory"
 	@read -p "*** Press ENTER when done: " x
 	-mount | grep /media
+	-ls -ld /media/`whoami`/*/$(USB_DIR)/
 	-rsync -ax mac /media/`whoami`/*/$(USB_DIR)/
 	@sync
 	@sleep 3
@@ -171,12 +179,12 @@ $(GTV)_Installer.exe: $(GTV).tar.gz
 	perl -pi -e 's/([\s])geotoad\.rb/$1geotoad/g' win/README.txt
 	# convert .txt files to MSDOS linebreaks
 	flip -mb win/*.txt
-	sed s/XXXVERSIONXXX/$(VERSION)/g win/tools/build/buildinno.iss.in > win/geotoad.iss
+	sed s/XXXVERSIONXXX/$(VERSION)/g win/tools/build/buildinno.iss.in > win/buildinno.iss
 	sed s/XXXVERSIONXXX/$(VERSION)/g win/tools/build/buildinno.bat.in > win/buildinno.bat
 	sed s/XXXWINRUBYXXX/$(WINRUBY)/g win/tools/build/buildocra.bat.in > win/buildocra.bat
 	-rm -rf win/tools/build/
 	# now do the real stuff
-	@echo    "*** In Windows \"Z:\\...\\build\\win\", run:"
+	@echo    "*** In Windows \"Z:\\\\...\\\\tools\\\\build\\\\win\", run:"
 	@echo    "      buildocra.bat"
 	@read -p "*** Press ENTER when done (geotoad.exe exists): " x
 	#rm -rf win/buildocra.bat
@@ -185,13 +193,16 @@ $(GTV)_Installer.exe: $(GTV).tar.gz
 	mv win/compile/templates   win/ # see above
 	mv win/compile/data        win/ # see above
 	-rm -rf win/compile
-	@echo    "*** In Windows \"Z:\\...\\build\\win\", run:"
+	@echo    "*** In Windows \"Z:\\\\...\\\\tools\\\\build\\\\win\", run:"
 	@echo    "      buildinno.bat"
 	@read -p "*** Press ENTER when done ($(GTV)_Installer.exe exists): " x
 	# does it make sense to have the executable alone?
 	#cp -p win/geotoad.exe $(GTV).exe
 	touch $(GTV)_Installer.exe
 	@echo $@ done.
+
+md5sums.txt: Makefile $(GTV).tar.gz $(GTV)_Installer.exe $(GTV).dmg #$(GTV)-1_all.deb
+	md5sum $(GTV)* `echo $(GTV) | sed 's~-~_~'`* | grep -v '\.orig\.tar\.gz' > md5sums.txt
 
 .PHONY: tgz win mac deb clean fullclean version
 
