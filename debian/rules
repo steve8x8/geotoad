@@ -7,7 +7,7 @@ override_dh_auto_install:
 	if [ ! -f ChangeLog.txt ] ; then echo '(empty)' > ChangeLog.txt ; fi
 	-rm -rf tools/build/
 	dh_installdirs usr/bin
-	dh_install geotoad.rb debian/geotoad/usr/bin/geotoad
+	dh_install geotoad.rb usr/bin/geotoad
 	dh_install contrib data interface lib templates tools usr/share/geotoad
 
 override_dh_pysupport:

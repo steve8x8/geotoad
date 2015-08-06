@@ -1,5 +1,5 @@
 #!/usr/bin/make -f
-# may be called with $PREBUILD set e.g. to "-pre`date +%Y%m%d`"
+# may be called with $PREBUILD set e.g. to "~pre`date +%Y%m%d`"
 
 GITPATH = https://github.com/steve8x8/geotoad.git
 WINRUBY = 200
@@ -107,7 +107,7 @@ $(GUV)-1_all.deb: $(GTV).tar.gz
 	ln -sf $(GTV).tar.gz $(GUV).orig.tar.gz
 	# fix package version
 	if ! head -n1 $(GTV)/debian/changelog | grep -q "\($VERSION-1\)" ; then \
-	  sed -i "1s~(.*)~($(VERSION)-1)~" $(GTV)/debian/changelog ; \
+	  sed -i "1s/(.*)/($(VERSION)-1)/" $(GTV)/debian/changelog ; \
 	fi
 	head -n1 $(GTV)/debian/changelog
 	sh -c "cd $(GTV); dpkg-buildpackage >/dev/null -rfakeroot -us -uc -tc"
