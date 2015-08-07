@@ -2,11 +2,12 @@ template = {
 
   # myfinds (Steve8x8) - use as follows:
   # geotoad -u $USERNAME -p ... -x myfindgpx -o myfinds.gpx -z -Z -q user $USERNAME
-  'myfindgpx'    => {
-    'ext'        => 'gpx',
-    'mime'    => 'text/ascii',
-    'desc'    => 'GPX Geocaching XML (my finds)',
-    'templatePre' => "<?xml version=\'1.0\' encoding=\'UTF-8\' standalone=\'yes\' ?>\n" +
+  'myfindgpx' => {
+    'ext'  => 'gpx',
+    'mime' => 'text/ascii',
+    'desc' => 'GPX Geocaching XML (my finds)',
+    'templatePre'  =>
+      "<?xml version=\'1.0\' encoding=\'UTF-8\' standalone=\'yes\' ?>\n" +
       "<gpx" +
        " version=\"1.0\" creator=\"GeoToad\"" +
        " xsi:schemaLocation=\"" +
@@ -24,7 +25,8 @@ template = {
       "<email>geotoad@googlegroups.com</email>\n" +
       "<time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S")  + ".000Z</time>\n" +
       "<keywords>cache, geocache, groundspeak, geotoad</keywords>\n",
-    'templateWP'    => "<wpt lat=\"<%out.latdatapad5%>\" lon=\"<%out.londatapad5%>\">\n" +
+    'templateWP'   =>
+      "<wpt lat=\"<%out.latdatapad5%>\" lon=\"<%out.londatapad5%>\">\n" +
       "  <time><%out.cdate%>T08:00:00Z</time>\n" +
       "  <name><%outEntity.id%></name>\n" +
       "  <desc><%wpEntity.name%> by <%wpEntity.creator%>, <%wp.fulltype%> (<%wp.difficulty%>/<%wp.terrain%>)</desc>\n" +
@@ -59,15 +61,17 @@ template = {
       "  <groundspeak:travelbugs />\n" +
       "  </groundspeak:cache>\n" +
       "</wpt>\n",
-    'templatePost'    => "</gpx>\n"
+    'templatePost' =>
+      "</gpx>\n"
   },
 
-  'myfindlist'    => {
-    'ext'        => 'lst',
-    'mime'    => 'text/plain',
-    'desc'    =>     'whitespace delimited, detailed table (my finds)',
-    'templatePre' => "",
-    'templateWP'    => "<%out.wid%>\t" +
+  'myfindlist' => {
+    'ext'  => 'lst',
+    'mime' => 'text/plain',
+    'desc' =>     'whitespace delimited, detailed table (my finds)',
+    'templatePre'  => "",
+    'templateWP'   =>
+      "<%out.wid%>\t" +
       "<%out.latdatapad5%> <%out.londatapad5%> " +
       "<%wp.type%>\t" +
       "<%out.adate%>\n"
@@ -75,11 +79,12 @@ template = {
 
   # yourfinds (Steve8x8) - use as follows:
   # geotoad -u $USERNAME -p ... -x yourfindgpx -o yourfinds.gpx -z -Z -q user $ANOTHERUSERNAME
-  'yourfindgpx'    => {
-    'ext'        => 'gpx',
-    'mime'    => 'text/ascii',
-    'desc'    => 'GPX Geocaching XML (user finds)',
-    'templatePre' => "<?xml version=\'1.0\' encoding=\'UTF-8\' standalone=\'yes\'?>\n" +
+  'yourfindgpx' => {
+    'ext'  => 'gpx',
+    'mime' => 'text/ascii',
+    'desc' => 'GPX Geocaching XML (user finds)',
+    'templatePre'  =>
+      "<?xml version=\'1.0\' encoding=\'UTF-8\' standalone=\'yes\'?>\n" +
       "<gpx" +
        " version=\"1.0\" creator=\"GeoToad\"" +
        " xsi:schemaLocation=\"" +
@@ -97,7 +102,8 @@ template = {
       "<email>geotoad@googlegroups.com</email>\n" +
       "<time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S")  + ".000Z</time>\n" +
       "<keywords>cache, geocache, groundspeak, geotoad</keywords>\n",
-    'templateWP'    => "<wpt lat=\"<%out.latdatapad6%>\" lon=\"<%out.londatapad6%>\">\n" +
+    'templateWP'   =>
+      "<wpt lat=\"<%out.latdatapad6%>\" lon=\"<%out.londatapad6%>\">\n" +
       "  <time><%out.cdate%>T08:00:00Z</time>\n" +
       "  <name><%outEntity.id%></name>\n" +
       "  <desc><%wpEntity.name%> by <%wpEntity.creator%>, <%wp.fulltype%> (<%wp.difficulty%>/<%wp.terrain%>)</desc>\n" +
@@ -132,15 +138,17 @@ template = {
       "  <groundspeak:travelbugs />\n" +
       "  </groundspeak:cache>\n" +
       "</wpt>\n",
-    'templatePost'    => "</gpx>\n"
+    'templatePost' =>
+      "</gpx>\n"
   },
 
-  'yourfindlist'    => {
-    'ext'        => 'lst',
-    'mime'    => 'text/plain',
-    'desc'    =>     'whitespace delimited, detailed table (user finds)',
-    'templatePre' => "",
-    'templateWP'    => "<%out.wid%>\t" +
+  'yourfindlist' => {
+    'ext'  => 'lst',
+    'mime' => 'text/plain',
+    'desc' =>     'whitespace delimited, detailed table (user finds)',
+    'templatePre'  => "",
+    'templateWP'   =>
+      "<%out.wid%>\t" +
       "<%out.latdatapad5%> <%out.londatapad5%> " +
       "<%wp.type%>\t" +
       "<%out.mdate%>\n"

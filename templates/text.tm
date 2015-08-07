@@ -1,11 +1,13 @@
 template = {
 
-  'text'    => {
-    'ext'        => 'txt',
-    'mime'    => 'text/plain',
-    'desc'    =>     'Plain ASCII',
-    'templatePre' =>  "== <%out.title%>\n\n",
-    'templateWP'    => "\n" +
+  'text' => {
+    'ext'  => 'txt',
+    'mime' => 'text/plain',
+    'desc' =>     'Plain ASCII',
+    'templatePre' =>
+      "== <%out.title%>\n\n",
+    'templateWP'  =>
+      "\n" +
       "----------------------------------------------------------------\n" +
       "=> <%wpText.name%> (<%out.wid%>) by <%wpText.creator%> <=\n" +
       "----------------------------------------------------------------\n\n" +

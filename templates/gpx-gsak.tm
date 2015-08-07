@@ -1,11 +1,12 @@
 template = {
 
   # templates for separate output of caches and add.wpts for GSAK use
-  'gpx-gsak'    => {
-    'ext'        => 'gpx',
-    'mime'    => 'text/ascii',
-    'desc'    => 'GPX Geocaching XML for GSAK, without Additional Waypoints',
-    'templatePre' => "<?xml version=\'1.0\' encoding=\'UTF-8\' standalone=\'yes\' ?>\n" +
+  'gpx-gsak' => {
+    'ext'  => 'gpx',
+    'mime' => 'text/ascii',
+    'desc' => 'GPX for GSAK, without AddWpts',
+    'templatePre'  =>
+      "<?xml version=\'1.0\' encoding=\'UTF-8\' standalone=\'yes\' ?>\n" +
       "<gpx" +
        " version=\"1.0\" creator=\"GeoToad\"" +
        " xsi:schemaLocation=\"" +
@@ -25,7 +26,8 @@ template = {
       "<email>geotoad@googlegroups.com</email>\n" +
       "<time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S")  + ".000Z</time>\n" +
       "<keywords>cache, geocache, groundspeak, geotoad</keywords>\n",
-    'templateWP'    => "<wpt lat=\"<%out.latdatapad6%>\" lon=\"<%out.londatapad6%>\">\n" +
+    'templateWP'   =>
+      "<wpt lat=\"<%out.latdatapad6%>\" lon=\"<%out.londatapad6%>\">\n" +
       "  <time><%out.XMLDate%></time>\n" +
       "  <name><%outEntity.id%></name>\n" +
       "  <desc><%wpEntity.name%> by <%wpEntity.creator%>, <%wp.type%> (<%wp.difficulty%>/<%wp.terrain%>)</desc>\n" +
@@ -66,14 +68,16 @@ template = {
 #      "    <gsak:GcNote></gsak:GcNote>\n" +
       "  </gsak:wptExtension>\n" +
       "</wpt>\n",
-    'templatePost'    => "</gpx>\n"
+    'templatePost' =>
+      "</gpx>\n"
   },
 
-  'gpx-wpts'    => {
-    'ext'        => 'wgpx',
-    'mime'    => 'text/ascii',
-    'desc'    => 'GPX Geocaching XML for GSAK, only Additional Waypoints',
-    'templatePre' => "<?xml version=\'1.0\' encoding=\'UTF-8\' standalone=\'yes\' ?>\n" +
+  'gpx-wpts' => {
+    'ext'  => 'wgpx',
+    'mime' => 'text/ascii',
+    'desc' => 'GPX for GSAK, AddWpts only',
+    'templatePre'  =>
+      "<?xml version=\'1.0\' encoding=\'UTF-8\' standalone=\'yes\' ?>\n" +
       "<gpx" +
        " version=\"1.0\" creator=\"GeoToad\"" +
        " xsi:schemaLocation=\"" +
@@ -93,17 +97,20 @@ template = {
       "<email>geotoad@googlegroups.com</email>\n" +
       "<time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S")  + ".000Z</time>\n" +
       "<keywords>cache, geocache, groundspeak, geotoad</keywords>\n",
-    'templateWP'    => "<%out.xmlWptsGsak%>",
-    'templatePost'    => "</gpx>\n"
+    'templateWP'   =>
+      "<%out.xmlWptsGsak%>",
+    'templatePost' =>
+      "</gpx>\n"
   },
 
   # Same as above, but including locationless waypoints
   # Will produce XML validation errors because of <wpt> without lat=... lon=...
-  'gpx-wpts0'    => {
-    'ext'        => 'wgpx',
-    'mime'    => 'text/ascii',
-    'desc'    => 'GPX Geocaching XML for GSAK, only Additional Waypoints, also locationless',
-    'templatePre' => "<?xml version=\'1.0\' encoding=\'UTF-8\' standalone=\'yes\' ?>\n" +
+  'gpx-wpts0' => {
+    'ext'  => 'wgpx',
+    'mime' => 'text/ascii',
+    'desc' => 'GPX for GSAK, AddWpts only, also unlocated',
+    'templatePre'  =>
+      "<?xml version=\'1.0\' encoding=\'UTF-8\' standalone=\'yes\' ?>\n" +
       "<gpx" +
        " version=\"1.0\" creator=\"GeoToad\"" +
        " xsi:schemaLocation=\"" +
@@ -123,8 +130,10 @@ template = {
       "<email>geotoad@googlegroups.com</email>\n" +
       "<time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S")  + ".000Z</time>\n" +
       "<keywords>cache, geocache, groundspeak, geotoad</keywords>\n",
-    'templateWP'    => "<%out.xmlWptsCgeo%>",
-    'templatePost'    => "</gpx>\n"
+    'templateWP'   =>
+      "<%out.xmlWptsCgeo%>",
+    'templatePost' =>
+      "</gpx>\n"
   },
 
 }

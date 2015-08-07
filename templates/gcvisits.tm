@@ -5,19 +5,19 @@ template = {
   'gclist'    => {
     'ext'     => 'txt',
     'mime'    => 'text/plain',
-    'desc'    =>     'Geocache visits text file for Garmin devices',
+    'desc'    => 'Garmin geocache_visits (text)',
     'templatePre' => "",
     'templateWP'  => "<%out.wid%>,<%out.adate%>T08:00Z,Found it,\"\"\n"
   },
 
   # geotoad -x gcvisits -o geocache_visits.txt -z -q user $USERNAME
-  'gcvisits' => {
-    'ext'        => 'txt',
+  'gcvisits'  => {
+    'ext'     => 'txt',
     'mime'    => 'text/plain',
-    'required' => 'iconv',
-    'desc'    => 'Geocache visits Unicode file for Garmin devices',
-    'filter_src'    => 'gclist',
-    'filter_exec'    => 'iconv -f US-ASCII -t UCS-2LE INFILE > OUTFILE'
+    'required'=> 'iconv',
+    'desc'    => 'Garmin geocache_visits (Unicode)',
+    'filter_src'  => 'gclist',
+    'filter_exec' => 'iconv -f US-ASCII -t UCS-2LE INFILE > OUTFILE'
   },
 
 }

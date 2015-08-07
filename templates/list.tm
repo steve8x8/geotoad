@@ -1,12 +1,13 @@
 template = {
 
   # contributed by Steve8x8: table, "tab" extended
-  'list'    => {
-    'ext'        => 'lst',
-    'mime'    => 'text/plain',
-    'desc'    =>     'whitespace delimited, detailed table',
+  'list' => {
+    'ext'         => 'lst',
+    'mime'        => 'text/plain',
+    'desc'        =>     'Table, whitespace delimited',
     'templatePre' => "",
-    'templateWP'    => "<%out.id%>\t" +
+    'templateWP'  =>
+      "<%out.id%>\t" +
       "<%out.latdatapad5%> <%out.londatapad5%> " +
       "<%out.cdate%> " +
       "<%wp.difficulty%>/<%wp.terrain%><%out.premiumOnly%><%out.warnArchiv%><%out.warnAvail%>\t" +

@@ -13,15 +13,17 @@ template = {
   #
   # You may consider using the gpx-wpts (wgpx) output for additional waypoints (parking etc.)!
 
-  'gpx-nuvi'    => {
-    'ext'     => 'ngpx',
-    'mime'    => 'text/ascii',
-    'desc'    => 'GPX Geocaching XML for Nuvi, without Additional Waypoints',
-    'templatePre' => "<?xml version=\'1.0\' encoding=\'UTF-8\' standalone=\'yes\' ?>\n" +
+  'gpx-nuvi' => {
+    'ext'  => 'ngpx',
+    'mime' => 'text/ascii',
+    'desc' => 'GPX Geocaching XML for Nuvi, without Additional Waypoints',
+    'templatePre'  =>
+      "<?xml version=\'1.0\' encoding=\'UTF-8\' standalone=\'yes\' ?>\n" +
       "<gpx" +
        " version=\"1.0\" creator=\"GeoToad\"" +
        " xsi:schemaLocation=\"" +
          "http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd" +
+# left out intentionally: there's no groundspeak content
 #        " http://www.groundspeak.com/cache/1/0/1 http://www.groundspeak.com/cache/1/0/1/cache.xsd" +
         " http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www8.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd" +
        "\"" +
@@ -35,7 +37,8 @@ template = {
       "<desc><%outEntity.title%></desc>\n" +
       "<author>GeoToad <%outEntity.version%></author>\n" +
       "<time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S")  + "</time>\n",
-    'templateWP'    => "<wpt lat=\"<%out.latdatapad6%>\" lon=\"<%out.londatapad6%>\">\n" +
+    'templateWP'   =>
+      "<wpt lat=\"<%out.latdatapad6%>\" lon=\"<%out.londatapad6%>\">\n" +
       "  <time><%out.XMLDate%></time>\n" +
       # title line, 1st line in POI list, max 24 chars shown
       "  <name><%outEntity.wid%>:<%out.nuvi%></name>\n" +
@@ -44,6 +47,7 @@ template = {
       "  <desc><%wpEntity.name%><%out.warnArchiv%><%out.warnAvail%> by <%wpEntity.creator%>," +
         " <%wp.fulltype%> (<%wp.size%>/<%wp.difficulty%>/<%wp.terrain%>)</desc>\n" +
       "  <sym>Geocache</sym>\n" +
+# SAXCount chokes on <extensions>
 #      "  <extensions>\n" +
       "    <gpxx:WaypointExtension>\n" +
       # do NOT set proximity here as it cannot be overwritten by POIloader/gpsbabel!
@@ -78,20 +82,21 @@ template = {
       "    </gpxx:WaypointExtension>\n" +
 #      "  </extensions>\n" +
       "</wpt>\n",
-    'templatePost'    => "</gpx>\n"
+    'templatePost' =>
+      "</gpx>\n"
   },
 
   'poi-nuvi' => {
-    'ext'        => 'gpi',
-    'mime'       => 'application/poiloader',
-    'desc'       => 'POI for Nuvi',
-    'required'   => 'gpsbabel',
-    'filter_src' => 'gpx-nuvi',
+    'ext'         => 'gpi',
+    'mime'        => 'application/poiloader',
+    'desc'        => 'POI for Nuvi',
+    'required'    => 'gpsbabel',
+    'filter_src'  => 'gpx-nuvi',
     # hide: don't show a symbol
     # proximity: set alert at given distance (forces alerts=1)
     # sleep: make sure no 2 files have same timestamp
-    # -bitmap: it's currently impossible to specify a full path name
-    'filter_exec' => 'gpsbabel -i gpx -o garmin_gpi,category="Geocaches",hide,proximity=250m,sleep=3 -f INFILE -F OUTFILE'
+    #'filter_exec' => 'gpsbabel -i gpx -o garmin_gpi,category="Geocaches",hide,proximity=250m,sleep=2 -f INFILE -F OUTFILE'
+    'filter_exec' => 'gpsbabel -i gpx -o garmin_gpi,category="Geocaches",proximity=250m,sleep=2 -f INFILE -F OUTFILE'
   },
 
 }

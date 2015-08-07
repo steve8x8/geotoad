@@ -1,10 +1,11 @@
 template = {
 
-  'html'    => {
-    'ext'        => 'html',
-    'mime'    => 'text/html',
-    'desc'    => 'Simple HTML',
-    'templatePre' => "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n" +
+  'html' => {
+    'ext'  => 'html',
+    'mime' => 'text/html',
+    'desc' => 'Simple HTML',
+    'templatePre'   =>
+      "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n" +
       "<html><head>\n<title><%outEntity.title%></title>\n" +
       "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n" + "</head>\n" +
       "<body link=\"#000099\" vlink=\"#000044\" alink=\"#000099\">\n" +
@@ -19,7 +20,7 @@ template = {
       "<b><font color=\"#BB6666\">&hearts;</font></b> fav factor of 3.0+<br>" +
       "<br>\n",
     'templateIndex' => "* <a href=\"#<%out.wid%>\"><%wpEntity.name%></a><br>",
-    'usesLocation' => true,
+    'usesLocation'  => true,
     'templateWP'    =>
       "\n\n<hr noshade size=\"1\">\n" +
       "<h3><a name=\"<%out.wid%>\"></a><font color=\"#000099\"><%out.symbols%><a href=\"<%wp.url%>\"><%wp.name%></a></font> by <font color=\"#555555\"><%wpEntity.creator%></font> <font color=\"#444444\">(<%out.wid%>)</font></h3>\n" +
@@ -36,7 +37,7 @@ template = {
       "<div>" + # catch runaway stuff like <center>
       "<p><font color=\"#330000\" size=\"-1\"><%out.htmllogs%></font></p>\n" +
       "</div>\n",
-    'templatePost'    => "</body></html>"
+    'templatePost'  => "</body></html>"
   },
 
 }

@@ -3,14 +3,13 @@ template = {
   # template taken from geotoad-3.9.6/lib/templates.rb,
   # (dropped later), slightly reformatted
   # WARNING: This template doesn't work anymore!!!
-  'vcf-3.9.6'    => {
+  'vcf-3.9.6' => {
     'ext'           => 'vcf',
     'mime'          => 'text/x-vcard',
     'detailsLength' => 2000,
     'desc'          => 'VCF for iPod Contacts export',
-    'spacer'        => ' ',
     'templatePre'   => "",
-    'templateWP'    => "" +
+    'templateWP'    =>
       "BEGIN:vCard\n" +
       "VERSION:2.1\n" +
       # average = (difficulty + terrain)/2, rounded down
@@ -30,13 +29,13 @@ template = {
   # iPod seems to be limited to 2000 characters (per entry?)
   # most entries are duplicated - sort this out
   # some entries may need "CHARSET=UTF-8"?
-  'vcf'    => {
+  'vcf' => {
     'ext'           => 'vcf',
     'mime'          => 'text/vcard',
     'desc'          => 'VCF vCard2.1 for iPod Contacts export',
     'usesLocation'  => true,
     'templatePre'   => "",
-    'templateWP'    => "" +
+    'templateWP'    =>
       "BEGIN:VCARD\n" +
       "VERSION:2.1\n" +
       "N:<%out.wid%>;<%wp.type%>;<%wp.size%>;;\n" +

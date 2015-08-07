@@ -14,20 +14,23 @@ template = {
   #</waypoint></loc>(no crlf!)
 
   'easygps' => {
-    'ext'        => 'loc',
-    'mime'    => 'application/easygps',
-    'desc'    => 'Geocaching.com .loc XML file',
-    'templatePre'    => "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+    'ext'  => 'loc',
+    'mime' => 'application/easygps',
+    'desc' => 'Geocaching.com .loc XML file',
+    'templatePre' =>
+      "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
       "<loc version=\"1.0\" src=\"GeoToad\">",
     # line feed in front of waypoints!
-    'templateWP'    => "\n<waypoint>\n" + 
+    'templateWP'  =>
+      "\n<waypoint>\n" + 
       "\t<name id=\"<%out.id%>\"><![CDATA[<%wp.name%> by <%wp.creator%>]]>\n" +
       "</name>\n" +
       "<coord lat=\"<%out.latdatapad6%>\" lon=\"<%out.londatapad6%>\"/>\n" +
       "<type>Geocache</type>\n" +
       "<link text=\"Cache Details\"><%wp.url%></link>\n" +
       "</waypoint>",
-    'templatePost'    => '</loc>',
+    'templatePost' =>
+      "</loc>",
     # there's no trailing LF in the reference file
   },
 

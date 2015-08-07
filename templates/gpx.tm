@@ -3,11 +3,12 @@ template = {
   # GPX with GroundSpeak extended attributes, modified headers
   # Successfully tested with a Garmin Oregon 300, firmware 4.10:
   # doesn't show any attributes, but doesn't complain either
-  'gpx'    => {
-    'ext'        => 'gpx',
-    'mime'    => 'text/ascii',
-    'desc'    => 'GPX Geocaching XML',
-    'templatePre' => "<?xml version=\'1.0\' encoding=\'UTF-8\' standalone=\'yes\' ?>\n" +
+  'gpx' => {
+    'ext'  => 'gpx',
+    'mime' => 'text/ascii',
+    'desc' => 'GPX (Geocaching XML), with AddWpts',
+    'templatePre'  =>
+      "<?xml version=\'1.0\' encoding=\'UTF-8\' standalone=\'yes\' ?>\n" +
       "<gpx" +
        " version=\"1.0\" creator=\"GeoToad\"" +
        " xsi:schemaLocation=\"" +
@@ -25,7 +26,8 @@ template = {
       "<email>geotoad@googlegroups.com</email>\n" +
       "<time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S")  + ".000Z</time>\n" +
       "<keywords>cache, geocache, groundspeak, geotoad</keywords>\n",
-    'templateWP'    => "<wpt lat=\"<%out.latdatapad6%>\" lon=\"<%out.londatapad6%>\">\n" +
+    'templateWP'   =>
+      "<wpt lat=\"<%out.latdatapad6%>\" lon=\"<%out.londatapad6%>\">\n" +
       "  <time><%out.XMLDate%></time>\n" +
       "  <name><%outEntity.id%></name>\n" +
       "  <desc><%wpEntity.name%> by <%wpEntity.creator%>, <%wp.type%> (<%wp.difficulty%>/<%wp.terrain%>)</desc>\n" +
@@ -56,7 +58,8 @@ template = {
       "  </groundspeak:cache>\n" +
       "</wpt>\n" +
       "<%out.xmlWpts%>",
-    'templatePost'    => "</gpx>\n"
+    'templatePost' =>
+      "</gpx>\n"
   },
 
 }

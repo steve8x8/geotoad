@@ -1,13 +1,13 @@
 template = {
 
-
   # GSAK-like GPX that can be imported into c:geo, with Additional Waypoints
   # Will produce XML validation errors because of <wpt> without lat=... lon=...
-  'gpx-cgeo'    => {
-    'ext'        => 'gpx',
-    'mime'    => 'text/ascii',
-    'desc'    => 'GPX Geocaching XML for c:geo, with Additional Waypoints, also locationless',
-    'templatePre' => "<?xml version=\'1.0\' encoding=\'UTF-8\' standalone=\'yes\' ?>\n" +
+  'gpx-cgeo' => {
+    'ext'  => 'gpx',
+    'mime' => 'text/ascii',
+    'desc' => 'GPX for c:geo, with AddWpts, also unlocated',
+    'templatePre'  =>
+      "<?xml version=\'1.0\' encoding=\'UTF-8\' standalone=\'yes\' ?>\n" +
       "<gpx" +
        " version=\"1.0\" creator=\"GeoToad\"" +
        " xsi:schemaLocation=\"" +
@@ -25,7 +25,8 @@ template = {
 # doesn't exist (2015-07-31)?
 #       " xmlns:cgeo=\"http://www.cgeo.org/wptext/1/0\"" +
       ">\n",
-    'templateWP'    => "<wpt lat=\"<%out.latdatapad6%>\" lon=\"<%out.londatapad6%>\">\n" +
+    'templateWP'   =>
+      "<wpt lat=\"<%out.latdatapad6%>\" lon=\"<%out.londatapad6%>\">\n" +
       "  <time><%out.XMLDate%></time>\n" +
       "  <name><%outEntity.id%></name>\n" +
       "  <desc><%wpEntity.name%></desc>\n" +
@@ -64,7 +65,8 @@ template = {
       "  </gsak:wptExtension>\n" +
       "</wpt>\n" +
       "<%out.xmlWptsCgeo%>",
-    'templatePost'    => "</gpx>\n"
+    'templatePost' =>
+      "</gpx>\n"
   },
 
 }
