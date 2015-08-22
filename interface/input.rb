@@ -603,16 +603,18 @@ class Input
         end
 
       when '24'
-        puts "List of Output Formats: "
         outputDetails = Output.new
+        puts "List of Output Formats [Extension] {Requirement}: "
         $validFormats = outputDetails.formatList.sort
         $validFormats.each{ |type|
-          desc = outputDetails.formatDesc(type)
-          req = outputDetails.formatRequirement(type)
+          desc = ""
+          ext  = "[" + outputDetails.formatExtension(type) + "]"
+          desc << outputDetails.formatDesc(type)
+          req  = outputDetails.formatRequirement(type)
           if (req)
-            req = "[" + req + " required]"
+            desc << " {" + req + "}"
           end
-          printf("%-12.12s: %-45.45s %s\n", type, desc, req)
+          printf("%-13.13s%6.6s %s\n", type, ext, desc)
         }
 
         puts ""
