@@ -605,6 +605,7 @@ class Input
       when '24'
         puts "List of Output Formats: "
         outputDetails = Output.new
+        $validFormats = outputDetails.formatList.sort
         $validFormats.each{ |type|
           desc = outputDetails.formatDesc(type)
           req = outputDetails.formatRequirement(type)
