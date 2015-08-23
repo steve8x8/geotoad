@@ -6,6 +6,7 @@ geotoad (3.23.2-1) unstable; urgency=low
   * Issue 316: Calculate distance from home location
   * Issue 320: Override default filename extensions
   * Issue 321: Include location-less waypoints in GPX output
+  * Issue 324: Fix TUI crash on output format selection (input still unchecked!)
   * build tools rewrite
   * some minor bugfixes, cleanups
 
