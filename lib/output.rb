@@ -1418,7 +1418,24 @@ class Output
       @outVars['gpxlogs'] = createGpxCommentLogs(cache)
       @outVars['textlogs'] = createTextCommentLogs(cache)
       @outVars['htmllogs'] = createHTMLCommentLogs(cache)
-      output << replaceVariables(@outputFormat['templateWP'], wid)
+      # make output conditional
+      if @outputFormat['conditionWP']
+        conditionWP = @outputFormat['conditionWP']
+        debug "WP condition #{conditionWP.inspect}"
+        condition = replaceVariables(conditionWP, wid)
+        begin
+          willOutput = eval(condition)
+        rescue => e
+          displayWarning "Problem with output condition \"#{condition}\":\n\t#{e}"
+          willOutput = false
+        end
+        debug "WP condition for #{wid}: #{willOutput.inspect}"
+      else
+        willOutput = true
+      end
+      if willOutput
+        output << replaceVariables(@outputFormat['templateWP'], wid)
+      end
     }
 
     if @outputFormat['templatePost']

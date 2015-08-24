@@ -5,8 +5,10 @@ template = {
     'ext'  => 'wig',
     'mime' => 'text/plain',
     'desc' => 'wherigo list',
-    'templatePre' =>
-      "# wherigo list, gaps to be filled in, input to WigToad\n",
+    'templatePre' => "",
+    # output condition: cache type must be "wherigo"
+    'conditionWP' =>
+      "\"<%wp.type%>\" == \"wherigo\"",
     # GCxxxx=CGUID lat lon ..., required for cartridge search outside GeoToad
     'templateWP'  =>
       "<%out.wid%>=<%out.cartridge%>\t" +

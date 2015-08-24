@@ -190,6 +190,14 @@ template = {
 }
 We leave as an exercise to the reader to sketch the resulting output for both formats!
 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Issue 323 asked for an addition 'conditionWP' which may be used to select WIDs for output.
+The syntax uses the <%...%> style to setup a condition that may be eval()uated.
+For example, the __wherigo__ template uses:
+    'conditionWP' =>
+      "\"<%wp.type%>\" == \"wherigo\"",
+to output lines only for "wherigo" caches.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
