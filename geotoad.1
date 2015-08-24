@@ -1,4 +1,4 @@
-.TH "GEOTOAD" "1" "30 Jul 2015" "steve8x8@googlemail.com" "Geocaching Query Tool"
+.TH "GEOTOAD" "1" "24 Aug 2015" "steve8x8@googlemail.com" "Geocaching Query Tool"
 
 .SH "NAME"
 
@@ -55,7 +55,7 @@ you accept all liability for possible damages.
 
 .SS "Toggled options:"
 \fB"No\-argument"\fR options, with the exception of \fB\-\-verbose\fR which
-implements miltiple levels, are \fB"toggles"\fR, i.e. they can be switched
+implements multiple levels, are \fB"toggles"\fR, i.e. they can be switched
 on by the first usage on the command line, switched off by the second, etc.
 
 .SS "(MULTI) options:"
@@ -198,7 +198,7 @@ Inverse filters are applied before, and therefore supersede, forward filters!
 .PP
 \fBevent\fR and \fBunknown\fR do not include "special" types.
 To search for "all event" (including cito, mega, and giga, and some 
-rare other events) or "all unknown" (including Groundspeak HQ) types,
+rare other events) or "all unknown" (including GroundSpeak HQ) types,
 use
 \fBevent+\fR, or \fBunknown+\fR respectively,
 \fBas the only cache type\fR (otherwise,
@@ -450,13 +450,13 @@ If there's no setting, the distances reported by the search (or \fBN/A\fR) will 
 .PP
 .B  geotoad
 is released every now and then ("it's ready when it's ready") as a tarball,
-and derived from that as Debian (/Ubuntu) and MacOSX packages and Windows
+and derived from that as Debian (/Ubuntu) and Mac OS X packages and Windows
 Installer.
 .PP
 .B  geotoad
-development had been started in a MacOSX environment, and has been moved
+development had been started in a Mac OS X environment, and has been moved
 to (Debian) Linux later. All testing is currently done in a Debian Linux
-context. MacOSX and Windows packaging happens on a foreign (or virtual)
+context. Mac OS X and Windows packaging happens on a foreign (or virtual)
 machine, testing is close to impossible.
 .PP
 Starting with Ruby 2.1, Windows XP is no longer supported (and 3.23.2 will
@@ -495,15 +495,23 @@ Ruby source files!
 Some output formats require external programs, like \fBgpsbabel\fR or \fBcmconvert\fR.
 
 .\".SS "PMO for Basic Members:"
-.\"There are a couple of inofficial patches to make
+.\"There are a couple of unofficial patches to make
 .\".B  geotoad
 .\"ready for Premium Member caches, also for Basic Members.
 .\"Those will not be made public now.
 
+.SH "RESOURCES"
+.PP
+.B  geotoad
+is currently hosted on GitHub
+.ft CW
+https://github.com/steve8x8/geotoad/
+.ft P
+
 .SH "EXAMPLES"
 .PP
 \fINote:\fR Some of these examples may still no longer work as shown.
-Please help to fix this; see Issue 284 on GoogleCode.
+Please help to fix this; see Issue 284.
 .PP
 Additional examples are welcome!
 
@@ -557,7 +565,7 @@ which users helixblue and Sallad have not visited.
 Outputs a GPX format file, which is usable by most GPSr's and other devices.
 .TP
 .B  geotoad ... \-t 2.5 \-E anyname=/path/to/file \-x gpx \-o charlotte.gpx 28272
-As before, but read a list of GCxxxx cache IDs from a file instead of querying the server
+As before, but read a list of GCxxxxx cache IDs from a file instead of querying the server
 for found caches.
 .TP
 .B  geotoad ... \-b \-K 'stream|creek|lake|river|ocean' \-x html \-o watery.html \-q state 15
