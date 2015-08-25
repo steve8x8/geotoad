@@ -30,7 +30,7 @@ template = {
        " xmlns=\"http://www.topografix.com/GPX/1/0\"" +
        " xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"" +
        " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" +
-#       " xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0/1\"" +
+       " xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0/1\"" +
        " xmlns:gpxx=\"http://www.garmin.com/xmlschemas/GpxExtensions/v3\"" +
       ">\n" +
       "<name>" + Time.new.gmtime.strftime("%Y%m%dT%H%M%S") + "</name>\n" +
@@ -48,7 +48,7 @@ template = {
         " <%wp.fulltype%> (<%wp.size%>/<%wp.difficulty%>/<%wp.terrain%>)</desc>\n" +
       "  <sym>Geocache</sym>\n" +
 # SAXCount chokes on <extensions>
-#      "  <extensions>\n" +
+      "  <extensions>\n" +
       "    <gpxx:WaypointExtension>\n" +
       # do NOT set proximity here as it cannot be overwritten by POIloader/gpsbabel!
       #"      <gpxx:Proximity>250</gpxx:Proximity>\n" +
@@ -80,7 +80,7 @@ template = {
         #"**Wpts: <%outTextEntity.shortWpts%>\n" +
       "      </gpxx:PhoneNumber>\n" +
       "    </gpxx:WaypointExtension>\n" +
-#      "  </extensions>\n" +
+      "  </extensions>\n" +
       "</wpt>\n",
     'templatePost' =>
       "</gpx>\n"
