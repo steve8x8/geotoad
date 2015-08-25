@@ -16,7 +16,7 @@ template = {
   'gpx-nuvi' => {
     'ext'  => 'ngpx',
     'mime' => 'text/ascii',
-    'desc' => 'GPX Geocaching XML for Nuvi, without Additional Waypoints',
+    'desc' => 'GPX for Nuvi, without AddWpts',
     'templatePre'  =>
       "<?xml version=\'1.0\' encoding=\'UTF-8\' standalone=\'yes\' ?>\n" +
       "<gpx" +

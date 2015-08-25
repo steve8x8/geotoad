@@ -68,7 +68,7 @@ template = {
   'myfindlist' => {
     'ext'  => 'lst',
     'mime' => 'text/plain',
-    'desc' =>     'whitespace delimited, detailed table (my finds)',
+    'desc' =>     'Table, whitespace delimited (my finds)',
     'templatePre'  => "",
     'templateWP'   =>
       "<%out.wid%>\t" +
@@ -145,7 +145,7 @@ template = {
   'yourfindlist' => {
     'ext'  => 'lst',
     'mime' => 'text/plain',
-    'desc' =>     'whitespace delimited, detailed table (user finds)',
+    'desc' =>     'Table, whitespace delimited (user finds)',
     'templatePre'  => "",
     'templateWP'   =>
       "<%out.wid%>\t" +
