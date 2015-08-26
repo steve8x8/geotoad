@@ -1,6 +1,6 @@
-geotoad (3.23.2-1) unstable; urgency=low
+geotoad (3.24.0-1) unstable; urgency=low
 
-  * New version 3.23.2, "Enceladus" (226th anniversary of discovery)
+  * New version 3.24.0, "Enceladus" (226th anniversary of discovery)
   * Issue 272: Option -W to fetch trackable logs
   * GSAK/c:geo templates/output (cont'd)
   * Issue 316: Calculate distance from home location
@@ -8,7 +8,9 @@ geotoad (3.23.2-1) unstable; urgency=low
   * Issue 321: Include location-less waypoints in GPX output
   * Issue 323: Conditional output (e.g. for "wherigo" template)
   * Issue 324: Fix TUI crash on output format selection (input still unchecked!)
-  * build tools rewrite
+  * build tools rewritten
+  * progress meter output shortened
+  * man page reformatted
   * some minor bugfixes, cleanups
 
  -- Steve Sixty-Four <steve8x8@gmail.com>  Fri, 28 Aug 2015 10:00:00 +0000

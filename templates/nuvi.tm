@@ -47,7 +47,7 @@ template = {
       "  <desc><%wpEntity.name%><%out.warnArchiv%><%out.warnAvail%> by <%wpEntity.creator%>," +
         " <%wp.fulltype%> (<%wp.size%>/<%wp.difficulty%>/<%wp.terrain%>)</desc>\n" +
       "  <sym>Geocache</sym>\n" +
-# SAXCount chokes on <extensions>
+# SAXCount chokes on <extensions> but without there's no text in GPI
       "  <extensions>\n" +
       "    <gpxx:WaypointExtension>\n" +
       # do NOT set proximity here as it cannot be overwritten by POIloader/gpsbabel!
