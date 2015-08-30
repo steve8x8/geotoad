@@ -280,14 +280,19 @@ class ShadowFetch
     end
     if uri.scheme == 'https'
       http.use_ssl = true
-      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      # openssl 1.0.1 tends to produce long headers which gc doesnt handle
-      # reduce set of ciphers to the one that's known to work with 1.0.0h
-      # http://gursevkalra.blogspot.de/2009/09/ruby-and-openssl-based-ssl-cipher.html
-      http.ciphers = [ 'RC4-SHA', 'AES128-SHA', 'AES256-SHA', 'DES-CBC3-SHA' ]
-      # force ssl context to TLSv1/SSLv3
-      # http://www.ruby-forum.com/topic/200072
-      http.instance_eval { @ssl_context = OpenSSL::SSL::SSLContext.new(:TLSv1) }
+      # this was for a long time kind of security by obscurity
+      http.verify_mode = OpenSSL::SSL::VERIFY_PEER
+      # reduce set of ciphers
+      # https://www.ssllabs.com/ssltest/analyze.html?d=geocaching.com, drop <256 bit
+      #http.ciphers = [ 'RC4-SHA', 'AES128-SHA', 'AES256-SHA', 'DES-CBC3-SHA' ]
+      #http.ciphers = OpenSSL::SSL::SSLContext::DEFAULT_PARAMS[:ciphers].split(/:/).map{ |c|
+      #  (c =~ /(RC4|AES128|DES)/) ? nil : c
+      #}.compact.join(':')
+      http.ciphers = OpenSSL::SSL::SSLContext.new(:TLSv1_2).ciphers.map{ |c,x,y,z|
+        (z >= 256) ? c : nil
+      }.compact.join(':')
+      # force ssl context http://www.ruby-forum.com/topic/200072
+      http.instance_eval { @ssl_context = OpenSSL::SSL::SSLContext.new(:TLSv1_2) }
     end
 
     query = uri.path
