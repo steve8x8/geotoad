@@ -29,7 +29,8 @@ deb:	$(GUV)-1_all.deb
 
 
 version:
-	@echo "Building for version $(VERSION)"
+	@echo ""
+	@echo "Building version $(VERSION)"
 
 clean:
 	@echo ""
@@ -142,7 +143,7 @@ $(GTV).dmg: $(GTV).tar.gz
 	-mount | grep /media
 	@echo    "*** Remove the USB key."
 	@read -p "*** Press ENTER when done: " x
-	@echo    "*** On a MacOSX machine, and run:"
+	@echo    "*** On a MacOSX machine, mount USB key and run:"
 	@echo    "      bash mac/run_mac.sh"
 	@echo    "*** Insert the USB key with \"$(GTV).dmg\""
 	@read -p "*** Press ENTER when done: " x
