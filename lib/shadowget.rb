@@ -281,18 +281,24 @@ class ShadowFetch
     if uri.scheme == 'https'
       http.use_ssl = true
       # this was for a long time kind of security by obscurity
-      http.verify_mode = OpenSSL::SSL::VERIFY_PEER
-      # reduce set of ciphers
-      # https://www.ssllabs.com/ssltest/analyze.html?d=geocaching.com, drop <256 bit
-      #http.ciphers = [ 'RC4-SHA', 'AES128-SHA', 'AES256-SHA', 'DES-CBC3-SHA' ]
-      #http.ciphers = OpenSSL::SSL::SSLContext::DEFAULT_PARAMS[:ciphers].split(/:/).map{ |c|
-      #  (c =~ /(RC4|AES128|DES)/) ? nil : c
-      #}.compact.join(':')
-      http.ciphers = OpenSSL::SSL::SSLContext.new(:TLSv1_2).ciphers.map{ |c,x,y,z|
-        (z >= 256) ? c : nil
-      }.compact.join(':')
-      # force ssl context http://www.ruby-forum.com/topic/200072
-      http.instance_eval { @ssl_context = OpenSSL::SSL::SSLContext.new(:TLSv1_2) }
+      # apparently there are still old Rubies around which would crash with TLSv1_2
+      begin
+        http.verify_mode = OpenSSL::SSL::VERIFY_PEER
+        # reduce set of ciphers
+        # https://www.ssllabs.com/ssltest/analyze.html?d=geocaching.com, drop <256 bit
+        http.ciphers = OpenSSL::SSL::SSLContext.new(:TLSv1_2).ciphers.map{ |c,x,y,z|
+          (z >= 256) ? c : nil
+        }.compact.join(':')
+        # force ssl context http://www.ruby-forum.com/topic/200072
+        http.instance_eval { @ssl_context = OpenSSL::SSL::SSLContext.new(:TLSv1_2) }
+      rescue => e
+        displayWarning "TLSv1_2 error #{e}, fallback to TLSv1"
+        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+        # http://gursevkalra.blogspot.de/2009/09/ruby-and-openssl-based-ssl-cipher.html
+        http.ciphers = [ 'RC4-SHA', 'AES128-SHA', 'AES256-SHA', 'DES-CBC3-SHA' ]
+        # http://www.ruby-forum.com/topic/200072
+        http.instance_eval { @ssl_context = OpenSSL::SSL::SSLContext.new(:TLSv1) }
+      end
     end
 
     query = uri.path
