@@ -207,6 +207,7 @@ class GeoToad
   def versionCheck
 
     checkurl = "https://raw.githubusercontent.com/wiki/steve8x8/geotoad/CurrentVersion.md"
+    wikiurl = "https://github.com/steve8x8/geotoad/wiki/CurrentVersion"
 
     version = ShadowFetch.new(checkurl)
     version.localExpiry = 1 * 86400	# 1 day
@@ -234,7 +235,7 @@ class GeoToad
           (1..20).each{ |line|
             displayBox textlines[line] if textlines[line]
           }
-          displayMessage "  ... see #{checkurl} for more ..." if textlines.length > 20
+          displayMessage "  ... see #{wikiurl} for more ..." if textlines.length > 20
           if obsoleteOlder
             displayBar
             displayWarning "Older versions do not work any longer. Update NOW!"

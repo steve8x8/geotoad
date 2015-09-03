@@ -292,7 +292,7 @@ class ShadowFetch
         # force ssl context http://www.ruby-forum.com/topic/200072
         http.instance_eval { @ssl_context = OpenSSL::SSL::SSLContext.new(:TLSv1_2) }
       rescue => e
-        displayWarning "TLSv1_2 error #{e}, fallback to TLSv1"
+        displayWarning "HTTPS error: #{e}\n\tFallback to insecure TLSv1 - upgrade your Ruby!"
         http.verify_mode = OpenSSL::SSL::VERIFY_NONE
         # http://gursevkalra.blogspot.de/2009/09/ruby-and-openssl-based-ssl-cipher.html
         http.ciphers = [ 'RC4-SHA', 'AES128-SHA', 'AES256-SHA', 'DES-CBC3-SHA' ]
