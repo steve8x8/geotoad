@@ -205,6 +205,9 @@ $(GTV)_Installer.exe: $(GTV).tar.gz
 md5sums.txt: Makefile $(GTV).tar.gz $(GTV)_Installer.exe $(GTV).dmg #$(GTV)-1_all.deb
 	md5sum $(GTV)* `echo $(GTV) | sed 's~-~_~'`* | grep -v '\.orig\.tar\.gz' > md5sums.txt
 
+Packages.gz: md5sums.txt
+	dpkg-scanpackages . | gzip -9v > Packages.gz
+
 .PHONY: tgz win mac deb clean fullclean version
 
 .SILENT:
