@@ -235,7 +235,7 @@ class GeoToad
           (1..20).each{ |line|
             displayBox textlines[line] if textlines[line]
           }
-          displayMessage "  ... see #{wikiurl} for more ..." if textlines.length > 20
+          displayBox "... see #{wikiurl} for more" if textlines.length > 20
           if obsoleteOlder
             displayBar
             displayWarning "Older versions do not work any longer. Update NOW!"
