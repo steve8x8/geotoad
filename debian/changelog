@@ -1,3 +1,11 @@
+geotoad (3.24.1-1) unstable; urgency=low
+
+  * New version 3.24.1, "..." (...)
+  * Issue 322: Harden  and verify SSL
+  * some minor bugfixes, cleanups
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Wed, 30 Sep 2015 10:00:00 +0000
+
 geotoad (3.24.0-1) unstable; urgency=low
 
   * New version 3.24.0, "Enceladus" (226th anniversary of discovery)
@@ -7,7 +15,7 @@ geotoad (3.24.0-1) unstable; urgency=low
   * Issue 320: Override default filename extensions
   * Issue 321: Include location-less waypoints in GPX output
   * Issue 323: Conditional output (e.g. for "wherigo" template)
-  * Issue 324: Fix TUI crash on output format selection (input still unchecked!)
+  * Issue 324: Fix TUI crash on output format selection
   * build tools rewritten
   * progress meter output shortened
   * man page reformatted
