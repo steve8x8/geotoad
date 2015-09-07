@@ -17,7 +17,7 @@ VERSION = $(VERSION0)$(PREBUILD)
 GTV     = geotoad-$(VERSION)
 GUV     = geotoad_$(VERSION)
 
-all:	version tgz deb win mac md5sums.txt
+all:	version tgz deb win mac md5sums.txt Packages.gz
 
 tgz:	$(GTV).tar.gz
 
@@ -48,7 +48,7 @@ fullclean: clean
 	@echo " FULL CLEANUP "
 	@echo "========================="
 	@echo ""
-	-rm  -f geotoad-* geotoad_* md5sums.txt
+	-rm  -f geotoad-* geotoad_* md5sums.txt Packages.*
 	-rm -rf git/
 	@echo $@ done.
 
