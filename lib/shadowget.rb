@@ -290,6 +290,12 @@ class ShadowFetch
         displayWarning "HTTPS error: #{e}\n\tFallback to insecure TLSv1 - upgrade your Ruby!"
         @@tlsVersion = :TLSv1
       end
+      # if there's no TLSv1 there's no hope
+      begin
+        OpenSSL::SSL::SSLContext.new(@@tlsVersion)
+      rescue => e
+        displayError "HTTPS error: #{e}\n\tYour Ruby version does not support TLS!"
+      end
       # reduce set of ciphers
       # http://gursevkalra.blogspot.de/2009/09/ruby-and-openssl-based-ssl-cipher.html
       # https://www.ssllabs.com/ssltest/analyze.html?d=geocaching.com, drop <256 bit
