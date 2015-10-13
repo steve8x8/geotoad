@@ -15,7 +15,7 @@ How to write your own template files
 You always wanted to have your own, tailor-made output templates, and always hesitated to ask for them?
 Now the time has come for you and your creativity!
 
- - All template files have to reside in a template subdirectory (folder) in your _config_ directory, right next to cookies.yaml
+ - All template files have to reside in a template subdirectory (folder) in your _config_ directory, right next to config.yaml
  - Template files must have a file extension of .tm
  - Template files are written in Ruby's "hash" assignment syntax, and have the form
 
