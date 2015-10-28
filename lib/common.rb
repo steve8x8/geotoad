@@ -57,11 +57,12 @@ module Common
     # get center location for distance
     my_lat = nil
     my_lon = nil
+    my_src = 'unknown source'
     # evaluate env variables too
     if ENV['GEO_HOME_LAT'] and ENV['GEO_HOME_LON']
       my_lat = ENV['GEO_HOME_LAT'].to_f
       my_lon = ENV['GEO_HOME_LON'].to_f
-      debug "env location #{my_lat} #{my_lon}"
+      my_src = 'GEO_HOME_* env'
     end
     if (my_lat == 0.0) and (my_lon == 0.0)
       # get location from user page, fall back
@@ -75,11 +76,12 @@ module Common
         if line =~ /viewModel\s*=\s*...homeLocation.:\[([\d.-]*),([\d.-]*)\]/
           my_lat = $1.to_f
           my_lon = $2.to_f
-          debug "homeLocation #{my_lat} #{my_lon}"
+          my_src = 'GC homeLocation'
         end
       }
     end
-    return [ @@dateFormat, prefLanguage, my_lat, my_lon ]
+    debug "location #{my_lat.inspect} #{my_lon.inspect} from #{my_src}"
+    return [ @@dateFormat, prefLanguage, my_lat, my_lon, my_src ]
   end
 
   def setDateFormat(dateFormat)

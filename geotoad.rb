@@ -336,9 +336,9 @@ class GeoToad
       displayWarning "Note: Subsequent operations may fail. You've been warned."
     end
     displayMessage "Querying user preferences"
-    @dateFormat, prefLang, $my_lat, $my_lon = getPreferences()
+    @dateFormat, prefLang, $my_lat, $my_lon, $my_src = getPreferences()
     displayInfo "Using date format #{@dateFormat}, language #{prefLang}"
-    displayInfo "Using home location (#{$my_lat || 'nil'}, #{$my_lon || 'nil'})"
+    displayInfo "Using home location (#{$my_lat || 'nil'}, #{$my_lon || 'nil'}) from #{$my_src}"
 
     if @option['myLogs'] || @option['myTrackables']
       displayMessage "Retrieving my logs"
