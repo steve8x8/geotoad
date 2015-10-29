@@ -253,7 +253,7 @@ class ShadowFetch
     @@remotePages = @@remotePages + 1
     randomizedSleep(@@remotePages)
     @httpHeaders['Referer'] = @url
-    data = fetchURL(@url)
+    data = fetchURL(@url).to_s
     debug2 "#{data.length} bytes retrieved from #{@url}"
     data.force_encoding("UTF-8")
     # although implicit:
@@ -281,8 +281,13 @@ class ShadowFetch
     end
     if uri.scheme == 'https'
       http.use_ssl = true
-      #http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       http.verify_mode = OpenSSL::SSL::VERIFY_PEER
+      # work around (only?) Windows not being able to verify peer
+      # http://stackoverflow.com/questions/170956/how-can-i-find-which-operating-system-my-ruby-program-is-running-on
+      # better use RbConfig::CONFIG['host_os']?
+      if RUBY_PLATFORM.downcase =~ /djgpp|(cyg|ms|bcc)win|mingw|wince|emx/
+        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      end
       # apparently there are still old Rubies around which would crash with TLSv1_2
       begin
         OpenSSL::SSL::SSLContext.new(@@tlsVersion)
