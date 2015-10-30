@@ -261,7 +261,7 @@ class ShadowFetch
   end
 
 
-  def fetchURL (url_str, redirects=2)  # full http:// string!
+  def fetchURL (url_str, redirects=4)  # full http:// string!
     if (redirects == 0)
       displayWarning "HTTP redirect loop for #{url_str}."
       displayWarning "Your cookie may have expired suddenly. Try to re-run once."
