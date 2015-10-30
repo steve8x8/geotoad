@@ -9,12 +9,6 @@ $BASEDIR = File.dirname(File.realpath(__FILE__))
 $LOAD_PATH << $BASEDIR
 $LOAD_PATH << File.join($BASEDIR, 'lib')
 
-if RUBY_VERSION.gsub('.', '').to_i < 191
-  puts "ERROR: Ruby version is #{RUBY_VERSION}. 1.9.1 or higher required."
-  sleep(5)
-  exit(99)
-end
-
 Encoding.default_external = Encoding::UTF_8
 
 $delimiters = /[\|:]/
@@ -1002,6 +996,15 @@ exit if Object.const_defined?(:Ocra)
 # have some output before initializing the GeoToad, Output, Template classes
 include Messages
 displayTitle "GeoToad #{$VERSION} (Ruby #{RUBY_VERSION}p#{RUBY_PATCHLEVEL}/#{RUBY_RELEASE_DATE} on #{RUBY_PLATFORM})"
+
+# check Ruby version
+if RUBY_VERSION.gsub('.', '').to_i < 191
+  displayError "Ruby version is #{RUBY_VERSION}. Required: 1.9.1 or higher."
+end
+if RUBY_VERSION.gsub('.', '').to_i < 215
+  displayWarning "Ruby version is #{RUBY_VERSION}. Recommended: 2.1.5 or higher."
+end
+
 # initialize method: 1st part of init
 cli = GeoToad.new
 cli.versionCheck

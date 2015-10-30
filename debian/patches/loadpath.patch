@@ -11,5 +11,5 @@
 +#$LOAD_PATH << File.join($BASEDIR, 'lib')
 +$LOAD_PATH << '/usr/share/geotoad'
  
- if RUBY_VERSION.gsub('.', '').to_i < 191
-   puts "ERROR: Ruby version is #{RUBY_VERSION}. 1.9.1 or higher required."
+ Encoding.default_external = Encoding::UTF_8
+ 
