@@ -2,6 +2,8 @@ geotoad (3.24.2-1) unstable; urgency=low
 
   * New version 3.24.2, "Soft cell"
   * Issue 322/329: Soften SSL (don't verify for Windows)
+  * Issue 330: HTTP redirection levels
+  * Require Ruby >= 1.9.1, recommend Ruby >= 2.1.5
   * some minor bugfixes, cleanups
 
  -- Steve Sixty-Four <steve8x8@gmail.com>  Wed, 04 Nov 2015 10:00:00 +0000
