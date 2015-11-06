@@ -16,7 +16,7 @@ template = {
       "FN:G<%out.average%> <%out.id%>\n" +
       "N:G<%out.average%>;<%out.id%>\n" +
       # details = shortdesc + longdesc, truncated to 2000 chars
-      "NOTE:<%out.details%><%out.hint%>\n" +
+      "NOTE:<%out.details%><%out.hintdecrypt%>\n" +
       "ADD:<%wp.latwritten%>;<%wp.lonwritten%>;;<%wp.state%>;\n" +
       "TEL;HOME:<%out.wid%>\n" +
       "EMAIL;INTERNET:<%wp.difficulty%>@<%wp.terrain%>\n" +
@@ -44,7 +44,7 @@ template = {
       "TITLE:<%wp.name%>\n" +
       "NOTE:<%out.txtAttrs%>;Hint:<%out.hintdecrypt%>;\n" +
       "GEO:<%out.latdatapad6%>;<%out.londatapad6%>\n" +
-      "ADR;HOME:;;<%wp.latdegmin%>, <%wp.londegmin%>;<%out.location%>;<%wp.state%>;<%wp.country%>\n" +
+      "ADR;HOME:;;<%out.latdegmin%>, <%out.londegmin%>;<%out.location%>;<%wp.state%>;<%wp.country%>\n" +
       "TEL;HOME:<%out.wid%>\n" +
       "EMAIL;PREF:D<%wp.difficulty%>_T<%wp.terrain%>_<%out.size%>@<%wp.type%>.gc\n" +
       "CATEGORIES:Geocaches,<%wp.fulltype%>,D<%wp.difficulty%>,T<%wp.terrain%>\n" +
