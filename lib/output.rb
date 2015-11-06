@@ -573,6 +573,11 @@ class Output
         value = makeText(@wpHash[wid][var].to_s)
       elsif (type == "outText")
         value = makeText(@outVars[var].to_s)
+      # convert to pure-ascii text
+      elsif (type == "wpTextAscii")
+        value = makeText(@wpHash[wid][var].to_s).chars.map{|c| c.ascii_only? ? c : "-"}.join
+      elsif (type == "outTextAscii")
+        value = makeText(@outVars[var].to_s).chars.map{|c| c.ascii_only? ? c : "-"}.join
       # convert to text that can be included verbatim into XML/HTML
       elsif (type == "wpTextEntity")
         value = CGI.escapeHTML(makeText(@wpHash[wid][var].to_s))
@@ -1432,7 +1437,13 @@ class Output
         willOutput = true
       end
       if willOutput
-        output << replaceVariables(@outputFormat['templateWP'], wid)
+        outputadd = replaceVariables(@outputFormat['templateWP'], wid)
+        maxlength = @outputFormat['maxlengthWP']
+        if maxlength and outputadd.length > maxlength
+          output << outputadd[0..maxlength-1] + outputadd[-1..-1]
+        else
+          output << outputadd
+        end
       end
     }
 
