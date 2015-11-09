@@ -683,7 +683,7 @@ class CacheDetails
 
     # Page Generated on
     # 09/11/2011 18:04:45</p>
-    if data =~ /Page Generated on\s*(\d+)\/(\d+)\/(\d+)\s(\d+:\d+:\d+)\s*<\/p>/m
+    if data =~ /Page Generated On\s*(\d+)\/(\d+)\/(\d+)\s(\d+:\d+:\d+)\s*<\/p>/mi
       begin
         cache['ltime'] = Time.parse("#{$3}-#{$1}-#{$2} #{$4} PDT/PST")
         cache['ldays'] = daysAgo(cache['ltime'])
