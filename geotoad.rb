@@ -1071,14 +1071,14 @@ while true
     count = cli.downloadGeocacheList()
   end
   if count < 1
-    cli.displayWarning "No valid query or no caches found in search, exiting early."
+    displayWarning "No valid query or no caches found in search, exiting early."
   else
-    cli.displayMessage "Your \"#{options['queryType']}\" query \"#{options['queryArg']}\" returned #{cli.caches(count)}."
+    displayMessage "Your \"#{options['queryType']}\" query \"#{options['queryArg']}\" returned #{cli.caches(count)}."
     cli.prepareFilter
     cli.preFetchFilter
 
     if options['noCacheDescriptions']
-      cli.displayMessage "Skipping retrieval of cache descriptions."
+      displayMessage "Skipping retrieval of cache descriptions."
       cli.copyGeocaches
     else
       cli.fetchGeocaches
@@ -1087,7 +1087,7 @@ while true
     if caches > 0
       cli.saveFile
     else
-      cli.displayMessage "After filtering, no caches are left matching your requirements."
+      displayMessage "After filtering, no caches are left matching your requirements."
     end
   end
 

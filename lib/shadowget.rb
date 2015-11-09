@@ -124,7 +124,7 @@ class ShadowFetch
   def invalidate
     filename = cacheFile(@url)
     if File.exist?(filename)
-      displayInfo "Invalidating cache at #{filename}"
+      debug "Invalidating cache at #{filename}"
       begin
         File.unlink(filename)
       rescue Errno::EACCES => e
@@ -377,7 +377,7 @@ class ShadowFetch
     when Net::HTTPNotFound
       # error 404
       displayWarning "Not Found #{resp.response.inspect}"
-      displayInfo "#{resp.body.length} bytes in body"
+      debug "#{resp.body.length} bytes in body"
     else
       # we may have reported a problem before
       if success
