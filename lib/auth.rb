@@ -26,7 +26,7 @@ module Auth
     if cookie
         saveCookie(cookie)
     end
-    logged_in = checkLoginScreen(cookie)
+    logged_in = checkLoginScreen(cookie, user)
     # get the current (set of) cookie(s) and pretend that login was successful
     cookie = loadCookie()
     return cookie
@@ -98,7 +98,7 @@ module Auth
     return hcookie
   end
 
-  def checkLoginScreen(cookie)
+  def checkLoginScreen(cookie, user)
     # if we have no cookie we aren't logged in
     debug3 "checkLoginScreen with #{hideCookie(cookie)}"
     return nil if ! cookie
@@ -109,8 +109,12 @@ module Auth
     data = page.fetch
     data.each_line do |line|
       case line
+      #  <h3><span id="ctl00_ContentBody_lbUsername">Has iniciado sesión como <strong>Ölscheich99</strong></span></h3>
       when /You are (logged|signed) in as/
         debug "Found login confirmation!"
+        return true
+      when /<strong>#{user}<\/strong>/
+        debug "Username confirmed!"
         return true
       when /^<input type=\"hidden\" name=\"(.*?)\".*value=\"(.*?)\"/
         @postVars[$1] = $2
@@ -121,7 +125,7 @@ module Auth
         debug3 "post URL is #{@postURL}"
       end
     end
-    debug "Looks like we don't have a valid cookie. Must login."
+    debug "Looks like we don't have a valid cookie. Must login again?"
     return nil
   end
 
