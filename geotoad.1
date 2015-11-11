@@ -469,8 +469,20 @@ parses \fIprintable\fR pages (cdpf format). Those pages don't contain
 owner IDs, trackable IDs, etc. Also the "cache by" string can contain
 arbitrary information. It's therefore not reliable to deduce the real
 owner. (Owner searches aren't affected by this.) This has been a
-sundamental design decision - cdpf pages have been mostly unharmed by
+fundamental design decision - cdpf pages have been mostly unharmed by
 website redesigns.
+.SS "Limitations imposed by GroundSpeak:"
+.PP
+The GC webpages can be displayed in more than 20 languages.
+While relative times (like "today", "yesterday" or "5 days ago" can be
+parsed with sufficient precision, the multitude of date representations
+causes a few ambiguities: There's no safe way to decide whether "05/06/2007"
+was in May or June. Using the current user preferences may provide a clue
+but may fail for saved cache descriptions that haven't been updated (e.g.
+because the cache was converted to PMO). Also month-name abbreviations
+haven't been included in the program code. This means that you cannot use
+a foreign language and abbreviated month names in a reliable manner.
+ISO date style ("2007-06-05" for 5th of June) is considered safe.
 .SS "Little-tested features:"
 .PP
 The TUI doesn't get tested very much - the command line is much more
