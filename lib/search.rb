@@ -303,8 +303,8 @@ class SearchCache
     cdays = -1
     begin
     if data =~ /<title>\s*404 - File Not Found\s*<\/title>/m
-      debug "Unknown cache, error 404"
-      return nil
+      displayWarning "Error 404: Cache unknown/unpublished"
+      return "unpublished"
     end
     data.split("\n").each{ |line|
       line.gsub!(/&#39;/, '\'')

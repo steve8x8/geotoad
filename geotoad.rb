@@ -690,28 +690,43 @@ class GeoToad
         status = @detail.fetch(wid)
       end
 
-      if status == 'subscriber-only'
-        message = '(subscriber-only)'
-      elsif status == 'unpublished'
-        wpFiltered.delete(wid)
-        displayWarning "#{wid} is either unpublished or hidden subscriber-only, skipping."
-        next
-      elsif ! status or status == 'login-required'
-        if (wpFiltered[wid]['warning'])
-          debug "Could not parse page, but it had a warning, so I am not invalidating"
-          message = "(PMO? #{wpFiltered[wid]['warning'].inspect})"
-        else
-          # don't throw this out yet, will get null entries in output though
-          message = "(PMO? #{status.to_s.inspect})"
+      message = ""
+      warning = wpFiltered[wid]['warning']
+      keepdata = true
+      # status is hash; false/nil/empty or string if problem
+      if ! status #status.to_s.empty?
+        message << "[W:\"#{warning}\"]"
+        keepdata = false
+      elsif status.class != Hash
+        debug "Could not parse page, S:#{status}, W:#{warning}"
+        if status == 'unpublished'
+          message << "(unpublished)"
+          keepdata = false
+        elsif status == 'login-required'
+          message << "[PMO? \"#{status}\"]"
+          keepdata = false
+        elsif status == 'subscriber-only'
+          message << "[PMO] \"#{warning}\""
+          keepdata = true
+        elsif status == 'no-coords'
+          message << "[PMO? \"#{status}\"]"
+          keepdata = true
+        else # unknown status?
+          message << "[??? \"#{status}\"]"
+          keepdata = false
         end
       else
-        # PMonly caches: write specific message
         if (wpFiltered[wid]['membersonly'])
-          message = "[PMO]"
-        # unspecific error message
-        elsif (wpFiltered[wid]['warning'])
-          message = "(unavailable)"
+          message << "[PMO]"
+        elsif (warning)
+          message << "[W:\"#{warning}\"]"
         end
+      end
+      # archived/disabled
+      if (wpFiltered[wid]['archived'])
+        message << "[%]"
+      elsif (wpFiltered[wid]['disabled'])
+        message << "[?]"
       end
       name = wpFiltered[wid]['name']
       # remove HTML cruft from name, may fail in rare cases (emoji)
@@ -721,14 +736,11 @@ class GeoToad
         temp = name.gsub(/\&/, '+')
       end
       name = temp
+      message << (keepdata ? "" : "(del)")
       progress.updateText(token, "[#{wid}]".ljust(9)+" \"#{name}\" (#{page.src.gsub(/(\w)\w*/){$1}}) #{message}")
 
-      if status == 'subscriber-only'
-        wpFiltered.delete(wid)
-      end
-
-      if message == '(error)'
-        debug "Page for #{wpFiltered[wid]['name']} failed to be parsed, invalidating cache."
+      if ! keepdata
+        debug "Page for #{wid} \"#{wpFiltered[wid]['name']}\" failed to be parsed, invalidating cache."
         wpFiltered.delete(wid)
         page.invalidate()
       end

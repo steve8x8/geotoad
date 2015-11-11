@@ -118,7 +118,6 @@ class CacheDetails
       # If we can look up the guid, use it. It's not actually required, but
       # it behaves a lot more like a standard web browser on the gc.com website.
       if ! @waypointHash[id]['guid']
-        # parseCache() returns "unpublished" for pm-only w/o premium membership
         # there is no cdpf.aspx?wp=...
         guid = getMapping(id.to_s)
         debug2 "dictionary maps #{id.inspect} to #{guid.inspect}"
@@ -187,29 +186,31 @@ class CacheDetails
       success = parseCache(page.data)
     else
       debug "No data found, not attempting to parse the entry at #{url}"
-      success = false
+      success = nil
     end
 
-    # We try to download the page one more time.
-    if not success
-      sleep(5)
-      debug "Trying to download #{url} again."
-      page.invalidate()
-      page.fetch()
-      if page.data
-        success = parseCache(page.data)
-      end
-    end
+#    # We try to download the page one more time.
+#    if ! success
+#      debug "Trying to download #{url} again."
+#      sleep(5)
+#      page.invalidate()
+#      page.fetch()
+#      if page.data
+#        success = parseCache(page.data)
+#      end
+#    end
 
-    if success
-      if success == 'login-required'
-        page.invalidate()
+    # success is hash; nil or string if problem
+    if success.class != Hash
+      message = "Could not parse #{url}."
+      if success.class == String
+        message << " (#{success})"
       end
-      return success
-    else
-      displayWarning "Could not parse #{url} (tried twice)"
-      return nil
+#      displayWarning message
+      debug message
+#      page.invalidate()
     end
+    return success
   end
 
 # calculate fav factor
@@ -559,10 +560,14 @@ class CacheDetails
     # Short-circuit and abort if the data is no good.
     if not cache
       displayWarning "Unable to parse any cache details from data."
-      return false
+      return nil
     elsif not cache['latwritten']
-      displayWarning "#{wid} was parsed, but no coordinates found."
-      return false
+      displayWarning "No coordinates found for #{wid}."
+      debug2 "no-coords: #{cache.inspect}"
+      if cache['membersonly']
+        return 'subscriber-only'
+      end
+      return 'no-coords'
     end
 
     # MULTI-LINE MATCHES BELOW
