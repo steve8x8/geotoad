@@ -1,4 +1,4 @@
-.TH "GEOTOAD" "1" "26 Aug 2015" "steve8x8@googlemail.com" "Geocaching Query Tool"
+.TH "GEOTOAD" "1" "14 Nov 2015" "steve8x8@googlemail.com" "Geocaching Query Tool"
 
 .SH "NAME"
 
@@ -413,6 +413,23 @@ If set (numerical values only!), distances are computed (using Haversine) relati
 If both values are set to zero, the home location registered at GC will be used.
 .PP
 If there's no setting, the distances reported by the search (or \fBN/A\fR) will be used.
+
+.SS "SSL_CERT_FILE"
+.PP
+Windows users who want to use SSL peer verification need a CA-certificate bundle.
+This seems to be included with all modern Linux distributions, but
+since this usually doesn't come with Windows nor Ruby, it is recommended to use
+the \fBcontrib\\CA_Bundle\\ca-bundle.crt\fR file, and declare that as \fBSSL_CERT_FILE\fR
+before starting \fBruby geotoad.rb\fR, e.g.:
+.PP
+.B set SSL_CERT_FILE=C:\\\\Programs\\\\GeoToad\\\\contrib\\\\CA_Bundle\\\\ca-bundle.crt
+.PP
+You may want to check \fBhttps://gist.github.com/fnichol/867550\fR as well, for
+how to make this change permanent.
+.PP
+The Windows_Installer tries to add environment settings,
+both system-wide and for the installing user,
+where the former intentionally needs renaming, and both may fail.
 
 .SH "OUTPUT FORMATS"
 

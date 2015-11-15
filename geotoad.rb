@@ -1023,7 +1023,10 @@ $SSLVERIFYMODE = OpenSSL::SSL::VERIFY_PEER
 # work around (only?) Windows not being able to verify peer
 # http://stackoverflow.com/questions/170956/how-can-i-find-which-operating-system-my-ruby-program-is-running-on
 # better use RbConfig::CONFIG['host_os']?
-if RUBY_PLATFORM.downcase =~ /djgpp|(cyg|ms|bcc)win|mingw|wince|emx/
+if ENV['SSL_CERT_FILE'] and File.readable?(ENV['SSL_CERT_FILE'])
+  displayInfo "HTTPS will use SSL cert file #{ENV['SSL_CERT_FILE']}"
+  #$SSLVERIFYMODE = OpenSSL::SSL::VERIFY_PEER
+elsif RUBY_PLATFORM.downcase =~ /djgpp|(cyg|ms|bcc)win|mingw|wince|emx/
   displayWarning "HTTPS will not verify peer identity!"
   $SSLVERIFYMODE = OpenSSL::SSL::VERIFY_NONE
 end

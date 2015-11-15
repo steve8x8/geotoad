@@ -1,0 +1,6 @@
+git clone https://github.com/bagder/curl.git
+cd curl/lib
+# in mk-ca-bundle.pl, replace http with https
+./mk-ca-bundle.pl
+rm certdata.txt
+# ca-bundle.crt should be identical to http://curl.haxx.se/ca/cacert.pem

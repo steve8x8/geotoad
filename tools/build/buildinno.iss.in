@@ -7,6 +7,13 @@ AppVersion=XXXVERSIONXXX
 DefaultDirName={pf}\GeoToad
 DefaultGroupName=GeoToad
 UninstallDisplayIcon={app}\geotoad.exe
+ChangesAssociations=yes
+
+[Registry]
+; this is somewhat risky - we might overwrite an existing system-wide file, use temp name
+Root: HKLM; Subkey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"; ValueType: string; ValueName: "SSL_CERT_FILE_temp"; ValueData: "{app}\contrib\CA_Bundle\ca-bundle.crt"; Flags: noerror createvalueifdoesntexist uninsdeletekey
+; on the other hand, this only creates an environment for the installing user
+Root: HKCU; Subkey: "Environment"; ValueType: string; ValueName: "SSL_CERT_FILE"; ValueData: "{app}\contrib\CA_Bundle\ca-bundle.crt"; Flags: noerror createvalueifdoesntexist uninsdeletekey
 
 [Files]
 Source: "geotoad.exe";               DestDir: "{app}"
@@ -25,3 +32,4 @@ Source: "Templates.txt";             DestDir: "{app}\doc"; Flags: skipifsourcedo
 
 [Icons]
 Name: "{group}\GeoToad"; Filename: "{app}\geotoad.exe"
+
