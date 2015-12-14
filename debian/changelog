@@ -1,6 +1,11 @@
 geotoad (3.25.0-1) unstable; urgency=low
 
   * New version 3.25.0, "Santa lacing his boots"
+  * Template overhaul: twitter, vcf
+  * "Generated on" parsing restored
+  * Additional login detection
+  * More consistent status handling
+  * HTTPS support for Windows (needs installation of PEM file)
   * some minor bugfixes, cleanups
 
  -- Steve Sixty-Four <steve8x8@gmail.com>  Wed, 16 Dec 2015 10:00:00 +0000
