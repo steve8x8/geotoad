@@ -366,8 +366,9 @@ class GeoToad
       end
     end
 
+    displayBar
+    #puts ""
     @queryArg.to_s.split($delimiters).each{ |queryArg0|
-      puts ""
       queryArg = queryArg0.gsub(/^\s+/, '').gsub(/\s+$/, '')
       message = "\"#{@queryType}\" search for \"#{queryArg}\""
       search = SearchCache.new
@@ -438,7 +439,7 @@ class GeoToad
     if (waypointsExtracted < @combinedWaypoints.length)
       displayWarning "Downloaded #{@combinedWaypoints.length} waypoints, but only #{waypointsExtracted} parsed!"
     end
-    puts ""
+    #puts ""
     return waypointsExtracted
   end
 
@@ -472,7 +473,7 @@ class GeoToad
       if (user =~ /(.*)=(.*)/)
         username = $1
         filename = $2
-        puts ""
+        #puts ""
         displayMessage "Read #{filename} for #{username}"
         counter = 0
         # read file (1st column)
@@ -512,7 +513,7 @@ class GeoToad
   # This step filters out all the geocaches by information
   # found from the searches.
   def preFetchFilter
-    puts ""
+    #puts ""
     @filtered = Filter.new(@combinedWaypoints)
     debug "Filter running cycle 1, #{caches(@filtered.totalWaypoints)} left."
 
@@ -665,7 +666,7 @@ class GeoToad
   end
 
   def fetchGeocaches
-    puts ""
+    #puts ""
     if $membership
       displayMessage "Fetching geocache pages as \"#{$membership}\""
     else
@@ -751,7 +752,7 @@ class GeoToad
   # In this stage, we actually have to download all the information on the caches in order to decide
   # whether or not they are keepers.
   def postFetchFilter
-    puts ""
+    #puts ""
     @filtered= Filter.new(@detail.waypoints)
 
     # caches with warnings we choose not to include.
@@ -892,7 +893,7 @@ class GeoToad
 
   ## save the file #############################################
   def saveFile
-    puts ""
+    #puts ""
     formatTypeCounter = 0
 
     # @appliedFilters: sort by option letter, ignore case
@@ -994,7 +995,7 @@ class GeoToad
       else
         displayWarning "NOT saved #{outputFile}!"
       end
-      puts ""
+      #puts ""
 
       formatTypeCounter += 1
     } # end format loop
@@ -1089,6 +1090,7 @@ while true
     displayWarning "No valid query or no caches found in search, exiting early."
   else
     displayMessage "Your \"#{options['queryType']}\" query \"#{options['queryArg']}\" returned #{cli.caches(count)}."
+
     cli.prepareFilter
     cli.preFetchFilter
 
