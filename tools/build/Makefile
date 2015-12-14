@@ -9,7 +9,7 @@ USB_DIR = gt
 VERSION0 = $(shell cat 2>/dev/null git/VERSION)
 ifeq "$(VERSION0)" ""
 # get from local tree
-VERSION0 = $(shell cat ../../VERSION)
+VERSION0 = $(shell cat 2>/dev/null ../../VERSION)
 endif
 VERSION = $(VERSION0)$(PREBUILD)
 
@@ -203,7 +203,7 @@ $(GTV)_Installer.exe: $(GTV).tar.gz
 	@echo $@ done.
 
 md5sums.txt: Makefile $(GTV).tar.gz $(GTV)_Installer.exe $(GTV).dmg #$(GTV)-1_all.deb
-	md5sum $(GTV)* `echo $(GTV) | sed 's~-~_~'`* | grep -v '\.orig\.tar\.gz' > md5sums.txt
+	md5sum $(GTV)* `echo $(GTV) | sed 's~-~_~'`* | grep -v '^d41d8cd98f00b204e9800998ecf8427e' | grep -v '\.orig\.tar\.gz' > md5sums.txt
 
 Packages.gz: md5sums.txt
 	dpkg-scanpackages . | gzip -9v > Packages.gz
