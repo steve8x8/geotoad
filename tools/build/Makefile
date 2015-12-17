@@ -130,7 +130,7 @@ $(GTV).dmg: $(GTV).tar.gz
 	cp -p $(GTV)/tools/build/build_dmg.sh mac/run_mac.sh
 	-rm -rf $(GTV)/tools/build/
 	mv $(GTV) mac/
-	@echo    "*** Insert a USB key with \"$(USB_DIR)\" directory"
+	@echo    "*** Insert a USB key with \"$(USB_DIR)\" directory and (wait for) mount"
 	@read -p "*** Press ENTER when done: " x
 	-mount | grep /media
 	-ls -ld /media/`whoami`/*/$(USB_DIR)/
@@ -141,18 +141,18 @@ $(GTV).dmg: $(GTV).tar.gz
 	@sleep 3
 	-umount `df /media/\`whoami\`/*/$(USB_DIR)/ | tail -n+2 | awk '{print $$NF}'` 2>/dev/null
 	-mount | grep /media
-	@echo    "*** Remove the USB key."
+	@echo    "*** Remove the (unmounted) USB key."
 	@read -p "*** Press ENTER when done: " x
 	@echo    "*** On a MacOSX machine, mount USB key and run:"
 	@echo    "      bash mac/run_mac.sh"
-	@echo    "*** Insert the USB key with \"$(GTV).dmg\""
+	@echo    "*** Insert the USB key with \"$(GTV).dmg\" and (wait for) mount"
 	@read -p "*** Press ENTER when done: " x
 	-mount | grep /media
 	-rsync -ax /media/`whoami`/*/$(USB_DIR)/mac ./
 	-mv mac/$(GTV).dmg ./
 	-umount `df /media/\`whoami\`/*/$(USB_DIR)/ | tail -n+2 | awk '{print $$NF}'` 2>/dev/null
 	-mount | grep /media
-	@echo    "*** Remove the USB key."
+	@echo    "*** Remove the (unmounted) USB key."
 	@read -p "*** Press ENTER when done: " x
 	touch $(GTV).dmg
 	@echo $@ done.
