@@ -10,8 +10,8 @@ module Common
   @@prefs_url = 'https://www.geocaching.com/account/settings/preferences'
   @@homel_url = 'https://www.geocaching.com/account/settings/homelocation'
   # logs.aspx s=1: geocaches (default); s=2: trackables; s=3: benchmarks
-  @@mylogs_url = 'http://www.geocaching.com/my/logs.aspx?s=1'
-  @@mytrks_url = 'http://www.geocaching.com/my/logs.aspx?s=2'
+  @@mylogs_url = 'https://www.geocaching.com/my/logs.aspx?s=1'
+  @@mytrks_url = 'https://www.geocaching.com/my/logs.aspx?s=2'
   @@dateFormat = 'dd MMM yy'
 
   def getPreferences()

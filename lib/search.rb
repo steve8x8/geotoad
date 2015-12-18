@@ -11,7 +11,7 @@ class SearchCache
 
   attr_accessor :distance, :max_pages
 
-  @@base_url = 'http://www.geocaching.com/seek/nearest.aspx'
+  @@base_url = 'https://www.geocaching.com/seek/nearest.aspx'
 
   def initialize
     @distance = 15
@@ -154,12 +154,12 @@ class SearchCache
     when 'wid'
       @query_type = 'wid'
       @query_arg = key.upcase
-      @search_url = "http://www.geocaching.com/seek/cache_details.aspx?wp=#{key.upcase}"
+      @search_url = "https://www.geocaching.com/seek/cache_details.aspx?wp=#{key.upcase}"
 
     when 'guid'
       @query_type = 'guid'
       @query_arg = key.downcase
-      @search_url = "http://www.geocaching.com/seek/cache_details.aspx?guid=#{key.downcase}"
+      @search_url = "https://www.geocaching.com/seek/cache_details.aspx?guid=#{key.downcase}"
     end
 
     if not @query_type
@@ -360,10 +360,10 @@ class SearchCache
       when /_(GC\w+)[^>]+>Bing Maps/
         wid = $1
         debug "Found WID: #{wid} (Bing)"
-      when /<meta name=\"og:url\"\s+content=\"http:\/\/coord.info\/(GC\w+)./
+      when /<meta name=\"og:url\"\s+content=\"https?:\/\/coord.info\/(GC\w+)./
         wid = $1
         debug "Found WID: #{wid} (coord.info)"
-      when /<meta name=\"og:url\"\s+content=\"http:\/\/www.geocaching.com\/seek\/cache_details.aspx?wp=(GC\w+)/
+      when /<meta name=\"og:url\"\s+content=\"https?:\/\/www.geocaching.com\/seek\/cache_details.aspx?wp=(GC\w+)/
         wid = $1
         debug "Found WID: #{wid} (cache_details)"
       # added 2012-05-15:

@@ -10,7 +10,7 @@ class CountryState
   include Common
   include Messages
 
-  @@base_url = 'http://www.geocaching.com/seek/nearest.aspx'
+  @@base_url = 'https://www.geocaching.com/seek/nearest.aspx'
 
   def initialize
     @ttl = 60 * 86400		# 2 months

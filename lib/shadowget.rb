@@ -420,6 +420,7 @@ class ShadowFetch
   def fetchGuid (wid)
     debug "Running GCCodeLookup for [#{wid}]"
     # found via wireshark
+    # 20151202: must still be http, not https - may fail in the long run!
     url_str = "http://www.geocaching.com/seek/cache_details.aspx/GCCodeLookup"
     uri = URI.parse(url_str)
     if ENV['HTTP_PROXY']
@@ -446,7 +447,7 @@ class ShadowFetch
     begin
         postString = "{\"gcCode\":\"#{wid}\"}"
         @httpHeaders['Content-Type'] = "application/json; charset=UTF-8"
-        @httpHeaders['Referer'] = "http://www.geocaching.com/seek/cache_details.aspx?wp=GC1"
+        @httpHeaders['Referer'] = "https://www.geocaching.com/seek/cache_details.aspx?wp=GC1"
         resp = http.post(query, postString, @httpHeaders)
     rescue Timeout::Error => e
       success = false
@@ -458,8 +459,12 @@ class ShadowFetch
       success = false
       displayWarning "Cannot connect to #{uri.host}:#{uri.port}: #{e}"
     end
-    debug3 "Response: #{resp.body}"
-    return resp.body
+    if success
+      debug3 "Response: #{resp.body}"
+      return resp.body
+    else
+      return nil
+    end
   end
 
 

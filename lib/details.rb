@@ -12,7 +12,7 @@ class CacheDetails
   include Messages
 
   # Use a printable template that shows the last 10 logs.
-  @@baseURL = "http://www.geocaching.com/seek/cdpf.aspx"
+  @@baseURL = "https://www.geocaching.com/seek/cdpf.aspx"
 
   def initialize(data)
     @waypointHash = data
@@ -100,7 +100,7 @@ class CacheDetails
     debug "Get GUID from cache_details for #{wid}"
     # extract mapping from cache_details page
     guid = nil
-    @pageURL = 'http://www.geocaching.com/seek/cache_details.aspx?wp=' + wid
+    @pageURL = 'https://www.geocaching.com/seek/cache_details.aspx?wp=' + wid
     page = ShadowFetch.new(@pageURL)
     page.localExpiry = 14 * 24 * 3600	# or even longer
     data = page.fetch
@@ -806,7 +806,7 @@ class CacheDetails
   end
 
   def fixRelativeImageLinks(text)
-    new_text = text.gsub(' src="/', ' src="http://www.geocaching.com/')
+    new_text = text.gsub(' src="/', ' src="https://www.geocaching.com/')
     if text != new_text
       debug2 "fixed relative links"
     end
