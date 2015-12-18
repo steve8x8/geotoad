@@ -25,7 +25,7 @@ class ShadowFetch
     @url = url
     @remote = 0
     @localExpiry = 5 * 86400		# 5 days
-    @maxFailures = 3			#was 2
+    @maxFailures = 10			#was 3
     @useCookie   = true
     @httpHeaders = {
       'User-Agent'      => "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_2; en-US) AppleWebKit/532.9 (KHTML, like Gecko) Chrome/5.0.307.11 Safari/532.9",
