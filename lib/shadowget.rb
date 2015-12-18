@@ -215,9 +215,7 @@ class ShadowFetch
         @@src = 'local+remote'
       end
     end
-    if not dowrite
-      displayWarning "Merging current PMO with non-PMO cache file!"
-    else
+    if dowrite
       debug "writing #{localfile}"
       begin
         cache = File.open(localfile, File::WRONLY|File::TRUNC|File::CREAT, 0666)
@@ -226,6 +224,8 @@ class ShadowFetch
       rescue
         displayWarning "Could not overwrite #{localfile}!"
       end
+    #else
+    #  displayWarning "Merging current PMO with non-PMO cache file!"
     end
     debug3 "Returning #{@data.length} bytes: #{@data[0..20]}(...)#{data[-21..-1]}"
     return @data
