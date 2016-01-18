@@ -301,6 +301,7 @@ class SearchCache
     cterr = nil
     ctime = Time.at($ZEROTIME)
     cdays = -1
+    cfavs = nil
     begin
     if data =~ /<title>\s*404 - File Not Found\s*<\/title>/m
       displayWarning "Error 404: Cache unknown/unpublished"
@@ -376,8 +377,8 @@ class SearchCache
         wid = $1
         debug "Found WID: #{wid} (s2phone)"
        # premium-member only
-      when /WptTypeImage.*\/wpttypes\/(\w+)\./
-        ccode = $1
+      when /WptTypeImage.*\/(wpttypes|play\/Content\/images)\/(\w+)\./
+        ccode = $2
         # list covers only "standard" types! This may be incorrect
         if @cachetypenum[ccode]
           ctype = @cachetypenum[ccode]
@@ -389,10 +390,18 @@ class SearchCache
       when /\s+\((GC\w+)\)<\/h2>/
         wid = $1
         debug "Found PMO WID: #{wid}"
-      when /uxCacheType\">A cache by (.*?)\s*</
-        owner = $1
+      # <form ... action="../seek/cache_pmo.aspx?wp=GC4V7ZH&amp;title=froehliche-weihnachten&amp;guid=2718079c-9da2-4962-8618-37ca1820bde8" id="aspnetForm">
+      when /cache_\w+.aspx\?wp=(GC\w+).amp;(.*guid=([0-9a-f-]+))?/
+        wid = $1
+        guid = $3
+        debug "Found PMO WID: #{wid.inspect} GUID: #{guid.inspect}"
+      when /uxCache(Type|By)\">A cache by (.*?)\s*</
+        owner = $2
         debug "Found PMO owner: #{owner.inspect}"
       when /The owner of <strong>(.*?)<\/strong> has chosen to make/
+        cname = $1
+        debug "Found PMO cache name: #{cname.inspect}"
+      when /<h1 class=.heading-\d.>(.*?)\s*<\//
         cname = $1
         debug "Found PMO cache name: #{cname.inspect}"
       # for filtering; don't care about ".0" representation
@@ -459,13 +468,25 @@ class SearchCache
     #    <strong>
     #        <span id="ctl00_ContentBody_lblTerrain">Terrain:</span></strong>
     #    <img src="http://www.geocaching.com/images/stars/stars1_5.gif" alt="1.5 out of 5" />
-    if data =~ /lblDifficulty\".*?(\d(\.\d)?) out of 5/m
+    if data =~ /lblDifficulty\".*?(\d(\.\d)?)( out of 5|<\/)/m
       cdiff = tohalfint($1)
       debug "Found PMO D: #{cdiff}"
     end
-    if data =~ /lblTerrain\".*?(\d(\.\d)?) out of 5/m
+    if data =~ /lblTerrain\".*?(\d(\.\d)?)( out of 5|<\/)/m
       cterr = tohalfint($1)
       debug "Found PMO T: #{cterr}"
+    end
+    if data =~ /lblSize\".*?<span>(\w*)<\//m
+      csize = $1.downcase
+      debug "Found PMO S: #{csize}"
+    end
+    if data =~ /lblFavoritePoints\".*?<span>(\d*)<\//m
+      cfavs = $1
+      debug "Found PMO F: #{cfavs}"
+    end
+    if data =~ /<span class=.favorite-value.>\s*(\d+)\s*<\//
+      cfavs = $1
+      debug "Found F: #{cfavs}"
     end
 
     cache_data = {
@@ -489,6 +510,7 @@ class SearchCache
       'cdays' => cdays,
       'atime' => Time.at($ZEROTIME),
       'mtime' => Time.at($ZEROTIME),
+      'favorites' => cfavs,
       'visitors' => []
     }
     return cache_data
