@@ -377,7 +377,7 @@ class SearchCache
         wid = $1
         debug "Found WID: #{wid} (s2phone)"
        # premium-member only
-      when /WptTypeImage.*\/(wpttypes|play\/Content\/images)\/(\w+)\./
+      when /WptTypeImage.*\/(wpttypes|play\/Content\/images\/cache-types)\/(\w+)\./
         ccode = $2
         # list covers only "standard" types! This may be incorrect
         if @cachetypenum[ccode]
