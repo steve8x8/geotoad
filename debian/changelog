@@ -1,3 +1,12 @@
+geotoad (3.25.1-1) unstable; urgency=low
+
+  * New version 3.25.1, "Ground Oddity"
+  * Use HTTPS throughout. Windows users will hate this.
+  * Issue 332: parse redesigned PMO cache_details page
+  * some minor bugfixes, cleanups
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Fri, 29 Jan 2016 10:00:00 +0000
+
 geotoad (3.25.0-1) unstable; urgency=low
 
   * New version 3.25.0, "Santa lacing his boots"

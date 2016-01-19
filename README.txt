@@ -23,7 +23,9 @@ GPX (also variants suited for GSAK, or your road nav device) and HTML.
 System Requirements
 -------------------
  - Windows
-   - Windows 98 or Higher
+   - Windows 98 or Higher with
+     - a sufficiently recent Ruby version
+     - a SSL certificate chain required for HTTPS (also provided with GeoToad)
  - Mac OS
    - Mac OS X 10.4 or Higher
  - Other Operating Systems
