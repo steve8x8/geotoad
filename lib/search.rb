@@ -391,10 +391,17 @@ class SearchCache
         wid = $1
         debug "Found PMO WID: #{wid}"
       # <form ... action="../seek/cache_pmo.aspx?wp=GC4V7ZH&amp;title=froehliche-weihnachten&amp;guid=2718079c-9da2-4962-8618-37ca1820bde8" id="aspnetForm">
-      when /cache_\w+.aspx\?wp=(GC\w+).amp;(.*guid=([0-9a-f-]+))?/
+      when /cache_pmo.aspx\?wp=(GC\w+).amp;(.*guid=([0-9a-f-]+))?/
         wid = $1
         guid = $3
         debug "Found PMO WID: #{wid.inspect} GUID: #{guid.inspect}"
+      # attention: the following also matches links in comments, avoid overwriting
+      when /cache_\w+.aspx\?wp=(GC\w+).amp;(.*guid=([0-9a-f-]+))?/
+        if not wid
+          wid = $1
+          guid = $3
+          debug "Found (PMO?) WID: #{wid.inspect} GUID: #{guid.inspect}"
+        end
       when /uxCache(Type|By)\">A cache by (.*?)\s*</
         owner = $2
         debug "Found PMO owner: #{owner.inspect}"
