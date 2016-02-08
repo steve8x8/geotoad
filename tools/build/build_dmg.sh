@@ -1,8 +1,9 @@
 #!/bin/bash
 
-# script to be run on a MacOSX machine, with 
+# script to be run on a MacOSX machine, with XCode installed
+
 cd $(dirname $0)
-DISTNAME=$(ls -d geotoad-*)
+DISTNAME=$(ls -d geotoad-* | tail -n1) # highest available version
 export PATH=/Developer/Tools:/Applications/Xcode.app/Contents/Developer/usr/bin:${PATH}
 cd ${DISTNAME}/
 sips -i data/bufos-icon.icns && DeRez -only icns data/bufos-icon.icns > data/icns.rsrc
