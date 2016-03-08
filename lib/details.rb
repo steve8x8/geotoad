@@ -548,6 +548,21 @@ class CacheDetails
       if line =~ /^\s*<h\d>Cache is Unpublished<\/h\d>\s*$/i
         return "unpublished"
       end
+
+      # last resort to get coordinates - from JavaScript line (at end)
+      if line =~ /^var lat=(-?[0-9\.]+), lng=(-?[0-9\.]+),/
+        jslat = $1
+        jslon = $2
+        debug "got javascript lat/lon #{jslat}/#{jslon}"
+        if not cache['membersonly'] and ( not cache['latdata'] or not cache['londata'] )
+          cache['latdata'] = jslat
+          cache['londata'] = jslon
+          # "written" style, whatever that's good for.
+          cache['latwritten'] = lat2str(jslat, degsign="°")
+          cache['lonwritten'] = lon2str(jslon, degsign="°")
+          debug "last resort lat/lon for #{wid}"
+        end
+      end
     }
     rescue => error
       displayWarning "Error in parseCache():data.split"
