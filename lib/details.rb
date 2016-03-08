@@ -563,6 +563,11 @@ class CacheDetails
           debug "last resort lat/lon for #{wid}"
         end
       end
+      # 2013-02-05: additional info in "var lat=..." line, but ignore []
+      # ;cmapAdditionalWaypoints = [{"lat":54.1835,"lng":12.87963,"type":218,"name":"GC3QN0F Stage 2 ( Question to Answer )","pf":"S2"},{...}];
+      if (line =~ /;cmapAdditionalWaypoints\s*=\s*\[(.+)\];/)
+        cache['additional_raw2'] = parseMapWaypoints($1)
+      end
     }
     rescue => error
       displayWarning "Error in parseCache():data.split"
@@ -790,6 +795,12 @@ class CacheDetails
     comment_text = comments.collect{ |x| x['text'] }
     cache['additional_raw'] = parseAdditionalWaypoints(data)
 
+    # Add "map" waypoints (PMO)
+    if not cache['additional_raw'] and cache['additional_raw2']
+      debug "Insert waypoints from MAP"
+      cache['additional_raw'] = cache['additional_raw2']
+    end
+
     # Fix cache owner/name
     if cache['name2'] and cache['creator2']
       if cache['creator2'] != cache['creator']
@@ -836,6 +847,60 @@ class CacheDetails
     else
       return nil
     end
+  end
+
+  def parseMapWaypoints(cmaptext)
+    cmaphash = Hash.new()
+    cmaptext.split(/},{/).each{ |wp|
+      itemhash = Hash.new()
+      begin
+        # strip curly brackets, be careful when splitting items at commas and colons:
+        # {"lat":52.13368,"lng":12.56848,"type":218,"name":"Huhu, wer schaut aus dem Haus raus? ( Question to Answer )","pf":"S6"}
+        # were not 100% safe, better have a dummy error handler
+        wp.gsub(/^{/, '').gsub(/}$/, '').split(/,\"/).each{ |item|
+          keyval = item.split(/\":/)
+          itemhash[keyval[0].gsub(/\"/, '')] = keyval[1].gsub(/\"/, '')
+        }
+        if itemhash['pf']
+          cmaphash[itemhash['pf']] = itemhash
+        end
+      rescue # ignore errors
+      end
+    }
+    debug2 "MAP WP all: #{cmaphash.inspect}"
+    if cmaphash.empty?
+      return nil
+    end
+    # create table similar to Additional Waypoints and return that
+    table = ''
+    table << "<table id=\"Waypoints\">\n"
+    table << "  <tbody>\n"
+    cmaphash.each_key{ |pf|
+      cmapitem = cmaphash[pf]
+      # convert floats to "X xx&deg; xx.xxx"
+      slat = lat2str(cmapitem['lat'], degsign="&#176;")
+      slon = lon2str(cmapitem['lng'], degsign="&#176;")
+      # strip blanks off wpt type in parentheses
+      name = cmapitem['name'].gsub(/\(\s*(.*?)\s*\)/){"(#{$1})"}
+      table << "    <tr ishidden=\"false\">\n"
+      table << "      <td></td>\n" #empty
+      table << "      <td></td>\n" #empty
+      table << "      <td></td>\n" #empty
+      table << "      <td>#{pf}</td>\n" #prefix
+      table << "      <td>#{pf}</td>\n" #no separate lookup code
+      table << "      <td>#{name}</td>\n"
+      table << "      <td>#{slat} #{slon}</td>\n"
+      table << "      <td></td>\n" #empty
+      table << "    </tr>\n"
+      table << "    <tr>\n"
+      table << "      <td></td>\n"
+      table << "      <td>Note:</td>\n"
+      table << "      <td></td>\n"
+      table << "    </tr>\n"
+    }
+    table << "  </tbody>\n"
+    table << "</table>"
+    return table
   end
 
   def parseComments(data, creator)
