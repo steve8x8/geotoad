@@ -79,10 +79,10 @@ class CacheDetails
     return guid
   end
 
-  def getRemoteMapping1(wid)
+  def getRemoteMapping2(wid)
     debug "Get GUID from GCCodeLookup for #{wid}"
     # get mapping using GC code lookup (found via wireshark)
-    @pageURL = 'http://www.geocaching.com/seek/cache_details.aspx/GCCodeLookup'
+    @pageURL = 'https://www.geocaching.com/seek/cache_details.aspx/GCCodeLookup'
     page = ShadowFetch.new(@pageURL)
     # no need to set expiry as this bypasses the file cache
     response = page.fetchGuid(wid)
@@ -92,11 +92,11 @@ class CacheDetails
       debug2 "Found GUID: #{guid}"
       return guid
     end
-    displayWarning "Could not map(1) #{wid} to GUID"
+    displayWarning "Could not map(2) #{wid} to GUID"
     return nil
   end
 
-  def getRemoteMapping2(wid)
+  def getRemoteMapping1(wid)
     debug "Get GUID from cache_details for #{wid}"
     # extract mapping from cache_details page
     guid = nil
@@ -109,7 +109,7 @@ class CacheDetails
       debug2 "Found GUID: #{guid}"
       return guid
     end
-    displayWarning "Could not map(2) #{wid} to GUID"
+    displayWarning "Could not map(1) #{wid} to GUID"
     return nil
   end
 
