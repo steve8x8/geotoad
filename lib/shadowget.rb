@@ -122,6 +122,7 @@ class ShadowFetch
   end
 
   def invalidate
+    return if not @url
     filename = cacheFile(@url)
     if File.exist?(filename)
       debug "Invalidating cache at #{filename}"
