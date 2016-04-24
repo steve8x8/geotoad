@@ -272,6 +272,12 @@ exclude caches with attribute ID \fIid\fR set to "yes", or to "no" if \fB\-\fR s
 \fB\-z\fR|\fB\-\-includeDisabled\fR|\fB\-\-bad\fR
 include disabled caches
 .TP
+\fB\-\-includeArchived\fR|\fB\-\-gone\fR
+include archived caches
+.PP
+This will only have an effect for queries which return archived caches as well:
+\fBuser\fR and \fBowner\fR queries. Normally, archived caches are suppressed.
+.TP
 \fB\-n\fR|\fB\-\-notFound\fR|\fB\-\-virgin\fR
 select only caches not found yet
 .TP
