@@ -1,3 +1,12 @@
+geotoad (3.25.4-1) unstable; urgency=low
+
+  * New version 3.25.4, "May the 4th be with you"
+  * Issue 335: GUIDs for PMO caches are no longer available
+  * Archived caches no longer shown by default, use "--includeArchived" option
+  * Occasional minor bugfixes, cleanups
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Wed, 04 May 2016 10:00:00 +0000
+
 geotoad (3.25.3-1) unstable; urgency=low
 
   * New version 3.25.3, "Bunny hop"
