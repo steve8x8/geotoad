@@ -984,23 +984,6 @@ class Output
     end
   end
 
-  # convert cache "waypoint ID" (GC.....) to numeric value
-  def cacheID(wid)
-    if wid
-      wp = wid.gsub(/^GC/, '')
-      if wp.length <= 4 && wp < 'G000'
-        # base 16 is easy
-        return wp.to_i(16)
-      else
-        # base 31: consider gaps in char set, and correction offset
-        # magic number -411120 reflects that GCG000 = GCFFFF + 1
-        return wp.upcase.tr('0-9A-HJKMNPQRTV-Z', '0-9A-U').to_i(31) - 411120
-      end
-    else
-      return 0
-    end
-  end
-
   # reduce HTML content (of waypoint table) to a minimum
   # suited for GPSr and parsing in toWptList()
   def reduceHtml(text)
