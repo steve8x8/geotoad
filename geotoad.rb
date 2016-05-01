@@ -298,6 +298,9 @@ class GeoToad
     displayInfo "Clearing cache details older than 3 days"
     findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "seek"), 3, "^cache_details\\.aspx.*", true)
 
+    displayInfo "Clearing log submission pages older than 3 days"
+    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "seek"), 3, "^log\\.aspx.*", true)
+
     displayInfo "Clearing lat/lon query data older than 3 days"
     findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "seek"), 3, "^nearest\\.aspx.*_lat_.*_lng_.*", true)
 

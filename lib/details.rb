@@ -79,23 +79,6 @@ class CacheDetails
     return guid
   end
 
-  def getRemoteMapping2(wid)
-    debug "Get GUID from GCCodeLookup for #{wid}"
-    # get mapping using GC code lookup (found via wireshark)
-    @pageURL = 'https://www.geocaching.com/seek/cache_details.aspx/GCCodeLookup'
-    page = ShadowFetch.new(@pageURL)
-    # no need to set expiry as this bypasses the file cache
-    response = page.fetchGuid(wid)
-    # returns json object {"d":"http://...guid=..."}
-    if response =~ /guid=([\w-]*)/
-      guid = $1
-      debug2 "Found GUID: #{guid}"
-      return guid
-    end
-    displayWarning "Could not map(2) #{wid} to GUID"
-    return nil
-  end
-
   def getRemoteMapping1(wid)
     debug "Get GUID from cache_details for #{wid}"
     # extract mapping from cache_details page
@@ -110,6 +93,24 @@ class CacheDetails
       return guid
     end
     displayWarning "Could not map(1) #{wid} to GUID"
+    return nil
+  end
+
+  def getRemoteMapping2(wid)
+    debug "Get GUID from log submission page for #{wid}"
+    # log submission page contains guid of cache [2016-04-30]
+    logid = cacheID(wid)
+    guid = nil
+    @pageURL = 'https://www.geocaching.com/seek/log.aspx?ID=' + logid.to_s + '&lcn=1'
+    page = ShadowFetch.new(@pageURL)
+    page.localExpiry = 14 * 24 * 3600	# or even longer
+    data = page.fetch
+    if data =~ /cache_details\.aspx\?guid=([\w-]+)/m
+      guid = $1
+      debug2 "Found GUID: #{guid}"
+      return guid
+    end
+    displayWarning "Could not map(2) #{wid} to GUID"
     return nil
   end
 
