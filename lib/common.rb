@@ -174,6 +174,7 @@ module Common
 # O	yyyy.MM.dd.
 # P	yyyy/MM/dd
 # Q	yyyy-MM-dd
+# + later additions (mostly yy two-digit years)
 #  resulting in combined patterns:
 # ABFJK		d+[.-]m+[.-]y+
 # CDH		d+/m+/y+ (see LM!)
@@ -200,16 +201,16 @@ module Common
     when /(\d)+ .+\*$/
       debug2 "date: #{$1} days ago"
       days_ago=$1.to_i
-    # [ABFJK] dd.MM.yyyy, d-M-yyyy etc. (dots and dashes)
-    when /^(\d+)[\.-](\d+)[\.-](\d{4})$/
-      year = $3
+    # [ABFJK] dd.MM.yyyy, d-M-yyyy etc. (dots and dashes), + yy variant (20160501)
+    when /^(\d+)[\.-](\d+)[\.-](\d{2}(\d{2})?)$/
+      year = (2000 + ($3.to_i % 100)).to_s
       month = $2
       day = $1
       debug2 "dotted date: year=#{year} month=#{month} day=#{day}"
       timestamp = Time.local(year, month, day)
     # [CDH] dd/MM/yyyy, [LM] MM/dd/yyyy (need to distinguish!)
-    when /^(\d+)\/(\d+)\/(\d{4})$/
-      year = $3
+    when /^(\d+)\/(\d+)\/(\d{2}(\d{2})?)$/
+      year = (2000 + ($3.to_i % 100)).to_s
       value1 = $1
       value2 = $2
       # interpretation depends on dateFormat
@@ -252,7 +253,7 @@ module Common
       debug2 "no date: N/A"
       return nil
     else
-      displayWarning "Could not parse date: #{date} - unknown language?"
+      displayWarning "Could not parse date: #{date} - unsupported format?"
       return nil
     end
    rescue => error

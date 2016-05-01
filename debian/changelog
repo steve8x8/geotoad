@@ -3,6 +3,7 @@ geotoad (3.25.4-1) unstable; urgency=low
   * New version 3.25.4, "May the 4th be with you"
   * Issue 335: New mapping of WIDs to GUIDs
   * Archived caches no longer shown by default, use "--includeArchived" option
+  * Issue 337: Some support for new (discouraged) date formats
   * Occasional minor bugfixes, cleanups
 
  -- Steve Sixty-Four <steve8x8@gmail.com>  Wed, 04 May 2016 10:00:00 +0000
