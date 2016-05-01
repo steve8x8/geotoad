@@ -202,14 +202,14 @@ module Common
       debug2 "date: #{$1} days ago"
       days_ago=$1.to_i
     # [ABFJK] dd.MM.yyyy, d-M-yyyy etc. (dots and dashes), + yy variant (20160501)
-    when /^(\d+)[\.-](\d+)[\.-](\d{2}(\d{2})?)$/
+    when /^(\d{1,2})[\.-](\d{1,2})[\.-](\d{2}(\d{2})?)$/
       year = (2000 + ($3.to_i % 100)).to_s
       month = $2
       day = $1
       debug2 "dotted date: year=#{year} month=#{month} day=#{day}"
       timestamp = Time.local(year, month, day)
     # [CDH] dd/MM/yyyy, [LM] MM/dd/yyyy (need to distinguish!)
-    when /^(\d+)\/(\d+)\/(\d{2}(\d{2})?)$/
+    when /^(\d{1,2})\/(\d{1,2})\/(\d{2}(\d{2})?)$/
       year = (2000 + ($3.to_i % 100)).to_s
       value1 = $1
       value2 = $2
@@ -232,18 +232,18 @@ module Common
       end
     # [EGI] dd/MMM/yyyy, dd.MMM.yyyy (20140826), dd MMM yy
     # ToDo: i18n month names?
-    when /^(\d+[ \/\.]\w{3}[ \/\.]\d{2}(\d{2})?)/
+    when /^(\d{1,2}[ \/\.]\w{3}[ \/\.]\d{2}(\d{2})?)/
       debug2 "dd_MMM_yy[yy] date: #{$1}"
       timestamp = Time.parse(date)
     # [N] MMM/dd/yyyy
-    when /^(\w{3})\/(\d+)\/(\d+)/
+    when /^(\w{3})\/(\d{1,2})\/(\d{2,4})/
       year = $3
       month = $1
       day = $2
       debug2 "MMM/dd/yyyy date: year=#{year} month=#{month} day=#{day}"
       timestamp = Time.parse("#{day} #{month} #{year}")
     # [OPQ] yyyy-MM-dd, yyyy/MM/dd etc. (ISO style)
-    when /^(\d{4})[\/\.-](\d+)[\/\.-](\d+)(\.)?$/
+    when /^(\d{4})[\/\.-](\d{1,2})[\/\.-](\d{1,2})(\.)?$/
       year = $1
       month = $2
       day = $3
