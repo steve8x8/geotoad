@@ -763,7 +763,8 @@ class GeoToad
     if @option['includeArchived']
       @appliedFilters['--includeArchived'] = { 'f' => "", 't' => "also archived" }
     else
-      @appliedFilters['--excludeArchived'] = { 'f' => "", 't' => "not archived" }
+      # this would cause too much noise, don't advertise
+      #@appliedFilters['--excludeArchived'] = { 'f' => "", 't' => "not archived" }
       @filtered.removeByElement('archived')
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
