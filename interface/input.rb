@@ -121,7 +121,8 @@ class Input
       [ "--minLongitude", "--longMin",            GetoptLong::REQUIRED_ARGUMENT ],
       [ "--maxLongitude", "--longMax",            GetoptLong::REQUIRED_ARGUMENT ],
       [ "--minLatitude",  "--latMin",             GetoptLong::REQUIRED_ARGUMENT ],
-      [ "--maxLatitude",  "--latMax",             GetoptLong::REQUIRED_ARGUMENT ]
+      [ "--maxLatitude",  "--latMax",             GetoptLong::REQUIRED_ARGUMENT ],
+      [ "--gpxTrack",     "--track",              GetoptLong::REQUIRED_ARGUMENT ]
     ) || usage
 
     # put the stupid crap in a hash. Much nicer to deal with.
