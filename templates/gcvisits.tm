@@ -1,7 +1,7 @@
 template = {
 
   # mygeocachelist (law.skynet) - use as follows:
-  # geotoad -x gclist -o geocache_list.txt -z -q user $USERNAME
+  # geotoad -x gclist -o geocache_list.txt -z --includeArchived -q user $USERNAME
   'gclist'    => {
     'ext'     => 'txt',
     'mime'    => 'text/plain',
@@ -10,7 +10,7 @@ template = {
     'templateWP'  => "<%out.wid%>,<%out.adate%>T08:00Z,Found it,\"\"\n"
   },
 
-  # geotoad -x gcvisits -o geocache_visits.txt -z -q user $USERNAME
+  # geotoad -x gcvisits -o geocache_visits.txt -z --includeArchived -q user $USERNAME
   'gcvisits'  => {
     'ext'     => 'txt',
     'mime'    => 'text/plain',

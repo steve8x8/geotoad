@@ -1,7 +1,7 @@
 template = {
 
   # myfinds (Steve8x8) - use as follows:
-  # geotoad -u $USERNAME -p ... -x myfindgpx -o myfinds.gpx -z -Z -q user $USERNAME
+  # geotoad -u $USERNAME -p ... -x myfindgpx -o myfinds.gpx -z --includeArchived -Z -q user $USERNAME
   'myfindgpx' => {
     'ext'  => 'gpx',
     'mime' => 'text/ascii',
@@ -78,7 +78,7 @@ template = {
   },
 
   # yourfinds (Steve8x8) - use as follows:
-  # geotoad -u $USERNAME -p ... -x yourfindgpx -o yourfinds.gpx -z -Z -q user $ANOTHERUSERNAME
+  # geotoad -u $USERNAME -p ... -x yourfindgpx -o yourfinds.gpx -z -Z --includeArchived -q user $ANOTHERUSERNAME
   'yourfindgpx' => {
     'ext'  => 'gpx',
     'mime' => 'text/ascii',
