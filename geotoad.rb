@@ -327,20 +327,22 @@ class GeoToad
     displayMessage "Logging in as #{@option['user']}"
     @cookie = login(@option['user'], @option['password'])
     debug "Login returned cookie #{hideCookie(@cookie).inspect}"
-    if (@cookie)
+    if (@cookie) && (@cookie =~ /gspkauth=/) && (@cookie =~ /(ASP.NET_SessionId=\w+)/)
       displayMessage "Login successful"
     else
-      displayWarning "Login failed! Check network connection, username and password!"
+      displayWarning "Login failed!"
+      displayWarning "Check network connection, username and password!"
       displayWarning "Note: Subsequent operations may fail. You've been warned."
+      displayInfo    "You have 60 seconds to safely interrupt here."
+      sleep 60
+      displayWarning "Okay, as you wish. Don't complain if something breaks!"
     end
     displayMessage "Querying user preferences"
     @dateFormat, prefLang, $my_lat, $my_lon, $my_src = getPreferences()
     displayInfo "Using date format \"#{@dateFormat}\", language \"#{prefLang}\""
     if prefLang.to_s.empty?
       displayWarning "Could not get language setting from preferences."
-      displayWarning "If you had been inactive for a long time, please visit the website,"
-      displayWarning " update, and save your preferences there."
-      displayWarning "Do not forget to remove the cached \"preferences\" file!"
+      displayWarning "This may be due to a failed login."
     end
     displayInfo "Using home location (#{$my_lat || 'nil'}, #{$my_lon || 'nil'}) from #{$my_src}"
 

@@ -25,10 +25,13 @@ module Auth
     cookie = getLoginCookie(user, password)
     if cookie
         saveCookie(cookie)
+    else
+	debug "no cookie from login"
     end
     logged_in = checkLoginScreen(cookie, user)
+    debug "checkLoginScreen returns #{logged_in.inspect}"
     # get the current (set of) cookie(s) and pretend that login was successful
-    cookie = loadCookie()
+#    cookie = loadCookie()
     return cookie
   end
 
@@ -100,7 +103,7 @@ module Auth
 
   def checkLoginScreen(cookie, user)
     # if we have no cookie we aren't logged in
-    debug3 "checkLoginScreen with #{hideCookie(cookie)}"
+    debug2 "checkLoginScreen with #{hideCookie(cookie)}"
     return nil if ! cookie
     @postVars = Hash.new
     page = ShadowFetch.new(@@login_url + 'default.aspx')
@@ -162,7 +165,6 @@ module Auth
     # merge this new cookie with the one we got at login time
     saveCookie(cookie)
     cookie = loadCookie()
-    # FIXME: this always succeeds if we don't delete cookies
     # spring 2016 replaced userid with other cookies
     #if (cookie =~ /userid=/) && (cookie =~ /(ASP.NET_SessionId=\w+)/)
     if (cookie =~ /gspkauth=/) && (cookie =~ /(ASP.NET_SessionId=\w+)/)
