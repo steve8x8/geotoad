@@ -12,9 +12,10 @@ module Common
   # logs.aspx s=1: geocaches (default); s=2: trackables; s=3: benchmarks
   @@mylogs_url = 'https://www.geocaching.com/my/logs.aspx?s=1'
   @@mytrks_url = 'https://www.geocaching.com/my/logs.aspx?s=2'
-  @@dateFormat = 'dd MMM yy'
+  @@dateFormat = 'dd MMM yy' # this should be a never-used one
 
   def getPreferences()
+    debug2 "getting preferences"
     page = ShadowFetch.new(@@prefs_url)
     page.localExpiry = 3 * 3600		# 3 hours
     data = page.fetch
@@ -53,6 +54,10 @@ module Common
     end
     if ! dateFormat.to_s.empty?
       @@dateFormat = dateFormat
+      debug2 "no date format set in preferences - this should never happen"
+    end
+    if ! prefLanguage.to_s.empty?
+      debug2 "no language set in preferences - this should never happen"
     end
     # get center location for distance
     my_lat = nil

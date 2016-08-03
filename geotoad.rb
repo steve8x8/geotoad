@@ -335,7 +335,13 @@ class GeoToad
     end
     displayMessage "Querying user preferences"
     @dateFormat, prefLang, $my_lat, $my_lon, $my_src = getPreferences()
-    displayInfo "Using date format #{@dateFormat}, language #{prefLang}"
+    displayInfo "Using date format \"#{@dateFormat}\", language \"#{prefLang}\""
+    if prefLang.to_s.empty?
+      displayWarning "Could not get language setting from preferences."
+      displayWarning "If you had been inactive for a long time, please visit the website,"
+      displayWarning " update, and save your preferences there."
+      displayWarning "Do not forget to remove the cached \"preferences\" file!"
+    end
     displayInfo "Using home location (#{$my_lat || 'nil'}, #{$my_lon || 'nil'}) from #{$my_src}"
 
     if @option['myLogs'] || @option['myTrackables']
