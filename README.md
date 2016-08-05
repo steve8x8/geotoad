@@ -18,7 +18,7 @@ GeoToad is an open-source query tool to query the geocaching.com website. It sup
   * a SSL certificate chain required for HTTPS (also provided with GeoToad)
 
 #### macOS
-   * macOS 10.4 or Higher
+   * macOS 10.4 or Higher. If you have [Homebrew](https://brew.sh), install with `brew install https://github.com/steve8x8/geotoad/macOS/geotoad.rb`.
 
 #### Other Operating Systems
 * You may need to install Ruby before running GeoToad.
