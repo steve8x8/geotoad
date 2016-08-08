@@ -78,9 +78,8 @@ $(GTV).tar.gz: git
 	## patch version
 	#sed -i s/%VERSION%/$(VERSION)/g $(GTV)/lib/version.rb
 	#sed -i s/%VERSION%/$(VERSION)/g $(GTV)/README.txt
-	#sed -i s/%VERSION%/$(VERSION)/g $(GTV)/FAQ.txt
-	## version file gets ignored !$!$!
-	#-rm  -f $(GTV)/VERSION
+	# version file gets ignored !$!$!
+	-rm  -f $(GTV)/VERSION
 	# fix permissions
 	-chmod 755 $(GTV)/*.rb
 	-chmod 755 $(GTV)/tools/*.rb
