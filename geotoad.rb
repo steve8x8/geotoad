@@ -380,7 +380,13 @@ class GeoToad
     displayBar
     #puts ""
     @queryArg.to_s.split($delimiters).each{ |queryArg0|
+      # strip whitespace at beginning and end
       queryArg = queryArg0.gsub(/^\s+/, '').gsub(/\s+$/, '')
+      # skip if nothing left
+      if queryArg.empty?
+        displayWarning "\"#{@queryType}\" search argument \"#{queryArg0}\" empty, skipping."
+        next
+      end
       message = "\"#{@queryType}\" search for \"#{queryArg}\""
       search = SearchCache.new
 
