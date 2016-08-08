@@ -4,3 +4,5 @@
 /tools/build/geotoad_*
 /tools/build/md5sums.*
 /tools/build/Packages.*
+/VERSION
+*-v

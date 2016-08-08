@@ -75,12 +75,12 @@ $(GTV).tar.gz: git
 	rsync -ax git/. $(GTV)/
 	# remove local .git copy
 	-rm -rf $(GTV)/.git*
-	# patch version
-	sed -i s/%VERSION%/$(VERSION)/g $(GTV)/lib/version.rb
-	sed -i s/%VERSION%/$(VERSION)/g $(GTV)/README.txt
-	sed -i s/%VERSION%/$(VERSION)/g $(GTV)/FAQ.txt
-	# version file gets ignored !$!$!
-	-rm  -f $(GTV)/VERSION
+	## patch version
+	#sed -i s/%VERSION%/$(VERSION)/g $(GTV)/lib/version.rb
+	#sed -i s/%VERSION%/$(VERSION)/g $(GTV)/README.txt
+	#sed -i s/%VERSION%/$(VERSION)/g $(GTV)/FAQ.txt
+	## version file gets ignored !$!$!
+	#-rm  -f $(GTV)/VERSION
 	# fix permissions
 	-chmod 755 $(GTV)/*.rb
 	-chmod 755 $(GTV)/tools/*.rb
