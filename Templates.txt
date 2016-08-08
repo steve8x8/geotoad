@@ -2,11 +2,15 @@
 Using tailor-made templates with GeoToad
 ========================================
 
+
+------------------
 Table of Contents:
 ------------------
-* How to write your own template files
-* Some examples
-
+ - How to write your own template files
+ - Some examples
+   - Second way: tell GeoToad what to do
+   - First way: describe the details of the output format
+ - Conditional output
 
 ------------------------------------
 How to write your own template files
@@ -19,14 +23,14 @@ Now the time has come for you and your creativity!
  - Template files must have a file extension of .tm
  - Template files are written in Ruby's "hash" assignment syntax, and have the form
 
-template = {
-  'name' => {
-    'ext' => 'extension',
-    'mime' => 'mime-format',
-    'desc' => 'some descriptive string',
-    ... # some more definitions, see below
-  }, # the comma is only necessary if another template follows
-}
+  template = {
+    'name' => {
+      'ext' => 'extension',
+      'mime' => 'mime-format',
+      'desc' => 'some descriptive string',
+      ... # some more definitions, see below
+    }, # the comma is only necessary if another template follows
+  }
 
  - A single template file can contain multiple templates, each with a unique name
  - Although basic syntax checking is done when importing, you should run ruby -wc template.tm and check for errors
@@ -45,50 +49,50 @@ Currently GeoToad knows about cmconvert (for the "cachemate" format) and gpsbabe
 
 A template using gpsbabel, the strings INFILE and OUTFILE are mission-critical:
 
-template = {
-  'cetus' => {
-    'ext'        => 'cet',
-    'mime'    => 'application/cetus',
-    'desc'    => 'Cetus for PalmOS',
-    'required' => 'gpsbabel',
-    'filter_src'    => 'gpx',
-    'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o cetus -F OUTFILE'
-  },
-}
+  template = {
+    'cetus' => {
+      'ext'        => 'cet',
+      'mime'    => 'application/cetus',
+      'desc'    => 'Cetus for PalmOS',
+      'required' => 'gpsbabel',
+      'filter_src'    => 'gpx',
+      'filter_exec'    => 'gpsbabel -i gpx -f INFILE -o cetus -F OUTFILE'
+    },
+  }
 
 Additionally, you may specify a STYLEFILE:
 
-template = {
-  'gpspoint2' => {
-    'ext'         => 'gpd',
-    'mime'        => 'application/gpspoint',
-    'desc'        => 'gpspoint datafile created by gpsbabel',
-    'required'    => 'gpsbabel',
-    'filter_src'  => 'gpx',
-    'filter_exec' => 'gpsbabel -i gpx -f INFILE -o xcsv,style=STYLEFILE -F OUTFILE',
-    'filter_style'=> "#STYLEFILE: (inpired by Mike Pickering, 6/19/2005)\n" +
-                     "DESCRIPTION             gpspoint format\n" +
-                     "FIELD_DELIMITER         SPACE\n" +
-                     "RECORD_DELIMITER        NEWLINE\n" +
-                     "BADCHARS                ^\n" +
-                     "PROLOGUE GPSPOINT DATA FILE\n" +
-                     "PROLOGUE type=\"waypointlist\" comment=\"GeoToad\"\n" +
-                     "OFIELD  CONSTANT,       \"type=\"waypoint\"\", \"%s\"\n" +
-                     "OFIELD  LAT_DECIMAL,    \"\", \"latitude=\"%.5f\"\"\n" +
-                     "OFIELD  LON_DECIMAL,    \"\", \"longitude=\"%.5f\"\"\n" +
-                     "OFIELD  SHORTNAME,      \"\", \"name=\"%s\"\"\n" +
-                     "OFIELD  URL_LINK_TEXT,  \"\", \"comment=\"%s\"\n" +
-                     "OFIELD  ICON_DESCR,     \"\", \"(%s\"\n" +
-                     "OFIELD GEOCACHE_TYPE,   \"\", \":%-.5s\", \"no_delim_before,optional\"\n" +
-                     "OFIELD GEOCACHE_CONTAINER, \"\", \"/%-.5s\", \"no_delim_before,optional\"\n" +
-                     "OFIELD GEOCACHE_DIFF,   \"\", \"/D%3.1f\", \"no_delim_before,optional\"\n" +
-                     "OFIELD GEOCACHE_TERR,   \"\", \"/T%3.1f\", \"no_delim_before,optional\"\n" +
-                     "OFIELD  CONSTANT,       \")\", \"%s\"\", \"no_delim_before\"\n" +
-                     "OFIELD  CONSTANT,       \"symbol=\"flag\"\", \"%s\"\n" +
-                     "OFIELD  CONSTANT,       \"display_option=\"symbol+name\"\", \"%s\"\n" +
-                     "EPILOGUE type=\"waypointlistend\"\n"
-  },
-}
+  template = {
+    'gpspoint2' => {
+      'ext'         => 'gpd',
+      'mime'        => 'application/gpspoint',
+      'desc'        => 'gpspoint datafile created by gpsbabel',
+      'required'    => 'gpsbabel',
+      'filter_src'  => 'gpx',
+      'filter_exec' => 'gpsbabel -i gpx -f INFILE -o xcsv,style=STYLEFILE -F OUTFILE',
+      'filter_style'=> "#STYLEFILE: (inpired by Mike Pickering, 6/19/2005)\n" +
+                       "DESCRIPTION             gpspoint format\n" +
+                       "FIELD_DELIMITER         SPACE\n" +
+                       "RECORD_DELIMITER        NEWLINE\n" +
+                       "BADCHARS                ^\n" +
+                       "PROLOGUE GPSPOINT DATA FILE\n" +
+                       "PROLOGUE type=\"waypointlist\" comment=\"GeoToad\"\n" +
+                       "OFIELD  CONSTANT,       \"type=\"waypoint\"\", \"%s\"\n" +
+                       "OFIELD  LAT_DECIMAL,    \"\", \"latitude=\"%.5f\"\"\n" +
+                       "OFIELD  LON_DECIMAL,    \"\", \"longitude=\"%.5f\"\"\n" +
+                       "OFIELD  SHORTNAME,      \"\", \"name=\"%s\"\"\n" +
+                       "OFIELD  URL_LINK_TEXT,  \"\", \"comment=\"%s\"\n" +
+                       "OFIELD  ICON_DESCR,     \"\", \"(%s\"\n" +
+                       "OFIELD GEOCACHE_TYPE,   \"\", \":%-.5s\", \"no_delim_before,optional\"\n" +
+                       "OFIELD GEOCACHE_CONTAINER, \"\", \"/%-.5s\", \"no_delim_before,optional\"\n" +
+                       "OFIELD GEOCACHE_DIFF,   \"\", \"/D%3.1f\", \"no_delim_before,optional\"\n" +
+                       "OFIELD GEOCACHE_TERR,   \"\", \"/T%3.1f\", \"no_delim_before,optional\"\n" +
+                       "OFIELD  CONSTANT,       \")\", \"%s\"\", \"no_delim_before\"\n" +
+                       "OFIELD  CONSTANT,       \"symbol=\"flag\"\", \"%s\"\n" +
+                       "OFIELD  CONSTANT,       \"display_option=\"symbol+name\"\", \"%s\"\n" +
+                       "EPILOGUE type=\"waypointlistend\"\n"
+    },
+  }
 (see gpsbabel's documentation for a description of the individual style file fields).
 
 > First way: describe the details of the output format <
@@ -103,6 +107,7 @@ There are several flavours of variables, all set in <% and %> brackets:
  - "out.var"
  - "outText.var"
  - "outEntity.var"
+
 All wp... strings refer to data directly read from search and cache pages (to @wpHash[] in lib/search.rb and lib/details.rb,
 while a lot of out... strings are defined as @outVars[] inside lib/output.rb.
 A built-in "interpreter" performs the necessary replacements.
@@ -115,82 +120,86 @@ The following examples may show you what's possible.
 
 First, have a look at the "list" template (derived from the "tab" one) and the resulting output:
 
-template = {
-  'list'    => {
-    'ext'        => 'lst',
-    'mime'    => 'text/plain',
-    'desc'    =>     'whitespace delimited, detailed table',
-    'templatePre' => "",
-    'templateWP'    => "<%out.id%>\t" +
-      "<%out.latdatapad5%> <%out.londatapad5%> " +
-      "<%out.cdate%> " +
-      "<%wp.difficulty%>/<%wp.terrain%><%out.warnArchiv%><%out.warnAvail%>\t" +
-      "<%wp.type%>\t" +
-      "<%out.relativedistancekm%>\t" +
-      "<%out.size%>\t" + # testing only
-      "\"<%wp.name%>\" by <%wp.creator%>\n"
-  },
-}
+  template = {
+    'list'    => {
+      'ext'        => 'lst',
+      'mime'    => 'text/plain',
+      'desc'    =>     'whitespace delimited, detailed table',
+      'templatePre' => "",
+      'templateWP'    => "<%out.id%>\t" +
+        "<%out.latdatapad5%> <%out.londatapad5%> " +
+        "<%out.cdate%> " +
+        "<%wp.difficulty%>/<%wp.terrain%><%out.warnArchiv%><%out.warnAvail%>\t" +
+        "<%wp.type%>\t" +
+        "<%out.relativedistancekm%>\t" +
+        "<%out.size%>\t" + # testing only
+        "\"<%wp.name%>\" by <%wp.creator%>\n"
+    },
+  }
 
-# output looks like this (this is Dublin- slainte!):
-GC44C5	53.35312 -6.33280 2002-03-23 1.5/1	traditional	6.00km@SW	regular	"The Phoenix" by The Champions
-GCGJEP	53.36173 -6.16182 2003-07-29 1/1	traditional	6.00km@E	regular	"Bligh&#39;s Cache" by Maji
-GCJJFQ	53.33602 -6.26003 2004-05-29 2/1.5	traditional	4.40km@S	micro	"Iveagh Cache" by Bootle
-[...]
-GC3K660	53.37213 -6.26228 2012-05-12 2/1.5	traditional	0.87km@W	regular	"Do not disturb" by winsac
-GC3NH2Z	53.35435 -6.26035 2012-06-14 1/1.5	traditional	2.40km@S	small	"Magnetic Storage" by The internet says hello.
-GC3P2V8	53.34722 -6.34027 2012-06-22 1/1	traditional	6.70km@SW	micro	"Church Micro IE 30 - Church of the Nativity, D20" by Blue  Jay
+  # output looks like this (this is Dublin - Sláinte!):
+  GC44C5	53.35312 -6.33280 2002-03-23 1.5/1	traditional	6.00km@SW	regular	"The Phoenix" by The Champions
+  GCGJEP	53.36173 -6.16182 2003-07-29 1/1	traditional	6.00km@E	regular	"Bligh&#39;s Cache" by Maji
+  GCJJFQ	53.33602 -6.26003 2004-05-29 2/1.5	traditional	4.40km@S	micro	"Iveagh Cache" by Bootle
+  [...]
+  GC3K660	53.37213 -6.26228 2012-05-12 2/1.5	traditional	0.87km@W	regular	"Do not disturb" by winsac
+  GC3NH2Z	53.35435 -6.26035 2012-06-14 1/1.5	traditional	2.40km@S	small	"Magnetic Storage" by The internet says hello.
+  GC3P2V8	53.34722 -6.34027 2012-06-22 1/1	traditional	6.70km@SW	micro	"Church Micro IE 30 - Church of the Nativity, D20" by Blue  Jay
 
 Another table output format (try to play with it...):
 
-templates = {
-  'tbl'    => {
-    'ext'        => 'tbl',
-    'mime'    => 'text/plain',
-    'desc'    =>     'some table',
-    'templatePre' => "",
-    'templateWP'    => "<%out.id%>\t" +
-      "<%out.latdatapad5%> <%out.londatapad5%> " +
-      "<%out.cdate%> " +
-      "<%out.size%> " +
-      "<%wp.type%> " +
-      "<%wp.difficulty%>/<%wp.terrain%><%out.warnArchiv%><%out.warnAvail%>\t" +
-      "<%out.relativedistancekm%>\t" +
-      "\"<%wp.name%>\" by <%wp.creator%>\n"
-  },
-}
+  templates = {
+    'tbl'    => {
+      'ext'        => 'tbl',
+      'mime'    => 'text/plain',
+      'desc'    =>     'some table',
+      'templatePre' => "",
+      'templateWP'    => "<%out.id%>\t" +
+        "<%out.latdatapad5%> <%out.londatapad5%> " +
+        "<%out.cdate%> " +
+        "<%out.size%> " +
+        "<%wp.type%> " +
+        "<%wp.difficulty%>/<%wp.terrain%><%out.warnArchiv%><%out.warnAvail%>\t" +
+        "<%out.relativedistancekm%>\t" +
+        "\"<%wp.name%>\" by <%wp.creator%>\n"
+    },
+  }
 
 and two versions of output suited for SMS notifications:
 
-template = {
-  # contributed by regengott.nass
-  'sms' => {
-    'ext'         => 'sms',
-    'mime'        => 'text/plain',
-    'desc'        => '(SMS) Shorten relevant infos for SMS info',
-    'spacer'      => "",
-    'templatePre' => "",
-    'templateWP'  => "<%wpText.name%>,<%out.wid%>,<%wpText.creator%>," +
-      "D<%wp.difficulty%>,T<%wp.terrain%>,<%out.relativedistance%>,<%wp.latwritten%>,<%wp.lonwritten%>," +
-      "<%wp.type%>,<%wp.size%>\n"
-  },
-  # derived from "sms" but reordered and ready for smartphone
-  'sms2' => {
-    'ext'         => 'sms2',
-    'mime'        => 'text/plain',
-    'desc'        => '(SMS) Shorten relevant infos for SMS info',
-    'spacer'      => "",
-    'templatePre' => "",
-    'templateWP'  => "coord.info/<%out.wid%>" +
-      " <%wp.latwritten%> <%wp.lonwritten%>" +
-      " (<%out.relativedistancekm%>)" +
-      " <%wp.type%> D<%wp.difficulty%>/T<%wp.terrain%>/<%wp.size%> -" +
-      " <%wpText.creator%>: <%wpText.name%>\n"
-  },
-}
+  template = {
+    # contributed by regengott.nass
+    'sms' => {
+      'ext'         => 'sms',
+      'mime'        => 'text/plain',
+      'desc'        => '(SMS) Shorten relevant infos for SMS info',
+      'spacer'      => "",
+      'templatePre' => "",
+      'templateWP'  => "<%wpText.name%>,<%out.wid%>,<%wpText.creator%>," +
+        "D<%wp.difficulty%>,T<%wp.terrain%>,<%out.relativedistance%>,<%wp.latwritten%>,<%wp.lonwritten%>," +
+        "<%wp.type%>,<%wp.size%>\n"
+    },
+    # derived from "sms" but reordered and ready for smartphone
+    'sms2' => {
+      'ext'         => 'sms2',
+      'mime'        => 'text/plain',
+      'desc'        => '(SMS) Shorten relevant infos for SMS info',
+      'spacer'      => "",
+      'templatePre' => "",
+      'templateWP'  => "coord.info/<%out.wid%>" +
+        " <%wp.latwritten%> <%wp.lonwritten%>" +
+        " (<%out.relativedistancekm%>)" +
+        " <%wp.type%> D<%wp.difficulty%>/T<%wp.terrain%>/<%wp.size%> -" +
+        " <%wpText.creator%>: <%wpText.name%>\n"
+    },
+  }
 We leave as an exercise to the reader to sketch the resulting output for both formats!
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+------------------
+Conditional output
+------------------
 
 Issue 323 asked for an addition 'conditionWP' which may be used to select WIDs for output.
 The syntax uses the <%...%> style to setup a condition that may be eval()uated.

@@ -2,14 +2,15 @@
 Introduction
 ============
 
+
+------------------
 Table of Contents:
 ------------------
-* Are you using the stable version (=> Wiki:CurrentVersion)?
-* Have you upgraded to the latest release (=> Wiki:CurrentVersion)?
-* There is nothing available for my OS.
-* Yes, I've got the latest version. It used to work, but now it's dead, Jim.
-* GeoToad seems to work, but the output file is rejected (by the device, or other software).
-
+ - stable-version]currentversion)
+ - latest-release]currentversion)
+ - There is nothing available for my OS.
+ - Yes, I've got the latest version. It used to work, but now it's dead, Jim.
+ - GeoToad seems to work, but the output file is rejected (by the device, or other software).
 
 Some hints for reporting bugs. Updated 2015-05-08.
 
@@ -89,10 +90,10 @@ This seems to happen every now and then, unfortunately. You have no idea what pe
 
 It was good practice to pass every GPX file through gpsbabel:
 
-#!/bin/bash
-# check a GPX file by passing through gpsbabel
-for inputfile in "$@"
-do
+  #!/bin/bash
+  # check a GPX file by passing through gpsbabel
+  for inputfile in "$@"
+  do
     echo -n "$inputfile: "
     gpsbabel -i gpx -o gpx -f "$inputfile" -F /dev/null >/tmp/$$.chk 2>&1
     ret=$?
@@ -105,7 +106,7 @@ do
         sed -ne "${line}p" "$inputfile"
     fi
     rm -f /tmp/$$.chk
-done
+  done
 
 This script (tested under Linux, to be invoked with a list of files) checks for the first error, and shows the corresponding line in the GPX file.
 If you don't understand the output, just make sure it's contained in your bug report.

@@ -2,15 +2,16 @@
 Using GeoToad for searches which are not built in
 =================================================
 
+
+------------------
 Table of Contents:
 ------------------
-* "Proximity" search around an existing geocache
-* Searches along a given track/route (issue 103)
-* Parsing bookmark lists (issue 227)
-* Removing mystery caches from GPX
-* Merging riddle solutions into GPX
-* Modify GPX files to be accepted by BaseCamp (issue 238)
-* Get an approximate overview map of caches in a whole large area (now defunct)
+ - Searches along a given track/route (issue 103)
+ - Parsing bookmark lists (issue 227)
+ - Removing mystery caches from GPX
+ - Merging riddle solutions into GPX
+ - Modify GPX files to be accepted by BaseCamp (issue 238)
+ - Get an approximate overview map of caches in a whole large area (now defunct)
 
 _Note: Tested with Debian Linux and bash. Adaptions may be necessary._
 
@@ -29,19 +30,19 @@ Here's a suggestion how to accomplish this (you will have to
 add your credentials, and modify some other search parameters,
 but you'll get the idea):
 
-#!/bin/bash
+  #!/bin/bash
 
-CENTER=GC77       # or whatever should be the center of your search
-DISTANCE=2km      # radius around $CENTER
+  CENTER=GC77       # or whatever should be the center of your search
+  DISTANCE=2km      # radius around $CENTER
 
-# extract coordinates for $CENTER cache
-geotoad -q wid -x list -o `pwd`/$CENTER.list $CENTER
+  # extract coordinates for $CENTER cache
+  geotoad -q wid -x list -o `pwd`/$CENTER.list $CENTER
 
-# get coordinates from list
-COORDS=`awk '{printf("%s,%s\n",$2,$3)}' $CENTER.list`
+  # get coordinates from list
+  COORDS=`awk '{printf("%s,%s\n",$2,$3)}' $CENTER.list`
 
-# now run the real query
-geotoad -q coord -x gpx -o `pwd`/$CENTER-prox.gpx "$COORDS"
+  # now run the real query
+  geotoad -q coord -x gpx -o `pwd`/$CENTER-prox.gpx "$COORDS"
 
 ----------------------------------------------
 Searches along a given track/route (issue 103)
@@ -50,41 +51,40 @@ Searches along a given track/route (issue 103)
 The following script will suggest a geotoad command line,
 not run geotoad itself:
 
-#!/bin/bash
+  #!/bin/bash
 
-input=input.gpx # some file you picked up at e.g. openrouteservice.org
+  input=input.gpx # some file you picked up at e.g. openrouteservice.org
 
-error=0.25k     # Douglas-Peucker tolerance
-distance=1.25k  # interpolation distance
-circle=1.00km   # search radius
+  error=0.25k     # Douglas-Peucker tolerance
+  distance=1.25k  # interpolation distance
+  circle=1.00km   # search radius
 
-# note: error/circle ~ 1/4, distance/circle ~ 5/4 will give you
-# an approximate coverage of about 2/3 circle radius
+  # note: error/circle ~ 1/4, distance/circle ~ 5/4 will give you
+  # an approximate coverage of about 2/3 circle radius
 
-# for a half-mile wide corridor along your route: 
-#error=0.2m
-#distance=1m
-#circle=0.8mi
+  # for a half-mile wide corridor along your route: 
+  #error=0.2m
+  #distance=1m
+  #circle=0.8mi
 
-# simplify input with Douglas-Peucker,
-# then interpolate for point distance,
-# output as series of coordinates suited for geotoad
+  # simplify input with Douglas-Peucker,
+  # then interpolate for point distance,
+  # output as series of coordinates suited for geotoad
 
-searchargs=$(
-cat $input |
-gpsbabel -i gpx -f - \
-    -x simplify,crosstrack,error=$error \
-         -o gpx -F - |
-gpsbabel -i gpx -f - \
-    -x interpolate,distance=$distance \
-         -o csv -F - |
-tr ',' ' ' |
-awk '{printf("%.3f,%.3f|",$1,$2)}'
+  searchargs=$(
+  cat $input |
+  gpsbabel -i gpx -f - \
+      -x simplify,crosstrack,error=$error \
+           -o gpx -F - |
+  gpsbabel -i gpx -f - \
+      -x interpolate,distance=$distance \
+           -o csv -F - |
+  tr ',' ' ' |
+  awk '{printf("%.3f,%.3f|",$1,$2)}'
+  )
 
-)
-
-echo complete \(with your credentials etc.\) and run:
-echo geotoad ... -y$circle -q coord \"$searchargs\"
+  echo complete \(with your credentials etc.\) and run:
+  echo geotoad ... -y$circle -q coord \"$searchargs\"
 
 Note the number of decimals in the "printf" command -
 it will limit center point precision to about 100 metres
@@ -99,19 +99,19 @@ Parsing bookmark lists (issue 227)
 
 With issue 228 resolved, this has become easier:
 
-#!/bin/bash
+  #!/bin/bash
 
-# example: Berlin/Brandenburg area night caches
-listguid="cbb21edf-fb9e-45b5-9b27-c51fd6453cbf"
+  # example: Berlin/Brandenburg area night caches
+  listguid="cbb21edf-fb9e-45b5-9b27-c51fd6453cbf"
 
-# extract list of guids from KML file
-GUIDS=`
-lynx -source "http://www.geocaching.com/kml/bmkml.aspx?bmguid=$listguid" \
-| perl -ne 'if(/\?guid=([0-9a-f-]+)/){printf("%s:",$1)}'
-`
+  # extract list of guids from KML file
+  GUIDS=$(
+  lynx -source "http://www.geocaching.com/kml/bmkml.aspx?bmguid=$listguid" \
+  | perl -ne 'if(/\?guid=([0-9a-f-]+)/){printf("%s:",$1)}'
+  )
 
-# now run the real query
-geotoad -q guid -x gpx -o `pwd`/list_$listguid.gpx "$GUIDS"
+  # now run the real query
+  geotoad -q guid -x gpx -o `pwd`/list_$listguid.gpx "$GUIDS"
 
 --------------------------------
 Removing mystery caches from GPX
@@ -125,10 +125,10 @@ without cache type "unknown" is time-consuming and error-prone.
 The following Ruby scriptlet gpxdemystify will strip "Unknown" caches from
 a GPX file produced by GeoToad:
 
-#!/usr/bin/env ruby
-puts $stdin.read.split(/<\/wpt>/).map { |fragment|
-    (fragment !~ /<groundspeak:type>Unknown Cache/m) ? fragment : nil
-}.compact.join("</wpt>")
+  #!/usr/bin/env ruby
+  puts $stdin.read.split(/<\/wpt>/).map { |fragment|
+      (fragment !~ /<groundspeak:type>Unknown Cache/m) ? fragment : nil
+  }.compact.join("</wpt>")
 
 to be run as follows:   gpxdemystify <input.gpx >output.gpx
 
@@ -140,64 +140,64 @@ Similarly, it is possible to merge a list of "solved" mysteries, or
 already reached multi-cache stages, into an existing GPX, using
 gpxsolutions as follows:
 
-#!/usr/bin/env ruby
-# merge solved mysteries into GPX file
+  #!/usr/bin/env ruby
+  # merge solved mysteries into GPX file
 
-# first read solutions (WPID lat lon) from table
-solutions = Hash.new
-begin
-File.foreach(ARGV[0]) { |line|
-    columns = line.upcase.split(/\s+/)
-    name = columns[0]
-    lat = columns[1]
-    lon = columns[2]
-    gcid = "GC" + name[2..-1]
-    wpnr = name[0..1]
-    case wpnr
-    when /GC/
-	type = 'Traditional Cache'
-    when /\d./
-	type = 'Multi-cache'
-    end
-    solutions[gcid] = {'wpnr'=>wpnr, 'lat'=>lat, 'lon'=>lon, 'type'=>type}
-}
-rescue
+  # first read solutions (WPID lat lon) from table
+  solutions = Hash.new
+  begin
+    File.foreach(ARGV[0]) { |line|
+      columns = line.upcase.split(/\s+/)
+      name = columns[0]
+      lat = columns[1]
+      lon = columns[2]
+      gcid = "GC" + name[2..-1]
+      wpnr = name[0..1]
+      case wpnr
+      when /GC/
+        type = 'Traditional Cache'
+      when /\d./
+        type = 'Multi-cache'
+      end
+      solutions[gcid] = {'wpnr'=>wpnr, 'lat'=>lat, 'lon'=>lon, 'type'=>type}
+    }
+  rescue
     $stderr.puts "Cannot read #{ARGV[0].inspect}, will not modify anything"
-end
+  end
 
-# now merge into GPX (UNIX filter!)
-puts $stdin.read.split(/<\/wpt>/).map { |fragment|
+  # now merge into GPX (UNIX filter!)
+  puts $stdin.read.split(/<\/wpt>/).map { |fragment|
     if fragment =~ /<name>(GC.*?)<\/name>.*?<groundspeak:type>(Unknown Cache|Multi-cache)/m
-	gcid = $1
-	if fragment =~ /<groundspeak:name>(.*?)</m
-	    name = $1
-	end
-	solution = solutions[gcid]
-	if solution
-	    wpnr = solution['wpnr']
-	    lat = solution['lat']
-	    lon = solution['lon']
-	    type = solution['type']
-	    fragment.gsub!(/lat="[\d\.-]+"/, "lat=\"#{lat}\"")
-	    fragment.gsub!(/lon="[\d\.-]+"/, "lon=\"#{lon}\"")
-	    fragment.gsub!(/(Unknown Cache|Multi-cache)</, "#{type}<")
-	    fragment.gsub!(/<groundspeak:short_description[^>]*>/) { |s| s.gsub(/>/, ">[+#{wpnr}]=") }
-	    $stderr.printf "Modified %7s: %s = %s %s \"%s\" -> %s\n", gcid, wpnr, lat, lon, name, type
-	end
+      gcid = $1
+      if fragment =~ /<groundspeak:name>(.*?)</m
+        name = $1
+      end
+      solution = solutions[gcid]
+      if solution
+        wpnr = solution['wpnr']
+        lat = solution['lat']
+        lon = solution['lon']
+        type = solution['type']
+        fragment.gsub!(/lat="[\d\.-]+"/, "lat=\"#{lat}\"")
+        fragment.gsub!(/lon="[\d\.-]+"/, "lon=\"#{lon}\"")
+        fragment.gsub!(/(Unknown Cache|Multi-cache)</, "#{type}<")
+        fragment.gsub!(/<groundspeak:short_description[^>]*>/) { |s| s.gsub(/>/, ">[+#{wpnr}]=") }
+        $stderr.printf "Modified %7s: %s = %s %s \"%s\" -> %s\n", gcid, wpnr, lat, lon, name, type
+      end
     end
     fragment
-}.join("</wpt>")
+  }.join("</wpt>")
 
 to be run as follows:   gpxsolutions solved.txt <input.gpx >output.gpx
 
 with a solved.txt file listing points by name, lat, lon (where point names are
 constructed the same way as "normal" waypoints) as in the following fictional list:
 
-gcqmea  02.012345 53.987654
-gcwpgf  13.543210 41.456789
-0113r5p 22.555555 33.444444
-0116d4t 32.888888 23.555555
-0018k6k 42.010101 13.101010
+  gcqmea  02.012345 53.987654
+  gcwpgf  13.543210 41.456789
+  0113r5p 22.555555 33.444444
+  0116d4t 32.888888 23.555555
+  0018k6k 42.010101 13.101010
 
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -214,9 +214,9 @@ Since extensions are essential for attribute support, GeoToad GPX output is (and
 continue to be) 1.0.1 compatible, but it's rather easy to mangle a GPX file to look
 like a 1.0 one:
 
-cat geotoadoutput.gpx \
-| sed 's~http://www.groundspeak.com/cache/1/0/1~http://www.groundspeak.com/cache/1/0~g' \
-> basecampinput.gpx
+  cat geotoadoutput.gpx \
+  | sed 's~http://www.groundspeak.com/cache/1/0/1~http://www.groundspeak.com/cache/1/0~g' \
+  > basecampinput.gpx
 
 It's not even necessary to remove the "groundspeak:attributes" section.
 
@@ -237,10 +237,10 @@ fetching of the cache details pages. This reduces your access count by a factor 
 
 Here's what I'm using (bash again):
 
-# -Y option skips cdpf fetch
-# qlist template gets distance and azimuth angle
+  # -Y option skips cdpf fetch
+  # qlist template gets distance and azimuth angle
 
-geotoad \
+  geotoad \
     -u $USERNAME -p $PASSWORD \
     -Y \
     -x qlist -o $(pwd)/all.qlist \
@@ -248,12 +248,12 @@ geotoad \
     -q coord \
         "$LAT $LON"
 
-# use geo-project from Rick Richardson's geo-* tools http://geo.rkkda.com/
-# to project from the center of the search, write output in "list" style
+  # use geo-project from Rick Richardson's geo-* tools http://geo.rkkda.com/
+  # to project from the center of the search, write output in "list" style
 
-cat all.qlist \
-| while read guid d1 d2 cdate dtp type dd other
-do
+  cat all.qlist \
+  | while read guid d1 d2 cdate dtp type dd other
+  do
     d=${dd%@*}
     dd0=${dd%=*}
     a=${dd#*=}
@@ -262,7 +262,7 @@ do
     | awk '{print $3, $4}'
     )
     echo $guid $latlon $cdate $dtp $type $dd0 $other
-done \
-> all.list
+  done \
+  > all.list
 
-_(More to be added. Suggestions welcome.)_
+(More to be added. Suggestions welcome.)_

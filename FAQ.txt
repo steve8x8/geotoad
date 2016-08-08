@@ -2,20 +2,20 @@
 Questions and Answers:
 ======================
 
+
+------------------
 Table of Contents:
 ------------------
-* How do you enable friendly waypoint id names?
-* Geocaching Swiss Army Knife complains about the GPX format. How do I make them compatible?
-* What software can you use the GPX files in?
-* Why is there no GUI for GeoToad?
-* So what about that "Fav Factor"?
-* geotoad.exe gets relative paths wrong in Windows
-* I cannot login with a name containing an umlaut ("ÜbercacherXY")
-* What about country and state searches?
-* Is there a list of attribute IDs somewhere?
-* How to contact developers?
-
-
+ - How do you enable friendly waypoint id names?
+ - Geocaching Swiss Army Knife complains about the GPX format. How do I make them compatible?
+ - What software can you use the GPX files in?
+ - Why is there no GUI for GeoToad?
+ - So what about that "Fav Factor"?
+ - geotoad.exe gets relative paths wrong in Windows
+ - I cannot login with a name containing an umlaut
+ - What about country and state searches?
+ - Is there a list of attribute IDs somewhere?
+ - How to contact developers?
 
 ---------------------------------------------
 How do you enable friendly waypoint id names?
@@ -131,10 +131,10 @@ This crash (which may have been fixed by now?) was related to funfactors
 which were replaced by favorite counts.
 As a workaround, we suggest to make sure GeoToad is run from its own directory.
 
-----------------------------------------------------------------
-I cannot login with a name containing an umlaut ("ÜbercacherXY")
-----------------------------------------------------------------
-You're probably using Windows.
+-----------------------------------------------
+I cannot login with a name containing an umlaut
+-----------------------------------------------
+... e.g. "ÜbercacherXY" ...: You're probably using Windows.
 (For unixoid systems, check your _locale_ setting $LANG for UTF-8.)
 
 It seems to be impossible to use UTF-8 in a Windows cmd.exe environment;
