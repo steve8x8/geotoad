@@ -548,6 +548,21 @@ class GeoToad
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
     showRemoved(excludedFilterTotal, "Cache type")
 
+    # caches with warnings we choose not to include.
+    beforeFilterTotal = @filtered.totalWaypoints
+    if not @option['includeArchived']
+      @filtered.removeByElement('archived')
+    end
+    excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
+    showRemoved(excludedFilterTotal, "Archived")
+    #
+    beforeFilterTotal = @filtered.totalWaypoints
+    if not @option['includeDisabled']
+      @filtered.removeByElement('disabled')
+    end
+    excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
+    showRemoved(excludedFilterTotal, "Disabled")
+
     # exclude Premium Member Only caches on request
     beforeFilterTotal = @filtered.totalWaypoints
     if @option['noPMO']
