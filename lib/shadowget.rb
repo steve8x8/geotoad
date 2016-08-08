@@ -19,6 +19,7 @@ class ShadowFetch
 
   @@downloadErrors = 0
   @@remotePages = 0
+  @@minFileSize = 128 # was 6
 
   # gets a URL, but stores it in a nice webcache
   def initialize (url)
@@ -151,7 +152,7 @@ class ShadowFetch
       age = time.to_i - File.mtime(localfile).to_i
       if (age > @localExpiry)
         debug "local cache is #{age} (> #{@localExpiry}) sec old"
-      elsif (File.size(localfile) < 6)
+      elsif (File.size(localfile) <  @@minFileSize)
         debug "local cache appears corrupt. removing.."
         invalidate
       else
@@ -199,23 +200,31 @@ class ShadowFetch
     end
 
     # some magic to not overwrite a publicly viewable cdpf with PMO
-    dowrite = true
-    if File.readable?(localfile) and @data =~ /be a Premium Member to view/
-      # Properly handle changed cache characteristics (D/T/S), coordinates:
-      # Get "old" non-PMO file, then append "new" data. Parser should find last info.
-      # Works at least with non-WID/GUID queries.
-      # As this is a kludge anyway, mimicking the old "paperful caching", don't care.
-      olddata = fetchLocal(localfile)
-      if olddata =~ /be a Premium Member to view/
-        # we do not lose important information by overwriting
-        dowrite = true
-      else
-        # we would lose information by overwriting, but have to concat
-        dowrite = false
-        @data = olddata + @data
-        @@src = 'local+remote'
-      end
-    end
+    dowrite = false
+    # protect against network failures
+    if @data and @data.length > @@minFileSize
+      dowrite = true
+      if @data =~ /be a Premium Member to view/
+        # we got a PMO description
+        # is there already one, possibly non-PMO?
+        if File.readable?(localfile)
+          # Properly handle changed cache characteristics (D/T/S), coordinates:
+          # Get "old" non-PMO file, then append "new" data. Parser should find last info.
+          # Works at least with non-WID/GUID queries.
+          # As this is a kludge anyway, mimicking the old "paperful caching", don't care.
+          olddata = fetchLocal(localfile)
+          if olddata =~ /be a Premium Member to view/
+            # we do not lose important information by overwriting
+            dowrite = true
+          else
+            # we would lose information by overwriting, but have to concat
+            dowrite = false
+            @data = olddata + @data
+            @@src = 'local+remote'
+          end #oldPMO
+        end #oldcdpf
+      end # newPMO
+    end # valid @data
     if dowrite
       debug "writing #{localfile}"
       begin
