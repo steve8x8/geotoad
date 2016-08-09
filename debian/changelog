@@ -1,3 +1,14 @@
+geotoad (3.25.5-1) unstable; urgency=low
+
+  * New version 3.25.5, "Geocaching Vacation 2016"
+  * Extend "gcvisits" template (your*, similar to myfinds)
+  * Issue 336, 339: Fix login detection
+  * Skip empty search arguments
+  * Filter archived and disabled caches before fetching details
+  * Minor bugfixes, cleanups
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Wed, 10 Aug 2016 10:00:00 +0000
+
 geotoad (3.25.4-1) unstable; urgency=low
 
   * New version 3.25.4, "May the 4th be with you"
