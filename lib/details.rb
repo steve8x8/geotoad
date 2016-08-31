@@ -797,7 +797,7 @@ class CacheDetails
       cache['last_find_type'] = 'none'
     end
 
-    comment_text = comments.collect{ |x| x['text'] }
+    #unused#comment_text = comments.collect{ |x| x['text'] }
     cache['additional_raw'] = parseAdditionalWaypoints(data)
 
     # Add "map" waypoints (PMO)
@@ -953,7 +953,8 @@ class CacheDetails
 
   def removeSpam(text)
     # <a href="http://s06.flagcounter.com/more/NOk"><img src= "http://s06.flagcounter.com/count/NOk/bg=E2FFC4/txt=000000/border=CCCCCC/columns=4/maxflags=32/viewers=0/labels=1/pageviews=1/" alt="free counters" /></a>
-    removed = text.gsub(/<a href[^>]*><img src[^>]*((flag|gc)counter|andyhoppe\.com\/count|gcstat\.selfip|gcvote)[^>]*><\/a>/m, '')
+    removed = text.dup
+    removed.gsub!(/<a href[^>]*><img src[^>]*((flag|gc)counter|andyhoppe\.com|gcwetterau\.de|gcstat\.selfip|gcvote)[^>]*><\/a>/m, '')
     removed.gsub!(/<a href=[^>]*hitwebcounter.com[^>]*>.*?<\/a[^>]*>/m, '')
     removed.gsub!(/<!--[^>]*hitwebcounter[^>]*-->/m, '')
     if removed != text

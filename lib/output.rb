@@ -643,6 +643,7 @@ class Output
     # also for style=...
     text.gsub!(/([;\'\"])\s*(background-)?color:[^;]*;/){$1}
     text.gsub!(/font-size:\d+p/, 'font-size:12p') # can be pt or px...
+    #text.gsub!(/font-size:\d+p[tx]/, 'font-size:12pt') # can be pt or px...
 
     # escape HTML entities (including <>)
     begin
@@ -717,9 +718,9 @@ class Output
     text.gsub!(/<\/?tr>/i, "\n")
     text.gsub!(/<\/?br(\s*\/)?>/i, "\n") #
     text.gsub!(/<li>/i, "\n * (o) ")
-    text.gsub!(/<img\s.*?src=\s*[\'\"]https?:\/\/(.*?)[\'\"].*?>/im){"[* #{$1}]"}
-    text.gsub!(/<a\s.*?href=\s*[\'\"]https?:\/\/(.*?)[\'\"].*?>/im){"[= #{$1}]"}
-    text.gsub!(/<\/a.*?>/im, '[=]')
+    text.gsub!(/<img\s.*?src=\s*[\'\"]https?:\/\/(.*?)[\'\"].*?>/im){"[* #{$1} *]"}
+    text.gsub!(/<a\s.*?href=\s*[\'\"]https?:\/\/(.*?)[\'\"].*?>/im){"[= #{$1} "}
+    text.gsub!(/<\/a.*?>/im, ' =]')
     text.gsub!(/<table.*?>/im, "\n[table]\n")
     text.gsub!(/<\/table.*?>/im, "\n[/table]\n")
     text.gsub!(/<.*?>/m, '')
@@ -1216,7 +1217,7 @@ class Output
         # remove locationless wpts
         xmlWptsGsak = xmlWptsCgeo.gsub(/<wpt( lat="0.000000*" lon="0.000000*")?>.*?<\/wpt>\s*/m, '')
         # strip desc strings
-        xmlWptsCgeo.gsub!(/<desc>(.*?):.*?<\/desc>/){ "<desc>#{$1}</desc>" }
+        xmlWptsCgeo.gsub!(/<desc>(.*?):.*?<\/desc>/){"<desc>#{$1}</desc>"}
       end
       if xmlWptsGsak
         # remove gsak additions
