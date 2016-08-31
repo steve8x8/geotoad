@@ -1251,22 +1251,21 @@ class Output
     txtTrackables = ''
     if cache['travelbug'].to_s.length > 0
       cache['travelbug'].split(', ').each{ |tbname|
-        # we don't have the real trackable ref or id
-        # therefore create a random number for the trackable
-        # use a number range far above what exists now
-        tbid = 801205108 + rand(923520) # = X0abcd
-        # convert into string
-        tbref = 'TB' + (tbid + 411120).to_s(31).upcase.tr('0-9A-U', '0-9A-HJKMNPQRTV-Z')
-        debug2 "Trackables: use fake id #{tbid} = #{tbref} for #{tbname}"
+        # 20160830: no longer fake TB ID or ref
         xmlTrackables << "\n"
-#        xmlTrackables << "    <groundspeak:travelbug id=\"#{tbid}\" ref=\"#{tbref}\">\n"
         xmlTrackables << "    <groundspeak:travelbug ref=\"\">\n"
         xmlTrackables << "      <groundspeak:name>" + makeXML(tbname) + "</groundspeak:name>\n"
         xmlTrackables << "    </groundspeak:travelbug>\n"
+        # separator between TBs
+        if txtTrackables.length > 0
+          txtTrackables << "; "
+        end
         txtTrackables << makeText(tbname)
       }
     end
     if xmlTrackables.length > 0
+      # get XML indentation right
+      xmlTrackables << "  "
       debug3 "Generated trackables XML: #{xmlTrackables}"
     end
     if txtTrackables.length > 0
