@@ -92,7 +92,7 @@ class CacheDetails
       debug2 "Found GUID: #{guid}"
       return guid
     end
-    displayWarning "Could not map(1) #{wid} to GUID"
+    debug "Could not map(1) #{wid} to GUID"
     return nil
   end
 
@@ -103,14 +103,17 @@ class CacheDetails
     guid = nil
     @pageURL = 'https://www.geocaching.com/seek/log.aspx?ID=' + logid.to_s + '&lcn=1'
     page = ShadowFetch.new(@pageURL)
-    page.localExpiry = 14 * 24 * 3600	# or even longer
+    page.localExpiry = 1 * 24 * 3600	# make this short to overcome locks
     data = page.fetch
+    if data =~ /The listing has been locked/m
+      displayWarning "#{wid} logbook is locked, cannot map"
+    end
     if data =~ /cache_details\.aspx\?guid=([\w-]+)/m
       guid = $1
       debug2 "Found GUID: #{guid}"
       return guid
     end
-    displayWarning "Could not map(2) #{wid} to GUID"
+    debug "Could not map(2) #{wid} to GUID"
     return nil
   end
 
@@ -128,6 +131,7 @@ class CacheDetails
         end
         if not guid
           # no way
+          displayWarning "Could not map #{id.inspect} to GUID"
           return nil
         end
         debug2 "mapped #{id.inspect} to #{guid.inspect}"
