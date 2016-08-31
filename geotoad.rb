@@ -332,10 +332,11 @@ class GeoToad
     else
       displayWarning "Login failed!"
       displayWarning "Check network connection, username and password!"
-      displayWarning "Note: Subsequent operations may fail. You've been warned."
-      displayInfo    "You have 60 seconds to safely interrupt here."
-      sleep 60
-      displayWarning "Okay, as you wish. Don't complain if something breaks!"
+      #displayWarning "Note: Subsequent operations may fail. You've been warned."
+      #displayInfo    "You have 60 seconds to safely interrupt here."
+      #sleep 60
+      #displayWarning "Okay, as you wish. Don't complain if something breaks!"
+      displayError   "Stopping here, for your own safety."
     end
     displayMessage "Querying user preferences"
     @dateFormat, prefLang, $my_lat, $my_lon, $my_src = getPreferences()
