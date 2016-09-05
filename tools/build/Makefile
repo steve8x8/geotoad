@@ -2,7 +2,7 @@
 # may be called with $PREBUILD set e.g. to "~pre`date +%Y%m%d`"
 
 GITPATH = https://github.com/steve8x8/geotoad.git
-WINRUBY = 200
+WINRUBY = 219
 USB_DIR = gt
 
 # get version to build
@@ -16,8 +16,10 @@ VERSION = $(VERSION0)$(PREBUILD)
 # Shortcuts
 GTV     = geotoad-$(VERSION)
 GUV     = geotoad_$(VERSION)
+BUILD   = 1
 
-all:	version tgz deb win mac md5sums.txt Packages.gz
+#all:	version tgz deb win mac md5sums.txt Packages.gz
+all:	version tgz deb mac md5sums.txt Packages.gz
 
 tgz:	$(GTV).tar.gz
 
@@ -25,7 +27,7 @@ win:	$(GTV)_Installer.exe
 
 mac:	$(GTV).dmg
 
-deb:	$(GUV)-1_all.deb
+deb:	$(GUV)-$(BUILD)_all.deb
 
 
 version:
