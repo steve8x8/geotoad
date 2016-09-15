@@ -563,11 +563,15 @@ class Output
         value = @wpHash[wid][var].to_s
       elsif (type == "out")
         value = @outVars[var].to_s
-      # convert to XML
+      # convert to XML, with some special (online-able) effects for c:geo
       elsif (type == "wpEntity" or type == "wpXML")
         value = makeXML(@wpHash[wid][var].to_s)
+      elsif (type == "wpEntityCgeo" or type == "wpCGEO")
+        value = makeXML(@wpHash[wid][var].to_s, removeImages=false, removeLinks=false)
       elsif (type == "outEntity" or type == "outXML")
         value = makeXML(@outVars[var].to_s)
+      elsif (type == "outEntityCgeo" or type == "outCGEO")
+        value = makeXML(@outVars[var].to_s, removeImages=false, removeLinks=false)
       # convert to text
       elsif (type == "wpText")
         value = makeText(@wpHash[wid][var].to_s)
@@ -622,20 +626,30 @@ class Output
     return text
   end
 
-  def makeXML(str)
+  def makeXML(str, removeImages=true, removeLinks=true)
     if not str or str.length == 0
         return ""
     end
     # issue 262: "emoji" seem to break GPSr devices
     text = deemoji(str, false)
 
-    # remove images, links
-    #text.gsub!(/(<img\s.*?src=\s*[\'\"]https?:\/\/(.*?)[\'\"].*?>)/im){"[img #{$2}]#{$1}"}
-    text.gsub!(/<img\s.*?src=\s*[\'\"]https?:\/\/(.*?)[\'\"].*?>/im){"[* #{$1}]"}
-    #text.gsub!(/(<a\s.*?href=\s*[\'\"]https?:\/\/(.*?)[\'\"].*?>)/im){"[link #{$2}]#{$1}"}
-    text.gsub!(/<a\s.*?href=\s*[\'\"]https?:\/\/(.*?)[\'\"].*?>/im){"[= #{$1}]"}
-    #text.gsub!(/(<\/a.*?>)/im){"#{$1}[/link]"}
-    text.gsub!(/<\/a.*?>/im){"[=]"}
+    # remove/tweak links, images
+    if removeLinks
+      # text-only link representation
+      text.gsub!(/<a\s.*?href=\s*[\'\"]https?:\/\/(.*?)[\'\"].*?>(.*?)<\/a.*?>/im){"[= #{$1} #{$2} =]"}
+    else
+      # clickable link
+      text.gsub!(/(<a\s.*?href=\s*[\'\"]https?:\/\/(.*?)[\'\"].*?>)(.*?)(<\/a.*?>)/im){"#{$1}[= #{$2} =] #{$3} #{$4}"}
+    end
+    # remove smileys
+    text = icons2Text(text.dup)
+    if removeImages
+      # text-only image representation
+      text.gsub!(/<img\s.*?src=\s*[\'\"]https?:\/\/(.*?)[\'\"].*?>/im){"[* #{$1} *]"}
+    else
+      # replace image reference by clickable link to avoid bandwidth consumption
+      text.gsub!(/<img\s.*?src=\s*[\'\"](https?:\/\/(.*?)[\'\"].*?)>/im){"<a href=\"#{$1}\">[* #{$2} *]</a>"}
+    end
 
     # fonts are not represented properly on most devices
     # avoid huge sizes, dark on black, white on white
@@ -774,7 +788,7 @@ class Output
       "_wink" => '[;)]',
     }
     # translate smileys, remove other HTML img tags
-    return str.gsub(/<img.*?icon_smile(.*?)\.gif[^>]*>/i){ iconmap[$1.downcase].to_s }.gsub(/<(\/?img)[^>]*>/i){ "[#{$1.upcase}]" }
+    return str.gsub(/<img.*?icon_smile(.*?)\.gif[^>]*>/im){iconmap[$1.downcase].to_s} #.gsub(/<\/img[^>]*>/im){""}
   end
 
   def generatePreOutput(title)

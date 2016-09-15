@@ -49,9 +49,9 @@ template = {
       "  <groundspeak:state><%wpEntity.state%></groundspeak:state>\n" +
       "  <groundspeak:short_description html=\"True\">" +
        "<%out.premiumOnly%><%outEntity.warnArchiv%><%outEntity.warnAvail%>&lt;br /&gt;" +
-       "<%wpEntity.shortdesc%></groundspeak:short_description>\n" +
-      "  <groundspeak:long_description html=\"True\"><%wpEntity.longdesc%></groundspeak:long_description>\n" +
-      "  <groundspeak:encoded_hints><%outEntity.hintdecrypt%></groundspeak:encoded_hints>\n" +
+       "<%wpEntityCgeo.shortdesc%></groundspeak:short_description>\n" +
+      "  <groundspeak:long_description html=\"True\"><%wpEntityCgeo.longdesc%></groundspeak:long_description>\n" +
+      "  <groundspeak:encoded_hints><%outEntityCgeo.hintdecrypt%></groundspeak:encoded_hints>\n" +
       "  <groundspeak:logs>\n" +
       "<%out.gpxlogs%>" +
       "  </groundspeak:logs>\n" +
