@@ -885,17 +885,34 @@ class CacheDetails
       # convert floats to "X xx&deg; xx.xxx"
       slat = lat2str(cmapitem['lat'], degsign="&#176;")
       slon = lon2str(cmapitem['lng'], degsign="&#176;")
+      type = cmapitem['type']
+      if type == 217
+        sym = "Parking Area"
+      elsif type == 218
+        sym = "Virtual Stage"
+      elsif type == 219
+        sym = "Physical Stage"
+      elsif type == 220
+        sym = "Final Location"
+      elsif type == 221
+        sym = "Trailhead"
+      elsif type == 452
+        sym = "Reference Point"
+      # ...
+      else
+        sym = "Reference Point" # do not know better yet
+      end
       # strip blanks off wpt type in parentheses
       name = cmapitem['name'].gsub(/\(\s*(.*?)\s*\)/){"(#{$1})"}
       table << "    <tr ishidden=\"false\">\n"
-      table << "      <td></td>\n" #empty
-      table << "      <td></td>\n" #empty
-      table << "      <td></td>\n" #empty
-      table << "      <td>#{pf}</td>\n" #prefix
-      table << "      <td>#{pf}</td>\n" #no separate lookup code
-      table << "      <td>#{name}</td>\n"
-      table << "      <td>#{slat} #{slon}</td>\n"
-      table << "      <td></td>\n" #empty
+      table << "      <td></td>\n"			# col 1: empty
+      table << "      <td></td>\n"			# col 2: (visibility icon) empty
+      table << "      <td></td>\n"			# col 3: (point type icon) empty
+      table << "      <td>#{pf}</td>\n"			# col 4: Prefix
+      table << "      <td>#{pf}</td>\n"			# col 5: (Lookup)
+      table << "      <td>#{name} (#{sym})</td>\n"	# col 6: Name (type)
+      table << "      <td>#{slat} #{slon}</td>\n"	# col 7: Coordinate
+      table << "      <td></td>\n"			# col 8: empty
       table << "    </tr>\n"
       table << "    <tr>\n"
       table << "      <td></td>\n"
