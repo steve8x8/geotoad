@@ -565,7 +565,11 @@ class CacheDetails
           # "written" style, whatever that's good for.
           cache['latwritten'] = lat2str(jslat, degsign="°")
           cache['lonwritten'] = lon2str(jslon, degsign="°")
-          debug "last resort lat/lon for #{wid}"
+          if cache['membersonly']
+            debug "rewrite lat/lon for PMO #{wid}"
+          else
+            debug "last resort lat/lon for #{wid}"
+          end
         end
       end
       # 2013-02-05: additional info in "var lat=..." line, but ignore []
