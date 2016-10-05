@@ -890,21 +890,20 @@ class CacheDetails
       slat = lat2str(cmapitem['lat'], degsign="&#176;")
       slon = lon2str(cmapitem['lng'], degsign="&#176;")
       type = cmapitem['type']
-      if type == 217
+      sym = "Unknown #{type}" # do not know better yet
+      case type.to_i
+      when 217
         sym = "Parking Area"
-      elsif type == 218
+      when 218
         sym = "Virtual Stage"
-      elsif type == 219
+      when 219
         sym = "Physical Stage"
-      elsif type == 220
+      when 220
         sym = "Final Location"
-      elsif type == 221
+      when 221
         sym = "Trailhead"
-      elsif type == 452
+      when 452
         sym = "Reference Point"
-      # ...
-      else
-        sym = "Reference Point" # do not know better yet
       end
       # strip blanks off wpt type in parentheses
       name = cmapitem['name'].gsub(/\(\s*(.*?)\s*\)/){"(#{$1})"}
