@@ -868,7 +868,7 @@ class CacheDetails
         # were not 100% safe, better have a dummy error handler
         wp.gsub(/^{/, '').gsub(/}$/, '').split(/,\"/).each{ |item|
           keyval = item.split(/\":/)
-          itemhash[keyval[0].gsub(/\"/, '')] = keyval[1].gsub(/\"/, '')
+          itemhash[keyval[0].gsub(/\"/, '')] = keyval[1].gsub(/\\\"/, '*').gsub(/\"/, '')
         }
         if itemhash['pf']
           cmaphash[itemhash['pf']] = itemhash
