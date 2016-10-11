@@ -119,11 +119,19 @@ module Auth
       when /<strong>#{user}<\/strong>/
         debug "Username confirmed!"
         return true
-      when /^<input type=\"hidden\" name=\"(.*?)\".*value=\"(.*?)\"/
+      when /<input type=\"hidden\" name=\"(.*?)\".*value=\"(.*?)\"/
         @postVars[$1] = $2
         debug3 "found hidden post variable: #{$1}"
-      when /<form name=\"aspnetForm\" method=\"post\" action=\"(.*?)\"/
+      when /<form .*logout/
+        # ignore
+        true
+      #when /<form name=\"aspnetForm\" method=\"post\" action=\"(.*?)\"/
+      # 20161010:
+      # <form method="post" action="./default.aspx" onsubmit="javascript:return WebForm_OnSubmit();" id="aspnetForm">
+      when /<form .*action=\"(.*?)\"/
+        debug3 "checkLoginScreen form action \"#{$1}\""
         @postURL = @@login_url + $1
+        @postURL.gsub!('/./', '/')
         @postURL.gsub!('&amp;', '&')
         debug3 "post URL is #{@postURL}"
       end
@@ -144,8 +152,16 @@ module Auth
       when /<input type=\"hidden\" name=\"(.*?)\".*value=\"(.*?)\"/
         @postVars[$1] = $2
         debug3 "found hidden post variable: #{$1}"
-      when /<form name=\"aspnetForm\" method=\"post\" action=\"(.*?)\"/
+      when /<form .*logout/
+        # ignore
+        true
+      #when /<form name=\"aspnetForm\" method=\"post\" action=\"(.*?)\"/
+      # 20161010:
+      # <form method="post" action="./default.aspx" onsubmit="javascript:return WebForm_OnSubmit();" id="aspnetForm">
+      when /<form .*action=\"(.*?)\"/
+        debug3 "getLoginCookie form action \"#{$1}\""
         @postURL = @@login_url + $1
+        @postURL.gsub!('/./', '/')
         @postURL.gsub!('&amp;', '&')
         debug3 "post URL is #{@postURL}"
       end
