@@ -1,5 +1,5 @@
 ==========================================================================
-GeoToad %VERSION% by Thomas Stromberg and The GeoToad Project (c) 2002 - 2016
+GeoToad 3.26.1 by Thomas Stromberg and The GeoToad Project (c) 2002 - 2016
 ==========================================================================
 
 
@@ -48,7 +48,7 @@ a command prompt run "geotoad". On UNIX, you may have to run "./geotoad.rb".
 You will then see a screen that looks similar to this:
 
 ==============================================================================
-:::                // GeoToad %VERSION% Text User Interface //                :::
+:::                // GeoToad 3.26.1 Text User Interface //                :::
 ==============================================================================
 (1)  GC.com login [REQUIRED         ] | (2)  search type          [location  ]
 (3)  location     [Dead Sea         ] | (4)  distance maximum (km)  [      25]

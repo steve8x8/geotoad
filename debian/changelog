@@ -1,3 +1,10 @@
+geotoad (3.26.1-1) unstable; urgency=low
+
+  * New version 3.26.1, "Free Fall 2016"
+  * Issue 343: Login fails due to changed element structure
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Wed, 12 Oct 2016 08:00:00 +0000
+
 geotoad (3.26.0-1) unstable; urgency=low
 
   * New version 3.26.0, "Fall 2016"
