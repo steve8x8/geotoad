@@ -693,10 +693,11 @@ class SearchCache
           waypoints_total = $1.to_i
           page_number = $2.to_i
           pages_total = $3.to_i
+          debug2 "Found summary line, total #{$1}, page #{$2} of #{$3}"
         end
         # href="javascript:__doPostBack('ctl00$ContentBody$pgrTop$ctl08','')"><b>Next &gt;</b></a></td>
-        if line =~ /doPostBack\(\'([\w\$]+)\',\'\'\)\"><b>[^>]+ \&gt;<\/b>/ #Next
-          debug2 "Found next target: #{$1}"
+        if line =~ /doPostBack\(\'([\w\$]+)\',\'\'\)\"><b>([^>]+) \&gt;<\/b>/ #Next
+          debug2 "Found next target: #{$1} #{$2.inspect}"
           post_vars['__EVENTTARGET'] = $1
         end
       # at least Dutch is different...
@@ -820,7 +821,7 @@ class SearchCache
         end
         # there may be more than 1 match, don't overwrite
         if cache['fulltype']
-          debug "Not overwriting \"#{cache['fulltype']}\"(#{cache['type']} with \"#{full_type}\""
+          debug "Not overwriting \"#{cache['fulltype']}\" (#{cache['type']}) with \"#{full_type}\""
         else
           cache['fulltype'] = full_type
           cache['type'] = full_type.split(' ')[0].downcase.gsub(/\-/, '')
@@ -902,7 +903,7 @@ class SearchCache
         end
         # there may be more than 1 match, don't overwrite
         if cache['fulltype']
-          debug "Not overwriting \"#{cache['fulltype']}\"(#{cache['type']} with \"#{full_type}\""
+          debug "Not overwriting \"#{cache['fulltype']}\" (#{cache['type']}) with \"#{full_type}\""
         else
           cache['fulltype'] = full_type
           cache['type'] = full_type.split(' ')[0].downcase.gsub(/\-/, '')

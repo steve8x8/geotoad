@@ -45,6 +45,8 @@ module Common
     # 2014-10-14
     dateFormat = prefs['SelectedDateFormat']
     prefLanguage = prefs['SelectedCultureCode']
+    debug2 "dateFormat = #{dateFormat.inspect}"
+    debug2 "prefLanguage = #{prefLanguage.inspect}"
     # fallbacks
     if dateFormat.to_s.empty?
       dateFormat = prefs['ctl00$ContentBody$uxDateTimeFormat']
@@ -54,9 +56,10 @@ module Common
     end
     if ! dateFormat.to_s.empty?
       @@dateFormat = dateFormat
+    else
       debug2 "no date format set in preferences - this should never happen"
     end
-    if ! prefLanguage.to_s.empty?
+    if prefLanguage.to_s.empty?
       debug2 "no language set in preferences - this should never happen"
     end
     # get center location for distance
@@ -273,10 +276,14 @@ module Common
   end
 
   def daysAgo(timestamp)
+    # whatever may cause this...
+    if ! timestamp
+      return nil
+    end
     begin
       return (Time.now - timestamp).to_i / 86400
     rescue TypeError
-      displayWarning "Could not convert timestamp '#{timestamp}' to Time object."
+      displayWarning "Could not convert timestamp #{timestamp.inspect} to Time object."
       return nil
     end
   end

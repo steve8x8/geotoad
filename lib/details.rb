@@ -606,11 +606,12 @@ class CacheDetails
     if data =~ />\s*(Placed|Event) Date\s*:\s*([\w \/\.-]+)\s*</m
         what = $1
         date = $2
+        debug2 "#{$1}: #{$2}"
         if date != 'N/A'
           # do not overwrite what we got from search
           ctime = parseDate(date)
           if not cache['ctime']
-            cache['time'] = ctime
+            cache['ctime'] = ctime
           elsif (ctime != cache['ctime'])
             debug2 "ctime changed: " + cache['ctime'].strftime("%Y-%m-%d") + " -> " + ctime.strftime("%Y-%m-%d")
           end
