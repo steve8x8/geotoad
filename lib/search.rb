@@ -160,6 +160,12 @@ class SearchCache
       @query_type = 'guid'
       @query_arg = key.downcase
       @search_url = "https://www.geocaching.com/seek/cache_details.aspx?guid=#{key.downcase}"
+
+    when 'bookmark'
+      @query_type = 'bookmark'
+      @query_arg = key.downcase
+      @search_url = "https://www.geocaching.com/bookmarks/view.aspx?guid=#{key.downcase}"
+
     end
 
     if not @query_type
@@ -710,8 +716,15 @@ class SearchCache
       # GC change 2012-02-14
       # <table class="SearchResultsTable Table"> (search results) </table>
       when /<table class=\"SearchResultsTable/
+        debug2 "entering result table"
         inresultstable = true
+      when /<table class=\"Table NoBottomSpacing\">/
+        if @query_type == 'bookmark'
+          debug2 "entering bookmark table"
+          inresultstable = true
+        end
       when /<\/table>/
+        debug2 "leaving result/bookmark table"
         inresultstable = false
       end #case
 
@@ -720,6 +733,7 @@ class SearchCache
         next
       end
 
+     if @query_type != 'bookmark'
       # stuff strictly inside results table
       case line
       # new travelbug list 2010-12-22
@@ -1057,8 +1071,116 @@ class SearchCache
         end
         # clear cache even if there's no wid (yet)
         cache.clear
+        wid = nil
 
       end # end case
+     else # != 'bookmark'
+
+      case line
+      when /guid=([0-9a-f-]*).>(GC\w+)</
+        guid = $1
+        wid = $2
+        cache['guid'] = guid
+        cache['wid'] = wid
+
+      when /<img.*?wpttypes\/(sm\/)?(\w+)\.[^>]*alt=\"(.*?)\"/
+        debug "found cd ccode=#{$2} type=#{$3}"
+        ccode = $2
+        full_type = $3
+        if @cachetypenum[ccode]
+          full_type = @cachetypenum[ccode]
+        end
+        # there may be more than 1 match, don't overwrite
+        if cache['fulltype']
+          debug "Not overwriting \"#{cache['fulltype']}\" (#{cache['type']}) with \"#{full_type}\""
+        else
+          cache['fulltype'] = full_type
+          cache['type'] = full_type.split(' ')[0].downcase.gsub(/\-/, '')
+          # special cases
+          case full_type
+          when /Cache In Trash Out/
+            cache['type'] = 'cito'
+          when /Lost and Found Celebration/
+            cache['type'] = 'lfceleb'
+          when /Lost and Found Event/
+            cache['type'] = 'lost+found'
+          when /Project APE Cache/
+            cache['type'] = 'ape'
+          when /Groundspeak HQ/
+            cache['type'] = 'gshq'
+          when /Geocaching HQ/
+            cache['type'] = 'gshq'
+          when /Locationless/
+            cache['type'] = 'reverse'
+          when /Block Party/
+            cache['type'] = 'block'
+          when /Exhibit/
+            cache['type'] = 'exhibit'
+          # planned transition
+          when /Mystery/
+            cache['fulltype'] = 'Unknown Cache'
+            cache['type'] = 'unknown'
+          # 2014-08-26
+          when /Traditional/
+            cache['fulltype'] = 'Traditional Cache'
+            cache['type'] = 'traditional'
+          when /Earth/
+            cache['fulltype'] = 'Earthcache'
+            cache['type'] = 'earthcache'
+          end
+          if full_type =~ /Event/
+            debug "Setting event flag for #{full_type}"
+            cache['event'] = true
+          end
+          debug "short type=#{cache['type']} for #{full_type}"
+        end
+
+      when /<span class=\"(.*?)\">(.*?)<\/span>/
+        # <span class="OldWarning Strike">Lars vom Mars</span>
+        # <span class="Strike">Rund um den See, # 04</span>
+        strike = $1
+        name = $2
+        cache['name'] = name
+        debug "name #{name.inspect} with flags"
+        if strike =~ /Warning/
+          cache['archived'] = true
+          debug "#{name} appears to be archived"
+        else
+          cache['archived'] = false
+        end
+        if strike =~ /Strike/
+          cache['disabled'] = true
+          debug "#{name} appears to be disabled"
+        else
+          cache['disabled'] = false
+        end
+
+      when /^\s+(\w+)\s*$/
+        name = $1
+        cache['name'] = name
+        debug "name #{name.inspect}"
+
+      when /^\s+<\/tr>/
+        debug "--- end of row ---"
+        if wid and not @waypoints.has_key?(wid)
+          debug2 "- closing #{wid} record -"
+          parsed_total += 1
+          cache['mdays'] = -1
+          cache['mtime'] = Time.at($ZEROTIME)
+          cache['adays'] = -1
+          cache['atime'] = Time.at($ZEROTIME)
+
+          @waypoints[wid] = cache.dup
+          @waypoints[wid]['visitors'] = []
+          # cache counter (1..n) - need that to reconstruct search order
+          @waypoints[wid]['index'] = @waypoints.length
+        end
+        cache.clear
+        wid = nil
+
+      end # end case
+     end # 'bookmark'
+
     } # end loop
     rescue => error
       displayWarning "Error in parseSearchData():data.split"

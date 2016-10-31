@@ -110,7 +110,7 @@ HTTP proxy server, http://username@password@host:port/
 .TP
 \fB\-q\fR|\fB\-\-queryType\fR \fItype\fR
 query type (default: \fBlocation\fR), choose from
- \fB[location|coord|user|owner|country|state|keyword|wid|guid]\fR
+ \fB[location|coord|user|owner|country|state|keyword|wid|guid|bookmark]\fR
 .PP
 Use \fBcoord\fR if you already have coordinates.
 Coordinates may be given in the usual (Google Maps) representations:
@@ -126,6 +126,8 @@ This should also work with zip codes.
 .PP
 \fBcountry\fR and \fBstate\fR queries require a \fInumerical id\fR which the TUI may tell you.
 .\"GeoToad might provide country and state lists?
+.PP
+\fBbookmark\fR allows to parse bookmark lists.
 
 .SS "Output control:"
 .TP

@@ -295,6 +295,9 @@ class GeoToad
     #displayInfo "Clearing cache descriptions older than 31 days"
     #findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "seek"), 31, "^cdpf\\.aspx.*", true)
 
+    displayInfo "Clearing bookmark list query data older than 3 days"
+    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "bookmarks"), 3, "^view\\.aspx.*", true)
+
     displayInfo "Clearing cache details older than 3 days"
     findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "seek"), 3, "^cache_details\\.aspx.*", true)
 
