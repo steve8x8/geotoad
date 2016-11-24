@@ -775,7 +775,8 @@ class CacheDetails
 
     if not cache['ctime']
       cache['cdays'] = -1
-      cache['ctime'] = Time.now
+      #cache['ctime'] = Time.now
+      cache['ctime'] = Time.at($ZEROTIME)
     end
 
     # if event is in the past (yesterday or before) it's unavailable
