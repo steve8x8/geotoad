@@ -1165,10 +1165,6 @@ class SearchCache
         if wid and not @waypoints.has_key?(wid)
           debug2 "- closing #{wid} record -"
           parsed_total += 1
-          cache['mdays'] = -1
-          cache['mtime'] = Time.at($ZEROTIME)
-          cache['adays'] = -1
-          cache['atime'] = Time.at($ZEROTIME)
 
           @waypoints[wid] = cache.dup
           @waypoints[wid]['visitors'] = []
