@@ -35,6 +35,7 @@ require 'find' # for cleanup
 require 'zlib'
 require 'cgi'
 require 'net/https' # for openssl
+require 'rexml/document'  # for xml parsing
 
 class GeoToad
 
@@ -135,12 +136,6 @@ class GeoToad
       exit
     end
 
-    if ! @option['clearCache'] && ! @option['myLogs'] && ! @option['myTrackables'] && ! @queryArg
-      displayError "You forgot to specify a #{@queryType} search argument"
-      @uin.usage
-      exit
-    end
-
     if (! @option['user']) || (! @option['password'])
       debug "No user/password option given, loading from config."
       (@option['user'], @option['password']) = @uin.loadUserAndPasswordFromConfig()
@@ -187,6 +182,21 @@ class GeoToad
 
     @limitPages = @option['limitSearchPages'].to_i
     debug "Limiting search to #{@limitPages.inspect} pages" if (@limitPages != 0)
+
+    # check for a gpx track to pase
+    # uses the maxDistance for its calculation so needs to be after distance determination
+    if @option['gpxTrack'] and !@queryArg
+      @queryType         = 'coord'
+      
+      # set the GPX Trackpoints as query array
+        @queryArg        = parseGPXTrack(@option['gpxTrack'])
+    end
+
+    if ! @option['clearCache'] && ! @option['myLogs'] && ! @option['myTrackables'] && ! @queryArg
+      displayError "You forgot to specify a #{@queryType} search argument"
+      @uin.usage
+      exit
+    end
 
     return @option
   end
@@ -1048,6 +1058,45 @@ class GeoToad
     } # end format loop
   end
 
+  ## parse the given gpx file to get all coordinates to check
+  def parseGPXTrack(file)
+
+    dist = @distanceMax * $MILE2KM
+    doc = REXML::Document.new(File.open(file))
+    
+    # get first coord
+    last = [doc.elements['gpx/trk/trkseg/trkpt'].attributes["lat"].to_f, doc.elements['gpx/trk/trkseg/trkpt'].attributes["lon"].to_f]
+
+    # Start of track as first 
+    queryCoords = last[0].to_s + ", " + last[1].to_s
+
+    doc.elements.each("gpx/trk/trkseg/trkpt"){ 
+      |e| 
+      curr = [e.attributes["lat"].to_f, e.attributes["lon"].to_f]
+      
+      # check if far enough apart
+      if (distanceBetweenCoords last,curr ) > (dist/3)
+        last = curr
+        queryCoords += ":" + curr[0].to_s + ", " + curr[1].to_s
+      end # end of for each
+    }
+
+    return queryCoords
+  end
+
+  ## it calculates the approximated distance between the two given Coords
+  ## it's not perfect, but fast and on short distances good enough
+  def distanceBetweenCoords loc1, loc2
+    rad_per_deg = Math::PI/180    # 1° = PI / 180 Radians
+    erkm = 6371                   # Earth radius in kilometers
+    
+    d1 = (loc2[0] - loc1[0]) * rad_per_deg    # Delta of lats
+    d2 = (loc2[1] - loc1[1]) * rad_per_deg    # Delta of lons
+    cml = Math::cos((loc1[0] + loc2[0]) / 2)  # cos Mean latitude
+
+    return erkm * Math::sqrt(d1*d1 + (cml*d2)**2) # D = R sqrt( d1² + (cml*d2)² )
+  end
+
 end
 
 # for Ocra build
@@ -1130,7 +1179,7 @@ while true
   end
 
   count = 0
-  if options['queryArg'] || options['myLogs'] || options['myTrackables']
+  if options['queryArg'] || options['myLogs'] || options['myTrackables'] || options['gpxTrack']
     count = cli.downloadGeocacheList()
   end
   if count < 1
