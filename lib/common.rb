@@ -42,6 +42,13 @@ module Common
         end
       end
     }
+    # if something went wrong: remove cache file
+    if data !~ /username: "(.*?)",/
+      if $1.to_s.empty?
+        displayWarning "no username found, invalidating preferences"
+        page.invalidate()
+      end
+    end
     # 2014-10-14
     dateFormat = prefs['SelectedDateFormat']
     prefLanguage = prefs['SelectedCultureCode']
