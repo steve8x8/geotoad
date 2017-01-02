@@ -2,10 +2,10 @@ Source: geotoad
 Section: utils
 Priority: optional
 Maintainer: Steve Sixty-Four <steve8x8@googlemail.com>
-Build-Depends: debhelper (>= 7)
-Standards-Version: 3.8.6
-Vcs-Git: https://github.com/steve8x8/geotoad
-Homepage: https://github.com/steve8x8/geotoad
+Build-Depends: debhelper (>= 9)
+Standards-Version: 3.9.6
+Vcs-Git: https://github.com/steve8x8/geotoad.git
+Homepage: https://github.com/steve8x8/geotoad/wiki
 
 Package: geotoad
 Architecture: all

@@ -11,4 +11,5 @@ override_dh_auto_install:
 	dh_install geotoad usr/bin
 	dh_install contrib data interface lib templates tools usr/share/geotoad
 
+# there's no python inside, keep dh silent
 override_dh_pysupport:
