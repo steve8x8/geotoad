@@ -2,6 +2,7 @@
 
 require 'time'
 require 'zlib'
+require 'lib/geodist'
 
 class CacheDetails
 
@@ -10,6 +11,8 @@ class CacheDetails
 
   include Common
   include Messages
+  # only required for "moved PMO":
+  include GeoDist
 
   # Use a printable template that shows the last 10 logs.
   @@baseURL = "https://www.geocaching.com/seek/cdpf.aspx"
@@ -565,8 +568,12 @@ class CacheDetails
         #if ( not cache['latdata'] or not cache['londata'] )
         # (3) get the most of all available information (old & new PMO location)
         #if cache['membersonly'] or ( not cache['latdata'] or not cache['londata'] )
+          oldlat = cache['latdata']
+          oldlon = cache['londata']
           cache['latdata'] = jslat
           cache['londata'] = jslon
+          newlat = jslat
+          newlon = jslon
           # "written" style, whatever that's good for.
           cache['latwritten'] = lat2str(jslat, degsign="°")
           cache['lonwritten'] = lon2str(jslon, degsign="°")
@@ -574,6 +581,14 @@ class CacheDetails
             debug "rewrite lat/lon for PMO #{wid}"
           else
             debug "last resort lat/lon for #{wid}"
+          end
+          if ( oldlat and oldlon ) and
+             ( ( (newlat.to_f - oldlat.to_f).abs + (newlon.to_f - oldlon.to_f).abs ) > 0.00001 )
+            # cache has moved, description and hint may be inaccurate - set mark
+            movedDistance, movedDirection = geoDistDir(oldlat, oldlon, newlat, newlon)
+            movedDistance = (movedDistance.to_f * 1000 * $MILE2KM).round
+            displayInfo "Moved from #{oldlat}/#{oldlon} to #{newlat}/#{newlon} (#{movedDistance}m@#{movedDirection})"
+            cache['moved'] = true
           end
         end
       end

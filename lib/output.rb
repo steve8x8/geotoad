@@ -1334,18 +1334,18 @@ class Output
       'txtAttrs' => (cache['attributeText'].to_s.empty?) ? '' : '[' + cache['attributeText'].to_s.capitalize.gsub(/\\/, "/") + ']',
       'warnAvail' => (available or archived) ? '' : '[?]',
       'warnArchiv' => (archived) ? '[%]' : '',
-      'premiumOnly' => (cache['membersonly'] ? ('[$' + (cache['olddesc'] ? '+' : '') + ']') : ''),
+      'premiumOnly' => (cache['membersonly'] ? ('[$' + (cache['olddesc'] ? '+' : '') + (cache['moved'] ? 'm' : '') + ']') : ''),
       'nuvi' => cache['type'][0..1].capitalize +
         sprintf("%.1f", cache['difficulty']).gsub(/\.5/, '\'').gsub(/\.0/, '.') +
         sprintf("%.1f", cache['terrain']).gsub(/\.5/, '\'').gsub(/\.0/, '.') +
         cache['size'][0..1].capitalize +
           ((cache['membersonly']) ? '$' : '') +
-            (cache['olddesc'] ? '+' : '') +
+            (cache['olddesc'] ? '+' : '') + (cache['moved'] ? 'm' : '') +
           ((archived) ? '%' : '') +
           ((available or archived) ? '' : '?'),
       # Premium/Archive/Disabled
       'pad' => ((cache['membersonly']) ? '$' : '') +
-            (cache['olddesc'] ? '+' : '') +
+            (cache['olddesc'] ? '+' : '') + (cache['moved'] ? 'm' : '') +
           ((archived) ? '%' : '') +
           ((available or archived) ? '' : '?'),
     }
