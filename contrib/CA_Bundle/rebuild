@@ -1,0 +1,17 @@
+#!/bin/sh
+
+cd `dirname $0`
+
+# refresh script
+wget -m -nvpdH https://github.com/curl/curl/raw/master/lib/mk-ca-bundle.pl
+
+chmod +x mk-ca-bundle.pl
+# run script
+./mk-ca-bundle.pl
+/bin/rm certdata.txt robots.txt
+
+# get canonical cert bundle
+wget -m -nvpdH http://curl.haxx.se/ca/cacert.pem
+
+# compare
+diff ca-bundle.crt cacert.pem

@@ -5,3 +5,4 @@
 /tools/build/md5sums.*
 /tools/build/Packages.*
 *-v
+/contrib/CA_Bundle/cacert.pem

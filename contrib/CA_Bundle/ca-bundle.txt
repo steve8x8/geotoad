@@ -1,9 +1,9 @@
 # to rebuild ca-bundle.crt:
 
 # get CURL, and patch it
-git clone https://github.com/bagder/curl.git
+git clone https://github.com/badger/curl.git
 cd curl/lib
-# in mk-ca-bundle.pl, replace http with https
+# in mk-ca-bundle.pl, replace http with https if necessary
 
 # or just use the copy provided here
 ./mk-ca-bundle.pl
@@ -14,4 +14,4 @@ rm certdata.txt
 # ca-bundle.crt should be identical to http://curl.haxx.se/ca/cacert.pem
 
 ## please observe COPYING file
-## 2015-11-15
+## 2015-11-15 - 2017-01-19
