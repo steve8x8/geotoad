@@ -25,15 +25,17 @@ class ShadowFetch
   def initialize (url)
     @url = url
     @remote = 0
-    @localExpiry = 5 * 86400		# 5 days
+    @localExpiry = 5 * 86400		# 5 days. Do not store if < 0
     @maxFailures = 10			#was 3
     @useCookie   = true
     @httpHeaders = {
-      'User-Agent'      => "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_2; en-US) AppleWebKit/532.9 (KHTML, like Gecko) Chrome/5.0.307.11 Safari/532.9",
+      'User-Agent'      => #'Mozilla/5.0 (X11; Linux i686; rv:45.0) Gecko/20100101 Firefox/45.0',
+                           'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_2; en-US) AppleWebKit/532.9 (KHTML, like Gecko) Chrome/5.0.307.11 Safari/532.9',
       'Accept'          => 'text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5',
       'Accept-Language' => 'en-us,en;q=0.5',
       'Accept-Charset'  => 'ISO-8859-1,utf-8;q=0.7,*;q=0.7'
     }
+    @closingHTML = true
   end
 
   def maxFailures=(maxfail)
@@ -49,6 +51,18 @@ class ShadowFetch
   def useCookie=(usecookie)
     debug "use cookie: #{usecookie}"
     @useCookie = usecookie
+  end
+
+  def closingHTML=(check)
+    debug "check for closing HTML: #{check}"
+    @closingHTML = check
+  end
+
+  def httpHeader=(keyvalue)
+    key, value = keyvalue
+    debug "set http header #{key}: #{value}"
+    @httpHeaders[key] = value
+    debug "http headers now: #{@httpHeaders.inspect}"
   end
 
 
@@ -141,14 +155,19 @@ class ShadowFetch
   def fetch
     @@src = nil
     time = Time.now
-    localfile = cacheFile(@url)
+    # this is kind of an ugly hack
+    if @localExpiry < 0
+      localfile = "/dev/null"
+    else
+      localfile = cacheFile(@url)
+    end
     localparts = localfile.split(/[\\\/]/)
     localdir = File.join(localparts[0..-2])  # basename sucks in Windows.
     debug3 "====+ Fetch URL: #{url}"
     debug3 "====+ Fetch File: #{localfile}"
-
-    # expiry?
-    if (File.readable?(localfile))
+    if @localExpiry >= 0
+     # expired?
+     if (File.readable?(localfile))
       age = time.to_i - File.mtime(localfile).to_i
       if (age > @localExpiry)
         debug "local cache is #{age} (> #{@localExpiry}) sec old"
@@ -162,8 +181,9 @@ class ShadowFetch
         # short-circuit out of here!
         return @data
       end
-    else
+     else
       debug "no local cache file found for #{localfile}"
+     end
     end
 
     # fetch a new version from remote
@@ -172,7 +192,7 @@ class ShadowFetch
     # check for valid closed html
     if not @data
       debug "we must not have a net connection, uh no"
-    elsif @data !~ /<\/html>\s*$/
+    elsif @data !~ /<\/html>\s*$/ and @closingHTML
       if @url =~ /geocaching\.com/
         displayWarning "No closing HTML tag found"
         #@data = nil
@@ -225,6 +245,9 @@ class ShadowFetch
         end #oldcdpf
       end # newPMO
     end # valid @data
+    if @localExpiry < 0
+      dowrite = false
+    end
     if dowrite
       debug "writing #{localfile}"
       begin

@@ -364,6 +364,7 @@ class CacheDetails
         end
         cache['shortdesc'] = ''
         cache['longdesc'] = ''
+        cache['comments'] = []
         cache['favfactor'] = 0
 #        cache['url'] = "http://www.geocaching.com/geocache/" + wid
         cache['url'] = "http://coord.info/" + wid
@@ -762,18 +763,22 @@ class CacheDetails
     # Parse the additional waypoints table. Needs additional work for non-HTML templates.
     comments, last_find_date, visitors = parseComments(data, cache['creator'])
     cache['visitors'] = cache['visitors'] + visitors
-    cache['comments'] = comments
+    if comments.length > 0 and cache['membersonly']
+      # there are logs, cache was not PMO before
+      cache['olddesc'] = true
+    end
     if comments.length > 0
       cache['last_find_type'] = comments[0]['type']
       cache['last_find_days'] = daysAgo(comments[0]['date'])
+      if not last_find_date
+        last_find_date = comments[0]['date']
+      end
       # Remove possibly unpaired font tags (issue 231)
       (0...comments.length).each{ |c|
-        cache['comments'][c]['text'].gsub!(/<\/?font[^>]*>/, '')
+        comments[c]['text'].gsub!(/<\/?font[^>]*>/, '')
       }
-      if cache['membersonly']
-        cache['olddesc'] = true
-      end
     end
+    cache['comments'] = comments
 
     if (not cache['mdays'] or cache['mdays'] == -1) and last_find_date
       cache['mtime'] = last_find_date
