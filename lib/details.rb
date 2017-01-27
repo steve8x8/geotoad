@@ -197,26 +197,13 @@ class CacheDetails
       success = nil
     end
 
-#    # We try to download the page one more time.
-#    if ! success
-#      debug "Trying to download #{url} again."
-#      sleep(5)
-#      page.invalidate()
-#      page.fetch()
-#      if page.data
-#        success = parseCache(page.data)
-#      end
-#    end
-
     # success is hash; nil or string if problem
     if success.class != Hash
       message = "Could not parse #{url}."
       if success.class == String
         message << " (#{success})"
       end
-#      displayWarning message
       debug message
-#      page.invalidate()
     end
     return success
   end
@@ -795,7 +782,6 @@ class CacheDetails
 
     if not cache['ctime']
       cache['cdays'] = -1
-      #cache['ctime'] = Time.now
       cache['ctime'] = Time.at($ZEROTIME)
     end
 
