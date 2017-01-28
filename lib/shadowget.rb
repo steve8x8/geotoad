@@ -36,6 +36,8 @@ class ShadowFetch
       'Accept-Charset'  => 'ISO-8859-1,utf-8;q=0.7,*;q=0.7'
     }
     @closingHTML = true
+    @localFile   = nil
+    @cacheFile   = nil
   end
 
   def maxFailures=(maxfail)
@@ -65,6 +67,22 @@ class ShadowFetch
     debug "http headers now: #{@httpHeaders.inspect}"
   end
 
+  def localFile=(name)
+    debug "set local file: #{name}"
+    @localFile = name
+  end
+
+  def filetimestamp()
+    timestamp = Time.now
+    if @cacheFile
+      begin
+        timestamp = File.stat(@cacheFile).mtime
+      rescue => e
+        # there's no cache file
+      end
+    end
+    return timestamp
+  end
 
   def postVars=(vars)
     if vars
@@ -110,30 +128,34 @@ class ShadowFetch
 
     if fileParts[3]
       dir = File.join(fileParts[3..-2])
-      file = fileParts[-1]
-      localfile = File.join(host, dir, file)
+      if @localFile
+        file = @localFile
+      else
+        file = fileParts[-1]
+      end
+      @cacheFile = File.join(host, dir, file)
     end
 
     if url =~ /\/$/
-      localfile = File.join(localfile, 'index.html')
+      @cacheFile = File.join(@cacheFile, 'index.html')
     end
 
     # make a friendly filename
-    localfile.gsub!(/[^\/\w\.\-]/, "_")
-    localfile.gsub!(/_+/, "_")
+    @cacheFile.gsub!(/[^\/\w\.\-]/, "_")
+    @cacheFile.gsub!(/_+/, "_")
     if $CACHE_DIR
-      localfile = File.join($CACHE_DIR, localfile)
+      @cacheFile = File.join($CACHE_DIR, @cacheFile)
     else
-      localfile = File.join('', 'tmp', localfile)
+      @cacheFile = File.join('', 'tmp', @cacheFile)
     end
     # Windows users have a max of 255 characters I believe.
-    if (localfile.length > 250)
+    if (@cacheFile.length > 250)
       debug "truncating #{localfile} -- too long"
-      localfile = localfile.slice(0,250)
+      @cacheFile = @cacheFile.slice(0,250)
     end
 
-    debug "cachefile: #{localfile}"
-    return localfile
+    debug "cachefile: #{@cacheFile}"
+    return @cacheFile
   end
 
   def invalidate
