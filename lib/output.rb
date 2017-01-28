@@ -860,22 +860,23 @@ class Output
     debug "Generating comment XML for #{cache['name']}"
     brlf = "\&lt;br /\&gt;\n"
 
+    # remark finder id strings can be empty, do not insert userIDs or fake numbers
+
     # info log entry
     if (@commentLimit > 0) && cache['ltime']
       debug3 "info log entry"
       entry = ''
       entry << "    <groundspeak:log id=\"-2\">\n"
-      formatted_date = cache['ltime'].strftime("%Y-%m-%dT%H:%M:%SZ")
+      formatted_date = cache['ltime'].gmtime.strftime("%Y-%m-%dT%H:%M:%SZ")
       entry << "      <groundspeak:date>#{formatted_date}</groundspeak:date>\n"
       entry << "      <groundspeak:type>Write note</groundspeak:type>\n"
-#      entry << "      <groundspeak:finder id=\"0\">**Info**</groundspeak:finder>\n"
       entry << "      <groundspeak:finder id=\"\">**Info**</groundspeak:finder>\n"
       entry << "      <groundspeak:text encoded=\"True\">\n"
       if cache['logcounts']
         entry << "Last log: #{cache['last_find_type']}" + brlf
         entry << "Stats: #{cache['logcounts']}" + brlf
       end
-      formatted_date = cache['ctime'].strftime("%Y-%m-%d")
+      formatted_date = cache['ctime'].gmtime.strftime("%Y-%m-%d")
       entry << "Placed: #{formatted_date}" + brlf
       entry << "D/T/S:  #{cache['difficulty']}/#{cache['terrain']}/#{cache['size']}"
       if cache['favfactor']
@@ -896,14 +897,14 @@ class Output
         break if (commentcount >= @commentLimit)
         # strip images from log entries
         comment_text = icons2Text(comment['text'].to_s)
-        comment_id = Zlib.crc32(comment_text)
+        formatted_date = comment['date'].gmtime.strftime("%Y-%m-%dT07:00:00.000Z")
+        # we may actually have a valid logID, use that
+        comment_id = cache['log_id'] || Zlib.crc32(comment_text + formatted_date)
         debug3 "Comment ID: #{comment_id} by #{comment['user']}: #{comment_text}"
-        formatted_date = comment['date'].strftime("%Y-%m-%dT07:00:00.000Z")
         entry = ''
         entry << "    <groundspeak:log id=\"#{comment_id}\">\n"
         entry << "      <groundspeak:date>#{formatted_date}</groundspeak:date>\n"
         entry << "      <groundspeak:type>#{comment['type']}</groundspeak:type>\n"
-#        entry << "      <groundspeak:finder id=\"#{comment['user_id']}\">#{comment['user']}</groundspeak:finder>\n"
         entry << "      <groundspeak:finder id=\"\">#{comment['user']}</groundspeak:finder>\n"
         entry << "      <groundspeak:text encoded=\"True\">" + makeXML(comment_text) + "</groundspeak:text>\n"
         entry << "    </groundspeak:log>\n"
@@ -929,6 +930,7 @@ class Output
     cache['comments'].each{ |comment|
       break if (commentcount >= @commentLimit)
       comment_text = icons2Text(comment['text'].to_s)
+      formatted_date = comment['date'].gmtime.strftime("%Y-%m-%d")
       # unescape HTML in finder name
       comment_user = deemoji(comment['user'], false)
       begin
@@ -936,7 +938,7 @@ class Output
       rescue => e
         debug "unescapeHTML throws exception #{e} - use original"
       end
-      formatted_date = comment['date'].strftime("%Y-%m-%d")
+      debug3 "Comment by #{comment['user']}: #{comment_text}"
       entry = ''
       entry << "----------\n"
       entry << "*#{comment['type']}* by #{comment_user} on #{formatted_date}:\n"
@@ -961,7 +963,7 @@ class Output
     commentcount = 0
     cache['comments'].each{ |comment|
       break if (commentcount >= @commentLimit)
-      formatted_date = comment['date'].strftime("%Y-%m-%d")
+      formatted_date = comment['date'].gmtime.strftime("%Y-%m-%d")
       entry = ''
       entry << "<hr noshade size=\"1\" width=\"150\" align=\"left\"/>\n"
       entry << "<h4><em>#{comment['type']}</em> by #{comment['user']} on #{formatted_date}</h4>\n"

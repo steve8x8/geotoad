@@ -1033,7 +1033,7 @@ class GeoToad
       displayInfo "Filename: #{outputFile}"
 
       # append time to our title
-      queryTitle = @queryTitle + " (" + Time.now.strftime("%d%b%y %H:%M") + ")"
+      queryTitle = @queryTitle + " (" + Time.now.localtime.strftime("%d%b%y %H:%M") + ")"
 
       # and do the dirty.
       output.prepare(queryTitle, @option['user'])
