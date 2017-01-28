@@ -621,8 +621,7 @@ class CacheDetails
           if not cache['ctime']
             cache['ctime'] = ctime
           elsif (ctime != cache['ctime'])
-            debug2 "ctime changed?: " + cache['ctime'].gmtime.strftime("%Y-%m-%d")
-                             + " -> " + ctime.gmtime.strftime("%Y-%m-%d")
+            debug2 "ctime changed?: " + cache['ctime'].gmtime.strftime("%Y-%m-%d") + " -> " + ctime.gmtime.strftime("%Y-%m-%d")
           end
           cache['cdays'] = daysAgo(cache['ctime'])
           if what =~ /Event/
