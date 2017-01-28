@@ -100,6 +100,7 @@ class SearchCache
   end
 
   def setType(mode, key)
+    @search_url = nil
     @query_type = nil
     @query_arg = key
     supports_distance = false
@@ -382,7 +383,7 @@ class SearchCache
       when /onclick=\"s2phone\(.*?(GC\w+).*?\);return/
         wid = $1
         debug "Found WID: #{wid} (s2phone)"
-       # premium-member only
+      # premium-member only
       when /WptTypeImage.*\/(wpttypes|play\/Content\/images\/cache-types)\/(\w+)\./
         ccode = $2
         # list covers only "standard" types! This may be incorrect
@@ -885,15 +886,15 @@ class SearchCache
         if strike =~ /class=\"[^\"]*Warning/
           cache['archived'] = true
           debug "#{name} appears to be archived"
-        else
-          cache['archived'] = false
+#        else
+#          cache['archived'] = false
         end
 
         if strike =~ /class=\"[^\"]*Strike/
           cache['disabled'] = true
           debug "#{name} appears to be disabled"
-        else
-          cache['disabled'] = false
+#        else
+#          cache['disabled'] = false
         end
 
         cache['name'] = name.gsub(/  */, ' ')
@@ -967,15 +968,15 @@ class SearchCache
         if strike =~ /class=\"[^\"]*Warning/
           cache['archived'] = true
           debug "#{name} appears to be archived"
-        else
-          cache['archived'] = false
+#        else
+#          cache['archived'] = false
         end
 
         if strike =~ /class=\"[^\"]*Strike/
           cache['disabled'] = true
           debug "#{name} appears to be disabled"
-        else
-          cache['disabled'] = false
+#        else
+#          cache['disabled'] = false
         end
 
         cache['name'] = name.gsub(/  */, ' ')
@@ -1084,7 +1085,7 @@ class SearchCache
         cache['wid'] = wid
 
       when /<img.*?wpttypes\/(sm\/)?(\w+)\.[^>]*alt=\"(.*?)\"/
-        debug "found cd ccode=#{$2} type=#{$3}"
+        debug "found gc ccode=#{$2} type=#{$3}"
         ccode = $2
         full_type = $3
         if @cachetypenum[ccode]
@@ -1145,14 +1146,14 @@ class SearchCache
         if strike =~ /Warning/
           cache['archived'] = true
           debug "#{name} appears to be archived"
-        else
-          cache['archived'] = false
+#        else
+#          cache['archived'] = false
         end
         if strike =~ /Strike/
           cache['disabled'] = true
           debug "#{name} appears to be disabled"
-        else
-          cache['disabled'] = false
+#        else
+#          cache['disabled'] = false
         end
 
       when /^\s+(\w+)\s*$/

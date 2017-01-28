@@ -48,7 +48,6 @@ module Messages
 
   # display boxed text
   def displayBox(text, len = 78)
-    #puts "| #{text.ljust(len-4)} |"[0..(len-1)]
     if text.length <= (len-4)
       # single-line output
       puts "| #{text.ljust(len-4)} |"

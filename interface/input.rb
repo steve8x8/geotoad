@@ -13,16 +13,16 @@ class Input
   include Messages
 
   def initialize
-    # Originally, it  was @optHash. Rather than write a probably unneeded
-    # restore and save for it so that it can keep preferences between runs,
-    # I thought I would just make it class-wide instead of instance wide.
-
     resetOptions
     @configDir = findConfigDir
     @configFile = File.join(@configDir, 'config.yaml')
   end
 
   def resetOptions
+    # Originally, it was @optHash. Rather than write a probably unneeded
+    # restore and save for it so that it can keep preferences between runs,
+    # I thought I would just make it class-wide instead of instance wide.
+
     @@optHash = Hash.new
     # some default values.
     @@optHash['queryType'] = 'location'
@@ -75,7 +75,7 @@ class Input
       [ "--userInclude",     "--doneBy", "-e",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--userExclude",  "--notdoneBy", "-E",    GetoptLong::REQUIRED_ARGUMENT ],
 # -f (was funFactorMin)
-# -F (was finFactorMax)
+# -F (was funFactorMax)
       [ "--favFactorMin",    "--minFav", "-g",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--favFactorMax",    "--maxFav", "-G",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--help",                        "-h",    GetoptLong::NO_ARGUMENT ],
@@ -116,6 +116,7 @@ class Input
       [ "--noCacheDescriptions",         "-Y",    GetoptLong::NO_ARGUMENT ],
       [ "--includeDisabled",    "--bad", "-z",    GetoptLong::NO_ARGUMENT ],
       [ "--preserveCache",  "--keepOld", "-Z",    GetoptLong::NO_ARGUMENT ],
+# -[0-9]
     # no short option available
       [ "--includeArchived", "--gone",            GetoptLong::NO_ARGUMENT ],
       [ "--minLongitude", "--longMin",            GetoptLong::REQUIRED_ARGUMENT ],
@@ -152,7 +153,6 @@ class Input
           @@optHash['verbose'] = @@optHash['verbose'].to_i + 1
         elsif (@@optHash[opt] == "")
           # NO_ARG but already set: toggle
-          #@@optHash[opt] = nil
           @@optHash.delete(opt)
         else
           @@optHash[opt] = arg

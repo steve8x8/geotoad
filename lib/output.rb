@@ -978,6 +978,7 @@ class Output
   end
 
   def decryptHint(hint)
+    decrypted = ''
     if hint
       # translate smileys
       hint2 = icons2Text(hint)
@@ -994,10 +995,8 @@ class Output
         # join decrypted and unchanged fragments
         x }.join
       debug "full hint: #{decrypted}"
-      return decrypted
-    else
-      return ''
     end
+    return decrypted
   end
 
   # reduce HTML content (of waypoint table) to a minimum
@@ -1014,8 +1013,6 @@ class Output
     # note: this will drop waypoint URLs!
     new_text.gsub!(/\s*<a\s+[^>]*>/m, '')
     new_text.gsub!(/\s*<\/a>/m, '')
-    # not yet ready: do not remove but clean up hyperlinks
-    # new_text.gsub!(/\&RefID=[0-9a-f-]*\&RefDS=[0-9]/, '')
     # remove form elements
     new_text.gsub!(/\s*<input\s+[^>]*>/m, '')
     # remove table head
@@ -1092,9 +1089,6 @@ class Output
             end
             # we must escape special characters in WP name (as in "Park & Ride")
             wpname = makeXML(wpname)
-            # we have thrown away the WID link in reduceHTML
-            # this may be bad, but for now we'll wait for requests
-            #widurl = ""
           elsif tdcount == 7
             # coords in "written" format
             coord = $1
@@ -1102,12 +1096,10 @@ class Output
             if coord =~ /([NS]) (\d+).*? ([\d\.]+) ([WE]) (\d+).*? ([\d\.]+)/
               wplat = ($2.to_f + $3.to_f / 60) * ($1 == 'S' ? -1:1)
               wplon = ($5.to_f + $6.to_f / 60) * ($4 == 'W' ? -1:1)
-              #hidden = false
             else # no coordinates ("???") -> <wpt>
+              # make "zero" waypoints available for c:geo etc.
               wplat = nil
               wplon = nil
-              # make "zero" waypoints available for c:geo etc.
-              ##hidden = true
             end
             # convert to shortened strings
             if wplat
@@ -1354,7 +1346,6 @@ class Output
       displayWarning "Problem (#{e}) while converting cache #{wid}:\n#{cache.inspect}"
       displayError "Backtrace: #{e.backtrace}"
     end
-    # although implicit:
     return variables
   end
 
@@ -1367,7 +1358,6 @@ class Output
     updateShortNames()
     output = generatePreOutput(title)
 
-    # ** This will be removed for GeoToad 4.0, when we use a real templating engine that can do loops **
     if @outputType =~ /html/
       html_index, symbolHash = generateHtmlIndex()
       output << html_index
@@ -1380,11 +1370,8 @@ class Output
     helpindex = 0
     @wpHash.keys.each{ |wid|
       helpindex += 1
-      index = @wpHash[wid]['index']
       # in "-q wid" mode, there's no index
-      if not index
-        index = helpindex
-      end
+      index = @wpHash[wid]['index'] || helpindex
       wpSearchOrder[index] = wid
     }
     # remove unset elements ([0])
@@ -1420,6 +1407,7 @@ class Output
       @outVars['textlogs'] = createTextCommentLogs(cache)
       @outVars['htmllogs'] = createHTMLCommentLogs(cache)
       # make output conditional
+      willOutput = true
       if @outputFormat['conditionWP']
         conditionWP = @outputFormat['conditionWP']
         debug "WP condition #{conditionWP.inspect}"
@@ -1431,14 +1419,12 @@ class Output
           willOutput = false
         end
         debug "WP condition for #{wid}: #{willOutput.inspect}"
-      else
-        willOutput = true
       end
       if willOutput
         outputadd = replaceVariables(@outputFormat['templateWP'], wid)
         maxlength = @outputFormat['maxlengthWP']
         if maxlength and outputadd.length > maxlength
-          output << outputadd[0..maxlength-1] + outputadd[-1..-1]
+          output << outputadd[0..maxlength-2] + "_" #+ outputadd[-1..-1]
         else
           output << outputadd
         end

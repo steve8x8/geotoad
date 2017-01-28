@@ -26,12 +26,11 @@ module Auth
     if cookie
         saveCookie(cookie)
     else
-	debug "no cookie from login"
+        debug "no cookie from login"
     end
     logged_in = checkLoginScreen(cookie, user)
     debug "checkLoginScreen returns #{logged_in.inspect}"
     # get the current (set of) cookie(s) and pretend that login was successful
-#    cookie = loadCookie()
     return cookie
   end
 
@@ -182,7 +181,6 @@ module Auth
     saveCookie(cookie)
     cookie = loadCookie()
     # spring 2016 replaced userid with other cookies
-    #if (cookie =~ /userid=/) && (cookie =~ /(ASP.NET_SessionId=\w+)/)
     if (cookie =~ /gspkauth=/) && (cookie =~ /(ASP.NET_SessionId=\w+)/)
       debug "Cookie #{hideCookie(cookie)} looks good, rock on."
       return cookie
