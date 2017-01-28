@@ -1283,54 +1283,54 @@ class Output
 
     begin
     variables = {
-      'username' => @username,
-      'wid' => wid,
-      'guid' => cache['guid'].to_s,
-      'symbols' => symbols,
-      'id' => cache['sname'],
-      'mdate' => cache['mtime'].strftime("%Y-%m-%d"),
-      'cdate' => cache['ctime'].strftime("%Y-%m-%d"),
-      'cdateshort' => cache['ctime'].strftime("%y%m%d"),
-      'adate' => cache['atime'].strftime("%Y-%m-%d"),
-      'size' => (cache['size'] || 'empty').to_s.gsub(/ /, '_'),
-      'type8' => (cache['type'] || 'unknown').ljust(8),
-      'favcount' => (cache['favorites'] || 0).to_s,
-      'foundcount' => (cache['foundcount'] || '?').to_s,
-      'favfactor' => (cache['favfactor'] || 0.0).to_s,
-      'XMLDate' => cache['ctime'].strftime("%Y-%m-%dT07:00:00.000Z"),
+      'username'    => @username,
+      'wid'         => wid,
+      'guid'        => cache['guid'].to_s,
+      'symbols'     => symbols,
+      'id'          => cache['sname'],
+      'mdate'       => cache['mtime'].gmtime.strftime("%Y-%m-%d"),
+      'cdate'       => cache['ctime'].gmtime.strftime("%Y-%m-%d"),
+      'cdateshort'  => cache['ctime'].gmtime.strftime("%y%m%d"),
+      'adate'       => cache['atime'].gmtime.strftime("%Y-%m-%d"),
+      'size'        => (cache['size'] || 'empty').to_s.gsub(/ /, '_'),
+      'type8'       => (cache['type'] || 'unknown').ljust(8),
+      'favcount'    => (cache['favorites'] || 0).to_s,
+      'foundcount'  => (cache['foundcount'] || '?').to_s,
+      'favfactor'   => (cache['favfactor'] || 0.0).to_s,
+      'XMLDate'     => cache['ctime'].gmtime.strftime("%Y-%m-%dT07:00:00.000Z"),
       'latdatapad5' => sprintf("%2.5f", cache['latdata'] || 0.0),
       'londatapad5' => sprintf("%2.5f", cache['londata'] || 0.0),
       'latdatapad6' => sprintf("%2.6f", cache['latdata'] || 0.0),
       'londatapad6' => sprintf("%2.6f", cache['londata'] || 0.0),
-      'latdegmin' => lat2str(cache['latdata'] || 0.0, degsign=':').gsub(/ */, '').gsub(/([NSEW])0+/, '\1'),
-      'londegmin' => lon2str(cache['londata'] || 0.0, degsign=':').gsub(/ */, '').gsub(/([NSEW])0+/, '\1'),
-      'maps_url' => "#{GOOGLE_MAPS_URL}?q=#{coord_query}",
+      'latdegmin'   => lat2str(cache['latdata'] || 0.0, degsign=':').gsub(/ */, '').gsub(/([NSEW])0+/, '\1'),
+      'londegmin'   => lon2str(cache['londata'] || 0.0, degsign=':').gsub(/ */, '').gsub(/([NSEW])0+/, '\1'),
+      'maps_url'    => "#{GOOGLE_MAPS_URL}?q=#{coord_query}",
       'IsAvailable' => (available == true).to_s.capitalize,
-      'IsArchived' => (archived == true).to_s.capitalize,
-      'IsPremium' => (cache['membersonly'] == true).to_s, # do not capitalize!
-      'FavPoints' => cache['favorites'] || 0,
+      'IsArchived'  => (archived == true).to_s.capitalize,
+      'IsPremium'   => (cache['membersonly'] == true).to_s, # do not capitalize!
+      'FavPoints'   => cache['favorites'] || 0,
       # cartridge CGUID has 36 characters, so has the "dummy" one
-      'cartridge' => (cache['cartridge'] || '_no_link_to_wherigo_cartridge_found_'),
-      'location' => location,
-      'relativedistance' => relative_distance,
+      'cartridge'   => (cache['cartridge'] || '_no_link_to_wherigo_cartridge_found_'),
+      'location'    => location,
+      'relativedistance'   => relative_distance,
       'relativedistancekm' => relative_distance_km,
       'hintdecrypt' => decryptHint(cache['hint']),
-      'hint' => cache['hint'],
+      'hint'        => cache['hint'],
       'cacheSymbol' => symbol,
-      'cacheID' => cacheID(wid),
-      'logID' => (100000000001 + @wpHash.length - cache['index'].to_i),
-      'trackables' => cache['travelbug'].to_s,
+      'cacheID'     => cacheID(wid),
+      'logID'       => (100000000001 + @wpHash.length - cache['index'].to_i),
+      'trackables'  => cache['travelbug'].to_s,
       'xmlTrackables' => xmlTrackables,
-      'shortWpts' => shortWpts.to_s,
+      'shortWpts'   => shortWpts.to_s,
       'xmlWptsCgeo' => xmlWptsCgeo.to_s.gsub(/XXXWIDXXX/, wid[2..-1]),
       'xmlWptsGsak' => xmlWptsGsak.to_s.gsub(/XXXWIDXXX/, wid[2..-1]),
-      'xmlWpts' => xmlWpts.to_s.gsub(/XXXWIDXXX/, wid[2..-1]),
-      'xmlAttrs' => xmlAttrs.to_s,
-      'txtAttrs' => (cache['attributeText'].to_s.empty?) ? '' : '[' + cache['attributeText'].to_s.capitalize.gsub(/\\/, "/") + ']',
-      'warnAvail' => (available or archived) ? '' : '[?]',
-      'warnArchiv' => (archived) ? '[%]' : '',
+      'xmlWpts'     => xmlWpts.to_s.gsub(/XXXWIDXXX/, wid[2..-1]),
+      'xmlAttrs'    => xmlAttrs.to_s,
+      'txtAttrs'    => (cache['attributeText'].to_s.empty?) ? '' : '[' + cache['attributeText'].to_s.capitalize.gsub(/\\/, "/") + ']',
+      'warnAvail'   => (available or archived) ? '' : '[?]',
+      'warnArchiv'  => (archived) ? '[%]' : '',
       'premiumOnly' => (cache['membersonly'] ? ('[$' + (cache['olddesc'] ? '+' : '') + (cache['moved'] ? 'm' : '') + ']') : ''),
-      'nuvi' => cache['type'][0..1].capitalize +
+      'nuvi'        => cache['type'][0..1].capitalize +
         sprintf("%.1f", cache['difficulty']).gsub(/\.5/, '\'').gsub(/\.0/, '.') +
         sprintf("%.1f", cache['terrain']).gsub(/\.5/, '\'').gsub(/\.0/, '.') +
         cache['size'][0..1].capitalize +
@@ -1339,10 +1339,10 @@ class Output
           ((archived) ? '%' : '') +
           ((available or archived) ? '' : '?'),
       # Premium/Archive/Disabled
-      'pad' => ((cache['membersonly']) ? '$' : '') +
-            (cache['olddesc'] ? '+' : '') + (cache['moved'] ? 'm' : '') +
-          ((archived) ? '%' : '') +
-          ((available or archived) ? '' : '?'),
+      'pad'         => ((cache['membersonly']) ? '$' : '') +
+                        (cache['olddesc'] ? '+' : '') + (cache['moved'] ? 'm' : '') +
+                        ((archived) ? '%' : '') +
+                        ((available or archived) ? '' : '?'),
     }
     rescue => e
       displayWarning "Problem (#{e}) while converting cache #{wid}:\n#{cache.inspect}"
