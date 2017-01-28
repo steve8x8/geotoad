@@ -221,7 +221,7 @@ class Output
     @waypointLength = 0
     @username = nil
     # initialize templates
-    Templates.new if $FORMATS.empty?
+    Templates.new if $allFormats.empty?
     @commentLimit = 10
   end
 
@@ -427,8 +427,8 @@ class Output
 
   # select the format for the next set of output
   def formatType=(format)
-    if ($FORMATS[format])
-      @outputFormat = $FORMATS[format].dup
+    if ($allFormats[format])
+      @outputFormat = $allFormats[format].dup
       @outputType = format
       debug "format switched to #{format}"
     else
@@ -450,7 +450,7 @@ class Output
   # exploratory functions.
   def formatList
     formatList = Array.new
-    $FORMATS.each_key{ |format|
+    $allFormats.each_key{ |format|
       formatList.push(format)
     }
     formatList
@@ -458,19 +458,19 @@ class Output
 
 
   def formatExtension(format)
-    return $FORMATS[format]['ext']
+    return $allFormats[format]['ext']
   end
 
   def formatMIME(format)
-    return $FORMATS[format]['mime']
+    return $allFormats[format]['mime']
   end
 
   def formatDesc(format)
-    return $FORMATS[format]['desc']
+    return $allFormats[format]['desc']
   end
 
   def formatRequirement(format)
-    return $FORMATS[format]['required']
+    return $allFormats[format]['required']
   end
 
   ## sets up for the filtering process ################3
@@ -1358,7 +1358,7 @@ class Output
   end
 
   def generateOutput(title)
-    debug3 "generating output: #{@outputType} - #{$FORMATS[@outputType]['desc']}"
+    debug3 "generating output: #{@outputType} - #{$allFormats[@outputType]['desc']}"
     @outVars = Hash.new
     @outVars['title'] = title
     @outVars['version'] = GTVersion.version
