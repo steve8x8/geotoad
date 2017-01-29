@@ -88,7 +88,7 @@ class CacheDetails
     guid = nil
     @pageURL = 'https://www.geocaching.com/seek/cache_details.aspx?wp=' + wid
     page = ShadowFetch.new(@pageURL)
-    page.localExpiry = 14 * 24 * 3600	# or even longer
+    page.localExpiry = 14 * 24 * 60 * 60
     data = page.fetch
     if data =~ /cdpf\.aspx\?guid=([\w-]+)/m
       guid = $1
@@ -106,7 +106,7 @@ class CacheDetails
     guid = nil
     @pageURL = 'https://www.geocaching.com/seek/log.aspx?ID=' + logid.to_s + '&lcn=1'
     page = ShadowFetch.new(@pageURL)
-    page.localExpiry = 1 * 24 * 3600	# make this short to overcome locks
+    page.localExpiry = 1 * 24 * 60 * 60
     data = page.fetch
     if data =~ /The listing has been locked/m
       displayWarning "#{wid} logbook is locked, cannot map"

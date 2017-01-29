@@ -5,10 +5,9 @@ require 'common'
 require 'cgi'
 require 'shadowget'
 
-MAPS_URL = 'http://maps.googleapis.com/maps/api/geocode/xml?sensor=false'
-CACHE_SECONDS = 86400 * 60
-
 class GeoCode
+
+  @@maps_base = 'http://maps.googleapis.com/maps/api/geocode/xml?sensor=false'
 
   include Common
   include Messages
@@ -42,14 +41,14 @@ class GeoCode
 
   def create_url(location, type)
     q = CGI.escape(location)
-    url = "#{MAPS_URL}&#{type}=#{q}"
+    url = @@maps_base + "&#{type}=#{q}"
     debug2 "geocode url: #{url}"
     return url
   end
 
   def get_url(url)
     http = ShadowFetch.new(url)
-    http.localExpiry = CACHE_SECONDS
+    http.localExpiry = 31 * 24 * 60 * 60
     http.maxFailures = 5
     http.useCookie = false
     results = http.fetch

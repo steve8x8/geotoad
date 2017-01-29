@@ -48,8 +48,8 @@ class GeoToad
   # *if* cache D/T/S extraction works, early filtering is possible
   $DTSFILTER = true
 
-  # time to use for "unknown" creation dates
-  $ZEROTIME = 946728000 # 2000-01-01T13:00:00Z
+  # time to use for "unknown" dates: noon UTC Jan 1, 2000 (second 946728000)
+  $ZEROTIME = Time.new(2000, 1, 1, 12, 00, 00, 0).to_i
 
   # conversion miles to kilometres
   $MILE2KM = 1.609344
