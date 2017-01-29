@@ -941,37 +941,35 @@ class Input
   def guessQueryType(type)
 
     case type
-    when /auto/
+    when /^auto/ #(obsolete?)
       return 'location'
-    when /loc/
-      return 'location'
-    when /zip/
-      return 'location'
-    when /country/
-      return 'country'
-    when /state/
-      return 'state'
-    when /province/
-      return 'state'
-    when /coo/
-      return 'coord'
-    when /wid/
-      return 'wid'
-    when /waypoint/
-      return 'wid'
-    when /guid/
-      return 'guid'
-    when /book/
+    when /^boo/ #bookmark
       return 'bookmark'
-    when /user/
-      return 'user'
-    when /own/
-      return 'owner'
-    when /key/
+    when /^coo/ #coordinates
+      return 'coord'
+    when /^cou/ #country_id
+      return 'country'
+    when /^gu/ #guid
+      return 'guid'
+    when /^key/ #keyword
       return 'keyword'
+    when /^loc/ #location
+      return 'location'
+    when /^own/ #owner
+      return 'owner'
+    when /^prov/ #province
+      return 'state'
+    when /^sta/ #state_id
+      return 'state'
+    when /^us/ #user
+      return 'user'
+    when /^w/ #wid,waypoint
+      return 'wid'
+    when /^zip/ #zipcode
+      return 'location'
     end
-    # Could not guess
-    return nil
+    # Could not guess: fallback to auto
+    return 'location'
   end
 
 end
