@@ -14,7 +14,7 @@ will invoke text user interface (TUI)
 
 .SH "NOTE"
 .PP
-If GeoToad was not installed from a (distribution\-specific) package
+If GeoToad was not installed from a (distribution-specific) package
 (like .rpm for RedHat, OpenSuse, CentOS and derivatives; .deb for Debian
 and Ubuntu, etc.), it may be necessary to invoke GeoToad with the
 \fB.rb\fR
@@ -33,7 +33,7 @@ and export the matching geocaches to numerous devices and over 20 file formats.
 If run without any parameters,
 \fBgeotoad\fR
 will launch the interactive mode ("text user interface", "TUI").
-It can also be used in command\-line mode for specific queries.
+It can also be used in command-line mode for specific queries.
 
 .SH "DISCLAIMER"
 .PP
@@ -47,14 +47,14 @@ Strictly speaking, using GeoToad may harm your GeoCaching account and possibly m
 The authors have taken a few measures to reduce the impact of the website access,
 including a progressive slowdown for bigger queries, but there is no safe limit.
 .PP
-The software is provided as\-is, also in source form, for educational purposes.
+The software is provided as-is, also in source form, for educational purposes.
 By using it to gather actual geocache descriptions and related information,
 you accept all liability for possible damages.
 
 .SH "OPTION SYNTAX"
 
 .SS "Toggled options:"
-\fB"No\-argument"\fR options, with the exception of \fB\-\-verbose\fR which
+\fB"No-argument"\fR options, with the exception of \fB\-\-verbose\fR which
 implements multiple levels, are \fB"toggles"\fR, i.e. they can be switched
 on by the first usage on the command line, switched off by the second, etc.
 
@@ -74,12 +74,12 @@ GCxxxxx cache IDs.
 \fBWarning:\fR Since colons are used as default \fB(MULTI)\fR delimiters,
 if you want to use a file from another (Windows) drive, or with a filename
 containing a colon for another reason, you will have to define your own
-delimiter (set) \- see the \fB\-m\fR (\fB\-\-delimiter\fR) option for that.
+delimiter (set) - see the \fB\-m\fR (\fB\-\-delimiter\fR) option for that.
 
 .SH "OPTIONS"
 
 .SS "Unambiguous abbreviations:"
-Option keywords are case\-sensitive, and may be separated from values by whitespace
+Option keywords are case-sensitive, and may be separated from values by whitespace
 or an equal sign \fB=\fR.
 .PP
 Options can be unambiguously abbreviated, for example, \fB\-\-password\fR may be written
@@ -88,10 +88,10 @@ as \fB\-\-pas\fR (but not \fB\-\-p\fR).
 .SS "Help and verbosity:"
 .TP
 \fB\-h\fR|\fB\-\-help\fR
-get a short command\-line option summary
+get a short command-line option summary
 .TP
 \fB\-v\fR|\fB\-\-verbose\fR|\fB\-\-debug\fR
-enable debugging output \- very helpful in case of malfunctions.
+enable debugging output - very helpful in case of malfunctions.
 .PP
 Multiple (currently up to 3) \fB\-v\fR options raise the debug level, resulting in copious output.
 
@@ -110,7 +110,9 @@ HTTP proxy server, http://username@password@host:port/
 .TP
 \fB\-q\fR|\fB\-\-queryType\fR \fItype\fR
 query type (default: \fBlocation\fR), choose from
+.nf
  \fB[location|coord|user|owner|country|state|keyword|wid|guid|bookmark]\fR
+.fi
 .PP
 Use \fBcoord\fR if you already have coordinates.
 Coordinates may be given in the usual (Google Maps) representations:
@@ -193,7 +195,7 @@ by reducing the number of queries sent to the server.
 .PP
 By suffixing one or more cacheType(s) with a minus sign (dash) "\-",
 you may invert the filter,
-i.e. \fBunknown\-\fR will return only non\-mystery caches.
+i.e. \fBunknown\-\fR will return only non-mystery caches.
 .PP
 Inverse filters are applied before, and therefore supersede, forward filters!
 (This means, \fBtype:type\-\fR will exclude \fBtype\fR.)
@@ -204,7 +206,7 @@ rare other events) or "all unknown" (including GroundSpeak HQ) types,
 use
 \fBevent+\fR, or \fBunknown+\fR respectively,
 \fBas the only cache type\fR (otherwise,
-filtering won't work \- you've been warned).
+filtering won't work - you've been warned).
 .PP
 Warning: Inverted filtering for these types does \fBnot\fR work!
 Also, these types may not be supported by the TUI.
@@ -293,12 +295,12 @@ select only caches with travelbugs/trackables
 exclude Premium Member Only caches
 .TP
 \fB\-Q\fR|\fB\-\-onlyPMO\fR|\fB\-\-pmo\fR
-select only Premium Member Only caches
+select only Premium Member Only caches (will not work for some query types!)
 .PP
 \fINote\fR: \fB\-O\fR and \fB\-Q\fR are mutually exclusive!
 
 .SS "Lat/lon grid limits:"
-The following 4 options have no one\-letter version, and are used for limiting the search area.
+The following 4 options have no one-letter version, and are used for limiting the search area.
 Note that this filter is applied \fBafter\fR fetching all cache details (as coordinates aren't available before).
 Use numeric values only!
 .\" (TBD: same representations as in a \fBcoord\fR search)
@@ -341,10 +343,11 @@ retrieve "my trackable logs" page, and store in cache
 Options \fB\-V\fR, \fB\-C\fR, \fB\-M\fR and \fB\-W\fR may be used without a real query.
 .TP
 \fB\-X\fR|\fB\-\-disableEarlyFilter\fR
-emergency switch to disable early (cache\-list based) filtering by difficulty/terrain/size
+emergency switch to disable early (cache\-list based) filtering by difficulty/terrain/size/PMO
 .PP
 This may be required should the representation of those values change again,
-after 2010 and 2012.
+after 2010 and 2012 - or if you want to apply filters to the result of an exotic
+query (like \fBbookmark\fR).
 Normally you don't want to use this!
 .TP
 \fB\-U\fR|\fB\-\-unbufferedOutput\fR
@@ -354,7 +357,7 @@ switch output to unbuffered (useful for wrappers)
 
 \fIsearch\fR can be of the \fB(MULTI)\fR type.
 This, for example, allows you to combine multiple circular search spots
-into a single search \- the query results will be merged.
+into a single search - the query results will be merged.
 (Be warned that some output fields, like distances and directions, may become ambiguous!)
 
 .SH "SPECIAL CASES"
@@ -372,13 +375,13 @@ Characters like \fB!\fR and \fB|\fR may have to be "escaped" from the shell,
 usually by enclosing them, or the whole string, in quotes.
 
 .SS "Non-ASCII characters in names:"
-If \fBuser\fR or \fBowner\fR names contain special (non\-ASCII) characters,
+If \fBuser\fR or \fBowner\fR names contain special (non-ASCII) characters,
 and you are using Windows, you may not be able to login or run a "user" query.
-In those cases, you'll have to pre\-encode those characters.
+In those cases, you'll have to pre-encode those characters.
 .PP
 .B http://www.utf8\-chartable.de/unicode\-utf8\-table.pl?number=1024
 will help you to look up the proper UTF\-8 codes.
-Prefix each two\-digit hex value with a percent sign:
+Prefix each two-digit hex value with a percent sign:
 .PP
 For example
 .B (capital_letter_O_with_diaeresis)lscheich
@@ -396,7 +399,7 @@ delimiter set.
 .SS "GEO_DIR"
 If set, GeoToad will put its cache in this directory. If not the cache is
 placed in ~/.geotoad/ . Note that it is not secure to set GEO_DIR to point
-to a world\-writable directory such as /tmp.
+to a world-writable directory such as /tmp.
 
 .SS "LANG"
 To properly handle special characters (which are not in the ASCII character
@@ -408,7 +411,7 @@ or similar.
 .PP
 The syntax depends on the shell you're using:
 .B setenv LANG en_US.UTF\-8
-for C\-shell derivatives (csh, tcsh)
+for C-shell derivatives (csh, tcsh)
 .B LANG=en_US.UTF\-8; export LANG
 for Bourne and Korn shell (sh, ksh)
 .B export LANG=en_US.UTF\-8
@@ -427,10 +430,10 @@ If there's no setting, the distances reported by the search (or \fBN/A\fR) will 
 Windows users who want to use SSL peer verification need a CA-certificate bundle.
 This seems to be included with all modern Linux distributions, but
 since this usually doesn't come with Windows nor Ruby, it is recommended to use
-the \fBcontrib\\CA_Bundle\\ca-bundle.crt\fR file, and declare that as \fBSSL_CERT_FILE\fR
+the \fBcontrib\\CA_Bundle\\ca\-bundle.crt\fR file, and declare that as \fBSSL_CERT_FILE\fR
 before starting \fBruby geotoad.rb\fR, e.g.:
 .PP
-.B set SSL_CERT_FILE=C:\\\\Programs\\\\GeoToad\\\\contrib\\\\CA_Bundle\\\\ca-bundle.crt
+.B set SSL_CERT_FILE=C:\\\\Programs\\\\GeoToad\\\\contrib\\\\CA_Bundle\\\\ca\-bundle.crt
 .PP
 You may want to check \fBhttps://gist.github.com/fnichol/867550\fR as well, for
 how to make this change permanent.
@@ -441,7 +444,7 @@ where the former intentionally needs renaming, and both may fail.
 
 .SH "OUTPUT FORMATS"
 
-.\" set indentation to "none", use fixed\-width font for format list
+.\" set indentation to "none", use fixed-width font for format list
 .PP 0
 .ft CW
  cachemate(=)  cetus(+)      csv           delorme        delorme\-nourl 
@@ -490,12 +493,24 @@ will be preserved as long as possible.
 .SS "Limitations by design:"
 .PP
 .B  geotoad
-parses \fIprintable\fR pages (cdpf format). Those pages don't contain
-owner IDs, trackable IDs, etc. Also the "cache by" string can contain
-arbitrary information. It's therefore not reliable to deduce the real
-owner. (Owner searches aren't affected by this.) This has been a
-fundamental design decision - cdpf pages have been mostly unharmed by
-website redesigns.
+Almost all searches provide enough information for the second stage that
+interprets cache-specific information. \fBbookmark\fR mode is a notable
+exception, see below.
+.PP
+parses \fIprintable\fR pages (cdpf format).
+This has been a fundamental design decision - cdpf pages have been mostly
+unharmed by website redesigns, but those pages don't contain owner IDs,
+trackable IDs, etc. 
+Also the "cache by" string can contain arbitrary information. It's therefore
+not reliable to deduce the real owner. (Owner searches aren't affected by this.)
+.PP
+It is not possible to search for more than one cache type if \fBevent+\fR
+or \fBunknown+\fR are involved.
+.PP
+Early filtering by attributes like D, T, size, or PMO may fail if this
+information hasn't been provided by the initial query. This is true for
+bookmark list processing. for example. Use the \-\-disableEarlyFilter (\-X)
+option to avoid disappointment.
 .SS "Limitations imposed by GroundSpeak:"
 .PP
 The GC webpages can be displayed in more than 20 languages.
@@ -507,11 +522,19 @@ but may fail for saved cache descriptions that haven't been updated (e.g.
 because the cache was converted to PMO). Also month-name abbreviations
 haven't been included in the program code. This means that you cannot use
 a foreign language and abbreviated month names in a reliable manner.
-ISO date style ("2007-06-05" for 5th of June) is considered safe.
+ISO date style ("2007\-06\-05" for 5th of June) is considered safe.
 .SS "Little-tested features:"
 .PP
 The TUI doesn't get tested very much - the command line is much more
 powerful, and there are a lot of options which aren't supported by the TUI.
+.PP
+Bookmark mode will parse \fIbookmarks/view.aspx\fR list pages which are very sparse - 
+they contain no coordinates, no container size, no D or T values -,
+then proceed directly to cdpf pages matching the list of \fIguid\fRs obtained.
+The \fIcdpf.aspx\fR (printable cache) pages may not be able to provide the missing
+values. As a result, you may see \fID/T/Size\fR values of \fI1/1/not_chosen\fR.
+See the sample script included with the distribution, which extracts a \fIwid\fR
+list from a KML file instead, for an alternative approach.
 .PP
 .B  geotoad
 is being tested with English only. While there is some support for other
@@ -526,7 +549,7 @@ If you are using a wrapper, that may need some adjustment.
 .B  geotoad
 comes with a limited set of pre-defined output templates, but you are free
 to create your own ones.
-Make sure to test them for syntax errors (use \fB ruby -wc\fR) - they are valid
+Make sure to test them for syntax errors (use \fB ruby \-wc\fR) - they are valid
 Ruby source files!
 
 Some output formats require external programs, like \fBgpsbabel\fR or \fBcmconvert\fR.
@@ -559,7 +582,7 @@ invokes the text user interface
 .TP
 .B  geotoad \-u user \-p password 27513
 You've just made a file named gt_27513.gpx containing all the geocaches
-nearby the zipcode 27513 (Cary, NC \- with a maximum distance of 10 miles)
+nearby the zipcode 27513 (Cary, NC - with a maximum distance of 10 miles)
 suitable to be read by almost every GPSr device.
 .PP
 Why do we need a username and password? In October of 2004, Geocaching.com
@@ -576,7 +599,7 @@ searches for caches within 5 miles of the above coordinates
 .B  geotoad \-u user \-p password 27513:27502:33434
 performs a multiple search, and combines the results into a single output.
 .PP
-You can combine searches with a delimiter (default is "\fB|\fR", or "\fB:\fR" \- except TUI).
+You can combine searches with a delimiter (default is "\fB|\fR", or "\fB:\fR" - except TUI).
 This works for all search types (and other \fB(MULTI)\fR options).
 .TP
 .B  geotoad \-u user \-p password \-x text \-o nc.txt \-n \-q state 34
@@ -597,7 +620,7 @@ as country and state searches return caches in reverse chronological order
 Get a HTML representation of all caches in Palestine. (Oct 2013: 7, one of them unfound)
 .TP
 .B  geotoad ... \-t 2.5 \-E "helixblue:Sallad" \-x gpx \-o charlotte.gpx 28272
-Get caches in the 10\-mile zone of zipcode 28272, with a terrain score of 2.5 or higher, 
+Get caches in the 10-mile zone of zipcode 28272, with a terrain score of 2.5 or higher, 
 which users helixblue and Sallad have not visited.
 Outputs a GPX format file, which is usable by most GPSr's and other devices.
 .TP
@@ -621,7 +644,7 @@ create three files output.gpx, output.lst, output.html combining the results.
 As the \fB|\fR character has a special meaning, it must be "quoted".)
 .TP
 .B  geotoad ... \-c multicache \-a 6 \-A 57 \-o family.gpx \-x gpx:list \-y 25km \-q coord "52.25,6.075"
-Prepare for a Sunday afternoon walk, and find all multi\-caches around
+Prepare for a Sunday afternoon walk, and find all multi-caches around
 which pretend to be "Kid friendly" (attribute 6) and shorter than 10km (attribute 57).
 .TP
 .B  geotoad ... ... (as above) \-\-minLat 52.10 \-\-maxLat 52.40 \-q coord "52.25,6.075"
