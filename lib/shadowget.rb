@@ -76,7 +76,7 @@ class ShadowFetch
     timestamp = Time.now
     if @cacheFile
       begin
-        timestamp = File.stat(@cacheFile).mtime
+        timestamp = File.mtime(@cacheFile)
       rescue => e
         # there's no cache file
       end
