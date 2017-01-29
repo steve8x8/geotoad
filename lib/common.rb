@@ -3,6 +3,7 @@
 require 'fileutils'
 require 'pathname'
 require 'time'
+require 'cgi'
 
 module Common
   # pre 2014-10-14: @@prefs_url = 'http://www.geocaching.com/account/ManagePreferences.aspx'
@@ -62,7 +63,7 @@ module Common
       prefLanguage = prefs['ctl00$ContentBody$uxLanguagePreference']
     end
     if ! dateFormat.to_s.empty?
-      @@dateFormat = dateFormat
+      @@dateFormat = CGI.unescapeHTML(dateFormat)
     else
       debug2 "no date format set in preferences - this should never happen"
     end
