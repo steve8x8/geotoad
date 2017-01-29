@@ -867,7 +867,7 @@ class Output
       debug3 "info log entry"
       entry = ''
       entry << "    <groundspeak:log id=\"-2\">\n"
-      formatted_date = cache['ltime'].localtime.strftime("%Y-%m-%dT%H:%M:%S")
+      formatted_date = cache['ltime'].getgm.strftime("%Y-%m-%dT%H:%M:%SZ")
       entry << "      <groundspeak:date>#{formatted_date}</groundspeak:date>\n"
       entry << "      <groundspeak:type>Write note</groundspeak:type>\n"
       entry << "      <groundspeak:finder id=\"\">**Info**</groundspeak:finder>\n"
@@ -876,7 +876,7 @@ class Output
         entry << "Last log: #{cache['last_find_type']}" + brlf
         entry << "Stats: #{cache['logcounts']}" + brlf
       end
-      formatted_date = cache['ctime'].localtime.strftime("%Y-%m-%d")
+      formatted_date = cache['ctime'].getlocal.strftime("%Y-%m-%d")
       entry << "Placed: #{formatted_date}" + brlf
       entry << "D/T/S:  #{cache['difficulty']}/#{cache['terrain']}/#{cache['size']}"
       if cache['favfactor']
@@ -897,7 +897,7 @@ class Output
         break if (commentcount >= @commentLimit)
         # strip images from log entries
         comment_text = icons2Text(comment['text'].to_s)
-        formatted_date = comment['date'].localtime.strftime("%Y-%m-%dT07:00:00")
+        formatted_date = comment['date'].getgm.strftime("%Y-%m-%dT%H:%M:%SZ")
         # we may actually have a valid logID, use that
         comment_id = cache['log_id'] || Zlib.crc32(comment_text + formatted_date)
         debug3 "Comment ID: #{comment_id} by #{comment['user']}: #{comment_text}"
@@ -930,7 +930,7 @@ class Output
     cache['comments'].each{ |comment|
       break if (commentcount >= @commentLimit)
       comment_text = icons2Text(comment['text'].to_s)
-      formatted_date = comment['date'].localtime.strftime("%Y-%m-%d")
+      formatted_date = comment['date'].getlocal.strftime("%Y-%m-%d")
       # unescape HTML in finder name
       comment_user = deemoji(comment['user'], false)
       begin
@@ -963,7 +963,7 @@ class Output
     commentcount = 0
     cache['comments'].each{ |comment|
       break if (commentcount >= @commentLimit)
-      formatted_date = comment['date'].localtime.strftime("%Y-%m-%d")
+      formatted_date = comment['date'].getlocal.strftime("%Y-%m-%d")
       entry = ''
       entry << "<hr noshade size=\"1\" width=\"150\" align=\"left\"/>\n"
       entry << "<h4><em>#{comment['type']}</em> by #{comment['user']} on #{formatted_date}</h4>\n"
@@ -1288,16 +1288,21 @@ class Output
       'guid'        => cache['guid'].to_s,
       'symbols'     => symbols,
       'id'          => cache['sname'],
-      'mdate'       => cache['mtime'].localtime.strftime("%Y-%m-%d"),
-      'cdate'       => cache['ctime'].localtime.strftime("%Y-%m-%d"),
-      'cdateshort'  => cache['ctime'].localtime.strftime("%y%m%d"),
-      'adate'       => cache['atime'].localtime.strftime("%Y-%m-%d"),
+      'ctime'       => cache['ctime'].getgm.strftime("%Y-%m-%dT%H:%M:%SZ"),
+      'ctime_hm'    => cache['ctime'].getgm.strftime("%Y-%m-%dT%H:%MZ"),
+      'cdate'       => cache['ctime'].getlocal.strftime("%Y-%m-%d"),
+      'cdateshort'  => cache['ctime'].getlocal.strftime("%y%m%d"),
+      'atime'       => cache['atime'].getgm.strftime("%Y-%m-%dT%H:%M:%SZ"),
+      'atime_hm'    => cache['atime'].getgm.strftime("%Y-%m-%dT%H:%MZ"),
+      'adate'       => cache['atime'].getlocal.strftime("%Y-%m-%d"),
+      'mtime'       => cache['mtime'].getgm.strftime("%Y-%m-%dT%H:%M:%SZ"),
+      'mtime_hm'    => cache['mtime'].getgm.strftime("%Y-%m-%dT%H:%MZ"),
+      'mdate'       => cache['mtime'].getlocal.strftime("%Y-%m-%d"),
       'size'        => (cache['size'] || 'empty').to_s.gsub(/ /, '_'),
       'type8'       => (cache['type'] || 'unknown').ljust(8),
       'favcount'    => (cache['favorites'] || 0).to_s,
       'foundcount'  => (cache['foundcount'] || '?').to_s,
       'favfactor'   => (cache['favfactor'] || 0.0).to_s,
-      'XMLDate'     => cache['ctime'].localtime.strftime("%Y-%m-%dT07:00:00"),
       'latdatapad5' => sprintf("%2.5f", cache['latdata'] || 0.0),
       'londatapad5' => sprintf("%2.5f", cache['londata'] || 0.0),
       'latdatapad6' => sprintf("%2.6f", cache['latdata'] || 0.0),

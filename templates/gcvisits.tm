@@ -7,7 +7,7 @@ template = {
     'mime'    => 'text/plain',
     'desc'    => 'Garmin geocache_visits (text)',
     'templatePre' => "",
-    'templateWP'  => "<%out.wid%>,<%out.adate%>T08:00Z,Found it,\"\"\n"
+    'templateWP'  => "<%out.wid%>,<%out.atime_hm%>,Found it,\"\"\n"
   },
 
   # geotoad -x gcvisits -o geocache_visits.txt -z --includeArchived -q user $USERNAME
@@ -26,7 +26,7 @@ template = {
     'mime'    => 'text/plain',
     'desc'    => 'Garmin your_geocache_visits (text)',
     'templatePre' => "",
-    'templateWP'  => "<%out.wid%>,<%out.mdate%>T08:00Z,Found it,\"\"\n"
+    'templateWP'  => "<%out.wid%>,<%out.mtime_hm%>,Found it,\"\"\n"
   },
 
   'yourgcvisits'  => {

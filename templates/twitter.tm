@@ -33,8 +33,8 @@ template = {
     'templateWP'  =>
       "coord.info/<%out.wid%>" +
       " maps.google.com/?q=" +
-      #"<%out.wid%>@" +
-      "<%out.latdatapad5%>,<%out.londatapad5%>" +
+        #"<%out.wid%>@" +
+        "<%out.latdatapad5%>,<%out.londatapad5%>" +
       " <%out.nuvi%>" +
       # only ASCII charset allowed
       " \"<%wpTextAscii.name%>\"" +

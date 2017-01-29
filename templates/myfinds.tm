@@ -23,11 +23,11 @@ template = {
       "<desc><%outEntity.title%></desc>\n" +
       "<author>GeoToad <%outEntity.version%></author>\n" +
       "<email>geotoad@googlegroups.com</email>\n" +
-      "<time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S")  + ".000Z</time>\n" +
+      "<time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S.000Z")  + "</time>\n" +
       "<keywords>cache, geocache, groundspeak, geotoad</keywords>\n",
     'templateWP'   =>
       "<wpt lat=\"<%out.latdatapad5%>\" lon=\"<%out.londatapad5%>\">\n" +
-      "  <time><%out.cdate%>T08:00:00Z</time>\n" +
+      "  <time><%out.ctime%></time>\n" +
       "  <name><%outEntity.id%></name>\n" +
       "  <desc><%wpEntity.name%> by <%wpEntity.creator%>, <%wp.fulltype%> (<%wp.difficulty%>/<%wp.terrain%>)</desc>\n" +
       "  <url>http://www.geocaching.com/seek/cache_details.aspx?guid=<%out.guid%></url>\n" +
@@ -52,7 +52,7 @@ template = {
       "  <groundspeak:encoded_hints>hint</groundspeak:encoded_hints>\n" +
       "  <groundspeak:logs>\n" +
       "    <groundspeak:log id=\"<%out.logID%>\">\n" +
-      "      <groundspeak:date><%out.adate%>T08:00:00Z</groundspeak:date>\n" +
+      "      <groundspeak:date><%out.atime%></groundspeak:date>\n" +
       "      <groundspeak:type>Found it</groundspeak:type>\n" +
       "      <groundspeak:finder id=\"666\"><%outEntity.username%></groundspeak:finder>\n" +
       "      <groundspeak:text encoded=\"False\"></groundspeak:text>\n" +
@@ -100,11 +100,11 @@ template = {
       "<desc><%outEntity.title%></desc>\n" +
       "<author>GeoToad <%outEntity.version%></author>\n" +
       "<email>geotoad@googlegroups.com</email>\n" +
-      "<time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S")  + ".000Z</time>\n" +
+      "<time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S.000Z")  + "</time>\n" +
       "<keywords>cache, geocache, groundspeak, geotoad</keywords>\n",
     'templateWP'   =>
       "<wpt lat=\"<%out.latdatapad6%>\" lon=\"<%out.londatapad6%>\">\n" +
-      "  <time><%out.cdate%>T08:00:00Z</time>\n" +
+      "  <time><%out.ctime%></time>\n" +
       "  <name><%outEntity.id%></name>\n" +
       "  <desc><%wpEntity.name%> by <%wpEntity.creator%>, <%wp.fulltype%> (<%wp.difficulty%>/<%wp.terrain%>)</desc>\n" +
       "  <url>http://www.geocaching.com/seek/cache_details.aspx?guid=<%out.guid%></url>\n" +
@@ -129,7 +129,7 @@ template = {
       "  <groundspeak:encoded_hints>hint</groundspeak:encoded_hints>\n" +
       "  <groundspeak:logs>\n" +
       "    <groundspeak:log id=\"<%out.logID%>\">\n" +
-      "      <groundspeak:date><%out.mdate%>T08:00:00Z</groundspeak:date>\n" +
+      "      <groundspeak:date><%out.mtime%></groundspeak:date>\n" +
       "      <groundspeak:type>Found it</groundspeak:type>\n" +
       "      <groundspeak:finder id=\"666\"><%outEntity.username%></groundspeak:finder>\n" +
       "      <groundspeak:text encoded=\"False\"></groundspeak:text>\n" +

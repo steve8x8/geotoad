@@ -27,7 +27,7 @@ template = {
       ">\n",
     'templateWP'   =>
       "<wpt lat=\"<%out.latdatapad6%>\" lon=\"<%out.londatapad6%>\">\n" +
-      "  <time><%out.XMLDate%></time>\n" +
+      "  <time><%out.ctime%></time>\n" +
       "  <name><%outEntity.id%></name>\n" +
       "  <desc><%wpEntity.name%></desc>\n" +
       "  <url><%wp.url%></url>\n" +

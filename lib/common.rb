@@ -278,6 +278,9 @@ module Common
    end
     if not timestamp and days_ago
       timestamp = Time.now - (days_ago * 3600 * 24)
+    else
+      # add 12 hours (day at noon)
+      timestamp += 12*60*60
     end
     debug "Timestamp parsed as #{timestamp}"
     return timestamp
@@ -289,7 +292,8 @@ module Common
       return nil
     end
     begin
-      return (Time.now - timestamp).to_i / 86400
+      # round time difference to full days
+      return (((Time.now - timestamp).to_i + 12*60*60) / (24*60*60))
     rescue TypeError
       displayWarning "Could not convert timestamp #{timestamp.inspect} to Time object."
       return nil
