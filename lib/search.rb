@@ -1083,6 +1083,7 @@ class SearchCache
         wid = $2
         cache['guid'] = guid
         cache['wid'] = wid
+        debug "found guid=#{guid} wid=#{wid}"
 
       when /<img.*?wpttypes\/(sm\/)?(\w+)\.[^>]*alt=\"(.*?)\"/
         debug "found gc ccode=#{$2} type=#{$3}"
