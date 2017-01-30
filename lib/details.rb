@@ -962,7 +962,10 @@ class CacheDetails
       debug2 "comment date: #{datestr}, icon: #{icon}, type: #{type}, user: #{user}"
       # strip "icon_" from old style image name
       icon.gsub!(/^icon_/, '')
-      date = Time.parse(datestr)
+      # parseDate cannot handle this
+      #date = parseDate(datestr)
+      # use Time.parse, add 12 hours
+      date = Time.parse(datestr) + (12 * 60 * 60)
       # "found it" or "attended"
       if (icon == 'smile' or icon == '2') or (icon == 'attended' or icon == '10')
         visitors << user.downcase
