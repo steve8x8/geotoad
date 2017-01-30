@@ -91,8 +91,8 @@ $(GTV).tar.gz: git
 	-rm  -f $(GTV)/tools/convert*.sh
 	-rm  -f $(GTV)/tools/build/makedist*.sh
 	-rm  -f $(GTV)/data/*.gz
-	# create PDF version of manual page
-	groff -Tps -mman $(GTV)/geotoad.1 | ps2pdf - $(GTV)/geotoad.pdf
+	# create PDF version of manual page, A4 paper size
+	groff -Tps -P-pa4 -mman $(GTV)/geotoad.1 | ps2pdf - $(GTV)/geotoad.pdf
 	# pack (with command file)
 	tar zcf $@ $(GTV)/
 	mv $(GTV) tgz
