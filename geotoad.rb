@@ -774,7 +774,8 @@ class GeoToad
       end
       name = temp
       message << (keepdata ? "" : "(del)")
-      progress.updateText(token, "[#{wid}]".ljust(9)+" \"#{name}\" (#{page.src.gsub(/(\w)\w*/){$1}}) #{message}")
+#      progress.updateText(token, "[#{wid}]".ljust(9)+" \"#{name}\" (#{page.src.gsub(/(\w)\w*/){$1}}) #{message}")
+      progress.updateText(token, "[#{wid}]".ljust(9)+" \"#{name}\" (#{page.src}) #{message}")
 
       if ! keepdata
         debug "Page for #{wid} \"#{wpFiltered[wid]['name']}\" failed to be parsed, invalidating cache."

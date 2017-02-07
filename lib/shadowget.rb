@@ -200,7 +200,8 @@ class ShadowFetch
       else
         debug "local cache is only #{age} (<= #{@localExpiry}) sec old, using local file."
         @data = fetchLocal(localfile)
-        @@src = 'local'
+#        @@src = 'local'
+        @@src = 'l'
         # short-circuit out of here!
         return @data
       end
@@ -222,13 +223,15 @@ class ShadowFetch
       end
     end
     if (@data)
-      @@src = 'remote'
+#      @@src = 'remote'
+      @@src = 'r'
       size = @data.length
     else
       if (File.readable?(localfile))
         debug "using local cache instead"
         @data = fetchLocal(localfile)
-        @@src = "local <offline>"
+#        @@src = "local <offline>"
+        @@src = "lo"
         return @data
       else
         @@src = nil
@@ -263,7 +266,8 @@ class ShadowFetch
             # we would lose information by overwriting, but have to concat
             dowrite = false
             @data = olddata + @data
-            @@src = 'local+remote'
+#            @@src = 'local+remote'
+            @@src = 'l+r'
           end #oldPMO
         end #oldcdpf
       end # newPMO
