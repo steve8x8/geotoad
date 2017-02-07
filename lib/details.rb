@@ -106,7 +106,7 @@ class CacheDetails
     guid = nil
     @pageURL = 'https://www.geocaching.com/seek/log.aspx?ID=' + logid.to_s + '&lcn=1'
     page = ShadowFetch.new(@pageURL)
-    page.localExpiry = 1 * 24 * 60 * 60
+    page.localExpiry = -1
     data = page.fetch
     if data =~ /The listing has been locked/m
       displayWarning "#{wid} logbook is locked, cannot map"

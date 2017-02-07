@@ -19,7 +19,7 @@ class ShadowFetch
 
   @@downloadErrors = 0
   @@remotePages = 0
-  @@minFileSize = 128 # was 6
+  @@minFileSize = 1024 # was 6
 
   # gets a URL, but stores it in a nice webcache
   def initialize (url)
@@ -194,6 +194,7 @@ class ShadowFetch
       if (age > @localExpiry)
         debug "local cache is #{age} (> #{@localExpiry}) sec old"
       elsif (File.size(localfile) <  @@minFileSize)
+        # this also takes care of failed JSON requests
         debug "local cache appears corrupt. removing.."
         invalidate
       else
@@ -244,7 +245,7 @@ class ShadowFetch
     # some magic to not overwrite a publicly viewable cdpf with PMO
     dowrite = false
     # protect against network failures
-    if @data and @data.length > @@minFileSize
+    if @data and @data.length >= @@minFileSize
       dowrite = true
       if @data =~ /be a Premium Member to view/
         # we got a PMO description
