@@ -3,9 +3,9 @@ require 'net/https'
 require 'fileutils'
 require 'uri'
 require 'cgi'
-require 'common'
-require 'messages'
-require 'auth'
+require 'lib/common'
+require 'lib/messages'
+require 'lib/auth'
 
 # Does a webget, but stores a local directory with cached results ###################
 class ShadowFetch

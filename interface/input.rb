@@ -1,11 +1,11 @@
 require 'pathname'
 $THISDIR = File.dirname(File.realpath(__FILE__))
-$LOAD_PATH << File.join($THISDIR, '..')
-$LOAD_PATH << File.join($THISDIR, '..', 'lib')
+#$LOAD_PATH << File.join($THISDIR, '..')
+#$LOAD_PATH << File.join($THISDIR, '..', 'lib')
 
-require 'country_state'
-require 'common'
-require 'messages'
+require 'lib/country_state'
+require 'lib/common'
+require 'lib/messages'
 
 class Input
 

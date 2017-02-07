@@ -1,9 +1,9 @@
 # A library for automatic location searches, using the Google Geocoding API v3
 # see documentation https://developers.google.com/maps/documentation/geocoding/
 
-require 'common'
+require 'lib/common'
 require 'cgi'
-require 'shadowget'
+require 'lib/shadowget'
 
 class GeoCode
 

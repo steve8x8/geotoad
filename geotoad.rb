@@ -7,7 +7,7 @@
 require 'pathname'
 $BASEDIR = File.dirname(File.realpath(__FILE__))
 $LOAD_PATH << $BASEDIR
-$LOAD_PATH << File.join($BASEDIR, 'lib')
+#$LOAD_PATH << File.join($BASEDIR, 'lib')
 
 Encoding.default_external = Encoding::UTF_8
 

@@ -1,6 +1,6 @@
 require 'cgi'
-require 'geocode'
-require 'shadowget'
+require 'lib/geocode'
+require 'lib/shadowget'
 require 'time'
 
 

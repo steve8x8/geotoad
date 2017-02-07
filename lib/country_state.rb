@@ -1,8 +1,8 @@
 # Get a list of countries / states for the geocaching form.
 
 require 'cgi'
-require 'geocode'
-require 'shadowget'
+require 'lib/geocode'
+require 'lib/shadowget'
 require 'time'
 
 class CountryState

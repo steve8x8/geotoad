@@ -4,11 +4,10 @@
  
  require 'pathname'
  $BASEDIR = File.dirname(File.realpath(__FILE__))
--$LOAD_PATH << $BASEDIR
--$LOAD_PATH << File.join($BASEDIR, 'lib')
 +# For Debian/Ubuntu, modules are below /usr/share/geotoad
+-$LOAD_PATH << $BASEDIR
 +#$LOAD_PATH << $BASEDIR
-+#$LOAD_PATH << File.join($BASEDIR, 'lib')
+ #$LOAD_PATH << File.join($BASEDIR, 'lib')
 +$LOAD_PATH << '/usr/share/geotoad'
  
  Encoding.default_external = Encoding::UTF_8
