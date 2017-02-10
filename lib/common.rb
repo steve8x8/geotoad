@@ -18,7 +18,7 @@ module Common
   def getPreferences()
     debug2 "getting preferences"
     page = ShadowFetch.new(@@prefs_url)
-    page.localExpiry = 3 * 60 * 60
+    page.localExpiry = 12 * $HOUR
     data = page.fetch
     prefs = Hash.new
     current_select_name = nil
@@ -85,7 +85,7 @@ module Common
       my_lat = nil
       my_lon = nil
       page = ShadowFetch.new(@@homel_url)
-      page.localExpiry = 7 * 24 * 60 * 60
+      page.localExpiry = 15 * $DAY
       data = page.fetch
       data.each_line{ |line|
         # var viewModel = [{"homeLocation":[51.9968514417669,-9.50660705566406], ...
@@ -106,7 +106,7 @@ module Common
 
   def getMyLogs()
     page = ShadowFetch.new(@@mylogs_url)
-    page.localExpiry = 12 * 60 * 60
+    page.localExpiry = 1 * $DAY
     data = page.fetch
     foundcount = 0
     logcount = 0
@@ -134,7 +134,7 @@ module Common
 
   def getMyTrks()
     page = ShadowFetch.new(@@mytrks_url)
-    page.localExpiry = 12 * 60 * 60
+    page.localExpiry = 1 * $DAY
     data = page.fetch
     logcount = 0
     # (like log count above)
@@ -277,11 +277,11 @@ module Common
       return nil
    end
     if not timestamp and days_ago
-      timestamp = Time.now - (days_ago * 24 * 60 * 60)
+      timestamp = Time.now - (days_ago * $DAY)
     else
       # add 12 hours (day at noon)
       # check: which time is used in found PQs?
-      timestamp += 12 * 60 * 60
+      timestamp += 12 * $HOUR
     end
     debug "Timestamp parsed as #{timestamp}"
     return timestamp
@@ -294,7 +294,7 @@ module Common
     end
     begin
       # round time difference to full days
-      return (((Time.now - timestamp).to_i + 12 * 60 * 60) / (24 * 60 * 60))
+      return (((Time.now - timestamp).to_i + 12 * $HOUR) / $DAY)
     rescue TypeError
       displayWarning "Could not convert timestamp #{timestamp.inspect} to Time object."
       return nil

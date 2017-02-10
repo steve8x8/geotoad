@@ -88,7 +88,7 @@ class CacheDetails
     guid = nil
     @pageURL = 'https://www.geocaching.com/seek/cache_details.aspx?wp=' + wid
     page = ShadowFetch.new(@pageURL)
-    page.localExpiry = 14 * 24 * 60 * 60
+    page.localExpiry = -1
     data = page.fetch
     if data =~ /cdpf\.aspx\?guid=([\w-]+)/m
       guid = $1
@@ -965,7 +965,7 @@ class CacheDetails
       # parseDate cannot handle this
       #date = parseDate(datestr)
       # use Time.parse, add 12 hours
-      date = Time.parse(datestr) + (12 * 60 * 60)
+      date = Time.parse(datestr) + (12 * $HOUR)
       # "found it" or "attended"
       if (icon == 'smile' or icon == '2') or (icon == 'attended' or icon == '10')
         visitors << user.downcase

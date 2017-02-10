@@ -48,7 +48,7 @@ class GeoCode
 
   def get_url(url)
     http = ShadowFetch.new(url)
-    http.localExpiry = 31 * 24 * 60 * 60
+    http.localExpiry = 30 * $DAY
     http.maxFailures = 5
     http.useCookie = false
     results = http.fetch

@@ -54,6 +54,10 @@ class GeoToad
   # conversion miles to kilometres
   $MILE2KM = 1.609344
 
+  # time conversions
+  $DAY  = 24 * 60 * 60
+  $HOUR = 60 * 60
+
   def initialize
     $debugMode    = 0
 #    output        = Output.new
@@ -205,7 +209,7 @@ class GeoToad
     wikiurl = "https://github.com/steve8x8/geotoad/wiki/CurrentVersion"
 
     version = ShadowFetch.new(checkurl)
-    version.localExpiry = 1 * 86400	# 1 day
+    version.localExpiry = 1 * $DAY
     version.maxFailures = 0
     version.fetch
 

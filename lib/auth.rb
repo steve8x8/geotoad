@@ -106,7 +106,7 @@ module Auth
     return nil if ! cookie
     @postVars = Hash.new
     page = ShadowFetch.new(@@login_url + 'default.aspx')
-    page.localExpiry = 1
+    page.localExpiry = -1
     debug3 "Checking validity of cookie #{hideCookie(cookie)}"
     data = page.fetch
     data.each_line do |line|
@@ -144,7 +144,7 @@ module Auth
     @postVars = Hash.new
     # get login form
     page = ShadowFetch.new(@@login_url + 'default.aspx')
-    page.localExpiry = 1
+    page.localExpiry = -1
     data = page.fetch
     data.each_line do |line|
       case line
@@ -167,7 +167,7 @@ module Auth
     end
     # fill in form, and submit
     page = ShadowFetch.new(@postURL)
-    page.localExpiry = 0
+    page.localExpiry = -1
     @postVars['ctl00$ContentBody$tbUsername'] = user
     @postVars['ctl00$ContentBody$tbPassword'] = password
     @postVars['ctl00$ContentBody$cbRememberMe'] = 'on'
