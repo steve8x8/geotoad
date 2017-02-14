@@ -3,16 +3,18 @@
 require 'time'
 require 'zlib'
 require 'lib/geodist'
+require 'lib/logbook'
 
 class CacheDetails
 
   attr_writer :useShadow, :cookie
-  attr_accessor :preserve
+  attr_accessor :preserve, :getlogbk
 
   include Common
   include Messages
   # only required for "moved PMO":
   include GeoDist
+  include LogBook
 
   # Use a printable template that shows the last 10 logs.
   @@baseURL = "https://www.geocaching.com/seek/cdpf.aspx"
@@ -21,6 +23,7 @@ class CacheDetails
     @waypointHash = data
     @useShadow = 1
     @preserve = nil
+    @getlogbk = nil
 
     @cachetypenum = {
 	'2'	=> 'Traditional Cache',
@@ -766,6 +769,19 @@ class CacheDetails
     if comments.length > 0 and cache['membersonly']
       # there are logs, cache was not PMO before
       cache['olddesc'] = true
+    end
+    # do we want to retrieve the geocache.logbook?
+    if @getlogbk
+      # even if there are old logs from pre-PMO times
+      if comments.length <= 0 or cache['membersonly']
+        # try to get log entries from logbook page instead
+        debug "Get logbook for guid #{cache['guid']}"
+        newcomments, logtimestamp = getLogBook(cache['guid'])
+        if newcomments.length > 0
+          comments = newcomments
+          cache['ltime'] = logtimestamp
+        end
+      end
     end
     if comments.length > 0
       cache['last_find_type'] = comments[0]['type']

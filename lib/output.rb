@@ -899,7 +899,7 @@ class Output
         comment_text = icons2Text(comment['text'].to_s)
         formatted_date = comment['date'].getgm.strftime("%Y-%m-%dT%H:%M:%SZ")
         # we may actually have a valid logID, use that
-        comment_id = cache['log_id'] || Zlib.crc32(comment_text + formatted_date)
+        comment_id = comment['log_id'] || Zlib.crc32(comment_text + formatted_date)
         debug3 "Comment ID: #{comment_id} by #{comment['user']}: #{comment_text}"
         entry = ''
         entry << "    <groundspeak:log id=\"#{comment_id}\">\n"

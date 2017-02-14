@@ -160,6 +160,7 @@ class GeoToad
     end
 
     @preserveCache     = @option['preserveCache']
+    @getLogbook        = @option['getLogbook']
 
     @formatTypes       = @option['format'] || 'gpx'
     # there is no "usemetric" cmdline option but the TUI may set it
@@ -307,6 +308,12 @@ class GeoToad
 
     displayInfo "Clearing log submission pages older than 3 days"
     findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "seek"), 3, "^log\\.aspx.*", true)
+
+    displayInfo "Clearing logbook query pages older than 3 days"
+    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "seek"), 3, "^cache_logbook\\.aspx.*", true)
+
+    displayInfo "Clearing logbook json files older than 7 days"
+    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "seek"), 7, "^cache_logbook\\.json.*", true)
 
     displayInfo "Clearing lat/lon query data older than 3 days"
     findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "seek"), 3, "^nearest\\.aspx.*_lat_.*_lng_.*", true)
@@ -716,6 +723,7 @@ class GeoToad
     progress = ProgressBar.new(0, @filtered.totalWaypoints, "")
     @detail = CacheDetails.new(wpFiltered)
     @detail.preserve = @preserveCache
+    @detail.getlogbk = @getLogbook
     token = 0
 
     wpFiltered.each_key{ |wid|

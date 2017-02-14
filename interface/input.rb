@@ -67,7 +67,7 @@ class Input
       [ "--attributeInclude",            "-a",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--attributeExclude",            "-A",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--travelBug",    "--trackable", "-b",    GetoptLong::NO_ARGUMENT ],
-# -B
+      [ "--getLogbook",  "--getLogBook", "-B",    GetoptLong::NO_ARGUMENT ],
       [ "--cacheType",         "--type", "-c",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--clearCache",     "--cleanup", "-C",    GetoptLong::NO_ARGUMENT ],
       [ "--difficultyMin",  "--minDiff", "-d",    GetoptLong::REQUIRED_ARGUMENT ],

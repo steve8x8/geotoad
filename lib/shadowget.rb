@@ -19,7 +19,8 @@ class ShadowFetch
 
   @@downloadErrors = 0
   @@remotePages = 0
-  @@minFileSize = 1024 # was 6
+  # json sizes: error ~300 bytes, "publish" only ~700, +FTF ~1300
+  @@minFileSize = 512
 
   # gets a URL, but stores it in a nice webcache
   def initialize (url)
@@ -70,18 +71,6 @@ class ShadowFetch
   def localFile=(name)
     debug "set local file: #{name}"
     @localFile = name
-  end
-
-  def filetimestamp()
-    timestamp = Time.now
-    if @cacheFile
-      begin
-        timestamp = File.mtime(@cacheFile)
-      rescue => e
-        # there's no cache file
-      end
-    end
-    return timestamp
   end
 
   def postVars=(vars)
@@ -153,8 +142,7 @@ class ShadowFetch
       debug "truncating #{localfile} -- too long"
       @cacheFile = @cacheFile.slice(0,250)
     end
-
-    debug "cachefile: #{@cacheFile}"
+    debug2 "cachefile: #{@cacheFile}"
     return @cacheFile
   end
 
@@ -170,6 +158,26 @@ class ShadowFetch
         File.truncate(filename, 0)
       end
     end
+  end
+
+  # timestamp of local cache file (if any)
+  def fileTimestamp
+    timestamp = Time.at($ZEROTIME)
+    localfile = cacheFile(@url)
+    if localfile and File.exist?(localfile)
+      begin
+        timestamp = File.mtime(localfile)
+      rescue => e
+        # there's no cache file
+        debug "mtime failed: #{e}"
+      end
+    end
+    return timestamp
+  end
+
+  # file age (if file exists)
+  def fileAge
+    return (Time.now - fileTimestamp()).to_i
   end
 
 
