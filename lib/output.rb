@@ -662,9 +662,9 @@ class Output
 
     # escape HTML entities (including <>)
     begin
-        text = CGI.escapeHTML(text)
+      text = CGI.escapeHTML(text)
     rescue => e
-        debug "escapeHTML throws exception #{e} - use original"
+      debug "escapeHTML throws exception #{e} - use original"
     end
 
     # CGI.escapeHTML will try to re-escape previously escaped entities.
@@ -707,9 +707,9 @@ class Output
     # issue 262: may fail with "emoji" entities like &#xD83D;&#xDE03;
     text = deemoji(str)
     begin
-        text = CGI.unescapeHTML(text)
+      text = CGI.unescapeHTML(text)
     rescue => e
-        debug "unescapeHTML throws exception #{e} - use original"
+      debug "unescapeHTML throws exception #{e} - use original"
     end
     # compactify whitespace
     text.gsub!(/[\r\n]+/m, "\n") # was ' '
@@ -789,7 +789,7 @@ class Output
       "_wink" => '[;)]',
     }
     # translate smileys, remove other HTML img tags
-    return str.gsub(/<img.*?icon_smile(.*?)\.gif[^>]*>/im){iconmap[$1.downcase].to_s} #.gsub(/<\/img[^>]*>/im){""}
+    return str.gsub(/<img.*?icon_smile(.*?)\.gif[^>]*>/im){iconmap[$1.downcase].to_s}
   end
 
   def generatePreOutput(title)
@@ -1051,7 +1051,6 @@ class Output
     lookup = nil
     wpname = nil
     wptype = nil
-    #urlwid = ""
     coord = nil
     wplat = 0
     wplon = 0

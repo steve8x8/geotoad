@@ -539,7 +539,6 @@ class SearchCache
 
     page_number, pages_total, parsed_total, post_vars, src = processPage({})
     progress = ProgressBar.new(1, pages_total, "Search results")
-#    progress.updateText(page_number, "page #{page_number} (#{src.gsub(/(\w)\w*/){$1}})")
     progress.updateText(page_number, "page #{page_number} (#{src})")
     if not parsed_total or parsed_total == 0
       displayMessage "No geocaches were found."
@@ -569,7 +568,6 @@ class SearchCache
       last_page_number = page_number
       page_number, total_pages, total_waypoints, post_vars, src = processPage(post_vars)
       debug2 "processPage returns #{page_number}/#{total_pages}"
-#      progress.updateText(page_number, "page #{page_number} (#{src.gsub(/(\w)\w*/){$1}})")
       progress.updateText(page_number, "page #{page_number} (#{src})")
 
       if page_number == last_page_number

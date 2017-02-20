@@ -112,6 +112,7 @@ module Auth
     data.each_line do |line|
       case line
       #  <h3><span id="ctl00_ContentBody_lbUsername">Has iniciado sesión como <strong>Ölscheich99</strong></span></h3>
+      # Note: the only occurrence of utf-8 characters is in the comment above
       when /You are (logged|signed) in as/
         debug "Found login confirmation!"
         return true

@@ -41,7 +41,9 @@ class GeoToad
   include Common
   include Messages
   include Auth
+
   $VERSION = GTVersion.version
+
   # with the new progressive slowdown, start with 1 second
   $SLEEP = 1.0
 
@@ -59,13 +61,11 @@ class GeoToad
   $HOUR = 60 * 60
 
   def initialize
+    # some actions postponed to "populate"
     $debugMode    = 0
-#    output        = Output.new
-#    $validFormats = output.formatList.sort
     @uin          = Input.new
     $CACHE_DIR    = findCacheDir()
     @configDir    = findConfigDir
-#    $mapping      = loadMapping()
     $membership   = nil # unknown before searching
   end
 
@@ -86,11 +86,11 @@ class GeoToad
 
   def getoptions
     if ARGV[0]
-      # command line arguments
+      # there are command line arguments
       @option = @uin.getopt
       $mode = 'CLI'
     else
-      # Then go into interactive.
+      # go into interactive.
       print "** Press Enter to start the Text User Interface: "
       $stdin.gets
       @option = @uin.interactive
@@ -289,8 +289,6 @@ class GeoToad
 
     displayInfo "Clearing account data older than 7 days"
     findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "account"), 7)
-    # obsolete again 2014-10-28
-    #findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "myaccount"), 7)
 
     displayInfo "Clearing login data older than 7 days"
     findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "login"), 7)
@@ -346,10 +344,6 @@ class GeoToad
     else
       displayWarning "Login failed!"
       displayWarning "Check network connection, username and password!"
-      #displayWarning "Note: Subsequent operations may fail. You've been warned."
-      #displayInfo    "You have 60 seconds to safely interrupt here."
-      #sleep 60
-      #displayWarning "Okay, as you wish. Don't complain if something breaks!"
       displayError   "Stopping here, for your own safety."
     end
     displayMessage "Querying user preferences"
@@ -393,7 +387,6 @@ class GeoToad
     end
 
     displayBar
-    #puts ""
     @queryArg.to_s.split($delimiters).each{ |queryArg0|
       # strip whitespace at beginning and end
       queryArg = queryArg0.gsub(/^\s+/, '').gsub(/\s+$/, '')
@@ -471,7 +464,6 @@ class GeoToad
     if (waypointsExtracted < @combinedWaypoints.length)
       displayWarning "Downloaded #{@combinedWaypoints.length} waypoints, but only #{waypointsExtracted} parsed!"
     end
-    #puts ""
     return waypointsExtracted
   end
 
@@ -505,7 +497,6 @@ class GeoToad
       if (user =~ /(.*)=(.*)/)
         username = $1
         filename = $2
-        #puts ""
         displayMessage "Read #{filename} for #{username}"
         counter = 0
         # read file (1st column)
@@ -545,7 +536,6 @@ class GeoToad
   # This step filters out all the geocaches by information
   # found from the searches.
   def preFetchFilter
-    #puts ""
     @filtered = Filter.new(@combinedWaypoints)
     debug "Filter running cycle 1, #{caches(@filtered.totalWaypoints)} left."
 
@@ -713,7 +703,6 @@ class GeoToad
   end
 
   def fetchGeocaches
-    #puts ""
     if $membership
       displayMessage "Fetching geocache pages as \"#{$membership}\""
     else
@@ -801,7 +790,6 @@ class GeoToad
   # In this stage, we actually have to download all the information on the caches in order to decide
   # whether or not they are keepers.
   def postFetchFilter
-    #puts ""
     @filtered= Filter.new(@detail.waypoints)
 
     # caches with warnings we choose not to include.
@@ -847,8 +835,6 @@ class GeoToad
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
     showRemoved(excludedFilterTotal, "Keyword")
 
-    ##if not $DTSFILTER
-    #-------------------
     beforeFilterTotal = @filtered.totalWaypoints
     if @option['difficultyMin']
       @appliedFilters['-d'] = { 'f' => "#{@option['difficultyMin']}", 't' => "difficulty min" }
@@ -876,8 +862,6 @@ class GeoToad
     end
     excludedFilterTotal = beforeFilterTotal - @filtered.totalWaypoints
     showRemoved(excludedFilterTotal, "D/T/Size")
-    #-------------------
-    ##end # not $DTSFILTER
 
     beforeFilterTotal = @filtered.totalWaypoints
     if @option['favFactorMin']
@@ -953,7 +937,6 @@ class GeoToad
 
   ## save the file #############################################
   def saveFile
-    #puts ""
     formatTypeCounter = 0
 
     # @appliedFilters: sort by option letter, ignore case
@@ -1003,7 +986,6 @@ class GeoToad
       end
     else
       outputFileBase = File.basename(filename)
-      # 
       outputDir = File.dirname(filename + 'x')
     end
     displayInfo message
@@ -1055,7 +1037,6 @@ class GeoToad
       else
         displayWarning "NOT saved #{outputFile}!"
       end
-      #puts ""
 
       formatTypeCounter += 1
     } # end format loop
@@ -1086,7 +1067,6 @@ $SSLVERIFYMODE = OpenSSL::SSL::VERIFY_PEER
 # better use RbConfig::CONFIG['host_os']?
 if ENV['SSL_CERT_FILE'] and File.readable?(ENV['SSL_CERT_FILE'])
   displayInfo "HTTPS will use SSL cert file #{ENV['SSL_CERT_FILE']}"
-  #$SSLVERIFYMODE = OpenSSL::SSL::VERIFY_PEER
 elsif RUBY_PLATFORM.downcase =~ /djgpp|(cyg|ms|bcc)win|mingw|wince|emx/
   displayWarning "HTTPS will not verify peer identity!"
   $SSLVERIFYMODE = OpenSSL::SSL::VERIFY_NONE

@@ -1,7 +1,5 @@
 require 'pathname'
 $THISDIR = File.dirname(File.realpath(__FILE__))
-#$LOAD_PATH << File.join($THISDIR, '..')
-#$LOAD_PATH << File.join($THISDIR, '..', 'lib')
 
 require 'lib/country_state'
 require 'lib/common'
@@ -645,12 +643,12 @@ class Input
             if (! File.directory?(@@optHash['outDir']))
               puts " ***  Although existing, this is no directory. Trouble ahead!"
               print "Press enter to continue: "
-              answer=$stdin.gets
+              answer = $stdin.gets
             end
             if (! File.writable?(@@optHash['outDir']))
               puts " ***  Although existing, this is not writable. Trouble ahead!"
               print "Press enter to continue: "
-              answer=$stdin.gets
+              answer = $stdin.gets
             end
           else
             answer = ask("This directory does not exist. Would you like me to create it?", 'n')
@@ -660,7 +658,7 @@ class Input
               rescue
                 puts " ***  Directory cannot be created. Trouble ahead!"
                 print "Press enter to continue: "
-                answer=$stdin.gets
+                answer = $stdin.gets
               end
             else
               puts "Fine, suit yourself."
@@ -673,7 +671,7 @@ class Input
         if (! @@optHash['queryArg']) || (@@optHash['queryArg'].size < 1)
           puts " ***  You cannot start till you specify what #{@@optHash['queryType']} data you would like to search with"
           print "Press enter to continue: "
-          answer=$stdin.gets
+          answer = $stdin.gets
         end
         # in case of country or state query, return numeric id only
         if (@@optHash['queryType'] == 'country' || @@optHash['queryType'] == 'state')

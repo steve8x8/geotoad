@@ -201,7 +201,6 @@ class Filter
   def ownerInclude(nick)
     debug2 "filtering by ownerInclude: #{nick}"
     @waypointHash.delete_if{ |wid, values|
-    #  @waypointHash[wid]['creator'].to_s !~ /#{nick}/i
       CGI.unescapeHTML(@waypointHash[wid]['creator'].to_s) !~ /#{nick}/i
     }
   end
