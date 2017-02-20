@@ -3,12 +3,15 @@
 require 'cgi'
 require 'lib/geocode'
 require 'lib/shadowget'
+require 'lib/country_state_list'
 require 'time'
 
 class CountryState
 
   include Common
   include Messages
+  # static CS list since dynamic query doesn't work anymore (issue 348)
+  include CountryStateList
 
   @@base_url = 'https://www.geocaching.com/seek/nearest.aspx'
 
@@ -50,7 +53,9 @@ class CountryState
   end
 
   def getCountryList()
-    return getCountryValues.map{ |y| "#{y[0]}=#{y[1]}" if y[0].to_i > 1 }.compact.sort.uniq
+    # doesn't work anymore
+    #return getCountryValues.map{ |y| "#{y[0]}=#{y[1]}" if y[0].to_i > 1 }.compact.sort.uniq
+    return $COUNTRIES.map{ |y| "#{y[0]}=#{y[1]}" if y[0].to_i > 1 }.compact.sort.uniq
   end
 
   def findMatchingCountry(try_country)
@@ -99,7 +104,10 @@ class CountryState
   end
 
   def getStatesList(country)
-    return getStatesValues(country).map{ |y| "#{y[0]}=#{CGI::unescapeHTML(y[1])}" if y[0].to_i > 1 }.compact.sort.uniq
+    # doesn't work anymore
+    #return getStatesValues(country).map{ |y| "#{y[0]}=#{CGI::unescapeHTML(y[1])}" if y[0].to_i > 1 }.compact.sort.uniq
+    c = country.to_i
+    return $STATES.map{ |y| "#{y[1]}=#{y[2]}" if ((c == 0) or (y[0].to_i == c)) }.compact.sort.uniq
   end
 
   def findMatchingState(try_state, country)

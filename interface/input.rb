@@ -829,14 +829,20 @@ class Input
       else
         # get from country's list
         try_country = try_state.to_s.split(/\//)[0]
-        if try_country.nil? or try_country.empty?
-          puts "** No country pattern. Use \"Country/State\""
+        if try_country.to_s.empty?
+          #puts "** No country pattern. Use \"[Country]/State\""
+          puts "** No country pattern, using \".\" to match all"
+          try_country = '.'
+        end
+        try_state = try_state.split(/\//)[1]
+        if try_state.to_s.empty?
+          puts "** No state pattern, using \".\" to match all"
+          try_state = '.'
+        end
+        if (try_country == '.')
+          puts "search all countries"
+          country = "0=anywhere"
         else
-          try_state = try_state.split(/\//)[1]
-          if try_state.nil? or try_state.empty?
-            puts "** No state pattern, using \".\" to match all"
-            try_state = '.'
-          end
           # match country from list
           countries = c.findMatchingCountry(try_country)
           if countries.length == 1
@@ -851,6 +857,7 @@ class Input
           else
             puts "** No country matches found. Try something else!"
           end
+        end
           if country
             puts "Searching in country #{country}"
             country = country.split(/=/)[0]
@@ -868,7 +875,7 @@ class Input
               puts "** No state matches found. Try something else!"
             end
           end
-        end
+        #end
       end
     end
     if state
