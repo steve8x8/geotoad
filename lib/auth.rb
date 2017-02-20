@@ -41,7 +41,7 @@ module Auth
 
   def saveCookie(cookie)
     # don't do anything without a cookie
-    return if ! cookie
+    return if not cookie
     debug3 "saveCookie: merge #{hideCookie(cookie)}"
     # get individual cookies
     cookie.split(/; */).map{ |f|
@@ -103,7 +103,7 @@ module Auth
   def checkLoginScreen(cookie, user)
     # if we have no cookie we aren't logged in
     debug2 "checkLoginScreen with #{hideCookie(cookie)}"
-    return nil if ! cookie
+    return nil if not cookie
     @postVars = Hash.new
     page = ShadowFetch.new(@@login_url + 'default.aspx')
     page.localExpiry = -1

@@ -668,7 +668,7 @@ class Input
         end
 
       when 's', 'q'
-        if (! @@optHash['queryArg']) || (@@optHash['queryArg'].size < 1)
+        if @@optHash['queryArg'].to_s.empty?
           puts " ***  You cannot start till you specify what #{@@optHash['queryType']} data you would like to search with"
           print "Press enter to continue: "
           answer = $stdin.gets
@@ -710,12 +710,12 @@ class Input
 
   def ask(string, default)
     answer = nil
-    while not answer or answer.length() == 0
+    while answer.to_s.empty?
       print string + ": "
       answer = $stdin.gets.chomp
       answer.gsub!(/ +$/, '')
 
-      if not answer or answer.length() == 0
+      if answer.to_s.empty?
         if default == 'NO_DEFAULT'
           puts "You must supply an answer, there is no default!"
         else

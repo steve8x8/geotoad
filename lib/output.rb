@@ -251,9 +251,8 @@ class Output
     tempname = name.dup
     tempname = makeText(tempname)
     tempname = utf8upcase(tempname[0..0]) + tempname[1..-1].to_s
-    if (tempname.length <= maxlength)
-      return tempname
-    end
+    return tempname if (tempname.length <= maxlength)
+
     tempname.gsub!(/cache/i, 'C')
     tempname.gsub!(/lost[\s-]*place/i, 'LP')
     tempname.gsub!(/bonus/i, 'BO')
@@ -276,7 +275,7 @@ class Output
     newwords = Array.new
     tempname.split(/ /).each{ |word|
       # skip "empty" words
-      next if (word.length < 1)
+      next if word.empty?
       # word.capitalize! would downcase everything else
       word = utf8upcase(word[0..0]) + word[1..-1].to_s
       newwords.push(word)
@@ -388,7 +387,7 @@ class Output
     snames = {}
     @wpHash.each_key{ |wid|
       cache = @wpHash[wid]
-      if (@waypointLength < 1)
+      if (@waypointLength <= 0)
         cache['sname'] = wid.dup
         next
       end
@@ -601,9 +600,7 @@ class Output
   end
 
   def deemoji(str, soft = true)
-    if not str or str.length == 0
-        return ""
-    end
+    return "" if str.to_s.empty?
     text = str.dup
     # pre-translate decimal into hex for large codepoints
     text.gsub!(/(\&#(\d+);)/) { ($2.to_i < 55296) ? $1 : ('&#x' + $2.to_i.to_s(16).upcase + ';') }
@@ -628,9 +625,7 @@ class Output
   end
 
   def makeXML(str, removeImages=true, removeLinks=true)
-    if not str or str.length == 0
-        return ""
-    end
+    return "" if str.to_s.empty?
     # issue 262: "emoji" seem to break GPSr devices
     text = deemoji(str, false)
 
@@ -1004,9 +999,7 @@ class Output
   # reduce HTML content (of waypoint table) to a minimum
   # suited for GPSr and parsing in toWptList()
   def reduceHtml(text)
-    if !text
-      return nil
-    end
+    return nil if not text
     # un-fix spaces
     new_text = text.gsub(/\s*\&nbsp;/, ' ')
     # remove images
@@ -1040,9 +1033,7 @@ class Output
 
   # convert waypoint "table light" into a sequence of <wpt> elements
   def toWptList(text, timestamp)
-    if !text
-      return nil
-    end
+    return nil if not text
     # <table><tr><td>...</table> -> <wpt>...</wpt>
     # replace line breaks by visible separator
     hidden = false

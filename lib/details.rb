@@ -127,7 +127,7 @@ class CacheDetails
     if (id =~ /^GC/)
       # If we can look up the guid, use it. It's not actually required, but
       # it behaves a lot more like a standard web browser on the gc.com website.
-      if ! @waypointHash[id]['guid']
+      if not @waypointHash[id]['guid']
         # there is no cdpf.aspx?wp=...
         guid = getMapping(id.to_s)
         debug2 "dictionary maps #{id.inspect} to #{guid.inspect}"
@@ -351,7 +351,7 @@ class CacheDetails
         end
         debug "wid = #{wid} name=#{name} creator=#{creator}"
         cache = @waypointHash[wid]
-        if ! cache.key?('visitors')
+        if not cache.key?('visitors')
           cache['visitors'] = []
         end
         if name and creator
@@ -390,7 +390,7 @@ class CacheDetails
         else
           displayWarning "Cache image code #{ccode} for #{full_type} - please report"
         end
-        if ! cache
+        if not cache
           displayWarning "Found waypoint type, but never saw cache title. Did geocaching.com change their layout again?"
         end
         debug "Found alternative name #{name.inspect}"

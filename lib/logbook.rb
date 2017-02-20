@@ -50,12 +50,8 @@ module LogBook
   def getLogBook(guid, logCount=10)
     debug2 "getLogBook(#{guid.inspect}, #{logCount})"
     comments = []
-    if guid.nil?
-      return [comments, Time.at($ZEROTIME)]
-    end
-    if logCount <= 0
-      return [comments, Time.now]
-    end
+    return [comments, Time.at($ZEROTIME)] if guid.nil?
+    return [comments, Time.now] if logCount <= 0
 
     # - try to read from json file (with fake URL)
     # - if that fails, we need a new token and a new json request
@@ -95,10 +91,9 @@ module LogBook
         end
       end
       debug "userToken is #{@@userToken.length} characters long."
-      if @@userToken.empty?
-        # we cannot get a userToken, it seems - return gracefully
-        return [comments, Time.now]
-      end
+      # we cannot get a userToken, it seems - return gracefully
+      return [comments, Time.now] if @@userToken.empty?
+
       # now retry the JSON part
       # $.getJSON("/seek/geocache.logbook", { tkn: userToken, idx: 1, num: 10, sp: false, sf: false, decrypt: false }
       # it is possible to request more than 10 logs here (in one go), adjust logCount option accordingly

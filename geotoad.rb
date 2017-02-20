@@ -139,7 +139,7 @@ class GeoToad
       exit
     end
 
-    if ! @option['clearCache'] && ! @option['myLogs'] && ! @option['myTrackables'] && ! @queryArg
+    if not @option['clearCache'] and not @option['myLogs'] and not @option['myTrackables'] and not @queryArg
       displayError "You forgot to specify a #{@queryType} search argument"
       @uin.usage
       exit
@@ -217,7 +217,7 @@ class GeoToad
     # version=a.bb.cc[*] in wiki page (* marks "supersedes all")
     if version.data =~ /version=(\d\.\d+[\.\d]+)(\*)?/
       latestVersion = $1
-      obsoleteOlder = ! $2.to_s.empty?
+      obsoleteOlder = (not $2.to_s.empty?)
 
       if comparableVersion(latestVersion) > comparableVersion($VERSION)
         displayBar
@@ -723,16 +723,14 @@ class GeoToad
       message = nil
 
       if status == 'login-required'
-        displayMessage "Cookie does not appear to be valid, logging in as #{@option['user']}"
-        @detail.cookie = login(@option['user'], @option['password'])
-        status = @detail.fetch(wid)
+        displayError   "Cookie suddenly does not appear to be valid anymore. No way to handle this."
       end
 
       message = ""
       warning = wpFiltered[wid]['warning']
       keepdata = true
       # status is hash; false/nil/empty or string if problem
-      if ! status #status.to_s.empty?
+      if not status
         message << "[W:\"#{warning}\"]"
         keepdata = false
       elsif status.class != Hash
@@ -778,7 +776,7 @@ class GeoToad
 #      progress.updateText(token, "[#{wid}]".ljust(9)+" \"#{name}\" (#{page.src.gsub(/(\w)\w*/){$1}}) #{message}")
       progress.updateText(token, "[#{wid}]".ljust(9)+" \"#{name}\" (#{page.src}) #{message}")
 
-      if ! keepdata
+      if not keepdata
         debug "Page for #{wid} \"#{wpFiltered[wid]['name']}\" failed to be parsed, invalidating cache."
         wpFiltered.delete(wid)
         page.invalidate()
@@ -959,7 +957,7 @@ class GeoToad
     # 'output' may be a directory, with or without trailing slash (should exist)
     # if there's nil or empty (no path at all), use current working directory
     # or the filename for the first output file, explicitly given
-    if ! @option['output'].to_s.empty?
+    if not @option['output'].to_s.empty?
       filename = @option['output'].dup
     else
       filename = Dir.pwd
@@ -994,7 +992,7 @@ class GeoToad
     @formatTypes.split($delimiters).each{ |formatType0|
       # does the formatType string contain a "="?
       formatType = formatType0.split(/=/)[0]
-      if ! $validFormats.include?(formatType)
+      if not $validFormats.include?(formatType)
         displayWarning "#{formatType} is not a valid supported format - skipping."
         next
       end
@@ -1126,7 +1124,7 @@ while true
   if options['queryArg'] || options['myLogs'] || options['myTrackables']
     count = cli.downloadGeocacheList()
   end
-  if count < 1
+  if count <= 0
     displayWarning "No valid query or no caches found in search, exiting early."
   else
     displayMessage "Your \"#{options['queryType']}\" query \"#{options['queryArg']}\" returned #{cli.caches(count)}."

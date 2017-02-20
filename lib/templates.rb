@@ -17,9 +17,7 @@ class Templates
     owntempdir = File.join(findConfigDir(), 'templates')
     [systempdir, owntempdir].each{ |dir|
       begin
-        if ! (File.directory?(dir) && FileTest.readable?(dir))
-          next
-        end
+        next if not (File.directory?(dir) && FileTest.readable?(dir))
         # now read all templates from there
         displayMessage "Templates: #{dir}"
         Dir.entries(dir).sort.each{ |fn|

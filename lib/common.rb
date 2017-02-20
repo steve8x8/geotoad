@@ -62,7 +62,7 @@ module Common
     if prefLanguage.to_s.empty?
       prefLanguage = prefs['ctl00$ContentBody$uxLanguagePreference']
     end
-    if ! dateFormat.to_s.empty?
+    if not dateFormat.to_s.empty?
       @@dateFormat = CGI.unescapeHTML(dateFormat)
     else
       debug2 "no date format set in preferences - this should never happen"
@@ -289,9 +289,7 @@ module Common
 
   def daysAgo(timestamp)
     # whatever may cause this...
-    if ! timestamp
-      return nil
-    end
+    return nil if not timestamp
     begin
       # round time difference to full days
       return (((Time.now - timestamp).to_i + 12 * $HOUR) / $DAY)

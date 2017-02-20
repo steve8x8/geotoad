@@ -186,11 +186,10 @@ class Filter
   def travelBug
     debug2 "filtering by travelBug"
     @waypointHash.delete_if{ |wid, values|
-      @waypointHash[wid]['travelbug'].to_s.length < 1
+      @waypointHash[wid]['travelbug'].to_s.empty?
     }
   end
 
-  # owner and user filtering still look very fragile :(
   def ownerExclude(nick)
     debug2 "filtering by ownerExclude: #{nick}"
     @waypointHash.delete_if{ |wid, values|
@@ -222,7 +221,7 @@ class Filter
     debug2 "filtering by User: #{nick}"
     @waypointHash.each_key{ |wid|
       debug3 "#{wid} visitors: #{@waypointHash[wid]['visitors']}"
-      if (! @waypointHash[wid]['visitors'].include?(nick))
+      if (not @waypointHash[wid]['visitors'].include?(nick))
         debug3 " - #{nick} has not visited #{@waypointHash[wid]['name']}, filtering."
         @waypointHash.delete(wid)
       end
@@ -280,11 +279,11 @@ class Filter
       # I wanted to use delete_if, but I had run into a segfault in ruby 1.6.7/8 [helixblue]
       if string =~ /^\!(.*)/
         real_string = $1
-        if (! (@waypointHash[wid]['name'] !~ /#{real_string}/i) )
+        if (@waypointHash[wid]['name'] =~ /#{real_string}/i)
           @waypointHash.delete(wid)
         end
       else
-        if (! (@waypointHash[wid]['name'] =~ /#{string}/i) )
+        if (@waypointHash[wid]['name'] !~ /#{string}/i)
           @waypointHash.delete(wid)
         end
       end
@@ -297,11 +296,11 @@ class Filter
       cache = @waypointHash[wid]
       if string =~ /^\!(.*)/
         real_string = $1
-        if cache['longdesc'] =~ /#{real_string}/i || cache['shortdesc'] =~ /#{real_string}/i
+        if (cache['longdesc'] =~ /#{real_string}/i) or (cache['shortdesc'] =~ /#{real_string}/i)
           @waypointHash.delete(wid)
         end
       else
-        if ! (cache['longdesc'] =~ /#{string}/i || cache['shortdesc'] =~ /#{string}/i)
+        if (cache['longdesc'] !~ /#{string}/i) and (cache['shortdesc'] !~ /#{string}/i)
           @waypointHash.delete(wid)
         end
       end

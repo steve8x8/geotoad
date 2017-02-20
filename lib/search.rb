@@ -254,7 +254,7 @@ class SearchCache
     debug3 "Getting results: #{@query_type} at #{@search_url}"
     if @query_type == 'wid'
       waypoint = getWidSearchResult(@search_url)
-      if ! waypoint
+      if not waypoint
         # no valid page found
         return {}
       end
@@ -269,7 +269,7 @@ class SearchCache
       return @waypoints
     elsif @query_type == 'guid'
       waypoint = getWidSearchResult(@search_url)
-      if ! waypoint
+      if not waypoint
         # no valid page found
         return {}
       end
@@ -540,7 +540,7 @@ class SearchCache
     page_number, pages_total, parsed_total, post_vars, src = processPage({})
     progress = ProgressBar.new(1, pages_total, "Search results")
     progress.updateText(page_number, "page #{page_number} (#{src})")
-    if not parsed_total or parsed_total == 0
+    if parsed_total.to_i <= 0
       displayMessage "No geocaches were found."
       return @waypoints
     end
@@ -576,7 +576,7 @@ class SearchCache
         displayError "We were on page #{last_page_number}, but just read #{page_number}. Parsing error?"
       end
       # limit search page count
-      if ! ((@max_pages == 0) or (page_number < @max_pages))
+      if ((@max_pages != 0) and (page_number >= @max_pages))
         debug "Reached page count limit #{page_number}/#{@max_pages}"
         page_number = pages_total
       end
