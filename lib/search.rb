@@ -791,11 +791,11 @@ class SearchCache
         dir = $1
         dist = $2.to_f
         unit = $3
-        if (unit =~ /km/)
-          dist = dist / $MILE2KM
-        elsif (unit =~ /ft/)
+        if unit =~ /km/
+          dist /= $MILE2KM
+        elsif unit =~ /ft/
           # 1 mile = 1760 yards = 5280 feet
-          dist = dist / 5280.0
+          dist /= 5280.0
         end
         cache['distance'] = dist
         cache['direction'] = dir

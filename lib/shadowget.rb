@@ -120,8 +120,8 @@ class ShadowFetch
     end
     # Windows users have a max of 255 characters I believe.
     if (@cacheFile.length > 250)
-      debug "truncating #{localfile} -- too long"
-      @cacheFile = @cacheFile.slice(0,250)
+      debug "truncating \"#{@cacheFile}\" -- too long"
+      @cacheFile = @cacheFile[0..219]
     end
     debug2 "cachefile: #{@cacheFile}"
     return @cacheFile
