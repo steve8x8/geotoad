@@ -7,22 +7,10 @@ class ProgressBar
     display
   end
 
-  def update(value)
-    @value = value
-  end
-
-  def setName(name)
-    @name = name
-  end
-
   def updateText(value, valueText)
     @value = value
     @valueText = valueText
     display
-  end
-
-  def setMax(value)
-    @max = max
   end
 
   def display

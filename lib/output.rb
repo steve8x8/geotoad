@@ -217,6 +217,9 @@ class Output
 
   ## the functions themselves ####################################################
 
+  attr_writer :waypointLength
+  attr_writer :commentLimit
+
   def initialize
     @output = Array.new
     @waypointLength = 0
@@ -435,16 +438,6 @@ class Output
       displayWarning "Attempted to select invalid format: #{format}"
       return nil
     end
-  end
-
-  def waypointLength=(length)
-    @waypointLength = length
-    debug "set waypoint id length to #{@waypointLength}"
-  end
-
-  def commentLimit=(logcount)
-    @commentLimit = logcount
-    debug "set log entry limit to #{@commentLimit}"
   end
 
   # exploratory functions.

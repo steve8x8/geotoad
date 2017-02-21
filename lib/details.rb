@@ -7,9 +7,6 @@ require 'lib/logbook'
 
 class CacheDetails
 
-  attr_writer :useShadow, :cookie
-  attr_accessor :preserve, :getlogbk
-
   include Common
   include Messages
   # only required for "moved PMO":
@@ -19,9 +16,11 @@ class CacheDetails
   # Use a printable template that shows the last 10 logs.
   @@baseURL = "https://www.geocaching.com/seek/cdpf.aspx"
 
+  attr_writer :preserve
+  attr_writer :getlogbk
+
   def initialize(data)
     @waypointHash = data
-    @useShadow = 1
     @preserve = nil
     @getlogbk = nil
 

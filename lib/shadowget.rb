@@ -10,9 +10,6 @@ require 'lib/auth'
 # Does a webget, but stores a local directory with cached results ###################
 class ShadowFetch
 
-  attr_reader :data, :waypoints, :cookie
-  attr_accessor :url
-
   include Common
   include Messages
   include Auth
@@ -21,6 +18,14 @@ class ShadowFetch
   @@remotePages = 0
   # json sizes: error ~300 bytes, "publish" only ~700, +FTF ~1300
   @@minFileSize = 512
+
+  attr_reader :data
+  attr_reader :cookie
+  attr_writer :maxFailures
+  attr_writer :localExpiry
+  attr_writer :useCookie
+  attr_writer :closingHTML
+  attr_writer :localFile
 
   # gets a URL, but stores it in a nice webcache
   def initialize (url)
@@ -39,26 +44,7 @@ class ShadowFetch
     @closingHTML = true
     @localFile   = nil
     @cacheFile   = nil
-  end
-
-  def maxFailures=(maxfail)
-    debug "setting max failures to #{maxfail}"
-    @maxFailures = maxfail
-  end
-
-  def localExpiry=(expiry)
-    debug "setting local expiry to #{expiry}"
-    @localExpiry = expiry
-  end
-
-  def useCookie=(usecookie)
-    debug "use cookie: #{usecookie}"
-    @useCookie = usecookie
-  end
-
-  def closingHTML=(check)
-    debug "check for closing HTML: #{check}"
-    @closingHTML = check
+    @src         = nil
   end
 
   def httpHeader=(keyvalue)
@@ -66,11 +52,6 @@ class ShadowFetch
     debug "set http header #{key}: #{value}"
     @httpHeaders[key] = value
     debug "http headers now: #{@httpHeaders.inspect}"
-  end
-
-  def localFile=(name)
-    debug "set local file: #{name}"
-    @localFile = name
   end
 
   def postVars=(vars)
@@ -193,7 +174,7 @@ class ShadowFetch
     end
     localparts = localfile.split(/[\\\/]/)
     localdir = File.join(localparts[0..-2])  # basename sucks in Windows.
-    debug3 "====+ Fetch URL: #{url}"
+    debug3 "====+ Fetch URL: #{@url}"
     debug3 "====+ Fetch File: #{localfile}"
     if @localExpiry >= 0
      # expired?

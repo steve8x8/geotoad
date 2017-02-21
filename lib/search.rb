@@ -9,7 +9,8 @@ class SearchCache
   include Common
   include Messages
 
-  attr_accessor :distance, :max_pages
+  attr_writer :distance
+  attr_writer :max_pages
 
   @@base_url = 'https://www.geocaching.com/seek/nearest.aspx'
 
