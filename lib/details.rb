@@ -68,10 +68,10 @@ class CacheDetails
     @@baseURL
   end
 
-  # this routine is for compatibility.
-  def fetchWid(id)
-    fetch(id)
-  end
+#  # this routine is for compatibility.
+#  def fetchWid(id)
+#    fetch(id)
+#  end
 
   def getRemoteMapping(wid)
     # get guid via GC code lookup
@@ -151,17 +151,15 @@ class CacheDetails
   end
 
   # fetches by geocaching.com sid
-  def fetch(id)
+  def fetchWid(id)
     if id.to_s.empty?
-      displayError "Empty fetch by id, quitting."
+      displayError "Empty fetch by wid, quitting."
       exit
     end
 
     url = fullURL(id)
     # no valid url (wid doesn't point to guid)
-    #return 'subscriber-only' if url.to_s.empty?
-    # force it even if there's nothing to tell
-    return nil if url.to_s.empty?
+    return [nil, nil] if url.to_s.empty?
     page = ShadowFetch.new(url)
 
     # Tune expiration for young caches:
@@ -192,6 +190,7 @@ class CacheDetails
       page.localExpiry = ttl
     end
     page.fetch()
+    src = page.src
     if page.data
       success = parseCache(page.data)
     else
@@ -207,7 +206,7 @@ class CacheDetails
       end
       debug message
     end
-    return success
+    return [success, src]
   end
 
 # calculate fav factor

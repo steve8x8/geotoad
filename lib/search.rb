@@ -592,18 +592,16 @@ class SearchCache
       page.postVars = post_vars.dup
     end
 
-    if (page.fetch)
-      return page.data
+    if page.fetch
+      return [page.data, page.src]
     else
-      return nil
+      return [nil, nil]
     end
   end
 
   def processPage(post_vars)
-    data = getPage(@search_url, post_vars)
+    data, src = getPage(@search_url, post_vars)
     page_number, pages_total, parsed_total, post_vars = parseSearchData(data)
-    cache_check = ShadowFetch.new(@url)
-    src = cache_check.src
     return [page_number, pages_total, parsed_total, post_vars, src]
   end
 

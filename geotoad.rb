@@ -716,10 +716,8 @@ class GeoToad
     token = 0
 
     wpFiltered.each_key{ |wid|
-      token = token + 1
-      detailURL = @detail.fullURL(wid)
-      page = ShadowFetch.new(detailURL)
-      status = @detail.fetch(wid)
+      token += 1
+      status, src = @detail.fetchWid(wid)
       message = nil
 
       if status == 'login-required'
@@ -773,8 +771,7 @@ class GeoToad
       end
       name = temp
       message << (keepdata ? "" : "(del)")
-#      progress.updateText(token, "[#{wid}]".ljust(9)+" \"#{name}\" (#{page.src.gsub(/(\w)\w*/){$1}}) #{message}")
-      progress.updateText(token, "[#{wid}]".ljust(9)+" \"#{name}\" (#{page.src}) #{message}")
+      progress.updateText(token, "[#{wid}]".ljust(9)+" \"#{name}\" (#{src}) #{message}")
 
       if not keepdata
         debug "Page for #{wid} \"#{wpFiltered[wid]['name']}\" failed to be parsed, invalidating cache."

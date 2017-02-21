@@ -74,8 +74,8 @@ class ShadowFetch
   end
 
   def src
-    debug2 "src of last get was #{@@src}"
-    @@src
+    debug2 "src of last get was #{@src}"
+    @src
   end
 
   # returns the cache filename that the URL will be stored as
@@ -164,7 +164,7 @@ class ShadowFetch
 
   # gets the file
   def fetch
-    @@src = nil
+    @src = nil
     time = Time.now
     # this is kind of an ugly hack
     if @localExpiry < 0
@@ -189,8 +189,7 @@ class ShadowFetch
       else
         debug "local cache is only #{age} (<= #{@localExpiry}) sec old, using local file."
         @data = fetchLocal(localfile)
-#        @@src = 'local'
-        @@src = 'l'
+        @src = 'l'	#'local'
         # short-circuit out of here!
         return @data
       end
@@ -212,18 +211,16 @@ class ShadowFetch
       end
     end
     if (@data)
-#      @@src = 'remote'
-      @@src = 'r'
+      @src = 'r'	#'remote'
       size = @data.length
     else
       if (File.readable?(localfile))
         debug "using local cache instead"
         @data = fetchLocal(localfile)
-#        @@src = "local <offline>"
-        @@src = "lo"
+        @src = "lo"	#'local <offline>'
         return @data
       else
-        @@src = nil
+        @src = nil
         debug "ERROR: #{@url} could not be fetched, even by cache"
         return nil
       end
@@ -255,8 +252,7 @@ class ShadowFetch
             # we would lose information by overwriting, but have to concat
             dowrite = false
             @data = olddata + @data
-#            @@src = 'local+remote'
-            @@src = 'l+r'
+            @src = 'l+r'	#'local+remote'
           end #oldPMO
         end #oldcdpf
       end # newPMO
