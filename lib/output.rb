@@ -350,7 +350,7 @@ class Output
       word = newwords[-index]
       next if (word.length < 8)
       # one by one
-      while (word.length > 1) && (i = word.rindex(/[aeiouäöü]/))
+      while (word.length > 1) and (i = word.rindex(/[aeiouäöü]/))
         word[i] = ''
         newwords[-index] = word
         break if (newwords.join.length <= maxlength)
@@ -365,7 +365,7 @@ class Output
     (1..wordcount).each{ |index|
       word = newwords[-index]
       # one by one
-      while (word.length > 1) && (i = word.rindex(/[aeiouäöü]/))
+      while (word.length > 1) and (i = word.rindex(/[aeiouäöü]/))
         word[i] = ''
         newwords[-index] = word
         break if (newwords.join.length <= maxlength)
@@ -430,7 +430,7 @@ class Output
 
   # select the format for the next set of output
   def formatType=(format)
-    if ($allFormats[format])
+    if $allFormats[format]
       @outputFormat = $allFormats[format].dup
       @outputType = format
       debug "format switched to #{format}"
@@ -533,7 +533,7 @@ class Output
       rescue
         displayWarning "Failed to unlink style file"
       end
-      if (! File.exists?(file))
+      if not File.exists?(file)
         displayWarning "Output filter did not create file #{file}. exec was: #{exec}"
       end
     else
@@ -796,19 +796,19 @@ class Output
       cache = @wpHash[wid]
       symbolHash[wid] = ''
 
-      if (cache['membersonly'])
+      if cache['membersonly']
         symbolHash[wid] << "<b><font color=\"#11CC11\">&#x24; </font></b>"
       end
 
-      if (cache['archived'])
+      if cache['archived']
         symbolHash[wid] << "<b><font color=\"#111111\">&Oslash; </font></b>"
       end
 
-      if (cache['disabled'] and not cache['archived'])
+      if cache['disabled'] and not cache['archived']
         symbolHash[wid] << "<b><font color=\"#CC1111\">&#x229e; </font></b>"
       end
 
-      if (cache['travelbug'])
+      if cache['travelbug']
         symbolHash[wid] << "<b><font color=\"#11CC11\">&euro;</font></b>"
       end
 
@@ -851,7 +851,7 @@ class Output
     # remark finder id strings can be empty, do not insert userIDs or fake numbers
 
     # info log entry
-    if (@commentLimit > 0) && cache['ltime']
+    if (@commentLimit > 0) and cache['ltime']
       debug3 "info log entry"
       entry = ''
       entry << "    <groundspeak:log id=\"-2\">\n"

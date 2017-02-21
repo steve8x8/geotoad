@@ -26,7 +26,7 @@ class CountryState
       page.postVars = post_vars.dup
     end
 
-    if (page.fetch)
+    if page.fetch
       return page.data
     else
       return nil

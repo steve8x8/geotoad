@@ -27,7 +27,7 @@ class Input
   end
 
   def saveConfig
-    if (! File.exists?(@configDir))
+    if not File.exists?(@configDir)
       File.makedirs(@configDir)
     end
 
@@ -194,13 +194,13 @@ class Input
     showMenu()
     saveConfig()
 
-    if (@@optHash['outDir'])
+    if @@optHash['outDir']
       @@optHash['output'] = @@optHash['outDir']
     else
       @@optHash['output'] = findOutputDir()
     end
 
-    if (@@optHash['outFile'])
+    if @@optHash['outFile']
       if @@optHash['output']
         @@optHash['output'] = File.join(@@optHash['output'], @@optHash['outFile'])
       else
@@ -613,7 +613,7 @@ class Input
           ext  = "[" + outputDetails.formatExtension(type) + "]"
           desc << outputDetails.formatDesc(type)
           req  = outputDetails.formatRequirement(type)
-          if (req)
+          if req
             desc << " {" + req + "}"
           end
           printf("%-13.13s%6.6s %s\n", type, ext, desc)
@@ -624,7 +624,7 @@ class Input
 
       when '25'
         @@optHash['outFile'] = ask('What filename would you like to output to? (press enter for automatic)', nil)
-        if (@@optHash['outFile'])
+        if @@optHash['outFile']
           @@optHash['outFile'].gsub!(/\\/,  '/')
         end
         # if (full) path: split into parts
@@ -640,12 +640,12 @@ class Input
           @@optHash['outDir'].gsub!(/\\/,  '/')
 
           if File.exists?(@@optHash['outDir'])
-            if (! File.directory?(@@optHash['outDir']))
+            if not File.directory?(@@optHash['outDir'])
               puts " ***  Although existing, this is no directory. Trouble ahead!"
               print "Press enter to continue: "
               answer = $stdin.gets
             end
-            if (! File.writable?(@@optHash['outDir']))
+            if not File.writable?(@@optHash['outDir'])
               puts " ***  Although existing, this is not writable. Trouble ahead!"
               print "Press enter to continue: "
               answer = $stdin.gets
@@ -674,7 +674,7 @@ class Input
           answer = $stdin.gets
         end
         # in case of country or state query, return numeric id only
-        if (@@optHash['queryType'] == 'country' || @@optHash['queryType'] == 'state')
+        if (@@optHash['queryType'] == 'country') or (@@optHash['queryType'] == 'state')
           @@optHash['queryArg'] = @@optHash['queryArg'].to_s.split(/=/)[0]
         end
 

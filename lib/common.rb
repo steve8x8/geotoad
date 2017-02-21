@@ -309,7 +309,7 @@ module Common
     # skip nils and empty strings
     dirs.compact.each do |dir|
       next if dir.empty?
-      if File.readable?(dir) && File.stat(dir).directory?
+      if File.readable?(dir) and File.stat(dir).directory?
         # write tests seem to be broken in Windows occasionally.
         if dir =~ /^\w:/ or File.stat(dir).writable?
           return dir
@@ -513,7 +513,7 @@ module Common
   def cacheID(wid)
     if wid
       wp = wid.gsub(/^GC/, '')
-      if wp.length <= 4 && wp < 'G000'
+      if (wp.length <= 4) and (wp < 'G000')
         # base 16 is easy
         return wp.to_i(16)
       else

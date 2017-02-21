@@ -182,7 +182,7 @@ module Auth
     saveCookie(cookie)
     cookie = loadCookie()
     # spring 2016 replaced userid with other cookies
-    if (cookie =~ /gspkauth=/) && (cookie =~ /(ASP.NET_SessionId=\w+)/)
+    if (cookie =~ /gspkauth=/) and (cookie =~ /(ASP.NET_SessionId=\w+)/)
       debug "Cookie #{hideCookie(cookie)} looks good, rock on."
       return cookie
     else

@@ -458,7 +458,7 @@ class CacheDetails
         nextline_coords = true
       end
       # changed 2014-01-14
-      if nextline_coords && (line =~ /([NS]) (\d+).*? ([\d\.]+) ([EW]) (\d+).*? ([\d\.]+)/)
+      if nextline_coords and (line =~ /([NS]) (\d+).*? ([\d\.]+) ([EW]) (\d+).*? ([\d\.]+)/)
         cache['latwritten'] = $1 + ' ' + $2 + '° ' + $3
         cache['lonwritten'] = $4 + ' ' + $5 + '° ' + $6
         cache['latdata'] = ($2.to_f + $3.to_f / 60) * ($1 == 'S' ? -1 : 1)
@@ -473,7 +473,7 @@ class CacheDetails
         warning = $1
         warning.gsub!(/<.*?>/, '')
         debug "got a warning: #{warning}"
-        if (wid)
+        if wid
           if warning =~ /has been archived/
             if cache['archived'].nil?
               debug "last resort setting cache to archived"

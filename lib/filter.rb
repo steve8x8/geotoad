@@ -209,7 +209,7 @@ class Filter
     debug2 "filtering by notUser: #{nick}"
     @waypointHash.each_key{ |wid|
       debug3 "#{wid} visitors: #{@waypointHash[wid]['visitors']}"
-      if (@waypointHash[wid]['visitors'].include?(nick))
+      if @waypointHash[wid]['visitors'].include?(nick)
         debug3 " - #{nick} has visited #{wid} #{@waypointHash[wid]['name']}, filtering."
         @waypointHash.delete(wid)
       end
@@ -221,7 +221,7 @@ class Filter
     debug2 "filtering by User: #{nick}"
     @waypointHash.each_key{ |wid|
       debug3 "#{wid} visitors: #{@waypointHash[wid]['visitors']}"
-      if (not @waypointHash[wid]['visitors'].include?(nick))
+      if not @waypointHash[wid]['visitors'].include?(nick)
         debug3 " - #{nick} has not visited #{@waypointHash[wid]['name']}, filtering."
         @waypointHash.delete(wid)
       end
@@ -321,7 +321,7 @@ class Filter
 
   # add a visitor to a cache. Used by the userlookup feeder.
   def addVisitor(wid, visitor)
-    if (@waypointHash[wid] && visitor)
+    if (@waypointHash[wid] and visitor)
       debug3 "Added visitor to #{wid}: #{visitor}"
       @waypointHash[wid]['visitors'] << visitor.downcase
     else

@@ -67,7 +67,7 @@ module GeoDist
 
   # given two lat/lon points, compute the distance between the two points using the haversine formula
   def haversine_miles(lat1, lon1, lat2=nil, lon2=nil)
-    if lat2.nil? || lon2.nil?
+    if lat2.nil? or lon2.nil?
       raise ArgumentError
     end
 
@@ -109,7 +109,7 @@ module GeoDist
 
   def geoDistDir(lat1, lon1, lat2, lon2)
     # no home location given (cover nil case)
-    if lat1.to_f==0.0 and lon1.to_f==0.0
+    if (lat1.to_f == 0.0) and (lon1.to_f == 0.0)
       return [nil, nil]
     end
     # target location doesn't exist (nil)

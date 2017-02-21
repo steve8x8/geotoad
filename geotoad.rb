@@ -103,8 +103,8 @@ class GeoToad
     end
 
     # enable synchronous output if selected by user
-    if (@option['unbufferedOutput'])
-      if (! $stdout.sync)
+    if @option['unbufferedOutput']
+      if not $stdout.sync
         $stdout.flush
         $stdout.sync = true
         puts "(***) Switched to unbuffered output"
@@ -145,17 +145,17 @@ class GeoToad
       exit
     end
 
-    if (! @option['user']) || (! @option['password'])
+    if (not @option['user']) or (not @option['password'])
       debug "No user/password option given, loading from config."
       (@option['user'], @option['password']) = @uin.loadUserAndPasswordFromConfig()
-      if (! @option['user']) || (! @option['password'])
+      if (not @option['user']) or (not @option['password'])
         displayError "You must specify a username and password!"
         exit
       end
     end
 
     # switch -X to disable early DTS filtering
-    if (@option['disableEarlyFilter'])
+    if @option['disableEarlyFilter']
       $DTSFILTER = false
     end
 
@@ -339,7 +339,7 @@ class GeoToad
     displayMessage "Logging in as #{@option['user']}"
     @cookie = login(@option['user'], @option['password'])
     debug "Login returned cookie #{hideCookie(@cookie).inspect}"
-    if (@cookie) && (@cookie =~ /gspkauth=/) && (@cookie =~ /(ASP.NET_SessionId=\w+)/)
+    if @cookie and (@cookie =~ /gspkauth=/) and (@cookie =~ /(ASP.NET_SessionId=\w+)/)
       displayMessage "Login successful"
     else
       displayWarning "Login failed!"
@@ -436,7 +436,7 @@ class GeoToad
 
       # this is kind of late, but we did our best 
       # we had to set txfilter and notyetfound before because setType creates the search URL
-      if (! search.setType(@queryType, queryArg))
+      if not search.setType(@queryType, queryArg)
         displayWarning "Search \"#{@queryType}\" for \"#{queryArg}\" unknown."
         displayWarning "Check for special characters or try a \"coord\" search instead."
         sleep 10
@@ -482,12 +482,12 @@ class GeoToad
     # with our discovery.
 
     userLookups = Array.new
-    if @option['userExclude'] and not @option['userExclude'].empty?
+    if not @option['userExclude'].to_s.empty?
       @appliedFilters['-E'] = { 'f' => "#{@option['userExclude']}", 't' => "not done by" }
       userLookups = @option['userExclude'].split($delimiters)
     end
 
-    if @option['userInclude'] and not @option['userInclude'].empty?
+    if not @option['userInclude'].to_s.empty?
       @appliedFilters['-e'] = { 'f' => "#{@option['userInclude']}", 't' => "done by" }
       userLookups = userLookups + @option['userInclude'].split($delimiters)
     end
@@ -653,13 +653,13 @@ class GeoToad
     showRemoved(excludedFilterTotal, "Trackable")
 
     beforeFilterTotal = @filtered.totalWaypoints
-    if (@option['ownerExclude'])
+    if @option['ownerExclude']
       @appliedFilters['-I'] = { 'f' => "#{@option['ownerExclude']}", 't' => "not owned by" }
       @option['ownerExclude'].split($delimiters).each{ |owner|
         @filtered.ownerExclude(owner)
       }
     end
-    if (@option['ownerInclude'])
+    if @option['ownerInclude']
       @appliedFilters['-i'] = { 'f' => "#{@option['ownerInclude']}", 't' => "owned by" }
       @option['ownerInclude'].split($delimiters).each{ |owner|
         @filtered.ownerInclude(owner)
@@ -669,13 +669,13 @@ class GeoToad
     showRemoved(excludedFilterTotal, "Owner")
 
     beforeFilterTotal = @filtered.totalWaypoints
-    if (@option['userExclude'])
+    if @option['userExclude']
       @appliedFilters['-E'] = { 'f' => "#{@option['userExclude']}", 't' => "not done by" }
       @option['userExclude'].split($delimiters).each{ |user|
         @filtered.userExclude(user)
       }
     end
-    if (@option['userInclude'])
+    if @option['userInclude']
       @appliedFilters['-e'] = { 'f' => "#{@option['userInclude']}", 't' => "done by" }
       @option['userInclude'].split($delimiters).each{ |user|
         @filtered.userInclude(user)
@@ -750,16 +750,16 @@ class GeoToad
           keepdata = false
         end
       else
-        if (wpFiltered[wid]['membersonly'])
+        if wpFiltered[wid]['membersonly']
           message << "[PMO]"
-        elsif (warning)
+        elsif warning
           message << "[W:\"#{warning}\"]"
         end
       end
       # archived/disabled
-      if (wpFiltered[wid]['archived'])
+      if wpFiltered[wid]['archived']
         message << "[%]"
-      elsif (wpFiltered[wid]['disabled'])
+      elsif wpFiltered[wid]['disabled']
         message << "[?]"
       end
       name = wpFiltered[wid]['name']
@@ -873,13 +873,13 @@ class GeoToad
     # We filter for users again. While this may be a bit obsessive, this is in case
     # our local cache is not valid.
     beforeFilterTotal = @filtered.totalWaypoints
-    if (@option['userExclude'])
+    if @option['userExclude']
       @appliedFilters['-E'] = { 'f' => "#{@option['userExclude']}", 't' => "not done by" }
       @option['userExclude'].split($delimiters).each{ |user|
         @filtered.userExclude(user)
       }
     end
-    if (@option['userInclude'])
+    if @option['userInclude']
       @appliedFilters['-e'] = { 'f' => "#{@option['userInclude']}", 't' => "done by" }
       @option['userInclude'].split($delimiters).each{ |user|
         @filtered.userInclude(user)
@@ -889,13 +889,13 @@ class GeoToad
     showRemoved(excludedFilterTotal, "User")
 
     beforeFilterTotal = @filtered.totalWaypoints
-    if (@option['attributeExclude'])
+    if @option['attributeExclude']
       @appliedFilters['-A'] = { 'f' => "#{@option['attributeExclude']}", 't' => "attr no" }
       @option['attributeExclude'].split($delimiters).each{ |attribute|
         @filtered.attributeExclude(attribute)
       }
     end
-    if (@option['attributeInclude'])
+    if @option['attributeInclude']
       @appliedFilters['-a'] = { 'f' => "#{@option['attributeExclude']}", 't' => "attr yes" }
       @option['attributeInclude'].split($delimiters).each{ |attribute|
         @filtered.attributeInclude(attribute)
@@ -905,19 +905,19 @@ class GeoToad
     showRemoved(excludedFilterTotal, "Attribute")
 
     beforeFilterTotal = @filtered.totalWaypoints
-    if (@option['minLongitude'])
+    if @option['minLongitude']
       @appliedFilters['--minLon'] = { 'f' => "#{@option['minLongitude']}", 't' => "West" }
       @filtered.longMin(@option['minLongitude'])
     end
-    if (@option['maxLongitude'])
+    if @option['maxLongitude']
       @appliedFilters['--maxLon'] = { 'f' => "#{@option['maxLongitude']}", 't' => "East" }
       @filtered.longMax(@option['maxLongitude'])
     end
-    if (@option['minLatitude'])
+    if @option['minLatitude']
       @appliedFilters['--minLat'] = { 'f' => "#{@option['minLatitude']}", 't' => "South" }
       @filtered.latMin(@option['minLatitude'])
     end
-    if (@option['maxLatitude'])
+    if @option['maxLatitude']
       @appliedFilters['--maxLat'] = { 'f' => "#{@option['maxLatitude']}", 't' => "North" }
       @filtered.latMax(@option['maxLatitude'])
     end
@@ -997,10 +997,10 @@ class GeoToad
       displayInfo "Format:   #{output.formatDesc(formatType)} (#{formatType})"
       output.input(@filtered.waypoints)
       output.formatType = formatType
-      if (@option['waypointLength'])
+      if @option['waypointLength']
         output.waypointLength=@option['waypointLength'].to_i
       end
-      if (@option['logCount'])
+      if @option['logCount']
         output.commentLimit=@option['logCount'].to_i
       end
       # keep filename if first run and not automatic
@@ -1009,7 +1009,7 @@ class GeoToad
         outputFileBase.gsub!(/\.[^\.]*$/, '')
       end
       # append suffix if automatic or subsequent runs
-      if (not @option['output']) || (formatTypeCounter > 0)
+      if (not @option['output']) or (formatTypeCounter > 0)
         outputFileExt = output.formatExtension(formatType)
         # override default extension?
         if formatType0 =~ /=/
@@ -1118,7 +1118,7 @@ while true
   end
 
   count = 0
-  if options['queryArg'] || options['myLogs'] || options['myTrackables']
+  if options['queryArg'] or options['myLogs'] or options['myTrackables']
     count = cli.downloadGeocacheList()
   end
   if count <= 0
