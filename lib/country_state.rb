@@ -107,7 +107,7 @@ class CountryState
     # doesn't work anymore
     #return getStatesValues(country).map{ |y| "#{y[0]}=#{CGI::unescapeHTML(y[1])}" if y[0].to_i > 1 }.compact.sort.uniq
     c = country.to_i
-    return $STATES.map{ |y| "#{y[1]}=#{y[2]}" if ((c == 0) or (y[0].to_i == c)) }.compact.sort.uniq
+    return $STATES.map{ |y| "#{y[0]}=#{y[1]} (#{y[3]})" if ((c == 0) or (y[2].to_i == c)) }.compact.sort.uniq
   end
 
   def findMatchingState(try_state, country)
