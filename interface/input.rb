@@ -820,7 +820,7 @@ class Input
     state = nil
     c = CountryState.new()
     while not state
-      try_state = ask("Which state do you want to search for (id, or country/state pattern)?", nil)
+      try_state = ask("Which state do you want to search for (id, or [country]/[state] pattern)?", nil)
       # numerical value? state 1 doesn't exist
       if try_state.to_i > 1
         state = try_state.to_i
@@ -828,8 +828,7 @@ class Input
         # get from country's list
         try_country = try_state.to_s.split(/\//)[0]
         if try_country.to_s.empty?
-          #puts "** No country pattern. Use \"[Country]/State\""
-          puts "** No country pattern, using \".\" to match all"
+          puts "** No country pattern, trying to match all"
           try_country = '.'
         end
         try_state = try_state.split(/\//)[1]
@@ -838,8 +837,7 @@ class Input
           try_state = '.'
         end
         if (try_country == '.')
-          puts "search all countries"
-          country = "0=anywhere"
+          country = "1=(Unknown)"
         else
           # match country from list
           countries = c.findMatchingCountry(try_country)

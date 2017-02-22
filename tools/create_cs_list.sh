@@ -7,6 +7,7 @@ cd `dirname $0`
 trap "/bin/rm -f /tmp/$$.{c,s}; exit" 0 1 2 3 6 9 15
 
 {
+printf "# country list last updated: `stat -c %y ../data/country.list | cut -c1-10`\n"
 printf "\$COUNTRIES = [\n"
 cat ../data/country.list \
 | awk '
@@ -20,6 +21,7 @@ printf "]\n\n"
 > /tmp/$$.c
 
 {
+printf "#   state list last updated: `stat -c %y ../data/state.list | cut -c1-10`\n"
 printf "\$STATES = [\n"
 cat ../data/state.list \
 | sed -e 's~\(.*\) \[\(.*\)\]$~\2=\1~'\

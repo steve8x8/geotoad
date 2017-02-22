@@ -10,8 +10,12 @@ class CountryState
 
   include Common
   include Messages
-  # static CS list since dynamic query doesn't work anymore (issue 348)
   include CountryStateList
+
+  # developer switch: [20170222]
+  # false = use table (to fix issue 348, allow for all-country state search)
+  # true  = fetch c and s lists from GC (old style, pre-issue 348)
+  @@fetch_cs = false
 
   @@base_url = 'https://www.geocaching.com/seek/nearest.aspx'
 
@@ -34,12 +38,12 @@ class CountryState
   end
 
   def getCountriesPage()
-    post_vars, options = parseSearchPage(@@base_url, nil)
+    post_vars, options = parseSearchPage(@@base_url + "?country_id=2", nil)
     option, key = findOptionAndValue(options, "By Country")
     debug2 "Changing #{option} from #{post_vars[option]} to #{key}"
     post_vars[option] = key
 
-    post_vars, options = parseSearchPage(@@base_url, post_vars)
+    post_vars, options = parseSearchPage(@@base_url + "?country_id=2", post_vars)
     return [post_vars, options]
   end
 
@@ -53,9 +57,11 @@ class CountryState
   end
 
   def getCountryList()
-    # doesn't work anymore
-    #return getCountryValues.map{ |y| "#{y[0]}=#{y[1]}" if y[0].to_i > 1 }.compact.sort.uniq
-    return $COUNTRIES.map{ |y| "#{y[0]}=#{y[1]}" if y[0].to_i > 1 }.compact.sort.uniq
+    if @@fetch_cs
+      return getCountryValues.map{ |y| "#{y[0]}=#{y[1]}" if y[0].to_i > 1 }.compact.sort.uniq
+    else
+      return $COUNTRIES.map{ |y| "#{y[0]}=#{y[1]}" if y[0].to_i > 1 }.compact.sort.uniq
+    end
   end
 
   def findMatchingCountry(try_country)
@@ -90,7 +96,7 @@ class CountryState
       return nil
     end
 
-    post_vars, options = parseSearchPage(@@base_url, post_vars)
+    post_vars, options = parseSearchPage(@@base_url + "?country_id=#{found_country}&as=0&children=y", post_vars)
     return [post_vars, options]
   end
 
@@ -104,10 +110,14 @@ class CountryState
   end
 
   def getStatesList(country)
-    # doesn't work anymore
-    #return getStatesValues(country).map{ |y| "#{y[0]}=#{CGI::unescapeHTML(y[1])}" if y[0].to_i > 1 }.compact.sort.uniq
     c = country.to_i
-    return $STATES.map{ |y| "#{y[0]}=#{y[1]} (#{y[3]})" if ((c == 0) or (y[2].to_i == c)) }.compact.sort.uniq
+    if @@fetch_cs
+      # cannot search all countries
+      return [] if (c < 2)
+      return getStatesValues(country).map{ |y| "#{y[0]}=#{y[1]}" if y[0].to_i > 1 }.compact.sort.uniq
+    else
+      return $STATES.map{ |y| "#{y[0]}=#{y[1]} (#{y[3]})" if ((c < 2) or (y[2].to_i == c)) }.compact.sort.uniq
+    end
   end
 
   def findMatchingState(try_state, country)
