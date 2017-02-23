@@ -258,14 +258,16 @@ class GeoToad
     debug "findRemoveFiles() age=#{age}, pattern=#{pattern}, writable=#{writable.inspect}"
     filelist = Array.new
     begin # catch filesystem problems
-      Find.find(where){ |file|
-        # never touch directories
-        next if not File.file?(file)
-        next if (age * 86400) > (Time.now - File.mtime(file)).to_i
-        next if not regexp.match(File.basename(file))
-        next if writable and not File.writable?(file)
-        filelist.push file
-      }
+      if File.exists?(where) and File.stat(where).directory?
+        Find.find(where){ |file|
+          # never touch directories
+          next if not File.file?(file)
+          next if (age * 86400) > (Time.now - File.mtime(file)).to_i
+          next if not regexp.match(File.basename(file))
+          next if writable and not File.writable?(file)
+          filelist.push file
+        }
+      end
     rescue => error
       displayWarning "Cannot parse #{where}: #{error}"
       return

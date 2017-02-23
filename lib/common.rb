@@ -311,7 +311,7 @@ module Common
       next if dir.empty?
       if File.readable?(dir) and File.stat(dir).directory?
         # write tests seem to be broken in Windows occasionally.
-        if dir =~ /^\w:/ or File.stat(dir).writable?
+        if dir =~ /^\w:/ or File.writable?(dir)
           return dir
         end
       end
