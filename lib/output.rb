@@ -219,6 +219,7 @@ class Output
 
   attr_writer :waypointLength
   attr_writer :commentLimit
+  attr_writer :conditionWP
 
   def initialize
     @output = Array.new
@@ -227,6 +228,7 @@ class Output
     # initialize templates
     Templates.new if $allFormats.empty?
     @commentLimit = 10
+    @conditionWP = nil
   end
 
   def input(data)
@@ -1397,14 +1399,18 @@ class Output
       @outVars['htmllogs'] = createHTMLCommentLogs(cache)
       # make output conditional
       willOutput = true
-      if @outputFormat['conditionWP']
-        conditionWP = @outputFormat['conditionWP']
+      if @outputFormat['conditionWP'] or @conditionWP
+        condition1 = @outputFormat['conditionWP'] || true
+        condition2 = @conditionWP || true
+        conditionWP = "( (#{condition1}) and (#{condition2}) )"
         debug "WP condition #{conditionWP.inspect}"
         condition = replaceVariables(conditionWP, wid)
+        debug "gives condition #{condition.inspect}"
         begin
           willOutput = eval(condition)
+          debug "result #{willOutput.inspect}"
         rescue => e
-          displayWarning "Problem with output condition \"#{condition}\":\n\t#{e}"
+          displayWarning "Problem with output condition \"#{condition}\":\n\t#{e}, assuming false"
           willOutput = false
         end
         debug "WP condition for #{wid}: #{willOutput.inspect}"

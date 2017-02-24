@@ -163,6 +163,8 @@ class GeoToad
     @getLogbook        = @option['getLogbook']
 
     @formatTypes       = @option['format'] || 'gpx'
+    # experimental: runtime output filtering
+    @conditionWP       = @option['conditionWP']
     # there is no "usemetric" cmdline option but the TUI may set it
     @useMetric         = @option['usemetric']
     # distanceMax from command line can contain the unit
@@ -996,6 +998,7 @@ class GeoToad
         next
       end
       output = Output.new
+      output.conditionWP = @conditionWP
       displayInfo "Format:   #{output.formatDesc(formatType)} (#{formatType})"
       output.input(@filtered.waypoints)
       output.formatType = formatType

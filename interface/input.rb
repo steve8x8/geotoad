@@ -116,6 +116,7 @@ class Input
       [ "--preserveCache",  "--keepOld", "-Z",    GetoptLong::NO_ARGUMENT ],
 # -[0-9]
     # no short option available
+      [ "--conditionWP",                          GetoptLong::REQUIRED_ARGUMENT ],
       [ "--includeArchived", "--gone",            GetoptLong::NO_ARGUMENT ],
       [ "--minLongitude", "--longMin",            GetoptLong::REQUIRED_ARGUMENT ],
       [ "--maxLongitude", "--longMax",            GetoptLong::REQUIRED_ARGUMENT ],
