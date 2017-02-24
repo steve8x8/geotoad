@@ -459,7 +459,7 @@ class GeoToad
     waypointsExtracted = 0
     @combinedWaypoints.each_key{ |wp|
       debug2 "pre-filter: #{wp}"
-      waypointsExtracted = waypointsExtracted + 1
+      waypointsExtracted += 1
     }
 
     debug "waypoints extracted: #{waypointsExtracted}, combined: #{@combinedWaypoints.length}"
@@ -491,7 +491,7 @@ class GeoToad
 
     if not @option['userInclude'].to_s.empty?
       @appliedFilters['-e'] = { 'f' => "#{@option['userInclude']}", 't' => "done by" }
-      userLookups = userLookups + @option['userInclude'].split($delimiters)
+      userLookups << @option['userInclude'].split($delimiters)
     end
 
     userLookups.each{ |user|
@@ -508,7 +508,7 @@ class GeoToad
             wid = $1
             debug2 "Add #{wid} for #{username}"
             @filtered.addVisitor(wid, username)
-            counter = counter + 1
+            counter += 1
           end
           }
           displayInfo "Total of #{counter} WIDs read"
@@ -1017,7 +1017,7 @@ class GeoToad
         if formatType0 =~ /=/
           outputFileExt = formatType0.split(/=/)[1]
         end
-        outputFileBase = outputFileBase + "." + outputFileExt
+        outputFileBase << "." + outputFileExt
       end
       outputFile = File.join(outputDir, outputFileBase)
       # Lets not mix and match DOS and UNIX /'s, we'll just make everyone like us!
@@ -1116,7 +1116,7 @@ while true
 
     displayBar
 
-    loopcount = loopcount + 1
+    loopcount += 1
   end
 
   count = 0

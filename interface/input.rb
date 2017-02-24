@@ -226,13 +226,13 @@ class Input
     @@optHash.keys.sort.each{ |option|
       if ! @@optHash[option].to_s.empty? and ! hidden_opts.include?(option)
         if @@optHash[option] == 'X'
-          cmdline = cmdline + " --#{option}"
+          cmdline << " --#{option}"
         elsif not @@optHash[option].to_s.empty?
           # Omit the quotes if the argument is 'simple'
           if @@optHash[option].to_s =~ /^[\w\.:]+$/
-            cmdline = cmdline + " --#{option}=#{@@optHash[option]}"
+            cmdline << " --#{option}=#{@@optHash[option]}"
           else
-            cmdline = cmdline + " --#{option}=\'#{@@optHash[option]}\'"
+            cmdline << " --#{option}=\'#{@@optHash[option]}\'"
           end
         end
         # in the metric case, we must append "km" to the distance
@@ -246,9 +246,9 @@ class Input
       cmdline << " --"
     end
     if @@optHash['queryArg'].to_s =~ /^[\w\.:]+$/
-      cmdline = cmdline + " " + @@optHash['queryArg'].to_s
+      cmdline << " " + @@optHash['queryArg'].to_s
     else
-      cmdline = cmdline + " \'" + @@optHash['queryArg'].to_s + '\''
+      cmdline << " \'" + @@optHash['queryArg'].to_s + '\''
     end
     displayMessage "To use this query in the future, type:"
     displayMessage cmdline
@@ -473,8 +473,8 @@ class Input
             print coordset.to_s + ": "
             coord = $stdin.gets.chomp
             if coord != 'q'
-              query = query + coord + '|'
-              coordset = coordset + 1
+              query << coord + '|'
+              coordset += 1
             end
           end
 
@@ -493,8 +493,8 @@ class Input
             print keyset.to_s + ": "
             key = $stdin.gets.chomp
             if key != 'q'
-              query = query + key + '|'
-              keyset = keyset + 1
+              query << key + '|'
+              keyset += 1
             end
           end
 
@@ -609,9 +609,8 @@ class Input
         puts "List of Output Formats [Extension] {Requirement}: "
         $validFormats = outputDetails.formatList.sort
         $validFormats.each{ |type|
-          desc = ""
           ext  = "[" + outputDetails.formatExtension(type) + "]"
-          desc << outputDetails.formatDesc(type)
+          desc = outputDetails.formatDesc(type)
           req  = outputDetails.formatRequirement(type)
           if req
             desc << " {" + req + "}"

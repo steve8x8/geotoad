@@ -763,7 +763,7 @@ class CacheDetails
 
     # Parse the additional waypoints table. Needs additional work for non-HTML templates.
     comments, last_find_date, visitors = parseComments(data, cache['creator'])
-    cache['visitors'] = cache['visitors'] + visitors
+    cache['visitors'] << visitors
     if comments.length > 0 and cache['membersonly']
       # there are logs, cache was not PMO before
       cache['olddesc'] = true

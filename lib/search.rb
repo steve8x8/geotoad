@@ -92,7 +92,7 @@ class SearchCache
   def txfilter=(cacheType)
     # may return nil if not found
     @txfilter = @cachetypetx[cacheType]
-    @txfilter = @txfilter + '&children=y' if (@txfilter and (@txfilter !~ /children=/))
+    @txfilter << '&children=y' if (@txfilter and (@txfilter !~ /children=/))
     debug "Setting txfilter to \"#{cacheType}\", now #{@txfilter.inspect}"
   end
 
@@ -180,15 +180,15 @@ class SearchCache
     end
 
     if @txfilter
-        @search_url = @search_url + '&tx=' + @txfilter
+        @search_url << '&tx=' + @txfilter
     end
 
     if @notyetfound
-        @search_url = @search_url + '&f=1'
+        @search_url << '&f=1'
     end
 
     if supports_distance and @distance
-        @search_url = @search_url + '&dist=' + @distance.to_s
+        @search_url << '&dist=' + @distance.to_s
     end
 
     debug @search_url

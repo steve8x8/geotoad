@@ -79,16 +79,17 @@ class ShadowFetch
   end
 
   # returns the cache filename that the URL will be stored as
-  def cacheFile(url)
+  def cacheFile(orig_url)
+    url = orig_url.dup
     if (@postVars)
-      postdata=''
+      postdata = ''
       @postVars.each_key{ |key|
-        postdata = postdata + "#{key}=#{@postVars[key]}"
+        postdata << "#{key}=#{@postVars[key]}"
       }
 
       # we used to just keep the postdata in the filename, but DOS has
       # a 255 character limit on filenames. Lets hash it instead.
-      url = url + "-P=" + Digest::MD5.hexdigest(postdata)
+      url << "-P=" + Digest::MD5.hexdigest(postdata)
       debug3 "added post vars to url: #{url}"
     end
 
@@ -294,7 +295,7 @@ class ShadowFetch
 
 
   def fetchRemote
-    @@remotePages = @@remotePages + 1
+    @@remotePages += 1
     randomizedSleep(@@remotePages)
     @httpHeaders['Referer'] = @url
     data = fetchURL(@url).to_s

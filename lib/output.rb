@@ -1117,8 +1117,7 @@ class Output
             # Garmin Oregon shows only <desc>, not <cmt>, and limits to 48 chars
             # GSAK waypoints carry more info, c:geo can also handle locationless
             # return all info we may need, strip later
-            wptlist = wptlist +
-              "<wpt" +
+            wptlist << "<wpt" +
                 ((wplat and wplon) ? " lat=\"#{wplat}\" lon=\"#{wplon}\"" : "") +
                 ">\n" +
               "  <name>#{prefix}XXXWIDXXX</name>\n" +
