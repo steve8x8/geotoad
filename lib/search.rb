@@ -289,7 +289,7 @@ class SearchCache
   end
 
   def getWidSearchResult(url)
-    data = getPage(url, {})
+    data, src = getPage(url, {})
     if not data
       displayError "No data to be analyzed! Check network connection!"
     end
