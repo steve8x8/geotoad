@@ -10,7 +10,7 @@ module LogBook
   include Common
 
   # Retrieve log entries from Geocache Logbook page
-  # idea by daniel.k.acher, January 2017
+  # idea by daniel.k.ache, January 2017
   # converted from JS jQuery to HTTP GET request
 
   @@logbook_url  = 'https://www.geocaching.com/seek/cache_logbook.aspx'
