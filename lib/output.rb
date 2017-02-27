@@ -560,13 +560,17 @@ class Output
         value = @outVars[var].to_s
       # convert to XML, with some special (online-able) effects for c:geo
       elsif (type == "wpEntity" or type == "wpXML")
-        value = makeXML(@wpHash[wid][var].to_s)
+        value = makeXML(@wpHash[wid][var].to_s) # modify=true, remove=true
       elsif (type == "wpEntityCgeo" or type == "wpCGEO")
-        value = makeXML(@wpHash[wid][var].to_s, removeImages=false, removeLinks=false)
+        value = makeXML(@wpHash[wid][var].to_s, modify=true, remove=false)
+      elsif (type == "wpEntityNone" or type == "wpXML0")
+        value = makeXML(@wpHash[wid][var].to_s, modify=false, remove=false)
       elsif (type == "outEntity" or type == "outXML")
-        value = makeXML(@outVars[var].to_s)
+        value = makeXML(@outVars[var].to_s) # modify=true, remove=true
       elsif (type == "outEntityCgeo" or type == "outCGEO")
-        value = makeXML(@outVars[var].to_s, removeImages=false, removeLinks=false)
+        value = makeXML(@outVars[var].to_s, modify=true, remove=false)
+      elsif (type == "outEntityNone" or type == "outXML0")
+        value = makeXML(@outVars[var].to_s, modify=false, remove=false)
       # convert to text
       elsif (type == "wpText")
         value = makeText(@wpHash[wid][var].to_s)
@@ -619,27 +623,29 @@ class Output
     return text
   end
 
-  def makeXML(str, removeImages=true, removeLinks=true)
+  def makeXML(str, modify=true, remove=true)
     return "" if str.to_s.empty?
     # issue 262: "emoji" seem to break GPSr devices
     text = deemoji(str, false)
-
-    # remove/tweak links, images
-    if removeLinks
-      # text-only link representation
-      text.gsub!(/<a\s.*?href=\s*[\'\"]https?:\/\/(.*?)[\'\"].*?>(.*?)<\/a.*?>/im){"[= #{$1} #{$2} =]"}
-    else
-      # clickable link
-      text.gsub!(/(<a\s.*?href=\s*[\'\"]https?:\/\/(.*?)[\'\"].*?>)(.*?)(<\/a.*?>)/im){"#{$1}[= #{$2} =] #{$3} #{$4}"}
-    end
     # remove smileys
     text = icons2Text(text.dup)
-    if removeImages
-      # text-only image representation
-      text.gsub!(/<img\s.*?src=\s*[\'\"]https?:\/\/(.*?)[\'\"].*?>/im){"[* #{$1} *]"}
-    else
-      # replace image reference by clickable link to avoid bandwidth consumption
-      text.gsub!(/<img\s.*?src=\s*[\'\"](https?:\/\/(.*?)[\'\"].*?)>/im){"<a href=\"#{$1}\">[* #{$2} *]</a>"}
+
+    if modify
+      # remove/tweak links, images
+      if remove
+        # text-only link representation
+        text.gsub!(/<a\s.*?href=\s*[\'\"]https?:\/\/(.*?)[\'\"].*?>(.*?)<\/a.*?>/im){"[= #{$1} #{$2} =]"}
+      else
+        # clickable link
+        text.gsub!(/(<a\s.*?href=\s*[\'\"]https?:\/\/(.*?)[\'\"].*?>)(.*?)(<\/a.*?>)/im){"#{$1}[= #{$2} =] #{$3} #{$4}"}
+      end
+      if remove
+        # text-only image representation
+        text.gsub!(/<img\s.*?src=\s*[\'\"]https?:\/\/(.*?)[\'\"].*?>/im){"[* #{$1} *]"}
+      else
+        # replace image reference by clickable link to avoid bandwidth consumption
+        text.gsub!(/<img\s.*?src=\s*[\'\"](https?:\/\/(.*?))[\'\"].*?>/im){"<a href=\"#{$1}\">[* #{$2} *]</a>"}
+      end
     end
 
     # fonts are not represented properly on most devices
