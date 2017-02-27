@@ -74,14 +74,16 @@ class CacheDetails
 #  end
 
   def getRemoteMapping(wid)
-    # get guid via GC code lookup
-    guid = getRemoteMapping1(wid)
-    if guid
-      return guid
-    end
+    # get guid from gallery RSS
+    guid = getRemoteMapping3(wid)
+    return guid if guid
     # get guid from cache_details page
+    guid = getRemoteMapping1(wid)
+    return guid if guid
+    # get guid from log entry page
     guid = getRemoteMapping2(wid)
-    return guid
+    return guid if guid
+    return nil
   end
 
   def getRemoteMapping1(wid)
@@ -119,6 +121,25 @@ class CacheDetails
       return guid
     end
     debug "Could not map(2) #{wid} to GUID"
+    return nil
+  end
+
+  def getRemoteMapping3(wid)
+    debug "Get GUID from gallery for #{wid}"
+    # extract mapping from cache_details page
+    guid = nil
+    @pageURL = 'https://www.geocaching.com/datastore/rss_galleryimages.ashx?id=' + cacheID(wid).to_s
+    page = ShadowFetch.new(@pageURL)
+    page.localExpiry = -1
+    page.useCookie = false
+    page.closingHTML = false
+    data = page.fetch
+    if data =~ /cache_details\.aspx\?guid=([0-9a-f-]{36})/m
+      guid = $1
+      debug2 "Found GUID: #{guid}"
+      return guid
+    end
+    debug "Could not map(3) #{wid} to GUID"
     return nil
   end
 
