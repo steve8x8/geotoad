@@ -321,7 +321,7 @@ class SearchCache
       # wherigo cartridge link
       # http://www.wherigo.com/cartridge/details.aspx?CGUID=...
       # http://www.wherigo.com/cartridge/download.aspx?CGUID=...
-      when /(www\.wherigo\.com\/cartridge\/\w+.aspx\?CGUID=([0-9a-f-]+))/
+      when /(www\.wherigo\.com\/cartridge\/\w+.aspx\?CGUID=([0-9a-f-]{36}))/
         debug "Wherigo cartridge at #{$1}"
         # do not overwrite with later ones
         if not cartridge
@@ -399,12 +399,12 @@ class SearchCache
         wid = $1
         debug "Found PMO WID: #{wid}"
       # <form ... action="../seek/cache_pmo.aspx?wp=GC4V7ZH&amp;title=froehliche-weihnachten&amp;guid=2718079c-9da2-4962-8618-37ca1820bde8" id="aspnetForm">
-      when /cache_pmo.aspx\?wp=(GC\w+).amp;(.*guid=([0-9a-f-]+))?/
+      when /cache_pmo.aspx\?wp=(GC\w+).amp;(.*guid=([0-9a-f-]{36}))?/
         wid = $1
         guid = $3
         debug "Found PMO WID: #{wid.inspect} GUID: #{guid.inspect}"
       # attention: the following also matches links in comments, avoid overwriting
-      when /cache_\w+.aspx\?wp=(GC\w+).amp;(.*guid=([0-9a-f-]+))?/
+      when /cache_\w+.aspx\?wp=(GC\w+).amp;(.*guid=([0-9a-f-]{36}))?/
         if not wid
           wid = $1
           guid = $3
@@ -460,7 +460,7 @@ class SearchCache
       cdays = daysAgo(ctime)
     end
     # one match is enough!
-    if data =~ /cdpf\.aspx\?guid=([\w-]+)/m
+    if data =~ /cdpf\.aspx\?guid=([0-9a-f-]{36})/m
       guid = $1
       debug "Found GUID: #{guid}"
     end
@@ -817,7 +817,7 @@ class SearchCache
       # <a href="/seek/cache_details.aspx?guid=ecfd0038-8e51-4ac8-a073-1aebe7c10cbc" class="lnk">
       # ...<img src="http://www.geocaching.com/images/wpttypes/sm/3.gif" alt="Multi-cache" title="Multi-cache" /></a>
       # ... <a href="/seek/cache_details.aspx?guid=ecfd0038-8e51-4ac8-a073-1aebe7c10cbc" class="lnk  Strike"><span>Besinnungsweg</span></a>
-      when /(<img.*?wpttypes\/(\w+)\.[^>]*alt=\"(.*?)\".*)?cache_details.aspx\?guid=([0-9a-f-]*)([^>]*)><span>\s*(.*?)\s*<\/span><\/a>/
+      when /(<img.*?wpttypes\/(\w+)\.[^>]*alt=\"(.*?)\".*)?cache_details.aspx\?guid=([0-9a-f-]{36})([^>]*)><span>\s*(.*?)\s*<\/span><\/a>/
         debug "found cd ccode=#{$2} type=#{$3} guid=#{$4} name=#{$6}"
         ccode = $2
         full_type = $3
@@ -1077,7 +1077,7 @@ class SearchCache
      else # != 'bookmark'
 
       case line
-      when /guid=([0-9a-f-]*).>(GC\w+)</
+      when /guid=([0-9a-f-]{36}).>(GC\w+)</
         guid = $1
         wid = $2
         cache['guid'] = guid

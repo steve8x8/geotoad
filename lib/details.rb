@@ -92,7 +92,7 @@ class CacheDetails
     page = ShadowFetch.new(@pageURL)
     page.localExpiry = -1
     data = page.fetch
-    if data =~ /cdpf\.aspx\?guid=([\w-]+)/m
+    if data =~ /cdpf\.aspx\?guid=([0-9a-f-]{36})/m
       guid = $1
       debug2 "Found GUID: #{guid}"
       return guid
@@ -113,7 +113,7 @@ class CacheDetails
     if data =~ /The listing has been locked/m
       displayWarning "#{wid} logbook is locked, cannot map"
     end
-    if data =~ /cache_details\.aspx\?guid=([\w-]+)/m
+    if data =~ /cache_details\.aspx\?guid=([0-9a-f-]{36})/m
       guid = $1
       debug2 "Found GUID: #{guid}"
       return guid
@@ -534,7 +534,7 @@ class CacheDetails
       # wherigo cartridge link
       # http://www.wherigo.com/cartridge/details.aspx?CGUID=...
       # http://www.wherigo.com/cartridge/download.aspx?CGUID=...
-      if line =~ /(www\.wherigo\.com\/cartridge\/\w+.aspx\?CGUID=([0-9a-f-]+))/
+      if line =~ /(www\.wherigo\.com\/cartridge\/\w+.aspx\?CGUID=([0-9a-f-]{36}))/
         debug "Wherigo cartridge at #{$1}"
         # do not overwrite with later ones
         if not cache['cartridge']
