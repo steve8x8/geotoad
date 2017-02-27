@@ -42,8 +42,8 @@ template = {
       "  <groundspeak:type><%wp.fulltype%></groundspeak:type>\n" +
       "  <groundspeak:container><%wp.size%></groundspeak:container>\n" +
       "  <groundspeak:attributes>\n" +
-      "<%out.xmlAttrs%>" +
-      "  </groundspeak:attributes>\n" +
+       "<%out.xmlAttrs%>" +
+       "  </groundspeak:attributes>\n" +
       "  <groundspeak:difficulty><%wp.difficulty%></groundspeak:difficulty>\n" +
       "  <groundspeak:terrain><%wp.terrain%></groundspeak:terrain>\n" +
       "  <groundspeak:country><%wpEntity.country%></groundspeak:country>\n" +
@@ -51,14 +51,16 @@ template = {
       "  <groundspeak:short_description html=\"True\">" +
        "<%out.premiumOnly%><%outEntity.warnArchiv%><%outEntity.warnAvail%>&lt;br /&gt;" +
        "<%outEntity.txtAttrs%>&lt;br /&gt;" +
-       "<%wpEntity.shortdesc%></groundspeak:short_description>\n" +
+       "<%wpEntity.shortdesc%>" +
+       "</groundspeak:short_description>\n" +
       "  <groundspeak:long_description html=\"True\">" +
        "<%outEntity.shortWpts%>" +
-       "<%wpEntity.longdesc%></groundspeak:long_description>\n" +
+       "<%wpEntity.longdesc%>" +
+       "</groundspeak:long_description>\n" +
       "  <groundspeak:encoded_hints><%outEntity.hintdecrypt%></groundspeak:encoded_hints>\n" +
       "  <groundspeak:logs>\n" +
-      "<%out.gpxlogs%>" +
-      "  </groundspeak:logs>\n" +
+       "<%out.gpxlogs%>" +
+       "  </groundspeak:logs>\n" +
       "  <groundspeak:travelbugs><%out.xmlTrackables%></groundspeak:travelbugs>\n" +
       "  </groundspeak:cache>\n" +
       "  <gsak:wptExtension>\n" +
