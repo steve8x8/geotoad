@@ -1,3 +1,5 @@
+# -*- encoding : utf-8 -*-
+
 module CountryStateList
 
 # country list last updated: 2017-02-22
