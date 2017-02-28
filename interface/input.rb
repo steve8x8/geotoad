@@ -319,14 +319,10 @@ class Input
         puts ""
         column = 0
       end
-      if (outputDetails.formatRequirement(type) == 'gpsbabel')
-        type << '(+)'
-      elsif (outputDetails.formatRequirement(type) == 'cmconvert')
-        type << '(=)'
-      elsif (outputDetails.formatRequirement(type) == 'iconv')
-        type << '(%)'
-      end
-      printf(" %-13.13s", type)
+      type << '(+)' if (outputDetails.formatRequirement(f) =~ /gpsbabel/)
+      type << '(=)' if (outputDetails.formatRequirement(f) =~ /cmconvert/)
+      type << '(%)' if (outputDetails.formatRequirement(f) =~ /iconv/)
+      printf(" %-15.15s", type)
       column += 1
     }
     puts ""
