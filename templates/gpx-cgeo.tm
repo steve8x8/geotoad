@@ -53,6 +53,7 @@ template = {
        "</groundspeak:short_description>\n" +
       "  <groundspeak:long_description html=\"True\">" +
        "<%wpEntityCgeo.longdesc%>" +
+       "<%wpEntityNone.gallery%>" +
        "</groundspeak:long_description>\n" +
       "  <groundspeak:encoded_hints><%outEntityCgeo.hintdecrypt%></groundspeak:encoded_hints>\n" +
       "  <groundspeak:logs>\n" +

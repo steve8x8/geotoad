@@ -161,6 +161,7 @@ class GeoToad
 
     @preserveCache     = @option['preserveCache']
     @getLogbook        = @option['getLogbook']
+    @imageLinks        = @option['imageLinks']
 
     @formatTypes       = @option['format'] || 'gpx'
     # experimental: runtime output filtering
@@ -717,6 +718,7 @@ class GeoToad
     @detail = CacheDetails.new(wpFiltered)
     @detail.preserve = @preserveCache
     @detail.getlogbk = @getLogbook
+    @detail.getimage = @imageLinks
     token = 0
 
     wpFiltered.each_key{ |wid|

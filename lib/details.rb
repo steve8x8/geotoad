@@ -4,6 +4,7 @@ require 'time'
 require 'zlib'
 require 'lib/geodist'
 require 'lib/logbook'
+require 'lib/gallery'
 
 class CacheDetails
 
@@ -12,17 +13,20 @@ class CacheDetails
   # only required for "moved PMO":
   include GeoDist
   include LogBook
+  include Gallery
 
   # Use a printable template that shows the last 10 logs.
   @@baseURL = "https://www.geocaching.com/seek/cdpf.aspx"
 
   attr_writer :preserve
   attr_writer :getlogbk
+  attr_writer :getimage
 
   def initialize(data)
     @waypointHash = data
     @preserve = nil
     @getlogbk = nil
+    @getimage = nil
 
     @cachetypenum = {
 	'2'	=> 'Traditional Cache',
@@ -873,6 +877,14 @@ class CacheDetails
     end
     if not cache['type']
       cache['type'] = 'empty'
+    end
+
+    # daniel.k.ache: links to gallery images
+    if @getimage
+      cache['gallery'] = getImageLinks(cache['guid'])
+      #cache['longdesc'] << '<hr />' + cache['gallery']
+    else
+      cache['gallery'] = ''
     end
 
     return cache
