@@ -503,7 +503,7 @@ class Output
   def commit (file)
     debug2 "committing file type #{@outputType} to #{file}"
     if @outputFormat['filter_exec']
-      displayInfo "Running output filter:"
+      displayInfo "Running output filter"
       debug "Executing #{@outputFormat['filter_exec']}"
       exec = @outputFormat['filter_exec'].dup
       tmpfile = File.join($CACHE_DIR, @outputType + "." + rand(500000).to_s)
@@ -526,7 +526,7 @@ class Output
       debug2 "exec = #{exec}"
       begin
         ok = system(exec)
-        displayWarning "Non-zero return code #{$?.exitstatus}"
+        displayWarning "Non-zero return code #{$?.exitstatus}" if not ok
       rescue => e
         displayWarning "Something went wrong - error \"#{e}\""
       end
