@@ -503,7 +503,8 @@ class Output
   def commit (file)
     debug2 "committing file type #{@outputType} to #{file}"
     if @outputFormat['filter_exec']
-      displayMessage "Executing #{@outputFormat['filter_exec']}"
+      displayInfo "Running output filter:"
+      debug "Executing #{@outputFormat['filter_exec']}"
       exec = @outputFormat['filter_exec'].dup
       tmpfile = File.join($CACHE_DIR, @outputType + "." + rand(500000).to_s)
       exec.gsub!('INFILE', "\"#{tmpfile}\"")
@@ -523,7 +524,12 @@ class Output
       end
 
       debug2 "exec = #{exec}"
-      ok = system(exec)
+      begin
+        ok = system(exec)
+        displayWarning "Non-zero return code #{$?.exitstatus}"
+      rescue => e
+        displayWarning "Something went wrong - error \"#{e}\""
+      end
       # clean up temp files
       begin
         File.unlink(tmpfile) if File.exists?(tmpfile)
@@ -536,7 +542,8 @@ class Output
         displayWarning "Failed to unlink style file"
       end
       if not File.exists?(file)
-        displayWarning "Output filter did not create file #{file}. exec was: #{exec}"
+        displayWarning "Output filter did not create file #{file}"
+        displayWarning " filter_exec was: #{exec}"
       end
     else
       debug3 "no exec"
