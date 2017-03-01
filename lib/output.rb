@@ -4,6 +4,7 @@ require 'cgi'
 require 'lib/templates'
 require 'lib/version'
 require 'zlib'
+require 'base64'
 require 'lib/geodist'
 
 GOOGLE_MAPS_URL = 'http://maps.google.com/maps'
@@ -518,9 +519,21 @@ class Output
       # if gpsbabel needs a style file, create it
       stylefile = nil
       if @outputFormat['filter_style']
-        stylefile = File.join($CACHE_DIR, @outputType + ".s_" + rand(500000).to_s)
-        File.open(stylefile, 'w'){ |f| f.write(@outputFormat['filter_style']) }
-        exec.gsub!('STYLEFILE', "\"#{stylefile}\"")
+        begin
+          stylefile = File.join($CACHE_DIR, @outputType + ".s_" + rand(500000).to_s)
+          File.open(stylefile, 'w'){ |f| f.write(@outputFormat['filter_style']) }
+          exec.gsub!('STYLEFILE', "\"#{stylefile}\"")
+        rescue => e
+          displayWarning "Failure to write style file: #{e}"
+        end
+      elsif @outputFormat['filter_style64']
+        begin
+          stylefile = File.join($CACHE_DIR, @outputType + ".s_" + rand(500000).to_s)
+          File.open(stylefile, 'w'){ |f| f.write(Base64.decode64(@outputFormat['filter_style64'])) }
+          exec.gsub!('STYLEFILE', "\"#{stylefile}\"")
+        rescue => e
+          displayWarning "Failure to write decoded style file: #{e}"
+        end
       end
 
       debug2 "exec = #{exec}"
