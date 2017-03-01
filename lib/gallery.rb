@@ -8,17 +8,18 @@ module Gallery
   include Common
 
   # Retrieve image links from gallery RSS
-  # idea by daniel.k.ache, February 2017
+  # ideas by daniel.k.ache, February-March 2017
 
   @@gallery_url  = 'https://www.geocaching.com/datastore/rss_galleryimages.ashx'
 
-  def getImageLinks(guid, logimages=true)
-    debug2 "getImageLinks(#{guid.inspect}, #{logimages.inspect})"
+  def getImageLinks(guid, cacheimages=true, logimages=false)
+    debug2 "getImageLinks(#{guid.inspect}, #{cacheimages.inspect}, #{logimages.inspect})"
     return '' if guid.nil?
+    return '' if (not cacheimages and not logimages)
     # fetch gallery RSS
     gallery = ShadowFetch.new(@@gallery_url + "?guid=" + guid)
     gallery.localExpiry = 31
-    #gallery.localExpiry = 14 if log
+    gallery.localExpiry = 14 if logimages
     gallery.useCookie = false
     gallery.closingHTML = false
     data = gallery.fetch
@@ -58,12 +59,12 @@ module Gallery
     } # item
     # create one or two lists of image links, newest first
     imagelinks = ''
-    if not images_c.empty?
+    if not images_c.empty? and cacheimages
       imagelinks << "<p>Cache images:<ul>" +
                     images_c.map{ |img| "<li><a href=\"#{img[0]}\">&nbsp;#{img[1]}&nbsp;</a></li>" }.join("")
                     "</ul></p>"
     end
-    if not images_l.empty?
+    if not images_l.empty? and logimages
       imagelinks << "<p>Log images:<ul>" +
                     images_l.map{ |img| "<li><a href=\"#{img[0]}\">&nbsp;#{img[1]}&nbsp;</a></li>" }.join("")
                     "</ul></p>"

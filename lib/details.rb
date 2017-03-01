@@ -880,8 +880,10 @@ class CacheDetails
     end
 
     # daniel.k.ache: links to gallery images
-    if @getimage
-      cache['gallery'] = getImageLinks(cache['guid'])
+    # @getimage comes as string or nil
+    gi = @getimage.to_i
+    if (gi > 0)
+      cache['gallery'] = getImageLinks(cache['guid'], cacheimages=((gi & 1) != 0), logimages=((gi & 2) != 0))
       #cache['longdesc'] << '<hr />' + cache['gallery']
     else
       cache['gallery'] = ''
