@@ -4,7 +4,6 @@ template = {
   # geotoad -u $USERNAME -p ... -x myfindgpx -o myfinds.gpx -z --includeArchived -Z -q user $USERNAME
   'myfindgpx' => {
     'ext'  => 'gpx',
-    'mime' => 'text/ascii',
     'desc' => 'GPX Geocaching XML (my finds)',
     'templatePre'  =>
       "<?xml version=\'1.0\' encoding=\'UTF-8\' standalone=\'yes\' ?>\n" +
@@ -65,7 +64,6 @@ template = {
 
   'myfindlist' => {
     'ext'  => 'lst',
-    'mime' => 'text/plain',
     'desc' =>     'Table, whitespace delimited (my finds)',
     'templatePre'  => "",
     'templateWP'   =>
@@ -79,7 +77,6 @@ template = {
   # geotoad -u $USERNAME -p ... -x yourfindgpx -o yourfinds.gpx -z -Z --includeArchived -q user $ANOTHERUSERNAME
   'yourfindgpx' => {
     'ext'  => 'gpx',
-    'mime' => 'text/ascii',
     'desc' => 'GPX Geocaching XML (user finds)',
     'templatePre'  =>
       "<?xml version=\'1.0\' encoding=\'UTF-8\' standalone=\'yes\'?>\n" +
@@ -140,7 +137,6 @@ template = {
 
   'yourfindlist' => {
     'ext'  => 'lst',
-    'mime' => 'text/plain',
     'desc' =>     'Table, whitespace delimited (user finds)',
     'templatePre'  => "",
     'templateWP'   =>

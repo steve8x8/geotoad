@@ -2,7 +2,6 @@ template = {
 
   'kml' => {
     'ext'         => 'kml',
-    'mime'        => 'application/kml',
     'desc'        => 'KML (Google Earth)',
     'required'    => 'gpsbabel',
     'filter_src'  => 'gpx',

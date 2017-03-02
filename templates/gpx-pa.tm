@@ -5,7 +5,6 @@ template = {
   # Originally contributed by Tris Sethur, Sep 2011
   'gpx-pa' => {
     'ext'  => 'gpx',
-    'mime' => 'text/ascii',
     'desc' => 'GPX for PathAway',
     'templatePre'  =>
       "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +

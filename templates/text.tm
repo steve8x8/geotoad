@@ -2,7 +2,6 @@ template = {
 
   'text' => {
     'ext'  => 'txt',
-    'mime' => 'text/plain',
     'desc' =>     'Plain ASCII',
     'templatePre' =>
       "== <%out.title%>\n\n",

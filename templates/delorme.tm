@@ -2,7 +2,6 @@ template = {
 
   'delorme' => {
     'ext'          => 'txt',
-    'mime'         => 'application/delorme',
     'desc'         => 'DeLorme TXT import datafile',
     'templatePre'  => "BEGIN SYMBOL\n",
     'templateWP'   =>
@@ -13,7 +12,6 @@ template = {
 
   'delorme-nourl' => {
     'ext'          => 'txt',
-    'mime'         => 'application/delorme',
     'desc'         => 'DeLorme TXT import datafile without URL',
     'templatePre'  => "BEGIN SYMBOL\n",
     'templateWP'   =>

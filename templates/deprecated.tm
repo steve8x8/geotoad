@@ -5,7 +5,6 @@ template = {
 
   'cetus' => {
     'ext'         => 'cet',
-    'mime'        => 'application/cetus',
     'desc'        => 'Cetus for PalmOS',
     'required'    => 'gpsbabel',
     'filter_src'  => 'gpx',
@@ -14,7 +13,6 @@ template = {
 
   'gpspilot' => {
     'ext'         => 'gps',
-    'mime'        => 'application/gpspilot',
     'desc'        => 'GPSPilot for PalmOS',
     'required'    => 'gpsbabel',
     'filter_src'  => 'gpx',
@@ -23,7 +21,6 @@ template = {
 
   'magnav' => {
     'ext'         => 'mgv',
-    'mime'        => 'application/magnav',
     'desc'        => 'Magellan NAV Companion for PalmOS',
     'required'    => 'gpsbabel',
     'filter_src'  => 'gpx',
@@ -32,7 +29,6 @@ template = {
 
   'psp' => {
     'ext'         => 'psp',
-    'mime'        => 'application/psp',
     'desc'        => 'Microsoft PocketStreets 2002 Pushpin',
     'required'    => 'gpsbabel',
     'filter_src'  => 'gpx',

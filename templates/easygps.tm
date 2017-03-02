@@ -15,7 +15,6 @@ template = {
 
   'easygps' => {
     'ext'  => 'loc',
-    'mime' => 'application/easygps',
     'desc' => 'Geocaching.com .loc XML file',
     'templatePre' =>
       "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +

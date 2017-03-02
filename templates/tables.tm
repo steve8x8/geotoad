@@ -4,7 +4,6 @@ template = {
 
   'gpsdrive' => {
     'ext'  => 'sav',
-    'mime' => 'application/gpsdrive',
     'desc' => 'GpsDrive',
     'templatePre' => '',
     'templateWP'  =>
@@ -13,7 +12,6 @@ template = {
 
   'mxf' => {
     'ext'  => 'mxf',
-    'mime' => 'application/mxf',
     'desc' => 'MapTech Exchange',
     'templatePre' => '',
     'templateWP'  =>
@@ -25,7 +23,6 @@ template = {
   # Tested by efnord @ EFnet.. Thanks!
   'ozi' => {
     'ext'  => 'wpt',
-    'mime' => 'application/x-ozi-wpt',
     'desc' => 'OziExplorer',
     'templatePre' =>
       "OziExplorer Waypoint File Version 1.1\n" +
@@ -42,7 +39,6 @@ template = {
 
   'tiger' => {
     'ext'  => 'tgr',
-    'mime' => 'application/x-tiger',
     'desc' => 'U.S. Census Bureau Tiger Mapping Service Data',
     'templatePre' =>
       "#tms-marker\n",

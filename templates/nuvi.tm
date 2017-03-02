@@ -16,7 +16,6 @@ template = {
 
   'gpx-nuvi' => {
     'ext'  => 'ngpx',
-    'mime' => 'text/ascii',
     'desc' => 'GPX for Nuvi, without AddWpts',
     'templatePre'  =>
 # encoding should be 'Windows-1252' (if we find out how to write this)
@@ -91,7 +90,6 @@ template = {
 # *nüvi 255 doesn't like UTF-8, best to trim everything down to ASCII. Avoid <>!
   'poi-nuvi' => {
     'ext'         => 'gpi',
-    'mime'        => 'application/poiloader',
     'desc'        => 'POI for Nuvi, pure ASCII',
     'required'    => 'gpsbabel:iconv',
     'filter_src'  => 'gpx-nuvi',

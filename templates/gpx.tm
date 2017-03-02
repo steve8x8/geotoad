@@ -5,7 +5,6 @@ template = {
   # doesn't show any attributes, but doesn't complain either
   'gpx' => {
     'ext'  => 'gpx',
-    'mime' => 'text/ascii',
     'desc' => 'GPX (Geocaching XML), with AddWpts',
     'templatePre'  =>
       "<?xml version=\'1.0\' encoding=\'UTF-8\' standalone=\'yes\' ?>\n" +

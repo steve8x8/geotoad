@@ -2,7 +2,6 @@ template = {
 
   'csv' => {
     'ext'  => 'txt',
-    'mime' => 'text/plain',
     'desc' => 'CSV for spreadsheet imports',
     'templatePre' =>
       "\"Name\",\"Waypoint ID\",\"Creator\",\"Difficulty\",\"Terrain\"," +

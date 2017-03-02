@@ -26,7 +26,6 @@ Now the time has come for you and your creativity!
   template = {
     'name' => {
       'ext' => 'extension',
-      'mime' => 'mime-format',
       'desc' => 'some descriptive string',
       ... # some more definitions, see below
     }, # the comma is only necessary if another template follows
@@ -52,7 +51,6 @@ A template using gpsbabel, the strings INFILE and OUTFILE are mission-critical:
   template = {
     'cetus' => {
       'ext'        => 'cet',
-      'mime'    => 'application/cetus',
       'desc'    => 'Cetus for PalmOS',
       'required' => 'gpsbabel',
       'filter_src'    => 'gpx',
@@ -65,7 +63,6 @@ Additionally, you may specify a STYLEFILE:
   template = {
     'gpspoint2' => {
       'ext'         => 'gpd',
-      'mime'        => 'application/gpspoint',
       'desc'        => 'gpspoint datafile created by gpsbabel',
       'required'    => 'gpsbabel',
       'filter_src'  => 'gpx',
@@ -123,7 +120,6 @@ First, have a look at the "list" template (derived from the "tab" one) and the r
   template = {
     'list'    => {
       'ext'        => 'lst',
-      'mime'    => 'text/plain',
       'desc'    =>     'whitespace delimited, detailed table',
       'templatePre' => "",
       'templateWP'    => "<%out.id%>\t" +
@@ -151,7 +147,6 @@ Another table output format (try to play with it...):
   templates = {
     'tbl'    => {
       'ext'        => 'tbl',
-      'mime'    => 'text/plain',
       'desc'    =>     'some table',
       'templatePre' => "",
       'templateWP'    => "<%out.id%>\t" +
@@ -171,9 +166,7 @@ and two versions of output suited for SMS notifications:
     # contributed by regengott.nass
     'sms' => {
       'ext'         => 'sms',
-      'mime'        => 'text/plain',
       'desc'        => '(SMS) Shorten relevant infos for SMS info',
-      'spacer'      => "",
       'templatePre' => "",
       'templateWP'  => "<%wpText.name%>,<%out.wid%>,<%wpText.creator%>," +
         "D<%wp.difficulty%>,T<%wp.terrain%>,<%out.relativedistance%>,<%wp.latwritten%>,<%wp.lonwritten%>," +
@@ -182,9 +175,7 @@ and two versions of output suited for SMS notifications:
     # derived from "sms" but reordered and ready for smartphone
     'sms2' => {
       'ext'         => 'sms2',
-      'mime'        => 'text/plain',
       'desc'        => '(SMS) Shorten relevant infos for SMS info',
-      'spacer'      => "",
       'templatePre' => "",
       'templateWP'  => "coord.info/<%out.wid%>" +
         " <%wp.latwritten%> <%wp.lonwritten%>" +

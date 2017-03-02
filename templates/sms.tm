@@ -3,7 +3,6 @@ template = {
   # contributed by regengott.nass
   'sms' => {
     'ext'  => 'sms',
-    'mime' => 'text/plain',
     'desc' => 'SMS (type 1)',
     'templatePre' => "",
     'templateWP'  =>
@@ -15,7 +14,6 @@ template = {
   # derived from "sms" but reordered and ready for smartphone
   'sms2' => {
     'ext'  => 'sms2',
-    'mime' => 'text/plain',
     'desc' => 'SMS (type 2)',
     'templatePre' => "",
     'templateWP'  =>
@@ -29,7 +27,6 @@ template = {
   # derived from "sms" as well, different coord representation
   'sms3' => {
     'ext'  => 'sms3',
-    'mime' => 'text/plain',
     'desc' => 'SMS (type 3)',
     'templatePre' => "",
     'templateWP'  =>
@@ -43,7 +40,6 @@ template = {
   # derived from "sms" as well, different coord representation
   'sms4' => {
     'ext'         => 'sms4',
-    'mime'        => 'text/plain',
     'desc'        => 'SMS (type 4)',
     'templatePre' => "",
     'templateWP'  =>

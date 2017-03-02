@@ -457,10 +457,6 @@ class Output
     return $allFormats[format]['ext']
   end
 
-  def formatMIME(format)
-    return $allFormats[format]['mime']
-  end
-
   def formatDesc(format)
     return $allFormats[format]['desc']
   end

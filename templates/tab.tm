@@ -2,7 +2,6 @@ template = {
 
   'tab' => {
     'ext'  => 'txt',
-    'mime' => 'text/plain',
     'desc' => 'Tab Delimited (GPS Connect)',
     'templatePre' => "",
     'templateWP'  =>

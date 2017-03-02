@@ -4,7 +4,6 @@ template = {
 
   'cachemate' => {
     'ext'         => 'pdb',
-    'mime'        => 'application/cachemate',
     'desc'        => 'CacheMate for PalmOS',
     'required'    => 'cmconvert',
     'filter_src'  => 'gpx',
@@ -13,7 +12,6 @@ template = {
 
   'dna' => {
     'ext'         => 'dna',
-    'mime'        => 'application/xmap',
     'desc'        => 'Navitrak DNA marker',
     'required'    => 'gpsbabel',
     'filter_src'  => 'gpx',
@@ -22,7 +20,6 @@ template = {
 
   'gpsman' => {
     'ext'         => 'gpm',
-    'mime'        => 'application/gpsman',
     'desc'        => 'GPSman datafile',
     'required'    => 'gpsbabel',
     'filter_src'  => 'gpx',
@@ -31,7 +28,6 @@ template = {
 
   'gpsutil' => {
     'ext'         => 'gpu',
-    'mime'        => 'application/gpsutil',
     'desc'        => 'gpsutil',
     'required'    => 'gpsbabel',
     'filter_src'  => 'gpx',
@@ -40,7 +36,6 @@ template = {
 
   'holux' => {
     'ext'         => 'wpo',
-    'mime'        => 'application/holux',
     'desc'        => 'Holux gm-100 ',
     'required'    => 'gpsbabel',
     'filter_src'  => 'gpx',
@@ -49,7 +44,6 @@ template = {
 
   'mapsend' => {
     'ext'         => 'mps',
-    'mime'        => 'application/mapsend',
     'desc'        => 'Magellan MapSend software',
     'required'    => 'gpsbabel',
     'filter_src'  => 'gpx',
@@ -58,7 +52,6 @@ template = {
 
   'pcx' => {
     'ext'         => 'pcx',
-    'mime'        => 'application/pcx',
     'desc'        => 'Garmin PCX5',
     'required'    => 'gpsbabel',
     'filter_src'  => 'gpx',
@@ -67,7 +60,6 @@ template = {
 
   'tmpro' => {
     'ext'         => 'tmp',
-    'mime'        => 'application/tmpro',
     'desc'        => 'TopoMapPro Places',
     'required'    => 'gpsbabel',
     'filter_src'  => 'gpx',
@@ -76,7 +68,6 @@ template = {
 
   'tpg' => {
     'ext'         => 'tpg',
-    'mime'        => 'application/tpg',
     'desc'        => 'National Geographic Topo',
     'required'    => 'gpsbabel',
     'filter_src'  => 'gpx',
@@ -85,7 +76,6 @@ template = {
 
   'xmap' => {
     'ext'         => 'xmp',
-    'mime'        => 'application/xmap',
     'desc'        => 'DeLorme Topo USA4/XMap Conduit',
     'required'    => 'gpsbabel',
     'filter_src'  => 'gpx',

@@ -4,7 +4,6 @@ template = {
   # Will produce XML validation errors because of <wpt> without lat=... lon=...
   'gpx-cgeo' => {
     'ext'  => 'gpx',
-    'mime' => 'text/ascii',
     'desc' => 'GPX for c:geo, with AddWpts, also unlocated',
     'templatePre'  =>
       "<?xml version=\'1.0\' encoding=\'UTF-8\' standalone=\'yes\' ?>\n" +

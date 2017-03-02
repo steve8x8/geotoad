@@ -3,7 +3,6 @@ template = {
   # templates for separate output of caches and add.wpts for GSAK use
   'gpx-gsak' => {
     'ext'  => 'gpx',
-    'mime' => 'text/ascii',
     'desc' => 'GPX for GSAK, without AddWpts',
     'templatePre'  =>
       "<?xml version=\'1.0\' encoding=\'UTF-8\' standalone=\'yes\' ?>\n" +
@@ -75,7 +74,6 @@ template = {
 
   'gpx-wpts' => {
     'ext'  => 'wgpx',
-    'mime' => 'text/ascii',
     'desc' => 'GPX for GSAK, AddWpts only',
     'templatePre'  =>
       "<?xml version=\'1.0\' encoding=\'UTF-8\' standalone=\'yes\' ?>\n" +
@@ -106,7 +104,6 @@ template = {
   # Will produce XML validation errors because of <wpt> without lat=... lon=...
   'gpx-wpts0' => {
     'ext'  => 'wgpx',
-    'mime' => 'text/ascii',
     'desc' => 'GPX for GSAK, AddWpts only, also unlocated',
     'templatePre'  =>
       "<?xml version=\'1.0\' encoding=\'UTF-8\' standalone=\'yes\' ?>\n" +

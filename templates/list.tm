@@ -3,7 +3,6 @@ template = {
   # contributed by Steve8x8: table, "tab" extended
   'list' => {
     'ext'         => 'lst',
-    'mime'        => 'text/plain',
     'desc'        =>     'Table, whitespace delimited',
     'templatePre' => "",
     'templateWP'  =>

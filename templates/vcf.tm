@@ -5,7 +5,6 @@ template = {
   # WARNING: This template doesn't work anymore!!!
   'vcf-3.9.6' => {
     'ext'           => 'vcf',
-    'mime'          => 'text/x-vcard',
     'detailsLength' => 2000,
     'desc'          => 'VCF for iPod Contacts export',
     'templatePre'   => "",
@@ -31,7 +30,6 @@ template = {
   # some entries may need "CHARSET=UTF-8"?
   'vcf' => {
     'ext'           => 'vcf',
-    'mime'          => 'text/vcard',
     'desc'          => 'VCF vCard2.1 for iPod Contacts export',
     'usesLocation'  => true,
     'templatePre'   => "",

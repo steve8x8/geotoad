@@ -3,7 +3,6 @@ template = {
   # wherigo table
   'wherigo' => {
     'ext'  => 'wig',
-    'mime' => 'text/plain',
     'desc' => 'wherigo list',
     'templatePre' => "",
     # output condition: cache type must be "wherigo"
