@@ -78,6 +78,7 @@ template = {
         "**Hint:  <%outEntity.hintdecrypt%>\n" +
         "**Desc:\n<%wpTextEntity.shortdesc%>\n" +
         "**Long:\n<%wpTextEntity.longdesc%>\n" +
+        "**Wpts: <%outTextEntity.shortWpts%>\n" +
         "**Logs:\n<%outTextEntity.textlogs%>\n" +
       "      </gpxx:PhoneNumber>\n" +
       "    </gpxx:WaypointExtension>\n" +
@@ -93,13 +94,11 @@ template = {
     'desc'        => 'POI for Nuvi, pure ASCII',
     'required'    => 'gpsbabel:iconv',
     'filter_src'  => 'gpx-nuvi',
-    # hide: don't show a symbol
-    # proximity: set alert at given distance (forces alerts=1)
-    # sleep: make sure no 2 files have same timestamp
     #use the following if you prefer UTF-8
     #'filter_exec' => 'gpsbabel -i gpx -o garmin_gpi,category="Geocaches",bitmap=STYLEFILE,alerts=1,unique=0,proximity=250m,sleep=2 -f INFILE -F OUTFILE'
     'filter_exec' => 'cat INFILE | tr \'«‹›»\' \'*\' | iconv -f UTF8 -t ASCII//TRANSLIT -c | ' +
                       'gpsbabel -i gpx -o garmin_gpi,category="Geocaches",bitmap=STYLEFILE,alerts=1,unique=0,proximity=250m,sleep=2 -f - -F OUTFILE',
+    # "G" geocaching symbol, created in xpaint
     'filter_style64' => "Qk2yAQAAAAAAAEoAAAAoAAAAEgAAABIAAAABAAgAAAAAAGgBAABtCwAAbQsAAAUAAAAFAAAA/wD/\n" +
                         "AP///wCZmZkAAAAAAMzMzAAAAAAAAAEBAQEBAQEBAAAAAAAAAAAAAAEBAgMDAwMDAwIBAQAAAAAA\n" +
                         "AAABBAMDBAEBAQEEAwMEAQAAAAAAAQQDAgEBAQAAAQEBAgMEAQAAAAABAwIBAQAAAAEDAQEBAgMB\n" +
