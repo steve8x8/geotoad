@@ -9,7 +9,7 @@ template = {
     'templatePre'  =>
       "<?xml version=\'1.0\' encoding=\'UTF-8\' standalone=\'yes\' ?>\n" +
       "<gpx" +
-       " version=\"1.0\" creator=\"GeoToad\"" +
+       " version=\"1.0\" creator=\"GeoToad <%outEntity.version%>\"" +
        " xsi:schemaLocation=\"" +
          "http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd" +
         " http://www.groundspeak.com/cache/1/0/1 http://www.groundspeak.com/cache/1/0/1/cache.xsd" +
@@ -21,8 +21,6 @@ template = {
        ">\n" +
       "<name>My Finds Pocket Query</name>\n" +
       "<desc><%outEntity.title%></desc>\n" +
-      "<author>GeoToad <%outEntity.version%></author>\n" +
-      "<email>geotoad@googlegroups.com</email>\n" +
       "<time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S.000Z")  + "</time>\n" +
       "<keywords>cache, geocache, groundspeak, geotoad</keywords>\n",
     'templateWP'   =>
@@ -86,7 +84,7 @@ template = {
     'templatePre'  =>
       "<?xml version=\'1.0\' encoding=\'UTF-8\' standalone=\'yes\'?>\n" +
       "<gpx" +
-       " version=\"1.0\" creator=\"GeoToad\"" +
+       " version=\"1.0\" creator=\"GeoToad <%outEntity.version%>\"" +
        " xsi:schemaLocation=\"" +
          "http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd" +
         " http://www.groundspeak.com/cache/1/0/1 http://www.groundspeak.com/cache/1/0/1/cache.xsd" +
@@ -98,8 +96,6 @@ template = {
        ">\n" +
       "<name>My Finds Pocket Query</name>\n" +
       "<desc><%outEntity.title%></desc>\n" +
-      "<author>GeoToad <%outEntity.version%></author>\n" +
-      "<email>geotoad@googlegroups.com</email>\n" +
       "<time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S.000Z")  + "</time>\n" +
       "<keywords>cache, geocache, groundspeak, geotoad</keywords>\n",
     'templateWP'   =>

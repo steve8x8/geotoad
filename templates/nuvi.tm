@@ -22,7 +22,7 @@ template = {
 # encoding should be 'Windows-1252' (if we find out how to write this)
       "<?xml version=\'1.0\' encoding=\'UTF-8\' standalone=\'yes\' ?>\n" +
       "<gpx" +
-       " version=\"1.1\" creator=\"GeoToad-<%outEntity.version%>\"" +
+       " version=\"1.1\" creator=\"GeoToad <%outEntity.version%>\"" +
        " xsi:schemaLocation=\"" +
          "http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd" +
         " http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www8.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd" +
@@ -35,7 +35,6 @@ template = {
       "<metadata>\n" +
       "  <name>" + Time.new.localtime.strftime("%Y%m%dT%H%M%S") + "</name>\n" +
       "  <desc><%outEntity.title%></desc>\n" +
-      "  <author>GeoToad <%outEntity.version%></author>\n" +
       "  <time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%SZ")  + "</time>\n" +
       "</metadata>\n",
 # *Unicode characters (degree symbol, umlauts, etc.) will be shown as 3-character garbage

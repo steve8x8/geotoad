@@ -9,7 +9,7 @@ template = {
     'templatePre'  =>
       "<?xml version=\'1.0\' encoding=\'UTF-8\' standalone=\'yes\' ?>\n" +
       "<gpx" +
-       " version=\"1.0\" creator=\"GeoToad\"" +
+       " version=\"1.0\" creator=\"GeoToad <%outEntity.version%>\"" +
        " xsi:schemaLocation=\"" +
          "http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd" +
         " http://www.groundspeak.com/cache/1/0/1 http://www.groundspeak.com/cache/1/0/1/cache.xsd" +

@@ -19,7 +19,7 @@ template = {
     'desc' => 'Geocaching.com .loc XML file',
     'templatePre' =>
       "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-      "<loc version=\"1.0\" src=\"GeoToad\">",
+      "<loc version=\"1.0\" src=\"GeoToad <%outEntity.version%>\">",
     # line feed in front of waypoints!
     'templateWP'  =>
       "\n<waypoint>\n" + 

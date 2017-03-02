@@ -8,7 +8,7 @@ template = {
     'desc'         => 'GpsPoint data file',
     'templatePre'  =>
       "GPSPOINT DATA FILE\ntype=\"fileinfo\"  version=\"1.00\"\n" +
-      "type=\"programinfo\" program=\"geotoad\" version=\"0.0\"\n" +
+      "type=\"programinfo\" program=\"geotoad\" version=\"<%outEntity.version%>\"\n" +
       "type=\"waypointlist\"\n",
     'templateWP'   =>
       "type=\"waypoint\" " +

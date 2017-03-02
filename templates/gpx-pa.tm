@@ -10,7 +10,7 @@ template = {
     'templatePre'  =>
       "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
       "<gpx" +
-       " version=\"1.0\" creator=\"GeoToad\"" +
+       " version=\"1.0\" creator=\"GeoToad <%outEntity.version%>\"" +
        " xsi:schemaLocation=\"" +
          "http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd" +
         " http://www.groundspeak.com/cache/1/0/1 http://www.groundspeak.com/cache/1/0/1/cache.xsd" +
@@ -22,7 +22,6 @@ template = {
       ">\n" +
       "<name>" + Time.new.localtime.strftime("%Y%m%dT%H%M%S") + "</name>\n" +
       "<desc><%outEntity.title%></desc>\n" +
-      "<author>GeoToad <%outEntity.version%></author>\n" +
       "<time>" + Time.new.gmtime.strftime("%Y-%m-%dT%H:%M:%S.000Z")  + "</time>\n",
     'templateWP'   =>
       "<wpt lat=\"<%out.latdatapad6%>\" lon=\"<%out.londatapad6%>\">\n" +
