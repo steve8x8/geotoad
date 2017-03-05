@@ -171,6 +171,8 @@ module Common
 #ru-RU	Русский		Сегодня		Вчера		(n) дн.назад
 #fi-FI	Suomi		Tänään		Eilen		(n) päivää sitten
 #sv-SE	Svenska		Idag		Igår		för (n) dagar sedan
+#lb-LU	Lëtzebuergesch	Haut		Gëschter	virun (n) Deeg
+#sv-SI	Slovenščina	Danes		Včeraj		pred (n) dnevi(?)
 
 # date formats (last checked: 2014-12-01) M, MM num; MMM alpha
 # A	d.M.yyyy
@@ -207,10 +209,10 @@ module Common
     # patterns may be duplicated (Dansk/Norsk) intentionally
     case date
     # relative dates end in a "*"
-    when /^(Today|Avui|Dnes|I dag|Heute|Σήμερα|Täna|Hoy|Hier|Oggi|今日|오늘|Šodien|Ma|Vandaag|I dag|Dzisiaj|Hoje|Azi|Сегодня|Tänään|Idag)\*/i
+    when /^(Today|Avui|Dnes|I dag|Heute|Σήμερα|Täna|Hoy|Hier|Oggi|今日|오늘|Šodien|Ma|Vandaag|I dag|Dzisiaj|Hoje|Azi|Сегодня|Tänään|Idag|Haut|Danes)\*/i
       debug2 "date: Today"
       days_ago=0
-    when /^(Yesterday|Ahir|Včera|I går|Gestern|Χτές|Eile|Ayer|Aujourd.hui|Ieri|昨日|어제|Vakar|Tegnap|Gisteren|I går|Wczoraj|Ontem|Ieri|Вчера|Eilen|Igår)\*/i
+    when /^(Yesterday|Ahir|Včera|I går|Gestern|Χτές|Eile|Ayer|Aujourd.hui|Ieri|昨日|어제|Vakar|Tegnap|Gisteren|I går|Wczoraj|Ontem|Ieri|Вчера|Eilen|Igår|Gëschter|Včeraj)\*/i
       debug2 "date: Yesterday"
       days_ago=1
     # (any string ending with a * and a number in it)
