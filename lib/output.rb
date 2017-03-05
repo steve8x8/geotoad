@@ -1294,6 +1294,7 @@ class Output
       'guid'        => cache['guid'].to_s,
       'symbols'     => symbols,
       'id'          => cache['sname'],
+      'csize'       => cache['size'].capitalize,
       'ctime'       => cache['ctime'].getgm.strftime("%Y-%m-%dT%H:%M:%SZ"),
       'ctime_hm'    => cache['ctime'].getgm.strftime("%Y-%m-%dT%H:%MZ"),
       'cdate'       => cache['ctime'].getlocal.strftime("%Y-%m-%d"),

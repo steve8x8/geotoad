@@ -81,7 +81,7 @@ class Filter
     debug2 "filtering by sizeMin: #{size_name} (#{@@sizes[size_name]})"
     @waypointHash.delete_if{ |wid, values|
       debug3 "size check for #{wid}: #{@waypointHash[wid]['size']}"
-      @@sizes[@waypointHash[wid]['size']].to_i < @@sizes[size_name]
+      @@sizes[@waypointHash[wid]['size'].downcase].to_i < @@sizes[size_name]
     }
   end
 
@@ -89,7 +89,7 @@ class Filter
     debug2 "filtering by sizeMax: #{size_name} (#{@@sizes[size_name]})"
     @waypointHash.delete_if{ |wid, values|
       debug3 "size check for #{wid}: #{@waypointHash[wid]['size']}"
-      @@sizes[@waypointHash[wid]['size']].to_i > @@sizes[size_name]
+      @@sizes[@waypointHash[wid]['size'].downcase].to_i > @@sizes[size_name]
     }
   end
 

@@ -37,7 +37,7 @@ template = {
       "  <groundspeak:placed_by><%wpEntity.creator%></groundspeak:placed_by>\n" +
       "  <groundspeak:owner><%wpEntity.creator%></groundspeak:owner>\n" +
       "  <groundspeak:type><%wp.fulltype%></groundspeak:type>\n" +
-      "  <groundspeak:container><%wp.size%></groundspeak:container>\n" +
+      "  <groundspeak:container><%out.csize%></groundspeak:container>\n" +
       "  <groundspeak:attributes>\n" +
        "<%out.xmlAttrs%>" +
        "  </groundspeak:attributes>\n" +
