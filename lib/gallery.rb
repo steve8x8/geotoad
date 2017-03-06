@@ -1,11 +1,11 @@
-require 'time'
-require 'zlib'
-require 'cgi'
+require 'lib/common'
+require 'lib/messages'
 require 'lib/shadowget'
 
 module Gallery
 
   include Common
+  include Messages
 
   # Retrieve image links from gallery RSS
   # ideas by daniel.k.ache, February-March 2017

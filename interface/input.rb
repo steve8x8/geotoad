@@ -1,6 +1,9 @@
 require 'pathname'
 $THISDIR = File.dirname(File.realpath(__FILE__))
 
+require 'getoptlong'
+require 'fileutils'
+require 'yaml'
 require 'lib/country_state'
 require 'lib/common'
 require 'lib/messages'

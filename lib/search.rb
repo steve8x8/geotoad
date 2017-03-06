@@ -1,7 +1,9 @@
 require 'cgi'
+require 'time'
+require 'lib/common'
+require 'lib/messages'
 require 'lib/geocode'
 require 'lib/shadowget'
-require 'time'
 
 
 class SearchCache

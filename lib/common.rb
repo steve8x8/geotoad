@@ -4,6 +4,7 @@ require 'fileutils'
 require 'pathname'
 require 'time'
 require 'cgi'
+require 'yaml'
 
 module Common
   # pre 2014-10-14: @@prefs_url = 'http://www.geocaching.com/account/ManagePreferences.aspx'

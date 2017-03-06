@@ -2,12 +2,15 @@
 ### Received cookies dissected and written to hash,
 ### cookies to be sent combined from hash
 
-module Auth
+require 'time'
+require 'lib/common'
+require 'lib/messages'
 
-  require 'yaml'
+module Auth
 
   include Common
   include Messages
+
   @@login_url = 'https://www.geocaching.com/login/'
   @@user = nil
   # cookie to be sent

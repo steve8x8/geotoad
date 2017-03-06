@@ -1,8 +1,9 @@
 # collect template definitions
 
+require 'fileutils'
+require 'pathname'
 require 'lib/common'
 require 'lib/messages'
-require 'pathname'
 
 class Templates
 

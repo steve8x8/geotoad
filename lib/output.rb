@@ -1,10 +1,15 @@
 # -*- encoding : utf-8 -*-
 
+require 'fileutils'
 require 'cgi'
-require 'lib/templates'
-require 'lib/version'
+require 'uri'
+require 'time'
 require 'zlib'
 require 'base64'
+require 'lib/common'
+require 'lib/messages'
+require 'lib/templates'
+require 'lib/version'
 require 'lib/geodist'
 
 GOOGLE_MAPS_URL = 'http://maps.google.com/maps'

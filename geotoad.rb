@@ -4,6 +4,7 @@
 # This is the main geotoad binary.
 #
 
+require 'fileutils'
 require 'pathname'
 $BASEDIR = File.dirname(File.realpath(__FILE__))
 $LOAD_PATH << $BASEDIR
@@ -17,6 +18,10 @@ $delimiter = '|'
 $my_lat = nil
 $my_lon = nil
 
+require 'find' # for cleanup
+require 'zlib'
+require 'cgi'
+require 'net/https' # for openssl
 # toss in our own libraries.
 require 'interface/progressbar'
 require 'lib/common'
@@ -29,12 +34,6 @@ require 'lib/output'
 require 'lib/details'
 require 'lib/auth'
 require 'lib/version'
-require 'getoptlong'
-require 'fileutils'
-require 'find' # for cleanup
-require 'zlib'
-require 'cgi'
-require 'net/https' # for openssl
 
 class GeoToad
 

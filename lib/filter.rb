@@ -1,4 +1,6 @@
 require 'cgi'
+require 'lib/common'
+require 'lib/messages'
 
 class Filter
 
