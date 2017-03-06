@@ -80,14 +80,14 @@ class CacheDetails
   def getRemoteMapping(wid)
     # get guid from gallery RSS
     guid = getRemoteMapping3(wid)
-    return guid if guid
+    return [guid, '3'] if guid
     # get guid from cache_details page
     guid = getRemoteMapping1(wid)
-    return guid if guid
+    return [guid, '1'] if guid
     # get guid from log entry page
     guid = getRemoteMapping2(wid)
-    return guid if guid
-    return nil
+    return [guid, '2'] if guid
+    return [nil, '0']
   end
 
   def getRemoteMapping1(wid)
@@ -149,15 +149,14 @@ class CacheDetails
 
   def fullURL(id)
     if (id =~ /^GC/)
-      # If we can look up the guid, use it. It's not actually required, but
-      # it behaves a lot more like a standard web browser on the gc.com website.
+      # look up guid
       if not @waypointHash[id]['guid']
         # there is no cdpf.aspx?wp=...
         guid = getMapping(id.to_s)
         debug2 "dictionary maps #{id.inspect} to #{guid.inspect}"
         if not guid
-          # it's not in the dictionary; try to map using the "unpub" interface
-          guid = getRemoteMapping(id.to_s)
+          # it's not in the dictionary; try to map
+          guid, src = getRemoteMapping(id.to_s)
         end
         if not guid
           # no way
@@ -165,7 +164,7 @@ class CacheDetails
           return nil
         end
         debug2 "mapped #{id.inspect} to #{guid.inspect}"
-        appendMapping(id, guid)
+        appendMapping(id, guid, "(#{src})")
         @waypointHash[id]['guid'] = guid
       end
       suffix = 'guid=' + @waypointHash[id]['guid'].to_s

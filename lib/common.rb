@@ -553,7 +553,7 @@ module Common
     return $mapping[wid]
   end
 
-  def appendMapping(wid, guid)
+  def appendMapping(wid, guid, src="")
     # this is a simple YAML file that can just be appended to
     return if $mapping[wid]
     $mapping[wid] = guid
