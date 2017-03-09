@@ -89,6 +89,7 @@ class CacheDetails
     # get guid from log entry page
     guid = getRemoteMapping2(wid)
     return [guid, '2'] if guid
+    displayWarning "Could not map #{wid} to GUID"
     return [nil, '0']
   end
 
