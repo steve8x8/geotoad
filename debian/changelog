@@ -1,3 +1,20 @@
+geotoad (3.27.0-1) unstable; urgency=low
+
+  * New version 3.27.0, "Bookkeeping release"
+  * Update certificate bundle
+  * Issue 283, possible fix?: Use local TZ for date-only timestamps
+  * Issue 348: get country and state IDs from static list
+  * Issue 349: capitalize container size in GPX output
+  * Coding style and logic overhaul for better readability
+  * Class accessors cleanups
+  * Additions to local cachefile handling, adjusted expiration times
+  * Experimental: Attempt to fill in logbook entries if there aren't any
+  * Experimental: Conditional output from command line (syntax is terrible)
+  * Experimental: Add links to gallery images
+  * Minor stuff here and there
+
+ -- Steve Sixty-Four <steve8x8@gmail.com>  Wed, 22 Mar 2017 09:00:00 +0000
+
 geotoad (3.26.2-1) unstable; urgency=low
 
   * New version 3.26.2, "..." (running out of nicknames for now)

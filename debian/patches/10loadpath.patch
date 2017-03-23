@@ -1,13 +1,12 @@
 --- a/geotoad.rb
 +++ b/geotoad.rb
-@@ -6,8 +6,10 @@
- 
+@@ -7,8 +7,8 @@
+ require 'fileutils'
  require 'pathname'
  $BASEDIR = File.dirname(File.realpath(__FILE__))
-+# For Debian/Ubuntu, modules are below /usr/share/geotoad
 -$LOAD_PATH << $BASEDIR
-+#$LOAD_PATH << $BASEDIR
- #$LOAD_PATH << File.join($BASEDIR, 'lib')
+-#$LOAD_PATH << File.join($BASEDIR, 'lib')
++# For Debian/Ubuntu, modules are below /usr/share/geotoad
 +$LOAD_PATH << '/usr/share/geotoad'
  
  Encoding.default_external = Encoding::UTF_8

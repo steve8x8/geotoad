@@ -353,6 +353,28 @@ Normally you don't want to use this!
 \fB\-U\fR|\fB\-\-unbufferedOutput\fR
 switch output to unbuffered (useful for wrappers)
 
+.SS "Options yet experimental and/or undocumented:"
+\fICaveat: Here be dragons.\fR
+
+These are experimental additions which need testing and documentation.
+Volunteers wanted!
+.TP
+\fB\-B|\-\-getLogbook|\-\-getLogBook\fR
+try to retrieve logbook entries from another source if there aren't any
+.PP
+.TP
+\fB\-\-conditionWP\fR \fI condition \fR
+conditionally output caches, similar to the setting of the same name in templates (e.g. \fBwherigo\fR)
+Example, to output only if this isn't a member-only mystery cache:
+
+\-\-conditionWP="( not (<%wp.membersonly%> and \\"<%wp.type%>\\"==\\"unknown\\") )"
+
+Use plenty of parentheses!
+.PP
+.TP
+\fB\-\-imageLinks|\-\-gallery\fR \fI bitflags \fR
+to selected output formats, add links to cache (bit 0) and log (bit 1) images from the gallery
+
 .SH "SEARCH ARGUMENT"
 
 \fIsearch\fR can be of the \fB(MULTI)\fR type.

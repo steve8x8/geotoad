@@ -199,6 +199,8 @@ For example, the __wherigo__ template uses:
       "\"<%wp.type%>\" == \"wherigo\"",
 to output lines only for "wherigo" caches.
 
+A similar command-line option '--conditionWP' has been introduced with release 3.27.0.
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 

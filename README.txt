@@ -1,5 +1,5 @@
 ==========================================================================
-GeoToad %VERSION% by Thomas Stromberg and The GeoToad Project (c) 2002 - 2017
+GeoToad 3.27.0 by Thomas Stromberg and The GeoToad Project (c) 2002 - 2017
 ==========================================================================
 
 
@@ -48,7 +48,7 @@ a command prompt run "geotoad". On UNIX, you may have to run "./geotoad.rb".
 You will then see a screen that looks similar to this:
 
 ==============================================================================
-:::                // GeoToad %VERSION% Text User Interface //                :::
+:::                // GeoToad 3.27.0 Text User Interface //                :::
 ==============================================================================
 (1)  GC.com login [REQUIRED         ] | (2)  search type          [location  ]
 (3)  location     [Dead Sea         ] | (4)  distance maximum (km)  [      25]
@@ -98,7 +98,7 @@ syntax: geotoad [options] <search:search2:search3>
  -m [delimiters]        set delimiter(s) (default "|:") for multiple selections
  -o [filename]          output file name (automatic otherwise)
  -x [format]            output format type, see list below (default: gpx)
- -q [location|coord|user|owner|country|state|keyword|wid|guid]
+ -q [location|coord|user|owner|country|state|keyword|wid|guid|bookmark]
                         query type (default: location)
  -d/-D [1.0-5.0]        difficulty minimum/maximum
  -t/-T [1.0-5.0]        terrain minimum/maximum

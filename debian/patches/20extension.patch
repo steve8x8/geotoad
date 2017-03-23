@@ -1,6 +1,6 @@
 --- a/interface/input.rb
 +++ b/interface/input.rb
-@@ -217,7 +217,7 @@
+@@ -221,7 +221,7 @@
      @@optHash.delete('outFile')
  
      # demonstrate a sample command line
@@ -9,7 +9,7 @@
      hidden_opts = ['queryArg', 'user', 'password', 'usemetric', 'verbose']
      # hide unlimited search
      if @@optHash['limitSearchPages'] == 0
-@@ -260,7 +260,7 @@
+@@ -264,7 +264,7 @@
  
  
    def usage
