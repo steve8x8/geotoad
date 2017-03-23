@@ -467,8 +467,8 @@ class ShadowFetch
 
   # compute random sleep time from number of pages remotely fetched
   def randomizedSleep(counter)
-    # start with 1.5 seconds, add a second for each 250 caches, randomize by factor 0.5 .. 1.5, somewhat rounded
-    sleeptime = ($SLEEP + counter/250.0) * (rand+0.5)
+    # start with 1 second, add a second for each 250 caches, randomize by factor 0.5 .. 1.5, somewhat rounded
+    sleeptime = $SLEEP * (1.0 + counter/250.0) * (rand+0.5)
     sleeptime = (10.0*sleeptime).round/10.0
     sleeptime = $SLEEP if (sleeptime<$SLEEP)
     debug3 "sleep #{sleeptime} seconds"

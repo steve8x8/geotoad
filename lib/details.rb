@@ -603,7 +603,7 @@ class CacheDetails
             # cache has moved, description and hint may be inaccurate - set mark
             movedDistance, movedDirection = geoDistDir(oldlat, oldlon, newlat, newlon)
             movedDistance = (movedDistance.to_f * 1000 * $MILE2KM).round
-            displayInfo "Moved from #{oldlat}/#{oldlon} to #{newlat}/#{newlon} (#{movedDistance}m@#{movedDirection})"
+            debug "Moved from #{oldlat}/#{oldlon} to #{newlat}/#{newlon} (#{movedDistance}m@#{movedDirection})"
             cache['moved'] = true
           end
         end
