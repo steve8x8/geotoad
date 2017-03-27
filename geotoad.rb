@@ -346,7 +346,8 @@ class GeoToad
     displayMessage "Logging in as #{@option['user']}"
     @cookie = login(@option['user'], @option['password'])
     debug "Login returned cookie #{hideCookie(@cookie).inspect}"
-    if @cookie and (@cookie =~ /gspkauth=/) and (@cookie =~ /(ASP.NET_SessionId=\w+)/)
+    if @cookie and (@cookie =~ /gspkauth=/) and 
+      ((@cookie =~ /(__RequestVerificationToken=\w+)/) or (@cookie =~ /(ASP.NET_SessionId==\w+)/))
       displayMessage "Login successful"
     else
       displayWarning "Login failed!"

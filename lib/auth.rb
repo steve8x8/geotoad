@@ -11,7 +11,7 @@ module Auth
   include Common
   include Messages
 
-  @@login_url = 'https://www.geocaching.com/login/'
+  @@login_url = 'https://www.geocaching.com/account/login'
   @@user = nil
   # cookie to be sent
   @@cookie = nil
@@ -31,8 +31,6 @@ module Auth
     else
         debug "no cookie from login"
     end
-    logged_in = checkLoginScreen(cookie, user)
-    debug "checkLoginScreen returns #{logged_in.inspect}"
     # get the current (set of) cookie(s) and pretend that login was successful
     return cookie
   end
@@ -61,15 +59,18 @@ module Auth
       # key=value; [domain=...; ][expires=Sat, 06-Apr-2013 07:45:26 GMT; ]path=...; HttpOnly
       # if expires date is in the past, remove/disable
       case c
+      # default format
       when /^(.*?)=(.*?);.*expires=(\w+, (\d+)-(\w+)-(\d+) (\d+):(\d+):(\d+) GMT);/
         key = $1
         value = $2
         expire = $3
         et = Time.gm($6, $5, $4, $7, $8, $9)
         life = (et.to_i - Time.now.to_i) / 86400.0
-        if (life <= 0)
+        if (life <= -86400)
           value = 'expired'
           displayWarning "Cookie \"#{key}\" has expired! (#{expire})"
+        elsif (life <= 0)
+          displayWarning "Cookie \"#{key}\" is expiring! (#{expire})"
         end
         if @@cookies[key] != value
           debug3 "saveCookie: set #{key}, expires #{expire}"
@@ -77,7 +78,14 @@ module Auth
         else
           debug3 "saveCookie: confirm #{key}, expires #{expire}"
         end
-      when /^(.*?)=(.*?);/ # SessionId has no expires
+      # unsupported format or timezone
+      when /^(.*?)=(.*?);.*expires=(.*);/
+        key = $1
+        value = $2
+        expire = $3
+        displayWarning "Cookie \"#{key}\" has unsupported expires=#{expire}"
+      # cookie without expires, e.g. SessionID
+      when /^(.*?)=(.*?);/
         key = $1
         value = $2
         if @@cookies[key] != value
@@ -95,87 +103,48 @@ module Auth
 
   # obfuscate cookie so nobody can use it
   def hideCookie(cookie)
-    hcookie = cookie.to_s
-    if cookie =~ /(ASP.NET_SessionId=)(\w{5})(\w+)(\w{5})(;.*)?/
-      hcookie = $1 + $2 + "*" * $3.length + $4 + $5.to_s
+    hcookie = cookie.to_s.split(/; */).map{ |c|
+    if c =~ /(__RequestVerificationToken=|gspkauth=|ASP.NET_SessionId=)(\w{5})(\w+)(\w{5})/
+      "#{$1}#{$2}[#{$3.length}]#{$4}"
+    else
+      c
     end
-    hcookie = 'nil' if hcookie.empty?
+    }.compact.join("; ")
     return hcookie
-  end
-
-  def checkLoginScreen(cookie, user)
-    # if we have no cookie we aren't logged in
-    debug2 "checkLoginScreen with #{hideCookie(cookie)}"
-    return nil if not cookie
-    @postVars = Hash.new
-    page = ShadowFetch.new(@@login_url + 'default.aspx')
-    page.localExpiry = -1
-    debug3 "Checking validity of cookie #{hideCookie(cookie)}"
-    data = page.fetch
-    data.each_line do |line|
-      case line
-      #  <h3><span id="ctl00_ContentBody_lbUsername">Has iniciado sesión como <strong>Ölscheich99</strong></span></h3>
-      # Note: the only occurrence of utf-8 characters is in the comment above
-      when /You are (logged|signed) in as/
-        debug "Found login confirmation!"
-        return true
-      when /<strong>#{user}<\/strong>/
-        debug "Username confirmed!"
-        return true
-      when /<input type=\"hidden\" name=\"(.*?)\".*value=\"(.*?)\"/
-        @postVars[$1] = $2
-        debug3 "found hidden post variable: #{$1}"
-      when /<form .*logout/
-        # ignore
-        true
-      #when /<form name=\"aspnetForm\" method=\"post\" action=\"(.*?)\"/
-      # 20161010:
-      # <form method="post" action="./default.aspx" onsubmit="javascript:return WebForm_OnSubmit();" id="aspnetForm">
-      when /<form .*action=\"(.*?)\"/
-        debug3 "checkLoginScreen form action \"#{$1}\""
-        @postURL = @@login_url + $1
-        @postURL.gsub!('/./', '/')
-        @postURL.gsub!('&amp;', '&')
-        debug3 "post URL is #{@postURL}"
-      end
-    end
-    debug "Looks like we don't have a valid cookie. Must login again?"
-    return nil
   end
 
   def getLoginCookie(user, password)
     @@user = user
     @postVars = Hash.new
+    @postURL = @@login_url
     # get login form
-    page = ShadowFetch.new(@@login_url + 'default.aspx')
+    page = ShadowFetch.new(@@login_url)
     page.localExpiry = -1
     data = page.fetch
-    data.each_line do |line|
+    # all form data are in one line now (20170323)
+    # as a workaround, split at tag end - FIXME
+    data.gsub(">", ">\n").each_line do |line|
       case line
-      when /<input type=\"hidden\" name=\"(.*?)\".*value=\"(.*?)\"/
+      # sequence of type="hidden" and name="..." may change
+      # make this more robust - FIXME
+      when /<input .*name=\"(.*?)\".*value=\"(.*?)\"/
         @postVars[$1] = $2
-        debug3 "found hidden post variable: #{$1}"
+        debug3 "found post variable: #{$1}"
       when /<form .*logout/
         # ignore
         true
-      #when /<form name=\"aspnetForm\" method=\"post\" action=\"(.*?)\"/
-      # 20161010:
-      # <form method="post" action="./default.aspx" onsubmit="javascript:return WebForm_OnSubmit();" id="aspnetForm">
       when /<form .*action=\"(.*?)\"/
         debug3 "getLoginCookie form action \"#{$1}\""
-        @postURL = @@login_url + $1
-        @postURL.gsub!('/./', '/')
-        @postURL.gsub!('&amp;', '&')
+        @postURL = @@login_url
         debug3 "post URL is #{@postURL}"
       end
     end
-    # fill in form, and submit
+    # fill in form with user credentials, and submit
     page = ShadowFetch.new(@postURL)
     page.localExpiry = -1
-    @postVars['ctl00$ContentBody$tbUsername'] = user
-    @postVars['ctl00$ContentBody$tbPassword'] = password
-    @postVars['ctl00$ContentBody$cbRememberMe'] = 'on'
-    @postVars['ctl00$ContentBody$btnSignIn'] = 'Sign In'
+    @postVars['Username'] = user
+    @postVars['Password'] = password
+    debug3 "login postVars #{@postVars.keys.inspect}"
     page.postVars = @postVars
     data = page.fetch
     # extract cookie
@@ -185,7 +154,9 @@ module Auth
     saveCookie(cookie)
     cookie = loadCookie()
     # spring 2016 replaced userid with other cookies
-    if (cookie =~ /gspkauth=/) and (cookie =~ /(ASP.NET_SessionId=\w+)/)
+    # spring 2017 did this again
+    if (cookie =~ /gspkauth=/) and
+      ((cookie =~ /(__RequestVerificationToken=\w+)/) or (@cookie =~ /(ASP.NET_SessionId==\w+)/))
       debug "Cookie #{hideCookie(cookie)} looks good, rock on."
       return cookie
     else
