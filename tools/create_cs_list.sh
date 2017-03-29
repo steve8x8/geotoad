@@ -39,6 +39,7 @@ printf "]\n\n"
 > /tmp/$$.s
 
 {
+printf "# -*- encoding : utf-8 -*-\n\n"
 printf "module CountryStateList\n\n"
 cat /tmp/$$.[cs]
 printf "end\n"

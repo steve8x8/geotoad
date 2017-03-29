@@ -2,7 +2,7 @@
 
 module CountryStateList
 
-# country list last updated: 2017-02-22
+# country list last updated: 2017-03-29
 $COUNTRIES = [
 	[   2, "United States" ],
 	[   3, "Australia" ],
@@ -259,7 +259,7 @@ $COUNTRIES = [
 	[ 278, "South Sudan" ],
 ]
 
-#   state list last updated: 2017-02-22
+#   state list last updated: 2017-03-29
 $STATES = [
 	[   2, "Alaska (AK)",   2, "United States" ],
 	[   3, "Arizona (AZ)",   2, "United States" ],
