@@ -233,7 +233,7 @@ class Output
     @username = nil
     # initialize templates
     Templates.new if $allFormats.empty?
-    @commentLimit = 10
+    @commentLimit = -1
     @conditionWP = nil
   end
 
@@ -880,7 +880,7 @@ class Output
     # remark finder id strings can be empty, do not insert userIDs or fake numbers
 
     # info log entry
-    if (@commentLimit > 0) and cache['ltime']
+    if (@commentLimit != 0) and cache['ltime']
       debug3 "info log entry"
       entry = ''
       entry << "    <groundspeak:log id=\"-2\">\n"
@@ -911,7 +911,7 @@ class Output
     if cache['comments']
       commentcount = 0
       cache['comments'].each{ |comment|
-        break if (commentcount >= @commentLimit)
+        break if (@commentLimit >= 0) and (commentcount >= @commentLimit)
         # strip images from log entries
         comment_text = icons2Text(comment['text'].to_s)
         formatted_date = comment['date'].getgm.strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -945,7 +945,7 @@ class Output
     debug "Generating comment text for #{cache['name']}"
     commentcount = 0
     cache['comments'].each{ |comment|
-      break if (commentcount >= @commentLimit)
+      break if (@commentLimit >= 0) and (commentcount >= @commentLimit)
       comment_text = icons2Text(comment['text'].to_s)
       formatted_date = comment['date'].getlocal.strftime("%Y-%m-%d")
       # unescape HTML in finder name
@@ -979,7 +979,7 @@ class Output
     debug "Generating comment HTML for #{cache['name']}"
     commentcount = 0
     cache['comments'].each{ |comment|
-      break if (commentcount >= @commentLimit)
+      break if (@commentLimit >= 0) and (commentcount >= @commentLimit)
       formatted_date = comment['date'].getlocal.strftime("%Y-%m-%d")
       entry = ''
       entry << "<hr noshade size=\"1\" width=\"150\" align=\"left\"/>\n"
