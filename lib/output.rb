@@ -1447,7 +1447,8 @@ class Output
         outputadd = replaceVariables(@outputFormat['templateWP'], wid)
         maxlength = @outputFormat['maxlengthWP']
         if maxlength and outputadd.length > maxlength
-          output << outputadd[0..maxlength-2] + "_" #+ outputadd[-1..-1]
+          # keep last two characters (LF)
+          output << outputadd[0..maxlength-4] + "_" + outputadd[-2..-1]
         else
           output << outputadd
         end
