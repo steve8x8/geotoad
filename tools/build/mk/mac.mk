@@ -1,5 +1,5 @@
 USB_DIR = gt
-USB_MPT = /media/`whoami`
+USB_MPT = /media/$(shell whoami)
 
 $(GTV).dmg: $(GTV).tar.gz
 	@echo ""
@@ -35,7 +35,7 @@ $(GTV).dmg: $(GTV).tar.gz
 	-mount | grep $(USB_MPT)
 	-rsync -ax $(USB_MPT)/*/$(USB_DIR)/mac ./
 	-mv mac/$(GTV).dmg ./
-	-umount `df $(USR_MPT)/*/$(USB_DIR)/ | tail -n+2 | awk '{print $$NF}'` 2>/dev/null
+	-umount `df $(USB_MPT)/*/$(USB_DIR)/ | tail -n+2 | awk '{print $$NF}'` 2>/dev/null
 	-mount | grep $(USB_MPT)
 	@echo    "*** Remove the (unmounted) USB key."
 	@read -p "*** Press ENTER when done: " x
