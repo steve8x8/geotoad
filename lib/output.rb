@@ -1399,6 +1399,8 @@ class Output
     # use wpSearchOrder.reverse_each{} for reverse search order
 
     counter = 0
+    cond1cnt = 0
+    cond2cnt = 0
     (
      # arrange "-q user" queries in reverse search order
      # otherwise, sort GC1 < GCZZZZ < GC10000 < GCZZZZZ < GC100000
@@ -1427,21 +1429,53 @@ class Output
       @outVars['htmllogs'] = createHTMLCommentLogs(cache)
       # make output conditional
       willOutput = true
-      if @outputFormat['conditionWP'] or @conditionWP
+      # apply conditional output rule(s) only if at least one is given (non-nil)
+      # expressions are not interpreted yet - values are string or nil
+      if willOutput and @outputFormat['conditionWP']
         condition1 = @outputFormat['conditionWP'] || true
-        condition2 = @conditionWP || true
-        conditionWP = "( (#{condition1}) and (#{condition2}) )"
-        debug "WP condition #{conditionWP.inspect}"
-        condition = replaceVariables(conditionWP, wid)
-        debug "gives condition #{condition.inspect}"
+        debug "WP condition from template: #{condition1.inspect}"
+        # fill in cache-specific content
+        condition = replaceVariables(condition1, wid)
+        debug "\tgives condition #{condition.inspect}"
         begin
           willOutput = eval(condition)
           debug "result #{willOutput.inspect}"
+        rescue SyntaxError => e
+          displayWarning "template condition syntax error, skipping #{wid}:"
+          displayInfo    "\t#{condition} - #{e}"
+          willOutput = false
         rescue => e
-          displayWarning "Problem with output condition \"#{condition}\":\n\t#{e}, assuming false"
+          displayWarning "template condition problem, skipping #{wid}:"
+          displayInfo    "\t#{condition} - #{e}"
           willOutput = false
         end
         debug "WP condition for #{wid}: #{willOutput.inspect}"
+        if not willOutput
+          cond1cnt += 1
+        end
+      end
+      if willOutput and @conditionWP
+        condition2 = @conditionWP || true
+        debug "WP conditions from cmdline: #{@condition2.inspect}"
+        # fill in cache-specific content
+        condition = replaceVariables(condition2, wid)
+        debug "\tgives condition #{condition.inspect}"
+        begin
+          willOutput = eval(condition)
+          debug "result #{willOutput.inspect}"
+        rescue SyntaxError => e
+          displayWarning "cmdline condition syntax error, skipping #{wid}:"
+          displayInfo    "\t#{condition} - #{e}"
+          willOutput = false
+        rescue => e
+          displayWarning "cmdline condition problem, skipping #{wid}:"
+          displayInfo    "\t#{condition} - #{e}"
+          willOutput = false
+        end
+        debug "WP condition for #{wid}: #{willOutput.inspect}"
+        if not willOutput
+          cond2cnt += 1
+        end
       end
       if willOutput
         outputadd = replaceVariables(@outputFormat['templateWP'], wid)
@@ -1455,6 +1489,12 @@ class Output
       end
     }
 
+    if cond1cnt > 0
+      displayMessage "Removed #{cond1cnt} caches not matching template condition."
+    end
+    if cond2cnt > 0
+      displayMessage "Removed #{cond2cnt} caches not matching cmdline condition."
+    end
     if @outputFormat['templatePost']
       output << replaceVariables(@outputFormat['templatePost'], nil)
     end
