@@ -780,33 +780,67 @@ class Output
   end
 
   def icons2Text(str)
-    iconmap = {
-      "" => '[:)]',
-      "_angry" => '[:(!]',
-      "_approve" => '[^]',
-      "_big" => '[:D]',		#big smile
-      "_blackeye" => '[B)]',	#black eye
-      "_blush" => '[:I]',
-      "_clown" => '[:o)]',
-      "_cool" => '[8D]',
-      "_dead" => '[xx(]',
-      "_dissapprove" => '[V]',	#disapprove
-      "_disapprove" => '[V]',
-      "_8ball" => '[8]',	#eightball
-      "_eightball" => '[8]',
-      "_evil" => '[}:)]',
-      "_sad" => '[:(]',		#frown
-      "_frown" => '[:(]',
-      "_kisses" => '[:X]',
-      "_question" => '[?]',
-      "_shocked" => '[:O]',
-      "_shy" => '[8)]',
-      "_sleepy" => '[|)]',
-      "_tongue" => '[:P]',
-      "_wink" => '[;)]',
+    iconmap1 = {
+      ""             => '[:)]',
+      "_angry"       => '[:(!]',
+      "_approve"     => '[++]',
+      "_big"         => '[:D]',		#big smile
+      "_blackeye"    => '[B)]',	#black eye
+      "_blush"       => '[:I]',
+      "_clown"       => '[:o)]',
+      "_cool"        => '[8D]',
+      "_dead"        => '[xx(]',
+      "_dissapprove" => '[--]',	#disapprove
+      "_disapprove"  => '[--]',
+      "_8ball"       => '[8.]',	#eightball
+      "_eightball"   => '[8.]',
+      "_evil"        => '[}:)]',
+      "_sad"         => '[:(]',	#frown
+      "_frown"       => '[:(]',
+      "_kisses"      => '[:*]',
+      "_question"    => '[??]',
+      "_shocked"     => '[:O]',
+      "_shock"       => '[:O]',
+      "_shy"         => '[8)]',
+      "_sleepy"      => '[|)]',
+      "_tongue"      => '[:P]',
+      "_wink"        => '[;)]',
+    }
+    iconmap2 = {
+      "angel"       => '[O:)]',
+      "angry"       => '[:(!]',
+      "big"         => '[:D]',
+      "confused"    => '[S)]',
+      "cry"         => '[:,(]',
+      "devil"       => '[}:)]',
+      "embarrassed" => '[:I]',
+      "heart"       => '[<3]',
+      "kiss"        => '[:*]',
+      "lightbulb"   => '[!!]',
+      "omg"         => '[¦)]',
+      "regular"     => '[:)]',
+      "sad"         => '[:(]',
+      "shades"      => '[B)]',
+      "teeth"       => '[:D]',
+      "thumbs_down" => '[--]',
+      "thumbs_up"   => '[++]',
+      "tongue"      => '[:P]',
+      "tounge"      => '[:P]',	# tongue
+      "wink"        => '[;)]',
     }
     # translate smileys, remove other HTML img tags
-    return str.gsub(/<img.*?icon_smile(.*?)\.gif[^>]*>/im){iconmap[$1.downcase].to_s}
+    temp = str.dup
+    temp.gsub!(/<img\s[^>]*icon_smile(.*?)\.[^>]*>/im){
+      i = iconmap1[$1.downcase]
+      debug2 "smiley #{$1} -> #{i.inspect}"
+      i ? i.to_s : "[?#{$1}?]"
+    }
+    temp.gsub!(/<img\s[^>]*\/plugins\/smiley\/images\/(.*?)(_smile)?\.[^>]*>/im){
+      i = iconmap2[$1.downcase]
+      debug2 "smiley #{$1} + #{$2} -> #{i.inspect}"
+      i ? i.to_s : "[?#{$1}?]"
+    }
+    return temp
   end
 
   def generatePreOutput(title)
