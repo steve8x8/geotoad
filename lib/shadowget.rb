@@ -425,6 +425,13 @@ class ShadowFetch
       # error 404
       displayWarning "Not Found #{resp.response.inspect}"
       debug "#{resp.body.length} bytes in body"
+      success = false
+    when Net::HTTPServiceUnavailable
+      # error 503
+      #Unknown response "#<Net::HTTPServiceUnavailable 503 Service Unavailable readbody=true>"
+      displayWarning "Service unavailable, retry later"
+      debug "#{resp.body.length} bytes in body"
+      success = false
     else
       # we may have reported a problem before
       if success
