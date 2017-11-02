@@ -579,17 +579,17 @@ class Output
         value = @wpHash[wid][var].to_s
       elsif (type == "out")
         value = @outVars[var].to_s
-      # convert to XML, with some special (online-able) effects for c:geo
+      # convert to XML, with some special (online-able) effects and emoji for c:geo only
       elsif (type == "wpEntity" or type == "wpXML")
-        value = makeXML(@wpHash[wid][var].to_s) # modify=true, remove=true
+        value = makeXML(@wpHash[wid][var].to_s) # modify=true, remove=true, emoji=false
       elsif (type == "wpEntityCgeo" or type == "wpCGEO")
-        value = makeXML(@wpHash[wid][var].to_s, modify=true, remove=false)
+        value = makeXML(@wpHash[wid][var].to_s, modify=true, remove=false, emoji=true)
       elsif (type == "wpEntityNone" or type == "wpXML0")
         value = makeXML(@wpHash[wid][var].to_s, modify=false, remove=false)
       elsif (type == "outEntity" or type == "outXML")
         value = makeXML(@outVars[var].to_s) # modify=true, remove=true
       elsif (type == "outEntityCgeo" or type == "outCGEO")
-        value = makeXML(@outVars[var].to_s, modify=true, remove=false)
+        value = makeXML(@outVars[var].to_s, modify=true, remove=false, emoji=true)
       elsif (type == "outEntityNone" or type == "outXML0")
         value = makeXML(@outVars[var].to_s, modify=false, remove=false)
       # convert to text
@@ -625,29 +625,27 @@ class Output
     # pre-translate decimal into hex for large codepoints
     text.gsub!(/(\&#(\d+);)/) { ($2.to_i < 55296) ? $1 : ('&#x' + $2.to_i.to_s(16).upcase + ';') }
     # translate some UTF-16 surrogates into UTF-8 code points, remove others
-    if soft
-      # formula from http://www.unicode.org/faq/utf_bom.html
-      text.gsub!(/\&#x(D8..);\&#x(D[CDEF]..);/i) {
-        hi = $1.to_i(16)
-        lo = $2.to_i(16)
-        x = ((hi & 0x3f) << 10) | (lo & 0x3ff)
-        u = ((hi >> 6) & 0x1f) + 1
-        c = (u << 16) | x
-        hex = c.to_s(16).upcase
-        debug2 "converting surrogate #{$1}/#{$2} to #{hex}"
-        '&#x' + hex + ';'
+    #text.gsub!(/\&#xD[89AB]..;\&#xD[CDEF]..;/i, '(*)')
+    # formula from http://www.unicode.org/faq/utf_bom.html
+    text.gsub!(/\&#x(D8..);\&#x(D[CDEF]..);/i) {
+      hi = $1.to_i(16)
+      lo = $2.to_i(16)
+      x = ((hi & 0x3f) << 10) | (lo & 0x3ff)
+      u = ((hi >> 6) & 0x1f) + 1
+      c = (u << 16) | x
+      hex = c.to_s(16).upcase
+      debug2 "converting surrogate #{$1}/#{$2} to #{hex}"
+      soft ? '&#x' + hex + ';' : "[U+#{hex}]"
       }
-    end
-    text.gsub!(/\&#xD[89AB]..;\&#xD[CDEF]..;/i, '(*)')
     # handle unpaired surrogates
     text.gsub!(/\&#xD[89ABCDEF]..;/i, '(?)')
     return text
   end
 
-  def makeXML(str, modify=true, remove=true)
+  def makeXML(str, modify=true, remove=true, emoji=false)
     return "" if str.to_s.empty?
     # issue 262: "emoji" seem to break GPSr devices
-    text = deemoji(str, false)
+    text = deemoji(str, emoji)
     # remove smileys
     text = icons2Text(text.dup)
 
@@ -719,10 +717,10 @@ class Output
     return text
   end
 
-  def makeText(str)
+  def makeText(str, emoji=true)
     # Take HTML-like input, no matter how hacked up, and turn it into text
     # issue 262: may fail with "emoji" entities like &#xD83D;&#xDE03;
-    text = deemoji(str)
+    text = deemoji(str, emoji)
     begin
       text = CGI.unescapeHTML(text)
     rescue => e
