@@ -367,11 +367,13 @@ try to retrieve logbook entries from another source if there aren't any
 conditionally output caches, similar to the setting of the same name in templates (e.g. \fBwherigo\fR)
 Example, to output only if this isn't a member-only mystery cache:
 
-\-\-conditionWP="( not (<%wp.membersonly%> and \\"<%wp.type%>\\"==\\"unknown\\") )"
+ \fB\-\-conditionWP="(not( (<%wp.membersonly%>) and
+                        (\\"<%wp.type%>\\"==\\"unknown\\") ))"\fR
 
-Use plenty of parentheses!
+Use plenty of parentheses! Conditions which result in syntax errors are ignored.
 
-\fIMaintainer's recommendation: Add condition to a template instead.\fR
+ \fIRecommendation: Add condition to a template instead.\fR
+ \fISee \fR\fBtwitter.tm\fR\fI and \fR\fBwherigo.tm\fR\fI for examples.\fR
 
 .PP
 .TP
