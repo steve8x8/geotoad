@@ -1,4 +1,4 @@
-.TH "GEOTOAD" "1" "19 Jul 2017" "steve8x8@googlemail.com" "Geocaching Query Tool"
+.TH "GEOTOAD" "1" "04 Nov 2017" "steve8x8@googlemail.com" "Geocaching Query Tool"
 
 .SH "NAME"
 
@@ -19,7 +19,7 @@ If GeoToad was not installed from a (distribution-specific) package
 and Ubuntu, etc.), it may be necessary to invoke GeoToad with the
 \fB.rb\fR
 suffix, as in \fBgeotoad.rb\fR, \fB./geotoad.rb\fR, \fBruby geotoad.rb\fR
-or even \fBruby1.9.3 geotoad.rb\fR
+or even \fBruby2.1.5 geotoad.rb\fR
 (if the \fBruby\fR in your PATH is not the one you want to use).
 
 .SH "DESCRIPTION"
@@ -517,6 +517,10 @@ machine, testing is close to impossible.
 Starting with Ruby 2.1, Windows XP is no longer supported (and 3.24.0 will
 be the last release that comes with Ruby 2.0 pre-packaged). 32-bit support
 will be preserved as long as possible.
+.PP
+Due to implementation limitations, Ruby versions before 2.1(.5) are discouraged.
+You will get a warning - don't complain if something fails afterwards.
+(And something will fail since GroundSpeak have started enforcing https.)
 .SS "Limitations by design:"
 .PP
 .B  geotoad
