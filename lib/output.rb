@@ -719,10 +719,12 @@ class Output
     text.gsub!(/\&(amp;)*nbsp;/, ' ')
     text.gsub!(/[\x09\x0a\x0d]/, ' ')
     text.gsub!(/ +/, ' ')
-    # Strip out control characters
-    text.gsub!(/[\x00-\x1f\x7f]/, '?')
-    text.gsub!(/\&#x[01].;/, '?')
-    text.gsub!(/\&#x7[fF]/, '?')
+    # Strip out control characters; ToDo: replace with [^X] ?
+    text.gsub!(/([\x00-\x1f\x7f])/){ x="#{$1}".ord.to_s(16).upcase; "[\\x#{x}]" }
+    # Convert hex encoding to decimal
+    text.gsub!(/\&#x([0-9a-fA-F]{1,2});/){ x="#{$1}".to_i(16); "&##{x};" }
+    # Remove dec-encoded control chars
+    text.gsub!(/(\&#([0-9]+);)/){ x=$2.to_i; ((x<=31)||(x==127)) ? "[\\x#{x.to_s(16)}]" : $1 }
 
     # Fix apostrophes so that they show up as expected. Fixes issue 26.
     text.gsub!('&#8217;', "'")
