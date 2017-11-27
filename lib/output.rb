@@ -653,28 +653,45 @@ class Output
       # remove/tweak links, images
       if remove
         # text-only link representation
-        text.gsub!(/<a\s[^>]*href=\s*[\'\"]https?:\/\/([^\'\">]*)[\'\"].*?>(.*?)<\/a.*?>/im){"[= #{$2} #{$1} =]"}
+        text.gsub!(/<a\s[^>]*href=\s*[\'\"]https?:\/\/([^\'\">]*)[\'\"].*?>(.*?)<\/a.*?>/im){
+            "[= #{$2} #{$1} =]"
+        }
       else
-        # clickable link
-        text.gsub!(/(<a\s[^>]*href=\s*[\'\"]https?:\/\/([^\'\">]*)[\'\"].*?>)(.*?)(<\/a.*?>)/im){"#{$1}[= #{$3} #{$2} =] #{$4}"}
+        # clickable link: do not nest!
+        text.gsub!(/(<a\s[^>]*href=\s*[\'\"]https?:\/\/([^\'\">]*)[\'\"].*?>)(.*?)(<\/a.*?>)/im){
+#            "#{$1}[= #{$3} #{$2} =] #{$4}"
+            "#{$3} #{$1}[= #{$2} =]#{$4}"
+        }
       end
       # caveat: there are <img alt="..." src="..." ...> in the wild
       if remove
         # text-only image representation
         # with alt and src
-        text.gsub!(/<img\s[^>]*alt=\s*[\'\"]([^\'\">]*)[\'\"][^>]*\s+src=\s*[\'\"]https?:\/\/([^\'\">]*)[\'\"][^>]*>/im){"[* #{$1}: #{$2} *]"}
+        text.gsub!(/<img\s[^>]*alt=\s*[\'\"]([^\'\">]*)[\'\"][^>]*\s+src=\s*[\'\"]https?:\/\/([^\'\">]*)[\'\"][^>]*>/im){
+            "[* #{$1}: #{$2} *]"
+        }
         # with src and alt
-        text.gsub!(/<img\s[^>]*src=\s*[\'\"]https?:\/\/([^\'\">]*)[\'\"][^>]*\s+alt=\s*[\'\"]([^\'\">]*)[\'\"][^>]*>/im){"[* #{$2}: #{$1} *]"}
+        text.gsub!(/<img\s[^>]*src=\s*[\'\"]https?:\/\/([^\'\">]*)[\'\"][^>]*\s+alt=\s*[\'\"]([^\'\">]*)[\'\"][^>]*>/im){
+            "[* #{$2}: #{$1} *]"
+        }
         # no alt
-        text.gsub!(/<img\s[^>]*src=\s*[\'\"]https?:\/\/([^\'\">]*)[\'\"][^>]*>/im){"[* #{$1} *]"}
+        text.gsub!(/<img\s[^>]*src=\s*[\'\"]https?:\/\/([^\'\">]*)[\'\"][^>]*>/im){
+            "[* #{$1} *]"
+        }
       else
         # replace image reference by clickable link to avoid bandwidth consumption
         # with alt and src
-        text.gsub!(/<img\s[^>]*alt=\s*[\'\"]([^\'\">]*)[\'\"][^>]*\s+src=\s*[\'\"](https?:\/\/([^\'\">]*))[\'\"][^>]*>/im){"<a href=\"#{$2}\">[* #{$1}: #{$3} *]</a>"}
+        text.gsub!(/<img\s[^>]*alt=\s*[\'\"]([^\'\">]*)[\'\"][^>]*\s+src=\s*[\'\"](https?:\/\/([^\'\">]*))[\'\"][^>]*>/im){
+            "<a href=\"#{$2}\">(* #{$1}: #{$3} *]</a>"
+        }
         # with src and alt
-        text.gsub!(/<img\s[^>]*src=\s*[\'\"](https?:\/\/([^\'\">]*))[\'\"][^>]*\s+alt=\s*[\'\"]([^\'\">]*)[\'\"][^>]*>/im){"<a href=\"#{$1}\">[* #{$3}: #{$2} *]</a>"}
+        text.gsub!(/<img\s[^>]*src=\s*[\'\"](https?:\/\/([^\'\">]*))[\'\"][^>]*\s+alt=\s*[\'\"]([^\'\">]*)[\'\"][^>]*>/im){
+            "<a href=\"#{$1}\">[* #{$3}: #{$2} *]</a>"
+        }
         # no alt
-        text.gsub!(/<img\s[^>]*src=\s*[\'\"](https?:\/\/([^\'\">]*))[\'\"][^>]*>/im){"<a href=\"#{$1}\">[* #{$2} *]</a>"}
+        text.gsub!(/<img\s[^>]*src=\s*[\'\"](https?:\/\/([^\'\">]*))[\'\"][^>]*>/im){
+            "<a href=\"#{$1}\">[* #{$2} *]</a>"
+        }
       end
     end
 
