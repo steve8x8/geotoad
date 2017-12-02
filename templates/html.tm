@@ -3,6 +3,7 @@ template = {
   'html' => {
     'ext'  => 'html',
     'desc' => 'Simple HTML',
+    'emoji' => 'supported',
     'templatePre'   =>
       "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n" +
       "<html><head>\n<title><%outEntity.title%></title>\n" +

@@ -1036,7 +1036,7 @@ class GeoToad
       queryTitle = @queryTitle + " (" + Time.now.localtime.strftime("%d%b%y %H:%M") + ")"
 
       # and do the dirty.
-      output.prepare(queryTitle, @option['user'])
+      output.prepare(queryTitle, @option['user'], output.formatEmoji(formatType))
       if output.commit(outputFile)
         displayMessage "Saved #{outputFile}"
       else

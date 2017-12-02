@@ -5,6 +5,7 @@ template = {
   'gpx-cgeo' => {
     'ext'  => 'gpx',
     'desc' => 'GPX for c:geo, with AddWpts, also unlocated',
+    'emoji' => 'supported',
     'templatePre'  =>
       "<?xml version=\'1.0\' encoding=\'UTF-8\' standalone=\'yes\' ?>\n" +
       "<gpx" +
@@ -52,7 +53,7 @@ template = {
        "</groundspeak:short_description>\n" +
       "  <groundspeak:long_description html=\"True\">" +
        "<%wpEntityCgeo.longdesc%>" +
-       "<%wpEntityNone.gallery%>" +
+       "<%wpEntityCgeo.gallery%>" +
        "</groundspeak:long_description>\n" +
       "  <groundspeak:encoded_hints><%outEntityCgeo.hintdecrypt%></groundspeak:encoded_hints>\n" +
       "  <groundspeak:logs>\n" +

@@ -231,6 +231,7 @@ class Output
     @output = Array.new
     @waypointLength = 0
     @username = nil
+    @doemoji = false
     # initialize templates
     Templates.new if $allFormats.empty?
     @commentLimit = -1
@@ -466,21 +467,26 @@ class Output
     return $allFormats[format]['desc']
   end
 
+  def formatEmoji(format)
+    return $allFormats[format]['emoji']
+  end
+
   def formatRequirement(format)
     return $allFormats[format]['required']
   end
 
   ## sets up for the filtering process ################3
-  def prepare (title, username)
+  def prepare (title, username, doemoji)
     @title = title
     @username = username
+    @doemoji = (! doemoji.to_s.empty?)
 
     # if we are not actually generating the output, lets do it in a meta-fashion.
-    debug2 "preparing for #{@outputType}"
+    debug2 "preparing for #{@outputType}, emoji: #{@doemoji.inspect}"
     if @outputFormat['filter_exec']
       post_format = @outputType
       debug3 "pre-formatting as #{@outputFormat['filter_src']} (from #{post_format})"
-      self.formatType=@outputFormat['filter_src']
+      self.formatType = @outputFormat['filter_src']
       debug3 "pre-format: #{@outputFormat['desc']}"
       @output = generateOutput(title)
       self.formatType = post_format
@@ -581,17 +587,13 @@ class Output
         value = @outVars[var].to_s
       # convert to XML, with some special (online-able) effects and emoji for c:geo only
       elsif (type == "wpEntity" or type == "wpXML")
-        value = makeXML(@wpHash[wid][var].to_s) # modify=true, remove=true, emoji=false
+        value = makeXML(@wpHash[wid][var].to_s, emoji=@doemoji) # modify=true, remove=true
       elsif (type == "wpEntityCgeo" or type == "wpCGEO")
-        value = makeXML(@wpHash[wid][var].to_s, modify=true, remove=false, emoji=true)
-      elsif (type == "wpEntityNone" or type == "wpXML0")
-        value = makeXML(@wpHash[wid][var].to_s, modify=false, remove=false)
+        value = makeXML(@wpHash[wid][var].to_s, emoji=@doemoji, modify=true, remove=false)
       elsif (type == "outEntity" or type == "outXML")
-        value = makeXML(@outVars[var].to_s) # modify=true, remove=true
+        value = makeXML(@outVars[var].to_s, emoji=@doemoji) # modify=true, remove=true
       elsif (type == "outEntityCgeo" or type == "outCGEO")
-        value = makeXML(@outVars[var].to_s, modify=true, remove=false, emoji=true)
-      elsif (type == "outEntityNone" or type == "outXML0")
-        value = makeXML(@outVars[var].to_s, modify=false, remove=false)
+        value = makeXML(@outVars[var].to_s, emoji=@doemoji, modify=true, remove=false)
       # convert to text
       elsif (type == "wpText")
         value = makeText(@wpHash[wid][var].to_s)
@@ -642,7 +644,7 @@ class Output
     return text
   end
 
-  def makeXML(str, modify=true, remove=true, emoji=false)
+  def makeXML(str, emoji=false, modify=true, remove=true)
     return "" if str.to_s.empty?
     # issue 262: "emoji" seem to break GPSr devices
     text = deemoji(str, emoji)
@@ -993,7 +995,7 @@ class Output
         entry << "      <groundspeak:date>#{formatted_date}</groundspeak:date>\n"
         entry << "      <groundspeak:type>#{comment['type']}</groundspeak:type>\n"
         entry << "      <groundspeak:finder id=\"\">#{comment['user']}</groundspeak:finder>\n"
-        entry << "      <groundspeak:text encoded=\"True\">" + makeXML(comment_text) + "</groundspeak:text>\n"
+        entry << "      <groundspeak:text encoded=\"True\">" + makeXML(comment_text, emoji=@doemoji) + "</groundspeak:text>\n"
         entry << "    </groundspeak:log>\n"
         entries << entry
         commentcount += 1
