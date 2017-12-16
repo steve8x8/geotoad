@@ -387,13 +387,14 @@ class SearchCache
         wid = $1
         debug "Found WID: #{wid} (s2phone)"
       # premium-member only
-      when /WptTypeImage.*\/(wpttypes|play\/Content\/images\/cache-types)\/(\w+)\./
+      when /WptTypeImage.*\/([wW]pt[tT]ypes|play\/Content\/images\/cache-types)\/(\w+)\./
         ccode = $2
         # list covers only "standard" types! This may be incorrect
         if @cachetypenum[ccode]
           ctype = @cachetypenum[ccode]
         else
-          displayWarning "Cache image code #{ccode} for WID #{wid.inspect} - please report"
+          displayWarning "Cache image code #{ccode.inspect} for WID #{wid.inspect} A - please report!"
+          displayInfo "#{line}"
           ctype = 'Unknown Cache'
         end
         debug "Found PMO type code #{ccode} -> #{ctype}"
@@ -819,7 +820,7 @@ class SearchCache
       # <a href="/seek/cache_details.aspx?guid=ecfd0038-8e51-4ac8-a073-1aebe7c10cbc" class="lnk">
       # ...<img src="http://www.geocaching.com/images/wpttypes/sm/3.gif" alt="Multi-cache" title="Multi-cache" /></a>
       # ... <a href="/seek/cache_details.aspx?guid=ecfd0038-8e51-4ac8-a073-1aebe7c10cbc" class="lnk  Strike"><span>Besinnungsweg</span></a>
-      when /(<img.*?wpttypes\/(\w+)\.[^>]*alt=\"(.*?)\".*)?cache_details.aspx\?guid=([0-9a-f-]{36})([^>]*)><span>\s*(.*?)\s*<\/span><\/a>/
+      when /(<img.*?[wW]pt[tT]ypes\/(\w+)\.[^>]*alt=\"(.*?)\".*)?cache_details.aspx\?guid=([0-9a-f-]{36})([^>]*)><span>\s*(.*?)\s*<\/span><\/a>/
         debug "found cd ccode=#{$2} type=#{$3} guid=#{$4} name=#{$6}"
         ccode = $2
         full_type = $3
@@ -833,7 +834,8 @@ class SearchCache
         if @cachetypenum[ccode]
           full_type = @cachetypenum[ccode]
         else
-          displayWarning "Cache image code #{ccode} for #{full_type} - please report"
+          displayWarning "Cache image code #{ccode.inspect} for type #{full_type.inspect} B - please report!"
+          displayInfo "#{line}"
         end
         # there may be more than 1 match, don't overwrite
         if cache['fulltype']
@@ -902,7 +904,7 @@ class SearchCache
         debug "guid=#{cache['guid']} name=#{cache['name']} (disabled=#{cache['disabled']}, archived=#{cache['archived']})"
 
       # 2013-08-21:
-      when /(<img.*?wpttypes\/(\w+)\.[^>]*alt=\"(.*?)\".*)?\/geocache\/(GC[0-9A-Z]+)([^>]*)><span>\s*(.*?)\s*<\/span><\/a>/
+      when /(<img.*?[wW]pt[tT]ypes\/(\w+)\.[^>]*alt=\"(.*?)\".*)?\/geocache\/(GC[0-9A-Z]+)([^>]*)><span>\s*(.*?)\s*<\/span><\/a>/
         debug "found gc ccode=#{$2} type=#{$3} wid=#{$4} name=#{$6}"
         ccode = $2
         full_type = $3
@@ -915,7 +917,8 @@ class SearchCache
         if @cachetypenum[ccode]
           full_type = @cachetypenum[ccode]
         else
-          displayWarning "Cache image code #{ccode} for #{full_type} - please report"
+          displayWarning "Cache image code #{ccode.inspect} for type #{full_type.inspect} C - please report!"
+          displayInfo "#{line}"
         end
         # there may be more than 1 match, don't overwrite
         if cache['fulltype']
@@ -1086,7 +1089,7 @@ class SearchCache
         cache['wid'] = wid
         debug "found guid=#{guid} wid=#{wid}"
 
-      when /<img.*?wpttypes\/(sm\/)?(\w+)\.[^>]*alt=\"(.*?)\"/
+      when /<img.*?[wW]pt[tT]ypes\/(sm\/)?(\w+)\.[^>]*alt=\"(.*?)\"/
         debug "found gc ccode=#{$2} type=#{$3}"
         ccode = $2
         full_type = $3

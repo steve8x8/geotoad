@@ -342,7 +342,7 @@ class CacheDetails
     attrval = (how.downcase == "yes") ? 1 : 0
     if not attrid
       # we may have missed an addition or change to the list
-      displayWarning "Unknown attribute #{text}, please report!"
+      displayWarning "Unknown attribute #{text.inspect}, please report!"
       return 0, 0
     end
     return attrid, attrval
@@ -401,7 +401,7 @@ class CacheDetails
       # <h2>
       #     <img src="../images/WptTypes/2.gif" alt="Traditional Cache" width="32" height="32" />&nbsp;Lake Crabtree computer software store
       # </h2>
-      if line =~ /WptTypes\/(\w+)\.[^>]* alt=\"(.*?)\".*?\/>(.nbsp;)?\s*(.*?)\s*$/
+      if line =~ /[wW]pt[tT]ypes\/(\w+)\.[^>]* alt=\"(.*?)\".*?\/>(.nbsp;)?\s*(.*?)\s*$/
         debug "found ccode=#{$1}, type=#{$2} name=#{$4}"
         ccode = $1
         full_type = $2
@@ -413,7 +413,7 @@ class CacheDetails
         if @cachetypenum[ccode]
           full_type = @cachetypenum[ccode]
         else
-          displayWarning "Cache image code #{ccode} for #{full_type} - please report"
+          displayWarning "Cache image code #{ccode.inspect} for type #{full_type.inspect} D - please report!"
         end
         if not cache
           displayWarning "Found waypoint type, but never saw cache title. Did geocaching.com change their layout again?"
