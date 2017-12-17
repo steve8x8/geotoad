@@ -22,12 +22,14 @@ class CacheDetails
 
   attr_writer :preserve
   attr_writer :getlogbk
+  attr_writer :logcount
   attr_writer :getimage
 
   def initialize(data)
     @waypointHash = data
     @preserve = nil
     @getlogbk = nil
+    @logcount = 10
     @getimage = nil
 
     @cachetypenum = {
@@ -788,7 +790,8 @@ class CacheDetails
       cache['atime'] = Time.at($ZEROTIME)
     end
 
-    # Parse the additional waypoints table. Needs additional work for non-HTML templates.
+    # This snippet may become obsolete...
+    # ----------
     comments, last_find_date, visitors = parseComments(data, cache['creator'])
     cache['visitors'] << visitors
     if comments.length > 0 and cache['membersonly']
@@ -798,7 +801,8 @@ class CacheDetails
     # do we want to retrieve the geocache.logbook?
     if @getlogbk
       # even if there are old logs from pre-PMO times
-      if comments.length <= 0 or cache['membersonly']
+    # ----------
+      if (@logcount > 0) and (comments.length <= 0 or cache['membersonly'])
         # try to get log entries from logbook page instead
         debug "Get logbook for guid #{cache['guid']}"
         newcomments, logtimestamp = getLogBook(cache['guid'])
@@ -807,7 +811,10 @@ class CacheDetails
           cache['ltime'] = logtimestamp
         end
       end
+    # ----------
     end
+    # ----------
+
     if comments.length > 0
       cache['last_find_type'] = comments[0]['type']
       cache['last_find_days'] = daysAgo(comments[0]['date'])

@@ -160,6 +160,7 @@ class GeoToad
 
     @preserveCache     = @option['preserveCache']
     @getLogbook        = @option['getLogbook']
+    @logCount          = (@option['logCount'] || '10').to_i
     @imageLinks        = @option['imageLinks']
 
     @formatTypes       = @option['format'] || 'gpx'
@@ -752,6 +753,7 @@ class GeoToad
     @detail = CacheDetails.new(wpFiltered)
     @detail.preserve = @preserveCache
     @detail.getlogbk = @getLogbook
+    @detail.logcount = @logCount
     @detail.getimage = @imageLinks
     token = 0
 
