@@ -1,3 +1,15 @@
+geotoad (3.27.2-1) unstable; urgency=low
+
+  * New version 3.27.2, "Santa Wishlist 2017"
+  * Improved --conditionWP (command line option) handling, catch syntax errors
+  * Fixed handling of image "alt" tags
+  * Convert new icons
+  * Issue 352: Untangle nested hyperlinks
+  * Issue 354 quick-fix: case-sensitivity in cache type detection
+  * Minor stuff here and there
+
+ -- Steve Sixty-Four <steve8x8@googlemail.com>  Mon, 18 Dec 2017 09:00:00 +0000
+
 geotoad (3.27.1-1) unstable; urgency=low
 
   * New version 3.27.1, "Geocaching Vacation 2017"
