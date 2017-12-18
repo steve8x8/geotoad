@@ -403,7 +403,7 @@ class CacheDetails
       # <h2>
       #     <img src="../images/WptTypes/2.gif" alt="Traditional Cache" width="32" height="32" />&nbsp;Lake Crabtree computer software store
       # </h2>
-      if line =~ /[wW]pt[tT]ypes\/(\w+)\.[^>]* alt=\"(.*?)\".*?\/>(.nbsp;)?\s*(.*?)\s*$/
+      if line =~ /wpttypes\/(\w+)\.[^>]* alt=\"(.*?)\".*?\/>(.nbsp;)?\s*(.*?)\s*$/i
         debug "found ccode=#{$1}, type=#{$2} name=#{$4}"
         ccode = $1
         full_type = $2
@@ -475,7 +475,7 @@ class CacheDetails
 
       # <p class="Meta">\s*<strong>Size:</strong>\s*<img src="../images/icons/container/regular.gif" alt="Size: Regular" />&nbsp;<small>(Regular)</small>\s*</p>
       # match only image part
-      if line =~ /<img src=\".*?\" alt=\"Size: (.*?)\" \/>/
+      if line =~ /<img src=\".*?\" alt=\"Size: (.*?)\" \/>/i
         if not cache['size']
           cache['size'] = $1.downcase.gsub(/medium/, 'regular')
         end
@@ -729,7 +729,7 @@ class CacheDetails
 
     # <h2>\n   Trackable Items</h2>\n   </div>\n   <div class="item-content">\n   (empty)\n   </div>
     # ... <img src="http://www.geocaching.com/images/wpttypes/sm/21.gif" alt="" /> SCOUBIDOU, <img src="http://www.geocaching.com/images/wpttypes/sm/3916.gif" alt="" /> colorful kite ...
-    if data =~ /<h\d>\s*Trackable Items\s*<\/h\d>\s*<\/div>\s*<div [^>]*>\s*(.*?)\s*<\/div>/
+    if data =~ /<h\d>\s*Trackable Items\s*<\/h\d>\s*<\/div>\s*<div [^>]*>\s*(.*?)\s*<\/div>/m
       # travel bug data, all in a single line
       line = $1
       debug2 "List of trackables: #{line}"
