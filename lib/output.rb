@@ -682,15 +682,15 @@ class Output
         }
       else
         # replace image reference by clickable link to avoid bandwidth consumption
-        # with alt and src
-        text.gsub!(/<img\s[^>]*alt=\s*[\'\"]([^\'\">]*)[\'\"][^>]*\s+src=\s*[\'\"](https?:\/\/([^\'\">]*))[\'\"][^>]*>/im){
-            "<a href=\"#{$2}\">(* #{$1}: #{$3} *]</a>"
+        # with alt/title and src
+        text.gsub!(/<img\s[^>]*(alt|title)=\s*[\'\"]([^\'\">]*)[\'\"][^>]*\s+src=\s*[\'\"](https?:\/\/([^\'\">]*))[\'\"][^>]*>/im){
+            "<a href=\"#{$3}\">[* #{$2}: #{$4} *]</a>"
         }
-        # with src and alt
-        text.gsub!(/<img\s[^>]*src=\s*[\'\"](https?:\/\/([^\'\">]*))[\'\"][^>]*\s+alt=\s*[\'\"]([^\'\">]*)[\'\"][^>]*>/im){
-            "<a href=\"#{$1}\">[* #{$3}: #{$2} *]</a>"
+        # with src and alt/title
+        text.gsub!(/<img\s[^>]*src=\s*[\'\"](https?:\/\/([^\'\">]*))[\'\"][^>]*\s+(alt|title)=\s*[\'\"]([^\'\">]*)[\'\"][^>]*>/im){
+            "<a href=\"#{$1}\">[* #{$4}: #{$2} *]</a>"
         }
-        # no alt
+        # no alt/title
         text.gsub!(/<img\s[^>]*src=\s*[\'\"](https?:\/\/([^\'\">]*))[\'\"][^>]*>/im){
             "<a href=\"#{$1}\">[* #{$2} *]</a>"
         }
