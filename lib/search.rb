@@ -541,10 +541,11 @@ class SearchCache
     end
     post_vars = Hash.new
 
-    page_number, pages_total, parsed_total, post_vars, src = processPage({})
+    # get first result page
+    page_number, pages_total, waypoints_total, post_vars, src = processPage({})
     progress = ProgressBar.new(1, pages_total, "Search results")
     progress.updateText(page_number, "page #{page_number} (#{src})")
-    if parsed_total.to_i <= 0
+    if waypoints_total.to_i <= 0
       displayMessage "No geocaches were found."
       return @waypoints
     end
@@ -568,15 +569,25 @@ class SearchCache
     end
 
     while (page_number < pages_total)
+      # get subsequent search pages
       debug "*** On page #{page_number} of #{pages_total}"
       last_page_number = page_number
-      page_number, total_pages, total_waypoints, post_vars, src = processPage(post_vars)
-      debug2 "processPage returns #{page_number}/#{total_pages}"
+      page_number, pages_total_updated, waypoints_total, post_vars, src = processPage(post_vars)
+      debug2 "processPage returns #{page_number}/#{pages_total_updated}, #{waypoints_total} wpts"
+      # number of result pages may have changed!
+      if pages_total_updated != pages_total
+        displayWarning "Result page count changed from #{pages_total} to #{pages_total_updated}, trouble ahead?"
+        pages_total = pages_total_updated
+        # set new maximum for ProgressBar
+        progress.updateText(nil, nil, pages_total)
+      end
       progress.updateText(page_number, "page #{page_number} (#{src})")
 
       if page_number == last_page_number
-        displayError "Stuck on page number #{page_number} of #{total_pages}"
+        displayWarning "Page number not increasing."
+        displayError "Stuck on page number #{page_number} of #{pages_total}"
       elsif page_number < last_page_number
+        displayWarning "Page number not increasing."
         displayError "We were on page #{last_page_number}, but just read #{page_number}. Parsing error?"
       end
       # limit search page count
@@ -604,8 +615,8 @@ class SearchCache
 
   def processPage(post_vars)
     data, src = getPage(@search_url, post_vars)
-    page_number, pages_total, parsed_total, post_vars = parseSearchData(data)
-    return [page_number, pages_total, parsed_total, post_vars, src]
+    page_number, pages_total, waypoints_total, post_vars = parseSearchData(data)
+    return [page_number, pages_total, waypoints_total, post_vars, src]
   end
 
 
@@ -615,7 +626,7 @@ class SearchCache
     end
     page_number = nil
     pages_total = nil
-    parsed_total = 0
+    waypoints_total = 0
     wid = nil
     waypoints_total = nil
     post_vars = Hash.new
@@ -1053,7 +1064,7 @@ class SearchCache
         debug "--- end of row ---"
         if wid and not @waypoints.has_key?(wid)
           debug2 "- closing #{wid} record -"
-          parsed_total += 1
+          waypoints_total += 1
           if not cache['mtime']
             cache['mdays'] = -1
             cache['mtime'] = Time.at($ZEROTIME)
@@ -1170,7 +1181,7 @@ class SearchCache
         debug "--- end of row ---"
         if wid and not @waypoints.has_key?(wid)
           debug2 "- closing #{wid} record -"
-          parsed_total += 1
+          waypoints_total += 1
 
           @waypoints[wid] = cache.dup
           @waypoints[wid]['visitors'] = []
@@ -1188,8 +1199,8 @@ class SearchCache
       displayWarning "Error in parseSearchData():data.split"
       raise error
     end
-    debug2 "processPage done: page:#{page_number} total_pages: #{pages_total} parsed: #{parsed_total}"
-    return [page_number, pages_total, parsed_total, post_vars]
+    debug2 "processPage done: page:#{page_number} total pages: #{pages_total} parsed: #{waypoints_total}"
+    return [page_number, pages_total, waypoints_total, post_vars]
   end #end parsecache
 
 end

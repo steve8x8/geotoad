@@ -7,9 +7,10 @@ class ProgressBar
     display
   end
 
-  def updateText(value, valueText)
-    @value = value
-    @valueText = valueText
+  def updateText(value, valueText, max=nil)
+    @value = value         if ! (value.nil?)
+    @valueText = valueText if ! (valueText.nil?)
+    @max = max             if ! (max.nil?)
     display
   end
 
