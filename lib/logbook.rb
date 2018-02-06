@@ -28,6 +28,7 @@ module LogBook
               .split(/},{/)
               .each { |jsonentry|
       begin
+        debug3 "JSON entry #{jsonentry}"
         jsonhash = eval("{" + jsonentry + "}")
         commenthash = { "type"    => jsonhash["LogType"],
                                      # "Visited" is in user-defined format
@@ -39,9 +40,11 @@ module LogBook
                         "text"    => jsonhash["LogText"]}
         commentarray.push(commenthash)
       rescue SyntaxError => e
-        debug2 "dropped json entry \"#{jsonentry}\"because of #{e}"
-#      rescue => e
-#        debug2 "dropped json entry \"#{jsonentry}\"because of #{e}"
+        debug2 "dropped json entry \"#{jsonentry}\" because of \"#{e}\""
+        displayWarning "json entry dropped because of syntax error"
+      rescue => e
+        debug2 "dropped json entry \"#{jsonentry}\" because of \"#{e}\""
+        displayWarning "json entry dropped because of error"
       end
     }
     return commentarray
