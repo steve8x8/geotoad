@@ -954,6 +954,19 @@ class CacheDetails
     # create table similar to Additional Waypoints and return that
     table = ''
     table << "<table id=\"Waypoints\">\n"
+    # include table header to tell this is an old-style table
+    table << "  <thead>\n"
+    table << "    <tr>\n"
+    table << "      <th></th>\n"
+    table << "      <th></th>\n"
+    table << "      <th></th>\n"
+    table << "      <th>Prefix</th>\n"
+    table << "      <th>Lookup</th>\n"
+    table << "      <th>Name</th>\n"
+    table << "      <th>Coordinate</th>\n"
+    table << "      <th></th>\n"
+    table << "    </tr>\n"
+    table << "  </thead>\n"
     table << "  <tbody>\n"
     cmaphash.each_key{ |pf|
       cmapitem = cmaphash[pf]
@@ -991,7 +1004,7 @@ class CacheDetails
       table << "    <tr>\n"
       table << "      <td></td>\n"
       table << "      <td>Note:</td>\n"
-      table << "      <td></td>\n"
+      table << "      <td colspan=\"6\"></td>\n"
       table << "    </tr>\n"
     }
     table << "  </tbody>\n"

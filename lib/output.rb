@@ -1104,13 +1104,16 @@ class Output
     new_text.gsub!(/\s*<\/a>/m, '')
     # remove form elements
     new_text.gsub!(/\s*<input\s+[^>]*>/m, '')
-    # remove table head
-    new_text.gsub!(/\s*<thead>.*<\/thead>/m, '')
+    # do not remove table head: detect table format change
+    #$#new_text.gsub!(/\s*<thead>.*<\/thead>/m, '')
     # remove spans
     new_text.gsub!(/\s*<\/?span[^>]*>/m, '')
     # remove leading and trailing blanks
     new_text.gsub!(/^\s+/, '')
     new_text.gsub!(/\s+$/, '')
+    # combine table header entries
+    new_text.gsub!(/<th( [^>]*)?>\n+/m, '<th>')
+    new_text.gsub!(/\n+<\/th( [^>]*)?>/m, '</th>')
     # combine table entries
     new_text.gsub!(/<td[^>]*>\n+/m, '<td>')
     new_text.gsub!(/\n+<\/td[^>]*>/m, '</td>')
@@ -1131,12 +1134,18 @@ class Output
     # <table><tr><td>...</table> -> <wpt>...</wpt>
     # replace line breaks by visible separator
     hidden = false
-    desc = nil
     prefix = nil
     lookup = nil
     wpname = nil
     wptype = nil
-    coord = nil
+    coords = nil
+    note   = ""
+    # column index old style, new style starts one field earlier!
+    xprefix = 4
+    xlookup = 5
+    xwpname = 6
+    xcoords = 7
+    xnote   = 3
     wplat = 0
     wplon = 0
     wptlist = ""
@@ -1144,28 +1153,59 @@ class Output
     tdcount = 0
     # table consists of row pairs: 1st row with WP details, 2nd with note
     text.gsub(/<br[^>]*>/, '|').split("\n").each{ |line|
-      if line =~ /<tr/
+      if line =~ /<\/thead>/
+        # reset line counter
+        trcount = 0
+      elsif line =~ /<tr/
         # start of a row - trcount is 1 for 1st, 2 for 2nd
         trcount += 1
         tdcount = 0
         # hidden waypoints will not be shown (set only in 1st row of pair)
+        # this hasn't been in use anymore since 2011?
         if line =~ /ishidden=\"true\"/
           hidden = true
         end
+      elsif line =~ /<th>(.*)<\/th>/
+        match = $1
+        tdcount += 1
+        case match
+        when /Prefix/
+          xprefix = tdcount
+          if tdcount == 3
+            debug3 "AddWP prefix index: #{xprefix} (new style)"
+          elsif tdcount == 4
+            debug3 "AddWP prefix index: #{xprefix} (old style)"
+          else
+            debug "Additional Waypoints table format changed? Prefix index = #{xprefix}"
+          end
+          xlookup = tdcount + 1
+          xwpname = tdcount + 2
+          xcoords = tdcount + 3
+        when /Lookup/
+          xlookup = tdcount
+        when /Name/
+          xwpname = tdcount
+        when /Coordinate/
+          xcoords = tdcount
+        end
       elsif line =~ /<td>(.*)<\/td>/
+        match = $1
         tdcount += 1
         # extract fields
         if trcount == 1
           # first row of two
-          if tdcount == 4
+          if tdcount == xprefix #4
             # two-letter prefix
-            prefix = $1
-          elsif tdcount == 5
+            prefix = match
+            debug3 "AddWP prefix = #{prefix}"
+          elsif tdcount == xlookup #5
             # dunno what it's for - future extension by gc.com?
-            lookup = $1
-          elsif tdcount == 6
+            lookup = match
+            debug3 "AddWP lookup = #{lookup}"
+          elsif tdcount == xwpname #6
             # WP name and type
-            wpname = $1
+            wpname = match
+            debug3 "AddWP wpname = #{wpname}"
             # extract sym type (in parentheses), replace outdated types (from old cdpfs)
             wptype = wpname.gsub(/^.*\(/, '').gsub(/\).*/, '')
             wptype = wptype.gsub(/Question to Answer/i, 'Virtual Stage').gsub(/Stages of a Multicache/i, 'Physical Stage')
@@ -1175,11 +1215,12 @@ class Output
             end
             # we must escape special characters in WP name (as in "Park & Ride")
             wpname = makeXML(wpname)
-          elsif tdcount == 7
+          elsif tdcount == xcoords #7
             # coords in "written" format
-            coord = $1
+            coords = match
+            debug3 "AddWP coords = #{coords}"
             # do some transformations (taken from details.rb)
-            if coord =~ /([NS]) (\d+).*? ([\d\.]+) ([WE]) (\d+).*? ([\d\.]+)/
+            if coords =~ /([NS]) (\d+).*? ([\d\.]+) ([WE]) (\d+).*? ([\d\.]+)/
               wplat = ($2.to_f + $3.to_f / 60) * ($1 == 'S' ? -1:1)
               wplon = ($5.to_f + $6.to_f / 60) * ($4 == 'W' ? -1:1)
             else # no coordinates ("???") -> <wpt>
@@ -1195,19 +1236,25 @@ class Output
               wplon = sprintf("%.6f", wplon)
             end
           end
-        else
+        elsif trcount == 2
           # second row of two
-          if tdcount == 3
-            desc = $1
+          if line =~ /Note:/
+            xnote = tdcount + 1
+            debug3 "AddWP note tag index: #{xnote}"
+          elsif tdcount == 3 # xnote
+            note = match #.to_s
+            debug3 "AddWP note = #{note}"
             # remove some HTML stuff, but keep track of line breaks
-            desc.gsub!(/<(br|p|\/p)[^>]*>/, "|")
+            note.gsub!(/<(br|p|\/p)[^>]*>/, "|")
             # remove all other tags
-            desc.gsub!(/<[^>]*>/, "")
+            note.gsub!(/<[^>]*>/, "")
             # &euro; confuses gpsbabel, try to avoid
-            desc.gsub!(/\&euro;/, "EURO")
+            note.gsub!(/\&euro;/, "EURO")
             # escape special characters, just in case
-            desc = makeXML(desc)
+            note = makeXML(note)
           end
+        else
+          debug "AddWP excessive trcount #{trcount}"
         end
       elsif line =~ /<\/tr/
         # end of table row: did we collect info from two rows?
@@ -1222,9 +1269,9 @@ class Output
                 ((wplat and wplon) ? " lat=\"#{wplat}\" lon=\"#{wplon}\"" : "") +
                 ">\n" +
               "  <name>#{prefix}XXXWIDXXX</name>\n" +
-              "  <cmt>#{desc}</cmt>\n" +
+              "  <cmt>#{note}</cmt>\n" +
               "  <desc>#{wpname}" +
-                ((desc.to_s.length > 0) ? ":#{desc}" : "") +
+                ((note.to_s.length > 0) ? ":#{note}" : "") +
                 "</desc>\n" +
               "  <sym>#{wptype}</sym>\n" +
               "  <type>Waypoint|#{wptype}</type>\n" +
