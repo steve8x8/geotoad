@@ -790,30 +790,27 @@ class CacheDetails
       cache['atime'] = Time.at($ZEROTIME)
     end
 
-    # This snippet may become obsolete...
-    # ----------
+    # This snippet doesn't become obsolete...
     comments, last_find_date, visitors = parseComments(data, cache['creator'])
     cache['visitors'] << visitors
     if comments.length > 0 and cache['membersonly']
       # there are logs, cache was not PMO before
       cache['olddesc'] = true
     end
-    # do we want to retrieve the geocache.logbook?
+
     if @getlogbk
-      # even if there are old logs from pre-PMO times
-    # ----------
-      if (@logcount > 0) and (comments.length <= 0 or cache['membersonly'])
+    # If more than 10 logs wanted, retrieve the geocache.logbook
+      if (@logcount > 0) and (@logcount > comments.length)
+      # too few logs may mean new! cache :/
         # try to get log entries from logbook page instead
         debug "Get logbook for guid #{cache['guid']}"
-        newcomments, logtimestamp = getLogBook(cache['guid'])
+        newcomments, logtimestamp = getLogBook(cache['guid'], logCount=@logcount)
         if newcomments.length > 0
           comments = newcomments
           cache['ltime'] = logtimestamp
         end
       end
-    # ----------
     end
-    # ----------
 
     if comments.length > 0
       cache['last_find_type'] = comments[0]['type']
