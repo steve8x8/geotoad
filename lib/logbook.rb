@@ -143,7 +143,7 @@ module LogBook
         displayWarning "Unknown error."
       end
     rescue => e
-      displayWarning "Exception #{e} caught. Please report."
+      displayWarning "Exception \"#{e}\" caught. Please report."
     end
     if comments.length == 0
       json.invalidate
