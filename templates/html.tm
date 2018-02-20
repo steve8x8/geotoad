@@ -30,8 +30,10 @@ template = {
       "Age of information: <%wp.ldays%> days<br>\n" +
       "Attributes: <%out.txtAttrs%><br>\n" +
       "<div>" + # catch runaway stuff like <center>
+      "<font color=\"#000000\">\n" +
       "<p><%wp.additional_raw%><%wp.shortdesc%></p>\n" + # font size inside tables?
       "<p><%wp.longdesc%></p>\n" +
+      "</font>\n" +
       "</div>\n" +
       "<p><font color=\"#555555\"><i><%outEntity.hintdecrypt%></i></font></p>\n" +
       "<div>" + # catch runaway stuff like <center>
