@@ -479,6 +479,10 @@ class SearchCache
       archived = true
       debug "Cache appears to be archived"
     end
+    if data =~ /<h.[^>]*>\s*This cache has been archived.\s*<\/h.>/m
+      archived = true
+      debug "Cache appears to be archived"
+    end
     # premium-member only
     #         <strong>
     #        <span id="ctl00_ContentBody_lblDifficulty">Difficulty:</span></strong>
