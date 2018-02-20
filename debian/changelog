@@ -1,3 +1,13 @@
+geotoad (3.28.0-1) unstable; urgency=low
+
+  * New version 3.28.0, "2018.0 release"
+  * Issue 352: Clickable links, again
+  * Issue 355: Detect page count changes while running multi-page query
+  * Issue 356: Waypoint table format changes in early 2018
+  * Minor stuff here and there
+
+ -- Steve Sixty-Four <steve8x8@googlemail.com>  Tue, 20 Feb 2018 09:00:00 +0000
+
 geotoad (3.27.2-1) unstable; urgency=low
 
   * New version 3.27.2, "Santa Wishlist 2017"
