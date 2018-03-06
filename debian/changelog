@@ -4,9 +4,10 @@ geotoad (3.28.0-1) unstable; urgency=low
   * Issue 352: Clickable links, again
   * Issue 355: Detect page count changes while running multi-page query
   * Issue 356: Waypoint table format changes in early 2018
+  * Unreported: Attributes no longer detected after 2018-03-05 webpage changes
   * Minor stuff here and there
 
- -- Steve Sixty-Four <steve8x8@googlemail.com>  Tue, 20 Feb 2018 09:00:00 +0000
+ -- Steve Sixty-Four <steve8x8@googlemail.com>  Tue, 06 Mar 2018 19:00:00 +0000
 
 geotoad (3.27.2-1) unstable; urgency=low
 
