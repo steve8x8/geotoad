@@ -1085,6 +1085,8 @@ class Output
         end
         # join decrypted and unchanged fragments
         x }.join
+      # translate back content of <..>
+      decrypted.gsub!(/(<[^<>]*>)/){ $1.tr('A-MN-Za-mn-z', 'N-ZA-Mn-za-m') }
       debug "full hint: #{decrypted}"
     end
     return decrypted
