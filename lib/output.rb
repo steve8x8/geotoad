@@ -898,15 +898,15 @@ class Output
       symbolHash[wid] = ''
 
       if cache['membersonly']
-        symbolHash[wid] << "<b><font color=\"#11CC11\">&#x24; </font></b>"
+        symbolHash[wid] << "<b><font color=\"#11CC11\">&#x24;</font></b>"
       end
 
       if cache['archived']
-        symbolHash[wid] << "<b><font color=\"#111111\">&Oslash; </font></b>"
+        symbolHash[wid] << "<b><font color=\"#111111\">&Oslash;</font></b>"
       end
 
       if cache['disabled'] and not cache['archived']
-        symbolHash[wid] << "<b><font color=\"#CC1111\">&#x229e; </font></b>"
+        symbolHash[wid] << "<b><font color=\"#CC1111\">&#x229e;</font></b>"
       end
 
       if cache['travelbug']
