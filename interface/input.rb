@@ -162,12 +162,12 @@ class Input
         end
       end
     rescue => e
-      displayError "Error in option parsing: #{e} - this may be a bug, please check and report."
+      displayError "Error in option parsing: #{e} - this may be a bug, please check and report.", rc = 2
     end
 
     # some sanity check
     if @@optHash['noPMO'] and @@optHash['onlyPMO']
-      displayError   "Cannot select and exclude PMO at the same time."
+      displayError "Cannot select and exclude PMO at the same time.", rc = 2
     end
 
     @@optHash['queryArg'] = ARGV.shift
@@ -178,8 +178,7 @@ class Input
       displayWarning "Extra arguments found on command-line: \"#{ARGV.join(" ")}\""
       displayWarning "Perhaps you forgot quote marks around any arguments that contain spaces?"
       displayWarning "Example: -q #{@@optHash['queryType']} \"#{@@optHash['queryArg']} #{ARGV.join(" ")}\""
-      displayError   "Correct your input and re-run."
-      exit
+      displayError   "Correct your input and re-run.", rc = 2
     end
 
     @@optHash['user'] = convertEscapedHex(@@optHash['user'])
@@ -698,7 +697,7 @@ class Input
 
       when 'X'
         puts "Cya!"
-        exit
+        exit 0
 
       end
       saveConfig

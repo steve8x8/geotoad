@@ -226,25 +226,25 @@ class SearchCache
         lat = parseCoordinate($1)
         lon = parseCoordinate($2)
       else
-        displayError "Cannot parse #{input} as two degree values!"
+        displayError "Cannot parse #{input} as two degree values!", rc = 2
       end
     when 4 # Deg Min
       if key =~ /(-?[\d\.]+\W+[\d\.]+)\W\W*?(-?[\d\.]+\W+[\d\.]+)/
         lat = parseCoordinate($1)
         lon = parseCoordinate($2)
       else
-        displayError "Cannot parse #{input} as two degree/minute values!"
+        displayError "Cannot parse #{input} as two degree/minute values!", rc = 2
       end
     when 6 # Deg Min Sec
       if key =~ /(-?[\d\.]+\W+[\d\.]+\W+[\d\.]+)\W\W*?(-?[\d\.]+\W+[\d\.]+\W+[\d\.]+)/
         lat = parseCoordinate($1)
         lon = parseCoordinate($2)
       else
-        displayError "Cannot parse #{input} as two degree/minute/second values!"
+        displayError "Cannot parse #{input} as two degree/minute/second values!", rc = 2
       end
     else
       # did not recognize format
-      displayError "Bad format in #{input}: #{key.split("\s").length} fields found."
+      displayError "Bad format in #{input}: #{key.split("\s").length} fields found.", rc = 2
     end
     # sub-meter precision, strip some trailing 0's
     lat = sprintf("%.7f", lat).gsub(/0{1,4}$/, '')
@@ -293,7 +293,7 @@ class SearchCache
   def getWidSearchResult(url)
     data, src = getPage(url, {})
     if not data
-      displayError "No data to be analyzed! Check network connection!"
+      displayError "No data to be analyzed! Check network connection!", rc = 8
     end
     guid = nil
     wid = nil
@@ -556,13 +556,13 @@ class SearchCache
 
     if not page_number
       displayWarning "Could not determine current page number from #{url}"
-      displayError   "Please set language to English on GC.com as a workaround."
+      displayError   "Please set language to English on GC.com as a workaround.", rc = 1
       return @waypoints
     end
 
     if not pages_total
       displayWarning "Could not determine total pages from #{url}"
-      displayError   "Please set language to English on GC.com as a workaround."
+      displayError   "Please set language to English on GC.com as a workaround.", rc = 1
       return @waypoints
     end
 
@@ -589,10 +589,10 @@ class SearchCache
 
       if page_number == last_page_number
         displayWarning "Page number not increasing."
-        displayError "Stuck on page number #{page_number} of #{pages_total}"
+        displayError   "Stuck on page number #{page_number} of #{pages_total}", rc = 1
       elsif page_number < last_page_number
         displayWarning "Page number not increasing."
-        displayError "We were on page #{last_page_number}, but just read #{page_number}. Parsing error?"
+        displayError   "We were on page #{last_page_number}, but just read #{page_number}. Parsing error?", rc = 1
       end
       # limit search page count
       if ((@max_pages != 0) and (page_number >= @max_pages))
@@ -626,7 +626,7 @@ class SearchCache
 
   def parseSearchData(data)
     if not data
-      displayError "No data to be analyzed! Check network connection!"
+      displayError "No data to be analyzed! Check network connection!", rc = 8
     end
     page_number = nil
     pages_total = nil

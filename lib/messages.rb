@@ -59,11 +59,15 @@ module Messages
   end
 
   # fatal errors
-  def displayError(text)
+  def displayError(text, rc = 1)
+    # 2018-03-03: write to stdout, not stderr, but set returncode
     if text.to_s.empty?
-      abort("")
+      #abort("")
+      puts "ERROR: terminating - rc #{rc}"
     else
-      abort("ERROR: #{text}")
+      #abort("ERROR: #{text}")
+      puts "ERROR: #{text} - rc #{rc}"
     end
+    exit rc
   end
 end

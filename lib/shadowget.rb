@@ -311,7 +311,7 @@ class ShadowFetch
     if (redirects == 0)
       displayWarning "HTTP redirect loop for #{url_str}."
       displayWarning "Your cookie may have expired suddenly. Try to re-run once."
-      displayError   "Check your login data if problem persists."
+      displayError   "Check your login data if problem persists.", rc = 9
     end
     debug "Fetching URL [#{url_str}]"
     uri = URI.parse(url_str)

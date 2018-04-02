@@ -182,8 +182,7 @@ class CacheDetails
   # fetches by geocaching.com sid
   def fetchWid(id)
     if id.to_s.empty?
-      displayError "Empty fetch by wid, quitting."
-      exit
+      displayError "Empty fetch by wid, quitting.", rc = 3
     end
 
     url = fullURL(id)

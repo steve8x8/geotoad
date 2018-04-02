@@ -135,21 +135,20 @@ class GeoToad
     # Get this out of the way now.
     if @option['help']
       @uin.usage
-      exit
+      exit 0
     end
 
     if not @option['clearCache'] and not @option['myLogs'] and not @option['myTrackables'] and not @queryArg
-      displayError "You forgot to specify a #{@queryType} search argument"
+      displayWarning "You forgot to specify a #{@queryType} search argument"
       @uin.usage
-      exit
+      displayError  "", rc = 2
     end
 
     if (not @option['user']) or (not @option['password'])
       debug "No user/password option given, loading from config."
       (@option['user'], @option['password']) = @uin.loadUserAndPasswordFromConfig()
       if (not @option['user']) or (not @option['password'])
-        displayError "You must specify a username and password!"
-        exit
+        displayError "You must specify a username and password!", rc = 2
       end
     end
 
@@ -384,7 +383,7 @@ class GeoToad
     else
       displayWarning "Login failed!"
       displayWarning "Check network connection, username and password!"
-      displayError   "Stopping here, for your own safety."
+      displayError   "Stopping here, for your own safety.", rc = 9
     end
     displayMessage "Querying user preferences"
     @dateFormat, prefLang, $my_lat, $my_lon, $my_src = getPreferences()
@@ -763,7 +762,7 @@ class GeoToad
       message = nil
 
       if status == 'login-required'
-        displayError   "Cookie suddenly does not appear to be valid anymore. No way to handle this."
+        displayError "Cookie suddenly does not appear to be valid anymore. No way to handle this.", rc = 8
       end
 
       message = ""
@@ -1092,7 +1091,7 @@ displayTitle "GeoToad #{$VERSION} (Ruby #{RUBY_VERSION}p#{RUBY_PATCHLEVEL}/#{RUB
 
 # check Ruby version
 if RUBY_VERSION.gsub('.', '').to_i < 191
-  displayError "Ruby version is #{RUBY_VERSION}. Required: 1.9.1 or higher."
+  displayError   "Ruby version is #{RUBY_VERSION}. Required: 1.9.1 or higher.", rc = 4
 end
 if RUBY_VERSION.gsub('.', '').to_i < 215
   displayWarning "Ruby version is #{RUBY_VERSION}. Recommended: 2.1.5 or higher."
@@ -1121,7 +1120,7 @@ end
 begin
   OpenSSL::SSL::SSLContext.new($SSLVERSION)
 rescue => e
-  displayError "HTTPS error: #{e}\n\tyour Ruby version does not support TLS!"
+  displayError "HTTPS error: #{e}\n\tyour Ruby version does not support TLS!", rc = 4
 end
 displayInfo "Using #{$SSLVERSION.to_s} and #{($SSLVERIFYMODE == OpenSSL::SSL::VERIFY_PEER) ? '' : 'no '}SSL verification."
 
@@ -1135,11 +1134,11 @@ while true
   options = cli.getoptions
   if options['clearCache']
     cli.clearCacheDirectory()
-    exit
+    exit 0
   end
   if options['version']
     # version information has been shown above
-    exit
+    exit 0
   end
 
   if (loopcount == 0) # do only once, like before
@@ -1192,7 +1191,7 @@ while true
     puts ""
     puts "*************************************************"
   else
-    exit
+    exit 0
   end
 
 end

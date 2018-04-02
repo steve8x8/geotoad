@@ -1484,7 +1484,7 @@ class Output
     }
     rescue => e
       displayWarning "Problem (#{e}) while converting cache #{wid}:\n#{cache.inspect}"
-      displayError "Backtrace: #{e.backtrace}"
+      displayError   "Backtrace: #{e.backtrace}", rc = 1
     end
     return variables
   end

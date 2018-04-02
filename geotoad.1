@@ -500,6 +500,32 @@ where the former intentionally needs renaming, and both may fail.
 .\" back to normal font
 .ft P
 
+.SH "RETURN CODES"
+
+.B 0
+normal termination
+.PP
+.B 1
+any error not covered by higher return codes (yet)
+.PP
+.B 2
+error in input parameters, run \fBgeotoad --help\fR for usage
+.PP
+.B 3
+query returned empty result
+.PP
+.B 4
+unsupported Ruby or SSL versions, check your setup
+.PP
+.B 8
+communication problem, re-run may succeed
+.PP
+.B 9
+authentication problem, re-run may succeed
+.PP
+.I Caveat:
+re-running may require deleting (or expiring) the last cached files
+
 .SH "KNOWN LIMITATIONS"
 .SS "Release cycle, OS support:"
 .PP
