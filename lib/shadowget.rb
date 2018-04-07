@@ -424,19 +424,27 @@ class ShadowFetch
     when Net::HTTPNotFound
       # error 404
       displayWarning "Not Found #{resp.response.inspect}"
-      debug "#{resp.body.length} bytes in body"
+      debug3 "Response:\n#{resp.body.to_s.gsub(/<[^>]*>/, '')}"
+      success = false
+    when Net::HTTPInternalServerError
+      # error 500
+      # "#<Net::HTTPInternalServerError 500 Internal Server Error readbody=true>"
+      displayWarning "Internal Server Error #{resp.response.inspect}"
+      debug3 "Response:\n#{resp.body.to_s.gsub(/<[^>]*>/, '')}"
+      displayInfo    "Please check https://twitter.com/GoGeocaching for details."
       success = false
     when Net::HTTPServiceUnavailable
       # error 503
       #Unknown response "#<Net::HTTPServiceUnavailable 503 Service Unavailable readbody=true>"
       displayWarning "Service unavailable, retry later"
-      debug "#{resp.body.length} bytes in body"
+      debug3 "Response:\n#{resp.body.to_s.gsub(/<[^>]*>/, '')}"
       success = false
     else
       # we may have reported a problem before
       if success
-        success = false
         displayWarning "Unknown response \"#{resp.inspect}\" [#{url_str}]"
+        debug3 "Response:\n#{resp.body.to_s.gsub(/<[^>]*>/, '')}"
+        success = false
       end
     end
 
