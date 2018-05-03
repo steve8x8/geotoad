@@ -211,7 +211,7 @@ class CacheDetails
 
     # overwrite TTL if "preserveCache" option was set
     if @preserve
-      ttl = 333000000		# > 10 years
+      ttl = 1000000000		# > 30 years
     end
 
     if ttl
