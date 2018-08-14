@@ -43,8 +43,8 @@ class GeoToad
 
   $VERSION = GTVersion.version
 
-  # with the new progressive slowdown, start with 1 second
-  $SLEEP = 1.0
+  # with the new progressive slowdown, start with 0.1 second
+  $SLEEP = 0.1
 
   # *if* cache D/T/S extraction works, early filtering is possible
   $DTSFILTER = true
