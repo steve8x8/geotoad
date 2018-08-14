@@ -1108,17 +1108,12 @@ elsif RUBY_PLATFORM.downcase =~ /djgpp|(cyg|ms|bcc)win|mingw|wince|emx/
   displayWarning "HTTPS will not verify peer identity!"
   $SSLVERIFYMODE = OpenSSL::SSL::VERIFY_NONE
 end
-# apparently there are still old Rubies around which would crash with TLSv1_2
+# there may be still old Rubies around which crash with TLSv1_2
+# but gc.com forces TLSv1_2 since July 2018
 $SSLVERSION = :TLSv1_2
 begin
   OpenSSL::SSL::SSLContext.new($SSLVERSION)
-rescue => e
-  displayWarning "HTTPS #{e}:\n\tfalling back to insecure TLSv1!"
-  $SSLVERSION = :TLSv1
-end
-# if there's no TLSv1 there's no hope
-begin
-  OpenSSL::SSL::SSLContext.new($SSLVERSION)
+# if there's no TLS there's no hope
 rescue => e
   displayError "HTTPS error: #{e}\n\tyour Ruby version does not support TLS!", rc = 4
 end
