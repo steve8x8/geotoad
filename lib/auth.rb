@@ -11,7 +11,8 @@ module Auth
   include Common
   include Messages
 
-  @@login_url = 'https://www.geocaching.com/account/login'
+  # .../login stopped working on 2018-08-13
+  @@login_url = 'https://www.geocaching.com/account/signin'
   @@user = nil
   # cookie to be sent
   @@cookie = nil

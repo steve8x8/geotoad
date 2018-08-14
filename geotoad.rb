@@ -327,6 +327,7 @@ class GeoToad
 
     displayInfo "Clearing login data older than 7 days"
     findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "login"), 7)
+    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "signin"), 7)
 
     # We do NOT clear cdpf files, in NO case. Instead, preserve old descriptions!
     # If you really want this functionality, uncomment the following two lines:
