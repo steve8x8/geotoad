@@ -23,6 +23,7 @@ Source: "geotoad.pdf";               DestDir: "{app}"
 Source: "templates\*.*";             DestDir: "{app}\templates"
 Source: "data\*.*";                  DestDir: "{app}\data"; Flags: skipifsourcedoesntexist
 Source: "contrib\Delorme_Icons\*.*"; DestDir: "{app}\contrib\Delorme_Icons"; Flags: skipifsourcedoesntexist
+Source: "contrib\CA_Bundle\*.*";     DestDir: "{app}\contrib\CA_Bundle"; Flags: skipifsourcedoesntexist
 Source: "tools\*.*";                 DestDir: "{app}\tools"; Flags: skipifsourcedoesntexist
 Source: "README.txt";                DestDir: "{app}\doc"; Flags: isreadme
 Source: "ChangeLog.txt";             DestDir: "{app}\doc"; Flags: skipifsourcedoesntexist

@@ -1,4 +1,5 @@
-WINRUBY = 219
+USB_DIR = gt
+USB_MPT = /media/$(shell whoami)
 
 $(GTV)_Installer.exe: $(GTV).tar.gz
 	@echo ""
@@ -10,38 +11,59 @@ $(GTV)_Installer.exe: $(GTV).tar.gz
 	tar zxf $(GTV).tar.gz
 	-rm  -f $(GTV)/geotoad.1
 	-rm -rf $(GTV)/debian/
-	# prepare for VM
+	# prepare for remote machine
 	mv $(GTV) win
-	@echo "Build Windows package for ruby version $(WINRUBY)"
-	mkdir win/compile
-	mv win/*.rb      win/compile/
-	mv win/lib       win/compile/
-	mv win/interface win/compile/
-	mv win/templates win/compile/ # really?
-	mv win/data      win/compile/ # really?
-	# prepare some more files
-	perl -pi -e 's/([\s])geotoad\.rb/$1geotoad/g' win/README.txt
+	@echo "Build Windows package"
+
+	mkdir win/ocra
+	rsync -ax win/*.rb      win/ocra/
+	rsync -ax win/lib       win/ocra/
+	rsync -ax win/interface win/ocra/
+	rsync -ax win/templates win/ocra/ # really?
+	rsync -ax win/data      win/ocra/ # really?
+	 cat win/tools/build/in/buildocra.bat.in > win/buildocra.bat
+
+	mkdir win/inno
+	rsync -ax win/*.pdf     win/inno/
+	rsync -ax win/*.txt     win/inno/
+	rsync -ax win/templates win/inno/
+	rsync -ax win/contrib   win/inno/
+	rsync -ax win/data      win/inno/
+	rsync -ax win/tools     win/inno/
+	rm -rf win/inno/tools/build
+
+	sed s/XXXVERSIONXXX/$(VERSION)/g win/tools/build/in/buildinno.iss.in > win/inno/buildinno.iss
+	 sed s/XXXVERSIONXXX/$(VERSION)/g win/tools/build/in/buildinno.bat.in > win/buildinno.bat
+	perl -pi -e 's/([\s])geotoad\.rb/$1geotoad/g' win/inno/README.txt
 	# convert .txt files to MSDOS linebreaks
-	flip -mb win/*.txt
-	sed s/XXXVERSIONXXX/$(VERSION)/g win/tools/build/in/buildinno.iss.in > win/buildinno.iss
-	sed s/XXXVERSIONXXX/$(VERSION)/g win/tools/build/in/buildinno.bat.in > win/buildinno.bat
-	sed s/XXXWINRUBYXXX/$(WINRUBY)/g win/tools/build/in/buildocra.bat.in > win/buildocra.bat
-	-rm -rf win/tools/build/
+	flip -mb win/inno/*.txt
+
 	# now do the real stuff
-	@echo    "*** In Windows \"...\\\\tools\\\\build\\\\win\", run:"
-	@echo    "      buildocra.bat"
-	@read -p "*** Press ENTER when done (geotoad.exe exists): " x
-	#rm -rf win/buildocra.bat
-	# we might need better error handling (back to square one?)
-	-mv win/compile/geotoad.exe win/
-	mv win/compile/templates   win/ # see above
-	mv win/compile/data        win/ # see above
-	-rm -rf win/compile
-	@echo    "*** In Windows \"...\\\\tools\\\\build\\\\win\", run:"
-	@echo    "      buildinno.bat"
-	@read -p "*** Press ENTER when done ($(GTV)_Installer.exe exists): " x
-	# does it make sense to have the executable alone?
-	#cp -p win/geotoad.exe $(GTV).exe
+	sed s/XXXVERSIONXXX/$(VERSION)/g win/tools/build/in/build_win.bat > win/run_win.bat
+
+	@echo    "*** Insert a USB key with \"$(USB_DIR)\" directory and (wait for) mount"
+	@read -p "*** Press ENTER when done: " x
+	-mount | grep $(USB_MPT)
+	-ls -ld $(USB_MPT)/*/$(USB_DIR)/
+	-rsync -ax win $(USB_MPT)/*/$(USB_DIR)/
+	@sync
+	@sleep 3
+	@sync
+	@sleep 3
+	-umount `df $(USB_MPT)/*/$(USB_DIR)/ | tail -n+2 | awk '{print $$NF}'` 2>/dev/null
+	-mount | grep $(USB_MPT)
+	@echo    "*** Remove the (unmounted) USB key."
+	@read -p "*** Press ENTER when done: " x
+	@echo    "*** On a Windows machine, mount USB key and run:"
+	@echo    "      win/run_win.bat"
+	@echo    "*** Insert the USB key with \"$(GTV)_Installer.exe\" and (wait for) mount"
+	@read -p "*** Press ENTER when done: " x
+	-mount | grep $(USB_MPT)
+	-rsync -ax $(USB_MPT)/*/$(USB_DIR)/win ./
+	-cp -p win/$(GTV)_Installer.exe ./
+	-umount `df $(USB_MPT)/*/$(USB_DIR)/ | tail -n+2 | awk '{print $$NF}'` 2>/dev/null
+	-mount | grep $(USB_MPT)
+	@echo    "*** Remove the (unmounted) USB key."
+	@read -p "*** Press ENTER when done: " x
 	touch $(GTV)_Installer.exe
 	@echo $@ done.
-
