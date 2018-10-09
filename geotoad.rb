@@ -285,10 +285,10 @@ class GeoToad
     end
   end
 
-  def findRemoveFiles(where, age, pattern = ".*\\..*", writable = nil)
+  def findRemoveFiles(where, age, pattern = ".*\\..*", writableonly = nil)
   # inspired by ruby-forum.com/topic/149925
     regexp = Regexp.compile(pattern)
-    debug "findRemoveFiles() age=#{age}, pattern=#{pattern}, writable=#{writable.inspect}"
+    debug "findRemoveFiles() age=#{age}, pattern=#{pattern}, writableonly=#{writableonly.inspect}"
     filelist = Array.new
     begin # catch filesystem problems
       if File.exists?(where) and File.stat(where).directory?
@@ -297,7 +297,7 @@ class GeoToad
           next if not File.file?(file)
           next if (age * 86400) > (Time.now - File.mtime(file)).to_i
           next if not regexp.match(File.basename(file))
-          next if writable and not File.writable?(file)
+          next if writableonly and not File.writable?(file)
           filelist.push file
         }
       end
@@ -324,10 +324,13 @@ class GeoToad
 
     displayInfo "Clearing account data older than 7 days"
     findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "account"), 7)
+    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "myaccount"), 7)
 
-    displayInfo "Clearing login data older than 7 days"
-    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "login"), 7)
-    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "signin"), 7)
+    displayInfo "Clearing login data older than 1 day"
+    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "account"), 1, "login-P_.*")
+    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "myaccount"), 1, "login-P_.*")
+    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "account"), 1, "signin-P_.*")
+    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "myaccount"), 1, "signin-P_.*")
 
     # We do NOT clear cdpf files, in NO case. Instead, preserve old descriptions!
     # If you really want this functionality, uncomment the following two lines:
@@ -335,31 +338,31 @@ class GeoToad
     #findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "seek"), 31, "^cdpf\\.aspx.*", true)
 
     displayInfo "Clearing bookmark list query data older than 3 days"
-    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "bookmarks"), 3, "^view\\.aspx.*", true)
+    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "bookmarks"), 3, "^view\\.aspx.*")
 
     displayInfo "Clearing cache details older than 3 days"
-    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "seek"), 3, "^cache_details\\.aspx.*", true)
+    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "seek"), 3, "^cache_details\\.aspx.*")
 
-    displayInfo "Clearing log submission pages older than 3 days"
-    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "seek"), 3, "^log\\.aspx.*", true)
+    displayInfo "Clearing log submission pages older than 1 day"
+    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "seek"), 1, "^log\\.aspx.*")
 
     displayInfo "Clearing logbook query pages older than 3 days"
-    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "seek"), 3, "^cache_logbook\\.aspx.*", true)
+    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "seek"), 3, "^cache_logbook\\.aspx.*")
 
-    displayInfo "Clearing logbook json files older than 7 days"
-    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "seek"), 7, "^cache_logbook\\.json.*", true)
+    displayInfo "Clearing logbook json files older than 3 days"
+    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "seek"), 3, "^cache_logbook\\.json.*")
 
-    displayInfo "Clearing gallery xml files older than 31 days"
-    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "datastore"), 7, "^rss_galleryimages\\.ashx.*", true)
+    displayInfo "Clearing gallery xml files older than 14 days"
+    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "datastore"), 14, "^rss_galleryimages\\.ashx.*")
 
     displayInfo "Clearing lat/lon query data older than 3 days"
-    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "seek"), 3, "^nearest\\.aspx.*_lat_.*_lng_.*", true)
+    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "seek"), 3, "^nearest\\.aspx.*_lat_.*_lng_.*")
 
     displayInfo "Clearing state and country query data older than 3 days"
-    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "seek"), 3, "^nearest\\.aspx.*_(country|state)_id_.*", true)
+    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "seek"), 3, "^nearest\\.aspx.*_(country|state)_id_.*")
 
-    displayInfo "Clearing other query data older than 7 days"
-    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "seek"), 7, "^nearest\\.aspx.*", true)
+    displayInfo "Clearing other query data older than 5 days"
+    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "seek"), 5, "^nearest\\.aspx.*")
 
     displayMessage "Cleared!"
     $CACHE_DIR = findCacheDir()
