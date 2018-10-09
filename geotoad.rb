@@ -392,9 +392,18 @@ class GeoToad
     displayMessage "Querying user preferences"
     @dateFormat, prefLang, $my_lat, $my_lon, $my_src = getPreferences()
     displayInfo "Using date format \"#{@dateFormat}\", language \"#{prefLang}\""
+    if @dateFormat.to_s.empty?
+      displayWarning "Could not determine date format from preferences."
+    elsif @dateFormat != "yyyy-MM-dd"
+      displayWarning "There may be problems for some date format settings."
+      displayWarning "Using ISO date format (yyyy-MM-dd) is strongly recommended."
+    end
     if prefLang.to_s.empty?
       displayWarning "Could not get language setting from preferences."
       displayWarning "This may be due to a failed login."
+    elsif prefLang != "en-US"
+      displayWarning "There have been problems reported for non-English language preferences."
+      displayWarning "Using English (en-US) is strongly recommended."
     end
     displayInfo "Using home location (#{$my_lat || 'nil'}, #{$my_lon || 'nil'}) from #{$my_src}"
 
