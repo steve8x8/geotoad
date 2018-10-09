@@ -4,6 +4,8 @@ require 'fileutils'
 require 'uri'
 require 'cgi'
 require 'time'
+require 'zlib'
+require 'stringio'
 require 'lib/common'
 require 'lib/messages'
 require 'lib/auth'
@@ -39,8 +41,9 @@ class ShadowFetch
       'User-Agent'      => #'Mozilla/5.0 (X11; Linux i686; rv:45.0) Gecko/20100101 Firefox/45.0',
                            'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_2; en-US) AppleWebKit/532.9 (KHTML, like Gecko) Chrome/5.0.307.11 Safari/532.9',
       'Accept'          => 'text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5',
-      'Accept-Language' => 'en-us,en;q=0.5',
-      'Accept-Charset'  => 'ISO-8859-1,utf-8;q=0.7,*;q=0.7'
+      'Accept-Language' => 'en-us, en;q=0.5',
+      'Accept-Encoding' => 'gzip, deflate;q=0.1', # 'gzip;q=1.0, deflate;q=0.6, identity;q=0.3'
+      'Accept-Charset'  => 'utf-8;q=1.0, iso-8859-1;q=0.5, *;q=0.1'
     }
     @closingHTML = true
     @localFile   = nil
@@ -161,6 +164,23 @@ class ShadowFetch
   # file age (if file exists)
   def fileAge
     return (Time.now - fileTimestamp()).to_i
+  end
+
+
+  # decompress gzipped data
+  # https://stackoverflow.com/questions/1361892/how-to-decompress-gzip-string-in-ruby
+  def gunzip1(s)
+    r = Zlib::GzipReader.new(StringIO.new(s)).read
+    return r
+  end
+
+  # https://bugs.ruby-lang.org/attachments/2718/net.http.inflate_by_default.patch
+  def gunzip(s)
+    # zlib with automatic gzip detection: +32
+    zi = Zlib::Inflate.new(Zlib::MAX_WBITS + 32)
+    r = zi.inflate(s)
+    zi.close
+    return r
   end
 
 
@@ -476,7 +496,38 @@ class ShadowFetch
       saveCookie(@cookie)
     end
 
-    return resp.body
+    # possibly unpack gzipped data (issue 360)
+    ce = resp.response['Content-Encoding']
+    ce = resp.header['Content-Encoding']
+    debug2 "Content-Encoding #{ce.inspect} for #{url_str}"
+    case ce
+    # will be "gzip" if compressed, nil otherwise
+    when nil
+      data = resp.body
+    when "none", "identity"
+      data = resp.body
+    when "gzip", "deflate", "x-gzip"
+      begin
+        debug2 "gunzip content"
+        data = gunzip(resp.body)
+      rescue Zlib::DataError => e
+        displayWarning "gunzip failed although declared #{ce.inspect}: #{url_str}"
+        data = resp.body
+      rescue Zlib::GzipFile::Error => e
+        displayWarning "not compressed although declared #{ce.inspect}: #{url_str}"
+        data = resp.body
+      rescue => e
+        displayWarning "gunzip #{ce.inspect} failed with #{e}: #{url_str}"
+        data = resp.body
+      end
+    else
+      displayWarning "Content-Encoding #{ce.inspect} not implemented yet. We didn't ask for it."
+      displayInfo    "Please provide information to https://github.com/steve8x8/geotoad/issues/360"
+      displayInfo    "Dropped result from #{url_str}"
+      displayError   "Stopping here."
+      data = nil
+    end
+    return data
   end
 
 
