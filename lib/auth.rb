@@ -144,6 +144,9 @@ module Auth
     page = ShadowFetch.new(@postURL)
     page.localExpiry = -1
     @postVars['Username'] = user
+    # 2018-10-13: cgeo pull request #7155,#7156
+    @postVars['UsernameOrEmail'] = user
+    # 2018-10-13/
     @postVars['Password'] = password
     debug3 "login postVars #{@postVars.keys.inspect}"
     page.postVars = @postVars
