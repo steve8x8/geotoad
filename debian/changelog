@@ -1,3 +1,15 @@
+geotoad (3.28.3-1) unstable; urgency=low
+
+  * New version 3.28.3, "2018.3 release"
+  * Issue 357: Warn if non-standard language or date format set
+  * Issue 360: Uncompress "gzip" encoded content
+  * Allow "gzip" compression for all HTTP traffic, store uncompressed
+  * Issue 361: (Critical) Use "UsernameOrEmail" parameter for login
+  * Review lifetimes of cached files
+  * Remove unused poll stub
+
+ -- Steve Sixty-Four <steve8x8@googlemail.com>  Wed, 17 Oct 2018 09:00:00 +0000
+
 geotoad (3.28.2-1) unstable; urgency=low
 
   * New version 3.28.2, "2018.2 release"
