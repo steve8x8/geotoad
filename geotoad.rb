@@ -254,37 +254,6 @@ class GeoToad
     debug "Check complete."
   end
 
-  def showPoll
-
-    pollurl = "https://raw.githubusercontent.com/wiki/steve8x8/geotoad/Poll.md"
-
-    poll = ShadowFetch.new(pollurl)
-    poll.localExpiry = 7 * $DAY
-    poll.maxFailures = 0
-    poll.fetch
-
-    if poll.data =~ /href=/
-        displayBar
-        displayWarning "Poll: GeoToad needs your feedback!"
-        displayBar
-        poll.data.each_line do |notes|
-          text = notes[0].dup
-          text.gsub!(/^#\s/, "\n\* ")
-          text.gsub!(/^##\s/, "\n\+ ")
-          text.gsub!(/^###\s/, "\n\- ")
-          text.gsub!(/#+$/, "")
-          text.gsub!(/\n\n+/, "\n")
-          text.gsub!(/\&nbsp;/, '-')
-          textlines = text.split("\n")
-          (1..20).each{ |line|
-            displayBox textlines[line] if textlines[line]
-          }
-          displayBox "... see #{pollurl} for more" if textlines.length > 20
-        end
-        displayBar
-    end
-  end
-
   def findRemoveFiles(where, age, pattern = ".*\\..*", writableonly = nil)
   # inspired by ruby-forum.com/topic/149925
     regexp = Regexp.compile(pattern)
@@ -1135,7 +1104,6 @@ displayInfo "Using #{$SSLVERSION.to_s} and #{($SSLVERIFYMODE == OpenSSL::SSL::VE
 # initialize method: 1st part of init
 cli = GeoToad.new
 cli.versionCheck
-cli.showPoll
 
 loopcount = 0
 while true
