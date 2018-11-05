@@ -126,8 +126,9 @@ module Common
     #    <p>
     #        3728 Results</p>
     #    <p>
+    # 2018-11-05: xxxx result(s).</p>
     #if data =~ /\n\s*([\d,\.]+)\s[\s\w]+<\/p>\s\n/
-    if data =~ /\n\s*<p>\s*\n\s*([\d,\.]+)\s[\s\w]+<\/p>\s*\n/
+    if data =~ /\n\s*<p>\s*\n\s*([\d,\.]+)\s[\s\w()]+.?<\/p>\s*\n/
       logcount = $1.gsub(/[,\.]/, '').to_i
     end
     return [foundcount, logcount]
@@ -143,7 +144,7 @@ module Common
     #         2528 Results</p>
     # (not language-dependent)
     #if data =~ /\n\s*([\d,\.]+)\s[\s\w]+<\/p>\s\n/
-    if data =~ /\n\s*<p>\s*\n\s*([\d,\.]+)\s[\s\w]+<\/p>\s*\n/
+    if data =~ /\n\s*<p>\s*\n\s*([\d,\.]+)\s[\s\w()]+.?<\/p>\s*\n/
       logcount = $1.gsub(/[,\.]/, '').to_i
     end
     return logcount
