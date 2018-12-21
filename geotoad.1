@@ -421,12 +421,30 @@ If you're planning to use colons (e.g. for \fB(USERFILE)\fR) on the command line
 you may have a look at the \fB\-m\fR option which allows you to redefine the
 delimiter set.
 
+.SH "TEXT USER INTERFACE and CONFIG.YAML"
+
+The text user interface (TUI) stores several items in \fBconfig.yaml\fR in
+the configuration directory. \fBThis includes username and password.\fR
+.PP
+Upon invocation of the TUI (by omission of command-line parameters), this file
+is used to fill in the various fields in the TUI mask. Before performing the
+actual search, the values are written back.
+.PP
+If \fB\-\-username\fR \fIor\fR \fB\-\-password\fR are not given on the
+command-line, this file is read as a last resort to set \fIboth\fR values.
+In case of failure, an error is thrown.
+
+
 .SH "ENVIRONMENT"
 
 .SS "GEO_DIR"
-If set, GeoToad will put its cache in this directory. If not the cache is
-placed in ~/.geotoad/ . Note that it is not secure to set GEO_DIR to point
-to a world-writable directory such as /tmp.
+.PP
+If set, GeoToad will put its file cache in this directory.
+.PP
+If not the file cache is placed in \fB~/.geotoad/\fR .
+.PP
+Note that GEO_DIR should not point to a world-writable directory such as /tmp
+(see the discussion of \fBconfig.yaml\fR above).
 
 .SS "LANG"
 To properly handle special characters (which are not in the ASCII character
@@ -464,10 +482,10 @@ before starting \fBruby geotoad.rb\fR, e.g.:
 .PP
 You may want to check \fBhttps://gist.github.com/fnichol/867550\fR as well, for
 how to make this change permanent.
-.PP
-The Windows_Installer tries to add environment settings,
-both system-wide and for the installing user,
-where the former intentionally needs renaming, and both may fail.
+.\" .PP
+.\" The Windows_Installer tries to add environment settings,
+.\" both system-wide and for the installing user,
+.\" where the former intentionally needs renaming, and both may fail.
 
 .SH "OUTPUT FORMATS"
 
@@ -531,22 +549,29 @@ re-running may require deleting (or expiring) the last cached files
 .PP
 .B  geotoad
 is released every now and then ("it's ready when it's ready") as a tarball,
-and derived from that as Debian (/Ubuntu) and Mac OS X packages and Windows
-Installer.
+and derived from that as Debian (/Ubuntu) and Mac OS X packages.
+.\"  and Windows Installer.
+A Windows Installer had been provided for older versions, but can no longer
+be built for technical reasons.
 .PP
 .B  geotoad
 development had been started in a Mac OS X environment, and has been moved
-to (Debian) Linux later. All testing is currently done in a Debian Linux
-context. Mac OS X and Windows packaging happens on a foreign (or virtual)
-machine, testing is close to impossible.
+to (Debian) Linux later.
+All testing is currently done in a Debian Linux context, on multiple
+hardware architectures, including armel and i386.
+Mac OS X and Windows packaging take/took place on a foreign (or virtual)
+machine, testing is close to impossible, but feedback is appreciated.
 .PP
-Starting with Ruby 2.1, Windows XP is no longer supported (and 3.24.0 will
-be the last release that comes with Ruby 2.0 pre-packaged). 32-bit support
-will be preserved as long as possible.
+Starting with Ruby 2.1, Windows XP is no longer supported.
+While 3.24.0 was the last release that came with (now obsolete) Ruby 2.0
+pre-packaged, using GeoToad in a Windows environment is still possible:
+You will have to install Ruby yourself, and use the tarball.
+.PP
+32-bit support will be preserved as long as possible.
 .PP
 Due to implementation limitations, Ruby versions before 2.1(.5) are discouraged.
 You will get a warning - don't complain if something fails afterwards.
-(And something will fail since GroundSpeak have started enforcing https.)
+(Earlier versions will fail since GroundSpeak are now enforcing https.)
 .SS "Limitations by design:"
 .PP
 .B  geotoad
@@ -579,7 +604,9 @@ but may fail for saved cache descriptions that haven't been updated (e.g.
 because the cache was converted to PMO). Also month-name abbreviations
 haven't been included in the program code. This means that you cannot use
 a foreign language and abbreviated month names in a reliable manner.
-ISO date style ("2007\-06\-05" for 5th of June) is considered safe.
+.PP
+English language, and ISO date style ("2007\-06\-05" for 5th of June) are
+considered safe. A warning is emitted if your settings are different.
 .SS "Little-tested features:"
 .PP
 The TUI doesn't get tested very much - the command line is much more
@@ -605,11 +632,23 @@ If you are using a wrapper, that may need some adjustment.
 .SS "Output formats:"
 .B  geotoad
 comes with a limited set of pre-defined output templates, but you are free
-to create your own ones.
+to create your own ones. User-specific template files can be kept in a
+\fBtemplates\fR subdirectory of the configuration tree (\fBGEO_DIR\fR).
+It is recommended to start with a known template from the distribution, then
+modify it until the desired behaviour has been reached.
+.PP
+Templates of the same name will be superseded by the user-defined variants.
 Make sure to test them for syntax errors (use \fB ruby \-wc\fR) - they are valid
 Ruby source files!
-
+.PP
 Some output formats require external programs, like \fBgpsbabel\fR or \fBcmconvert\fR.
+.PP
+A template file maps (fixed) names of output file sections to string expressions
+which are evaluated when creating the output file.
+In general, a \fB<%type.value%>\fR in such a string gets replaced by the corresponding
+\fIvalue\fR calculated in \fBlib/output.rb\fR's \fBcreateExtraVariablesForWid()\fR function,
+converted to the desired \fItype\fR.
+Some cases (e.g., \fBconditionWP\fR for conditional output) will result in crude syntax.
 
 .\".SS "PMO for Basic Members:"
 .\"There are a couple of unofficial patches to make
