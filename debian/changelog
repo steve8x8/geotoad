@@ -1,3 +1,10 @@
+geotoad (3.28.4-1) unstable; urgency=low
+
+  * New version 3.28.4, "Good-bye 2018 release (2018.4)"
+  * Fix cache and trackable log counts (-M/-W options)
+
+ -- Steve Sixty-Four <steve8x8@googlemail.com>  Thu, 27 Dec 2018 18:00:00 +0000
+
 geotoad (3.28.3-1) unstable; urgency=low
 
   * New version 3.28.3, "2018.3 release"
