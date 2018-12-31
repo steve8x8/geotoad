@@ -371,10 +371,11 @@ class SearchCache
       when /_(GC\w+)[^>]+>Bing Maps/
         wid = $1
         debug "Found WID: #{wid} (Bing)"
-      when /<meta name=\"og:url\"\s+content=\"https?:\/\/coord.info\/(GC\w+)./
+      # modified 2018-12-31
+      when /<meta[^>]+name=\"og:url\"[^>]+content=\"https?:\/\/coord.info\/(GC\w+)./
         wid = $1
         debug "Found WID: #{wid} (coord.info)"
-      when /<meta name=\"og:url\"\s+content=\"https?:\/\/www.geocaching.com\/seek\/cache_details.aspx?wp=(GC\w+)/
+      when /<meta[^>]+name=\"og:url\"[^>]+content=\"https?:\/\/www.geocaching.com\/seek\/cache_details.aspx?wp=(GC\w+)/
         wid = $1
         debug "Found WID: #{wid} (cache_details)"
       # added 2012-05-15:
