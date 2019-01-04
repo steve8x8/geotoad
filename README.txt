@@ -1,5 +1,5 @@
 ==========================================================================
-GeoToad 3.28.4 by Thomas Stromberg and The GeoToad Project (c) 2002 - 2018
+GeoToad 3.28.4 by Thomas Stromberg and The GeoToad Project (c) 2002 - 2019
 ==========================================================================
 
 
