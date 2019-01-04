@@ -337,7 +337,8 @@ class SearchCache
       when /id=\"hlUpgrade\"[^>]*Upgrade to Premium/
         debug "Premium Member upgrade option found"
       when /Geocaching . Hide and Seek a Geocache . Unpublished Geocache/
-        debug "Unpublished cache, leaving parser"
+        # shown to non-owner only!
+        displayWarning "Unpublished cache, skipping"
         break
       # BM sees: Geocaching > Hide and Seek a Geocache > Premium Member Only Cache
       # PM sees: <p class="Warning NoBottomSpacing">This is a Premium Member Only cache.</p>
@@ -475,6 +476,14 @@ class SearchCache
     if data =~ /Warning.*This cache listing has been archived/
       archived = true
       debug "Cache appears to be archived"
+    end
+    if data =~ /Your geocache has not yet been submitted./
+      disabled = true
+      displayWarning "Cache has not been submitted"
+    end
+    if data =~ /Your cache has been submitted for review./
+      disabled = true
+      displayWarning "Cache has not been reviewed"
     end
     if data =~ /Cache Issues:.*class=\"OldWarning\".*This cache has been archived/
       archived = true
