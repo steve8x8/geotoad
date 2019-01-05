@@ -371,7 +371,7 @@ class GeoToad
       displayWarning "Could not get language setting from preferences."
       displayWarning "This may be due to a failed login."
     elsif prefLang != "en-US"
-      displayWarning "There have been problems reported for non-English language preferences."
+      displayWarning "Problems have been reported for non-English language preferences."
       displayWarning "Using English (en-US) is strongly recommended."
     end
     displayInfo "Using home location (#{$my_lat || 'nil'}, #{$my_lon || 'nil'}) from #{$my_src}"
