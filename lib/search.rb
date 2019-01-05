@@ -485,6 +485,10 @@ class SearchCache
       disabled = true
       displayWarning "Cache has not been reviewed"
     end
+    if data =~ /you need to resubmit your cache for review./
+      disabled = true
+      displayWarning "Cache has not been re-submitted"
+    end
     if data =~ /Cache Issues:.*class=\"OldWarning\".*This cache has been archived/
       archived = true
       debug "Cache appears to be archived"
