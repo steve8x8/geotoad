@@ -1,4 +1,4 @@
-.TH "GEOTOAD" "1" "20 Feb 2018" "steve8x8@googlemail.com" "Geocaching Query Tool"
+.TH "GEOTOAD" "1" "19 Feb 2019" "steve8x8@googlemail.com" "Geocaching Query Tool"
 
 .SH "NAME"
 
@@ -370,7 +370,13 @@ Example, to output only if this isn't a member-only mystery cache:
  \fB\-\-conditionWP="(not( (<%wp.membersonly%>) and
                         (\\"<%wp.type%>\\"==\\"unknown\\") ))"\fR
 
-Use plenty of parentheses! Conditions which result in syntax errors are ignored.
+To select only caches in a state (region) after a radius search around a location
+or coord:
+
+ \fB\-\-conditionWP="('<%wp.state%>'=='Berlin')"\fR
+
+Use plenty of parentheses! Conditions which result in syntax errors are ignored
+(so you may sort things out later, without losing your search result completely).
 
  \fIRecommendation: Add condition to a template instead.\fR
  \fISee \fR\fBtwitter.tm\fR\fI and \fR\fBwherigo.tm\fR\fI for examples.\fR
