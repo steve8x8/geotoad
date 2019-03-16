@@ -400,6 +400,18 @@ class SearchCache
           ctype = 'Unknown Cache'
         end
         debug "Found PMO type code #{ccode} -> #{ctype}"
+      # premium-member only, March 2019
+      when /\/sprites\/cache-types.svg#icon-(\d+)/i
+        ccode = $1
+        # list covers only "standard" types! This may be incorrect
+        if @cachetypenum[ccode]
+          ctype = @cachetypenum[ccode]
+        else
+          displayWarning "Cache image code #{ccode.inspect} for WID #{wid.inspect} A - please report!"
+          displayInfo "#{line}"
+          ctype = 'Unknown Cache'
+        end
+        debug "Found PMO type code #{ccode} -> #{ctype}"
       when /\s+\((GC\w+)\)<\/h2>/
         wid = $1
         debug "Found PMO WID: #{wid}"
