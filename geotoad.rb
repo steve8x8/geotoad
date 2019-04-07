@@ -744,7 +744,8 @@ class GeoToad
       message = nil
 
       if status == 'login-required'
-        displayError "Cookie suddenly does not appear to be valid anymore. No way to handle this.", rc = 8
+        displayWarning "Fetching #{wid}: Login required."
+        displayError   "Cookie suddenly does not appear to be valid anymore. No way to handle this.", rc = 8
       end
 
       message = ""
