@@ -700,11 +700,10 @@ class Output
     # fonts are not represented properly on most devices
     # avoid huge sizes, dark on black, white on white
     text.gsub!(/<\/?font[^>]*>/im, '')
-    text.gsub!(/<\/?big>/im, '')
+    text.gsub!(/<\/?big[^>]*>/im, '')
     # also for style=...
     text.gsub!(/([;\'\"])\s*(background-)?color:[^;]*;/){$1}
     text.gsub!(/font-size:\d+p/, 'font-size:12p') # can be pt or px...
-    #text.gsub!(/font-size:\d+p[tx]/, 'font-size:12pt') # can be pt or px...
 
     # escape HTML entities (including <>)
     begin
