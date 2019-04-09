@@ -1,3 +1,17 @@
+geotoad (3.29.0-1) unstable; urgency=low
+
+  * New version 3.29.0, "Spring 2019 release (2019.0)"
+  * Extend copyright into 2019
+  * New CA bundle from curl, 2019-01-21
+  * Wording of non-English warning
+  * Fx extraction of WID from GUID page, pattern adjusted
+  * Own caches, pending submission or review, also after edit (WID list required)
+  * Fix failure to extract cache type from PMO cache details page
+  * Fix insufficient handling of <big> HTML tags
+  * Miscellaneous changes and additions
+
+ -- Steve Sixty-Four <steve8x8@googlemail.com>  Tue, 09 Apr 2019 18:00:00 +0000
+
 geotoad (3.28.4-1) unstable; urgency=low
 
   * New version 3.28.4, "Good-bye 2018 release (2018.4)"
