@@ -114,10 +114,10 @@ class SearchCache
       accuracy, lat, lon, location, count = geocoder.lookup_location(key)
       debug "geocoder returned: a:#{accuracy.inspect} x:#{lat} y:#{lon}"
       if not accuracy
-        displayWarning "Google Maps failed to determine the location of #{key}"
+        displayWarning "GeoCoder failed to determine the location of #{key}"
         return nil
       else
-        displayMessage "Google Maps found \"#{key}\""
+        displayMessage "GeoCoder found \"#{key}\""
         displayMessage "Using result 1 of #{count}: \"#{location}\""
         displayMessage "Accuracy level #{accuracy}, will use coordinates #{lat}, #{lon}"
       end

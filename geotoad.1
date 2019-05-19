@@ -1,4 +1,4 @@
-.TH "GEOTOAD" "1" "19 Feb 2019" "steve8x8@googlemail.com" "Geocaching Query Tool"
+.TH "GEOTOAD" "1" "28 Apr 2019" "steve8x8@googlemail.com" "Geocaching Query Tool"
 
 .SH "NAME"
 
@@ -115,7 +115,7 @@ query type (default: \fBlocation\fR), choose from
 .fi
 .PP
 Use \fBcoord\fR if you already have coordinates.
-Coordinates may be given in the usual (Google Maps) representations:
+Coordinates may be given in the usual representations:
   dd.ddddd
   dd mm.mmm
   dd mm ss[.sss]
@@ -123,7 +123,9 @@ Coordinates may be given in the usual (Google Maps) representations:
 .PP
 Both latitude and longitude must use the same representation.
 .PP
-\fBlocation\fR will use the Google Maps API to translate into coordinates.
+\fBlocation\fR will use the OpenStreetMap Nominatim API
+(Data © OpenStreetMap contributors, ODbL 1.0, https://osm.org/copyright)
+to translate into coordinates.
 This should also work with zip codes.
 .PP
 \fBcountry\fR and \fBstate\fR queries require a \fInumerical id\fR which the TUI may tell you.

@@ -434,7 +434,7 @@ class Input
       when '3'
         case @@optHash['queryType']
         when 'location'
-          @@optHash['queryArg'] = ask("Type in an address, city, state, postal code, or coordinates (uses Google Maps).\nMultiple locations may be separated by the | symbol\n\n", 'NO_DEFAULT')
+          @@optHash['queryArg'] = ask("Type in an address, city, state, postal code (will use OSM Nominatim), or coordinates.\nMultiple locations may be separated by the | symbol\n\n", 'NO_DEFAULT')
 
         when 'country'
           @@optHash['queryArg'] = askCountry()

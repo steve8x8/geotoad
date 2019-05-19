@@ -19,7 +19,7 @@ class ShadowFetch
 
   @@downloadErrors = 0
   @@remotePages = 0
-  # json sizes: error ~300 bytes, "publish" only ~700, +FTF ~1300
+  # json sizes: error ~300 bytes, "publish" only ~700, +FTF ~1300; address: 256
   @@minFileSize = 512
 
   attr_reader :data
@@ -29,6 +29,8 @@ class ShadowFetch
   attr_writer :useCookie
   attr_writer :closingHTML
   attr_writer :localFile
+  attr_writer :minFileSize
+  attr_writer :extraSleep
 
   # gets a URL, but stores it in a nice webcache
   def initialize (url)
@@ -48,6 +50,8 @@ class ShadowFetch
     @closingHTML = true
     @localFile   = nil
     @cacheFile   = nil
+    @minFileSize = @@minFileSize
+    @extraSleep  = 0
     @src         = nil
   end
 
@@ -204,7 +208,7 @@ class ShadowFetch
       age = time.to_i - File.mtime(localfile).to_i
       if (age > @localExpiry)
         debug "local cache is #{age} (> #{@localExpiry}) sec old"
-      elsif (File.size(localfile) <  @@minFileSize)
+      elsif (File.size(localfile) <  @minFileSize)
         # this also takes care of failed JSON requests
         debug "local cache appears corrupt. removing.."
         invalidate
@@ -220,6 +224,10 @@ class ShadowFetch
      end
     end
 
+    if @extraSleep > 0
+      debug "sleeping #{@extraSleep} seconds before remote fetch"
+      sleep(@extraSleep)
+    end
     # fetch a new version from remote
     @data = fetchRemote
     size = nil
@@ -256,7 +264,7 @@ class ShadowFetch
     # some magic to not overwrite a publicly viewable cdpf with PMO
     dowrite = false
     # protect against network failures
-    if @data and @data.length >= @@minFileSize
+    if @data and @data.length >= @minFileSize
       dowrite = true
       if @data =~ /be a Premium Member to view/
         # we got a PMO description

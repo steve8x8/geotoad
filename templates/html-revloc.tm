@@ -1,8 +1,8 @@
 template = {
 
-  'html' => {
+  'html-revloc' => {
     'ext'  => 'html',
-    'desc' => 'Simple HTML, without reverse location lookup',
+    'desc' => 'Simple HTML, with reverse lookup (slow)',
     'emoji' => 'supported',
     'templatePre'   =>
       "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n" +
@@ -18,13 +18,16 @@ template = {
       "<b><font color=\"#999922\">&sect;</font></b> terrain rating of 3.5+&nbsp;&nbsp;&nbsp;" +
       "<b><font color=\"#440000\">&uarr;</font></b> difficulty rating of 3.5+&nbsp;&nbsp;&nbsp;" +
       "<b><font color=\"#BB6666\">&hearts;</font></b> fav factor of 3.0+<br>" +
+      "<i>Geocoding by <a href=\"https://openstreetmap.org\">OpenStreetMap</a>'s " +
+                      "<a href=\"https://wiki.openstreetmap.org/wiki/Nominatim\">Nominatim</a> service<br>" +
+        "(data provided under <a href=\"https://openstreetmap.org/copyright\">ODbL</a> license)</i><br>" +
       "<br>\n",
     'templateIndex' => "* <a href=\"#<%out.wid%>\"><%wpEntity.name%></a><br>",
     'usesLocation'  => true,
     'templateWP'    =>
       "\n\n<hr noshade size=\"1\">\n" +
       "<h3><a name=\"<%out.wid%>\"></a><font color=\"#000099\"><%out.symbols%><a href=\"<%wp.url%>\"><%wp.name%></a></font> by <font color=\"#555555\"><%wpEntity.creator%></font> <font color=\"#444444\">(<%out.wid%>)</font></h3>\n" +
-      "<a href=\"<%out.maps_url%>\"><%wp.latwritten%> <%wp.lonwritten%></a><br>" +
+      "<a href=\"<%out.maps_url%>\"><%wp.latwritten%> <%wp.lonwritten%></a> <i>near <%out.location%></i><br>" +
       "<font color=\"#339933\"><%wp.type%> (<%wp.size%>) D<%wp.difficulty%>/T<%wp.terrain%> Fav<%wp.favfactor%>(<%wp.favorites%>/<%out.foundcount%>) &rarr;<%out.relativedistance%><br>" +
       "Placed: <%out.cdate%> Last comment: <%wp.last_find_days%> days ago (<%wp.last_find_type%>)</font><br>\n" +
       "Age of information: <%wp.ldays%> days<br>\n" +
