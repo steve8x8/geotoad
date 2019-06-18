@@ -116,13 +116,14 @@ class SearchCache
       if not accuracy
         displayWarning "GeoCoder failed to determine the location of #{key}"
         return nil
-      else
-        displayMessage "GeoCoder found \"#{key}\""
-        displayMessage "Using result 1 of #{count}: \"#{location}\""
-        displayMessage "Accuracy level #{accuracy}, will use coordinates #{lat}, #{lon}"
       end
-      lat = sprintf("%2.6f", lat).gsub(/0{1,5}$/, '')
-      lon = sprintf("%2.6f", lon).gsub(/0{1,5}$/, '')
+      # trim numbers to useful precision, leave one trailing zero digit
+      accuracy = sprintf("%.3f", accuracy).gsub(/0{1,2}$/, '')
+      lat = sprintf("%.6f", lat).gsub(/0{1,5}$/, '')
+      lon = sprintf("%.6f", lon).gsub(/0{1,5}$/, '')
+      debug "GeoCoder returned result for \"#{key}\""
+      debug "Using result 1 of #{count}: \"#{location}\""
+      displayInfo "Accuracy level #{accuracy}, will use coordinates #{lat}, #{lon}"
       @search_url = @@base_url + "?lat=#{lat}&lng=#{lon}"
       supports_distance = true
 
@@ -130,8 +131,9 @@ class SearchCache
       @query_type = 'coord'
       supports_distance = true
       lat, lon = parseCoordinates(key)
-      lat = sprintf("%2.6f", lat).gsub(/0{1,5}$/, '')
-      lon = sprintf("%2.6f", lon).gsub(/0{1,5}$/, '')
+      lat = sprintf("%.6f", lat).gsub(/0{1,5}$/, '')
+      lon = sprintf("%.6f", lon).gsub(/0{1,5}$/, '')
+      displayInfo "Will use coordinates #{lat}, #{lon}"
       @search_url = @@base_url + "?lat=#{lat}&lng=#{lon}"
 
     when 'user'
@@ -247,8 +249,8 @@ class SearchCache
       displayError "Bad format in #{input}: #{key.split("\s").length} fields found.", rc = 2
     end
     # sub-meter precision, strip some trailing 0's
-    lat = sprintf("%.7f", lat).gsub(/0{1,4}$/, '')
-    lon = sprintf("%.7f", lon).gsub(/0{1,4}$/, '')
+    lat = sprintf("%.6f", lat).gsub(/0{1,5}$/, '')
+    lon = sprintf("%.6f", lon).gsub(/0{1,5}$/, '')
     displayMessage "\"#{input}\" parsed as latitude #{lat}, longitude #{lon}"
     return lat, lon
   end
