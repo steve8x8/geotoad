@@ -1,3 +1,11 @@
+geotoad (3.29.1-1) unstable; urgency=low
+
+  * New version 3.29.1, "Summer 2019 release (2019.1)"
+  * Issue 362: Switch from Google Geocode API to OSM Nominatim
+  * Miscellaneous changes and additions
+
+ -- Steve Sixty-Four <steve8x8@googlemail.com>  Sun, 30 Jun 2019 18:00:00 +0000
+
 geotoad (3.29.0-1) unstable; urgency=low
 
   * New version 3.29.0, "Spring 2019 release (2019.0)"
