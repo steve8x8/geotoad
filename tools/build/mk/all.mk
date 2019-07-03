@@ -22,7 +22,8 @@ fullclean: clean
 	-rm -rf git/
 	@echo $@ done.
 
-md5sums.txt: Makefile $(GTV).tar.gz $(GTV)_Installer.exe $(GTV).dmg #$(GTV)-$(DEB_BUILD)_all.deb
+#md5sums.txt: Makefile $(GTV).tar.gz $(GTV)_Installer.exe $(GTV).dmg #$(GTV)-$(DEB_BUILD)_all.deb
+md5sums.txt: Makefile $(GTV).tar.gz $(GTV).dmg #$(GTV)-$(DEB_BUILD)_all.deb
 	md5sum $(GTV)* `echo $(GTV) | sed 's~-~_~'`* | grep -v '^d41d8cd98f00b204e9800998ecf8427e' | grep -v '\.orig\.tar\.gz' > md5sums.txt
 
 Packages.gz: md5sums.txt
