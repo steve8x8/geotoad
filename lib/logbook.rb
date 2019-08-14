@@ -22,9 +22,22 @@ module LogBook
     commentarray = Array.new
     # required for eval()!
     null = ""
+
+    # jsonstring=
+    # {"status":"success","data":[...],"pageInfo":{"idx":1,"size":25,"totalRows":7625,"totalPages":305,"rows":25}}
+    # FIXME: Is is really necessary to split the json?
+    #        What about reading it as a whole (into an array)?
+    #        Problem: Errors would kill all logs :(
+
     # "Images" contains a sub-array, empty it so it doesn't get split
-    jsonstring.gsub(/\"[^\"]*\":/){ |m| "#{m.split(/:/)[0]} => " } #.gsub(/,\"Images\" => \[[^\]]*\]/, "")
-              .gsub(/ => \[[^\]]*\]/, " => []")
+    # apparently there's no need to strip header and footer
+    #         .gsub(/^.*?\"data\":/, '')                          # strip header
+    #         .gsub(/\"pageInfo\":\{[^\}]*\}/, '')                # strip footer
+    # should we check "success"?
+    jsonstring
+              .gsub(/#/, "=")                                     # disable in-string #{values}
+              .gsub(/\"Images\":\[\{.*?\}\]/, "\"Images\":[]") # strip Images content
+              .gsub(/\"[^\"]*\":/){|m| "#{m.split(/:/)[0]}=>"}    # rewrite into Ruby hash
               .split(/},{/)
               .each { |jsonentry|
       begin
@@ -38,13 +51,14 @@ module LogBook
                         "user"    => CGI.escapeHTML(jsonhash["UserName"]),
                         "user_id" => jsonhash["AccountID"],
                         "text"    => jsonhash["LogText"]}
+        debug3 "Adding #{commenthash.inspect}"
         commentarray.push(commenthash)
       rescue SyntaxError => e
-        debug2 "dropped json entry \"#{jsonentry}\" because of \"#{e}\""
         displayWarning "json entry dropped because of syntax error"
-      rescue => e
         debug2 "dropped json entry \"#{jsonentry}\" because of \"#{e}\""
+      rescue => e
         displayWarning "json entry dropped because of error"
+        debug2 "dropped json entry \"#{jsonentry}\" because of \"#{e}\""
       end
     }
     return commentarray
