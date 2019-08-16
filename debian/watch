@@ -1,3 +1,2 @@
-version=3
-opts=uversionsmangle=s/(rc|a|b|c)/~$1/ \
-https://github.com/steve8x8/geotoad/archive/(.+)\.tar.gz
+version=4
+https://github.com/steve8x8/geotoad/releases .*/archive/(.+)\.tar.gz
