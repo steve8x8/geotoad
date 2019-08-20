@@ -1118,7 +1118,8 @@ class Output
     # combine table entries
     new_text.gsub!(/<td[^>]*>\n+/m, '<td>')
     new_text.gsub!(/\n+<\/td[^>]*>/m, '</td>')
-    # ToDo: fuse continuation lines together between <td> .. </td>
+    # fuse continuation lines together between <td> .. </td>
+    new_text.gsub!(/<td>.*?<\/td>/m){ |td| td.gsub(/\n/, ' ') }
     # remove "class" string from <tr>
     new_text.gsub!(/\s*class=\"[^\"]*\"/m, '')
     # we have to keep the "ishidden" information for later
@@ -1140,7 +1141,7 @@ class Output
     wpname = nil
     wptype = nil
     coords = nil
-    note   = ""
+    note   = "(?)" # mark "not filled in"
     # column index old style, new style starts one field earlier!
     xprefix = 4
     xlookup = 5
@@ -1284,6 +1285,7 @@ class Output
           # reset row counter and hidden flag for next WP
           hidden = false
           trcount = 0
+          note = "(?)"
         end
       end
     }
