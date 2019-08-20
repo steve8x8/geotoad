@@ -950,10 +950,9 @@ class CacheDetails
     # create table similar to Additional Waypoints and return that
     table = ''
     table << "<table id=\"Waypoints\">\n"
-    # include table header to tell this is an old-style table
+    # include table header to tell this is an new-style table
     table << "  <thead>\n"
     table << "    <tr>\n"
-    table << "      <th></th>\n"
     table << "      <th></th>\n"
     table << "      <th></th>\n"
     table << "      <th>Prefix</th>\n"
@@ -988,19 +987,17 @@ class CacheDetails
       # strip blanks off wpt type in parentheses
       name = cmapitem['name'].gsub(/\(\s*(.*?)\s*\)/){"(#{$1})"}
       table << "    <tr ishidden=\"false\">\n"
-      table << "      <td></td>\n"			# col 1: empty
-      table << "      <td></td>\n"			# col 2: (visibility icon) empty
-      table << "      <td></td>\n"			# col 3: (point type icon) empty
-      table << "      <td>#{pf}</td>\n"			# col 4: Prefix
-      table << "      <td>#{pf}</td>\n"			# col 5: (Lookup)
-      table << "      <td>#{name} (#{sym})</td>\n"	# col 6: Name (type)
-      table << "      <td>#{slat} #{slon}</td>\n"	# col 7: Coordinate
-      table << "      <td></td>\n"			# col 8: empty
+      table << "      <td></td>\n"			# col 1: (visibility icon) empty
+      table << "      <td></td>\n"			# col 2: (point type icon) empty
+      table << "      <td>#{pf}</td>\n"			# col 3: Prefix
+      table << "      <td>#{pf}</td>\n"			# col 4: (Lookup)
+      table << "      <td>#{name} (#{sym})</td>\n"	# col 5: Name (type)
+      table << "      <td>#{slat} #{slon}</td>\n"	# col 6: Coordinate
       table << "    </tr>\n"
       table << "    <tr>\n"
       table << "      <td></td>\n"
       table << "      <td>Note:</td>\n"
-      table << "      <td colspan=\"6\"></td>\n"
+      table << "      <td></td>\n"
       table << "    </tr>\n"
     }
     table << "  </tbody>\n"
