@@ -105,8 +105,8 @@ module Auth
   # obfuscate cookie so nobody can use it
   def hideCookie(cookie)
     hcookie = cookie.to_s.split(/; */).map{ |c|
-    if c =~ /(__RequestVerificationToken=|gspkauth=|ASP.NET_SessionId=)(\w{5})(\w+)(\w{5})/
-      "#{$1}#{$2}[#{$3.length}]#{$4}"
+    if c =~ /(__RequestVerificationToken|gspkauth|ASP.NET_SessionId)=([\w-]{5})([\w-]+)([\w-]{5})/
+      "#{$1}=#{$2}[#{$3.length}]#{$4}"
     else
       c
     end
@@ -160,7 +160,7 @@ module Auth
     # spring 2016 replaced userid with other cookies
     # spring 2017 did this again
     if (cookie =~ /gspkauth=/) and
-      ((cookie =~ /(__RequestVerificationToken=\w+)/) or (@cookie =~ /(ASP.NET_SessionId==\w+)/))
+      ((cookie =~ /(__RequestVerificationToken|ASP.NET_SessionId)=([\w-]+)/))
       debug "Cookie #{hideCookie(cookie)} looks good, rock on."
       return cookie
     else
