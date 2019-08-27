@@ -35,8 +35,8 @@ module LogBook
     #         .gsub(/\"pageInfo\":\{[^\}]*\}/, '')                # strip footer
     # should we check "success"?
     jsonstring
-              .gsub(/#/, "=")                                     # disable in-string #{values}
-              .gsub(/\"Images\":\[\{.*?\}\]/, "\"Images\":[]") # strip Images content
+              .gsub(/#\{/, "={")                                  # disable in-string #{values}
+              .gsub(/\"Images\":\[\{.*?\}\]/, "\"Images\":[]")    # strip Images content
               .gsub(/\"[^\"]*\":/){|m| "#{m.split(/:/)[0]}=>"}    # rewrite into Ruby hash
               .split(/},{/)
               .each { |jsonentry|
