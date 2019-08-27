@@ -1154,7 +1154,7 @@ class Output
     trcount = 0
     tdcount = 0
     # table consists of row pairs: 1st row with WP details, 2nd with note
-    text.gsub(/<br[^>]*>/, '|').split("\n").each{ |line|
+    text.gsub(/<br[^>]*>/, '|').gsub(/<[^>]*>/, '').split("\n").each{ |line|
       if line =~ /<\/thead>/
         # reset line counter
         trcount = 0
