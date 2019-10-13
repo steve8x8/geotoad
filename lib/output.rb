@@ -1154,7 +1154,9 @@ class Output
     trcount = 0
     tdcount = 0
     # table consists of row pairs: 1st row with WP details, 2nd with note
-    text.gsub(/<br[^>]*>/, '|').gsub(/<[^>]*>/, '').split("\n").each{ |line|
+    # do not remove all HTML elements, only "linefeeds"
+    text.gsub(/<br[^>]*>/, '|').gsub(/<\/*p[^>]*>/, '|').split("\n").each{ |line|
+      debug3 "toWptList line=\"#{line}\""
       if line =~ /<\/thead>/
         # reset line counter
         trcount = 0
@@ -1169,14 +1171,15 @@ class Output
         end
       elsif line =~ /<th>(.*)<\/th>/
         match = $1
+        debug3 "th match #{match}"
         tdcount += 1
         case match
         when /Prefix/
           xprefix = tdcount
           if tdcount == 3
-            debug3 "AddWP prefix index: #{xprefix} (new style)"
+            debug2 "AddWP prefix index: #{xprefix} (new style)"
           elsif tdcount == 4
-            debug3 "AddWP prefix index: #{xprefix} (old style)"
+            debug2 "AddWP prefix index: #{xprefix} (old style)"
           else
             debug "Additional Waypoints table format changed? Prefix index = #{xprefix}"
           end
@@ -1192,6 +1195,7 @@ class Output
         end
       elsif line =~ /<td>(.*)<\/td>/
         match = $1
+        debug3 "td match #{match}"
         tdcount += 1
         # extract fields
         if trcount == 1
@@ -1199,15 +1203,15 @@ class Output
           if tdcount == xprefix #4
             # two-letter prefix
             prefix = match
-            debug3 "AddWP prefix = #{prefix}"
+            debug2 "AddWP prefix = #{prefix}"
           elsif tdcount == xlookup #5
             # dunno what it's for - future extension by gc.com?
             lookup = match
-            debug3 "AddWP lookup = #{lookup}"
+            debug2 "AddWP lookup = #{lookup}"
           elsif tdcount == xwpname #6
             # WP name and type
             wpname = match
-            debug3 "AddWP wpname = #{wpname}"
+            debug2 "AddWP wpname = #{wpname}"
             # extract sym type (in parentheses), replace outdated types (from old cdpfs)
             wptype = wpname.gsub(/^.*\(/, '').gsub(/\).*/, '')
             wptype = wptype.gsub(/Question to Answer/i, 'Virtual Stage').gsub(/Stages of a Multicache/i, 'Physical Stage')
@@ -1220,7 +1224,7 @@ class Output
           elsif tdcount == xcoords #7
             # coords in "written" format
             coords = match
-            debug3 "AddWP coords = #{coords}"
+            debug2 "AddWP coords = #{coords}"
             # do some transformations (taken from details.rb)
             if coords =~ /([NS]) (\d+).*? ([\d\.]+) ([WE]) (\d+).*? ([\d\.]+)/
               wplat = ($2.to_f + $3.to_f / 60) * ($1 == 'S' ? -1:1)
@@ -1242,10 +1246,10 @@ class Output
           # second row of two
           if line =~ /Note:/
             xnote = tdcount + 1
-            debug3 "AddWP note tag index: #{xnote}"
+            debug2 "AddWP note tag index: #{xnote}"
           elsif tdcount == 3 # xnote
             note = match #.to_s
-            debug3 "AddWP note = #{note}"
+            debug2 "AddWP note = #{note}"
             # remove some HTML stuff, but keep track of line breaks
             note.gsub!(/<(br|p|\/p)[^>]*>/, "|")
             # remove all other tags
