@@ -4,12 +4,13 @@ require 'lib/common'
 require 'lib/messages'
 require 'lib/geocode'
 require 'lib/shadowget'
-
+require 'lib/shortentype'
 
 class SearchCache
 
   include Common
   include Messages
+  include ShortenType
 
   attr_writer :distance
   attr_writer :max_pages
@@ -35,7 +36,9 @@ class SearchCache
 	 'cito'         => '57150806-bc1a-42d6-9cf0-538d171a2d22',
 	 'megaevent'    => '69eb8535-b718-4b35-ae3c-a856a55b0874',
 	 'lost+found'   => '3ea6533d-bb52-42fe-b2d2-79a3424d4728',
+	 'commceleb'    => '3ea6533d-bb52-42fe-b2d2-79a3424d4728', # check (?)
 	 'lfceleb'      => 'af820035-787a-47af-b52b-becc8b0c0c88',
+	 'hqceleb'      => 'af820035-787a-47af-b52b-becc8b0c0c88', # check (GC896PK)
 	 'block'        => 'bc2f3df2-1aab-4601-b2ff-b5091f6c02e3',
 	 'gigaevent'    => '51420629-5739-4945-8bdd-ccfd434c0ead',
 	'unknown+'     => '40861821-1835-4e11-b666-8d41064d03fe', # all unknown types
@@ -67,9 +70,12 @@ class SearchCache
 	'453'	=> 'Mega-Event Cache',
 	'1304'	=> 'GPS Adventures Exhibit',
 	'1858'	=> 'Wherigo Cache',
-	'3653'	=> 'Lost and Found Event Cache',
-	'3773'	=> 'Groundspeak HQ', # now: 'Geocaching HQ',
-	'3774'	=> 'Groundspeak Lost and Found Celebration',
+	#'3653'	=> 'Lost and Found Event Cache',
+	'3653'	=> 'Community Celebration Event Cache',
+	#'3773'	=> 'Groundspeak HQ', # now: 'Geocaching HQ',
+	'3773'	=> 'Geocaching HQ',
+	#'3774'	=> 'Groundspeak Lost and Found Celebration',
+	'3774'	=> 'Geocaching HQ Celebration',
 	'4738'	=> 'Geocaching Block Party',
 	'7005'	=> 'Giga-Event Cache',
 	'cito'		=> 'Cache In Trash Out Event',
@@ -864,6 +870,7 @@ class SearchCache
       # ...<img src="http://www.geocaching.com/images/wpttypes/sm/3.gif" alt="Multi-cache" title="Multi-cache" /></a>
       # ... <a href="/seek/cache_details.aspx?guid=ecfd0038-8e51-4ac8-a073-1aebe7c10cbc" class="lnk  Strike"><span>Besinnungsweg</span></a>
       when /(<img.*?wpttypes\/(\w+)\.[^>]*alt=\"(.*?)\".*)?cache_details.aspx\?guid=([0-9a-f-]{36})([^>]*)><span>\s*(.*?)\s*<\/span><\/a>/i
+        debug "Found cache details link for #{name}"
         debug "found cd ccode=#{$2} type=#{$3} guid=#{$4} name=#{$6}"
         ccode = $2
         full_type = $3
@@ -881,50 +888,16 @@ class SearchCache
           displayInfo "#{line}"
         end
         # there may be more than 1 match, don't overwrite
+        cache['type'], full_type = shortenType(full_type)
         if cache['fulltype']
           debug "Not overwriting \"#{cache['fulltype']}\" (#{cache['type']}) with \"#{full_type}\""
         else
           cache['fulltype'] = full_type
-          cache['type'] = full_type.split(' ')[0].downcase.gsub(/\-/, '')
-          # special cases
-          case full_type
-          when /Cache In Trash Out/
-            cache['type'] = 'cito'
-          when /Lost and Found Celebration/
-            cache['type'] = 'lfceleb'
-          when /Lost and Found Event/
-            cache['type'] = 'lost+found'
-          when /Project APE Cache/
-            cache['type'] = 'ape'
-          when /Groundspeak HQ/
-            cache['type'] = 'gshq'
-          when /Geocaching HQ/
-            cache['type'] = 'gshq'
-          when /Locationless/
-            cache['type'] = 'reverse'
-          when /Block Party/
-            cache['type'] = 'block'
-          when /Exhibit/
-            cache['type'] = 'exhibit'
-          # planned transition
-          when /Mystery/
-            cache['fulltype'] = 'Unknown Cache'
-            cache['type'] = 'unknown'
-          # 2014-08-26
-          when /Traditional/
-            cache['fulltype'] = 'Traditional Cache'
-            cache['type'] = 'traditional'
-          when /Earth/
-            cache['fulltype'] = 'Earthcache'
-            cache['type'] = 'earthcache'
-          end
-          if full_type =~ /Event/
-            debug "Setting event flag for #{full_type}"
-            cache['event'] = true
-          end
-          debug "short type=#{cache['type']} for #{full_type}"
         end
-        debug "Found cache details link for #{name}"
+        if cache['fulltype'] =~ /Event/
+            cache['event'] = true
+        end
+        debug "short type=#{cache['type']} for #{full_type}"
 
         # AFAIK only "user" queries actually return archived caches
         # class="lnk OldWarning Strike Strike"><span>Lars vom Mars</span></a>
@@ -948,6 +921,7 @@ class SearchCache
 
       # 2013-08-21:
       when /(<img.*?wpttypes\/(\w+)\.[^>]*alt=\"(.*?)\".*)?\/geocache\/(GC[0-9A-Z]+)([^>]*)><span>\s*(.*?)\s*<\/span><\/a>/i
+        debug "Found cache details link for #{name}"
         debug "found gc ccode=#{$2} type=#{$3} wid=#{$4} name=#{$6}"
         ccode = $2
         full_type = $3
@@ -964,50 +938,17 @@ class SearchCache
           displayInfo "#{line}"
         end
         # there may be more than 1 match, don't overwrite
+        cache['type'], full_type = shortenType(full_type)
         if cache['fulltype']
           debug "Not overwriting \"#{cache['fulltype']}\" (#{cache['type']}) with \"#{full_type}\""
         else
           cache['fulltype'] = full_type
-          cache['type'] = full_type.split(' ')[0].downcase.gsub(/\-/, '')
-          # special cases
-          case full_type
-          when /Cache In Trash Out/
-            cache['type'] = 'cito'
-          when /Lost and Found Celebration/
-            cache['type'] = 'lfceleb'
-          when /Lost and Found Event/
-            cache['type'] = 'lost+found'
-          when /Project APE Cache/
-            cache['type'] = 'ape'
-          when /Groundspeak HQ/
-            cache['type'] = 'gshq'
-          when /Geocaching HQ/
-            cache['type'] = 'gshq'
-          when /Locationless/
-            cache['type'] = 'reverse'
-          when /Block Party/
-            cache['type'] = 'block'
-          when /Exhibit/
-            cache['type'] = 'exhibit'
-          # planned transition
-          when /Mystery/
-            cache['fulltype'] = 'Unknown Cache'
-            cache['type'] = 'unknown'
-          # 2014-08-26
-          when /Traditional/
-            cache['fulltype'] = 'Traditional Cache'
-            cache['type'] = 'traditional'
-          when /Earth/
-            cache['fulltype'] = 'Earthcache'
-            cache['type'] = 'earthcache'
-          end
-          if full_type =~ /Event/
+        end
+        if cache['fulltype'] =~ /Event/
             debug "Setting event flag for #{full_type}"
             cache['event'] = true
-          end
-          debug "short type=#{cache['type']} for #{full_type}"
         end
-        debug "Found cache details link for #{name}"
+        debug "short type=#{cache['type']} for #{full_type}"
 
         # AFAIK only "user" queries actually return archived caches
         # class="lnk OldWarning Strike Strike"><span>Lars vom Mars</span></a>
@@ -1140,48 +1081,15 @@ class SearchCache
           full_type = @cachetypenum[ccode]
         end
         # there may be more than 1 match, don't overwrite
+        cache['type'], full_type = shortenType(full_type)
         if cache['fulltype']
           debug "Not overwriting \"#{cache['fulltype']}\" (#{cache['type']}) with \"#{full_type}\""
         else
           cache['fulltype'] = full_type
-          cache['type'] = full_type.split(' ')[0].downcase.gsub(/\-/, '')
-          # special cases
-          case full_type
-          when /Cache In Trash Out/
-            cache['type'] = 'cito'
-          when /Lost and Found Celebration/
-            cache['type'] = 'lfceleb'
-          when /Lost and Found Event/
-            cache['type'] = 'lost+found'
-          when /Project APE Cache/
-            cache['type'] = 'ape'
-          when /Groundspeak HQ/
-            cache['type'] = 'gshq'
-          when /Geocaching HQ/
-            cache['type'] = 'gshq'
-          when /Locationless/
-            cache['type'] = 'reverse'
-          when /Block Party/
-            cache['type'] = 'block'
-          when /Exhibit/
-            cache['type'] = 'exhibit'
-          # planned transition
-          when /Mystery/
-            cache['fulltype'] = 'Unknown Cache'
-            cache['type'] = 'unknown'
-          # 2014-08-26
-          when /Traditional/
-            cache['fulltype'] = 'Traditional Cache'
-            cache['type'] = 'traditional'
-          when /Earth/
-            cache['fulltype'] = 'Earthcache'
-            cache['type'] = 'earthcache'
-          end
-          if full_type =~ /Event/
+        end
+        if full_type =~ /Event/
             debug "Setting event flag for #{full_type}"
             cache['event'] = true
-          end
-          debug "short type=#{cache['type']} for #{full_type}"
         end
 
       when /<span class=\"(.*?)\">(.*?)<\/span>/

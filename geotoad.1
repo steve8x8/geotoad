@@ -187,11 +187,20 @@ do not overwrite existing cache description files in file cache
 \fB\-c\fR|\fB\-\-cacheType\fR|\fB\-\-type\fR \fItype\fR  \fB(MULTI)\fR
 set cache type(s), select from
  \fB[traditional|multicache|virtual|letterbox|\fR
+ \fB unknown+|unknown|\fR
  \fB event+|event|cito|megaevent|gigaevent|\fR
- \fB lost+found|lfceleb|block|\fR
- \fB unknown+|unknown|gshq|ape|\fR
- \fB webcam|earthcache|exhibit|wherigo]\fR
+  \fB  hqceleb|\fR
+  \fB  commceleb|\fR
+  \fB  gshq|block|ape|exhibit|\fR
+ \fB webcam|earthcache|wherigo]\fR
 .PP
+\fBhqceleb\fR (ex \fBlfceleb\fR) is used for \fIGeocaching HQ Celebration\fR (formerly
+\fIGroundspeak Lost and Found Celebration\fR, renamed in June 2019).
+\fBcommceleb\fR (ex \fBlost+found\fR) denotes a \fICommunity Celebration Event\fR (called
+\fILost and Found Event Cache\fR until June 2019).
+(Both cache types need more testing when available.)
+.PP
+Caveat:
 If \fBonly one type\fR is selected, search will be sped up considerably
 by reducing the number of queries sent to the server.
 .PP
@@ -207,11 +216,10 @@ To search for "all event" (including cito, mega, and giga, and some
 rare other events) or "all unknown" (including GroundSpeak HQ) types,
 use
 \fBevent+\fR, or \fBunknown+\fR respectively,
-\fBas the only cache type\fR (otherwise,
+can be used \fBas the only cache type\fR (otherwise,
 filtering won't work - you've been warned).
-.PP
-Warning: Inverted filtering for these types does \fBnot\fR work!
-Also, these types may not be supported by the TUI.
+Also, inverted filtering for these types does \fBnot\fR work!
+These types may not be supported by the TUI.
 .TP
 \fB\-d\fR|\fB\-\-difficultyMin\fR|\fB\-\-minDiff\fR \fI1.0\-5.0\fR
 set minimum difficulty

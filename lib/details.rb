@@ -7,6 +7,7 @@ require 'lib/messages'
 require 'lib/geodist'
 require 'lib/logbook'
 require 'lib/gallery'
+require 'lib/shortentype'
 
 class CacheDetails
 
@@ -16,6 +17,7 @@ class CacheDetails
   include GeoDist
   include LogBook
   include Gallery
+  include ShortenType
 
   # Use a printable template that shows the last 10 logs.
   @@baseURL = "https://www.geocaching.com/seek/cdpf.aspx"
@@ -47,9 +49,12 @@ class CacheDetails
 	'453'	=> 'Mega-Event Cache',
 	'1304'	=> 'GPS Adventures Exhibit',
 	'1858'	=> 'Wherigo Cache',
-	'3653'	=> 'Lost and Found Event Cache',
-	'3773'	=> 'Groundspeak HQ', # now: 'Geocaching HQ',
-	'3774'	=> 'Groundspeak Lost and Found Celebration',
+	#'3653'	=> 'Lost and Found Event Cache',
+	'3653'	=> 'Community Celebration Event',
+	#'3773'	=> 'Groundspeak HQ', # now: 'Geocaching HQ',
+	'3773'	=> 'Geocaching HQ',
+	#'3774'	=> 'Groundspeak Lost and Found Celebration',
+	'3774'	=> 'Geocaching HQ Celebration',
 	'4738'	=> 'Geocaching Block Party',
 	'7005'	=> 'Giga-Event Cache',
 	'cito'		=> 'Cache In Trash Out Event',
@@ -423,48 +428,16 @@ class CacheDetails
         cache['name2'] = name.gsub(/^\s+/, '').gsub(/\s+$/, '').gsub(/\s+/, ' ')
         # there may be more than 1 match, don't overwrite (see GC1PQKR, GC1PQKT)
         # actually, types have been set by search - is this code obsolete then?
+        cache['type'], full_type = shortenType(full_type)
         if cache['fulltype']
           debug "Not overwriting \"#{cache['fulltype']}\"(#{cache['type']}) with \"#{full_type}\""
         else
           cache['fulltype'] = full_type
-          cache['type'] = full_type.split(' ')[0].downcase.gsub(/\-/, '')
-          # special cases
-          case full_type
-          when /Cache In Trash Out/
-            cache['type'] = 'cito'
-          when /Lost and Found Celebration/
-            cache['type'] = 'lfceleb'
-          when /Lost and Found Event/
-            cache['type'] = 'lost+found'
-          when /Project APE Cache/
-            cache['type'] = 'ape'
-          when /Groundspeak HQ/
-            cache['type'] = 'gshq'
-          when /Geocaching HQ/
-            cache['type'] = 'gshq'
-          when /Locationless/
-            cache['type'] = 'reverse'
-          when /Block Party/
-            cache['type'] = 'block'
-          when /Exhibit/
-            cache['type'] = 'exhibit'
-          # planned transition
-          when /Mystery/
-            cache['fulltype'] = 'Unknown Cache'
-            cache['type'] = 'unknown'
-          # 2014-08-26 - obsolete?
-          when /Traditional/
-            cache['fulltype'] = 'Traditional Cache'
-            cache['type'] = 'traditional'
-          when /Earth/
-            cache['fulltype'] = 'Earthcache'
-            cache['type'] = 'earthcache'
-          end
-          if full_type =~ /Event/
-            cache['event'] = true
-          end
-          debug "stype=#{cache['type']} full_type=#{cache['fulltype']}"
         end
+        if cache['fulltype'] =~ /Event/
+            cache['event'] = true
+        end
+        debug "stype=#{cache['type']} full_type=#{cache['fulltype']}"
       end
 
       if line =~ /with an account to view|You must be logged in/
