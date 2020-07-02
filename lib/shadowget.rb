@@ -454,6 +454,11 @@ class ShadowFetch
       displayWarning "Not Found #{resp.response.inspect}"
       debug3 "Response:\n#{resp.body.to_s.gsub(/<[^>]*>/, '')}"
       success = false
+    # early exit - FIXME: use cached content instead?
+      displayWarning "Early exit from fetchURL()"
+      @@downloadErrors += 1
+      return nil
+    # ###
     when Net::HTTPInternalServerError
       # error 500
       # "#<Net::HTTPInternalServerError 500 Internal Server Error readbody=true>"
@@ -535,6 +540,12 @@ class ShadowFetch
       displayError   "Stopping here."
       data = nil
     end
+
+    if data =~ /<title id="pageTitle">Cache Details - Print Friendly<\/title>/
+      displayWarning "Server returned placeholder page claiming missing login. Skipping."
+      return nil
+    end
+
     return data
   end
 

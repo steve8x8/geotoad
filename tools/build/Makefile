@@ -14,7 +14,8 @@ GTV     = geotoad-$(VERSION)
 GUV     = geotoad_$(VERSION)
 BUILD   = 1
 
-all:	version tgz deb mac win pkg #upl
+#all:	version tgz deb mac win pkg upl
+all:	version tgz deb mac     pkg    
 
 tgz:	$(GTV).tar.gz
 deb:	$(GUV)-$(BUILD)_all.deb
