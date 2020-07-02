@@ -1,4 +1,4 @@
-.TH "GEOTOAD" "1" "28 Apr 2019" "steve8x8@googlemail.com" "Geocaching Query Tool"
+.TH "GEOTOAD" "1" "02 Jul 2020" "steve8x8@googlemail.com" "Geocaching Query Tool"
 
 .SH "NAME"
 
@@ -188,21 +188,24 @@ do not overwrite existing cache description files in file cache
 set cache type(s), select from
  \fB[traditional|multicache|virtual|letterbox|\fR
  \fB unknown+|unknown|\fR
- \fB event+|event|cito|megaevent|gigaevent|\fR
-  \fB  hqceleb|\fR
-  \fB  commceleb|\fR
-  \fB  gshq|block|ape|exhibit|\fR
+ \fB event+|event|cito|mega[event]|giga[event]|\fR
+  \fB  gchqceleb|\fR
+  \fB  communceleb|\fR
+  \fB  gchq|block|ape|gps|\fR
  \fB webcam|earthcache|wherigo]\fR
 .PP
-\fBhqceleb\fR (ex \fBlfceleb\fR) is used for \fIGeocaching HQ Celebration\fR (formerly
+\fBgchqceleb\fR (ex \fBlfceleb\fR, \fBhqceleb\fR) is used for \fIGeocaching HQ Celebration\fR (formerly
 \fIGroundspeak Lost and Found Celebration\fR, renamed in June 2019).
-\fBcommceleb\fR (ex \fBlost+found\fR) denotes a \fICommunity Celebration Event\fR (called
+\fBcommunceleb\fR (ex \fBlost+found\fR, \fBcommceleb\fR) denotes a \fICommunity Celebration Event\fR (called
 \fILost and Found Event Cache\fR until June 2019).
-(Both cache types need more testing when available.)
 .PP
 Caveat:
 If \fBonly one type\fR is selected, search will be sped up considerably
 by reducing the number of queries sent to the server.
+.PP
+Another caveat:
+Some of the renamed cache types need more testing.
+Also the grouping into \fBevent+\fR and \fBunknown+\fR isn\'t fully clear yet.
 .PP
 By suffixing one or more cacheType(s) with a minus sign (dash) "\-",
 you may invert the filter,

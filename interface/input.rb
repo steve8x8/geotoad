@@ -531,10 +531,10 @@ class Input
       when '9'
         # full list of supported types; no "+" types
         kinds = ['traditional', 'multicache', 'virtual', 'letterbox', 'unknown',
-                  'event', 'cito', 'megaevent', 'gigaevent',
-                   'commceleb', 'hqceleb',
-                   'lost+found', 'lfceleb', # these are obsolete (June 2019)
-                   'block', 'gshq', 'ape', 'exhibit',
+                  'event', 'cito', 'megaevent', 'mega', 'gigaevent', 'giga',
+                   'communceleb', 'commceleb', 'lfceleb',
+                   'gchqceleb', 'hqceleb', 'lost+found',
+                   'block', 'gchq', 'gshq', 'ape', 'gps', 'exhibit',
                   'webcam', 'earthcache', 'wherigo']
         @@optHash['cacheType'] = askFromList("Valid types: #{kinds.join(', ')}.\nWhat do you seek (separate with commas)?", kinds, nil, trailing_dash_allowed = true)
 
