@@ -10,28 +10,26 @@ module ShortenType
       case ftype
       when /Cache In Trash Out/
         stype = 'cito'
-      when /Lost and Found Celebration/
-        stype = 'lfceleb'
-      when /Lost and Found Event/
-        stype = 'lost+found'
+      when /Lost and Found Celebration/		# obsolete
+        stype = 'gchqceleb'
+      when /Geocaching HQ Celebration/
+        stype = 'gchqceleb'
+      when /Lost and Found Event/		# obsolete
+        stype = 'communceleb'
+      when /Community Celebration Event/
+        stype = 'communceleb'
+      when /Groundspeak HQ/			# obsolete
+        stype = 'gchq'
+      when /Geocaching HQ/
+        stype = 'gchq'
       when /Project APE Cache/
         stype = 'ape'
       when /Locationless/
-        stype = 'reverse'
+        stype = 'locationless'
       when /Block Party/
         stype = 'block'
       when /Exhibit/
-        stype = 'exhibit'
-      # new June 2019:
-      when /Geocaching HQ Celebration/
-        stype = 'hqceleb'
-      when /Community Celebration Event/
-        stype = 'commceleb'
-      # do these still exist?
-      when /Groundspeak HQ/
-        stype = 'gshq'
-      when /Geocaching HQ/
-        stype = 'gshq'
+        stype = 'gps'
       # planned transition
       when /Mystery/
         ftype = 'Unknown Cache'
