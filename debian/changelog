@@ -1,3 +1,14 @@
+geotoad (3.30.0-1) unstable; urgency=low
+
+  * New version 3.30.0, "Coronation release - Summer 2020 (2020.0)"
+  * Fix "Community Celebration Event" bug
+  * Sync CacheTypes from c:geo, keep old types
+  * Do not build for Windows
+  * Better handling of some fetch errors
+  * Extend copyright into 2020
+
+ -- Steve Sixty-Four <steve8x8@googlemail.com>  Tue, 14 Jul 2020 18:00:00 +0000
+
 geotoad (3.29.2-1) unstable; urgency=low
 
   * New version 3.29.2, "Fall 2019 release (2019.2)"
