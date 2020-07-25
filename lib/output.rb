@@ -1384,7 +1384,7 @@ class Output
         if cache["attribute#{x}id"]
           rawattrib = "      <groundspeak:attribute " +
             sprintf("id=\"%s\" inc=\"%s\">", cache["attribute#{x}id"], cache["attribute#{x}inc"]) +
-            cache["attribute#{x}txt"].to_s.capitalize.gsub(/\\/, "/") +
+            CGI.escapeHTML(cache["attribute#{x}txt"].to_s.capitalize.gsub(/\\/, "/")) +
             "</groundspeak:attribute>\n"
           debug3 "Attribute #{x} XML: #{rawattrib}"
           xmlAttrs << rawattrib
@@ -1469,7 +1469,8 @@ class Output
       'xmlWptsGsak' => xmlWptsGsak.to_s.gsub(/XXXWIDXXX/, wid[2..-1]),
       'xmlWpts'     => xmlWpts.to_s.gsub(/XXXWIDXXX/, wid[2..-1]),
       'xmlAttrs'    => xmlAttrs.to_s,
-      'txtAttrs'    => (cache['attributeText'].to_s.empty?) ? '' : '[' + cache['attributeText'].to_s.capitalize.gsub(/\\/, "/") + ']',
+      # 202007xx: "<1 km hike" etc
+      'txtAttrs'    => (cache['attributeText'].to_s.empty?) ? '' : '[' + cache['attributeText'].to_s.capitalize.gsub(/\\/, "/").gsub(/</, "less than ").gsub(/>/, "more than ") + ']',
       'warnAvail'   => (available or archived) ? '' : '[?]',
       'warnArchiv'  => (archived) ? '[%]' : '',
       'premiumOnly' => (cache['membersonly'] ? ('[$' + (cache['olddesc'] ? '+' : '') + (cache['moved'] ? 'm' : '') + ']') : ''),
