@@ -1,3 +1,10 @@
+geotoad (3.30.1-1) unstable; urgency=low
+
+  * New version 3.30.1, "First bugfix release - Summer 2020 (2020.1)"
+  * Issue 365: Changes in attribute descriptions break GPX output
+
+ -- Steve Sixty-Four <steve8x8@googlemail.com>  Sat, 25 Jul 2020 12:00:00 +0000
+
 geotoad (3.30.0-1) unstable; urgency=low
 
   * New version 3.30.0, "Coronation release - Summer 2020 (2020.0)"
