@@ -344,6 +344,11 @@ class CacheDetails
       "frontyard"        => 65,
       "teamwork"         => 66,
       "geotour"          => 67,
+      "unknown68"        => 68,
+      "bonuscache"       => 69,
+      "powertrail"       => 70,
+      "challengecache"   => 71,
+      "hqsolutionchecker"=> 72,
       # obsolete?, but image still exists
       "snakes"           => 18,
       "sponsored"        => 61,
@@ -523,7 +528,7 @@ class CacheDetails
         # is this really necessary?
         line.gsub!(/<p[^>]*>/, '')
         # <img src="/images/attributes/bicycles-no.gif" alt="no bikes" width="30" height="30" />
-        line.scan(/\/images\/attributes\/(.+?)\.(gif|png). alt=\"(.*?)\"[^>]*\/>/){ |icon, type, alt|
+        line.scan(/\/images\/attributes\/([^\.]+)\.(gif|png). alt=\"([^\"]+)\"/){ |icon, type, alt|
           # convert each image name into index/value pair, keep related text
           aid, ainc = parseAttr(icon)
           debug3 "attribute #{anum}: ic=#{icon} id=#{aid} inc=#{ainc} alt=#{alt} "
