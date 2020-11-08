@@ -1284,6 +1284,7 @@ class Output
               "  <gsak:wptExtension>\n" +
               "    <gsak:Parent>GCXXXWIDXXX</gsak:Parent>\n" +
               "  </gsak:wptExtension>\n" +
+                ((wplat and wplon) ? "" : "  <cgeo:userdefined>true</cgeo:userdefined>\n") +
               "</wpt>\n"
           end
           # reset row counter and hidden flag for next WP
