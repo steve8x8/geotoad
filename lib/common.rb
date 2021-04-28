@@ -122,6 +122,11 @@ module Common
     if data =~ /<span class=.cache-count.[^>]*>\s*([\d,\.]+)[\s\w]+<\/span>/
       foundcount = $1.gsub(/[,\.]/, '').to_i
     end
+    # seen April 2021
+    #  "findCount": 9556,
+    if data =~ /[\r\n]\s*.findCount.:\s*(\d+),\s*[\r\n]/
+      foundcount = $1.to_i
+    end
     # seen 2013-10-xx
     #    <p>
     #        3728 Results</p>
