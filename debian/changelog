@@ -1,3 +1,10 @@
+geotoad (3.31.0-1) unstable; urgency=low
+
+  * New version 3.31.0, "Spring 2021"
+  * Found count restored
+
+ -- Steve Sixty-Four <steve8x8@googlemail.com>  Wed, 28 Apr 2021 08:30:00 +0000
+
 geotoad (3.30.2-1) unstable; urgency=low
 
   * New version 3.30.2, "Second bugfix release - Summer 2020 (2020.2)"
