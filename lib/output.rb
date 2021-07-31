@@ -1334,7 +1334,7 @@ class Output
     else
       location = 'Undetermined'
     end
-    coord_query = URI.escape(sprintf("%.6f,%.6f", cache['latdata'].to_f, cache['londata'].to_f))
+    coord_query = URI.encode_www_form_component(sprintf("%.6f,%.6f", cache['latdata'].to_f, cache['londata'].to_f), enc=nil)
     available = (not cache['disabled'] and not cache['archived'])
     archived = cache['archived']
 
