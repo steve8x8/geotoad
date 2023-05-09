@@ -22,8 +22,7 @@ template = {
        " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" +
        " xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0/1\"" +
        " xmlns:gsak=\"http://www.gsak.net/xmlv1/6\"" +
-# doesn't exist (2015-07-31)?
-#       " xmlns:cgeo=\"http://www.cgeo.org/wptext/1/0\"" +
+       " xmlns:cgeo=\"http://www.cgeo.org/wptext/1/0\"" +
       ">\n",
     'templateWP'   =>
       "<wpt lat=\"<%out.latdatapad6%>\" lon=\"<%out.londatapad6%>\">\n" +

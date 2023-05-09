@@ -89,6 +89,7 @@ template = {
        " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" +
        " xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0/1\"" +
        " xmlns:gsak=\"http://www.gsak.net/xmlv1/6\"" +
+       " xmlns:cgeo=\"http://www.cgeo.org/wptext/1/0\"" +
       ">\n" +
       "<name>Waypoints</name>\n" +
       "<desc><%outEntity.title%></desc>\n" +
@@ -119,6 +120,7 @@ template = {
        " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" +
        " xmlns:groundspeak=\"http://www.groundspeak.com/cache/1/0/1\"" +
        " xmlns:gsak=\"http://www.gsak.net/xmlv1/6\"" +
+       " xmlns:cgeo=\"http://www.cgeo.org/wptext/1/0\"" +
       ">\n" +
       "<name>Waypoints</name>\n" +
       "<desc><%outEntity.title%></desc>\n" +
