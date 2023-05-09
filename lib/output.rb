@@ -1334,7 +1334,13 @@ class Output
     else
       location = 'Undetermined'
     end
-    coord_query = URI.escape(sprintf("%.6f,%.6f", cache['latdata'].to_f, cache['londata'].to_f))
+    begin
+      # issue #367
+      coord_query = URI.encode_www_form_component(sprintf("%.6f,%.6f", cache['latdata'].to_f, cache['londata'].to_f), enc=nil)
+    rescue => error
+      displayWarning "URI.encode_www_form_component() error, fallback to URI_escape()"
+      coord_query = URI.escape(sprintf("%.6f,%.6f", cache['latdata'].to_f, cache['londata'].to_f))
+    end
     available = (not cache['disabled'] and not cache['archived'])
     archived = cache['archived']
 
