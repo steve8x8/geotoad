@@ -230,32 +230,50 @@ class ShadowFetch
       debug "sleeping #{@extraSleep} seconds before remote fetch"
       sleep(@extraSleep)
     end
+
     # fetch a new version from remote
+    dsize = 0
     @data = fetchRemote
-    size = nil
-    # check for valid closed html
+
+    # check data validity
     if not @data
-      debug "we must not have a net connection, uh no"
-    elsif @data !~ /<\/html>\s*$/ and @closingHTML
-      if @url =~ /geocaching\.com/
-        displayWarning "No closing HTML tag found"
-        #@data = nil
-      end
-    end
-    if (@data)
-      @src = 'r'	#'remote'
-      size = @data.length
+      displayWarning "Empty remote data"
+      #debug "we must not have a net connection, uh no"
+    # check for closing HTML tag
+    elsif @closingHTML and @data !~ /<\/html>\s*$/
+      displayWarning "No closing HTML tag found"
+      #displayInfo "data ends in #{@data[-10..-1]}"
+    # check for presence of pattern
+    elsif @filePattern != '.' and @data !~ /#{@filePattern}/
+      displayWarning "File pattern #{@filePattern} not found in data (#{data.length}b)"
+      #displayWarning "File pattern #{@filePattern} not found in data"
+      # return incomplete data instead of bailing out here
+      #displayError "Search returned empty page, retry after a while", rc = 42
     else
-      if (File.readable?(localfile))
-        debug "using local cache instead"
-        @data = fetchLocal(localfile)
-        @src = "lo"	#'local <offline>'
-        return @data
-      else
-        @src = nil
-        debug "ERROR: #{@url} could not be fetched, even by cache"
-        return nil
-      end
+      # set dsize only if all looks fine
+      dsize = @data.length
+    end
+
+    # all OK
+    if @data and dsize > @minFileSize
+      @src = 'r'	#'remote'
+      #dsize = @data.length
+    # data inconsistent
+    elsif @data
+      # check failed: return data without caching
+      @src = '?'
+      return @data
+    # no data but cached
+    elsif (File.readable?(localfile))
+      debug "using local cache instead"
+      @data = fetchLocal(localfile)
+      @src = 'lo'	#'local <offline>'
+      return @data
+    # no data at all
+    else
+      @src = nil
+      debug "ERROR: #{@url} could not be fetched, even by cache"
+      return nil
     end
 
     if (! File.exists?(localdir))

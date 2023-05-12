@@ -316,7 +316,35 @@ class SearchCache
       end
       return @waypoints
     else
-      return searchResults(@search_url)
+      waypoints = []
+      totalpages = 1
+      loopcount = 0
+      maxloopcount = 42
+      # completeness: first number must be > 20 * second
+      # special case: empty search
+      while loopcount < maxloopcount and totalpages > 0 and waypoints.length <= 20 * (totalpages - 1)
+        waypoints, totalpages = searchResults(@search_url)
+        # -L option causes less pages to be returned
+        if @max_pages != 0 and totalpages > @max_pages
+          totalpages = @max_pages
+        end
+        if  totalpages > 0 and waypoints.length <= 20 * (totalpages - 1)
+          displayWarning "Search results incomplete: #{@waypoints.length} caches from #{totalpages} pages"
+          # note: previous pages have been cached and will be used "local"
+          loopcount += 1
+          if loopcount < maxloopcount
+            # progressive sleep instead of simple "sleep(10 * loopcount)"
+            sleeptime = 5 * 2 ** (loopcount/10)
+            displayInfo "Restarting query after #{sleeptime} seconds ..."
+            sleep(sleeptime)
+          end
+        end
+      end
+      if  totalpages > 0 and waypoints.length <= 20 * (totalpages - 1)
+        displayWarning "Search results still incomplete after #{maxloopcount} retries"
+        # make this a displayError?
+      end
+      return waypoints
     end
   end
 
@@ -605,27 +633,28 @@ class SearchCache
     page_number, pages_total, waypoints_total, post_vars, src = processPage({})
     progress = ProgressBar.new(1, pages_total, "Search results")
     progress.updateText(page_number, "page #{page_number} (#{src})")
+
     if waypoints_total.to_i <= 0
       displayMessage "No geocaches were found."
-      return @waypoints
+      return [@waypoints, 0]
     end
 
     if not page_number
       displayWarning "Could not determine current page number from #{url}"
       displayError   "Please set language to English on GC.com as a workaround.", rc = 1
-      return @waypoints
+      return [@waypoints, 0]
     end
 
     if not pages_total
       displayWarning "Could not determine total pages from #{url}"
       displayError   "Please set language to English on GC.com as a workaround.", rc = 1
-      return @waypoints
+      return [@waypoints, 0]
     end
 
     # special case: only first page
     if @max_pages == 1
       debug "Limiting to first search page"
-      return @waypoints
+      return [@waypoints, 1]
     end
 
     while (page_number < pages_total)
@@ -651,12 +680,22 @@ class SearchCache
         displayError   "We were on page #{last_page_number}, but just read #{page_number}. Parsing error?", rc = 1
       end
       # limit search page count
-      if ((@max_pages != 0) and (page_number >= @max_pages))
-        debug "Reached page count limit #{page_number}/#{@max_pages}"
+      if @max_pages > 0 and page_number >= @max_pages
+        displayWarning "Reached page count limit #{@max_pages}"
+        # exit loop
+        page_number = pages_total
+      end
+
+      # if there has been an empty page,
+      # do not pollute cache tree with subsequent pages -
+      # jump to the end instead
+      if src == '?'
+        displayWarning "Interrupting incomplete query"
+        # exit loop
         page_number = pages_total
       end
     end
-    return @waypoints
+    return [@waypoints, pages_total]
   end
 
   def getPage(url, post_vars, pattern = nil)
