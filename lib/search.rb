@@ -659,9 +659,12 @@ class SearchCache
     return @waypoints
   end
 
-  def getPage(url, post_vars)
+  def getPage(url, post_vars, pattern = nil)
     page = ShadowFetch.new(url)
     page.localExpiry = @ttl
+    if pattern
+      page.filePattern = pattern
+    end
     if (post_vars.length > 0)
       page.postVars = post_vars.dup
     end
@@ -674,7 +677,7 @@ class SearchCache
   end
 
   def processPage(post_vars)
-    data, src = getPage(@search_url, post_vars)
+    data, src = getPage(@search_url, post_vars, pattern = "SearchResultsTable")
     page_number, pages_total, waypoints_total, post_vars = parseSearchData(data)
     return [page_number, pages_total, waypoints_total, post_vars, src]
   end
