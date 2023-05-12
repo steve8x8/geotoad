@@ -431,7 +431,7 @@ class GeoToad
         search.distance = @distanceMax
       end
 
-      # limit search page count
+      # limit search page count (0 = unlimited)
       search.max_pages = @limitPages
 
       if @option['cacheType']

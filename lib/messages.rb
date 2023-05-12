@@ -12,7 +12,7 @@ module Messages
   end
 
   def debug(text, level = 1)
-    puts "D: #{text}" if ($debugMode >= level)
+    puts "D#{level}: #{text}" if ($debugMode >= level)
   end
 
   # only levels 0-3 are supported by TUI

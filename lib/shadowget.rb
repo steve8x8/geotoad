@@ -34,7 +34,7 @@ class ShadowFetch
   attr_writer :extraSleep
 
   # gets a URL, but stores it in a nice webcache
-  def initialize (url)
+  def initialize(url)
     @url = url
     @remote = 0
     @localExpiry = 5 * $DAY		# Do not store if < 0
@@ -149,6 +149,8 @@ class ShadowFetch
         displayWarning "Could not delete #{filename}: #{e} - attempting truncation."
         File.truncate(filename, 0)
       end
+    else
+      displayWarning "File #{filename} not found"
     end
   end
 
@@ -213,7 +215,7 @@ class ShadowFetch
       elsif (File.size(localfile) <  @minFileSize)
         # this also takes care of failed JSON requests
         debug "local cache appears corrupt. removing.."
-        invalidate
+        invalidate()
       else
         debug "local cache is only #{age} (<= #{@localExpiry}) sec old, using local file."
         @data = fetchLocal(localfile)
@@ -322,7 +324,9 @@ class ShadowFetch
     #else
     #  displayWarning "Merging current PMO with non-PMO cache file!"
     end
-    debug3 "Returning #{@data.length} bytes: #{@data[0..20]}(...)#{data[-21..-1]}"
+    if @data != nil
+      debug3 "Returning #{@data.length} bytes: #{@data[0..20]}(...)#{data[-21..-1]}"
+    end
     return @data
   end
 
@@ -355,7 +359,7 @@ class ShadowFetch
   end
 
 
-  def fetchURL (url_str, redirects=4)  # full http:// string!
+  def fetchURL(url_str, redirects=4)  # full http:// string!
     if (redirects == 0)
       displayWarning "HTTP redirect loop for #{url_str}."
       displayWarning "Your cookie may have expired suddenly. Try to re-run once."
@@ -573,9 +577,9 @@ class ShadowFetch
   # compute random sleep time from number of pages remotely fetched
   def randomizedSleep(counter)
     # start with 1 second, add a second for each 250 caches, randomize by factor 0.5 .. 1.5, somewhat rounded
-    sleeptime = $SLEEP * (1.0 + counter/250.0) * (rand+0.5)
-    sleeptime = (10.0*sleeptime).round/10.0
-    sleeptime = $SLEEP if (sleeptime<$SLEEP)
+    sleeptime = $SLEEP * (1.0 + counter / 250.0) * (rand + 0.5)
+    sleeptime = (10.0 * sleeptime).round / 10.0
+    sleeptime = $SLEEP if (sleeptime < $SLEEP)
     debug3 "sleep #{sleeptime} seconds"
     sleep sleeptime
   end

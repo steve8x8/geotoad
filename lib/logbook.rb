@@ -160,7 +160,7 @@ module LogBook
       displayWarning "Exception \"#{e}\" caught. Please report."
     end
     if comments.length == 0
-      json.invalidate
+      json.invalidate()
       displayWarning "LogBook errors may indicate an issue with the userToken."
       displayWarning "Check file(s) cache_logbook.*_guid_#{guid}."
       displayWarning "This may become a serious error instead of a warning only."
