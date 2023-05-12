@@ -7,3 +7,7 @@
 /tools/build/Packages.*
 *-v
 /contrib/CA_Bundle/cacert.pem
+*.orig
+*.rej
+*.ORIG
+*.SAVE
