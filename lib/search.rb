@@ -329,7 +329,7 @@ class SearchCache
           totalpages = @max_pages
         end
         if  totalpages > 0 and waypoints.length <= 20 * (totalpages - 1)
-          displayWarning "Search results incomplete: #{@waypoints.length} caches from #{totalpages} pages"
+          displayWarning "Search results incomplete: #{waypoints.length} caches from #{totalpages} pages"
           # note: previous pages have been cached and will be used "local"
           loopcount += 1
           if loopcount < maxloopcount
