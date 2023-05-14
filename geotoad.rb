@@ -214,6 +214,7 @@ class GeoToad
     version = ShadowFetch.new(checkurl)
     version.localExpiry = 1 * $DAY
     version.closingHTML = false
+    version.filePattern = 'version='
     version.maxFailures = 0
     version.fetch
 

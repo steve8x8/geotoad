@@ -82,6 +82,7 @@ module LogBook
     json.useCookie = false
     # do not check for valid HTML
     json.closingHTML = false
+    #json.filePattern = '"status":"success"'
     # stored logbook
     json.localFile = "cache_logbook.json?guid=#{guid}"
     data = json.fetch
@@ -93,6 +94,8 @@ module LogBook
       # get user token for logbook ajax access
       aspx = ShadowFetch.new(@@logbook_url + "?guid=" + guid)
       aspx.localExpiry = -1 # do not store userToken
+      #aspx.closingHTML = false
+      #aspx.filePattern = '"status":"success"'
       data = aspx.fetch
       @@userToken = ""
       data.each_line do |line|
@@ -124,6 +127,7 @@ module LogBook
       #json.useCookie = false
       # do not check for valid HTML
       json.closingHTML = false
+      #json.filePattern = '"status":"success"'
       # store logbook for default time, using a crafted name
       #json.localFile = "cache_logbook.json?guid=#{guid}&lc=#{logCount}"
       json.localFile = "cache_logbook.json?guid=#{guid}"

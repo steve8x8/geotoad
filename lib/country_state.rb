@@ -26,10 +26,11 @@ class CountryState
   def getPage(url, post_vars)
     page = ShadowFetch.new(url)
     page.localExpiry = @ttl
+#    page.filePattern = '"Advanced Search Results"'
+    page.filePattern = 'meta name="page_name" content='
     if post_vars
       page.postVars = post_vars.dup
     end
-
     if page.fetch
       return page.data
     else

@@ -71,6 +71,7 @@ class GeoCode
     http.useCookie = false
     # do not check for valid HTML
     http.closingHTML = false
+    http.filePattern = '"boundingbox":'
     # shorten filename
     http.localFile = url.gsub(/^https?:\/\/.*\//,'').gsub(/.format=.*/,'').gsub(/%20/,' ').gsub(/[, :.\/]/,'_')
     # some minimum size of returned JSON

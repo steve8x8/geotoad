@@ -117,6 +117,7 @@ class CacheDetails
     @pageURL = 'https://www.geocaching.com/seek/cache_details.aspx?wp=' + wid
     page = ShadowFetch.new(@pageURL)
     page.localExpiry = -1
+    page.filePattern = 'meta name="page_name" content='
     data = page.fetch
     if data =~ /cdpf\.aspx\?guid=([0-9a-f-]{36})/m
       guid = $1
@@ -232,6 +233,7 @@ class CacheDetails
     if ttl
       page.localExpiry = ttl
     end
+    page.filePattern = '<title id="pageTitle">\(GC'
     page.fetch()
     src = page.src
     if page.data

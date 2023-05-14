@@ -48,8 +48,8 @@ class ShadowFetch
       'Accept-Encoding' => 'gzip, deflate;q=0.1', # 'gzip;q=1.0, deflate;q=0.6, identity;q=0.3'
       'Accept-Charset'  => 'utf-8;q=1.0, iso-8859-1;q=0.5, *;q=0.1'
     }
-    @closingHTML = true # check for '</html>\s*$'
-    @filePattern = '.'	# matches all
+    @closingHTML = true		# check for '</html>\s*$'
+    @filePattern = '.'		# matches all
     @localFile   = nil
     @cacheFile   = nil
     @minFileSize = @@minFileSize
