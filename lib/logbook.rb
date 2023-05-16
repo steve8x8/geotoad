@@ -89,7 +89,7 @@ module LogBook
     timestamp = json.fileTimestamp
     src = json.src
     # if we got a remote file, things went wrong
-    if src =~ /^r/
+    if src =~ /^r/ or src == '?'
       # no need to invalidate because the "file" was shorter than 1 kB and not stored!
       # get user token for logbook ajax access
       aspx = ShadowFetch.new(@@logbook_url + "?guid=" + guid)
