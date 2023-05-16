@@ -569,6 +569,7 @@ class CacheDetails
         jslat = $1
         jslon = $2
         debug "got javascript lat/lon #{jslat}/#{jslon}"
+        # crossroad logic: #:)#
         # (1) normal behaviour (BM doesn't see PMO coords)
         if not cache['membersonly'] and ( not cache['latdata'] or not cache['londata'] )
         # (2) only fill in if nothing there (ignore moved caches with old desc)
@@ -787,7 +788,7 @@ class CacheDetails
       cache['olddesc'] = true
     end
 
-    if @getlogbk
+    if @getlogbk #:)# or true
     # If more than 10 logs wanted, retrieve the geocache.logbook
       if (@logcount > 0) and (@logcount > comments.length)
       # too few logs may mean new! cache :/
