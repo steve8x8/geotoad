@@ -2,7 +2,7 @@
 
 module GTVersion
 
-  MY_VERSION = '3.33.0'
+  MY_VERSION = '%VERSION%'
 
   def self.version
     if MY_VERSION !~ /^\d/
