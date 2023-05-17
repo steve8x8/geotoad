@@ -13,7 +13,8 @@ module LogBook
   # idea by daniel.k.ache, January 2017
   # converted from JS jQuery to HTTP GET request
 
-  @@logbook_url  = 'https://www.geocaching.com/seek/cache_logbook.aspx'
+  #@@logbook_url  = 'https://www.geocaching.com/seek/cache_logbook.aspx'
+  @@logbook_url  = 'https://www.geocaching.com/seek/geocache_logs.aspx'
   @@getjson_url  = 'https://www.geocaching.com/seek/geocache.logbook'
   @@getjson_base = 'https://www.geocaching.com'
 
@@ -115,7 +116,7 @@ module LogBook
       return [comments, Time.now] if @@userToken.empty?
 
       # now retry the JSON part
-      # $.getJSON("/seek/geocache.logbook", { tkn: userToken, idx: 1, num: 10, sp: false, sf: false, decrypt: false }
+      # $.getJSON("/seek/geocache.logbook", { tkn: userToken, idx: pageIdx + 1, num: 10, sp: showPersonal, sf: showFriends, decrypt: decryptLogs },
       # it is possible to request more than 10 logs here (in one go), adjust logCount option accordingly
       url = @@getjson_url + "?tkn=#{@@userToken}&idx=1&num=#{logCount}&sp=false&sf=false&decrypt=false"
       debug2 "getJSON URL #{url.inspect}"
