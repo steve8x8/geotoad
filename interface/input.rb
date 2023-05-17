@@ -436,7 +436,8 @@ class Input
   9. (guid)     By waypoint GUID (01234567-abcd-6789-...)
  10. (bookmark) By bookmark list (experimental!)
 
-", ['location', 'coord', 'coords', 'user', 'owner', 'country', 'state', 'keyword', 'wid', 'gccode', 'guid', 'bookmark'], 'location')
+", ['location', 'coord', 'user', 'owner', 'country', 'state', 'keyword', 'wid', 'guid', 'bookmark',
+    'coords', 'gccode'], 'location')
 
         # Clear the query argument if the type has changed.
         if @@optHash['queryType'] != chosen
@@ -828,7 +829,7 @@ class Input
             i += 1
             puts "  #{i}.\t#{co}"
           end
-          country = askFromList("Enter index", countries, nil)
+          country = askFromList("Enter index (not id)", countries, nil)
         else
           puts "No country matches found. Try something else!"
         end
@@ -874,7 +875,7 @@ class Input
               i += 1
               puts "  #{i}.\t#{co}"
             end
-            country = askFromList("Enter index", countries, nil)
+            country = askFromList("Enter index (not id)", countries, nil)
           else
             puts "** No country matches found. Try something else!"
           end
@@ -891,7 +892,7 @@ class Input
                 i += 1
                 puts "  #{i}.\t#{st}"
               end
-              state = askFromList("Enter index", states, nil)
+              state = askFromList("Enter index (not id)", states, nil)
             else
               puts "** No state matches found. Try something else!"
             end
