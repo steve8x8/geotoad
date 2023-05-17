@@ -1,50 +1,75 @@
 #!/bin/bash
 
 cd `dirname $0`
-[ -f ../data/country.list ] || exit
-[ -f ../data/state.list ] || exit
 
-trap "/bin/rm -f /tmp/$$.{c,s}; exit" 0 1 2 3 6 9 15
+#listpath=../data
+#outpath=.
+#temppath=.
+
+listpath=../data
+outpath=../lib
+temppath=/tmp
+trap "/bin/rm -f ${temppath}/$$.{c,s}; exit" 0 1 2 3 6 9 15
+
+[ -f ${listpath}/country.list ] || exit
+[ -f ${listpath}/state.list ] || exit
+
 
 {
-#printf "# country list last updated: `stat -c %y ../data/country.list | cut -c1-10`\n"
+#printf "# country list last updated: `stat -c %y ${listpath}/country.list | cut -c1-10`\n"
 printf "\$COUNTRIES = [\n"
-cat ../data/country.list \
+cat ${listpath}/country.list \
 | awk '
     {
-	cn=$1; $1=""; nm=substr($0,2);
+	cn = $1;
+	$1 = "";
+	nm = substr($0, 2);
+	tx = "";
+	if (nm ~ "^---") {
+	    next;
+	}
+	if (nm ~ /^\*\*/) {
+	    nm = substr(nm, 3);
+	    tx = "no full-country search";
+	} else {
+	    if (nm ~ /^\*/) {
+		nm = substr(nm, 2);
+		tx = "region search possible";
+	    }
+	}
 	printf("\t[ %3d, \"%s\" ],\n", cn, nm);
     }
     '
 printf "]\n\n"
 } \
-> /tmp/$$.c
+> ${temppath}/$$.c
 
 {
-#printf "#   state list last updated: `stat -c %y ../data/state.list | cut -c1-10`\n"
+#printf "#   state list last updated: `stat -c %y ${listpath}/state.list | cut -c1-10`\n"
 printf "\$STATES = [\n"
-cat ../data/state.list \
-| sed -e 's~\(.*\) \[\(.*\)\]$~\2=\1~'\
+cat ${listpath}/state.list \
+| grep -v ' --- ' \
 | while read line
 do
-    c=${line%%=*}
-    r=${line##*=}
-    cn=`grep "\"$c\"" /tmp/$$.c | tr -d '[,' | awk '{print $1}'`
-    sn=`echo $r | awk '{print $1}'`
-    nm=`echo $r | awk '{$1=""; print substr($0,2);}'`
+    sn=`echo "${line}" | cut -c1-3 | tr -dc '[0-9]'`
+    r=`echo "${line}" | sed -e 's~^[ 0-9][ 0-9]*~~' -e 's~\[.*$~~'`
+    c=`echo "${line}" | sed -e 's~^.*\[~~' -e 's~\].*$~~'`
+    cn=`grep "\"${c}\"" ${temppath}/$$.c | tr -d '[,' | awk '{print $1}'`
+    nm=`echo $r`
+    #echo $sn \"$nm\" $cn \"$c\" >&2
     printf "\t[ %3d, \"%s\", %3d, \"%s\" ],\n" $sn "$nm" $cn "$c"
 done
 printf "]\n\n"
 } \
-> /tmp/$$.s
+> ${temppath}/$$.s
 
 {
 printf "# -*- encoding : utf-8 -*-\n\n"
 printf "module CountryStateList\n\n"
-cat /tmp/$$.[cs]
+cat ${temppath}/$$.[cs]
 printf "end\n"
 } \
-> ../lib/country_state_list.rb
+> ${outpath}/country_state_list.rb
 
 exit
 
