@@ -360,18 +360,17 @@ class Input
       puts "=============================================================================="
       printf(":::           %46.46s               :::\n", "// GeoToad #$VERSION Text User Interface //")
       puts "=============================================================================="
-      printf("(1)  GC.com login [%-17.17s] | (2)  search type          [%10.10s]\n",
+      printf("(1)  GC.com login [%-17.17s] | (2)  search type            [%8.8s]\n",
         (@@optHash['user'] || 'REQUIRED'), @@optHash['queryType'])
+      printf("(3)  %-12.12s [%-58.58s]\n",
+         @@optHash['queryType'], (@@optHash['queryArg'] || 'REQUIRED'))
       if (@@optHash['queryType'] == 'coord') or (@@optHash['queryType'] == 'location')
-        printf("(3)  %-12.12s [%-17.17s] |",
-           @@optHash['queryType'], (@@optHash['queryArg'] || 'REQUIRED'))
+        printf "- - - - - - - - - - - - - - - - - - - +"
         printf(" (4)  distance maximum (%-2.2s)  [%8.8s]\n",
           (@@optHash['usemetric'] && "km" || "mi"), (@@optHash['distanceMax'] || 10))
       else
-        printf("(3)  %-12.12s [%58.58s]\n",
-           @@optHash['queryType'], (@@optHash['queryArg'] || 'REQUIRED'))
+        printf "- - - - - - - - - - - - - - - - - - - + - - - - - - - - - - - - - - - - - - -\n"
       end
-      puts "- - - - - - - - - - - - - - - - - - - + - - - - - - - - - - - - - - - - - - -"
       printf("(5)  difficulty           [%-2.1f - %-1.1f] | (6)  terrain               [%-1.1f - %-1.1f]\n",
         (@@optHash['difficultyMin'] || 1.0), (@@optHash['difficultyMax'] || 5.0),
         (@@optHash['terrainMin'] || 1.0), (@@optHash['terrainMax'] || 5.0))
@@ -382,14 +381,14 @@ class Input
         (@@optHash['cacheType'] || 'any'))
       printf("(10) caches not found by me       [%1.1s] | (11) caches not found by anyone    [%1.1s]\n",
          @@optHash['notFoundByMe'], @@optHash['notFound'])
-      printf("(12) cache age (days)     [%3.3s - %-3.3s] | (13) last found (days ago) [%3.3s - %-3.3s]\n",
+      printf("(12) cache age (days)   [%4.4s -%5.5s] | (13) last found (days ago) [%3.3s -%4.4s]\n",
         (@@optHash['placeDateExclude'] || 0), (@@optHash['placeDateInclude'] || 'any'),
         (@@optHash['foundDateExclude'] || 0), (@@optHash['foundDateInclude'] || 'any'))
-      printf("(14) title keyword       [%-10.10s] | (15) descript. keyword [%-13.13s]\n",
+      printf("(14) title keyword    [%-13.13s] | (15) descript. keyword [%-13.13s]\n",
          @@optHash['titleKeyword'], @@optHash['descKeyword'])
-      printf("(16) cache not found by  [%-10.10s] | (17) cache owner isn't [%-13.13s]\n",
+      printf("(16) not found by  [%-16.16s] | (17) owner isn't    [%-16.16s]\n",
          @@optHash['userExclude'], @@optHash['ownerExclude'])
-      printf("(18) cache found by      [%-10.10s] | (19) cache owner is    [%-13.13s]\n",
+      printf("(18) found by      [%-16.16s] | (19) owner is       [%-16.16s]\n",
          @@optHash['userInclude'], @@optHash['ownerInclude'])
 
       printf("(20) EasyName WP length         [%3.3s] | (21) include disabled caches       [%1.1s]\n",
@@ -411,8 +410,8 @@ class Input
         disableDebug
         msg = "disabled"
       end
-      puts "** Verbose (debug) mode #{msg}, (v) to change"
-      print "-- Enter menu number, (s) to start, (R) to reset, or (X) to exit --> "
+      puts "** Verbose (debug) mode #{msg}, \"v\" to change"
+      print "-- Enter menu number, \"s\" to start, \"R\" to reset, or \"X\" to exit --> "
       answer = $stdin.gets.chop
       puts ""
 
@@ -425,30 +424,22 @@ class Input
       when '2'
         chosen = askFromList("What type of search would you like to perform:
 
-  1. (location) Within distance of a location (landmark, city, postal code, coordinates) - DEFAULT
-  2. (coord)    By coordinates
-  3. (user)     All caches found by a user
-  4. (owner)    All caches created by an owner
-  5. (country)  All caches within a country
-  6. (state)    All caches within a state
-  7. (keyword)  By title keyword
-  8. (wid)      By waypoint ID (GC.....)
-  9. (guid)     By waypoint GUID (01234567-abcd-6789-...)
- 10. (bookmark) By bookmark list (experimental!)
+   1.\t(location) Within distance of a location (landmark, city, postal code, coordinates) - DEFAULT
+   2.\t(coord)    By coordinates
+   3.\t(user)     All caches found by a user
+   4.\t(owner)    All caches created by an owner
+   5.\t(country)  All caches within a country
+   6.\t(state)    All caches within a state
+   7.\t(keyword)  By title keyword
+   8.\t(wid)      By waypoint ID (GC.....)
+   9.\t(guid)     By waypoint GUID (01234567-abcd-6789-...)
+  10.\t(bookmark) By bookmark list (experimental!)
 
-", ['location', 'coord', 'user', 'owner', 'country', 'state', 'keyword', 'wid', 'guid', 'bookmark',
-    'coords', 'gccode'], 'location')
+", ['location', 'coord', 'user', 'owner', 'country', 'state', 'keyword', 'wid', 'guid', 'bookmark'], 'location')
 
         # Clear the query argument if the type has changed.
         if @@optHash['queryType'] != chosen
           @@optHash['queryArg'] = nil
-        end
-
-        if chosen == 'coords'
-          chosen = 'coord'
-        end
-        if chosen == 'gccode'
-          chosen = 'wid'
         end
 
         @@optHash['queryType'] = chosen
@@ -550,7 +541,7 @@ class Input
         # 'virtual' and 'not chosen' are equivalent
         sizes = ['virtual', 'not_chosen', 'not chosen', 'other', 'micro', 'small', 'regular', 'large']
         @@optHash['sizeMin'] = askFromList("What is the smallest cache you seek (#{sizes.join(', ')})?", sizes, nil)
-        @@optHash['sizeMax'] = askFromList("What is the largest cache you seek (#{sizes.join(', ')})?", sizes, nil)
+        @@optHash['sizeMax'] = askFromList("What is the  largest cache you seek (#{sizes.join(', ')})?", sizes, nil)
 
       when '9'
         # full list of supported types; no "+" types
@@ -560,7 +551,7 @@ class Input
                    'gchqceleb', 'hqceleb', 'lost+found',
                    'block', 'gchq', 'gshq', 'ape', 'gps', 'exhibit',
                   'webcam', 'earthcache', 'wherigo']
-        @@optHash['cacheType'] = askFromList("Valid types: #{kinds.join(', ')}.\nWhat do you seek (separate with commas)?", kinds, nil, trailing_dash_allowed = true)
+        @@optHash['cacheType'] = askFromList("Valid types: #{kinds.join(', ')}.\nWhat do you seek? (separate with commas)", kinds, nil, trailing_dash_allowed = true)
 
       when '10'
         answer = ask('Would you like to only include geocaches you have not found yet?', nil)
@@ -587,10 +578,10 @@ class Input
         @@optHash['foundDateInclude'] = askNumber('How many days ago is the maximum a geocache can be found in for your list? (any)', nil)
 
       when '14'
-        @@optHash['titleKeyword'] = ask('Filter caches by title keywords (negate using !, separate multiple using |): ', nil)
+        @@optHash['titleKeyword'] = ask('Filter caches by title keywords (negate using !, separate multiple using |)', nil)
 
       when '15'
-        @@optHash['descKeyword'] = ask('Filter caches by description keywords (negate using !, separate multiple using |): ', nil)
+        @@optHash['descKeyword'] = ask('Filter caches by description keywords (negate using !, separate multiple using |)', nil)
 
       when '16'
         @@optHash['userExclude'] = ask('Filter out geocaches found by these people (separate by commas)', '').gsub(/, */, '|')
@@ -599,10 +590,10 @@ class Input
         @@optHash['ownerExclude'] = ask('Filter out geocaches owned by these people (separate by commas)', '').gsub(/, */, '|')
 
       when '18'
-        @@optHash['userInclude'] = ask('Only include geocaches that have been found by these people (separate by commas)', '').gsub(/, */, '|')
+        @@optHash['userInclude'] = ask('Only include geocaches that have been found by these people (separate by commas)?', '').gsub(/, */, '|')
 
       when '19'
-        @@optHash['ownerInclude'] = ask('Only include geocaches owned by these people (separate by commas)', '').gsub(/, */, '|')
+        @@optHash['ownerInclude'] = ask('Only include geocaches owned by these people (separate by commas)?', '').gsub(/, */, '|')
 
       when '20'
         @@optHash['waypointLength'] = askNumber('How long can your EasyName waypoint id\'s be? (recommended: 8 for Magellan, 16 for Garmin, 0 to disable and use waypoint id\'s)?', nil) #, true)
@@ -737,7 +728,11 @@ class Input
   def ask(string, default)
     answer = nil
     while answer.to_s.empty?
-      print string + ": "
+      if string[-1] == '?'
+        print string + " "
+      else
+        print string + " --> "
+      end
       answer = $stdin.gets.chomp
       answer.gsub!(/ +$/, '')
 
@@ -812,33 +807,26 @@ class Input
 
   def askCountry()
     country = nil
-    c = CountryState.new()
+    cs = CountryState.new()
     while not country
-      try_country = ask("What country would you like to search for (id, or name pattern)?", nil)
-      # numerical value? country 1 doesn't exist
-      if try_country.to_i > 1
-        country = c.getCountryName(try_country.to_i)
+      try_country = ask("What country would you like to search for (country id, name pattern, or empty for full list)?", nil)
+      country = nil
+      # id given?
+      if try_country.to_i >= 1
+        country = cs.getCountryName(try_country.to_i)
       else
-        # map 1 to all
-        if try_country.to_i > 0
-          try_country = '.'
-        end
-        # match from country list
-        countries = c.findMatchingCountry(try_country)
+        puts "try to match #{try_country.inspect}"
+        countries = cs.findMatchingCountry(try_country)
         if countries.length == 1
           country = countries[0]
         elsif countries.length > 1
           i = 0
           countries.each do |co|
-            #i = co.split('=')[0]
             i += 1
             c = co.split('=')[1]
-            #puts "  #{i}.\t#{c}"
             puts "  %3d.\t%s" % [i, c]
           end
           country = askFromList("Enter index", countries, nil)
-        else
-          puts "No country matches found. Try something else!"
         end
       end
     end
@@ -851,69 +839,26 @@ class Input
 
   def askState()
     state = nil
-    c = CountryState.new()
+    cs = CountryState.new()
     while not state
-      try_state = ask("Which state do you want to search for (id, or [country]/[state] pattern)?", nil)
-      # numerical value? state 1 doesn't exist
-      if try_state.to_i > 1
-        state = c.getStateName(try_state.to_i)
+      try_state = ask("Which state do you want to search for (state id, name pattern, or empty for full list)?", nil)
+      state = nil
+      # id given?
+      if try_state.to_i >= 1
+        state = cs.getStateName(try_state)
       else
-        if try_state.to_i > 0
-          try_state = '.'
-        end
-        # get from country's list
-        try_country = try_state.to_s.split(/\//)[0]
-        if try_country.to_s.empty?
-          puts "** No country pattern, trying to match all"
-          try_country = '.'
-        end
-        try_state = try_state.split(/\//)[1]
-        if try_state.to_s.empty?
-          puts "** No state pattern, using \".\" to match all"
-          try_state = '.'
-        end
-        if (try_country == '.')
-          country = "1=(Whole world)"
-        else
-          # match country from list
-          countries = c.findMatchingCountry(try_country)
-          if countries.length == 1
-            country = countries[0]
-          elsif countries.length > 1
-            i = 0
-            countries.each do |co|
-              #i = co.split('=')[0]
-              i += 1
-              c = co.split('=')[1]
-              #puts "  #{i}.\t#{c}"
-              puts "  %3d.\t%s" % [i, c]
-            end
-            country = askFromList("Enter index", countries, nil)
-          else
-            puts "** No country matches found. Try something else!"
+        states = cs.findMatchingState(try_state, '.')
+        if states.length == 1
+          state = states[0]
+        elsif states.length > 1
+          i = 0
+          states.each do |st|
+            i += 1
+            s = st.split('=')[1]
+            puts "  %3d.\t%s" % [i, s]
           end
+          state = askFromList("Enter index", states, nil)
         end
-          if country
-            puts "Searching in country #{country}"
-            country = country.split(/=/)[0]
-            states = c.findMatchingState(try_state, country)
-            if states.length == 1
-              state = states[0]
-            elsif states.length > 1
-              i = 0
-              states.each do |st|
-                #i = st.split('=')[0]
-                i += 1
-                s = st.split('=')[1]
-                #puts "  #{i}.\t#{s}"
-                puts "  %3d.\t%s" % [i, s]
-              end
-              state = askFromList("Enter index", states, nil)
-            else
-              puts "** No state matches found. Try something else!"
-            end
-          end
-        #end
       end
     end
     if state
@@ -936,7 +881,7 @@ class Input
         end
         # exceeding choices
         if answer.to_i > choices.length
-          puts "** That index is beyond the list. Try to match id."
+          puts "** The index you entered is beyond the list."
           # fall through to text pattern matching
         # numerical answer not validated, multiple not allowed
         elsif answer.to_i > 0
