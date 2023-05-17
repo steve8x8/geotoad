@@ -7,7 +7,7 @@ class ProgressBar
     display
   end
 
-  def updateText(value, valueText, max=nil)
+  def updateText(value, valueText, max = nil)
     @value = value         if ! (value.nil?)
     @valueText = valueText if ! (valueText.nil?)
     @max = max             if ! (max.nil?)
@@ -15,12 +15,6 @@ class ProgressBar
   end
 
   def display
-    if (@max == 0)
-      showMax = "?"
-    else
-      showMax = @max.to_s
-    end
-
     # if the value is 0 or less, don't bother to print up a bar.
     return if @value.to_i <= 0
 
@@ -44,7 +38,7 @@ class ProgressBar
     end
 
     pvalue = "#{@value}".rjust(@max.to_s.length)
-    addtext = "#{@name}" + ((@name.empty?)?"":": ") + "#{@valueText}"
+    addtext = "#{@name}" + ((@name.empty?) ? "" : ": ") + "#{@valueText}"
     puts "[#{meter}] (#{pvalue}/#{@max}) #{addtext}"
   end
 

@@ -16,6 +16,7 @@ module Messages
   end
 
   # only levels 0-3 are supported by TUI
+  def debug0(text) displayInfo(text) end
   def debug1(text) debug text, 1 end
   def debug2(text) debug text, 2 end
   def debug3(text) debug text, 3 end
@@ -43,18 +44,18 @@ module Messages
 
   # horizontal bar
   def displayBar(len = 78)
-    puts "-"*len
+    puts "-" * len
   end
 
   # display boxed text
   def displayBox(text, len = 78)
-    if text.length <= (len-4)
+    if text.length <= (len - 4)
       # single-line output
-      puts "| #{text.ljust(len-4)} |"
+      puts "| #{text.ljust(len - 4)} |"
     else
       # break into max two lines
-      puts "| #{text[0..(len-5)].ljust(len-4)}>|"
-      puts "|>#{text[(len-4)..-1].ljust(len-4)} |"[0..(len-1)]
+      puts "| #{text[0 .. (len - 5)].ljust(len - 4)}>|"
+      puts "|>#{text[(len - 4) .. -1].ljust(len - 4)} |"[0 .. (len - 1)]
     end
   end
 
