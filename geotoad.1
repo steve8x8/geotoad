@@ -1,4 +1,4 @@
-.TH "GEOTOAD" "1" "01 Jan 2023" "steve8x8@googlemail.com" "Geocaching Query Tool"
+.TH "GEOTOAD" "1" "17 May 2023" "steve8x8@googlemail.com" "Geocaching Query Tool"
 
 .SH "NAME"
 
@@ -128,8 +128,8 @@ Both latitude and longitude must use the same representation.
 to translate into coordinates.
 This should also work with zip codes.
 .PP
-\fBcountry\fR and \fBstate\fR queries require a \fInumerical id\fR which the TUI may tell you.
-.\"GeoToad might provide country and state lists?
+\fBcountry\fR and \fBstate\fR queries by command-line require a \fInumerical id\fR which the TUI can tell you.
+Do not confuse the index numbers provided with the sorted lists with the country or state \fIid\fR!
 .PP
 \fBbookmark\fR allows to parse bookmark lists.
 
@@ -371,11 +371,6 @@ switch output to unbuffered (useful for wrappers)
 
 These are experimental additions which need testing and documentation.
 Volunteers wanted!
-.TP
-\fB\-B|\-\-getLogbook|\-\-getLogBook\fR
-try to retrieve logbook entries from another source if there aren't any or too few
-\fI(Tested, may even become the default.) \fR
-.PP
 .TP
 \fB\-\-conditionWP\fR \fI condition \fR
 conditionally output caches, similar to the setting of the same name in templates (e.g. \fBwherigo\fR)
@@ -723,10 +718,10 @@ This works for all search types (and other \fB(MULTI)\fR options).
 Outputs a text file with all of the caches in US state North Carolina that are
 virgins (have never been found).
 .PP
-Please note that for state and country queries, the numerical id has to be used.
-You may use the TUI to search for the country or state number.
+Please note that for state and country command-line queries, the numerical id has to be used.
+You may use the TUI to determine the country or state id number.
 .PP
-Warning: Querying a whole state can be dangerous and may harm your account!
+Warning: Querying a whole state or country can be dangerous and may harm your account!
 For example, NC has (as of Oct 2013) more than 24k active caches.
 .PP
 You may want to limit the number of search pages parsed (e.g. using \fB\-L 10\fR),

@@ -68,6 +68,8 @@ class Input
       [ "--attributeInclude",            "-a",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--attributeExclude",            "-A",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--travelBug",    "--trackable", "-b",    GetoptLong::NO_ARGUMENT ],
+# -B (was getLogBook)
+# OBSOLETE:
       [ "--getLogbook",  "--getLogBook", "-B",    GetoptLong::NO_ARGUMENT ],
       [ "--cacheType",         "--type", "-c",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--clearCache",     "--cleanup", "-C",    GetoptLong::NO_ARGUMENT ],
@@ -150,6 +152,12 @@ class Input
           arg = parseCoordinate(input)
           debug "#{opt} is now #{arg}"
         end
+
+        # obsolete options
+        if (opt == 'getLogbook')
+          displayWarning "Option -B/--getLogbook is now default and will be removed in future versions!"
+        end
+
         # store opt/arg pairs into hash
         # verbose special treatment: sum up how often
         if (opt == 'verbose')
