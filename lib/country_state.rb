@@ -16,7 +16,10 @@ class CountryState
   end
 
   def getCountryList()
-    return $COUNTRIES.map{ |y| "#{y[0]}=#{y[1]}" if (y[0].to_i > 1) }.compact.sort{ |a, b| a.to_i <=> b.to_i }.uniq
+    return $COUNTRIES.map{ |y| "#{y[0]}=#{y[1]}" if (y[0].to_i > 1) }
+                     .compact
+                     .sort{ |a, b| a.split('=')[1] <=> b.split('=')[1] } #{ |a, b| a.to_i <=> b.to_i }
+                     .uniq
   end
 
   def findMatchingCountry(try_country)
@@ -32,12 +35,16 @@ class CountryState
 
   def getCountryName(country)
     c = country.to_i
-    return $COUNTRIES.map{ |y| "#{y[0]}=#{y[1]}" if (y[0].to_i == c) }.compact[0]
+    return $COUNTRIES.map{ |y| "#{y[0]}=#{y[1]}" if (y[0].to_i == c) }
+                     .compact[0]
   end
 
   def getStatesList(country)
     c = country.to_i
-    return $STATES.map{ |y| "#{y[0]}=#{y[1]} (#{y[3]})" if ((c < 2) or (y[2].to_i == c)) }.compact.sort{ |a, b| a.to_i <=> b.to_i }.uniq
+    return $STATES.map{ |y| "#{y[0]}=#{y[1]} (#{y[3]})" if ((c < 2) or (y[2].to_i == c)) }
+                  .compact
+                  .sort{ |a, b| a.split('=')[1] <=> b.split('=')[1] } #{ |a, b| a.to_i <=> b.to_i }
+                  .uniq
   end
 
   def findMatchingState(try_state, country)
@@ -53,7 +60,8 @@ class CountryState
 
   def getStateName(state)
     s = state.to_i
-    return $STATES.map{ |y|"#{y[0]}=#{y[1]} (#{y[3]})" if (y[0].to_i == s) }.compact[0]
+    return $STATES.map{ |y|"#{y[0]}=#{y[1]} (#{y[3]})" if (y[0].to_i == s) }
+                  .compact[0]
   end
 
 end
