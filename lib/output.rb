@@ -476,7 +476,7 @@ class Output
   end
 
   ## sets up for the filtering process ################3
-  def prepare (title, username, doemoji)
+  def prepare(title, username, doemoji)
     @title = title
     @username = username
     @doemoji = (! doemoji.to_s.empty?)
@@ -497,7 +497,7 @@ class Output
     return @output
   end
 
-  def writeFile (file)
+  def writeFile(file)
     begin
       File.open(file, 'w'){ |f| f.write(@output) }
       return true
@@ -508,7 +508,7 @@ class Output
   end
 
   # writes the output to a file or to a program #############################
-  def commit (file)
+  def commit(file)
     debug2 "committing file type #{@outputType} to #{file}"
     if @outputFormat['filter_exec']
       displayInfo "Running output filter"
