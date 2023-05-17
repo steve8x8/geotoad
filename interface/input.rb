@@ -360,34 +360,47 @@ class Input
       puts "=============================================================================="
       printf(":::           %46.46s               :::\n", "// GeoToad #$VERSION Text User Interface //")
       puts "=============================================================================="
-      printf("(1)  GC.com login [%-17.17s] | (2)  search type          [%-10.10s]\n", (@@optHash['user'] || 'REQUIRED'), @@optHash['queryType'])
-      printf("(3)  %-12.12s [%-17.17s] |", @@optHash['queryType'], (@@optHash['queryArg'] || 'REQUIRED'))
+      printf("(1)  GC.com login [%-17.17s] | (2)  search type          [%10.10s]\n",
+        (@@optHash['user'] || 'REQUIRED'), @@optHash['queryType'])
       if (@@optHash['queryType'] == 'coord') or (@@optHash['queryType'] == 'location')
+        printf("(3)  %-12.12s [%-17.17s] |",
+           @@optHash['queryType'], (@@optHash['queryArg'] || 'REQUIRED'))
         printf(" (4)  distance maximum (%-2.2s)  [%8.8s]\n",
           (@@optHash['usemetric'] && "km" || "mi"), (@@optHash['distanceMax'] || 10))
       else
-        puts   "                                      |"
+        printf("(3)  %-12.12s [%58.58s]\n",
+           @@optHash['queryType'], (@@optHash['queryArg'] || 'REQUIRED'))
       end
       puts "- - - - - - - - - - - - - - - - - - - + - - - - - - - - - - - - - - - - - - -"
       printf("(5)  difficulty           [%-2.1f - %-1.1f] | (6)  terrain               [%-1.1f - %-1.1f]\n",
         (@@optHash['difficultyMin'] || 1.0), (@@optHash['difficultyMax'] || 5.0),
         (@@optHash['terrainMin'] || 1.0), (@@optHash['terrainMax'] || 5.0))
-      printf("(7)  fav factor           [%-1.1f - %-1.1f] | (8)  cache size            [%3.3s - %3.3s]\n", (@@optHash['favFactorMin'] || 0.0),
-        (@@optHash['favFactorMax'] || 5.0), @@optHash['sizeMin'] || 'any', @@optHash['sizeMax'] || 'any')
-      printf("(9)  cache type   [%58.58s]\n", (@@optHash['cacheType'] || 'any'))
-      printf("(10) caches not found by me       [%1.1s] | (11) caches not found by anyone    [%1.1s]\n", @@optHash['notFoundByMe'], @@optHash['notFound'])
+      printf("(7)  fav factor           [%-1.1f - %-1.1f] | (8)  cache size            [%3.3s - %3.3s]\n",
+        (@@optHash['favFactorMin'] || 0.0), (@@optHash['favFactorMax'] || 5.0),
+        (@@optHash['sizeMin'] || 'any'), (@@optHash['sizeMax'] || 'any'))
+      printf("(9)  cache type   [%58.58s]\n",
+        (@@optHash['cacheType'] || 'any'))
+      printf("(10) caches not found by me       [%1.1s] | (11) caches not found by anyone    [%1.1s]\n",
+         @@optHash['notFoundByMe'], @@optHash['notFound'])
       printf("(12) cache age (days)     [%3.3s - %-3.3s] | (13) last found (days ago) [%3.3s - %-3.3s]\n",
         (@@optHash['placeDateExclude'] || 0), (@@optHash['placeDateInclude'] || 'any'),
         (@@optHash['foundDateExclude'] || 0), (@@optHash['foundDateInclude'] || 'any'))
-      printf("(14) title keyword       [%-10.10s] | (15) descript. keyword [%-13.13s]\n", @@optHash['titleKeyword'], @@optHash['descKeyword'])
-      printf("(16) cache not found by  [%-10.10s] | (17) cache owner isn't [%-13.13s]\n", @@optHash['userExclude'], @@optHash['ownerExclude'])
-      printf("(18) cache found by      [%-10.10s] | (19) cache owner is    [%-13.13s]\n", @@optHash['userInclude'], @@optHash['ownerInclude'])
+      printf("(14) title keyword       [%-10.10s] | (15) descript. keyword [%-13.13s]\n",
+         @@optHash['titleKeyword'], @@optHash['descKeyword'])
+      printf("(16) cache not found by  [%-10.10s] | (17) cache owner isn't [%-13.13s]\n",
+         @@optHash['userExclude'], @@optHash['ownerExclude'])
+      printf("(18) cache found by      [%-10.10s] | (19) cache owner is    [%-13.13s]\n",
+         @@optHash['userInclude'], @@optHash['ownerInclude'])
 
-      printf("(20) EasyName WP length         [%3.3s] | (21) include disabled caches       [%1.1s]\n", @@optHash['waypointLength'] || '0', @@optHash['includeDisabled'])
-      printf("(22) caches with trackables only  [%1.1s] | (23) no Premium Member Only caches [%1.1s]\n", @@optHash['travelBug'], @@optHash['noPMO'])
+      printf("(20) EasyName WP length         [%3.3s] | (21) include disabled caches       [%1.1s]\n",
+         @@optHash['waypointLength'] || '0', @@optHash['includeDisabled'])
+      printf("(22) caches with trackables only  [%1.1s] | (23) no Premium Member Only caches [%1.1s]\n",
+         @@optHash['travelBug'], @@optHash['noPMO'])
       puts "- - - - - - - - - - - - - - - - - - - + - - - - - - - - - - - - - - - - - - -"
-      printf("(24) output format  [%-15.15s] | (25) filename   [%-20.20s]\n", (@@optHash['format'] || 'gpx'), (@@optHash['outFile'] || 'automatic'))
-      printf("(26) output directory    [%-51.51s]\n", (@@optHash['outDir'] || findOutputDir))
+      printf("(24) output format  [%-15.15s] | (25) filename   [%-20.20s]\n",
+        (@@optHash['format'] || 'gpx'), (@@optHash['outFile'] || 'automatic'))
+      printf("(26) output directory    [%-51.51s]\n",
+        (@@optHash['outDir'] || findOutputDir))
       puts "=============================================================================="
       if @@optHash['verbose']
         level = @@optHash['verbose'].to_i
@@ -412,21 +425,29 @@ class Input
       when '2'
         chosen = askFromList("What type of search would you like to perform:
 
-  1. Within distance of a location (landmark, city, postal code, coordinates) - DEFAULT
-  2. By coordinates
-  3. All caches found by a user
-  4. All caches created by an owner
-  5. All caches within a country
-  6. All caches within a state
-  7. By title keyword
-  8. By waypoint ID
-  9. By waypoint GUID
+  1. (location) Within distance of a location (landmark, city, postal code, coordinates) - DEFAULT
+  2. (coord)    By coordinates
+  3. (user)     All caches found by a user
+  4. (owner)    All caches created by an owner
+  5. (country)  All caches within a country
+  6. (state)    All caches within a state
+  7. (keyword)  By title keyword
+  8. (wid)      By waypoint ID (GC.....)
+  9. (guid)     By waypoint GUID (01234567-abcd-6789-...)
+ 10. (bookmark) By bookmark list (experimental!)
 
-", ['location', 'coord', 'user', 'owner', 'country', 'state', 'keyword', 'wid', 'guid', 'bookmark'], 'location')
+", ['location', 'coord', 'coords', 'user', 'owner', 'country', 'state', 'keyword', 'wid', 'gccode', 'guid', 'bookmark'], 'location')
 
         # Clear the query argument if the type has changed.
         if @@optHash['queryType'] != chosen
           @@optHash['queryArg'] = nil
+        end
+
+        if chosen == 'coords'
+          chosen = 'coord'
+        end
+        if chosen == 'gccode'
+          chosen = 'wid'
         end
 
         @@optHash['queryType'] = chosen
@@ -460,10 +481,12 @@ class Input
             @@optHash['queryArg'] = convertEscapedHex(@@optHash['queryArg'])
 
         when 'coord'
-          puts "You will be asked to enter in a list of coordinates in the following format:"
-          puts "N56 44.392 E015 52.780"
+          puts "Enter a list of coordinates, one position per line."
+          puts "It is recommended to use one of the following formats:"
+          puts "  N56 44.392 E015 52.780"
+          puts "  56.73987 15.87967"
           puts ""
-          puts "Press (q) when done."
+          puts "Enter \"q\" when done."
 
           coordset = 1
           coord = nil
@@ -472,7 +495,7 @@ class Input
           while (coord != 'q')
             print coordset.to_s + ": "
             coord = $stdin.gets.chomp
-            if coord != 'q'
+            if coord.length > 0 and coord != 'q'
               query << coord + '|'
               coordset += 1
             end
@@ -482,8 +505,8 @@ class Input
           @@optHash['queryArg'] = query
 
         when 'keyword'
-          puts "Please enter a list of keywords, pressing enter after each one."
-          puts "Press (q) when done."
+          puts "Please enter a list of keywords, one keyword per line."
+          puts "Enter \"q\" when done."
 
           keyset = 1
           key = nil
@@ -492,7 +515,7 @@ class Input
           while (key != 'q')
             print keyset.to_s + ": "
             key = $stdin.gets.chomp
-            if key != 'q'
+            if key.length > 0 and key != 'q'
               query << key + '|'
               keyset += 1
             end
@@ -508,7 +531,7 @@ class Input
         # re-use old unit by default
         value, unit = askNumberandUnit("How far away are you willing to search? (10 #{unit})", 10, unit)
         @@optHash['distanceMax'] = value
-        @@optHash['usemetric'] = (unit=="km" || nil)
+        @@optHash['usemetric'] = (unit == "km" || nil)
 
       when '5'
         @@optHash['difficultyMin'] = askNumber('What is the minimum difficulty you would like? (1.0)', nil)
@@ -526,7 +549,7 @@ class Input
         # 'virtual' and 'not chosen' are equivalent
         sizes = ['virtual', 'not_chosen', 'not chosen', 'other', 'micro', 'small', 'regular', 'large']
         @@optHash['sizeMin'] = askFromList("What is the smallest cache you seek (#{sizes.join(', ')})?", sizes, nil)
-        @@optHash['sizeMax'] = askFromList("Great! What is the largest cache you seek (#{sizes.join(', ')})?", sizes, nil)
+        @@optHash['sizeMax'] = askFromList("What is the largest cache you seek (#{sizes.join(', ')})?", sizes, nil)
 
       when '9'
         # full list of supported types; no "+" types
