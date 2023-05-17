@@ -23,14 +23,14 @@ class CacheDetails
   @@baseURL = "https://www.geocaching.com/seek/cdpf.aspx"
 
   attr_writer :preserve
-  attr_writer :getlogbk
+  #attr_writer :getlogbk
   attr_writer :logcount
   attr_writer :getimage
 
   def initialize(data)
     @waypointHash = data
     @preserve = nil
-    @getlogbk = nil
+    #@getlogbk = nil
     @logcount = 10
     @getimage = nil
 
@@ -788,19 +788,19 @@ class CacheDetails
       cache['olddesc'] = true
     end
 
-    if @getlogbk #:)# or true
-    # If more than 10 logs wanted, retrieve the geocache.logbook
-      if (@logcount > 0) and (@logcount > comments.length)
-      # too few logs may mean new! cache :/
+    #if @getlogbk
+      # If more than present logs wanted, retrieve the geocache.logbook
+      if @logcount > comments.length
+        # too few logs may mean new! cache :/
         # try to get log entries from logbook page instead
         debug "Get logbook for guid #{cache['guid']}"
-        newcomments, logtimestamp = getLogBook(cache['guid'], logCount=@logcount)
+        newcomments, logtimestamp = getLogBook(cache['guid'], logCount = @logcount)
         if newcomments.length > 0
           comments = newcomments
           cache['ltime'] = logtimestamp
         end
       end
-    end
+    #end
 
     if comments.length > 0
       cache['last_find_type'] = comments[0]['type']
