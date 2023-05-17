@@ -817,8 +817,12 @@ class Input
       try_country = ask("What country would you like to search for (id, or name pattern)?", nil)
       # numerical value? country 1 doesn't exist
       if try_country.to_i > 1
-        country = try_country.to_i
+        country = c.getCountryName(try_country.to_i)
       else
+        # map 1 to all
+        if try_country.to_i > 0
+          try_country = '.'
+        end
         # match from country list
         countries = c.findMatchingCountry(try_country)
         if countries.length == 1
@@ -826,10 +830,13 @@ class Input
         elsif countries.length > 1
           i = 0
           countries.each do |co|
+            #i = co.split('=')[0]
             i += 1
-            puts "  #{i}.\t#{co}"
+            c = co.split('=')[1]
+            #puts "  #{i}.\t#{c}"
+            puts "  %3d.\t%s" % [i, c]
           end
-          country = askFromList("Enter index (not id)", countries, nil)
+          country = askFromList("Enter index", countries, nil)
         else
           puts "No country matches found. Try something else!"
         end
@@ -849,8 +856,11 @@ class Input
       try_state = ask("Which state do you want to search for (id, or [country]/[state] pattern)?", nil)
       # numerical value? state 1 doesn't exist
       if try_state.to_i > 1
-        state = try_state.to_i
+        state = c.getStateName(try_state.to_i)
       else
+        if try_state.to_i > 0
+          try_state = '.'
+        end
         # get from country's list
         try_country = try_state.to_s.split(/\//)[0]
         if try_country.to_s.empty?
@@ -863,7 +873,7 @@ class Input
           try_state = '.'
         end
         if (try_country == '.')
-          country = "1=(Unknown)"
+          country = "1=(Whole world)"
         else
           # match country from list
           countries = c.findMatchingCountry(try_country)
@@ -872,10 +882,13 @@ class Input
           elsif countries.length > 1
             i = 0
             countries.each do |co|
+              #i = co.split('=')[0]
               i += 1
-              puts "  #{i}.\t#{co}"
+              c = co.split('=')[1]
+              #puts "  #{i}.\t#{c}"
+              puts "  %3d.\t%s" % [i, c]
             end
-            country = askFromList("Enter index (not id)", countries, nil)
+            country = askFromList("Enter index", countries, nil)
           else
             puts "** No country matches found. Try something else!"
           end
@@ -889,10 +902,13 @@ class Input
             elsif states.length > 1
               i = 0
               states.each do |st|
+                #i = st.split('=')[0]
                 i += 1
-                puts "  #{i}.\t#{st}"
+                s = st.split('=')[1]
+                #puts "  #{i}.\t#{s}"
+                puts "  %3d.\t%s" % [i, s]
               end
-              state = askFromList("Enter index (not id)", states, nil)
+              state = askFromList("Enter index", states, nil)
             else
               puts "** No state matches found. Try something else!"
             end
