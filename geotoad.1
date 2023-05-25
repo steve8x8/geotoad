@@ -187,12 +187,13 @@ do not overwrite existing cache description files in file cache
 \fB\-c\fR|\fB\-\-cacheType\fR|\fB\-\-type\fR \fItype\fR  \fB(MULTI)\fR
 set cache type(s), select from
  \fB[traditional|multicache|virtual|letterbox|\fR
- \fB unknown+|unknown|\fR
- \fB event+|event|cito|mega[event]|giga[event]|\fR
-  \fB  gchqceleb|\fR
-  \fB  communceleb|\fR
-  \fB  gchq|block|ape|gps|\fR
- \fB webcam|earthcache|wherigo]\fR
+ \fB event+|\fR
+  \fB event|cito|mega[event]|giga[event]|\fR
+  \fB  communceleb|gchqceleb|block|\fR
+ \fB unknown+|\fR
+  \fB unknown|\fR
+  \fB  gshq|ape|\fR
+ \fB webcam|earthcache|gps|wherigo]\fR
 .PP
 \fBgchqceleb\fR (ex \fBlfceleb\fR, \fBhqceleb\fR) is used for \fIGeocaching HQ Celebration\fR (formerly
 \fIGroundspeak Lost and Found Celebration\fR, renamed in June 2019).
@@ -200,6 +201,7 @@ set cache type(s), select from
 \fILost and Found Event Cache\fR until June 2019).
 .PP
 Caveat:
+\fBMultiple cache types\fR will result in a \fIfull search\fR and subsequent filtering!
 If \fBonly one type\fR is selected, search will be sped up considerably
 by reducing the number of queries sent to the server.
 .PP

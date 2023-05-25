@@ -24,47 +24,53 @@ class SearchCache
     @waypoints = Hash.new
 
 # synced with c:geo 2020-07-02
+# cache types from search form 2023-05-12
     # cache types for selected search
     @cachetypetx = {
 	# commented-out types won't match post-filter
 	# order taken from advanced search
-	'traditional'  => '32bc9333-5e52-4957-b0f6-5a2c8fc7b257',
-	'multi'        => 'a5f6d0ad-d2f2-4011-8c14-940a9ebf3c74',
-	 'multicache'   => 'a5f6d0ad-d2f2-4011-8c14-940a9ebf3c74',
-	'virtual'      => '294d4360-ac86-4c83-84dd-8113ef678d7e',
-	'letterbox'    => '4bdd8fb2-d7bc-453f-a9c5-968563b15d24',
 
-	'event+'       => '69eb8534-b718-4b35-ae3c-a856a55b0874', # all event types, as listed below
-	 'event'        => '69eb8534-b718-4b35-ae3c-a856a55b0874&children=n',
-	 'cito'         => '57150806-bc1a-42d6-9cf0-538d171a2d22',
-	 'mega'         => '69eb8535-b718-4b35-ae3c-a856a55b0874',
-	  'megaevent'    => '69eb8535-b718-4b35-ae3c-a856a55b0874',
-	 'communceleb'  => '3ea6533d-bb52-42fe-b2d2-79a3424d4728',
-	  'commceleb'    => '3ea6533d-bb52-42fe-b2d2-79a3424d4728',
-	  'lost+found'   => '3ea6533d-bb52-42fe-b2d2-79a3424d4728',
-	 'gchqceleb'    => 'af820035-787a-47af-b52b-becc8b0c0c88',
-	  'hqceleb'      => 'af820035-787a-47af-b52b-becc8b0c0c88',
-	  'lfceleb'      => 'af820035-787a-47af-b52b-becc8b0c0c88',
-	 'block'        => 'bc2f3df2-1aab-4601-b2ff-b5091f6c02e3',
-	 'giga'         => '51420629-5739-4945-8bdd-ccfd434c0ead',
-	  'gigaevent'    => '51420629-5739-4945-8bdd-ccfd434c0ead',
-	 'exhibit'      => '72e69af2-7986-4990-afd9-bc16cbbb4ce3',
-	  'gps'          => '72e69af2-7986-4990-afd9-bc16cbbb4ce3',
+	'all_cache'	=> '9a79e6ce-3344-409c-bbe9-496530baf758',
+	'traditional'	=> '32bc9333-5e52-4957-b0f6-5a2c8fc7b257',
+	'multicache'	=> 'a5f6d0ad-d2f2-4011-8c14-940a9ebf3c74',
+	'multi'		=> 'a5f6d0ad-d2f2-4011-8c14-940a9ebf3c74',
+	'virtual'	=> '294d4360-ac86-4c83-84dd-8113ef678d7e',
+	'letterbox'	=> '4bdd8fb2-d7bc-453f-a9c5-968563b15d24',
 
-	'mystery+'     => '40861821-1835-4e11-b666-8d41064d03fe', # all unknown types (which ones?)
-	'unknown+'     => '40861821-1835-4e11-b666-8d41064d03fe', # all unknown types
-	 'mystery'      => '40861821-1835-4e11-b666-8d41064d03fe&children=n',
-	 'unknown'      => '40861821-1835-4e11-b666-8d41064d03fe&children=n',
-	'gchq'         => '416f2494-dc17-4b6a-9bab-1a29dd292d8c',
-	 'gshq'         => '416f2494-dc17-4b6a-9bab-1a29dd292d8c',
-	'ape'          => '2555690d-b2bc-4b55-b5ac-0cb704c0b768',
+	'all_event'	=> '69eb8534-b718-4b35-ae3c-a856a55b0874-parent&children=y',
+	'event+'	=> '69eb8534-b718-4b35-ae3c-a856a55b0874-parent&children=y', # all event types, as listed below
+	'event'		=> '69eb8534-b718-4b35-ae3c-a856a55b0874',
+	'cito'		=> '57150806-bc1a-42d6-9cf0-538d171a2d22',
+	'megaevent'	=> '69eb8535-b718-4b35-ae3c-a856a55b0874',
+	'mega'		=> '69eb8535-b718-4b35-ae3c-a856a55b0874', #X
+	'communceleb'	=> '3ea6533d-bb52-42fe-b2d2-79a3424d4728',
+	'commceleb'	=> '3ea6533d-bb52-42fe-b2d2-79a3424d4728', #X
+	'lost+found'	=> '3ea6533d-bb52-42fe-b2d2-79a3424d4728', #X
+	'gchqceleb'	=> 'af820035-787a-47af-b52b-becc8b0c0c88',
+	'hqceleb'	=> 'af820035-787a-47af-b52b-becc8b0c0c88', #X
+	'lfceleb'	=> 'af820035-787a-47af-b52b-becc8b0c0c88', #X
+	'block'		=> 'bc2f3df2-1aab-4601-b2ff-b5091f6c02e3',
+	'gigaevent'	=> '51420629-5739-4945-8bdd-ccfd434c0ead',
+	'giga'		=> '51420629-5739-4945-8bdd-ccfd434c0ead', #X
 
-	'webcam'       => '31d2ae3c-c358-4b5f-8dcd-2185bf472d3d',
-	'earth'        => 'c66f5cf3-9523-4549-b8dd-759cd2f18db8',
-	 'earthcache'   => 'c66f5cf3-9523-4549-b8dd-759cd2f18db8',
-	'wherigo'      => '0544fa55-772d-4e5c-96a9-36a51ebcf5c9',
-	'locationless' => '8f6dd7bc-ff39-4997-bd2e-225a0d2adf9d',
-	 'reverse'      => '8f6dd7bc-ff39-4997-bd2e-225a0d2adf9d',
+	'all_unknown'	=> '40861821-1835-4e11-b666-8d41064d03fe-parent&children=y',
+	'unknown+'	=> '40861821-1835-4e11-b666-8d41064d03fe-parent&children=y', # all unknown types
+	'mystery+'	=> '40861821-1835-4e11-b666-8d41064d03fe-parent&children=y', #X
+	'unknown'	=> '40861821-1835-4e11-b666-8d41064d03fe',
+	'mystery'	=> '40861821-1835-4e11-b666-8d41064d03fe', #X
+	'gshq'		=> '416f2494-dc17-4b6a-9bab-1a29dd292d8c',
+	'gchq'		=> '416f2494-dc17-4b6a-9bab-1a29dd292d8c', #X
+	'ape'		=> '2555690d-b2bc-4b55-b5ac-0cb704c0b768',
+
+	'webcam'	=> '31d2ae3c-c358-4b5f-8dcd-2185bf472d3d',
+	'earthcache'	=> 'c66f5cf3-9523-4549-b8dd-759cd2f18db8',
+	'earth'		=> 'c66f5cf3-9523-4549-b8dd-759cd2f18db8',
+	'gps'		=> '72e69af2-7986-4990-afd9-bc16cbbb4ce3',
+	'exhibit'	=> '72e69af2-7986-4990-afd9-bc16cbbb4ce3', #X
+	'wherigo'	=> '0544fa55-772d-4e5c-96a9-36a51ebcf5c9',
+
+	'locationless'	=> '8f6dd7bc-ff39-4997-bd2e-225a0d2adf9d', #X?
+	'reverse'	=> '8f6dd7bc-ff39-4997-bd2e-225a0d2adf9d', #X?
     }
     @txfilter = nil
 
@@ -85,8 +91,8 @@ class SearchCache
 	'1858'	=> 'Wherigo Cache',
 	#'3653'	=> 'Lost and Found Event Cache',
 	'3653'	=> 'Community Celebration Event',
-	#'3773'	=> 'Groundspeak HQ',
-	'3773'	=> 'Geocaching HQ',
+	'3773'	=> 'Groundspeak HQ',
+	#'3773'	=> 'Geocaching HQ',
 	#'3774'	=> 'Groundspeak Lost and Found Celebration',
 	'3774'	=> 'Geocaching HQ Celebration',
 	'4738'	=> 'Geocaching HQ Block Party',
@@ -98,13 +104,13 @@ class SearchCache
 	'earth'		=> 'EarthCache',
 	'earthcache'	=> 'EarthCache',
 	'event'		=> 'Event Cache',
-	'gchq'		=> 'Geocaching HQ',
+	'gshq'		=> 'Groundspeak HQ',
 	'gchqceleb'	=> 'Geocaching HQ Celebration',
 	'giga'		=> 'Giga-Event Cache',
 	'gps'		=> 'GPS Adventures Exhibit',
 	'letterbox'	=> 'Letterbox Hybrid',
 	'locationless'	=> 'Locationless (Reverse) Cache',
-	'maze'		=> 'GPS Adventures Exhibit',
+	'exhibit'	=> 'GPS Adventures Exhibit',
 	'mega'		=> 'Mega-Event Cache',
 	'multi'		=> 'Multi-cache',
 	'mystery'	=> 'Unknown Cache',
@@ -121,8 +127,8 @@ class SearchCache
 
   def txfilter=(cacheType)
     # may return nil if not found
-    @txfilter = @cachetypetx[cacheType]
-    @txfilter << '&children=y' if (@txfilter and (@txfilter !~ /children=/))
+    @txfilter = @cachetypetx[cacheType].dup
+    @txfilter << '&children=n' if (@txfilter and (@txfilter !~ /children=/))
     debug "Setting txfilter to \"#{cacheType}\", now #{@txfilter.inspect}"
   end
 
@@ -212,7 +218,11 @@ class SearchCache
     end
 
     if @txfilter
+        # old style: most stable
         @search_url << '&tx=' + @txfilter
+        # used by the nearest.aspx web interface
+        #@search_url << '&ex=0&cFilter=' + @txfilter
+        #@search_url << '&cFilter=' + @txfilter
     end
 
     if @notyetfound

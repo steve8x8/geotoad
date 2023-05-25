@@ -553,13 +553,30 @@ class Input
 
       when '9'
         # full list of supported types; no "+" types
-        kinds = ['traditional', 'multicache', 'virtual', 'letterbox', 'unknown',
-                  'event', 'cito', 'megaevent', 'mega', 'gigaevent', 'giga',
+        # regrouped following the search form
+        kinds = ['traditional', 'multicache', 'virtual', 'letterbox',
+#                'event+',
+                  'event', 'cito', 'megaevent', 'gigaevent',
                    'communceleb', 'commceleb', 'lfceleb',
                    'gchqceleb', 'hqceleb', 'lost+found',
-                   'block', 'gchq', 'gshq', 'ape', 'gps', 'exhibit',
-                  'webcam', 'earthcache', 'wherigo']
-        @@optHash['cacheType'] = askFromList("Valid types: #{kinds.join(', ')}.\nWhat do you seek? (separate with commas)", kinds, nil, trailing_dash_allowed = true)
+#                'unknown+',
+                  'unknown',
+                   'block',
+                   'gchq', 'gshq', 'ape',
+                  'webcam', 'earthcache',
+                  'gps', 'exhibit',
+                  'wherigo',
+#                  'all_event', 'all_unknown',
+                ]
+        @@optHash['cacheType'] = askFromList("Valid types:\n" +
+                                              " #{kinds[0..3].join(', ')},\n" +
+                                              " #{kinds[4..7].join(', ')},\n" +
+                                              " #{kinds[8..10].join(', ')},\n" +
+                                              " #{kinds[11..13].join(', ')},\n" +
+                                              " #{kinds[14..18].join(', ')},\n" +
+                                              " #{kinds[19..23].join(', ')},\n" +
+#                                              " #{kinds[24..25].join(', ')},\n" +
+                                             "What do you seek? (separate with commas)", kinds, nil, trailing_dash_allowed = true)
 
       when '10'
         answer = ask('Would you like to only include geocaches you have not found yet?', nil)
