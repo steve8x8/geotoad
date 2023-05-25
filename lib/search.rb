@@ -138,6 +138,7 @@ class SearchCache
     case mode
     when 'location'
       @query_type = 'location'
+      supports_distance = true
       geocoder = GeoCode.new()
       accuracy, lat, lon, location, count = geocoder.lookup_location(key)
       debug "geocoder returned: a:#{accuracy.inspect} x:#{lat} y:#{lon}"
@@ -153,7 +154,6 @@ class SearchCache
       debug "Using result 1 of #{count}: \"#{location}\""
       displayInfo "Accuracy level #{accuracy}, will use coordinates #{lat}, #{lon}"
       @search_url = @@base_url + "?lat=#{lat}&lng=#{lon}"
-      supports_distance = true
 
     when 'coord'
       @query_type = 'coord'

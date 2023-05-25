@@ -2,7 +2,7 @@ template = {
 
   # caveat: use this format as last one
   'wptpoi-nuvi' => {
-    'ext'         => 'wpt.gpi',
+    'ext'         => 'w.gpi',
     'desc'        => 'POI for Nuvi Waypoints, pure ASCII',
     'required'    => 'gpsbabel:iconv',
     'filter_src'  => 'gpx-wpts',

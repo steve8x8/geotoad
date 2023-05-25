@@ -636,12 +636,12 @@ class Input
         $validFormats = outputDetails.formatList.sort
         $validFormats.each{ |type|
           ext  = "[" + outputDetails.formatExtension(type) + "]"
-          desc = outputDetails.formatDesc(type)
+          desc = outputDetails.formatDesc(type).dup
           req  = outputDetails.formatRequirement(type)
           if req
             desc << " {" + req + "}"
           end
-          printf("%-13.13s%6.6s %s\n", type, ext, desc)
+          printf("%-13.13s%7.7s %s\n", type, ext, desc)
         }
 
         puts ""
@@ -817,7 +817,7 @@ class Input
     country = nil
     cs = CountryState.new()
     while not country
-      try_country = ask("What country would you like to search for (country id, name pattern, or empty for full list)?", nil)
+      try_country = ask("Which country (id, name pattern, or empty for full list)?", nil)
       country = nil
       # id given?
       if try_country.to_i >= 1
@@ -849,7 +849,7 @@ class Input
     state = nil
     cs = CountryState.new()
     while not state
-      try_state = ask("Which state do you want to search for (state id, name pattern, or empty for full list)?", nil)
+      try_state = ask("Which state (id, name pattern, or empty for full list)?", nil)
       state = nil
       # id given?
       if try_state.to_i >= 1
