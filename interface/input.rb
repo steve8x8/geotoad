@@ -455,7 +455,8 @@ class Input
       when '3'
         case @@optHash['queryType']
         when 'location'
-          @@optHash['queryArg'] = ask("Type in an address, city, state, postal code (will use OSM Nominatim), or coordinates.\nMultiple locations may be separated by the | symbol\n\n", 'NO_DEFAULT')
+          # locations will probably have commas
+          @@optHash['queryArg'] = ask('Enter location(s) that will be resolved by OSM Nominatim.\nMultiple locations may be separated by the | symbol', 'NO_DEFAULT')
 
         when 'country'
           @@optHash['queryArg'] = askCountry()
@@ -484,7 +485,7 @@ class Input
           puts "Enter a list of coordinates, one position per line."
           puts "It is recommended to use one of the following formats:"
           puts "  N56 44.392 E015 52.780"
-          puts "  56.73987 15.87967"
+          puts "  56.73987,15.87967"
           puts ""
           puts "Enter \"q\" when done."
 
@@ -575,7 +576,9 @@ class Input
                                               " #{kinds[11..13].join(', ')},\n" +
                                               " #{kinds[14..18].join(', ')},\n" +
                                               " #{kinds[19..23].join(', ')},\n" +
+                                # do not show all_* options              
 #                                              " #{kinds[24..25].join(', ')},\n" +
+                                              "or empty input for all cache types.\n" +
                                              "What do you seek? (separate with commas)", kinds, nil, trailing_dash_allowed = true)
 
       when '10'
@@ -595,18 +598,18 @@ class Input
         end
 
       when '12'
-        @@optHash['placeDateExclude'] = askNumber('How many days old is the youngest a geocache can be for your list? (0)', nil)
-        @@optHash['placeDateInclude'] = askNumber('How many days old is the oldest a geocache can be for your list? (any)', nil)
+        @@optHash['placeDateExclude'] = askNumber('Age (in days) of the youngest geocache for your list? (0)', nil)
+        @@optHash['placeDateInclude'] = askNumber('Age (in days) of the oldest geocache for your list? (any)', nil)
 
       when '13'
-        @@optHash['foundDateExclude'] = askNumber('How many days ago is the minimum a geocache can be found in for your list? (0)', nil)
-        @@optHash['foundDateInclude'] = askNumber('How many days ago is the maximum a geocache can be found in for your list? (any)', nil)
+        @@optHash['foundDateExclude'] = askNumber('Minimum age (in days) of the last find of a geocache for your list? (0)', nil)
+        @@optHash['foundDateInclude'] = askNumber('Maximum age (in days) of the last find of a geocache for your list? (any)', nil)
 
       when '14'
-        @@optHash['titleKeyword'] = ask('Filter caches by title keywords (negate using !, separate multiple using |)', nil)
+        @@optHash['titleKeyword'] = ask('Filter caches by title keywords\n (negate using !, separate multiple using |)', nil)
 
       when '15'
-        @@optHash['descKeyword'] = ask('Filter caches by description keywords (negate using !, separate multiple using |)', nil)
+        @@optHash['descKeyword'] = ask('Filter caches by description keywords\n (negate using !, separate multiple using |)', nil)
 
       when '16'
         @@optHash['userExclude'] = ask('Filter out geocaches found by these people (separate by commas)', '').gsub(/, */, '|')
@@ -615,13 +618,13 @@ class Input
         @@optHash['ownerExclude'] = ask('Filter out geocaches owned by these people (separate by commas)', '').gsub(/, */, '|')
 
       when '18'
-        @@optHash['userInclude'] = ask('Only include geocaches that have been found by these people (separate by commas)?', '').gsub(/, */, '|')
+        @@optHash['userInclude'] = ask('Only include geocaches found by these people (separate by commas)?', '').gsub(/, */, '|')
 
       when '19'
         @@optHash['ownerInclude'] = ask('Only include geocaches owned by these people (separate by commas)?', '').gsub(/, */, '|')
 
       when '20'
-        @@optHash['waypointLength'] = askNumber('How long can your EasyName waypoint id\'s be? (recommended: 8 for Magellan, 16 for Garmin, 0 to disable and use waypoint id\'s)?', nil) #, true)
+        @@optHash['waypointLength'] = askNumber('How long can your EasyName waypoint id\'s be?\n (recommended: 8 for Magellan, 16 for Garmin,\n 0 to disable and use waypoint id\'s)?', nil) #, true)
 
       when '21'
         answer = ask('Include disabled caches in your results?', nil)
@@ -784,7 +787,7 @@ class Input
           answerf = Float(answer)
           # negative values aren't allowed
           if (answerf < 0)
-            puts "** #{answer} is negative, not allowed."
+            puts "** \"#{answer}\" is negative, not allowed."
           # If it is equivalent to it's integer, return the integer instead
           elsif answerf == answerf.to_i
             return answerf.to_i
@@ -793,7 +796,7 @@ class Input
           end
         end
       rescue ArgumentError
-        puts "** #{answer} does not look like a valid number."
+        puts "** \"#{answer}\" does not look like a valid number."
       end
     end
   end
@@ -821,11 +824,11 @@ class Input
               return answerf, defaultunit
             end
           else
-            puts "** Cannot parse #{answer}!"
+            puts "** Cannot parse \"#{answer}\"!"
           end
         end
       rescue ArgumentError
-        puts "** #{answer} does not look like valid input."
+        puts "** \"#{answer}\" does not look like valid input."
       end
     end
   end
