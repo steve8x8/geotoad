@@ -90,8 +90,11 @@ class GeoToad
       $mode = 'CLI'
     else
       # go into interactive.
-      print "** Press Enter to start the Text User Interface: "
-      $stdin.gets
+      print "** Press Enter to start the Text User Interface or \"X\" to exit: "
+      x = $stdin.gets.chomp
+      if x == 'X'
+        exit(0)
+      end
       @option = @uin.interactive
       $mode = 'TUI'
     end
@@ -439,8 +442,8 @@ class GeoToad
       if @option['cacheType']
         # filter by cacheType
         cacheTypes = @option['cacheType'].split($delimiters)
-        cacheType0 = cacheTypes[0]
         if (cacheTypes.length == 1)
+         cacheType0 = cacheTypes[0]
           # inverted filter? careful...
           if (cacheType0 !~ /-$/)
             # if only one type, use tx= parameter (pre-filtering)

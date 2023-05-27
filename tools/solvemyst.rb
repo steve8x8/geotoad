@@ -21,8 +21,8 @@ File.foreach(ARGV[0]) { |line|
       type = 'Traditional Cache'
     when /\d./
       type = 'Multi-cache'
-    end
-    solutions[gcid] = {'wpnr' => wpnr, 'lat' => lat, 'lon' => lon, 'type' => type, 'comm' => comment}
+  end
+  solutions[gcid] = {'wpnr' => wpnr, 'lat' => lat, 'lon' => lon, 'type' => type, 'comm' => comment}
 }
 rescue
   $stderr.puts "Cannot read #{ARGV[0].inspect}, will not modify anything"

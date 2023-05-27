@@ -13,7 +13,7 @@ class Filter
     # 'unspecified/not applicable' (becoming obsolete)
     'virtual' => 0,
     # events, earthcaches, citos are kind of virtual too
-    'not chosen' => 0,
+    'not chosen' => 0, #X
     'not_chosen' => 0,
     # 'other' here means 'nano' (nacro, bison, ...) mostly
     # starting Dec 14, 'not chosen' gets replaced with 'other' throughout
@@ -21,7 +21,7 @@ class Filter
     'micro'   => 2,
     'small' => 3,
     'regular' => 4,
-    'medium' => 4,
+    'medium' => 4, #X
     'large' => 5
   }
 

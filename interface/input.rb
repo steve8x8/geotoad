@@ -420,7 +420,7 @@ class Input
       end
       puts "** Verbose (debug) mode #{msg}, \"v\" to change"
       print "-- Enter menu number, \"s\" to start, \"R\" to reset, or \"X\" to exit --> "
-      answer = $stdin.gets.chop
+      answer = $stdin.gets.chomp
       puts ""
 
       case answer
