@@ -567,7 +567,7 @@ class Input
                   'webcam', 'earthcache',
                   'gps', 'exhibit',
                   'wherigo',
-#                  'all_event', 'all_unknown',
+                  'all_event', 'all_unknown',
                 ]
         @@optHash['cacheType'] = askFromList("Valid types:\n" +
                                               " #{kinds[0..3].join(', ')},\n" +

@@ -570,8 +570,11 @@ class GeoToad
     if @option['cacheType']
       # post-filter by cacheType
       @appliedFilters['-c'] = { 'f' => "#{@option['cacheType']}", 't' => "type" }
-      if @option['cacheType'] !~ /\+$/
+      # event+ is now all_event, unknown+ is now all_unknown
+      if @option['cacheType'] !~ /\+$/ and
+         @option['cacheType'] !~ /^all_/
         # but only if there's no "all xxx" chosen
+        # we must trust that the query returns correct data here...
         @filtered.cacheType(@option['cacheType'])
       else
         displayWarning "Not filtering for cache type!"
