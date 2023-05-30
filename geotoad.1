@@ -1,4 +1,4 @@
-.TH "GEOTOAD" "1" "17 May 2023" "steve8x8@googlemail.com" "Geocaching Query Tool"
+.TH "GEOTOAD" "1" "3 Jun 2023" "steve8x8@googlemail.com" "Geocaching Query Tool"
 
 .SH "NAME"
 
@@ -64,6 +64,8 @@ marked by \fB(MULTI)\fR below),
 they can be delimited by a pipe symbol (\fB|\fR) or a colon (\fB:\fR),
 or you can define your own delimiter(s).
 Make sure the pipe symbols are properly escaped from the command shell!
+.PP
+The TUI internally uses the pipe symbol \fB|\fR.
 
 .SS "(USERFILE) options:"
 If the user name is followed by an "equal" sign and a filename
@@ -153,7 +155,8 @@ See the \fBOUTPUT FORMATS\fR section below for the list of supported formats.
 \fB\-w\fR|\fB\-\-waypointLength\fR \fIlength\fR
 set EasyName waypoint id length. (default: 0=use WID)
 .PP
-\fINote\fR: negative values are no longer allowed.
+.I Note:
+negative values are no longer allowed.
 .TP
 \fB\-l\fR|\fB\-\-logCount\fR \fIcount\fR
 limit number of log entries (default: 10)
@@ -187,31 +190,36 @@ do not overwrite existing cache description files in file cache
 \fB\-c\fR|\fB\-\-cacheType\fR|\fB\-\-type\fR \fItype\fR  \fB(MULTI)\fR
 set cache type(s), select from
  \fB[traditional|multicache|virtual|letterbox|\fR
- \fB event+|\fR
+ \fI event+|\fR
   \fB event|cito|mega[event]|giga[event]|\fR
-  \fB  communceleb|gchqceleb|block|\fR
- \fB unknown+|\fR
+  \fB communceleb|gchqceleb|block|\fR
+ \fI unknown+|\fR
   \fB unknown|\fR
-  \fB  gshq|ape|\fR
+  \fB gshq|ape|\fR
  \fB webcam|earthcache|gps|wherigo]\fR
 .PP
 \fBgchqceleb\fR (ex \fBlfceleb\fR, \fBhqceleb\fR) is used for \fIGeocaching HQ Celebration\fR (formerly
 \fIGroundspeak Lost and Found Celebration\fR, renamed in June 2019).
+.PP
 \fBcommunceleb\fR (ex \fBlost+found\fR, \fBcommceleb\fR) denotes a \fICommunity Celebration Event\fR (called
 \fILost and Found Event Cache\fR until June 2019).
 .PP
-Caveat:
+\fBlocationlass\fR (aka \fBreverse\fR) caches are no longer supported it seems (May 2023).
+.PP
+.I Caveat:
 \fBMultiple cache types\fR will result in a \fIfull search\fR and subsequent filtering!
 If \fBonly one type\fR is selected, search will be sped up considerably
 by reducing the number of queries sent to the server.
 .PP
-Another caveat:
-Some of the renamed cache types need more testing.
-Also the grouping into \fBevent+\fR and \fBunknown+\fR isn\'t fully clear yet.
+.I Another caveat:
+Some of the renamed (but also less abundant) cache types need more testing.
+There are indications that \fIevent+\fR (\fIall_event\fR in the TUI) and \fIunknown+\fR (\fIall_unknown\fR)
+queries may \fIreturn nonsense\fR when more than one page is retrieved, this needs to be investigated.
 .PP
 By suffixing one or more cacheType(s) with a minus sign (dash) "\-",
 you may invert the filter,
 i.e. \fBunknown\-\fR will return only non-mystery caches.
+(This doesn't work with \fIall_*\fR / \fI*+\fR!)
 .PP
 Inverse filters are applied before, and therefore supersede, forward filters!
 (This means, \fBtype:type\-\fR will exclude \fBtype\fR.)
@@ -312,7 +320,8 @@ exclude Premium Member Only caches
 \fB\-Q\fR|\fB\-\-onlyPMO\fR|\fB\-\-pmo\fR
 select only Premium Member Only caches (will not work for some query types!)
 .PP
-\fINote\fR: \fB\-O\fR and \fB\-Q\fR are mutually exclusive!
+.I Note:
+\fB\-O\fR and \fB\-Q\fR are mutually exclusive!
 
 .SS "Lat/lon grid limits:"
 The following 4 options have no one-letter version, and are used for limiting the search area.
@@ -369,7 +378,7 @@ Normally you don't want to use this!
 switch output to unbuffered (useful for wrappers)
 
 .SS "Options yet experimental and/or undocumented:"
-\fICaveat: Here be dragons.\fR
+.I Caveat: Here be dragons.
 
 These are experimental additions which need testing and documentation.
 Volunteers wanted!
