@@ -187,7 +187,16 @@ class GeoToad
     debug "Internally using distance #{@distanceMax} miles."
     # include query type, will be parsed by output.rb
     @queryTitle        = "GeoToad: #{@queryType} = #{@queryArg}"
-    @defaultOutputFile = "gt_" + @queryArg.to_s
+    #@defaultOutputFile = "gt_" + @queryArg.to_s
+    if @queryType == "location"
+      @defaultOutputFile = "#{@queryArg}"
+    elsif @queryType == "wid"
+      @defaultOutputFile = "#{@queryArg.upcase}"
+    elsif @queryType == "guid"
+      @defaultOutputFile = "#{@queryArg.dncase}"
+    else
+      @defaultOutputFile = "#{@queryType.capitalize}_#{@queryArg}"
+    end
     # collect additional title and output filename text
     # key: short option
     # 'f': filename << "#{key}#{h['f']}"
