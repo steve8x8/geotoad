@@ -66,7 +66,7 @@ module GeoDist
     RAD_PER_DEG = Math::PI / 180
 
   # given two lat/lon points, compute the distance between the two points using the haversine formula
-  def haversine_miles(lat1, lon1, lat2=nil, lon2=nil)
+  def haversine_miles(lat1, lon1, lat2 = nil, lon2 = nil)
     if lat2.nil? or lon2.nil?
       raise ArgumentError
     end
@@ -74,12 +74,12 @@ module GeoDist
     dlon = lon2 - lon1
     dlat = lat2 - lat1
     a = haversine_calc(dlat, lat1, lat2, dlon)
-    c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
+    c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
     return c * GREAT_CIRCLE_RADIUS_MILES
   end
 
   def haversine_calc(dlat, lat1, lat2, dlon)
-    (Math.sin(rpd(dlat)/2))**2 + Math.cos(rpd(lat1)) * Math.cos((rpd(lat2))) * (Math.sin(rpd(dlon)/2))**2
+    (Math.sin(rpd(dlat) / 2)) ** 2 + Math.cos(rpd(lat1)) * Math.cos((rpd(lat2))) * (Math.sin(rpd(dlon) / 2)) ** 2
   end
 
   # Radians per degree
@@ -104,7 +104,7 @@ module GeoDist
     # convert counterclockwise radians into wind-rose degrees
     bearing = (90 - dpr(Math.atan2(x,y)) + 360) % 360
     # assign wind-rose directions
-    ["N","NE","E","SE","S","SW","W","NW","N"][((bearing.to_f+22.5)/45.0).to_i]
+    ["N","NE","E","SE","S","SW","W","NW","N"][((bearing.to_f + 22.5) / 45.0).to_i]
   end
 
   def geoDistDir(lat1, lon1, lat2, lon2)
@@ -118,7 +118,7 @@ module GeoDist
     end
     # Haversine takes degrees, not radians
     return [haversine_miles(lat1.to_f, lon1.to_f, lat2.to_f, lon2.to_f),
-            geoBearing(lat1.to_f, lon1.to_f, lat2.to_f, lon2.to_f)]
+                 geoBearing(lat1.to_f, lon1.to_f, lat2.to_f, lon2.to_f)]
   end
 
 end

@@ -218,14 +218,14 @@ module Common
     # relative dates end in a "*"
     when /^(Today|Avui|Dnes|I dag|Heute|Σήμερα|Täna|Hoy|Hier|Oggi|今日|오늘|Šodien|Ma|Vandaag|I dag|Dzisiaj|Hoje|Azi|Сегодня|Tänään|Idag|Haut|Danes)\*/i
       debug2 "date: Today"
-      days_ago=0
+      days_ago = 0
     when /^(Yesterday|Ahir|Včera|I går|Gestern|Χτές|Eile|Ayer|Aujourd.hui|Ieri|昨日|어제|Vakar|Tegnap|Gisteren|I går|Wczoraj|Ontem|Ieri|Вчера|Eilen|Igår|Gëschter|Včeraj)\*/i
       debug2 "date: Yesterday"
-      days_ago=1
+      days_ago = 1
     # (any string ending with a * and a number in it)
     when /(\d)+ .+\*$/
       debug2 "date: #{$1} days ago"
-      days_ago=$1.to_i
+      days_ago = $1.to_i
     # [ABFJK] dd.MM.yyyy, d-M-yyyy etc. (dots and dashes), + yy variant (20160501)
     when /^(\d{1,2})[\.-](\d{1,2})[\.-](\d{2}(\d{2})?)$/
       year = (2000 + ($3.to_i % 100)).to_s
@@ -316,7 +316,7 @@ module Common
   ## find an existing directory from a list
   def selectDirectory(dirs)
     # skip nils and empty strings
-    dirs.compact.each do |dir|
+    dirs.compact.each{ |dir|
       next if dir.empty?
       if File.readable?(dir) and File.stat(dir).directory?
         # write tests seem to be broken in Windows occasionally.
@@ -324,7 +324,7 @@ module Common
           return dir
         end
       end
-    end
+    }
     # last resort: current directory
     return flipSlash(Dir.pwd)
   end
@@ -547,7 +547,9 @@ module Common
       displayInfo "No valid dictionary found, initializing"
       mapping = Hash.new
       begin
-        File.open(mappingFile, 'w'){ |f| f.puts "---" }
+        File.open(mappingFile, 'w'){ |f|
+          f.puts "---"
+        }
       rescue => error
         displayWarning "Could not reset dictionary:\n\t#{error}"
       end
@@ -567,7 +569,9 @@ module Common
     mappingFile  = File.join(findConfigDir, 'mapping.yaml')
     debug "Mapping#{src} #{wid} -> #{guid}"
     begin
-      File.open(mappingFile, 'a'){ |f| f.puts "#{wid}: #{guid}" }
+      File.open(mappingFile, 'a'){ |f|
+        f.puts "#{wid}: #{guid}"
+      }
     rescue => error
       displayWarning "Could not append mapping for #{wid}:\n\t#{error}"
     end

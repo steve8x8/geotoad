@@ -38,8 +38,9 @@ module LogBook
     jsonstring
               .gsub(/#\{/, "={")                                  # disable in-string #{values}
               .gsub(/\"Images\":\[\{.*?\}\]/, "\"Images\":[]")    # strip Images content
-              .gsub(/\"[^\"]*\":/){|m| "#{m.split(/:/)[0]}=>"}    # rewrite into Ruby hash
-              .split(/},{/)
+              .gsub(/\"[^\"]*\":/){ |m|
+                "#{m.split(/:/)[0]}=>"                            # rewrite into Ruby hash
+              }.split(/},{/)
               .each { |jsonentry|
       begin
         debug3 "JSON entry #{jsonentry}"
@@ -99,7 +100,7 @@ module LogBook
       #aspx.filePattern = '"status":"success"'
       data = aspx.fetch
       @@userToken = ""
-      data.each_line do |line|
+      data.each_line{ |line|
         case line
         when /userToken\s*=\s*\'(.*?)\';/
           debug2 "userToken = #{$1}"
@@ -110,7 +111,7 @@ module LogBook
           debug2 "getJSON URL \"#{getjsonUrl}\""
           @@getjson_url = @@getjson_base + getjsonUrl
         end
-      end
+      }
       debug "userToken is #{@@userToken.length} characters long."
       # we cannot get a userToken, it seems - return gracefully
       return [comments, Time.now] if @@userToken.empty?

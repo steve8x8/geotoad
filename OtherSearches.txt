@@ -146,7 +146,7 @@ gpxsolutions as follows:
   # first read solutions (WPID lat lon) from table
   solutions = Hash.new
   begin
-    File.foreach(ARGV[0]) { |line|
+    File.foreach(ARGV[0]){ |line|
       columns = line.upcase.split(/\s+/)
       name = columns[0]
       lat = columns[1]
@@ -181,7 +181,9 @@ gpxsolutions as follows:
         fragment.gsub!(/lat="[\d\.-]+"/, "lat=\"#{lat}\"")
         fragment.gsub!(/lon="[\d\.-]+"/, "lon=\"#{lon}\"")
         fragment.gsub!(/(Unknown Cache|Multi-cache)</, "#{type}<")
-        fragment.gsub!(/<groundspeak:short_description[^>]*>/) { |s| s.gsub(/>/, ">[+#{wpnr}]=") }
+        fragment.gsub!(/<groundspeak:short_description[^>]*>/){ |s|
+          s.gsub(/>/, ">[+#{wpnr}]=")
+        }
         $stderr.printf "Modified %7s: %s = %s %s \"%s\" -> %s\n", gcid, wpnr, lat, lon, name, type
       end
     end

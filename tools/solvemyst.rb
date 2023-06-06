@@ -8,7 +8,7 @@
 solutions = Hash.new
 
 begin
-File.foreach(ARGV[0]) { |line|
+File.foreach(ARGV[0]){ |line|
   columns = line.split(/\s+/)
   name    = columns[0].upcase
   lat     = columns[1]
@@ -29,7 +29,9 @@ rescue
 end
 
 # now merge into GPX (UNIX filter!)
-puts $stdin.read.split(/<\/wpt>/).map { |fragment|
+puts $stdin.read.
+split(/<\/wpt>/)
+.map{ |fragment|
   if fragment =~ /<name>(GC.*?)<\/name>.*?<groundspeak:type>(Unknown Cache|Multi-cache)/m
     gcid = $1
     solution = solutions[gcid]
@@ -42,7 +44,9 @@ puts $stdin.read.split(/<\/wpt>/).map { |fragment|
       fragment.gsub!(/lat="[\d\.-]+"/, "lat=\"#{lat}\"")
       fragment.gsub!(/lon="[\d\.-]+"/, "lon=\"#{lon}\"")
       fragment.gsub!(/(Unknown Cache|Multi-cache)</, "#{type}<")
-      fragment.gsub!(/<groundspeak:short_description[^>]*>/) { |s| s.gsub(/>/, ">[+#{wpnr}(#{comment})]=") }
+      fragment.gsub!(/<groundspeak:short_description[^>]*>/){ |s|
+        s.gsub(/>/, ">[+#{wpnr}(#{comment})]=")
+      }
       $stderr.printf "Modified %7s: %s = %s %s -> %s (%s)\n", gcid, wpnr, lat, lon, type, comment
     end
   end

@@ -499,7 +499,9 @@ class Output
 
   def writeFile(file)
     begin
-      File.open(file, 'w'){ |f| f.write(@output) }
+      File.open(file, 'w'){ |f|
+        f.write(@output)
+      }
       return true
     rescue => error
       displayWarning "Error writing #{file}:\n\t#{error}"
@@ -528,7 +530,9 @@ class Output
       if @outputFormat['filter_style']
         begin
           stylefile = File.join($CACHE_DIR, @outputType + ".s_" + rand(500000).to_s)
-          File.open(stylefile, 'w'){ |f| f.write(@outputFormat['filter_style']) }
+          File.open(stylefile, 'w'){ |f|
+            f.write(@outputFormat['filter_style'])
+          }
           exec.gsub!('STYLEFILE', "\"#{stylefile}\"")
         rescue => e
           displayWarning "Failure to write style file: #{e}"
@@ -536,7 +540,9 @@ class Output
       elsif @outputFormat['filter_style64']
         begin
           stylefile = File.join($CACHE_DIR, @outputType + ".s_" + rand(500000).to_s)
-          File.open(stylefile, 'w'){ |f| f.write(Base64.decode64(@outputFormat['filter_style64'])) }
+          File.open(stylefile, 'w'){ |f|
+            f.write(Base64.decode64(@outputFormat['filter_style64']))
+          }
           exec.gsub!('STYLEFILE', "\"#{stylefile}\"")
         rescue => e
           displayWarning "Failure to write decoded style file: #{e}"
@@ -601,9 +607,17 @@ class Output
         value = makeText(@outVars[var].to_s)
       # convert to pure-ascii text
       elsif (type == "wpTextAscii")
-        value = makeText(@wpHash[wid][var].to_s).chars.map{|c| c.ascii_only? ? c : "-"}.join
+        value = makeText(@wpHash[wid][var].to_s)
+        .chars
+        .map{ |c|
+          c.ascii_only? ? c : "-"
+        }.join
       elsif (type == "outTextAscii")
-        value = makeText(@outVars[var].to_s).chars.map{|c| c.ascii_only? ? c : "-"}.join
+        value = makeText(@outVars[var].to_s)
+        .chars
+        .map{ |c|
+          c.ascii_only? ? c : "-"
+        }.join
       # convert to text that can be included verbatim into XML/HTML
       elsif (type == "wpTextEntity")
         value = CGI.escapeHTML(makeText(@wpHash[wid][var].to_s))
@@ -614,7 +628,7 @@ class Output
       debug2 "TAG <%#{tag}%> for #{wid} -> #{value.gsub(/[\n\r]+/, '<|>')}"
 
       # This looks very ugly, but it works around backreference issues. Thanks ddollar!
-      text.gsub!('<%' + tag[0] + '%>') { value }
+      text.gsub!('<%' + tag[0] + '%>'){ value }
     }
 
     debug3 "Replaced text: #{text}"
@@ -625,11 +639,13 @@ class Output
     return "" if str.to_s.empty?
     text = str.dup
     # pre-translate decimal into hex for large codepoints
-    text.gsub!(/(\&#(\d+);)/) { ($2.to_i < 55296) ? $1 : ('&#x' + $2.to_i.to_s(16).upcase + ';') }
+    text.gsub!(/(\&#(\d+);)/){
+      ($2.to_i < 55296) ? $1 : ('&#x' + $2.to_i.to_s(16).upcase + ';')
+    }
     # translate some UTF-16 surrogates into UTF-8 code points, remove others
     #text.gsub!(/\&#xD[89AB]..;\&#xD[CDEF]..;/i, '(*)')
     # formula from http://www.unicode.org/faq/utf_bom.html
-    text.gsub!(/\&#x(D8..);\&#x(D[CDEF]..);/i) {
+    text.gsub!(/\&#x(D8..);\&#x(D[CDEF]..);/i){
       hi = $1.to_i(16)
       lo = $2.to_i(16)
       x = ((hi & 0x3f) << 10) | (lo & 0x3ff)
@@ -638,7 +654,7 @@ class Output
       hex = c.to_s(16).upcase
       debug2 "converting surrogate #{$1}/#{$2} to #{hex}"
       soft ? '&#x' + hex + ';' : "[U+#{hex}]"
-      }
+    }
     # handle unpaired surrogates
     text.gsub!(/\&#xD[89ABCDEF]..;/i, '(?)')
     return text
@@ -702,7 +718,7 @@ class Output
     text.gsub!(/<\/?font[^>]*>/im, '')
     text.gsub!(/<\/?big[^>]*>/im, '')
     # also for style=...
-    text.gsub!(/([;\'\"])\s*(background-)?color:[^;]*;/){$1}
+    text.gsub!(/([;\'\"])\s*(background-)?color:[^;]*;/){ $1 }
     text.gsub!(/font-size:\d+p/, 'font-size:12p') # can be pt or px...
 
     # escape HTML entities (including <>)
@@ -731,18 +747,30 @@ class Output
     text.gsub!(/\&(amp;)?hellip;/, '...')
 
     # From http://snippets.dzone.com/posts/show/1161
-    text = text.unpack("U*").collect{ |s| (s > 127 ? "&##{s};" : s.chr) }.join("")
+    text = text.unpack("U*")
+    .collect{ |s|
+      (s > 127 ? "&##{s};" : s.chr)
+    }.join("")
 
     # Collapse white space
     text.gsub!(/\&(amp;)*nbsp;/, ' ')
     text.gsub!(/[\x09\x0a\x0d]/, ' ')
     text.gsub!(/ +/, ' ')
     # Strip out control characters; ToDo: replace with [^X] ?
-    text.gsub!(/([\x00-\x1f\x7f])/){ x="#{$1}".ord.to_s(16).upcase; "[\\x#{x}]" }
+    text.gsub!(/([\x00-\x1f\x7f])/){
+      x = "#{$1}".ord.to_s(16).upcase
+      "[\\x#{x}]"
+    }
     # Convert hex encoding to decimal
-    text.gsub!(/\&#x([0-9a-fA-F]{1,2});/){ x="#{$1}".to_i(16); "&##{x};" }
+    text.gsub!(/\&#x([0-9a-fA-F]{1,2});/){
+      x = "#{$1}".to_i(16)
+      "&##{x};"
+    }
     # Remove dec-encoded control chars
-    text.gsub!(/(\&#([0-9]+);)/){ x=$2.to_i; ((x<=31)||(x==127)) ? "[\\x#{x.to_s(16)}]" : $1 }
+    text.gsub!(/(\&#([0-9]+);)/){
+      x = $2.to_i
+      ((x <= 31) || (x == 127)) ? "[\\x#{x.to_s(16)}]" : $1
+    }
 
     # Fix apostrophes so that they show up as expected. Fixes issue 26.
     text.gsub!('&#8217;', "'")
@@ -782,13 +810,21 @@ class Output
     text.gsub!(/<li>/i, "\n * (o) ")
     # images
     # with alt and src
-    text.gsub!(/<img\s[^>]*alt=\s*[\'\"]([^\'\">]*)[\'\"][^>]*\s+src=\s*[\'\"]https?:\/\/([^\'\">]*)[\'\"][^>]*>/im){"[* #{$1}: #{$2} *]"}
+    text.gsub!(/<img\s[^>]*alt=\s*[\'\"]([^\'\">]*)[\'\"][^>]*\s+src=\s*[\'\"]https?:\/\/([^\'\">]*)[\'\"][^>]*>/im){
+      "[* #{$1}: #{$2} *]"
+    }
     # with src and alt
-    text.gsub!(/<img\s[^>]*src=\s*[\'\"]https?:\/\/([^\'\">]*)[\'\"][^>]*\s+alt=\s*[\'\"]([^\'\">]*)[\'\"][^>]*>/im){"[* #{$2}: #{$1} *]"}
+    text.gsub!(/<img\s[^>]*src=\s*[\'\"]https?:\/\/([^\'\">]*)[\'\"][^>]*\s+alt=\s*[\'\"]([^\'\">]*)[\'\"][^>]*>/im){
+      "[* #{$2}: #{$1} *]"
+    }
     # no alt
-    text.gsub!(/<img\s[^>]*src=\s*[\'\"]https?:\/\/([^\'\">]*)[\'\"][^>]*>/im){"[* #{$1} *]"}
+    text.gsub!(/<img\s[^>]*src=\s*[\'\"]https?:\/\/([^\'\">]*)[\'\"][^>]*>/im){
+      "[* #{$1} *]"
+    }
     # links
-    text.gsub!(/<a\s[^>]*href=\s*[\'\"]https?:\/\/([^\'\">]*)[\'\"].*?>(.*?)<\/a.*?>/im){"[= #{$2}: #{$1} =]"}
+    text.gsub!(/<a\s[^>]*href=\s*[\'\"]https?:\/\/([^\'\">]*)[\'\"].*?>(.*?)<\/a.*?>/im){
+      "[= #{$2}: #{$1} =]"
+    }
     text.gsub!(/<\/a.*?>/im, ' =]')
     text.gsub!(/<table.*?>/im, "\n[table]\n")
     text.gsub!(/<\/table.*?>/im, "\n[/table]\n")
@@ -892,7 +928,9 @@ class Output
     symbolHash = Hash.new
 
     # sort GC1 < GCZZZZ < GC10000 < GCZZZZZ < GC100000
-    @wpHash.keys.sort{ |a,b| a[2..-1].rjust(6) <=> b[2..-1].rjust(6) }.each{ |wid|
+    @wpHash.keys.sort{ |a,b|
+      a[2..-1].rjust(6) <=> b[2..-1].rjust(6)
+    }.each{ |wid|
       cache = @wpHash[wid]
       symbolHash[wid] = ''
 
@@ -1073,19 +1111,27 @@ class Output
       # translate smileys
       hint2 = icons2Text(hint)
       # split hint into bracketed and unbracketed fragments
-      decrypted = hint2.gsub(/\[/, '\n[').gsub(/\]/, ']\n').split('\n').collect{ |x|
+      decrypted = hint2.gsub(/\[/, '\n[')
+      .gsub(/\]/, ']\n')
+      .split('\n')
+      .collect{ |x|
         debug3 "hint fragment #{x}"
         if x[0..0] != '['
           # only decrypt text not within brackets
           x.tr!('A-MN-Za-mn-z', 'N-ZA-Mn-za-m')
           # re-"en"crypt HTML entities
-          x.gsub!(/(\&.*?;)/) { $1.tr('A-MN-Za-mn-z', 'N-ZA-Mn-za-m') }
+          x.gsub!(/(\&.*?;)/){
+            $1.tr('A-MN-Za-mn-z', 'N-ZA-Mn-za-m')
+          }
           debug3 "decrypted #{x}"
         end
         # join decrypted and unchanged fragments
-        x }.join
+        x
+      }.join
       # translate back content of <..>
-      decrypted.gsub!(/(<[^<>]*>)/){ $1.tr('A-MN-Za-mn-z', 'N-ZA-Mn-za-m') }
+      decrypted.gsub!(/(<[^<>]*>)/){
+        $1.tr('A-MN-Za-mn-z', 'N-ZA-Mn-za-m')
+      }
       debug "full hint: #{decrypted}"
     end
     return decrypted
@@ -1119,7 +1165,9 @@ class Output
     new_text.gsub!(/<td[^>]*>\n+/m, '<td>')
     new_text.gsub!(/\n+<\/td[^>]*>/m, '</td>')
     # fuse continuation lines together between <td> .. </td>
-    new_text.gsub!(/<td>.*?<\/td>/m){ |td| td.gsub(/\n/, ' ') }
+    new_text.gsub!(/<td>.*?<\/td>/m){ |td|
+      td.gsub(/\n/, ' ')
+    }
     # remove "class" string from <tr>
     new_text.gsub!(/\s*class=\"[^\"]*\"/m, '')
     # we have to keep the "ishidden" information for later
@@ -1337,8 +1385,8 @@ class Output
     begin
       # issue #367
       coord_query = URI.encode_www_form_component(sprintf("%.6f,%.6f", cache['latdata'].to_f, cache['londata'].to_f), enc=nil)
-    rescue => error
-      displayWarning "URI.encode_www_form_component() error, fallback to URI_escape()"
+    rescue => e
+      displayWarning "URI.encode_www_form_component() error #{e}, fallback to URI_escape()"
       coord_query = URI.escape(sprintf("%.6f,%.6f", cache['latdata'].to_f, cache['londata'].to_f))
     end
     available = (not cache['disabled'] and not cache['archived'])
@@ -1370,11 +1418,17 @@ class Output
         # remove locationless wpts
         xmlWptsGsak = xmlWptsCgeo.gsub(/<wpt( lat="0.000000*" lon="0.000000*")?>.*?<\/wpt>\s*/m, '')
         # strip desc strings
-        xmlWptsCgeo.gsub!(/<desc>(.*?):.*?<\/desc>/){"<desc>#{$1}</desc>"}
+        xmlWptsCgeo.gsub!(/<desc>(.*?):.*?<\/desc>/){
+          "<desc>#{$1}</desc>"
+        }
       end
       if xmlWptsGsak
         # remove gsak additions
-        xmlWpts = xmlWptsGsak.each_line.map{|l| (l=~/<\/?gsak:/)?nil:l}.compact.join
+        xmlWpts = xmlWptsGsak.each_line
+        .map{ |l|
+          (l =~ /<\/?gsak:/) ? nil : l
+        }.compact
+        .join
       end
       # add separator lines
       shortWpts = "<hr />" + shortWpts + "<hr />"
@@ -1535,14 +1589,14 @@ class Output
     counter = 0
     cond1cnt = 0
     cond2cnt = 0
-    (
-     # arrange "-q user" queries in reverse search order
-     # otherwise, sort GC1 < GCZZZZ < GC10000 < GCZZZZZ < GC100000
-      (@title =~ /^GeoToad: user =/) ?
-        wpSearchOrder.reverse
-        :
-        @wpHash.keys.sort{ |a,b| a[2..-1].rjust(6) <=> b[2..-1].rjust(6) }
-    ).each{ |wid|
+    # arrange "-q user" queries in reverse search order
+    # otherwise, sort GC1 < GCZZZZ < GC10000 < GCZZZZZ < GC100000
+    (@title =~ /^GeoToad: user =/) ?
+      wpSearchOrder.reverse
+      :
+      @wpHash.keys.sort{ |a,b|
+        a[2..-1].rjust(6) <=> b[2..-1].rjust(6)
+      }.each{ |wid|
       # unescape HTML entities in _some_ fields (if not done yet)
       ['name', 'creator'].each{ |var|
         temp = deemoji(@wpHash[wid][var], false)

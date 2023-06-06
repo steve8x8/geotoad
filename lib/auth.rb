@@ -46,7 +46,8 @@ module Auth
     return if not cookie
     debug3 "saveCookie: merge #{hideCookie(cookie)}"
     # get individual cookies
-    cookie.split(/; */).map{ |f|
+    cookie.split(/; */)
+    .map{ |f|
       # split at ';' will yield 2nd cookie with "HttpOnly, " prefix
       # recombine fragments, insert unique separator
       if f =~ /(.*),(.*?=.*)/
@@ -54,7 +55,9 @@ module Auth
       else
         f
       end
-    }.join('; ').split(/% */).each{ |c|
+    }.join('; ')
+    .split(/% */)
+    .each{ |c|
       # individual cookies
       debug3 "saveCookie: process cookie #{hideCookie(c)}"
       # key=value; [domain=...; ][expires=Sat, 06-Apr-2013 07:45:26 GMT; ]path=...; HttpOnly
@@ -124,7 +127,8 @@ module Auth
     data = page.fetch
     # all form data are in one line now (20170323)
     # as a workaround, split at tag end - FIXME
-    data.gsub(">", ">\n").each_line do |line|
+    data.gsub(">", ">\n")
+    .each_line{ |line|
       case line
       # sequence of type="hidden" and name="..." may change
       # make this more robust - FIXME
@@ -139,7 +143,7 @@ module Auth
         @postURL = @@login_url
         debug3 "post URL is #{@postURL}"
       end
-    end
+    }
     # fill in form with user credentials, and submit
     page = ShadowFetch.new(@postURL)
     page.localExpiry = -1

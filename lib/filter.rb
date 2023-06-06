@@ -129,8 +129,12 @@ class Filter
     typestr.gsub!('puzzle', 'unknown')
     typestr.gsub!('mystery', 'unknown')
     types = typestr.split($delimiters)
-    fwdtypes = types.each.map{ |t| (t =~ /-$/) ? nil : t }.compact
-    invtypes = types.each.map{ |t| (t =~ /-$/) ? t.gsub(/-$/, '') : nil }.compact
+    fwdtypes = types.each.map{ |t|
+      (t =~ /-$/) ? nil : t
+    }.compact
+    invtypes = types.each.map{ |t|
+      (t =~ /-$/) ? t.gsub(/-$/, '') : nil
+    }.compact
     debug2 "filtering by types: #{types}"
     # delete_if rule to be tested - FIXME
     #@waypointHash.delete_if{ |wid, values|

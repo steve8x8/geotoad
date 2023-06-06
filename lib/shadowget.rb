@@ -384,9 +384,12 @@ class ShadowFetch
       # http://gursevkalra.blogspot.de/2009/09/ruby-and-openssl-based-ssl-cipher.html
       # https://www.ssllabs.com/ssltest/analyze.html?d=geocaching.com, drop <256 bit
       #http.ciphers = [ 'RC4-SHA', 'AES128-SHA', 'AES256-SHA', 'DES-CBC3-SHA' ]
-      http.ciphers = OpenSSL::SSL::SSLContext.new($SSLVERSION).ciphers.map{ |c,x,y,z|
+      http.ciphers = OpenSSL::SSL::SSLContext.new($SSLVERSION)
+      .ciphers
+      .map{ |c,x,y,z|
         (z >= 256) ? c : nil
-      }.compact.join(':')
+      }.compact
+      .join(':')
       # force ssl context http://www.ruby-forum.com/topic/200072
       http.instance_eval { @ssl_context = OpenSSL::SSL::SSLContext.new($SSLVERSION) }
     end

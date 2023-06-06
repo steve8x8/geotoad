@@ -43,12 +43,12 @@ module Messages
   end
 
   # horizontal bar
-  def displayBar(len = 78)
-    puts "-" * len
+  def displayBar(len = 79, char = "-")
+    puts char * len
   end
 
   # display boxed text
-  def displayBox(text, len = 78)
+  def displayBox(text, len = 79)
     if text.length <= (len - 4)
       # single-line output
       puts "| #{text.ljust(len - 4)} |"

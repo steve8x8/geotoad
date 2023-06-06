@@ -133,7 +133,7 @@ class Input
     # put the stupid crap in a hash. Much nicer to deal with.
     begin
       @@optHash = Hash.new
-      opts.each do |opt0, arg|
+      opts.each{ |opt0, arg|
         opt = opt0.gsub(/-/, '')
         # replace default delimiter(s)
         if (opt == 'delimiter')
@@ -168,7 +168,7 @@ class Input
         else
           @@optHash[opt] = arg
         end
-      end
+      }
     rescue => e
       displayError "Error in option parsing: #{e} - this may be a bug, please check and report.", rc = 2
     end
@@ -849,11 +849,11 @@ class Input
           country = countries[0]
         elsif countries.length > 1
           i = 0
-          countries.each do |co|
+          countries.each{ |co|
             i += 1
             c = co.split('=')[1]
             puts "  %3d.\t%s" % [i, c]
-          end
+          }
           country = askFromList("Enter index", countries, nil)
         end
       end
@@ -880,11 +880,11 @@ class Input
           state = states[0]
         elsif states.length > 1
           i = 0
-          states.each do |st|
+          states.each{ |st|
             i += 1
             s = st.split('=')[1]
             puts "  %3d.\t%s" % [i, s]
-          end
+          }
           state = askFromList("Enter index", states, nil)
         end
       end
@@ -927,7 +927,9 @@ class Input
             try_answer_nodash = try_answer
           end
           # check for match
-          matches = choices.map{ |e| (e =~ Regexp.compile('^'+try_answer_nodash)) ? e : nil }.compact
+          matches = choices.map{ |e|
+            (e =~ Regexp.compile('^'+try_answer_nodash)) ? e : nil
+          }.compact
           if matches.length == 0
             puts "** \"#{try_answer}\" is invalid!"
             try_again = true
@@ -950,7 +952,9 @@ class Input
     text = nil
     if string
       text = string.dup
-      text.gsub!(/(\\x|%)([0-9a-fA-F][0-9a-fA-F])/) { $2.to_i(16).chr }
+      text.gsub!(/(\\x|%)([0-9a-fA-F][0-9a-fA-F])/){
+        $2.to_i(16).chr
+      }
     end
     return text
   end

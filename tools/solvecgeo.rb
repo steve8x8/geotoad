@@ -8,7 +8,7 @@
 waypoints = Hash.new
 
 begin
-File.foreach(ARGV[0]) { |line|
+File.foreach(ARGV[0]){ |line|
   columns = line.split(/\s+/)
   name    = columns[0].upcase
   lat     = columns[1]		# sDD.DDDDDD
@@ -25,7 +25,9 @@ File.foreach(ARGV[0]) { |line|
       # should be 'Virtual Stage' or 'Physical Stage'
       # but how to identify?
       type = 'Trailhead'
-      wpnr.gsub!(/^0/, 'X').gsub!(/^1/, 'Y').gsub!(/^2/, 'Z')
+      wpnr.gsub!(/^0/, 'X')
+      .gsub!(/^1/, 'Y')
+      .gsub!(/^2/, 'Z')
     # extend here
     when /R./
       type = 'Reference Point'

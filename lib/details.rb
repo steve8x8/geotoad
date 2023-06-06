@@ -976,7 +976,9 @@ class CacheDetails
         sym = "Reference Point"
       end
       # strip blanks off wpt type in parentheses
-      name = cmapitem['name'].gsub(/\(\s*(.*?)\s*\)/){"(#{$1})"}
+      name = cmapitem['name'].gsub(/\(\s*(.*?)\s*\)/){
+        "(#{$1})"
+      }
       table << "    <tr ishidden=\"false\">\n"
       table << "      <td></td>\n"			# col 1: (visibility icon) empty
       table << "      <td></td>\n"			# col 2: (point type icon) empty

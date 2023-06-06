@@ -240,7 +240,7 @@ class GeoToad
         displayBar
         displayWarning "VersionCheck: GeoToad #{latestVersion} is now available!"
         displayBar
-        version.data.scan(/version=\S*\s*(.*?)\s*---/im) do |notes|
+        version.data.scan(/version=\S*\s*(.*?)\s*---/im){ |notes|
           text = notes[0].dup
           text.gsub!(/^#\s/, "\n\* ")
           text.gsub!(/^##\s/, "\n\+ ")
@@ -258,7 +258,7 @@ class GeoToad
             displayWarning "Older versions do not work any longer. Update NOW!"
             displayBar
           end
-        end
+        }
         displayBar
         if $VERSION !~ /CURRENT/
           displayInfo "(sleeping for 30 seconds)"

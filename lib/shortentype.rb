@@ -19,9 +19,9 @@ module ShortenType
       when /Community Celebration Event/
         stype = 'communceleb'
       when /Groundspeak HQ/			# obsolete
-        stype = 'gchq'
+        stype = 'gshq'
       when /Geocaching HQ/
-        stype = 'gchq'
+        stype = 'gshq'
       when /Project APE Cache/
         stype = 'ape'
       when /Locationless/
