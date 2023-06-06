@@ -180,7 +180,7 @@ limit number of search pages (default: 0=unlimited)
 do not fetch nor parse cache descriptions, search only
 .PP
 This will reduce the amount of server requests, but provides no means
-to determine (and use for filtering) cache coordinates, hints, attributes, or descriptions.
+to determine (and use for filtering) cache coordinates, dates, hints, attributes, or descriptions.
 .TP
 \fB\-Z\fR|\fB\-\-preserveCache\fR|\fB\-\-keepOld\fR
 do not overwrite existing cache description files in file cache
@@ -228,7 +228,7 @@ Inverse filters are applied before, and therefore supersede, forward filters!
 To search for "all event" (including cito, mega, and giga, and some 
 rare other events) or "all unknown" (including GroundSpeak HQ) types,
 use
-\fBevent+\fR, or \fBunknown+\fR respectively,
+\fBall_event\fR (\fBevent+\fR), or \fBall_unknown\fR (\fBunknown+\fR) respectively,
 can be used \fBas the only cache type\fR (otherwise,
 filtering won't work - you've been warned).
 Also, inverted filtering for these types does \fBnot\fR work!
@@ -298,6 +298,10 @@ exclude caches with attribute ID \fIid\fR set to "yes", or to "no" if \fB\-\fR s
 .TP
 \fB\-z\fR|\fB\-\-includeDisabled\fR|\fB\-\-bad\fR
 include disabled caches
+.I Note:
+For \fBevent\fR caches of any type, event dates in the past will result in the cache
+being disabled (even if the "disabled" flag hasn't been set yet) -
+but only after reading the individual cache page.
 .TP
 \fB\-\-includeArchived\fR|\fB\-\-gone\fR
 include archived caches
