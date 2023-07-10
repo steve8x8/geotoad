@@ -221,50 +221,36 @@ class GeoToad
 
   def versionCheck
 
-    checkurl = "https://raw.githubusercontent.com/wiki/steve8x8/geotoad/CurrentVersion.md"
-    wikiurl = "https://github.com/steve8x8/geotoad/wiki/CurrentVersion"
+    checkurl = "https://raw.githubusercontent.com/steve8x8/geotoad/master/lib/version.rb"
+    wikiurl  = "https://github.com/steve8x8/geotoad/wiki/CurrentVersion"
 
     version = ShadowFetch.new(checkurl)
     version.localExpiry = 1 * $DAY
     version.closingHTML = false
-    version.filePattern = 'version='
+    version.filePattern = 'MY_VERSION = '
     version.maxFailures = 0
     version.fetch
 
-    # version=a.bb.cc[*] in wiki page (* marks "supersedes all")
-    if version.data =~ /version=(\d\.\d+[\.\d]+)(\*)?/
+    version_string = "UNKNOWN"
+    version.data.each_line{ |l|
+      if l =~ /MY_VERSION[ =\']+/
+        version_string = l
+        break
+      end
+    }
+    if version_string =~ /MY_VERSION[ =\']+(\d\.\d+[\.\d]+)(\*)?/
       latestVersion = $1
-      obsoleteOlder = (not $2.to_s.empty?)
-
       if comparableVersion(latestVersion) > comparableVersion($VERSION)
         displayBar
         displayWarning "VersionCheck: GeoToad #{latestVersion} is now available!"
+        displayBox     " ... check #{wikiurl} for more"
         displayBar
-        version.data.scan(/version=\S*\s*(.*?)\s*---/im){ |notes|
-          text = notes[0].dup
-          text.gsub!(/^#\s/, "\n\* ")
-          text.gsub!(/^##\s/, "\n\+ ")
-          text.gsub!(/^###\s/, "\n\- ")
-          text.gsub!(/#+$/, "")
-          text.gsub!(/\n\n+/, "\n")
-          text.gsub!(/\&nbsp;/, '-')
-          textlines = text.split("\n")
-          (1..20).each{ |line|
-            displayBox textlines[line] if textlines[line]
-          }
-          displayBox "... see #{wikiurl} for more" if textlines.length > 20
-          if obsoleteOlder
-            displayBar
-            displayWarning "Older versions do not work any longer. Update NOW!"
-            displayBar
-          end
-        }
-        displayBar
-        if $VERSION !~ /CURRENT/
-          displayInfo "(sleeping for 30 seconds)"
-          sleep(30)
-        end
       end
+    else
+      displayBar
+      displayWarning "VersionCheck: GeoToad release is still pending:"
+      displayInfo    version_string
+      displayBar
     end
     debug "Check complete."
   end
