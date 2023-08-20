@@ -456,7 +456,7 @@ class Input
         case @@optHash['queryType']
         when 'location'
           # locations will probably have commas
-          @@optHash['queryArg'] = ask('Enter location(s) that will be resolved by OSM Nominatim.\nMultiple locations may be separated by the | symbol', 'NO_DEFAULT')
+          @@optHash['queryArg'] = ask("Enter location(s) that will be resolved by OSM Nominatim.\nMultiple locations may be separated by the | symbol", 'NO_DEFAULT')
 
         when 'country'
           @@optHash['queryArg'] = askCountry()
@@ -465,20 +465,20 @@ class Input
           @@optHash['queryArg'] = askState()
 
         when 'wid'
-          @@optHash['queryArg'] = ask('Enter a list of waypoint id\'s (separated by commas)', 'NO_DEFAULT').gsub(/, */, '|')
+          @@optHash['queryArg'] = ask("Enter a list of waypoint IDs (comma-separated)", 'NO_DEFAULT').gsub(/, */, '|')
 
         when 'guid'
-          @@optHash['queryArg'] = ask('Enter a list of guid\'s (separated by commas)', 'NO_DEFAULT').gsub(/, */, '|')
+          @@optHash['queryArg'] = ask("Enter a list of GUIDs (comma-separated)", 'NO_DEFAULT').gsub(/, */, '|')
 
         when 'bookmark'
-          @@optHash['queryArg'] = ask('Enter a list of bookmark guid\'s (separated by commas)', 'NO_DEFAULT').gsub(/, */, '|')
+          @@optHash['queryArg'] = ask("Enter a list of bookmark GUIDs (comma-separated)", 'NO_DEFAULT').gsub(/, */, '|')
 
         when 'user'
-          @@optHash['queryArg'] = ask('Enter a list of users (separated by commas)', 'NO_DEFAULT').gsub(/, */, '|')
+          @@optHash['queryArg'] = ask("Enter a list of users (comma-separated)", 'NO_DEFAULT').gsub(/, */, '|')
             @@optHash['queryArg'] = convertEscapedHex(@@optHash['queryArg'])
 
         when 'owner'
-          @@optHash['queryArg'] = ask('Enter a list of owners (separated by commas)', 'NO_DEFAULT').gsub(/, */, '|')
+          @@optHash['queryArg'] = ask("Enter a list of owners (comma-separated)", 'NO_DEFAULT').gsub(/, */, '|')
             @@optHash['queryArg'] = convertEscapedHex(@@optHash['queryArg'])
 
         when 'coord'
@@ -535,16 +535,16 @@ class Input
         @@optHash['usemetric'] = (unit == "km" || nil)
 
       when '5'
-        @@optHash['difficultyMin'] = askNumber('What is the minimum difficulty you would like? (1.0)', nil)
-        @@optHash['difficultyMax'] = askNumber('What is the maximum difficulty you would like? (5.0)', nil)
+        @@optHash['difficultyMin'] = askNumber("What is the minimum difficulty you would like? (1.0)", nil)
+        @@optHash['difficultyMax'] = askNumber("What is the maximum difficulty you would like? (5.0)", nil)
 
       when '6'
-        @@optHash['terrainMin'] = askNumber('What is the minimum terrain you would like? (1.0)', nil)
-        @@optHash['terrainMax'] = askNumber('What is the maximum terrain you would like? (5.0)', nil)
+        @@optHash['terrainMin'] = askNumber("What is the minimum terrain you would like? (1.0)", nil)
+        @@optHash['terrainMax'] = askNumber("What is the maximum terrain you would like? (5.0)", nil)
 
       when '7'
-        @@optHash['favFactorMin'] = askNumber('What is the minimum fav factor you would like? (0.0)', nil)
-        @@optHash['favFactorMax'] = askNumber('What is the maximum fav factor you would like? (5.0)', nil)
+        @@optHash['favFactorMin'] = askNumber("What is the minimum fav factor you would like? (0.0)", nil)
+        @@optHash['favFactorMax'] = askNumber("What is the maximum fav factor you would like? (5.0)", nil)
 
       when '8'
         # 'virtual' and 'not chosen' are equivalent
@@ -582,7 +582,7 @@ class Input
                                              "What do you seek? (separate with commas)", kinds, nil, trailing_dash_allowed = true)
 
       when '10'
-        answer = ask('Would you like to only include geocaches you have not found yet?', nil)
+        answer = ask("Would you like to only include geocaches you have not found yet?", nil)
         if (answer =~ /y/)
           @@optHash['notFoundByMe'] = 'X'
         else
@@ -590,7 +590,7 @@ class Input
         end
 
       when '11'
-        answer = ask('Would you like to only include virgin geocaches (geocaches that have never been found)?', nil)
+        answer = ask("Would you like to only include virgin geocaches (geocaches that have never been found)?", nil)
         if (answer =~ /y/)
           @@optHash['notFound'] = 'X'
         else
@@ -598,36 +598,36 @@ class Input
         end
 
       when '12'
-        @@optHash['placeDateExclude'] = askNumber('Age (in days) of the youngest geocache for your list? (0)', nil)
-        @@optHash['placeDateInclude'] = askNumber('Age (in days) of the oldest geocache for your list? (any)', nil)
+        @@optHash['placeDateExclude'] = askNumber("Age (in days) of the youngest geocache for your list? (0)", nil)
+        @@optHash['placeDateInclude'] = askNumber("Age (in days) of the oldest geocache for your list? (any)", nil)
 
       when '13'
-        @@optHash['foundDateExclude'] = askNumber('Minimum age (in days) of the last find of a geocache for your list? (0)', nil)
-        @@optHash['foundDateInclude'] = askNumber('Maximum age (in days) of the last find of a geocache for your list? (any)', nil)
+        @@optHash['foundDateExclude'] = askNumber("Minimum age (in days) of the last find of a geocache for your list? (0)", nil)
+        @@optHash['foundDateInclude'] = askNumber("Maximum age (in days) of the last find of a geocache for your list? (any)", nil)
 
       when '14'
-        @@optHash['titleKeyword'] = ask('Filter caches by title keywords\n (negate using !, separate multiple using |)', nil)
+        @@optHash['titleKeyword'] = ask("Filter caches by title keywords\n (negate using !, separate multiple using |)", nil)
 
       when '15'
-        @@optHash['descKeyword'] = ask('Filter caches by description keywords\n (negate using !, separate multiple using |)', nil)
+        @@optHash['descKeyword'] = ask("Filter caches by description keywords\n (negate using !, separate multiple using |)", nil)
 
       when '16'
-        @@optHash['userExclude'] = ask('Filter out geocaches found by these people (separate by commas)', '').gsub(/, */, '|')
+        @@optHash['userExclude'] = ask("Filter out geocaches found by these people (comma-separated)", '').gsub(/, */, '|')
 
       when '17'
-        @@optHash['ownerExclude'] = ask('Filter out geocaches owned by these people (separate by commas)', '').gsub(/, */, '|')
+        @@optHash['ownerExclude'] = ask("Filter out geocaches owned by these people (comma-separated)", '').gsub(/, */, '|')
 
       when '18'
-        @@optHash['userInclude'] = ask('Only include geocaches found by these people (separate by commas)?', '').gsub(/, */, '|')
+        @@optHash['userInclude'] = ask("Only include geocaches found by these people (comma-separated)?", '').gsub(/, */, '|')
 
       when '19'
-        @@optHash['ownerInclude'] = ask('Only include geocaches owned by these people (separate by commas)?', '').gsub(/, */, '|')
+        @@optHash['ownerInclude'] = ask("Only include geocaches owned by these people (comma-separated)?", '').gsub(/, */, '|')
 
       when '20'
-        @@optHash['waypointLength'] = askNumber('How long can your EasyName waypoint id\'s be?\n (recommended: 8 for Magellan, 16 for Garmin,\n 0 to disable and use waypoint id\'s)?', nil) #, true)
+        @@optHash['waypointLength'] = askNumber("How long can your EasyName waypoint id\'s be?\n (recommended: 8 for Magellan, 16 for Garmin,\n 0 to disable and use waypoint id\'s)?", nil)
 
       when '21'
-        answer = ask('Include disabled caches in your results?', nil)
+        answer = ask("Include disabled caches in your results?", nil)
         if (answer =~ /y/)
           @@optHash['includeDisabled'] = 'X'
         else
@@ -635,7 +635,7 @@ class Input
         end
 
       when '22'
-        answer = ask('Would you like to only include geocaches with travelbugs in them?', nil)
+        answer = ask("Would you like to only include geocaches with travelbugs in them?", nil)
         if (answer =~ /y/)
           @@optHash['travelBug'] = 'X'
         else
@@ -643,7 +643,7 @@ class Input
         end
 
       when '23'
-        answer = ask('Would you like to only include geocaches which are not Premium Member Only?', nil)
+        answer = ask("Would you like to only include geocaches which are not Premium Member Only?", nil)
         if (answer =~ /y/)
           @@optHash['noPMO'] = 'X'
         else
@@ -665,10 +665,10 @@ class Input
         }
 
         puts ""
-        @@optHash['format'] = ask('What format would you like your output in?', 'gpx').gsub(/, */, '|')
+        @@optHash['format'] = ask("What format would you like your output in?", 'gpx').gsub(/, */, '|')
 
       when '25'
-        @@optHash['outFile'] = ask('What filename would you like to output to? (press enter for automatic)', nil)
+        @@optHash['outFile'] = ask("What filename would you like to output to? (press enter for automatic)", nil)
         if @@optHash['outFile']
           @@optHash['outFile'].gsub!(/\\/,  '/')
         end
