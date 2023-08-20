@@ -50,15 +50,17 @@ class GeoCode
   end
 
   def create_url(location, type)
+    url = @@maps_base
     if type == 'address'
       q = CGI.escape(location.gsub(/[,:\/\+\&\?]/,' ')).gsub(/[\+ ]/,'%20')
-      url = @@maps_base + 'search/' + q + '?'
+      url += 'search?q=' + q
     elsif type == 'latlng'
-      url = @@maps_base + 'reverse?' + location + '&'
+      url += 'reverse?' + location
     else
       displayWarning "Geocoder type #{type} not supported?"
+      url += 'error?type=' + type
     end
-    url += "format=json&limit=1&addressdetails=0&polygon_svg=0"
+    url += "&format=json&limit=1&addressdetails=0&polygon_svg=0"
     debug2 "geocode url: #{url}"
     return url
   end
