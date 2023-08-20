@@ -5,7 +5,7 @@ Maintainer: Steve Sixty-Four <steve8x8@googlemail.com>
 Build-Depends: debhelper (>= 9)
 Standards-Version: 3.9.6
 Vcs-Git: https://github.com/steve8x8/geotoad.git
-Homepage: https://github.com/steve8x8/geotoad/wiki
+Homepage: https://github.com/steve8x8/geotoad
 
 Package: geotoad
 Architecture: all

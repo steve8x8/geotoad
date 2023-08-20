@@ -1,3 +1,27 @@
+geotoad (3.33.3-1) unstable; urgency=low
+
+  * New version 3.33.3, "GeoToad post-Covid retoaded"
+  * Copyright extended to 2023
+  * Detection of bad pages: check for HTML and patterns
+  * Issue 366/367: Ruby 3 support
+  * Issue 368: Server may deliver "empty" query pages randomly
+  * Issue 369: Nominatim API
+  * New country and state lists & search logic
+  * all* = *+ searches
+  * Code style: number formatting, blocks, white space etc.
+  * TUI brush-up (more to come)
+  * -B option is now default
+  * Code readability improved #:)#
+
+ -- Steve Sixty-Four <steve8x8@googlemail.com>  Sun, 20 Aug 2023 15:00:00 +0000
+
+geotoad (3.33.0-1) unstable; urgency=low
+
+  * New version 3.33.0, "GeoToad retoaded"
+  * -- unreleased --
+
+ -- Steve Sixty-Four <steve8x8@googlemail.com>  Sun, 01 Jan 2023 08:30:00 +0000
+
 geotoad (3.31.0-1) unstable; urgency=low
 
   * New version 3.31.0, "Spring 2021"
