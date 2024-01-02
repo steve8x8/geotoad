@@ -1591,12 +1591,14 @@ class Output
     cond2cnt = 0
     # arrange "-q user" queries in reverse search order
     # otherwise, sort GC1 < GCZZZZ < GC10000 < GCZZZZZ < GC100000
+    (
     (@title =~ /^GeoToad: user =/) ?
       wpSearchOrder.reverse
-      :
+    :
       @wpHash.keys.sort{ |a,b|
         a[2..-1].rjust(6) <=> b[2..-1].rjust(6)
-      }.each{ |wid|
+      }
+    ).each{ |wid|
       # unescape HTML entities in _some_ fields (if not done yet)
       ['name', 'creator'].each{ |var|
         temp = deemoji(@wpHash[wid][var], false)
