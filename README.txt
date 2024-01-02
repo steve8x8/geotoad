@@ -1,5 +1,5 @@
 ==========================================================================
-GeoToad 3.33.3 by Thomas Stromberg and The GeoToad Project (c) 2002 - 2023
+GeoToad 3.34.0 by Thomas Stromberg and The GeoToad Project (c) 2002 - 2024
 ==========================================================================
 
 
@@ -45,39 +45,68 @@ Getting Started
 The easiest way to get started with GeoToad is to use the "text user
 interface" (TUI). Simply double click on the GeoToad program icon, or from
 a command prompt run "geotoad". On UNIX, you may have to run "./geotoad.rb".
-You will then see a screen that looks similar to this:
+On first invocation, if you confirm the request to open the TUI, you will
+see a screen that looks like this:
 
-==============================================================================
-:::                // GeoToad 3.33.3 Text User Interface //                :::
-==============================================================================
-(1)  GC.com login [REQUIRED         ] | (2)  search type          [location  ]
-(3)  location     [Dead Sea         ] | (4)  distance maximum (km)  [      25]
-- - - - - - - - - - - - - - - - - - - + - - - - - - - - - - - - - - - - - - -
-(5)  difficulty           [2.0 - 5.0] | (6)  terrain               [1.0 - 3.5]
-(7)  fav factor           [0.0 - 5.0] | (8)  cache size            [any - any]
-(9)  cache type   [                                                       any]
-(10) caches not found by me       [ ] | (11) caches not found by anyone    [ ]
-(12) cache age (days)     [  0 - any] | (13) last found (days ago) [  0 - any]
-(14) title keyword       [          ] | (15) descript. keyword [             ]
-(16) cache not found by  [          ] | (17) cache owner isn't [             ]
-(18) cache found by      [          ] | (19) cache owner is    [             ]
-(20) EasyName WP length         [  0] | (21) include disabled caches       [X]
-(22) caches with trackables only  [ ] | (23) no Premium Member Only caches [ ]
-- - - - - - - - - - - - - - - - - - - + - - - - - - - - - - - - - - - - - - -
-(24) output format  [gpx|list|text  ] | (25) filename   [automatic           ]
-(26) output directory    [/home/user/geocaching/geotoad                      ]
-==============================================================================
-** Verbose (debug) mode disabled, (v) to change
--- Enter menu number, (s) to start, (r) to reset, or (x) to exit --> 
+===============================================================================
+:::                // GeoToad 3.34.0 Text User Interface //                 :::
+===============================================================================
+ (1) search type          [  location] |  (2) distance maximum (km)  [    0.01]
+ (3) location    [schloss finsterwalde                                        ]
+--------------------- page 1: basic cache specifications ----------------------
+(11) cache type  [                                                         any]
+(12) cache size  [     any -      any] | (13) no Premium Member Only caches [ ]
+(14) difficulty            [1.0 - 5.0] | (15) terrain               [1.0 - 5.0]
+(16) title keyword     [             ] | (17) descript. keyword [             ]
+(18) include disabled caches       [ ] | (19) include archived caches       [ ]
+----------------------------- search limits etc. ------------------------------
+(31) limit search to pages       [   ] | (32) max log entries             [   ]
+(33) skip cache descriptions       [ ] |
+---------------------------- output specifications ----------------------------
+(41) EasyName WP length          [  0] | (42) filename [(automatic)           ]
+(43) output format [list             ] |  (0) GC.com login [Erd_Kroete        ]
+(44) output directory [.                                                      ]
+===============================================================================
+** Verbose (debug) mode disabled, "v" to change
+-- Enter number, "p" for page 2, "s" to start, "R" to reset, "X" to exit --> 
 
+At this point, follow the prompt and change items by typing the number and
+pressing <ENTER> afterwards.
+You will need to enter your login and some basic search criteria.
+Note that changing the "search type" (1) will change the label of (3), etc.,
+and some settings may become meaningless and hidden (like distance (2) for
+searches without a center point).
 
-At this point, follow the prompt and begin typing the number of the item
-you wish to change, pressing enter afterwards. You will need to enter your
-login and some basic search criteria first.
+After entering the basic cache specs, you may switch to page 2 for more
+selection criteria, by selecting "p". The screen will change to this:
+
+===============================================================================
+:::                // GeoToad 3.34.0 Text User Interface //                 :::
+===============================================================================
+ (1) search type          [  location] |  (2) distance maximum (km)  [    0.01]
+ (3) location    [schloss finsterwalde                                        ]
+---------------------- page 2: further cache selections -----------------------
+(21) caches not found by me        [ ] | (22) caches not found by anyone    [ ]
+(23) found by     [                  ] | (24) owner is     [                  ]
+(25) not found by [                  ] | (26) owner isn't  [                  ]
+(27) cache age (days)    [   0 -  any] | (28) last found (days ago) [  0 - any]
+(29) caches with trackables only   [ ] | (35) fav factor            [0.0 - 5.0]
+----------------------------- search limits etc. ------------------------------
+(31) limit search to pages       [   ] | (32) max log entries             [   ]
+(33) skip cache descriptions       [ ] |
+---------------------------- output specifications ----------------------------
+(41) EasyName WP length          [  0] | (42) filename [(automatic)           ]
+(43) output format [list             ] |  (0) GC.com login [Erd_Kroete        ]
+(44) output directory [.                                                      ]
+===============================================================================
+** Verbose (debug) mode disabled, "v" to change
+-- Enter number, "p" for page 1, "s" to start, "R" to reset, "X" to exit --> 
 
 Once you have entered in all of your information, press "s" and then
-<ENTER> to begin your search. GeoToad will save any options you have
-entered for future runs.
+<ENTER> to begin your search.
+GeoToad will report the options for the current run, and save them for future runs.
+
+Caveat: Item numbering has been changed starting with version 3.34.0!
 
 
 -------------------
