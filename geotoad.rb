@@ -1131,10 +1131,10 @@ while true
 
   if (loopcount == 0) # do only once, like before
     if ($VERSION.to_i > 0)
-      displayInfo "Thank you for using a released version of GeoToad."
+      displayInfo "Thank you for using a patched version of GeoToad."
       displayInfo "Report bugs or suggestions at https://github.com/steve8x8/geotoad/"
     else
-      displayInfo "You are not using a released version of GeoToad!"
+      displayInfo "You are not using a released or patched version of GeoToad!"
       displayInfo "Report bugs or suggestions to steve8x8 at googlemail.com only."
     end
     displayInfo "Please include verbose output (-v) without passwords in the bug report."

@@ -574,11 +574,11 @@ class CacheDetails
         debug "got javascript lat/lon #{jslat}/#{jslon}"
         # crossroad logic: #:)#
         # (1) normal behaviour (BM doesn't see PMO coords)
-        if not cache['membersonly'] and ( not cache['latdata'] or not cache['londata'] )
+        #if not cache['membersonly'] and ( not cache['latdata'] or not cache['londata'] ) 
         # (2) only fill in if nothing there (ignore moved caches with old desc)
         #if ( not cache['latdata'] or not cache['londata'] )
         # (3) get the most of all available information (old & new PMO location)
-        #if cache['membersonly'] or ( not cache['latdata'] or not cache['londata'] )
+        if cache['membersonly'] or ( not cache['latdata'] or not cache['londata'] )
           oldlat = cache['latdata']
           oldlon = cache['londata']
           cache['latdata'] = jslat
