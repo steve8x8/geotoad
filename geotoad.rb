@@ -325,14 +325,17 @@ class GeoToad
     displayInfo "Clearing gallery xml files older than 14 days"
     findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "datastore"), 14, "^rss_galleryimages\\.ashx.*")
 
-    displayInfo "Clearing lat/lon query data older than 3 days"
-    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "seek"), 3, "^nearest\\.aspx.*_lat_.*_lng_.*")
+#   displayInfo "Clearing lat/lon query data older than 3 days"
+#   findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "seek"), 3, "^nearest\\.aspx.*_lat_.*_lng_.*")
 
-    displayInfo "Clearing state and country query data older than 3 days"
-    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "seek"), 3, "^nearest\\.aspx.*_(country|state)_id_.*")
+#   displayInfo "Clearing state and country query data older than 3 days"
+#   findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "seek"), 3, "^nearest\\.aspx.*_(country|state)_id_.*")
 
-    displayInfo "Clearing other query data older than 5 days"
-    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "seek"), 5, "^nearest\\.aspx.*")
+#   displayInfo "Clearing other query data older than 5 days"
+#   findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "seek"), 5, "^nearest\\.aspx.*")
+
+    displayInfo "Clearing query data older than 12 hours"
+    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "seek"), 0.5, "^nearest\\.aspx.*")
 
     displayMessage "Cleared!"
     $CACHE_DIR = findCacheDir()
