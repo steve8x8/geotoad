@@ -60,6 +60,7 @@ template = {
        "  </groundspeak:logs>\n" +
       "  <groundspeak:travelbugs><%out.xmlTrackables%></groundspeak:travelbugs>\n" +
       "  </groundspeak:cache>\n" +
+      "  <toad:guid><%out.guid%></toad:guid>\n" +
       "</wpt>\n" +
       "<%out.xmlWpts%>",
     'templatePost' =>

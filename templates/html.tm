@@ -29,6 +29,7 @@ template = {
       "Placed: <%out.cdate%> Last comment: <%wp.last_find_days%> days ago (<%wp.last_find_type%>)</font><br>\n" +
       "Age of information: <%wp.ldays%> days<br>\n" +
       "Attributes: <%out.txtAttrs%><br>\n" +
+      "GUID: <%out.guid%><br>\n" +
       "<div>" + # catch runaway stuff like <center>
       "<font color=\"#000000\">\n" +
       "<p><%wp.additional_raw%><%wp.shortdesc%></p>\n" + # font size inside tables?

@@ -16,6 +16,7 @@ template = {
       "Creation: <%out.cdate%>, Last comment: <%wp.last_find_days%> days ago (<%wp.last_find_type%>)\n\n" +
       "Age of info: <%wp.ldays%> days\n" +
       "Attributes: <%out.txtAttrs%>\n" +
+      "GUID: <%out.guid%>\n" +
       "State: <%out.premiumOnly%><%out.warnArchiv%><%out.warnAvail%>\n" +
       "Short: <%wpText.shortdesc%>\n" +
       "Long:\n<%wpText.longdesc%>\n\n" +
