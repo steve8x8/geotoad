@@ -1001,8 +1001,11 @@ class GeoToad
       message << " (automatic)"
       # flag as automatic for suffixing
       @option['output'] = nil
-      outputFileBase = @defaultOutputFile.gsub(/[^0-9A-Za-z\.-]/, '_')
+      #outputFileBase = @defaultOutputFile.gsub(/[^0-9A-Za-z\.-]/, '_')
+      outputFileBase = @defaultOutputFile.dup
       outputFileBase.gsub!(/_+/, '_')
+      outputFileBase.tr!('|,:', '+ -')
+      outputFileBase.gsub!(/ +/, ' ')
       # shorten at a somewhat randomly chosen place to fit in filesystem
       if outputFileBase.length > 220
         outputFileBase[216..-1] = "_etc"
