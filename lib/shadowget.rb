@@ -37,8 +37,8 @@ class ShadowFetch
   def initialize(url)
     @url = url
     @remote = 0
-    @localExpiry = 5 * $DAY		# Do not store if < 0
-    @maxFailures = 10			#was 3
+    @localExpiry = 4 * $DAY		# Do not store if < 0
+    @maxFailures = 10
     @useCookie   = true
     @httpHeaders = {
       'User-Agent'      => #'Mozilla/5.0 (X11; Linux i686; rv:45.0) Gecko/20100101 Firefox/45.0',
