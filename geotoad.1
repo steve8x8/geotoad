@@ -1,4 +1,4 @@
-.TH "GEOTOAD" "1" "3 Jun 2023" "steve8x8@googlemail.com" "Geocaching Query Tool"
+.TH "GEOTOAD" "1" "03 Jan 2024" "steve8x8@googlemail.com" "Geocaching Query Tool"
 
 .SH "NAME"
 
@@ -605,11 +605,11 @@ You will get a warning - don't complain if something fails afterwards.
 (Earlier versions will fail since GroundSpeak are now enforcing https.)
 .SS "Limitations by design:"
 .PP
-.B  geotoad
 Almost all searches provide enough information for the second stage that
 interprets cache-specific information. \fBbookmark\fR mode is a notable
 exception, see below.
 .PP
+.B  geotoad
 parses \fIprintable\fR pages (cdpf format).
 This has been a fundamental design decision - cdpf pages have been mostly
 unharmed by website redesigns, but those pages don't contain owner IDs,
@@ -637,11 +637,13 @@ haven't been included in the program code. This means that you cannot use
 a foreign language and abbreviated month names in a reliable manner.
 .PP
 English language, and ISO date style ("2007\-06\-05" for 5th of June) are
-considered safe. A warning is emitted if your settings are different.
+considered safe. A warning is shown if your settings are different.
 .SS "Little-tested features:"
 .PP
-The TUI doesn't get tested very much - the command line is much more
+The TUI doesn't get tested very much - the command line is still a lot more
 powerful, and there are a lot of options which aren't supported by the TUI.
+.PP
+\fBCaveat: Starting with version 3.34.0, TUI items have been renumbered!\fR
 .PP
 Bookmark mode will parse \fIbookmarks/view.aspx\fR list pages which are very sparse - 
 they contain no coordinates, no container size, no D or T values -,
