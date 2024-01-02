@@ -1,3 +1,15 @@
+geotoad (3.34.0-1) unstable; urgency=low
+
+  * New version 3.34.0, "Toady New Caching Year 2024"
+  * Copyright extended to 2024
+  * Bugfix for PMO resolution no longer working
+  * TUI redesign with two sub-pages
+  * CA Cert bundle refreshed
+  * Minor stuff
+  * ATTENTION: Item numbering in TUI has changed!
+
+ -- Steve Sixty-Four <steve8x8@googlemail.com>  Wed, 03 Jan 2024 18:00:00 +0000
+
 geotoad (3.33.3-1) unstable; urgency=low
 
   * New version 3.33.3, "GeoToad post-Covid retoaded"
