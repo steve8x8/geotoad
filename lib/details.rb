@@ -115,6 +115,7 @@ class CacheDetails
     # extract mapping from cache_details page
     guid = nil
     @pageURL = 'https://www.geocaching.com/seek/cache_details.aspx?wp=' + wid
+    # 20231210+: this redirects to https://www.geocaching.com/geocache/${wid}_*
     page = ShadowFetch.new(@pageURL)
     page.localExpiry = -1
     page.filePattern = 'meta name="page_name" content='
@@ -134,6 +135,7 @@ class CacheDetails
     logid = cacheID(wid)
     guid = nil
     @pageURL = 'https://www.geocaching.com/seek/log.aspx?ID=' + logid.to_s + '&lcn=1'
+    # 2023-12-10+: this maps to https://www.geocaching.com/live/geocache/${wid}/log
     page = ShadowFetch.new(@pageURL)
     page.localExpiry = -1
     data = page.fetch
@@ -154,6 +156,7 @@ class CacheDetails
     # extract mapping from cache_details page
     guid = nil
     @pageURL = 'https://www.geocaching.com/datastore/rss_galleryimages.ashx?id=' + cacheID(wid).to_s
+    # 2023-12-10+: returns RSS with ${wid} but no GUID
     page = ShadowFetch.new(@pageURL)
     page.localExpiry = -1
     page.useCookie = false

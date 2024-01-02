@@ -802,9 +802,10 @@ class GeoToad
       progress.updateText(token, "[#{wid}]".ljust(9)+" \"#{name}\" (#{src}) #{message}")
 
       if not keepdata
-        debug "Page for #{wid} \"#{wpFiltered[wid]['name']}\" failed to be parsed, invalidating cache."
+        # 2023-12-10+: PMO cache WIDs can no longer be translated to GUID
+        displayWarning "Page for #{wid} \"#{wpFiltered[wid]['name']}\" failed to be parsed, invalidating cache."
         wpFiltered.delete(wid)
-        page.invalidate()
+        #page.invalidate()
       end
     }
   end
