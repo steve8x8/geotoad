@@ -67,7 +67,7 @@ template = {
 #      "    <gsak:Watch>false</gsak:Watch>\n" +
 #      "    <gsak:GcNote></gsak:GcNote>\n" +
       "  </gsak:wptExtension>\n" +
-      "  <toad:guid><%out.guid%></toad:guid>\n" +
+      "  <toad:guid><%out.wid%>: <%out.guid%></toad:guid>\n" +
       "</wpt>\n",
     'templatePost' =>
       "</gpx>\n"
