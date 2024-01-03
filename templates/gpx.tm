@@ -47,7 +47,9 @@ template = {
       "  <groundspeak:state><%wpEntity.state%></groundspeak:state>\n" +
       "  <groundspeak:short_description html=\"True\">" +
        "<%out.premiumOnly%><%outEntity.warnArchiv%><%outEntity.warnAvail%>&lt;br /&gt;" +
-       "<%outEntity.txtAttrs%>&lt;br /&gt;<%wpEntity.shortdesc%>" +
+       "<%outEntity.txtAttrs%>&lt;br /&gt;" +
+       "<%wpEntity.shortdesc%>&lt;br /&gt;" +
+       "gsak:Guid <%out.wid%>: <%out.guid%>" +
        "</groundspeak:short_description>\n" +
       "  <groundspeak:long_description html=\"True\">" +
        "<%outEntity.shortWpts%>" +
@@ -60,7 +62,6 @@ template = {
        "  </groundspeak:logs>\n" +
       "  <groundspeak:travelbugs><%out.xmlTrackables%></groundspeak:travelbugs>\n" +
       "  </groundspeak:cache>\n" +
-      "  <gsak:Guid><%out.wid%>: <%out.guid%></gsak:Guid>\n" +
       "</wpt>\n" +
       "<%out.xmlWpts%>",
     'templatePost' =>

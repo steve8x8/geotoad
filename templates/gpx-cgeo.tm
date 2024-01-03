@@ -63,10 +63,10 @@ template = {
       "  <gsak:wptExtension>\n" +
       "    <gsak:IsPremium><%out.IsPremium%></gsak:IsPremium>\n" +
       "    <gsak:FavPoints><%out.FavPoints%></gsak:FavPoints>\n" +
+      "    <gsak:Guid><%out.wid%>: <%out.guid%></gsak:Guid>\n" +
 #      "    <gsak:Watch>false</gsak:Watch>\n" +
 #      "    <gsak:GcNote></gsak:GcNote>\n" +
       "  </gsak:wptExtension>\n" +
-      "  <gsak:Guid><%out.wid%>: <%out.guid%></gsak:Guid>\n" +
       "</wpt>\n" +
       "<%out.xmlWptsCgeo%>",
     'templatePost' =>
