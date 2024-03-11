@@ -8,7 +8,7 @@ wget -m -nvpdH https://github.com/curl/curl/raw/master/scripts/mk-ca-bundle.pl
 chmod +x mk-ca-bundle.pl
 # run script
 ./mk-ca-bundle.pl
-/bin/rm certdata.txt robots.txt
+/bin/rm -f certdata.txt robots.txt
 
 # get canonical cert bundle
 wget -m -nvpdH http://curl.haxx.se/ca/cacert.pem
