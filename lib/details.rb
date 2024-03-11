@@ -106,7 +106,7 @@ class CacheDetails
     # get guid from log entry page
     guid = getRemoteMapping2(wid)
     return [guid, '2'] if guid
-    displayWarning "Could not map #{wid} to GUID"
+    #displayWarning "Could not map #{wid} to GUID"
     return [nil, '0']
   end
 
@@ -184,7 +184,7 @@ class CacheDetails
         end
         if not guid
           # no way
-          displayWarning "Could not map #{id.inspect} to GUID"
+          displayWarning "Could not map #{id} to GUID"
           return nil
         end
         debug2 "mapped #{id.inspect} to #{guid.inspect}"

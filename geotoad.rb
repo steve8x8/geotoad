@@ -760,7 +760,7 @@ class GeoToad
       keepdata = true
       # status is hash; false/nil/empty or string if problem
       if not status
-        message << "[W:\"#{warning}\"]"
+        message << "[!]"
         keepdata = false
       elsif status.class != Hash
         debug "Could not parse page, S:#{status}, W:#{warning}"
@@ -806,7 +806,7 @@ class GeoToad
 
       if not keepdata
         # 2023-12-10+: PMO cache WIDs can no longer be translated to GUID
-        displayWarning "Page for #{wid} \"#{wpFiltered[wid]['name']}\" failed to be parsed, invalidating cache."
+        debug "Page for #{wid} \"#{wpFiltered[wid]['name']}\" failed to be parsed, invalidating cache."
         wpFiltered.delete(wid)
         #page.invalidate()
       end
