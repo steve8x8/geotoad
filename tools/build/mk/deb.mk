@@ -16,6 +16,8 @@ $(GUV)-$(BUILD)_all.deb: $(GTV).tar.gz
 	head -n1 $(GTV)/debian/changelog
 	sh -c "cd $(GTV); dpkg-buildpackage >/dev/null -rfakeroot -us -uc -tc"
 	mv $(GTV) deb
+	# file not needed
+	rm *.buildinfo || true
 	@echo ""
 	@echo $@ done.
 
