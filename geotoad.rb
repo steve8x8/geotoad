@@ -62,6 +62,7 @@ class GeoToad
   def initialize
     # some actions postponed to "populate"
     $debugMode    = 0
+    $useStderr    = 0
     @uin          = Input.new
     $CACHE_DIR    = findCacheDir()
     @configDir    = findConfigDir
@@ -125,6 +126,11 @@ class GeoToad
     else
       debug "Suppressing debug output"
       disableDebug
+    end
+
+    if (@option['stderr'])
+      displayInfo "Enabling stderr output for warnings and errors"
+      enableStderr
     end
 
     if @option['proxy']

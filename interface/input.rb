@@ -122,6 +122,7 @@ class Input
       [ "--preserveCache",  "--keepOld", "-Z",    GetoptLong::NO_ARGUMENT ],
 # -[0-9]
     # no short option available
+      [ "--stderr", "--errors",                   GetoptLong::NO_ARGUMENT ],
       [ "--conditionWP",                          GetoptLong::REQUIRED_ARGUMENT ],
       [ "--includeArchived", "--gone",            GetoptLong::NO_ARGUMENT ],
       [ "--imageLinks",   "--gallery",            GetoptLong::REQUIRED_ARGUMENT ],

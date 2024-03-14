@@ -2,9 +2,13 @@
 
 module Messages
 
+  def enableStderr
+    $useStderr = 1
+  end
+  
   def enableDebug(level = 1)
     $debugMode = level
-    debug "Debug level set to #{level}"
+    debug "Debug level set to #{level}", 0
   end
 
   def disableDebug
@@ -12,19 +16,26 @@ module Messages
   end
 
   def debug(text, level = 1)
-    puts "D#{level}: #{text}" if ($debugMode >= level)
+    if $debugMode >= level
+      if @@optHash['stderr']
+        $stderr.puts "D#{level}: #{text}"
+      else
+        puts "D#{level}: #{text}"
+      end
+    end
   end
 
   # only levels 0-3 are supported by TUI
-  def debug0(text) displayInfo(text) end
-  def debug1(text) debug text, 1 end
-  def debug2(text) debug text, 2 end
-  def debug3(text) debug text, 3 end
-  def nodebug(text) debug text, 9 end
+  def debug0(text)  displayInfo(text) end
+  def debug1(text)  debug text, 1     end
+  def debug2(text)  debug text, 2     end
+  def debug3(text)  debug text, 3     end
+  def nodebug(text) debug text, 9     end
 
   # Text that's just fluff that can be ignored.
   def displayInfo(text)
     puts "( - ) #{text}"
+    #$stderr.puts "I: #{text}" if $useStderr
   end
 
   # often worth displaying
@@ -40,6 +51,7 @@ module Messages
   # mindless warnings
   def displayWarning(text)
     puts " ***  #{text}"
+    $stderr.puts "W: #{text}" if $useStderr
   end
 
   # horizontal bar
@@ -60,15 +72,11 @@ module Messages
   end
 
   # fatal errors
-  def displayError(text, rc = 1)
-    # 2018-03-03: write to stdout, not stderr, but set returncode
-    if text.to_s.empty?
-      #abort("")
-      puts "ERROR: terminating - rc #{rc}"
-    else
-      #abort("ERROR: #{text}")
-      puts "ERROR: #{text} - rc #{rc}"
-    end
+  def displayError(text0, rc = 1)
+    text = text0.to_s.empty? ? "terminating" : text0
+    #abort("ERROR: #{text}")
+    puts "ERROR: #{text} - rc #{rc}"
+    $stderr.puts "E: #{text} - rc #{rc}" if $useStderr
     exit rc
   end
 end
