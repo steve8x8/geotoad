@@ -17,7 +17,7 @@ module Messages
 
   def debug(text, level = 1)
     if $debugMode >= level
-      if @@optHash['stderr']
+      if $useStderr
         $stderr.puts "D#{level}: #{text}"
       else
         puts "D#{level}: #{text}"
