@@ -342,7 +342,7 @@ class ShadowFetch
       return nil
     end
     debug2 "#{data.length} bytes retrieved from local cache"
-    data.force_encoding("UTF-8")
+    data.force_encoding("UTF-8") #if data.length > 0
     return data
   end
 
@@ -353,8 +353,9 @@ class ShadowFetch
     @httpHeaders['Referer'] = @url
     data = fetchURL(@url).to_s
     debug2 "#{data.length} bytes retrieved from #{@url}"
-    data.force_encoding("UTF-8")
-    # although implicit:
+    # empty data indicates a problem, should we hide it?
+    # forcing encoding of "" results in a FrozenError
+    data.force_encoding("UTF-8") #if data.length > 0
     return data
   end
 
