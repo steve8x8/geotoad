@@ -94,7 +94,7 @@ class GeoToad
       print "** Press Enter to start the Text User Interface or \"X\" to exit: "
       x = $stdin.gets.chomp
       if x == 'X'
-        exit(0)
+        displayExit "Cya!"
       end
       @option = @uin.interactive
       $mode = 'TUI'
@@ -144,13 +144,12 @@ class GeoToad
     # Get this out of the way now.
     if @option['help']
       @uin.usage
-      exit 0
+      displayExit "There is also a manual page ..."
     end
 
     if not @option['clearCache'] and not @option['myLogs'] and not @option['myTrackables'] and not @queryArg
-      displayWarning "You forgot to specify a #{@queryType} search argument"
-      @uin.usage
-      displayError  "", rc = 2
+      #@uin.usage
+      displayError "You forgot to specify a \"#{@queryType}\" search argument", rc = 2
     end
 
     if (not @option['user']) or (not @option['password'])
@@ -1082,7 +1081,7 @@ class GeoToad
 end
 
 # for Ocra build
-exit if Object.const_defined?(:Ocra)
+exit(0) if Object.const_defined?(:Ocra)
 
 ###### MAIN ACTIVITY ###############################################################
 # have some output before initializing the GeoToad, Output, Template classes
@@ -1091,7 +1090,7 @@ displayTitle "GeoToad #{$VERSION} (Ruby #{RUBY_VERSION}p#{RUBY_PATCHLEVEL}/#{RUB
 
 # check Ruby version
 if RUBY_VERSION.gsub('.', '').to_i < 191
-  displayError   "Ruby version is #{RUBY_VERSION}. Required: 1.9.1 or higher.", rc = 4
+  displayError   "Ruby version is #{RUBY_VERSION}. Required: 1.9.1 or higher.", rc = 1
 end
 if RUBY_VERSION.gsub('.', '').to_i < 215
   displayWarning "Ruby version is #{RUBY_VERSION}. Recommended: 2.1.5 or higher."
@@ -1115,7 +1114,7 @@ begin
   OpenSSL::SSL::SSLContext.new($SSLVERSION)
 # if there's no TLS there's no hope
 rescue => e
-  displayError "HTTPS error: #{e}\n\tyour Ruby version does not support TLS!", rc = 4
+  displayError "HTTPS error: #{e}\n\tyour Ruby version does not support TLS!", rc = 1
 end
 displayInfo "Using #{$SSLVERSION.to_s} and #{($SSLVERIFYMODE == OpenSSL::SSL::VERIFY_PEER) ? '' : 'no '}SSL verification."
 
@@ -1128,11 +1127,11 @@ while true
   options = cli.getoptions
   if options['clearCache']
     cli.clearCacheDirectory()
-    exit 0
+    displayExit "Cache cleared ..."
   end
   if options['version']
     # version information has been shown above
-    exit 0
+    displayExit ""
   end
 
   if (loopcount == 0) # do only once, like before
@@ -1185,7 +1184,7 @@ while true
     puts ""
     puts "*************************************************"
   else
-    exit 0
+    displayExit "Work done."
   end
 
 end

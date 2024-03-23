@@ -250,7 +250,7 @@ class ShadowFetch
       displayWarning "File pattern #{@filePattern} not found in data (#{data.length}b)"
       #displayWarning "File pattern #{@filePattern} not found in data"
       # return incomplete data instead of bailing out here
-      #displayError "Search returned empty page, retry after a while", rc = 42
+      #displayError "Search returned empty page, retry after a while", rc = 3
     else
       # set dsize only if all looks fine
       dsize = @data.length
@@ -363,7 +363,7 @@ class ShadowFetch
     if (redirects == 0)
       displayWarning "HTTP redirect loop for #{url_str}."
       displayWarning "Your cookie may have expired suddenly. Try to re-run once."
-      displayError   "Check your login data if problem persists.", rc = 9
+      displayError   "Check your login data if problem persists.", rc = 8
     end
     debug "Fetching URL [#{url_str}]"
     uri = URI.parse(url_str)
@@ -564,13 +564,15 @@ class ShadowFetch
       displayWarning "Content-Encoding #{ce.inspect} not implemented yet. We didn't ask for it."
       displayInfo    "Please provide information to https://github.com/steve8x8/geotoad/issues/360"
       displayInfo    "Dropped result from #{url_str}"
-      displayError   "Stopping here."
+      displayError   "Stopping here.", rc = 42
       data = nil
     end
 
     if data =~ /<title id="pageTitle">Cache Details - Print Friendly<\/title>/
       displayWarning "Server returned placeholder page claiming missing login. Skipping."
-      return nil
+      # this is a serious error, we shouldn't take it this easy...
+      displayError "Non-recoverable error, repeat run", rc = 4
+      #return nil
     end
 
     return data

@@ -559,25 +559,33 @@ how to make this change permanent.
 normal termination
 .PP
 .B 1
-any error not covered by higher return codes (yet)
+any general error not covered by higher return codes, also
+unsupported Ruby or SSL versions, check your setup
 .PP
 .B 2
 error in input parameters, run \fBgeotoad --help\fR for usage
 .PP
 .B 3
-query returned empty result
+query page progress error \fB(*)\fR
 .PP
 .B 4
-unsupported Ruby or SSL versions, check your setup
+details page parsing error (possibly corrupt cache page)
+.PP
+.B 7
+communication (network) problem \fB(*)\fR
 .PP
 .B 8
-communication problem, re-run may succeed
+cookies lost or got out of sync \fB(*)\fR
 .PP
 .B 9
-authentication problem, re-run may succeed
+authentication problem, check login data, then \fB(*)\fR
+.PP
+.B 42
+something has happened that wasn't considered in the code, provide feedback
 .PP
 .I Caveat:
-re-running may require deleting (or expiring) the last cached files
+\fB(*)\fR re-running may succeed,
+ but require deletion (or waiting for expiration) of cached files before
 
 .SH "KNOWN LIMITATIONS"
 .SS "Release cycle, OS support:"

@@ -335,7 +335,7 @@ class SearchCache
       waypoints = []
       totalpages = 1
       loopcount = 0
-      maxloopcount = 42
+      maxloopcount = 100
       # completeness: first number must be > 20 * second
       # special case: empty search
       while loopcount < maxloopcount and totalpages > 0 and waypoints.length <= 20 * (totalpages - 1)
@@ -357,8 +357,7 @@ class SearchCache
         end
       end
       if  totalpages > 0 and waypoints.length <= 20 * (totalpages - 1)
-        displayWarning "Search results still incomplete after #{maxloopcount} retries"
-        # make this a displayError?
+        displayError "Search results still incomplete after #{maxloopcount} retries", rc = 3
       end
       return waypoints
     end
@@ -367,7 +366,7 @@ class SearchCache
   def getWidSearchResult(url)
     data, src = getPage(url, {})
     if not data
-      displayError "No data to be analyzed! Check network connection!", rc = 8
+      displayError "No data to be analyzed! Check network connection!", rc = 7
     end
     guid = nil
     wid = nil
@@ -690,10 +689,10 @@ class SearchCache
 
       if page_number == last_page_number
         displayWarning "Page number not increasing."
-        displayError   "Stuck on page number #{page_number} of #{pages_total}", rc = 1
+        displayError   "Stuck on page number #{page_number} of #{pages_total}", rc = 3
       elsif page_number < last_page_number
         displayWarning "Page number not increasing."
-        displayError   "We were on page #{last_page_number}, but just read #{page_number}. Parsing error?", rc = 1
+        displayError   "We were on page #{last_page_number}, but just read #{page_number}. Parsing error?", rc = 3
       end
       # limit search page count
       if @max_pages > 0 and page_number >= @max_pages
@@ -740,7 +739,7 @@ class SearchCache
 
   def parseSearchData(data)
     if not data
-      displayError "No data to be analyzed! Check network connection!", rc = 8
+      displayError "No data to be analyzed! Check network connection!", rc = 7
     end
     page_number = nil
     pages_total = nil

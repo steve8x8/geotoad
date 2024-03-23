@@ -71,12 +71,32 @@ module Messages
     end
   end
 
+  # graceful exit
+  def displayExit(text0, rc = 0)
+    text = text0.to_s.empty? ? "Terminating regularly" : text0
+    #puts "DONE: #{text}"
+    $stderr.puts "I: #{text} - rc #{rc}" if $useStderr
+    exit(rc)
+  end
+
   # fatal errors
+  # error codes:
+  #  1 = general
+  #  2 = input parser
+  #  3 = page progress
+  #  4 = cache details
+  #  5
+  #  6
+  #  7 = network connection lost
+  #  8 = cookie lost
+  #  9 = login data
+  # 42 = special, feedback needed
+
   def displayError(text0, rc = 1)
-    text = text0.to_s.empty? ? "terminating" : text0
+    text = text0.to_s.empty? ? "Terminating on error" : text0
     #abort("ERROR: #{text}")
     puts "ERROR: #{text} - rc #{rc}"
     $stderr.puts "E: #{text} - rc #{rc}" if $useStderr
-    exit rc
+    exit(rc)
   end
 end

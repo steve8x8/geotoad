@@ -786,8 +786,7 @@ class Input
         @@optHash['verbose'] = level
 
       when 'X'
-        puts "Cya!"
-        exit 0
+        displayExit "Cya!"
 
       end
       saveConfig
