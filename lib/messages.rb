@@ -34,9 +34,9 @@ module Messages
   def nodebug(text) debug text, 9     end
 
   # Text that's just fluff that can be ignored.
-  def displayInfo(text)
+  def displayInfo(text, stderr = false)
     puts "( - ) #{text}"
-    #$stderr.puts "I: #{text}" if $useStderr
+    $stderr.puts "I: #{text}" if stderr
   end
 
   # often worth displaying

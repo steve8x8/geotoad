@@ -64,7 +64,45 @@ class Input
     end
   end
 
+  def createcmdline
+    # demonstrate a sample command line
+    cmdline = "geotoad.rb"
+    hidden_opts = ['queryArg', 'user', 'password', 'usemetric', 'verbose']
+    # hide unlimited search
+    if @@optHash['limitSearchPages'] == 0
+      hidden_opts.push('limitSearchPages')
+    end
+    @@optHash.keys.sort.each{ |option|
+      if ! @@optHash[option].to_s.empty? and ! hidden_opts.include?(option)
+        if @@optHash[option] == 'X'
+          cmdline << " --#{option}"
+        elsif not @@optHash[option].to_s.empty?
+          # Omit the quotes if the argument is 'simple'
+          if @@optHash[option].to_s =~ /^[\w\.:]+$/
+            cmdline << " --#{option}=#{@@optHash[option]}"
+          else
+            cmdline << " --#{option}=\'#{@@optHash[option]}\'"
+          end
+        end
+        # in the metric case, we must append "km" to the distance
+        if option == 'distanceMax' and @@optHash['usemetric']
+          cmdline << "km"
+        end
+      end
+    }
+    if @@optHash['queryArg'].to_s[0] == "-"
+      cmdline << " --"
+    end
+    if @@optHash['queryArg'].to_s =~ /^[\w\.:]+$/
+      cmdline << " " + @@optHash['queryArg'].to_s
+    else
+      cmdline << " \'" + @@optHash['queryArg'].to_s + '\''
+    end
+    return cmdline
+  end
+
   def getopt
+
     opts = GetoptLong.new(
       [ "--attributeInclude",            "-a",    GetoptLong::REQUIRED_ARGUMENT ],
       [ "--attributeExclude",            "-A",    GetoptLong::REQUIRED_ARGUMENT ],
@@ -196,6 +234,9 @@ class Input
       @@optHash['queryArg'] = convertEscapedHex(@@optHash['queryArg'])
     end
 
+    cmdline = createcmdline
+    displayMessage "Using command line settings:"
+    displayInfo    cmdline, stderr = true
     return @@optHash
   end
 
@@ -229,45 +270,11 @@ class Input
     @@optHash.delete('outDir')
     @@optHash.delete('outFile')
 
-    # demonstrate a sample command line
-    cmdline = "geotoad.rb"
-    hidden_opts = ['queryArg', 'user', 'password', 'usemetric', 'verbose']
-    # hide unlimited search
-    if @@optHash['limitSearchPages'] == 0
-      hidden_opts.push('limitSearchPages')
-    end
-
-    @@optHash.keys.sort.each{ |option|
-      if ! @@optHash[option].to_s.empty? and ! hidden_opts.include?(option)
-        if @@optHash[option] == 'X'
-          cmdline << " --#{option}"
-        elsif not @@optHash[option].to_s.empty?
-          # Omit the quotes if the argument is 'simple'
-          if @@optHash[option].to_s =~ /^[\w\.:]+$/
-            cmdline << " --#{option}=#{@@optHash[option]}"
-          else
-            cmdline << " --#{option}=\'#{@@optHash[option]}\'"
-          end
-        end
-        # in the metric case, we must append "km" to the distance
-        if option == 'distanceMax' and @@optHash['usemetric']
-          cmdline << "km"
-        end
-      end
-
-    }
-    if @@optHash['queryArg'].to_s[0] == "-"
-      cmdline << " --"
-    end
-    if @@optHash['queryArg'].to_s =~ /^[\w\.:]+$/
-      cmdline << " " + @@optHash['queryArg'].to_s
-    else
-      cmdline << " \'" + @@optHash['queryArg'].to_s + '\''
-    end
+    cmdline = createcmdline
     displayMessage "To use this query in the future, type:"
-    displayMessage cmdline
+    displayInfo    cmdline
+    sleep(5)
     puts
-    sleep(4)
     return @@optHash
   end
 
