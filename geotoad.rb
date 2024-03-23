@@ -62,7 +62,7 @@ class GeoToad
   def initialize
     # some actions postponed to "populate"
     $debugMode    = 0
-    $useStderr    = 0
+    $useStderr    = false
     @uin          = Input.new
     $CACHE_DIR    = findCacheDir()
     @configDir    = findConfigDir

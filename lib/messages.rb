@@ -3,9 +3,10 @@
 module Messages
 
   def enableStderr
-    $useStderr = 1
+    $useStderr = true
+    #displayWarning "Also outputting to stderr"
   end
-  
+
   def enableDebug(level = 1)
     $debugMode = level
     debug "Debug level set to #{level}", 0
