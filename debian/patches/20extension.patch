@@ -1,15 +1,15 @@
 --- a/interface/input.rb
 +++ b/interface/input.rb
-@@ -228,7 +228,7 @@
-     @@optHash.delete('outFile')
+@@ -66,7 +66,7 @@
  
+   def createcmdline
      # demonstrate a sample command line
 -    cmdline = "geotoad.rb"
 +    cmdline = "geotoad"
      hidden_opts = ['queryArg', 'user', 'password', 'usemetric', 'verbose']
      # hide unlimited search
      if @@optHash['limitSearchPages'] == 0
-@@ -271,7 +271,7 @@
+@@ -280,7 +280,7 @@
  
  
    def usage
@@ -18,7 +18,7 @@
      puts ""
      puts " -u <username>          Geocaching.com username, required for coordinates"
      puts " -p <password>          Geocaching.com password, required for coordinates"
-@@ -340,12 +340,12 @@
+@@ -349,12 +349,12 @@
      puts " (+) requires gpsbabel  (=) requires cmconvert  (%) requires iconv in PATH"
      puts ""
      puts "::: EXAMPLES:"
