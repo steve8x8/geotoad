@@ -419,7 +419,7 @@ class Input
       end
       puts   " search limits etc. ".center(79, '-')
       printf("(31) limit search to pages       [%3.3s] | (32) max log entries             [%3.3s]\n",
-         @@optHash['limitSearchPages'], @@optHash['logCount'])
+         @@optHash['limitSearchPages'], @@optHash['logCount'] || 10)
       printf("(33) skip cache descriptions       [%1.1s] |\n",
          @@optHash['noCacheDescriptions'])
       puts   " output specifications ".center(79, '-')
