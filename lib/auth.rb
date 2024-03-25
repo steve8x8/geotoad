@@ -70,10 +70,12 @@ module Auth
         expire = $3
         et = Time.gm($6, $5, $4, $7, $8, $9)
         life = (et.to_i - Time.now.to_i) / 86400.0
-        if (life <= -86400)
+        if (life <= 0)
           value = 'expired'
           displayWarning "Cookie \"#{key}\" has expired! (#{expire})"
-        elsif (life <= 0)
+          # this is a serious condition, how to handle???
+          displayWarning "et = #{et.inspect}"
+        elsif (life <= 1)
           displayWarning "Cookie \"#{key}\" is expiring! (#{expire})"
         end
         if @@cookies[key] != value
