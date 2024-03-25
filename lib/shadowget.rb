@@ -355,7 +355,7 @@ class ShadowFetch
     debug2 "#{data.length} bytes retrieved from #{@url}"
     # empty data indicates a problem, should we hide it?
     # forcing encoding of "" results in a FrozenError
-    data.force_encoding("UTF-8") #if data.length > 0
+    data.force_encoding("UTF-8") if data.length > 0
     return data
   end
 
@@ -479,11 +479,11 @@ class ShadowFetch
       # do nothing
     when Net::HTTPNotFound
       # error 404
-      displayWarning "Not Found #{resp.response.inspect}"
+      displayWarning "DNF: #{resp.response.inspect}"
       debug3 "Response:\n#{resp.body.to_s.gsub(/<[^>]*>/, '')}"
       success = false
     # early exit - FIXME: use cached content instead?
-      displayWarning "Early exit from fetchURL()"
+      #displayWarning "Early exit from fetchURL()"
       @@downloadErrors += 1
       return nil
     # ###
