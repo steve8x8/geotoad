@@ -64,22 +64,22 @@ module Auth
       # if expires date is in the past, remove/disable
       case c
       # default format
-      when /^(.*?)=(.*?);.*expires=(\w+, (\d+)-(\w+)-(\d+) (\d+):(\d+):(\d+) GMT);/
+      when /^(.*?)=(.*?);.*expires=(\w+, (\d+)-(\w+)-(\d+) (\d+):(\d+):(\d+) .*?);/
         key = $1
         value = $2
         expire = $3
         et = Time.gm($6, $5, $4, $7, $8, $9)
-        life = (et.to_i - Time.now.to_i) / 86400.0
+        # seconds of lifetime left
+        life = et.to_i - Time.now.to_i
         if (life <= 0)
           value = 'expired'
           displayWarning "Cookie \"#{key}\" has expired! (#{expire})"
-          # this is a serious condition, how to handle???
-          displayWarning "et = #{et.inspect}"
-        elsif (life <= 1)
-          displayWarning "Cookie \"#{key}\" is expiring! (#{expire})"
+          displayError   "Lost cookies are harmful. Try to re-run.", rc = 8
+        elsif (life <= 1 * 86400) # less than one day, shouldn't happen
+          displayWarning "Cookie \"#{key}\" about to expire! (#{expire})"
         end
         if @@cookies[key] != value
-          debug3 "saveCookie: set #{key}, expires #{expire}"
+          debug3 "saveCookie: set #{key} to #{value}, expires #{expire}"
           @@cookies[key] = value
         else
           debug3 "saveCookie: confirm #{key}, expires #{expire}"
