@@ -705,7 +705,7 @@ class SearchCache
       # do not pollute cache tree with subsequent pages -
       # jump to the end instead
       if src == '?'
-        displayWarning "Interrupting incomplete query"
+        debug2 "Interrupting incomplete query"
         # exit loop
         page_number = pages_total
       end
