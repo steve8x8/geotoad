@@ -1,3 +1,18 @@
+geotoad (3.34.1-1) unstable; urgency=low
+
+  * New version 3.34.1, "Spring springs springing (and geotoads watching)"
+  * Drop buildinfo file
+  * Reduce amount of warnings
+  * New "yaml" template (WID to GUID mappings) for sharing with others
+  * --stderr option to output warnings, errors, debug info to stderr
+  * Exit codes revisited
+  * Report command line (also to stderr if enabled)
+  * Investigate lost or expired cookies
+  * Some minor stuff
+  * ATTENTION: Item numbering in TUI has changed in 3.34.0!
+
+ -- Steve Sixty-Four <steve8x8@googlemail.com>  Thu, 28 Mar 2024 18:00:00 +0000
+
 geotoad (3.34.0-1) unstable; urgency=low
 
   * New version 3.34.0, "Toady New Caching Year 2024"

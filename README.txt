@@ -1,5 +1,5 @@
 ==========================================================================
-GeoToad 3.34.0 by Thomas Stromberg and The GeoToad Project (c) 2002 - 2024
+GeoToad 3.34.1 by Thomas Stromberg and The GeoToad Project (c) 2002 - 2024
 ==========================================================================
 
 
@@ -49,7 +49,7 @@ On first invocation, if you confirm the request to open the TUI, you will
 see a screen that looks like this:
 
 ===============================================================================
-:::                // GeoToad 3.34.0 Text User Interface //                 :::
+:::                // GeoToad 3.34.1 Text User Interface //                 :::
 ===============================================================================
  (1) search type          [  location] |  (2) distance maximum (km)  [    0.01]
  (3) location    [schloss finsterwalde                                        ]
@@ -81,7 +81,7 @@ After entering the basic cache specs, you may switch to page 2 for more
 selection criteria, by selecting "p". The screen will change to this:
 
 ===============================================================================
-:::                // GeoToad 3.34.0 Text User Interface //                 :::
+:::                // GeoToad 3.34.1 Text User Interface //                 :::
 ===============================================================================
  (1) search type          [  location] |  (2) distance maximum (km)  [    0.01]
  (3) location    [schloss finsterwalde                                        ]
