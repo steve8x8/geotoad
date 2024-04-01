@@ -236,7 +236,7 @@ class Input
 
     cmdline = createcmdline
     displayMessage "Using command line settings:"
-    displayInfo    cmdline, stderr = true
+    displayInfo    cmdline, stderr = @@optHash['stderr']
     return @@optHash
   end
 
