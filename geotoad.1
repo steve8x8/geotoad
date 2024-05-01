@@ -634,8 +634,8 @@ or \fBunknown+\fR are involved.
 .PP
 Early filtering by attributes like D, T, size, or PMO may fail if this
 information hasn't been provided by the initial query. This is true for
-bookmark list processing. for example. Use the \-\-disableEarlyFilter (\-X)
-option to avoid disappointment.
+bookmark list processing, for example. Under such circumstances,
+use the \-\-disableEarlyFilter (\-X) option to avoid disappointment.
 .SS "Limitations imposed by GroundSpeak:"
 .PP
 The GC webpages can be displayed in more than 20 languages.
@@ -661,7 +661,8 @@ Bookmark mode will parse \fIbookmarks/view.aspx\fR list pages which are very spa
 they contain no coordinates, no container size, no D or T values -,
 then proceed directly to cdpf pages matching the list of \fIguid\fRs obtained.
 The \fIcdpf.aspx\fR (printable cache) pages may not be able to provide the missing
-values. As a result, you may see \fID/T/Size\fR values of \fI1/1/not_chosen\fR.
+values.
+As a result, you may see weird or incorrect \fID/T/Size\fR values.
 See the sample script included with the distribution, which extracts a \fIwid\fR
 list from a KML file instead, for an alternative approach.
 .PP
