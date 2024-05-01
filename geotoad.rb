@@ -1087,7 +1087,7 @@ exit(0) if Object.const_defined?(:Ocra)
 # have some output before initializing the GeoToad, Output, Template classes
 include Messages
 displayTitle "GeoToad #{$VERSION} (Ruby #{RUBY_VERSION}p#{RUBY_PATCHLEVEL}/#{RUBY_RELEASE_DATE} on #{RUBY_PLATFORM})"
-displayInfo  "See   https://github.com/steve8x8/geotoad.git   for latest changes and bug reports!"
+displayInfo  "Latest changes, bug reports:  https://github.com/steve8x8/geotoad"
 # check Ruby version
 if RUBY_VERSION.gsub('.', '').to_i < 191
   displayError   "Ruby version is #{RUBY_VERSION}. Required: 1.9.1 or higher.", rc = 1
