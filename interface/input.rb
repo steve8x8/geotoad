@@ -31,7 +31,7 @@ class Input
   end
 
   def saveConfig
-    if not File.exists?(@configDir)
+    if not File.exist?(@configDir)
       File.makedirs(@configDir)
     end
 
@@ -49,7 +49,7 @@ class Input
   end
 
   def loadConfig
-    if File.exists?(@configFile)
+    if File.exist?(@configFile)
       displayMessage "Loading configuration from #{@configFile}"
       return YAML::load(File.open(@configFile))
     end
@@ -731,7 +731,7 @@ class Input
         if @@optHash['outDir']
           @@optHash['outDir'].gsub!(/\\/,  '/')
 
-          if File.exists?(@@optHash['outDir'])
+          if File.exist?(@@optHash['outDir'])
             if not File.directory?(@@optHash['outDir'])
               puts " ***  Although existing, this is no directory. Trouble ahead!"
               print "Press enter to continue: "

@@ -278,7 +278,7 @@ class ShadowFetch
       return nil
     end
 
-    if (! File.exists?(localdir))
+    if (! File.exist?(localdir))
       debug2 "creating #{localdir}"
       FileUtils::mkdir_p(localdir)
     end

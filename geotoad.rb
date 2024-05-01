@@ -266,7 +266,7 @@ class GeoToad
     debug "findRemoveFiles() age=#{age}, pattern=#{pattern}, writableonly=#{writableonly.inspect}"
     filelist = Array.new
     begin # catch filesystem problems
-      if File.exists?(where) and File.stat(where).directory?
+      if File.exist?(where) and File.stat(where).directory?
         Find.find(where){ |file|
           # never touch directories
           next if not File.file?(file)

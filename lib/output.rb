@@ -521,7 +521,7 @@ class Output
       exec.gsub!('OUTFILE', "\"#{file}\"")
       writeFile(tmpfile)
       begin
-        File.unlink(file) if File.exists?(file)
+        File.unlink(file) if File.exist?(file)
       rescue
         displayWarning "Failed to unlink output file"
       end
@@ -558,16 +558,16 @@ class Output
       end
       # clean up temp files
       begin
-        File.unlink(tmpfile) if File.exists?(tmpfile)
+        File.unlink(tmpfile) if File.exist?(tmpfile)
       rescue
         displayWarning "Failed to unlink temp file"
       end
       begin
-        File.unlink(stylefile) if stylefile and File.exists?(stylefile)
+        File.unlink(stylefile) if stylefile and File.exist?(stylefile)
       rescue
         displayWarning "Failed to unlink style file"
       end
-      if not File.exists?(file)
+      if not File.exist?(file)
         displayWarning "Output filter did not create file #{file}"
         displayWarning " filter_exec was: #{exec}"
       end
