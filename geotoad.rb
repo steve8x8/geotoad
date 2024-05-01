@@ -1088,12 +1088,33 @@ exit(0) if Object.const_defined?(:Ocra)
 include Messages
 displayTitle "GeoToad #{$VERSION} (Ruby #{RUBY_VERSION}p#{RUBY_PATCHLEVEL}/#{RUBY_RELEASE_DATE} on #{RUBY_PLATFORM})"
 displayInfo  "Latest changes, bug reports:  https://github.com/steve8x8/geotoad"
+
 # check Ruby version
-if RUBY_VERSION.gsub('.', '').to_i < 191
-  displayError   "Ruby version is #{RUBY_VERSION}. Required: 1.9.1 or higher.", rc = 1
+# 2024-05-01 issue 372: Can only find File.exist?() in 1.9.3 docs
+if RUBY_VERSION.gsub('.', '').to_i < 193
+  displayError   "Ruby version is #{RUBY_VERSION}. Required: 1.9.3 or higher.", rc = 1
 end
-if RUBY_VERSION.gsub('.', '').to_i < 215
-  displayWarning "Ruby version is #{RUBY_VERSION}. Recommended: 2.1.5 or higher."
+
+# End-Of-Life dates https://www.ruby-lang.org/en/downloads/branches/
+# Ruby 1.9.3 EOL 2015-02-23
+# Ruby 2.0   EOL 2016-02-24
+# Ruby 2.1   EOL 2017-03-31
+# Ruby 2.2   EOL 2018-03-31
+# Ruby 2.3   EOL 2019-03-31
+# RUby 2.4   EOL 2020-03-31
+# Ruby 2.5   EOL 2021-04-05
+# Ruby 2.6   EOL 2022-04-12
+# Ruby 2.7   EOL 2023-03-31
+# Ruby 3.0   EOL 2024-04-23
+# Ruby 3.1 Secu. 2025-03-31
+# Ruby 3.2       2026-03-31
+# Ruby 3.3       2027-03-31
+# Ruby 3.4 ???
+
+# - but Linux distros may carry older versions!
+
+if RUBY_VERSION.gsub('.', '').to_i < 310
+  displayWarning "Ruby version is #{RUBY_VERSION}. Recommended: 3.1.0 or higher."
 end
 
 # do some SSL initialisation

@@ -9,7 +9,7 @@ Homepage: https://github.com/steve8x8/geotoad
 
 Package: geotoad
 Architecture: all
-Depends: ruby (>= 1.9.1) | ruby-interpreter (>= 1.9.1), libruby | libopenssl-ruby
+Depends: ruby (>= 1.9.3) | ruby-interpreter (>= 1.9.3), libruby | libopenssl-ruby
 Recommends: gpsbabel, libc-bin
 Description: geocaching query tool
  GeoToad is software to help speed up the boring part of geocaching:

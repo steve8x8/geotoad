@@ -612,9 +612,12 @@ You will have to install Ruby yourself, and use the tarball.
 .PP
 32-bit support will be preserved as long as possible.
 .PP
-Due to implementation limitations, Ruby versions before 2.1(.5) are discouraged.
-You will get a warning - don't complain if something fails afterwards.
-(Earlier versions will fail since GroundSpeak are now enforcing https.)
+Ruby versions before 1.9.3 cannot be used;
+\fBgeotoad\fR will throw an error and exit.
+.PP
+Ruby versions before 3.1 are deprecated and discouraged.
+Since Linux distributions may continue patching end-of-life versions
+you will just get a warning - don't complain if something fails afterwards.
 .SS "Limitations by design:"
 .PP
 Almost all searches provide enough information for the second stage that
