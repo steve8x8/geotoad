@@ -234,7 +234,13 @@ class Input
       @@optHash['queryArg'] = convertEscapedHex(@@optHash['queryArg'])
     end
 
-    cmdline = createcmdline
+    if    @@optHash['clearCache']
+      cmdline = "geotoad.rb -C"
+    elsif @@optHash['version']
+      cmdline = "geotoad.rb -V"
+    else
+      cmdline = createcmdline
+    end
     displayMessage "Using command line settings:"
     displayInfo    cmdline, stderr = @@optHash['stderr']
     return @@optHash
