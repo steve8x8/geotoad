@@ -350,7 +350,7 @@ class SearchCache
           loopcount += 1
           if loopcount < maxloopcount
             # progressive sleep instead of simple "sleep(10 * loopcount)"
-            sleeptime = 5 * 2 ** (loopcount/10)
+            sleeptime = (4 + 1.05 ** loopcount).ceil
             displayInfo "Restarting query after #{sleeptime} seconds ..."
             sleep(sleeptime)
           end
