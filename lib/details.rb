@@ -91,11 +91,6 @@ class CacheDetails
     @@baseURL
   end
 
-#  # this routine is for compatibility.
-#  def fetchWid(id)
-#    fetch(id)
-#  end
-
   def getRemoteMapping(wid)
     # get guid from gallery RSS
     guid = getRemoteMapping3(wid)
@@ -113,10 +108,11 @@ class CacheDetails
   def getRemoteMapping1(wid)
     debug "Get GUID from cache_details for #{wid}"
     # extract mapping from cache_details page
-    guid = nil
     @pageURL = 'https://www.geocaching.com/seek/cache_details.aspx?wp=' + wid
     # 20231210+: this redirects to https://www.geocaching.com/geocache/${wid}_*
+    # but provides no GUID if cache is PMO
     page = ShadowFetch.new(@pageURL)
+    # do not store response in file cache
     page.localExpiry = -1
     page.filePattern = 'meta name="page_name" content='
     data = page.fetch
@@ -130,13 +126,16 @@ class CacheDetails
   end
 
   def getRemoteMapping2(wid)
+    # originally suggested by skywalker90 (2012)
     debug "Get GUID from log submission page for #{wid}"
     # log submission page contains guid of cache [2016-04-30]
+    # 2024: https://www.geocaching.com/seek/geocache_logs.aspx?code=${wid},
+    # also no GUID found
     logid = cacheID(wid)
-    guid = nil
     @pageURL = 'https://www.geocaching.com/seek/log.aspx?ID=' + logid.to_s + '&lcn=1'
     # 2023-12-10+: this maps to https://www.geocaching.com/live/geocache/${wid}/log
     page = ShadowFetch.new(@pageURL)
+    # do not store response in file cache
     page.localExpiry = -1
     data = page.fetch
     if data =~ /The listing has been locked/m
@@ -154,10 +153,11 @@ class CacheDetails
   def getRemoteMapping3(wid)
     debug "Get GUID from gallery for #{wid}"
     # extract mapping from cache_details page
-    guid = nil
+    # 2024: returns empty page, no GUID
     @pageURL = 'https://www.geocaching.com/datastore/rss_galleryimages.ashx?id=' + cacheID(wid).to_s
     # 2023-12-10+: returns RSS with ${wid} but no GUID
     page = ShadowFetch.new(@pageURL)
+    # do not store response in file cache
     page.localExpiry = -1
     page.useCookie = false
     page.closingHTML = false
