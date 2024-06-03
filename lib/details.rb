@@ -92,15 +92,18 @@ class CacheDetails
   end
 
   def getRemoteMapping(wid)
-    # get guid from gallery RSS
-    guid = getRemoteMapping3(wid)
-    return [guid, '3'] if guid
-    # get guid from cache_details page
-    guid = getRemoteMapping1(wid)
-    return [guid, '1'] if guid
-    # get guid from log entry page
-    guid = getRemoteMapping2(wid)
-    return [guid, '2'] if guid
+    # get guid from somewhere else
+    guid = getRemoteMapping4(wid)
+    return [guid, '4'] if guid
+#    # get guid from gallery RSS
+#    guid = getRemoteMapping3(wid)
+#    return [guid, '3'] if guid
+#    # get guid from log entry page
+#    guid = getRemoteMapping2(wid)
+#    return [guid, '2'] if guid
+#    # get guid from cache_details page
+#    guid = getRemoteMapping1(wid)
+#    return [guid, '1'] if guid
     #displayWarning "Could not map #{wid} to GUID"
     return [nil, '0']
   end
@@ -168,6 +171,11 @@ class CacheDetails
       return guid
     end
     debug "Could not map(3) #{wid} to GUID"
+    return nil
+  end
+
+  def getRemoteMapping4(wid)
+    debug "Could not map(4) #{wid} to GUID"
     return nil
   end
 
