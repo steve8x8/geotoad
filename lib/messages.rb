@@ -75,8 +75,11 @@ module Messages
   # graceful exit
   def displayExit(text0, rc = 0)
     text = text0.to_s.empty? ? "Terminating regularly" : text0
-    #puts "DONE: #{text}"
-    $stderr.puts "I: #{text} - rc #{rc}" if $useStderr
+    if $useStderr
+      $stderr.puts "I: #{text} - rc #{rc}\n"
+    else
+      puts "----> #{text} - rc #{rc}\n"
+    end
     exit(rc)
   end
 
