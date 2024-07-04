@@ -60,7 +60,7 @@ class GeoCode
       displayWarning "Geocoder type #{type} not supported?"
       url += 'error?type=' + type
     end
-    url += "&format=json&limit=1&addressdetails=0&polygon_svg=0"
+    url += "&format=json"
     debug2 "geocode url: #{url}"
     return url
   end
@@ -68,19 +68,24 @@ class GeoCode
   def get_url(url)
     http = ShadowFetch.new(url)
     http.localExpiry = (30 + 10*rand()) * $DAY
-    http.maxFailures = 5
+    http.maxFailures = 0
     # no need to present any cookies
     http.useCookie = false
     # do not check for valid HTML
     http.closingHTML = false
     http.filePattern = '"boundingbox":'
     # shorten filename
-    http.localFile = url.gsub(/^https?:\/\/.*\//,'').gsub(/.format=.*/,'').gsub(/%20/,' ').gsub(/[, :.\/]/,'_')
+    http.localFile = url.gsub(/^https?:\/\/.*\//,'').gsub(/.format=.*/,'').gsub(/%20/,' ').gsub(/[, :.\/]/,'_') + ".json"
     # some minimum size of returned JSON
     http.minFileSize = 128
     # do not overload server: Nominatim requests 1 second minimum
     # this is only in effect for multiple lookups, i.e. old html format
     http.extraSleep = 5
+    #http.httpHeader = ["User-Agent", "Lynx/2.8.9rel.1 libwww-FM/2.14 SSL-MM/1.4.1 OpenSSL/3.2.1"]
+    #http.httpHeaderDelete = "Accept"
+    #http.httpHeaderDelete = "Accept-Language"
+    #http.httpHeaderDelete = "Accept-Encoding"
+    #http.httpHeaderDelete = "Accept-Charset"
     results = http.fetch
     debug3 "geocode data: #{results.inspect}"
     return results

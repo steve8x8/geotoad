@@ -64,6 +64,12 @@ class ShadowFetch
     debug "http headers now: #{@httpHeaders.inspect}"
   end
 
+  def httpHeaderDelete=(key)
+    debug "removing http header #{key}"
+    @httpHeaders.delete(key)
+    debug "http headers now: #{@httpHeaders.inspect}"
+  end
+
   def postVars=(vars)
     if vars
       vars.each_key{ |key|
@@ -499,6 +505,13 @@ class ShadowFetch
       #Unknown response "#<Net::HTTPServiceUnavailable 503 Service Unavailable readbody=true>"
       displayWarning "Service unavailable, retry later"
       debug3 "Response:\n#{resp.body.to_s.gsub(/<[^>]*>/, '')}"
+      success = false
+    when Net::HTTPForbidden
+      # error 403
+      #Unknown response " <Net::HTTPForbidden 403 Forbidden readbody=true>"
+      displayWarning "Access forbidden. If you think this is a bug, please report."
+      displayInfo "Response:\n#{resp.body.to_s.gsub(/<[^>]*>/, '')}"
+      displayWarning "You may visit \"#{url_str}\" in your browser.\n\n"
       success = false
     else
       # we may have reported a problem before
