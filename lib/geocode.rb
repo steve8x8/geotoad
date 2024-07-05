@@ -5,6 +5,7 @@ require 'cgi'
 require 'lib/common'
 require 'lib/messages'
 require 'lib/shadowget'
+require 'net/http'
 
 class GeoCode
 
@@ -66,6 +67,16 @@ class GeoCode
   end
 
   def get_url(url)
+    # https://stackoverflow.com/questions/12883650/https-requests-in-ruby
+    # Net::HTTP.get URI('https://nominatim.openstreetmap.org/search?format=json&limit=1&q=buckingham palace')
+    results = Net::HTTP.get(URI(url))
+    sleep 5
+    debug "Querying #{url} returned #{results.inspect}"
+    return results
+  end
+  
+  def get_url_broken(url)
+    # for some not yet fully understood reasons, this started to fail in July 2024
     http = ShadowFetch.new(url)
     http.localExpiry = (30 + 10*rand()) * $DAY
     http.maxFailures = 0
