@@ -32,6 +32,7 @@ class ShadowFetch
   attr_writer :localFile
   attr_writer :minFileSize
   attr_writer :extraSleep
+  attr_reader :httpHeaders
 
   # gets a URL, but stores it in a nice webcache
   def initialize(url)

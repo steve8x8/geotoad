@@ -60,7 +60,7 @@ class GeoCode
       displayWarning "Geocoder type #{type} not supported?"
       url += 'error?type=' + type
     end
-    url += "&format=json"
+    url += "&format=json&limit=1"
     debug2 "geocode url: #{url}"
     return url
   end
@@ -81,11 +81,30 @@ class GeoCode
     # do not overload server: Nominatim requests 1 second minimum
     # this is only in effect for multiple lookups, i.e. old html format
     http.extraSleep = 5
-    #http.httpHeader = ["User-Agent", "Lynx/2.8.9rel.1 libwww-FM/2.14 SSL-MM/1.4.1 OpenSSL/3.2.1"]
-    #http.httpHeaderDelete = "Accept"
-    #http.httpHeaderDelete = "Accept-Language"
-    #http.httpHeaderDelete = "Accept-Encoding"
-    #http.httpHeaderDelete = "Accept-Charset"
+    # Nominatim enforces their policy
+    # the following is taken from a successful query by browser:
+	#Accept			    text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
+	#Accept-Encoding		    gzip, deflate, br
+	#Accept-Language		    en-GB,en;q=0.5
+	#Connection		    keep-alive
+	#Host			    nominatim.openstreetmap.org
+	#Sec-Fetch-Dest		    document
+	#Sec-Fetch-Mode		    navigate
+	#Sec-Fetch-Site		    none
+	#Sec-Fetch-User		    ?1
+	#TE			    trailers
+	#Upgrade-Insecure-Requests    1
+	#User-Agent		    Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:122.0) Gecko/20100101 Firefox/122.0
+    http.httpHeader = ["Accept",	"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8"]
+    http.httpHeader = ["Accept-Language", "en-GB,en;q=0.5"]
+    http.httpHeaderDelete = "Accept-Encoding"
+    http.httpHeader = ["Accept-Encoding", "gzip, deflate, br"]
+#    http.httpHeaderDelete = "Accept-Charset"
+#    http.httpHeader = ["Connection",	"keep-alive"]
+    http.httpHeader = ["Referer",	"https://github.com/steve8x8/geotoad"]
+#    http.httpHeader = ["User-Agent",	"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:122.0) Gecko/20100101 Firefox/122.0"]
+    http.httpHeader = ["User-Agent",	"GeoToad/3.34.2 Ruby/2.7"]
+    displayInfo "using HTTP headers #{http.httpHeaders.inspect}"
     results = http.fetch
     debug3 "geocode data: #{results.inspect}"
     return results
