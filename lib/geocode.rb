@@ -17,9 +17,9 @@ class GeoCode
   def lookup_location(location)
     debug "geocode looking up address #{location.inspect}"
     data = get_url(create_url(location, 'address'))
-    status, accuracy, lat, lon, location0, license = parse_data(data)
+    status, importance, lat, lon, location0, license = parse_data(data)
     if status == "OK"
-      return_data = [decode_accuracy(accuracy), lat, lon, location0, license]
+      return_data = [importance, lat, lon, location0, license]
       displayMessage "OpenStreetMap Nominatim search for #{location} returned"
       displayMessage " (#{lat},#{lon}) = \"#{location0}\""
       if license != nil
@@ -40,7 +40,7 @@ class GeoCode
     coords = sprintf("lat=%.6f&lon=%.6f", lat.to_f, lon.to_f)
     debug "geocode looking up coords #{coords.inspect}"
     data = get_url(create_url(coords, 'latlng'))
-    status, accuracy, lat0, lon0, location, license = parse_data(data)
+    status, importance, lat0, lon0, location, license = parse_data(data)
     if status == "OK"
       return_data = location
     else
@@ -121,24 +121,19 @@ class GeoCode
     return results
   end
 
-  def decode_accuracy(value)
-    # dummy: no need to translate strings
-    return value
-  end
-
   # Simple XML parser, returns
-  # status, accuracy, lat, lon, location, result count
+  # status, importance, lat, lon, location, result count
   def parse_data(data)
     status = "NO_DATA"
-    accuracy = "UNKNOWN"
+    importance = "UNKNOWN"
     lat = 0.0
     lon = 0.0
     location = "Unknown location"
     # handle nil or empty data
-    return [ status, accuracy, 0.0, 0.0, "Empty response", 0 ] if not data
-    return [ status, accuracy, 0.0, 0.0, "No match", 0 ] if data == "[]"
+    return [ status, importance, 0.0, 0.0, "Empty response", 0 ] if not data
+    return [ status, importance, 0.0, 0.0, "No match", 0 ] if data == "[]"
     if data =~ /"importance":([.0-9]*)/m
-      accuracy = $1
+      importance = $1
     end
     if data =~ /"lat":"(.*?)"/m
       lat = $1
@@ -155,7 +150,7 @@ class GeoCode
     if data =~ /"licence":"(.*?)"/m
       license = $1
     end
-    return [ status, accuracy, lat, lon, location, license ]
+    return [ status, importance, lat, lon, location, license ]
   end
 
 end

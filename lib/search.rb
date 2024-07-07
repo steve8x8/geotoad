@@ -152,19 +152,19 @@ class SearchCache
       @query_type = 'location'
       supports_distance = true
       geocoder = GeoCode.new()
-      accuracy, lat, lon, location, count = geocoder.lookup_location(key)
-      debug "geocoder returned: a:#{accuracy.inspect} x:#{lat} y:#{lon}"
-      if not accuracy
+      importance, lat, lon, location, count = geocoder.lookup_location(key)
+      debug "geocoder returned: a:#{importance.inspect} x:#{lat} y:#{lon}"
+      if not importance
         displayWarning "GeoCoder failed to determine the location of #{key}"
         return nil
       end
       # trim numbers to useful precision, leave one trailing zero digit
-      accuracy = sprintf("%.3f", accuracy).gsub(/0{1,2}$/, '')
+      importance = sprintf("%.3f", importance).gsub(/0{1,2}$/, '')
       lat = sprintf("%.6f", lat).gsub(/0{1,5}$/, '')
       lon = sprintf("%.6f", lon).gsub(/0{1,5}$/, '')
       debug "GeoCoder returned result for \"#{key}\""
       debug "Using result 1 of #{count}: \"#{location}\""
-      displayInfo "Accuracy level #{accuracy}, will use coordinates #{lat}, #{lon}"
+      displayInfo "Result importance #{importance}, will use coordinates #{lat}, #{lon}"
       @search_url = @@base_url + "?lat=#{lat}&lng=#{lon}"
 
     when 'coord'
