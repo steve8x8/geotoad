@@ -65,7 +65,8 @@ printf "]\n\n"
 
 {
 printf "# -*- encoding : utf-8 -*-\n\n"
-printf "module CountryStateList\n\n"
+date +"### Updated %Y-%m-%d ###"
+printf "\nmodule CountryStateList\n\n"
 cat ${temppath}/$$.[cs]
 printf "end\n"
 } \

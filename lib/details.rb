@@ -33,54 +33,7 @@ class CacheDetails
     #@getlogbk = nil
     @logcount = 10
     @getimage = nil
-
-# synced with c:geo 2020-07-02
-    @cachetypenum = {
-	'2'	=> 'Traditional Cache',
-	'3'	=> 'Multi-cache',
-	'4'	=> 'Virtual Cache',
-	'5'	=> 'Letterbox Hybrid',		# spelling? 'Letterbox hybrid'
-	'6'	=> 'Event Cache',
-	'8'	=> 'Unknown Cache',
-	'9'	=> 'Project APE Cache',		# spelling? 'Project Ape Cache'
-	'11'	=> 'Webcam Cache',
-	'12'	=> 'Locationless (Reverse) Cache',
-	'13'	=> 'Cache In Trash Out Event',
-	'137'	=> 'EarthCache',		# spelling? 'Earthcache'
-	'453'	=> 'Mega-Event Cache',
-	'1304'	=> 'GPS Adventures Exhibit',
-	'1858'	=> 'Wherigo Cache',
-	#'3653'	=> 'Lost and Found Event Cache',
-	'3653'	=> 'Community Celebration Event',
-	#'3773'	=> 'Groundspeak HQ',
-	'3773'	=> 'Geocaching HQ',
-	#'3774'	=> 'Groundspeak Lost and Found Celebration',
-	'3774'	=> 'Geocaching HQ Celebration',
-	'4738'	=> 'Geocaching HQ Block Party',
-	'7005'	=> 'Giga-Event Cache',
-	'ape'		=> 'Project APE Cache',
-	'block'		=> 'Geocaching HQ Block Party',
-	'cito'		=> 'Cache In Trash Out Event',
-	'communceleb'	=> 'Community Celebration Event',
-	'earth'		=> 'EarthCache',
-	'earthcache'	=> 'EarthCache',
-	'event'		=> 'Event Cache',
-	'gchq'		=> 'Geocaching HQ',
-	'gchqceleb'	=> 'Geocaching HQ Celebration',
-	'giga'		=> 'Giga-Event Cache',
-	'gps'		=> 'GPS Adventures Exhibit',
-	'letterbox'	=> 'Letterbox Hybrid',
-	'locationless'	=> 'Locationless (Reverse) Cache',
-	'maze'		=> 'GPS Adventures Exhibit',
-	'mega'		=> 'Mega-Event Cache',
-	'multi'		=> 'Multi-cache',
-	'mystery'	=> 'Unknown Cache',
-	'traditional'	=> 'Traditional Cache',
-	'unknown'	=> 'Unknown Cache',
-	'virtual'	=> 'Virtual Cache',
-	'webcam'	=> 'Webcam Cache',
-	'wherigo'	=> 'Wherigo Cache',
-    }
+# @cachetypenum -> $CacheTypes
   end
 
   def waypoints
@@ -288,91 +241,14 @@ class CacheDetails
   # Parse attributes: convert name of image into index and yes/no value
   def parseAttr(text)
     # "bicycles-yes" -> 32, 1
-    attrmap = {
-      "attribute-blank"  =>  0,
-      "dogs"             =>  1,
-      "fee"              =>  2,
-      "rappelling"       =>  3,
-      "boat"             =>  4,
-      "scuba"            =>  5,
-      "kids"             =>  6,
-      "onehour"          =>  7,
-      "scenic"           =>  8,
-      "hiking"           =>  9,
-      "climbing"         => 10,
-      "wading"           => 11,
-      "swimming"         => 12,
-      "available"        => 13,
-      "night"            => 14,
-      "winter"           => 15,
-      "16"               => 16,
-      "poisonoak"        => 17,
-      "dangerousanimals" => 18,
-      "ticks"            => 19,
-      "mine"             => 20,
-      "cliff"            => 21,
-      "hunting"          => 22,
-      "danger"           => 23,
-      "wheelchair"       => 24,
-      "parking"          => 25,
-      "public"           => 26,
-      "water"            => 27,
-      "restrooms"        => 28,
-      "phone"            => 29,
-      "picnic"           => 30,
-      "camping"          => 31,
-      "bicycles"         => 32,
-      "motorcycles"      => 33,
-      "quads"            => 34,
-      "jeeps"            => 35,
-      "snowmobiles"      => 36,
-      "horses"           => 37,
-      "campfires"        => 38,
-      "thorn"            => 39,
-      "stealth"          => 40,
-      "stroller"         => 41,
-      "firstaid"         => 42,
-      "cow"              => 43,
-      "flashlight"       => 44,
-      "landf"            => 45,
-      "rv"               => 46,
-      "field_puzzle"     => 47,
-      "uv"               => 48,
-      "snowshoes"        => 49,
-      "skiis"            => 50,
-      "s-tool"           => 51,
-      "nightcache"       => 52,
-      "parkngrab"        => 53,
-      "abandonedbuilding"=> 54,
-      "hike_short"       => 55,
-      "hike_med"         => 56,
-      "hike_long"        => 57,
-      "fuel"             => 58,
-      "food"             => 59,
-      "wirelessbeacon"   => 60,
-      "partnership"      => 61,
-      "seasonal"         => 62,
-      "touristok"        => 63,
-      "treeclimbing"     => 64,
-      "frontyard"        => 65,
-      "teamwork"         => 66,
-      "geotour"          => 67,
-      "unknown68"        => 68,
-      "bonuscache"       => 69,
-      "powertrail"       => 70,
-      "challengecache"   => 71,
-      "hqsolutionchecker"=> 72,
-      # obsolete?, but image still exists
-      "snakes"           => 18,
-      "sponsored"        => 61,
-    }
+    # attrmap -> $Attributes
     if text == "attribute-blank"
       return 0, 0
     end
     what = text.gsub(/(.*)-.*/, "\\1") # only strip "yes" or "no"!
     how = text.gsub(/^.*-/, "")
     # get mapping
-    attrid = attrmap[what.downcase]
+    attrid = $Attributes[what.downcase]
     attrval = (how.downcase == "yes") ? 1 : 0
     if not attrid
       # we may have missed an addition or change to the list
@@ -444,8 +320,8 @@ class CacheDetails
         if ccode =~ /^(\w+)_\d+/
           ccode = $1
         end
-        if @cachetypenum[ccode]
-          full_type = @cachetypenum[ccode]
+        if $CacheTypes[ccode]
+          full_type = $CacheTypes[ccode]
         else
           displayWarning "Cache image code #{ccode.inspect} for type #{full_type.inspect} D - please report!"
         end

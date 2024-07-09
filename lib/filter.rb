@@ -1,29 +1,14 @@
 require 'cgi'
 require 'lib/common'
 require 'interface/messages'
+require 'lib/constants'
 
 class Filter
 
   include Common
   include Messages
 
-  @@sizes = {
-    # order by cache sizes
-    # sizes not in this list get mapped to 'nil' (and 0)
-    # 'unspecified/not applicable' (becoming obsolete)
-    'virtual' => 0,
-    # events, earthcaches, citos are kind of virtual too
-    'not chosen' => 0, #X
-    'not_chosen' => 0,
-    # 'other' here means 'nano' (nacro, bison, ...) mostly
-    # starting Dec 14, 'not chosen' gets replaced with 'other' throughout
-    'other' => 1,
-    'micro'   => 2,
-    'small' => 3,
-    'regular' => 4,
-    'medium' => 4, #X
-    'large' => 5
-  }
+  # @@sizes -> $Sizes
 
   def initialize(data)
     @waypointHash = data
@@ -80,18 +65,18 @@ class Filter
   end
 
   def sizeMin(size_name)
-    debug2 "filtering by sizeMin: #{size_name} (#{@@sizes[size_name]})"
+    debug2 "filtering by sizeMin: #{size_name} (#{$Sizes[size_name]})"
     @waypointHash.delete_if{ |wid, values|
       debug3 "size check for #{wid}: #{@waypointHash[wid]['size']}"
-      @@sizes[@waypointHash[wid]['size'].downcase].to_i < @@sizes[size_name]
+      $Sizes[@waypointHash[wid]['size'].downcase].to_i < $Sizes[size_name]
     }
   end
 
   def sizeMax(size_name)
-    debug2 "filtering by sizeMax: #{size_name} (#{@@sizes[size_name]})"
+    debug2 "filtering by sizeMax: #{size_name} (#{$Sizes[size_name]})"
     @waypointHash.delete_if{ |wid, values|
       debug3 "size check for #{wid}: #{@waypointHash[wid]['size']}"
-      @@sizes[@waypointHash[wid]['size'].downcase].to_i > @@sizes[size_name]
+      $Sizes[@waypointHash[wid]['size'].downcase].to_i > $Sizes[size_name]
     }
   end
 

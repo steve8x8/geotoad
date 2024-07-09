@@ -1,10 +1,11 @@
 require 'cgi'
 require 'time'
-require 'lib/common'
 require 'interface/messages'
+require 'lib/common'
+require 'lib/constants'
+require 'lib/shortentype'
 require 'lib/geocode'
 require 'lib/shadowget'
-require 'lib/shortentype'
 
 class SearchCache
 
@@ -25,107 +26,9 @@ class SearchCache
 
 # synced with c:geo 2020-07-02
 # cache types from search form 2023-05-12
-    # cache types for selected search
-    @cachetypetx = {
-	# commented-out types won't match post-filter
-	# order taken from advanced search
-
-	'all_cache'	=> '9a79e6ce-3344-409c-bbe9-496530baf758',
-	'traditional'	=> '32bc9333-5e52-4957-b0f6-5a2c8fc7b257',
-	'multicache'	=> 'a5f6d0ad-d2f2-4011-8c14-940a9ebf3c74',
-	'multi'		=> 'a5f6d0ad-d2f2-4011-8c14-940a9ebf3c74',
-	'virtual'	=> '294d4360-ac86-4c83-84dd-8113ef678d7e',
-	'letterbox'	=> '4bdd8fb2-d7bc-453f-a9c5-968563b15d24',
-
-	# "-parent" doesn't work with "tx="
-#	'all_event'	=> '69eb8534-b718-4b35-ae3c-a856a55b0874-parent&children=y',
-	'all_event'	=> '69eb8534-b718-4b35-ae3c-a856a55b0874&children=y',
-#	'event+'	=> '69eb8534-b718-4b35-ae3c-a856a55b0874-parent&children=y', # all event types, as listed below
-	'event+'	=> '69eb8534-b718-4b35-ae3c-a856a55b0874&children=y', # all event types, as listed below
-	'event'		=> '69eb8534-b718-4b35-ae3c-a856a55b0874',
-	'cito'		=> '57150806-bc1a-42d6-9cf0-538d171a2d22',
-	'megaevent'	=> '69eb8535-b718-4b35-ae3c-a856a55b0874',
-	'mega'		=> '69eb8535-b718-4b35-ae3c-a856a55b0874', #X
-	'communceleb'	=> '3ea6533d-bb52-42fe-b2d2-79a3424d4728',
-	'commceleb'	=> '3ea6533d-bb52-42fe-b2d2-79a3424d4728', #X
-	'lost+found'	=> '3ea6533d-bb52-42fe-b2d2-79a3424d4728', #X
-	'gchqceleb'	=> 'af820035-787a-47af-b52b-becc8b0c0c88',
-	'hqceleb'	=> 'af820035-787a-47af-b52b-becc8b0c0c88', #X
-	'lfceleb'	=> 'af820035-787a-47af-b52b-becc8b0c0c88', #X
-	'block'		=> 'bc2f3df2-1aab-4601-b2ff-b5091f6c02e3',
-	'gigaevent'	=> '51420629-5739-4945-8bdd-ccfd434c0ead',
-	'giga'		=> '51420629-5739-4945-8bdd-ccfd434c0ead', #X
-
-#	'all_unknown'	=> '40861821-1835-4e11-b666-8d41064d03fe-parent&children=y',
-	'all_unknown'	=> '40861821-1835-4e11-b666-8d41064d03fe&children=y',
-#	'unknown+'	=> '40861821-1835-4e11-b666-8d41064d03fe-parent&children=y', # all unknown types
-	'unknown+'	=> '40861821-1835-4e11-b666-8d41064d03fe&children=y', # all unknown types
-#	'mystery+'	=> '40861821-1835-4e11-b666-8d41064d03fe-parent&children=y', #X
-	'mystery+'	=> '40861821-1835-4e11-b666-8d41064d03fe&children=y', #X
-	'unknown'	=> '40861821-1835-4e11-b666-8d41064d03fe',
-	'mystery'	=> '40861821-1835-4e11-b666-8d41064d03fe', #X
-	'gshq'		=> '416f2494-dc17-4b6a-9bab-1a29dd292d8c',
-	'gchq'		=> '416f2494-dc17-4b6a-9bab-1a29dd292d8c', #X
-	'ape'		=> '2555690d-b2bc-4b55-b5ac-0cb704c0b768',
-
-	'webcam'	=> '31d2ae3c-c358-4b5f-8dcd-2185bf472d3d',
-	'earthcache'	=> 'c66f5cf3-9523-4549-b8dd-759cd2f18db8',
-	'earth'		=> 'c66f5cf3-9523-4549-b8dd-759cd2f18db8',
-	'gps'		=> '72e69af2-7986-4990-afd9-bc16cbbb4ce3',
-	'exhibit'	=> '72e69af2-7986-4990-afd9-bc16cbbb4ce3', #X
-	'wherigo'	=> '0544fa55-772d-4e5c-96a9-36a51ebcf5c9',
-
-	'locationless'	=> '8f6dd7bc-ff39-4997-bd2e-225a0d2adf9d', #X?
-	'reverse'	=> '8f6dd7bc-ff39-4997-bd2e-225a0d2adf9d', #X?
-    }
+# $cachetypetx -> $CacheTypes_TX
+# @cachetypenum -> $CacheTypes
     @txfilter = nil
-
-    @cachetypenum = {
-	'2'	=> 'Traditional Cache',
-	'3'	=> 'Multi-cache',
-	'4'	=> 'Virtual Cache',
-	'5'	=> 'Letterbox Hybrid',		# spelling? 'Letterbox hybrid'
-	'6'	=> 'Event Cache',
-	'8'	=> 'Unknown Cache',
-	'9'	=> 'Project APE Cache',		# spelling? 'Project Ape Cache'
-	'11'	=> 'Webcam Cache',
-	'12'	=> 'Locationless (Reverse) Cache',
-	'13'	=> 'Cache In Trash Out Event',
-	'137'	=> 'EarthCache',		# spelling? 'Earthcache'
-	'453'	=> 'Mega-Event Cache',
-	'1304'	=> 'GPS Adventures Exhibit',
-	'1858'	=> 'Wherigo Cache',
-	#'3653'	=> 'Lost and Found Event Cache',
-	'3653'	=> 'Community Celebration Event',
-	'3773'	=> 'Groundspeak HQ',
-	#'3773'	=> 'Geocaching HQ',
-	#'3774'	=> 'Groundspeak Lost and Found Celebration',
-	'3774'	=> 'Geocaching HQ Celebration',
-	'4738'	=> 'Geocaching HQ Block Party',
-	'7005'	=> 'Giga-Event Cache',
-	'ape'		=> 'Project APE Cache',
-	'block'		=> 'Geocaching HQ Block Party',
-	'cito'		=> 'Cache In Trash Out Event',
-	'communceleb'	=> 'Community Celebration Event',
-	'earth'		=> 'EarthCache',
-	'earthcache'	=> 'EarthCache',
-	'event'		=> 'Event Cache',
-	'gshq'		=> 'Groundspeak HQ',
-	'gchqceleb'	=> 'Geocaching HQ Celebration',
-	'giga'		=> 'Giga-Event Cache',
-	'gps'		=> 'GPS Adventures Exhibit',
-	'letterbox'	=> 'Letterbox Hybrid',
-	'locationless'	=> 'Locationless (Reverse) Cache',
-	'exhibit'	=> 'GPS Adventures Exhibit',
-	'mega'		=> 'Mega-Event Cache',
-	'multi'		=> 'Multi-cache',
-	'mystery'	=> 'Unknown Cache',
-	'traditional'	=> 'Traditional Cache',
-	'unknown'	=> 'Unknown Cache',
-	'virtual'	=> 'Virtual Cache',
-	'webcam'	=> 'Webcam Cache',
-	'wherigo'	=> 'Wherigo Cache',
-    }
 
     # exclude own found
     @notyetfound = false
@@ -133,7 +36,7 @@ class SearchCache
 
   def txfilter=(cacheType)
     # may return nil if not found
-    @txfilter = @cachetypetx[cacheType].dup
+    @txfilter = $CacheTypes_TX[cacheType].dup
     @txfilter << '&children=n' if (@txfilter and (@txfilter !~ /children=/))
     debug "Setting txfilter to \"#{cacheType}\", now #{@txfilter.inspect}"
   end
@@ -473,8 +376,8 @@ class SearchCache
       when /WptTypeImage.*\/(wpttypes|play\/Content\/images\/cache-types)\/(\w+)\./i
         ccode = $2
         # list covers only "standard" types! This may be incorrect
-        if @cachetypenum[ccode]
-          ctype = @cachetypenum[ccode]
+        if $CacheTypes[ccode]
+          ctype = $CacheTypes[ccode]
         else
           displayWarning "Cache image code #{ccode.inspect} for WID #{wid.inspect} A - please report!"
           displayInfo "#{line}"
@@ -485,8 +388,8 @@ class SearchCache
       when /\/sprites\/cache-types.svg#icon-(\d+)/i
         ccode = $1
         # list covers only "standard" types! This may be incorrect
-        if @cachetypenum[ccode]
-          ctype = @cachetypenum[ccode]
+        if $CacheTypes[ccode]
+          ctype = $CacheTypes[ccode]
         else
           displayWarning "Cache image code #{ccode.inspect} for WID #{wid.inspect} A - please report!"
           displayInfo "#{line}"
@@ -761,60 +664,7 @@ class SearchCache
       'membersonly' => false
     }
     # list of US states, generated from seek page
-    usstates = {
-      "Alabama" => 60,
-      "Alaska" => 2,
-      "Arizona" => 3,
-      "Arkansas" => 4,
-      "California" => 5,
-      "Colorado" => 6,
-      "Connecticut" => 7,
-      "Delaware" => 9,
-      "District of Columbia" => 8,
-      "Florida" => 10,
-      "Georgia" => 11,
-      "Hawaii" => 12,
-      "Idaho" => 13,
-      "Illinois" => 14,
-      "Indiana" => 15,
-      "Iowa" => 16,
-      "Kansas" => 17,
-      "Kentucky" => 18,
-      "Louisiana" => 19,
-      "Maine" => 20,
-      "Maryland" => 21,
-      "Massachusetts" => 22,
-      "Michigan" => 23,
-      "Minnesota" => 24,
-      "Mississippi" => 25,
-      "Missouri" => 26,
-      "Montana" => 27,
-      "Nebraska" => 28,
-      "Nevada" => 29,
-      "New Hampshire" => 30,
-      "New Jersey" => 31,
-      "New Mexico" => 32,
-      "New York" => 33,
-      "North Carolina" => 34,
-      "North Dakota" => 35,
-      "Ohio" => 36,
-      "Oklahoma" => 37,
-      "Oregon" => 38,
-      "Pennsylvania" => 39,
-      "Rhode Island" => 40,
-      "South Carolina" => 41,
-      "South Dakota" => 42,
-      "Tennessee" => 43,
-      "Texas" => 44,
-      "Utah" => 45,
-      "Vermont" => 46,
-      "Virginia" => 47,
-      "Washington" => 48,
-      "West Virginia" => 49,
-      "Wisconsin" => 50,
-      "Wyoming" => 51,
-    }
-
+    # usstates => $USStates
     inresultstable = false
     begin
     data.split("\n").each{ |line|
@@ -1006,8 +856,8 @@ require 'json'
         if ccode =~ /^(\w+)_\d+/
           ccode = $1
         end
-        if @cachetypenum[ccode]
-          full_type = @cachetypenum[ccode]
+        if $CacheTypes[ccode]
+          full_type = $CacheTypes[ccode]
         else
           displayWarning "Cache image code #{ccode.inspect} for type #{full_type.inspect} B - please report!"
           displayInfo "#{line}"
@@ -1056,8 +906,8 @@ require 'json'
         if ccode =~ /^(\w+)_\d+/
           ccode = $1
         end
-        if @cachetypenum[ccode]
-          full_type = @cachetypenum[ccode]
+        if $CacheTypes[ccode]
+          full_type = $CacheTypes[ccode]
         else
           displayWarning "Cache image code #{ccode.inspect} for type #{full_type.inspect} C - please report!"
           displayInfo "#{line}"
@@ -1122,7 +972,7 @@ require 'json'
         debug "Country/state found #{$2} #{$3}"
         if ($3 != "Icons" and $3 != "Placed" and $3 != "Description" and $3 != "Last Found")
           # special case US states:
-          if usstates[$3]
+          if $USStates[$3]
             cache['country'] = 'United States'
             cache['state'] = $3
           else
