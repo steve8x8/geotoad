@@ -23,9 +23,10 @@ require 'zlib'
 require 'cgi'
 require 'net/https' # for openssl
 # toss in our own libraries.
+require 'interface/messages'
 require 'interface/progressbar'
 require 'lib/common'
-require 'interface/messages'
+require 'lib/mapping'
 require 'interface/input'
 require 'lib/shadowget'
 require 'lib/search'
@@ -37,8 +38,9 @@ require 'lib/version'
 
 class GeoToad
 
-  include Common
   include Messages
+  include Common
+  include Mapping
   include Auth
 
   $VERSION = GTVersion.version
