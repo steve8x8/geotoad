@@ -3,6 +3,7 @@ require 'time'
 require 'interface/messages'
 require 'lib/common'
 require 'lib/constants'
+require 'lib/country_state'
 require 'lib/shortentype'
 require 'lib/geocode'
 require 'lib/shadowget'
@@ -23,6 +24,8 @@ class SearchCache
     @max_pages = 0		# unlimited
     @ttl = 20 * $HOUR
     @waypoints = Hash.new
+    # no need for $USStates anymore, use CountryState.findMatchingState
+    @cs = CountryState.new
 
 # synced with c:geo 2020-07-02
 # cache types from search form 2023-05-12
@@ -607,8 +610,6 @@ class SearchCache
       'archived' => nil,
       'membersonly' => false
     }
-    # list of US states, generated from seek page
-    # usstates => $USStates
     inresultstable = false
     begin
     data.split("\n").each{ |line|
@@ -913,17 +914,24 @@ require 'json'
       # country names: English spelling; state names: local spelling
       #             |>$2|    |->$3 -------------------------------|
       when /^\s{28}((.*?), )?([A-Z][a-z]+\.?([ -]\(?[A-Za-z]+\)?)*)<\/span>\s?$/
-        debug "Country/state found #{$2} #{$3}"
+        debug "Found country \"#{$2}\" state \"#{$3}\""
         if ($3 != "Icons" and $3 != "Placed" and $3 != "Description" and $3 != "Last Found")
           # special case US states:
-          if $USStates[$3]
-            cache['country'] = 'United States'
-            cache['state'] = $3
+          #./interface/input.rb:        states = cs.findMatchingState(try_state, '.')
+          #./lib/country_state.rb:  def findMatchingState(try_state, country)
+          if $2.to_s == ""
+            if @cs.findMatchingState($3, 'United States').length != 0
+              cache['country'] = 'United States'
+              cache['state'] = $3
+            else
+              cache['country'] = 'Unidentified country'
+              cache['state'] = $3
+            end
           else
             cache['country'] = $3
-            cache['state'] = ($2)?$2:'-' # GCStatistic doesn't like empty state elements
+            cache['state'] = ($2) ? $2 : 'Unidentified state' # GCStatistic doesn't like empty state elements
           end
-          debug "Using country #{cache['country']} state #{cache['state']}"
+          debug "Using country \"#{cache['country']}\" state \"#{cache['state']}\""
         end
 
       # small_profile.gif" alt="Premium Member Only Cache" with="15" height="13"></TD
