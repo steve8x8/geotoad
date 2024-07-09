@@ -1,5 +1,5 @@
 require 'lib/common'
-require 'lib/messages'
+require 'interface/messages'
 require 'lib/shadowget'
 
 module Gallery

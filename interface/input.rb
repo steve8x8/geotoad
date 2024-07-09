@@ -6,7 +6,7 @@ require 'fileutils'
 require 'yaml'
 require 'lib/country_state'
 require 'lib/common'
-require 'lib/messages'
+require 'interface/messages'
 
 class Input
 

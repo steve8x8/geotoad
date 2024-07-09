@@ -3,7 +3,7 @@
 
 require 'cgi'
 require 'lib/common'
-require 'lib/messages'
+require 'interface/messages'
 require 'lib/shadowget'
 require 'net/http'
 

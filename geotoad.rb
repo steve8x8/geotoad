@@ -25,7 +25,7 @@ require 'net/https' # for openssl
 # toss in our own libraries.
 require 'interface/progressbar'
 require 'lib/common'
-require 'lib/messages'
+require 'interface/messages'
 require 'interface/input'
 require 'lib/shadowget'
 require 'lib/search'

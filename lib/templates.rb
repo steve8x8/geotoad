@@ -3,7 +3,7 @@
 require 'fileutils'
 require 'pathname'
 require 'lib/common'
-require 'lib/messages'
+require 'interface/messages'
 
 class Templates
 

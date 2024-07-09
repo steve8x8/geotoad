@@ -1,7 +1,7 @@
 # Get a list of countries / states for the geocaching form.
 
 require 'lib/common'
-require 'lib/messages'
+require 'interface/messages'
 require 'lib/geocode'
 require 'lib/shadowget'
 require 'lib/country_state_list'

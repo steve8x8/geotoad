@@ -7,7 +7,7 @@ require 'time'
 require 'zlib'
 require 'stringio'
 require 'lib/common'
-require 'lib/messages'
+require 'interface/messages'
 require 'lib/auth'
 
 # Does a webget, but stores a local directory with cached results ###################

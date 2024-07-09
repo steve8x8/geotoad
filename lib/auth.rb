@@ -4,7 +4,7 @@
 
 require 'time'
 require 'lib/common'
-require 'lib/messages'
+require 'interface/messages'
 
 module Auth
 

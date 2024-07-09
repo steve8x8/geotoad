@@ -1,7 +1,7 @@
 require 'cgi'
 require 'time'
 require 'lib/common'
-require 'lib/messages'
+require 'interface/messages'
 require 'lib/geocode'
 require 'lib/shadowget'
 require 'lib/shortentype'

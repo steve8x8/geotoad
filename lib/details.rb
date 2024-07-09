@@ -3,7 +3,7 @@
 require 'time'
 require 'zlib'
 require 'lib/common'
-require 'lib/messages'
+require 'interface/messages'
 require 'lib/geodist'
 require 'lib/logbook'
 require 'lib/gallery'
