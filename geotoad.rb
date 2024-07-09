@@ -327,9 +327,6 @@ class GeoToad
     displayInfo "Clearing logbook json files older than 3 days"
     findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "seek"), 3, "^cache_logbook\\.json.*")
 
-    displayInfo "Clearing gallery xml files older than 14 days"
-    findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "datastore"), 14, "^rss_galleryimages\\.ashx.*")
-
 #   displayInfo "Clearing lat/lon query data older than 3 days"
 #   findRemoveFiles(File.join($CACHE_DIR, "www.geocaching.com", "seek"), 3, "^nearest\\.aspx.*_lat_.*_lng_.*")
 

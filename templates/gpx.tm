@@ -54,7 +54,6 @@ template = {
       "  <groundspeak:long_description html=\"True\">" +
        "<%outEntity.shortWpts%>" +
        "<%wpEntity.longdesc%>" +
-       "<%wpEntity.gallery%>" +
        "</groundspeak:long_description>\n" +
       "  <groundspeak:encoded_hints><%outEntity.hintdecrypt%></groundspeak:encoded_hints>\n" +
       "  <groundspeak:logs>\n" +

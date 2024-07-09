@@ -163,7 +163,6 @@ class Input
       [ "--stderr", "--errors",                   GetoptLong::NO_ARGUMENT ],
       [ "--conditionWP",                          GetoptLong::REQUIRED_ARGUMENT ],
       [ "--includeArchived", "--gone",            GetoptLong::NO_ARGUMENT ],
-      [ "--imageLinks",   "--gallery",            GetoptLong::REQUIRED_ARGUMENT ],
       [ "--minLongitude", "--longMin",            GetoptLong::REQUIRED_ARGUMENT ],
       [ "--maxLongitude", "--longMax",            GetoptLong::REQUIRED_ARGUMENT ],
       [ "--minLatitude",  "--latMin",             GetoptLong::REQUIRED_ARGUMENT ],
