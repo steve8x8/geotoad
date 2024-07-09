@@ -463,30 +463,17 @@ module Common
   end
 
   def parseCoordinate(input)
-    # kinds of coordinate representations to parse (cf. geo-*):
-    #
+    # this function parses a single coordinate in one of three formats (cf. geo-*):
+    # "+dd.ddd" "+dd dd.ddd" "+dd dd dd.ddd" (NESW -> __-- has to be done before)
     #        -93.49130       DegDec (decimal degrees, simple format)
-    #        W93.49130       DegDec (decimal degrees)
     #        -93 29.478      MinDec (decimal minutes, caching format)
-    #        W93 29.478      MinDec (decimal minutes)
     #        -93 29 25       DMS
-    #        W 93 29 25       DMS
-    # not yet (":" is separator for input)
-    #        -93:29.478      MinDec (decimal minutes, gccalc format)
-    #        W93:29.478      MinDec (decimal minutes)
-    #
-    # this function parses a single coordinate in one of three formats
-    # (NESW -> __-- has to be done before)
-    # "+dd.ddd" "+dd dd.ddd" "+dd dd dd.ddd"
-
     # count number of fields
-    case input.split("\s").length # 1, 2, or 3
+    case input.split(/\s/).length # 1, 2, or 3
     when 1 # Deg
       if input =~ /(-?)([\d\.]+)/
         value = $2.to_f
-        if $1 == '-'
-          value = -value
-        end
+        value = -value if $1 == '-'
       else
         debug1 "Cannot parse #{input} as degree value!"
         value = 0
@@ -494,9 +481,7 @@ module Common
     when 2 # Deg Min
       if input =~ /(-?)([\d\.]+)\W+([\d\.]+)/
         value = $2.to_f + $3.to_f/60.0
-        if $1 == '-'
-          value = -value
-        end
+        value = -value if $1 == '-'
       else
         debug1 "Cannot parse #{input} as degree/minute value!"
         value = 0
@@ -504,9 +489,7 @@ module Common
     when 3 # Deg Min Sec
       if input =~ /(-?)([\d\.]+)\W+([\d\.]+)\W+([\d\.]+)/
         value = $2.to_f + $3.to_f/60.0 + $4.to_f/3600.0
-        if $1 == '-'
-          value = -value
-        end
+        value = -value if $1 == '-'
       else
         debug1 "Cannot parse #{input} as degree/minute/second value!"
         value = 0
@@ -518,6 +501,51 @@ module Common
     return value
   end
 
+  def parseCoordinates(input)
+    # kinds of coordinate representations to parse: see parseCoordinate
+    # we've got two of them separated by whitespace and/or comma!
+
+    # older version of parseCoordinates() returned big array
+    # newer version will return latitude and longitude only
+    # for a while, both formats will be filled in
+    # ToDo: activate proper code path
+
+    # replace NESW by signs, remove extra space, colon/comma by blank
+    key = input.upcase.tr(':,', '  ').gsub(/[NE\+]\s*/, '').gsub(/[SW-]\s*/, '-')
+    # Both coordinates must have same format. Count number of fields.
+    case key.split("\s").length #may be 2, 4, 6
+    when 2 # Deg
+      if key =~ /(-?[\d\.]+)\W\W*?(-?[\d\.]+)/
+        lat = parseCoordinate($1)
+        lon = parseCoordinate($2)
+      else
+        displayError "Cannot parse #{input} as two degree values!", rc = 2
+      end
+    when 4 # Deg Min
+      if key =~ /(-?[\d\.]+\W+[\d\.]+)\W\W*?(-?[\d\.]+\W+[\d\.]+)/
+        lat = parseCoordinate($1)
+        lon = parseCoordinate($2)
+      else
+        displayError "Cannot parse #{input} as two degree/minute values!", rc = 2
+      end
+    when 6 # Deg Min Sec
+      if key =~ /(-?[\d\.]+\W+[\d\.]+\W+[\d\.]+)\W\W*?(-?[\d\.]+\W+[\d\.]+\W+[\d\.]+)/
+        lat = parseCoordinate($1)
+        lon = parseCoordinate($2)
+      else
+        displayError "Cannot parse #{input} as two degree/minute/second values!", rc = 2
+      end
+    else
+      # did not recognize format
+      displayError "Bad format in #{input}: #{key.split("\s").length} fields found.", rc = 2
+    end
+    # sub-meter precision, strip trailing 0's
+    lat = sprintf("%.6f", lat).gsub(/0{1,5}$/, '')
+    lon = sprintf("%.6f", lon).gsub(/0{1,5}$/, '')
+    displayMessage "\"#{input}\" parsed as latitude #{lat}, longitude #{lon}"
+    return lat, lon
+  end
+
   # convert cache "waypoint ID" (GC.....) to numeric value
   def cacheID(wid)
     if wid
@@ -527,7 +555,7 @@ module Common
         return wp.to_i(16)
       else
         # base 31: consider gaps in char set, and correction offset
-        # magic number -411120 reflects that GCG000 = GCFFFF + 1
+        # magic number 411120 reflects difference between GCG000 (476656) and GCFFFF + 1 (65536)
         return wp.upcase.tr('0-9A-HJKMNPQRTV-Z', '0-9A-U').to_i(31) - 411120
       end
     else
@@ -535,5 +563,14 @@ module Common
     end
   end
 
+  # compute random sleep time from number of pages remotely fetched
+  def randomizedSleep(counter)
+    # start with 1 second, add a second for each 250 caches, randomize by factor 0.5 .. 1.5, somewhat rounded
+    sleeptime = $SLEEP * (1.0 + counter / 250.0) * (rand + 0.5)
+    sleeptime = (10.0 * sleeptime).round / 10.0
+    sleeptime = $SLEEP if (sleeptime < $SLEEP)
+    debug3 "sleep #{sleeptime} seconds"
+    sleep sleeptime
+  end
 
 end

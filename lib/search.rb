@@ -154,62 +154,6 @@ class SearchCache
     return @query_type
   end
 
-  def parseCoordinates(input)
-    # kinds of coordinate representations to parse (cf. geo-*):
-    #
-    #        -93.49130       DegDec (decimal degrees, simple format)
-    #        W93.49130       DegDec (decimal degrees)
-    #        -93 29.478      MinDec (decimal minutes, caching format)
-    #        W93 29.478      MinDec (decimal minutes)
-    #        -93 29 25       DMS
-    #        W 93 29 25       DMS
-    # not yet (":" is separator for input)
-    #        -93:29.478      MinDec (decimal minutes, gccalc format)
-    #        W93:29.478      MinDec (decimal minutes)
-    #
-    # we've got two of them separated by whitespace and/or comma!
-
-    # older version of parseCoordinates() returned big array
-    # newer version will return latitude and longitude only
-    # for a while, both formats will be filled in
-    # ToDo: activate proper code path
-
-    # replace NESW by signs, remove extra space, colon/comma by blank
-    key = input.upcase.tr(':,', '  ').gsub(/[NE\+]\s*/, '').gsub(/[SW-]\s*/, '-')
-    # Both coordinates must have same format. Count number of fields.
-    case key.split("\s").length #may be 2, 4, 6
-    when 2 # Deg
-      if key =~ /(-?[\d\.]+)\W\W*?(-?[\d\.]+)/
-        lat = parseCoordinate($1)
-        lon = parseCoordinate($2)
-      else
-        displayError "Cannot parse #{input} as two degree values!", rc = 2
-      end
-    when 4 # Deg Min
-      if key =~ /(-?[\d\.]+\W+[\d\.]+)\W\W*?(-?[\d\.]+\W+[\d\.]+)/
-        lat = parseCoordinate($1)
-        lon = parseCoordinate($2)
-      else
-        displayError "Cannot parse #{input} as two degree/minute values!", rc = 2
-      end
-    when 6 # Deg Min Sec
-      if key =~ /(-?[\d\.]+\W+[\d\.]+\W+[\d\.]+)\W\W*?(-?[\d\.]+\W+[\d\.]+\W+[\d\.]+)/
-        lat = parseCoordinate($1)
-        lon = parseCoordinate($2)
-      else
-        displayError "Cannot parse #{input} as two degree/minute/second values!", rc = 2
-      end
-    else
-      # did not recognize format
-      displayError "Bad format in #{input}: #{key.split("\s").length} fields found.", rc = 2
-    end
-    # sub-meter precision, strip some trailing 0's
-    lat = sprintf("%.6f", lat).gsub(/0{1,5}$/, '')
-    lon = sprintf("%.6f", lon).gsub(/0{1,5}$/, '')
-    displayMessage "\"#{input}\" parsed as latitude #{lat}, longitude #{lon}"
-    return lat, lon
-  end
-
   def getResults()
     debug3 "Getting results: #{@query_type} at #{@search_url}"
     if @query_type == 'wid'
