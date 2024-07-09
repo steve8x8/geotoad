@@ -1,11 +1,11 @@
-require 'lib/common'
 require 'interface/messages'
+require 'lib/common'
 require 'lib/shadowget'
 
 module Gallery
 
-  include Common
   include Messages
+  include Common
 
   # Retrieve image links from gallery RSS
   # ideas by daniel.k.ache, February-March 2017

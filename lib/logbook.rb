@@ -1,13 +1,13 @@
 require 'time'
 require 'cgi'
-require 'lib/common'
 require 'interface/messages'
+require 'lib/common'
 require 'lib/shadowget'
 
 module LogBook
 
-  include Common
   include Messages
+  include Common
 
   # Retrieve log entries from Geocache Logbook page
   # idea by daniel.k.ache, January 2017

@@ -3,13 +3,13 @@
 ### cookies to be sent combined from hash
 
 require 'time'
-require 'lib/common'
 require 'interface/messages'
+require 'lib/common'
 
 module Auth
 
-  include Common
   include Messages
+  include Common
 
   # .../login stopped working on 2018-08-13
   @@login_url = 'https://www.geocaching.com/account/signin'

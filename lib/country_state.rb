@@ -1,18 +1,19 @@
 # Get a list of countries / states for the geocaching form.
 
-require 'lib/common'
 require 'interface/messages'
+require 'lib/common'
+require 'lib/country_state_list'
 require 'lib/geocode'
 require 'lib/shadowget'
-require 'lib/country_state_list'
 
 class CountryState
 
-  include Common
   include Messages
+  include Common
   include CountryStateList
 
   def initialize
+    # nothing to do here
   end
 
   def getCountryList()
@@ -28,9 +29,7 @@ class CountryState
     countries = getCountryList()
     found = []
     countries.each{ |country|
-      if country =~ /#{try_country}/i
-        found << country
-      end
+      found << country if country =~ /#{try_country}/i
     }
     return found
   end
@@ -56,9 +55,7 @@ class CountryState
     states = getStatesList(country)
     found = []
     states.each{ |state|
-      if state =~ /#{try_state}/i
-        found << state
-      end
+      found << state if state =~ /#{try_state}/i
     }
     return found
   end

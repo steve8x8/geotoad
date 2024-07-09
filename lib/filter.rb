@@ -1,12 +1,13 @@
 require 'cgi'
-require 'lib/common'
 require 'interface/messages'
+require 'lib/common'
 require 'lib/constants'
 
 class Filter
 
-  include Common
   include Messages
+  include Common
+  include Constants
 
   # @@sizes -> $Sizes
 

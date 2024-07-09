@@ -2,17 +2,17 @@
 # see documentation https://wiki.openstreetmap.org/wiki/Nominatim
 
 require 'cgi'
-require 'lib/common'
-require 'interface/messages'
-require 'lib/shadowget'
 require 'net/http'
+require 'interface/messages'
+require 'lib/common'
+require 'lib/shadowget'
 
 class GeoCode
 
   @@maps_base = 'https://nominatim.openstreetmap.org/'
 
-  include Common
   include Messages
+  include Common
 
   def lookup_location(location)
     debug "geocode looking up address #{location.inspect}"
