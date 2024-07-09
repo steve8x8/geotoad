@@ -208,10 +208,18 @@ class SearchCache
       @search_url = "https://www.geocaching.com/seek/cache_details.aspx?guid=#{key.downcase}"
 
     when 'bookmark'
+      displayInfo "Bookmark Key #{key}"
       @query_type = 'bookmark'
-      @query_arg = key.downcase
-      @search_url = "https://www.geocaching.com/bookmarks/view.aspx?guid=#{key.downcase}"
-
+      # GUID style forwards to List style now (2024)
+      if key.downcase =~ /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/
+        displayWarning "GUID style"
+        @query_arg = key.downcase
+        @search_url = "https://www.geocaching.com/bookmarks/view.aspx?guid=#{key.downcase}"
+      else
+        displayWarning "List style"
+        @query_arg = key.upcase
+        @search_url = "https://www.geocaching.com/plan/lists/#{key.upcase}"
+      end
     end
 
     if not @query_type
@@ -857,6 +865,45 @@ class SearchCache
       when /<\/table>/
         debug2 "leaving result/bookmark table"
         inresultstable = false
+      when /<script id=\"__NEXT_DATA__\" type=\"application\/json\">/
+
+require 'json'
+
+        if @query_type == 'bookmark'
+          displayInfo "JSON table found"
+          inresultstable = true
+          json = line.dup
+          json.force_encoding("UTF-8")
+          json = json.gsub(/^.*<script id=\"__NEXT_DATA__\" type=\"application\/json\">/, "")
+          #debug2 "size: #{json.length} #{json[1,50]} ... #{json[json.length-100,json.length-1]}"
+          json = json.gsub(/<\/script.*$/, "")
+          #debug2 "size: #{json.length} #{json[1,50]} ... #{json[json.length-100,json.length-1]}"
+          null = ""
+          # what is the difference???
+          #jsonhash = JSON.load(json)
+          #debug2 "#{jsonhash.inspect}"
+          jsonhash = JSON.parse(json)
+          debug2 "#{jsonhash.inspect}"
+          caches = jsonhash["props"]["pageProps"]["geocaches"]["data"]
+          #debug2 "#{caches.inspect}"
+          caches.each{ |cache|
+            details = {
+                           "wid"     => cache["referenceCode"],
+                           "text"    => CGI.escapeHTML(cache["name"]),
+                           "user"    => CGI.escapeHTML(cache["owner"]),
+                           "type"    => cache["geocacheType"],
+                           "diff"    => cache["difficulty"],
+                           "terr"    => cache["terrain"],
+                           "size"    => cache["containerType"],
+                           "cdate"   => parseDate(cache["placedDate"].gsub(/T.*/, "")) || Time.at($ZEROTIME),
+                           "active"  => cache["state"]["isAvailable"],
+                         }
+            debug2 "Adding #{details.inspect}"
+            # ToDo: build cache hash
+          }
+          # nothing more to do
+          inresultstable = false
+        end
       end #case
 
       # short-cut if not inside results table
@@ -864,7 +911,6 @@ class SearchCache
         next
       end
 
-     if @query_type != 'bookmark'
       # stuff strictly inside results table
       case line
       # new travelbug list 2010-12-22
@@ -1142,76 +1188,6 @@ class SearchCache
         wid = nil
 
       end # end case
-     else # != 'bookmark'
-
-      case line
-      when /guid=([0-9a-f-]{36}).>(GC\w+)</
-        guid = $1
-        wid = $2
-        cache['guid'] = guid
-        cache['wid'] = wid
-        debug "found guid=#{guid} wid=#{wid}"
-
-      when /<img.*?wpttypes\/(sm\/)?(\w+)\.[^>]*alt=\"(.*?)\"/i
-        debug "found gc ccode=#{$2} type=#{$3}"
-        ccode = $2
-        full_type = $3
-        if @cachetypenum[ccode]
-          full_type = @cachetypenum[ccode]
-        end
-        # there may be more than 1 match, don't overwrite
-        cache['type'], full_type = shortenType(full_type)
-        if cache['fulltype']
-          debug "Not overwriting \"#{cache['fulltype']}\" (#{cache['type']}) with \"#{full_type}\""
-        else
-          cache['fulltype'] = full_type
-        end
-        if full_type =~ /Event/
-            debug "Setting event flag for #{full_type}"
-            cache['event'] = true
-        end
-
-      when /<span class=\"(.*?)\">(.*?)<\/span>/
-        # <span class="OldWarning Strike">Lars vom Mars</span>
-        # <span class="Strike">Rund um den See, # 04</span>
-        strike = $1
-        name = $2
-        cache['name'] = name
-        debug "name #{name.inspect} with flags"
-        if strike =~ /Warning/
-          cache['archived'] = true
-          debug "#{name} appears to be archived"
-#        else
-#          cache['archived'] = false
-        end
-        if strike =~ /Strike/
-          cache['disabled'] = true
-          debug "#{name} appears to be disabled"
-#        else
-#          cache['disabled'] = false
-        end
-
-      when /^\s+(\w+)\s*$/
-        name = $1
-        cache['name'] = name
-        debug "name #{name.inspect}"
-
-      when /^\s+<\/tr>/
-        debug "--- end of row ---"
-        if wid and not @waypoints.has_key?(wid)
-          debug2 "- closing #{wid} record -"
-          waypoints_total += 1
-
-          @waypoints[wid] = cache.dup
-          @waypoints[wid]['visitors'] = []
-          # cache counter (1..n) - need that to reconstruct search order
-          @waypoints[wid]['index'] = @waypoints.length
-        end
-        cache.clear
-        wid = nil
-
-      end # end case
-     end # 'bookmark'
 
     } # end loop
     rescue => error

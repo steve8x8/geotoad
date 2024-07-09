@@ -137,7 +137,7 @@ This should also work with zip codes.
 \fBcountry\fR and \fBstate\fR queries by command-line require a \fInumerical id\fR which the TUI can tell you.
 Do not confuse the index numbers provided with the sorted lists with the country or state \fIid\fR!
 .PP
-\fBbookmark\fR allows to parse bookmark lists.
+\fBbookmark\fR allows to parse bookmark lists, given by GUID (old) or BMXXXXX tag.\fI(Not working!)\fR
 
 .SS "Output control:"
 .TP
@@ -615,8 +615,7 @@ you will just get a warning - don't complain if something fails afterwards.
 .SS "Limitations by design:"
 .PP
 Almost all searches provide enough information for the second stage that
-interprets cache-specific information. \fBbookmark\fR mode is a notable
-exception, see below.
+interprets cache-specific information.
 .PP
 .B  geotoad
 parses \fIprintable\fR pages (cdpf format).
@@ -654,14 +653,11 @@ powerful, and there are a lot of options which aren't supported by the TUI.
 .PP
 \fBCaveat: Starting with version 3.34.0, TUI items have been renumbered!\fR
 .PP
-Bookmark mode will parse \fIbookmarks/view.aspx\fR list pages which are very sparse - 
-they contain no coordinates, no container size, no D or T values -,
-then proceed directly to cdpf pages matching the list of \fIguid\fRs obtained.
+Bookmark mode will parse list pages which are very sparse - 
+they contain no coordinates -,
+then proceed directly to cdpf pages matching the list of \fIwid\fRs obtained.
 The \fIcdpf.aspx\fR (printable cache) pages may not be able to provide the missing
 values.
-As a result, you may see weird or incorrect \fID/T/Size\fR values.
-See the sample script included with the distribution, which extracts a \fIwid\fR
-list from a KML file instead, for an alternative approach.
 .PP
 .B  geotoad
 is being tested with English only. While there is some support for other
