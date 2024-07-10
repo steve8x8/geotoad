@@ -16,7 +16,8 @@ class GeoCode
 
   def lookup_location(location)
     debug "geocode looking up address #{location.inspect}"
-    data = get_url(create_url(location, 'address'))
+    url = create_url(location, 'address')
+    data = get_url(url)
     status, importance, lat, lon, location0, license = parse_data(data)
     if status == "OK"
       return_data = [importance, lat, lon, location0, license]
@@ -28,7 +29,8 @@ class GeoCode
     else
       return_data = [nil, nil, nil, "", 0]
       displayMessage "OpenStreetMap Nominatim search for #{location} returned"
-      displayWarning " no results."
+      displayWarning " -no- results. Status: #{status}: #{location0}."
+      displayInfo "   #{url}" if location0 =~ /Use browser/
     end
     debug "returning: #{return_data}"
     # Nominatim requests: no more than one per second
@@ -39,7 +41,8 @@ class GeoCode
   def lookup_coords(lat, lon)
     coords = sprintf("lat=%.6f&lon=%.6f", lat.to_f, lon.to_f)
     debug "geocode looking up coords #{coords.inspect}"
-    data = get_url(create_url(coords, 'latlng'))
+    url = create_url(coords, 'latlng')
+    data = get_url(url)
     status, importance, lat0, lon0, location, license = parse_data(data)
     if status == "OK"
       return_data = location
@@ -132,6 +135,7 @@ class GeoCode
     # handle nil or empty data
     return [ status, importance, 0.0, 0.0, "Empty response", 0 ] if not data
     return [ status, importance, 0.0, 0.0, "No match", 0 ] if data == "[]"
+    return [ status, importance, 0.0, 0.0, "Access blocked. Use browser", 0 ] if data =~ /<html>.*Access blocked/m
     if data =~ /"importance":([.0-9]*)/m
       importance = $1
     end
