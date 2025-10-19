@@ -418,7 +418,7 @@ class Input
         printf("(27) cache age (days)    [%4.4s -%5.5s] | (28) last found (days ago) [%3.3s -%4.4s]\n",
           (@@optHash['placeDateExclude'] || 0), (@@optHash['placeDateInclude'] || 'any'),
           (@@optHash['foundDateExclude'] || 0), (@@optHash['foundDateInclude'] || 'any'))
-        printf("(29) caches with trackables only   [%1.1s] | (35) fav factor            [%-3.1f - %-3.1f]\n",
+        printf("(29) caches with trackables only   [%1.1s] | (30) fav factor            [%-3.1f - %-3.1f]\n",
            @@optHash['travelBug'],
           (@@optHash['favFactorMin'] || 0.0), (@@optHash['favFactorMax'] || 5.0))
       end

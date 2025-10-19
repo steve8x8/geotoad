@@ -90,7 +90,7 @@ selection criteria, by selecting "p". The screen will change to this:
 (23) found by     [                  ] | (24) owner is     [                  ]
 (25) not found by [                  ] | (26) owner isn't  [                  ]
 (27) cache age (days)    [   0 -  any] | (28) last found (days ago) [  0 - any]
-(29) caches with trackables only   [ ] | (35) fav factor            [0.0 - 5.0]
+(29) caches with trackables only   [ ] | (30) fav factor            [0.0 - 5.0]
 ----------------------------- search limits etc. ------------------------------
 (31) limit search to pages       [   ] | (32) max log entries             [   ]
 (33) skip cache descriptions       [ ] |
